@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Immutable-store</title>
+</head>
+
+<body>
+    <script src="immutable-store.js"></script>
+    <script>
+    var store = Store({
+        foo: 'bar',
+        array: []
+    });
+
+    store.on('update', function () {
+      console.log('Got an update!');
+    });
+
+    var action = function() {
+      store.set(['foo'], 'bar - ' + Date.now());
+      store.push(['array'], 'foo');
+    };
+
+    action();
+    console.log('store', store.state.foo);
+    
+    action();
+    console.log('store', store.state.foo);
+
+    console.log('storeBefore', store.state.toJS());
+    var store = store.travel(0);
+    console.log('storeAfter', store.state.toJS());
+    </script>
+</body>
+
+</html>

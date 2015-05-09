@@ -1,0 +1,36 @@
+{
+  "name": "cerebral",
+  "version": "0.1.0",
+  "description": "A modern application framework for React",
+  "main": "src/Cerebral.js",
+  "scripts": {
+    "demo": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --content-base demo --config demo.config.js",
+    "deploy": "NODE_ENV=production ./node_modules/webpack/bin/webpack.js -p",
+    "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --devtool eval --progress --colors --content-base build",
+    "devtest": "./node_modules/nodeunit-watcher/bin/nodeunit-watcher",
+    "test": "./node_modules/nodeunit/bin/nodeunit"
+  },
+  "author": "Christian Alfoni",
+  "license": "MIT",
+  "devDependencies": {
+    "babel-loader": "^5.0.0",
+    "classnames": "^2.1.1",
+    "css-loader": "^0.9.1",
+    "event-emitter": "^0.3.3",
+    "jshint": "^2.6.0",
+    "jshint-loader": "^0.8.2",
+    "karma": "^0.12.31",
+    "nodeunit": "^0.9.0",
+    "nodeunit-watcher": "0.0.3",
+    "page": "^1.6.1",
+    "react": "^0.13.0-beta.1",
+    "style-loader": "^0.8.3",
+    "todomvc-app-css": "^1.0.1",
+    "todomvc-common": "^1.0.1",
+    "webpack": "^1.5.3",
+    "webpack-dev-server": "^1.7.0"
+  },
+  "peerDependencies": {
+    "react": "^0.13.2"
+  }
+}
