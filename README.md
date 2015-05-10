@@ -1,6 +1,10 @@
 # cerebral (WIP)
 A modern application framework for React
 
+Preview at: [Immutable-store gets signals and a time machine ](https://www.youtube.com/watch?v=Txpw4wU4BCU)
+
+| [API](API.md) |
+
 ## Cerebral - the abstraction
 If your application was a person you interacted with, **cerebral** would be the brain and the nervous system of that person.
 

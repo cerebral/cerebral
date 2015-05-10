@@ -2,7 +2,6 @@ import React from 'react';
 import AddTodo from './components/AddTodo.js';
 import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
-import TimeTraveller from './TimeTraveller.js';
 import mixin from './../src/mixin.js';
 
 var App = React.createClass({
@@ -11,7 +10,7 @@ var App = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div id="todoapp-wrapper">
         <section id="todoapp">
           <header id="header">
             <h1>todos</h1>
@@ -32,7 +31,6 @@ var App = React.createClass({
           <p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
         </footer>
         */}
-        <TimeTraveller/>
       </div>
     );
   }

@@ -4,7 +4,7 @@ let saveTodo = function (store, todo) {
     setTimeout(function () {
       todo.$isSaving = false;
       resolve(todo);
-    }, 1000);
+    }, 3000);
 
   });
 };

@@ -32,7 +32,7 @@ cerebral.facet('visibleTodos', ['todos'], function (cerebral, ids) {
 
 // RENDER
 
-var Wrapper = cerebral.injectInto(App);
+let Wrapper = cerebral.injectInto(App);
 
 React.render(<Wrapper/>, document.querySelector('#app'));
 

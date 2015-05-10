@@ -3,6 +3,10 @@
 var React = require('react');
 var utils = require('./utils.js');
 
+var contextTypes = {
+  cerebral: React.PropTypes.object
+};
+
 var componentWillMount = function() {
   this._mergeInState = this._mergeInState.bind(this);
   this.signals = this.context.cerebral.signals;
@@ -30,29 +34,37 @@ var _mergeInState = function() {
   var statePaths = this.getCerebralState ? this.getCerebralState() : [];
   var cerebral = this.context.cerebral;
 
-  this.setState(statePaths.reduce(function(state, key, index) {
-    state[key] = cerebral.get(statePaths[index]);
-    return state;
-  }, {}));
+  if (Array.isArray(statePaths)) {
+
+    this.setState(statePaths.reduce(function(state, key, index) {
+      state[key] = cerebral.get(statePaths[index]);
+      return state;
+    }, {}));
+
+  } else {
+
+    this.setState(Object.keys(statePaths).reduce(function(state, key) {
+      state[key] = cerebral.get(statePaths[key]);
+      return state;
+    }, {}));
+
+  }
 
 };
 
 var mixin = function(component) {
-
-  component.contextTypes = {
-    cerebral: React.PropTypes.object
-  };
-
+  component.contextTypes = contextTypes;
   component.prototype.componentWillMount = componentWillMount;
-
   component.prototype.shouldComponentUpdate = shouldComponentUpdate;
-
   component.prototype.componentWillUnmount = componentWillUnmount;
-
   component.prototype._mergeInState = _mergeInState;
-
   return component;
-
 };
+
+mixin.contextTypes = contextTypes;
+mixin.componentWillMount = componentWillMount;
+mixin.shouldComponentUpdate = shouldComponentUpdate;
+mixin.componentWillUnmount = componentWillUnmount;
+mixin._mergeInState = _mergeInState;
 
 module.exports = mixin;

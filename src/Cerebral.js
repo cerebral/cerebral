@@ -3,7 +3,8 @@
 /*
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
-    - facets hook onto existing state
+    - Allow objects in mixin
+    - Normal mixin
 */
 var utils = require('./utils.js');
 var React = require('react');
@@ -14,6 +15,7 @@ var createHelpers = require('./core/createHelpers.js');
 var createSignalMethod = require('./core/createSignalMethod.js');
 var createFacetMethod = require('./core/createFacetMethod.js');
 var createMutationMethods = require('./core/createMutationMethods.js');
+var CerebralDebugger = React.createFactory(require('./Debugger.js'));
 
 function Cerebral(state) {
 
@@ -37,7 +39,7 @@ function Cerebral(state) {
   };
 
   cerebral.injectInto = function (component) {
-    return React.createClass({
+    var Wrapper = React.createClass({
       childContextTypes: {
         cerebral: React.PropTypes.object
       },
@@ -47,22 +49,39 @@ function Cerebral(state) {
         };
       },
       render: function () {
-        return React.createElement(component, this.props);
+        return React.DOM.div(null,
+          React.DOM.div({
+            style: {
+              paddingRight: '400px'
+            }
+          }, React.createElement(component, this.props)),
+          CerebralDebugger()
+        );
       }
     });
+
+    return Wrapper;
   };
 
   // Go back in time
   cerebral.remember = function(index) {
-    return helpers.currentState.__.eventStore.travel(index, helpers.currentState);
+    return helpers.eventStore.travel(index, helpers.currentState);
   };
 
   // Get signals and mutations done to cerebral
   cerebral.getMemories = function() {
     return {
-      signals: helpers.currentState.__.eventStore.signals.slice(0),
-      mutations: helpers.currentState.__.eventStore.mutations.slice(0)
+      signals: helpers.eventStore.signals.slice(0),
+      mutations: helpers.eventStore.mutations.slice(0)
     };
+  };
+
+  cerebral.getMemoryIndex = function () {
+    return helpers.eventStore.currentIndex;
+  };
+
+  cerebral.extractState = function () {
+    return helpers.currentState.toJS();
   };
 
   cerebral.get = function(path) {

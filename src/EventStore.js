@@ -9,7 +9,7 @@ var EventStore = function(state, store) {
   this.mutations = [];
   this.hasExecutingSignals = false;
   this.hasExecutingAsyncSignals = false;
-  this.currentIndex = 0;
+  this.currentIndex = -1;
   this.store = store;
 };
 
@@ -27,7 +27,6 @@ EventStore.prototype.addAsyncSignal = function (signal) {
       this.store.emit('update');
     }
   }
-
   if (!this.asyncSignals.length) {
     this.hasExecutingAsyncSignals = false;
     this.store.emit('update');
@@ -39,7 +38,7 @@ EventStore.prototype.addSignal = function(signal) {
   if (this.hasExecutingSignals) {
     return;
   }
-  if (this.currentIndex < this.signals.length) {
+  if (this.currentIndex < this.signals.length - 1) {
 
     var removedSignals = this.signals.splice(this.currentIndex + 1, this.signals.length - this.currentIndex);
     var lastSignal = removedSignals[0];
@@ -52,7 +51,8 @@ EventStore.prototype.addSignal = function(signal) {
     }
 
   }
-  this.currentIndex = this.signals.push(signal);
+  this.signals.push(signal);
+  this.currentIndex = this.signals.length - 1;
 };
 
 EventStore.prototype.addMutation = function(mutation) {
@@ -69,7 +69,6 @@ EventStore.prototype.travel = function(index, state) {
   // Create new store with initial state
   this.hasExecutingSignals = true;
   store.isRemembering = true;
-  index = index - 1;
 
   // Make sure we do not trigger any events
   Object.keys(this.initialState).forEach(function(key) {
@@ -78,7 +77,7 @@ EventStore.prototype.travel = function(index, state) {
 
   // If no event, just update the app
   if (index === -1) {
-    this.currentIndex = 0;
+    this.currentIndex = index;
     store.emit('update');
     return store;
   } else {
@@ -97,6 +96,7 @@ EventStore.prototype.travel = function(index, state) {
 
   this.hasExecutingSignals = false;
   store.isRemembering = false;
+  store.emit('update');
 
   return store;
 };

@@ -24,6 +24,7 @@ class AddTodo extends React.Component {
       <form id="todo-form" onSubmit={this.addTodo.bind(this)}>
         <input 
           id="new-todo" 
+          autoComplete="off"
           placeholder="What needs to be done?" 
           disabled={this.state.isSaving}
           value={this.state.newTodoTitle}
