@@ -2,7 +2,7 @@
 
 var utils = require('./../utils.js');
 
-var mutators = ['set', 'merge', 'push', 'unshift', 'splice', 'shift', 'concat', 'pop'];
+var mutators = ['set', 'merge', 'push', 'unshift', 'splice', 'shift', 'concat', 'pop', 'unset'];
 var createMutationMethods = function(helpers, store) {
 
   mutators.reduce(function(store, mutator) {
