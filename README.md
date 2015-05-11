@@ -1,4 +1,4 @@
-# cerebral (WIP)
+# cerebral (WIP) ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
 A modern application framework for React
 
 ![Cerebral - WIP](images/logo.jpg)
