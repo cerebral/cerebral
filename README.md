@@ -46,6 +46,8 @@ All examples are shown in ES6 code using Webpack as module loader. Though the co
 
 Please watch [this video for a complete introduction to **Cerebral**](http://) (SOON!)
 
+You can use the [cerebral-boilerplate](https://github.com/christianalfoni/cerebral/edit/master/README.md) to quickly get up and running. It is a Webpack and Node setup.
+
 ### Create a cerebral
 *cerebral.js*
 ```js
