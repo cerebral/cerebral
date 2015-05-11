@@ -246,17 +246,15 @@ React.render(<Wrapper/>, document.querySelector('#app'));
 ```
 *actions/addNewTodo.js*
 ```js
-import uuid from 'uuid';
-
 let addNewTodo = function (cerebral) {
   let todo = {
-    uuid: uuid.v1(),
+    ref: cerebral.ref(),
     title: cerebral.get('newTodoTitle'),
     $isSaving: true
   };
   cerebral.push('todos', todo);
   cerebral.set('newTodoTitle', '');
-  return todo;
+  return todo.ref;
 };
 
 export default addNewTodo;
@@ -265,19 +263,23 @@ export default addNewTodo;
 ```js
 import ajax from 'ajax';
 
-let saveTodo = function (cerebral, todo) {
+let saveTodo = function (cerebral, ref) {
+  let todo = cerebral.getByRef('todos', ref);
   return ajax.post('/todos', {
     title: todo.title
   })
   .then(function (id) {
-    todo.id = id;
-    todo.$isSaving = false;
-    return todo;
+    return {
+      ref: ref,
+      $isSaving: false
+    };
   })
   .catch(function (err) {
-    todo.$error = err;
-    todo.$isSaving = false;
-    return todo;
+    return {
+      ref: ref,
+      $error: err,
+      $isSaving: false
+    };
   });
 };
 
@@ -285,12 +287,8 @@ export default saveTodo;
 ```
 *actions/updateTodo.js*
 ```js
-import ajax from 'ajax';
-
 let updateTodo = function (cerebral, updatedTodo) {
-  let todo = cerebral.get('todos').filter(function (todo) {
-    return todo.uuid === updatedTodo.uuid;
-  }).pop();
+  let todo = cerebral.getByRef('todos', updatedTodo.ref);
   cerebral.merge(todo, updatedTodo);
 }
 export default updateTodo;

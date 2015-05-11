@@ -89,6 +89,15 @@ function Cerebral(state) {
     return helpers.nextRef++;
   };
 
+  cerebral.getByRef = function (path, ref) {
+    var items = this.get(path);
+    for (var x = 0; x < items.length; x++) {
+      if (items[x].ref === ref) {
+        return items[x];
+      }
+    }
+  };
+
   cerebral.get = function(path) {
     if (!path) {
       throw new Error('You have to pass a path to the get method');
