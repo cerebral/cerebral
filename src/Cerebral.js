@@ -3,8 +3,7 @@
 /*
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
-    - Allow objects in mixin
-    - Normal mixin
+    - Freeze returned objects form actions that are not immutable
 */
 var utils = require('./utils.js');
 var React = require('react');

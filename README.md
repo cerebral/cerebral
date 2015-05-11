@@ -1,6 +1,9 @@
 # cerebral (WIP)
 A modern application framework for React
 
+![Cerebral - WIP](images/logo.jpg)
+*Logo is a work in progress...*
+
 Preview at: [Immutable-store gets signals and a time machine ](https://www.youtube.com/watch?v=Txpw4wU4BCU)
 
 More preview at: [Cerebral - a React framework in the making ](https://www.youtube.com/watch?v=tM_K_lR_JT8)
@@ -19,7 +22,7 @@ With the flux architecture we conceptually moved away from dealing with a group 
 With **cerebral** your application is truly "one person". Think of your components as the body of your application, and cerebral as the brain and the nervous system. The user interacts with the body (UI) which passes impulses (signals) to the brain (cerebral). These impulses are processed by one or multiple axons (actions) and stored. Unlike traditional analogies of handling state and interactions as something "outside the components", think of **cerebral** as something "inside the components". This will make a lot of sense when you look at the code!
 
 ## Short history
-I have been writing about and researching traditional and flux architecture for quite some time. Look at my blog [www.christianalfoni.com](http://www.christianalfoni.com) for more information. Though I think we are moving towards better abstractions for reasoning about our applications there are core issues that are yet to be solved. This library is heavily inspired by articles, videos, other projects and my own experiences building applications. 
+I have been writing about and researching traditional and flux architecture for quite some time. Look at my blog [www.christianalfoni.com](http://www.christianalfoni.com) for more information. Though I think we are moving towards better abstractions for reasoning about our applications there are core issues that are yet to be solved. This library is heavily inspired by articles, videos, other projects and my own experiences building applications.
 
 ## Core features
 - An architecture inspired by flux and Baobab
@@ -30,7 +33,7 @@ I have been writing about and researching traditional and flux architecture for 
 - Immutable data
 - A functional approach to interactions
 - Gives errors on invalid code
-- Loves React
+- Requires React as your UI layer
 
 ## Creating an application
 All examples are shown in ES6 code using Webpack as module loader. Though the concept is heavily inspired by nerves, impulses etc. it felt weird naming methods as such. So the naming is:
@@ -41,8 +44,7 @@ All examples are shown in ES6 code using Webpack as module loader. Though the co
 - **actions**: Axons
 - **facets**: A composition of memory and/or replacement of lacking memory
 
-Please watch [this video for a complete introduction to **Cerebral**](http://)
-
+Please watch [this video for a complete introduction to **Cerebral**](http://) (SOON!)
 
 ### Create a cerebral
 *cerebral.js*
@@ -128,7 +130,7 @@ class App extends React.Component {
 
 export default mixin(App);
 ```
-The **mixin** allows you to expose state from the **cerebral** to the component. You do that by returning an array with paths or an object with key/path. The mixins includes a **PureRenderMixin** that checks changes to the state and props of the component, to avoid unnecessary renders. This is really fast as the **cerebral** is immutable.
+The **mixin** allows you to expose state from the **cerebral** to the component. You do that by returning an array with paths or an object with key/path. The mixin includes a **PureRenderMixin** that checks changes to the state and props of the component, to avoid unnecessary renders. This runs really fast as the **cerebral** is immutable.
 
 ### Inject the cerebral into the app
 *main.js*
@@ -142,9 +144,9 @@ import App from './App.js';
 cerebral.signal('newTodoTitleChanged', changeNewTodoTitle);
 cerebral.signal('newTodoTitleSubmitted', addNewTodo);
 
-App = cerebral.injectInto(App);
+let Wrapper = cerebral.injectInto(App);
 
-React.render(<App/>, document.body);
+React.render(<Wrapper/>, document.body);
 ```
 To expose the **cerebral** to the components you need to inject it. The returned wrapper can be used to render the application. This is also beneficial for isomorphic apps.
 
@@ -155,14 +157,14 @@ import uuid from 'uuid';
 
 let addNewTodo = function (cerebral) {
   let todo = {
-    uuid: uuid.v1(),
+    ref: cerebral.ref(),
     $isSaving: true,
     title: cerebral.get('newTodoTitle'),
     created: Date.now()
   };
   cerebral.push('todos', todo);
   cerebral.set('newTodoTitle', '');
-  return todo;
+  return todo.ref;
 };
 
 export default addNewTodo;
@@ -171,19 +173,24 @@ export default addNewTodo;
 ```js
 import ajax from 'ajax';
 
-let saveTodo = function (cerebral, todo) {
+let saveTodo = function (cerebral, ref) {
+  let todo = cerebral.getByRef('todos', ref);
   return ajax.post('/todos', {
       title: todo.title,
       created: todo.created
     })
     .then(function (result) {
-      todo.$isSaving = false;
-      return todo;
+      return {
+        ref: ref,
+        $isSaving: false
+      };
     })
     .fail(function (error) {
-      todo.$isSaving = false;
-      todo.$error = error;
-      return todo;
+      return {
+        ref: ref,
+        $isSaving: false,
+        $error: error
+      };
     });
 };
 
@@ -193,10 +200,7 @@ export default saveTodo;
 ```js
 let updateSavedTodo = function (cerebral, updatedTodo) {
 
-  let todo = cerebral.get('todos').filter(function (todo) {
-    return todo.uuid === updatedTodo.uuid;
-  }).pop();
-  
+  let todo = cerebral.getByRef('todos', updatedTodo.ref);
   cerebral.merge(todo, updatedTodo);
 
 };
@@ -220,7 +224,9 @@ App = cerebral.injectInto(App);
 
 React.render(<App/>, document.body);
 ```
-When you return a **promise** from an action it will become an **async action**. The next action will not be triggered until the async action is done. The value you return in a promise is passed to the next action. You will not be able to **remember** during an async action, but you will be able to **remember** syncrhonously when it is done. Any mutations to the **cerebral** outside of a signal or in an async callback will throw an error.
+When you return a **promise** from an action it will become an **async action**. The next action will not be triggered until the async action is done. The value you return in a promise is passed to the next action. You will not be able to **remember** during an async action, but you will be able to **remember** synchronously when it is done. Any mutations to the **cerebral** outside of a signal or in an async callback will throw an error.
+
+Note that we never return state from one action that can be mutated in the next. To reference the same object across actions we use `cerebral.ref()`. This is cerebrals own internal referencing which is helpful both to you as a developer, but also internals of cerebral depends on it.
 
 ### Facets
 *cerebral.js*
@@ -228,7 +234,7 @@ When you return a **promise** from an action it will become an **async action**.
 import Cerebral from 'cerebral';
 
 var state = {
-  todos: {},
+  todos: [],
   visibleTodos: [],
   newTodoTitle: ''
 };
@@ -249,9 +255,9 @@ import App from './App.js';
 cerebral.signal('newTodoTitleChanged', changeNewTodoTitle);
 cerebral.signal('newTodoTitleSubmitted', addNewTodo, saveTodo, updateTodo);
 
-cerebral.facet('visibleTodos', ['todos'], function (cerebral, uuids) {
-  return uuids.map(function (uuid) {
-    return cerebral.get('todos')[uuid];
+cerebral.facet('visibleTodos', ['todos'], function (cerebral, refs) {
+  return refs.map(function (ref) {
+    return cerebral.getByRef('todos', ref);
   });
 });
 
@@ -259,7 +265,7 @@ App = cerebral.injectInto(App);
 
 React.render(<App/>, document.body);
 ```
-**Facets** lets you compose state. This is extremely handy with relational data. If you have a map of todos and only want to show some of them and you want the shown todos to keep in sync with the map of todos, facets will help you. You create a facet by pointing to the entry state, what state it depends on and a function that returns the actual state. 
+**Facets** lets you compose state. This is extremely handy with relational data. If you have an array of todos and only want to show some of them and you want the shown todos to keep in sync with the original array of todos, facets will help you. You create a facet by pointing to the entry state, what state it depends on and a function that returns the actual state. 
 
 Just like our own memory can have complex relationships, so can our application state. Our brain can even create memories if something is missing, this is also possible with a facet. An example of this is if each todo has an **authorId**. If the author is not in our state the facet has to create a temporary state while we go grab the real state from the server. This can be expressed like:
 
