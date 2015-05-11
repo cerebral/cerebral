@@ -21,6 +21,16 @@ var StoreObjectProto = {
 
     });
   },
+  unset: function(key, value) {
+
+    return this.__.update(this.__.path, function(obj, helpers, traverse) {
+
+      helpers.currentPath.push(key);
+      delete obj[key];
+      helpers.currentPath.pop();
+
+    });
+  },  
   toJS: function() {
     return utils.toJS(this);
   },

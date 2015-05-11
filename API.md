@@ -14,7 +14,7 @@
   - [pop](#pop)
   - [shift](#shift)
   - [unshift](#unshift)
-- [Extract state](#extractstate)
+- [Get state](#getstate)
 
 All examples are shown with ES6 + Webpack syntax. You can of course use normal React syntax and ES5 code.
 
@@ -293,3 +293,89 @@ let updateTodo = function (cerebral, updatedTodo) {
 }
 export default updateTodo;
 ```
+### Mutate state
+All mutation methods takes a **path** and a **value**. The path can be:
+
+An array
+```js
+cerebral.push(['admin', 'todos'], {title: 'foo'});
+```
+A string
+```js
+cerebral.push('isSaving', true);
+```
+A state object
+```js
+let todo = cerebral.get('todos')[0];
+cerebral.merge(todo, {
+  title: 'Something'
+});
+```
+A combination
+```js
+let todo = cerebral.get('todos')[0];
+cerebral.set([todo, 'title'], 'Something');
+```
+
+The examples below will be shown using the *array* syntax.
+#### Set
+```js
+cerebral.set(['user', 'name'], 'foo');
+```
+#### Unset
+```js
+cerebral.unset(['user', 'name']);
+```
+Removes the name key on the user.
+#### Merge
+```js
+cerebral.merge(['user'], {
+  name: 'foo',
+  age: 30
+});
+```
+#### Merge
+```js
+cerebral.merge(['user'], {
+  name: 'foo',
+  age: 30
+});
+```
+#### Push
+```js
+cerebral.push(['todos'], {
+  title: 'foo'
+});
+```
+#### Splice
+```js
+cerebral.splice(['todos'], 0, 1, {
+  title: 'newTodo'
+});
+```
+Note that this works just like the natuve `Array.prototype.splice` method. The last argument is optional.
+#### Concat
+```js
+cerebral.concat(['todos'], [{
+  title: 'newTodo1'
+}, {
+  title: 'newTodo2'
+}]);
+```
+#### Pop
+```js
+cerebral.pop(['todos']);
+```
+Removes last item in array.
+#### Shift
+```js
+cerebral.shift(['todos']);
+```
+Removes first item in array.
+#### Unshift
+```js
+cerebral.unshift(['todos'], {
+  title: 'foo'
+});
+```
+Adds item at beginning of array.
