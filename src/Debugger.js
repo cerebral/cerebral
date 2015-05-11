@@ -95,7 +95,7 @@ var Debugger = React.createClass({
             ' ' + path.join('.'),
             DOM.div({style: MutationArgsStyle}, mutationArgs.map(function (mutationArg) {
               return JSON.stringify(mutationArg)
-            }).join(' | '))
+            }).join(' , '))
           )
         );
       });
@@ -104,17 +104,17 @@ var Debugger = React.createClass({
     var cerebral = this.context.cerebral;
     var lockInput = cerebral.hasExecutingAsyncSignals();
     var value = cerebral.getMemoryIndex() + 1;
-    var steps = cerebral.getMemories().signals.length
+    var steps = cerebral.getMemories().signals.length;
+    var currentSignalIndex = this.context.cerebral.getMemoryIndex();
+    var signals = this.context.cerebral.getMemories().signals
+    var signal = signals[currentSignalIndex];
 
     return DOM.div({
         style: debuggerStyle
       },
       DOM.h1(null, 'Cerebral Debugger'),
       DOM.h4(null, 
-        DOM.span(null, value + ' / ' + steps + (lockInput ? ' - ' : '')),
-        lockInput ? DOM.strong({
-          style: {color: 'orange'}
-        }, 'Async running') : null
+        DOM.span(null, value + ' / ' + steps)
       ),
       Range({
         onChange: this.travelThroughTime,
@@ -122,9 +122,11 @@ var Debugger = React.createClass({
         value: value,
         steps: steps
       }),
-      <ul style={MutationsStyle}>
-        {this.renderMutations()}
-      </ul>
+      DOM.h2({style:{color: '#999'}}, signal ? signal.name + ':' : null),
+      DOM.ul({style: MutationsStyle}, this.renderMutations()),
+      lockInput ? DOM.strong({
+        style: {color: 'orange'}
+      }, 'Async running...') : null
     );
   }
 });

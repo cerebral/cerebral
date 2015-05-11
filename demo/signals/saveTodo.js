@@ -1,9 +1,11 @@
-let saveTodo = function (store, todo) {
+let saveTodo = function (store, ref) {
   return new Promise(function (resolve, reject) {
     
     setTimeout(function () {
-      todo.$isSaving = false;
-      resolve(todo);
+      resolve({
+        ref: ref,
+        $isSaving: false
+      });
     }, 3000);
 
   });

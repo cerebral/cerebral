@@ -48,6 +48,7 @@ var createAsyncSignalMethod = function(helpers, store) {
               store.emit('update');
               return result;
             }).catch(function(err) {
+              console.error(err);
               helpers.currentState.__.eventStore.addAsyncSignal({
                 name: name,
                 start: timestamp,

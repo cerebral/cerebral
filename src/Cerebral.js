@@ -65,6 +65,7 @@ function Cerebral(state) {
 
   // Go back in time
   cerebral.remember = function(index) {
+    helpers.nextRef = 0;
     return helpers.eventStore.travel(index, helpers.currentState);
   };
 
@@ -82,6 +83,10 @@ function Cerebral(state) {
 
   cerebral.extractState = function () {
     return helpers.currentState.toJS();
+  };
+
+  cerebral.ref = function () {
+    return helpers.nextRef++;
   };
 
   cerebral.get = function(path) {

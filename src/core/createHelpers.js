@@ -13,7 +13,8 @@ var createHelpers = function(state, store) {
       helpers.currentState = updatePath(helpers, path, cb);
       return helpers.currentState;
     },
-    eventStore: new EventStore(state, store)
+    eventStore: new EventStore(state, store),
+    nextRef: 0
   };
 
   helpers.currentState = createStore(helpers, state);

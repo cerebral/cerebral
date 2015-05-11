@@ -13,11 +13,12 @@ import setAllChecked from './signals/setAllChecked.js';
 import setCounters from './signals/setCounters.js';
 import toggleAllChecked from './signals/toggleAllChecked.js';
 import saveTodo from './signals/saveTodo.js';
+import updateTodo from './signals/updateTodo.js';
 
 // SIGNALS
 
 cerebral.signal('newTodoTitleChanged', setNewTodoTitle);
-cerebral.signal('newTodoSubmitted', addTodo, saveTodo, setVisibleTodos, setAllChecked, setCounters);
+cerebral.signal('newTodoSubmitted', addTodo, saveTodo, updateTodo, setVisibleTodos, setAllChecked, setCounters);
 cerebral.signal('removeTodo', removeTodo, setVisibleTodos, setAllChecked, setCounters);
 cerebral.signal('toggleCompleted', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
 cerebral.signal('toggleAllChecked', toggleAllChecked, setVisibleTodos, setCounters);

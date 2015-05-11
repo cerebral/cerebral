@@ -16,9 +16,19 @@ var createMutationMethods = function(helpers, store) {
         throw new Error('You are mutating the store outside a signal. Mutation: "' + mutator + '"" with arguments ' + JSON.stringify(args));
       }
 
-      // A merge can be on object passed
-      var path = args.length === 1 && utils.isObject(args[0]) ? [] : args.shift().slice();
-      path = typeof path === 'string' ? [path] : path;
+
+      var path = null;
+
+      // A merge can be an object passed to merge top tree
+      if (args.length === 1 && utils.isObject(args[0])) {
+        path = [];
+      } else if (args[0].__) {
+        path = args[0].__.path.slice();
+        args.shift(); // Do not show the object that led to the path
+      } else {
+        path = args.shift().slice();
+        path = Array.isArray(path) ? path : [path];
+      }
 
       // If it is a set move the key to the first argument
       if (mutator === 'set') {
