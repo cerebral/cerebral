@@ -14,7 +14,8 @@ var createHelpers = function(state, store) {
       return helpers.currentState;
     },
     eventStore: new EventStore(state, store),
-    nextRef: 0
+    nextRef: 0,
+    nextSignal: 0
   };
 
   helpers.currentState = createStore(helpers, state);

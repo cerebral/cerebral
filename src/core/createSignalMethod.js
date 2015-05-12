@@ -11,6 +11,7 @@ var createAsyncSignalMethod = function(helpers, store) {
       var args = [].slice.call(arguments);
       var timestamp = Date.now();
       var executionArray = callbacks.slice();
+      var signalId = ++helpers.nextSignal;
       var execute = function() {
 
         if (executionArray.length) {
@@ -25,6 +26,7 @@ var createAsyncSignalMethod = function(helpers, store) {
           if (result && result.then && typeof result.then === 'function') {
 
             helpers.currentState.__.eventStore.addAsyncSignal({
+              signalId: signalId,
               name: name,
               start: timestamp,
               args: args.slice()
@@ -38,6 +40,7 @@ var createAsyncSignalMethod = function(helpers, store) {
               originCallback.results[name] = result;
               
               helpers.currentState.__.eventStore.addAsyncSignal({
+                signalId: signalId,
                 name: name,
                 start: timestamp,
                 end: Date.now()
@@ -50,6 +53,7 @@ var createAsyncSignalMethod = function(helpers, store) {
             }).catch(function(err) {
               console.error(err);
               helpers.currentState.__.eventStore.addAsyncSignal({
+                signalId: signalId,
                 name: name,
                 start: timestamp,
                 failed: err,
@@ -68,6 +72,7 @@ var createAsyncSignalMethod = function(helpers, store) {
       execute.apply(null, args);
 
       helpers.currentState.__.eventStore.addSignal({
+        id: signalId,
         name: name,
         timestamp: timestamp,
         args: args.slice()

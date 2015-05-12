@@ -4,6 +4,7 @@
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
     - Freeze returned objects form actions that are not immutable
+    - Show what actions that are run in the debugger
 */
 var utils = require('./utils.js');
 var React = require('react');
@@ -65,6 +66,7 @@ function Cerebral(state) {
   // Go back in time
   cerebral.remember = function(index) {
     helpers.nextRef = 0;
+    helpers.nextSignal = 0;
     return helpers.eventStore.travel(index, helpers.currentState);
   };
 

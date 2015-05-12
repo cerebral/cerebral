@@ -58,28 +58,15 @@ var Debugger = React.createClass({
   renderMutations: function() {
     var currentSignalIndex = this.context.cerebral.getMemoryIndex();
     var signals = this.context.cerebral.getMemories().signals
-    var nextSignal = signals[currentSignalIndex + 1];
-    var previousSignal = signals[currentSignalIndex];
-    var timestamp = null;
-    var prevTimestamp = null;
-    if (!nextSignal) {
-      timestamp = Date.now();
-    } else {
-      timestamp = nextSignal.timestamp;
-    }
-    if (!previousSignal) {
-      prevTimestamp = timestamp
-    } else {
-      prevTimestamp = previousSignal.timestamp;
-    }
+    var signal = signals[currentSignalIndex];
 
-    if (!nextSignal && !previousSignal) {
+    if (!signal) {
       return null;
     }
 
     var mutations = this.context.cerebral.getMemories().mutations;
     return mutations.filter(function(mutation) {
-        return mutation.timestamp < timestamp && mutation.timestamp >= prevTimestamp;
+        return mutation.signalId === signal.id;
       })
       .map(function(mutation, index) {
         var mutationArgs = mutation.args.slice();
