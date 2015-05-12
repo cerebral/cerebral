@@ -4,6 +4,7 @@
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
     - Freeze returned objects form actions that are not immutable
+    - Only run Debugger when not in
 */
 var utils = require('./utils.js');
 var React = require('react');
