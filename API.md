@@ -378,6 +378,7 @@ cerebral.unshift(['todos'], {
 });
 ```
 Adds item at beginning of array.
+<<<<<<< HEAD
 ### get
 ```js
 cerebral.get('todos');
@@ -418,3 +419,5 @@ Returns two arrays. One for signals and one for mutations. Use the *signalId* pr
 cerebral.remember(-1); // Go to beginning
 cerebral.remember(5); // Remember up to signal 5
 ```
+=======
+>>>>>>> 4b6405c2f6031ba344020825541ec6d211a5cf7a
