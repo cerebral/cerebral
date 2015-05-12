@@ -3,8 +3,14 @@
 /*
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
-    - Freeze returned objects form actions that are not immutable
-    - Only run Debugger when not in
+    - Freeze returned objects from actions that are not immutable
+    - Show what actions that are run in the debugger
+    - Only run Debugger when not in production
+    - Decide on when to emit event
+      - After signal (and async signal) <-
+      - Each mutation
+      - Generally batch up events
+    - Add toJS method documentation
 */
 var utils = require('./utils.js');
 var React = require('react');
@@ -66,6 +72,7 @@ function Cerebral(state) {
   // Go back in time
   cerebral.remember = function(index) {
     helpers.nextRef = 0;
+    helpers.nextSignal = 0;
     return helpers.eventStore.travel(index, helpers.currentState);
   };
 

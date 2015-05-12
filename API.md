@@ -4,8 +4,8 @@
 - [Inject](#inject)
 - [Mixin](#mixin)
 - [Signals](#signals)
-- [Compose signals](#composesignals)
-- [Mutate state](#mutatestate)
+- [Compose signals](#compose-signals)
+- [Mutate state](#mutate-state)
   - [set](#set)
   - [merge](#merge)
   - [push](#push)
@@ -14,7 +14,13 @@
   - [pop](#pop)
   - [shift](#shift)
   - [unshift](#unshift)
-- [Get state](#getstate)
+- [get](#get)
+- [toJS](#tojs)
+- [ref](#ref)
+- [getByRef](#getbyref)
+
+- [getMemories](#getmemories)
+- [remember](#remember)
 
 All examples are shown with ES6 + Webpack syntax. You can of course use normal React syntax and ES5 code.
 
@@ -318,43 +324,36 @@ cerebral.set([todo, 'title'], 'Something');
 ```
 
 The examples below will be shown using the *array* syntax.
-#### Set
+#### set
 ```js
 cerebral.set(['user', 'name'], 'foo');
 ```
-#### Unset
+#### unset
 ```js
 cerebral.unset(['user', 'name']);
 ```
 Removes the name key on the user.
-#### Merge
+#### merge
 ```js
 cerebral.merge(['user'], {
   name: 'foo',
   age: 30
 });
 ```
-#### Merge
-```js
-cerebral.merge(['user'], {
-  name: 'foo',
-  age: 30
-});
-```
-#### Push
+#### push
 ```js
 cerebral.push(['todos'], {
   title: 'foo'
 });
 ```
-#### Splice
+#### splice
 ```js
 cerebral.splice(['todos'], 0, 1, {
   title: 'newTodo'
 });
 ```
 Note that this works just like the natuve `Array.prototype.splice` method. The last argument is optional.
-#### Concat
+#### concat
 ```js
 cerebral.concat(['todos'], [{
   title: 'newTodo1'
@@ -362,20 +361,60 @@ cerebral.concat(['todos'], [{
   title: 'newTodo2'
 }]);
 ```
-#### Pop
+#### pop
 ```js
 cerebral.pop(['todos']);
 ```
 Removes last item in array.
-#### Shift
+#### shift
 ```js
 cerebral.shift(['todos']);
 ```
 Removes first item in array.
-#### Unshift
+#### unshift
 ```js
 cerebral.unshift(['todos'], {
   title: 'foo'
 });
 ```
 Adds item at beginning of array.
+### get
+```js
+cerebral.get('todos');
+cerebral.get(['user', 'name']);
+```
+Values returned from cerebral are immutable!
+### toJS
+```js
+let todo = cerebral.get('todos', 0);
+todo.title; // "foo"
+todo.title = 'bar';
+todo.title; // "foo"
+let copy = todo.toJS();
+copy.title = 'bar';
+copy.title; // "bar"
+```
+### ref
+```js
+let todo = {
+  ref: cerebral.ref(),
+  title: 'foo'
+};
+```
+Use Cerebral refs to create unique IDs in the client. It is important that you use Cerebrals internal reference implementation as the IDs will be created chronologically.
+### getByRef
+```js
+let todo = cerebral.getByRef('todos', todo.ref);
+```
+### getMemories
+```js
+let memories = getMemories();
+memories.signals; // [signals...]
+memories.mutations; // [mutations...]
+```
+Returns two arrays. One for signals and one for mutations. Use the *signalId* property to determine what mutations belongs to what signals.
+### remember
+```js
+cerebral.remember(-1); // Go to beginning
+cerebral.remember(5); // Remember up to signal 5
+```

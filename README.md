@@ -1,4 +1,4 @@
-# cerebral (WIP)
+# cerebral (WIP) ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
 A modern application framework for React
 
 ![Cerebral - WIP](images/logo.jpg)
@@ -45,6 +45,8 @@ All examples are shown in ES6 code using Webpack as module loader. Though the co
 - **facets**: A composition of memory and/or replacement of lacking memory
 
 Please watch [this video for a complete introduction to **Cerebral**](http://) (SOON!)
+
+You can use the [cerebral-boilerplate](https://github.com/christianalfoni/cerebral/edit/master/README.md) to quickly get up and running. It is a Webpack and Node setup.
 
 ### Create a cerebral
 *cerebral.js*
