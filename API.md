@@ -4,7 +4,7 @@
 - [Inject](#inject)
 - [Mixin](#mixin)
 - [Signals](#signals)
-- [Compose signals](#composeSignals)
+- [Compose signals](#compose signals)
 - [Mutate state](#mutatestate)
   - [set](#set)
   - [merge](#merge)
