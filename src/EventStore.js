@@ -77,9 +77,13 @@ EventStore.prototype.travel = function(index, state) {
 
   // If no event, just update the app
   if (index === -1) {
+
     this.currentIndex = index;
+    this.hasExecutingSignals = false;
+    store.isRemembering = false;
     store.emit('update');
     return store;
+
   } else {
     // Run through events
     for (var x = 0; x <= index; x++) {
