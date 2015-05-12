@@ -14,7 +14,7 @@ var config = {
     preLoaders: [{
       test: /\.js$/,
       loader: 'jshint',
-      exclude: /events/
+      exclude: [/events/, /react/]
     }]
   },
   jshint: {

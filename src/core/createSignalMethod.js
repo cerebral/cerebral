@@ -1,5 +1,5 @@
 "use strict";
-
+var utils = require('./../utils.js');
 var createAsyncSignalMethod = function(helpers, store) {
 
   return function() {
@@ -20,13 +20,13 @@ var createAsyncSignalMethod = function(helpers, store) {
           var callback = executionArray.shift();
 
           store.allowMutations = true;
-          var result = store.isRemembering && callback.isAsync ? callback.results[name] : callback.apply(null, signalArgs);
-          if (typeof result === 'object' && result !== null) {
+          var result = store.isRemembering && callback.isAsync ? callback.results[name][signalId] : callback.apply(null, signalArgs);
+          if (utils.isObject(result) && !utils.isPromise(result)) {
             Object.freeze(result);
           }
           store.allowMutations = false;
 
-          if (result && result.then && typeof result.then === 'function') {
+          if (utils.isPromise(result)) {
 
             helpers.currentState.__.eventStore.addAsyncSignal({
               signalId: signalId,
@@ -40,7 +40,8 @@ var createAsyncSignalMethod = function(helpers, store) {
               var originCallback = callbacks[callbacks.indexOf(callback)];
               originCallback.isAsync = true;
               originCallback.results = originCallback.results || {};
-              originCallback.results[name] = result;
+              originCallback.results[name] = originCallback.results[name] || {};
+              originCallback.results[name][signalId] = result;
               
               helpers.currentState.__.eventStore.addAsyncSignal({
                 signalId: signalId,

@@ -70,6 +70,9 @@ var utils = {
     
     return currentPath && !path.length ? currentPath : null;
 
+  },
+  isPromise: function (value) {
+    return value && value.then && typeof value.then === 'function';
   }
 };
 
