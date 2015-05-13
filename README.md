@@ -1,8 +1,7 @@
 # cerebral (WIP) ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
 A modern application framework for React
 
-![Cerebral - WIP](images/logo.jpg)
-*Logo is a work in progress...*
+<img src="images/logo.jpg" width="300" align="center">
 
 Preview at: [Immutable-store gets signals and a time machine ](https://www.youtube.com/watch?v=Txpw4wU4BCU)
 
