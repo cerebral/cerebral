@@ -10,15 +10,7 @@ More video preview at: [Cerebral - a React framework in the making ](https://www
 | [API](API.md) |
 
 ## Cerebral - the abstraction
-If your application was a person you interacted with, **cerebral** would be the brain and the nervous system of that person.
-
-Imagine how you interact with a person. You can interact in different ways, like talking, waving your arms or give a hug. The other person experiences these interactions as impulses that goes through the nervous system to the brain, where they are processed and stored. This is exactly how **cerebral** imagines your application, though the interactions are mouse clicks, keyboard presses etc. that are sent with signals to a single application store.
-
-So imagine your application as a human. The way we traditionally have built applications is having many "persons" (views) that can be interacted with. They have their own brain (state) and logic for handling interactions (events). This quickly becomes very complex and difficult to manage. The reason is that each "person" being interacted with operates in isolation and can not share their information. You have to create a system to share information and keep everyone informed. In real life  this is a huge challenge. It is difficult to keep a group of people in complete sync, and your application is no different. 
-
-With the flux architecture we conceptually moved away from dealing with a group of people to having one person handling all interaction and state changes. But in a flux architecture this person has a split personality. Multiple stores has different responsibilities and are dependant on each other, much like our traditional architecture. This is difficult to manage, though the result is much more scalable and easier to reason with.
-
-With **cerebral** your application is truly "one person". Think of your components as the body of your application, and cerebral as the brain and the nervous system. The user interacts with the body (UI) which passes impulses (signals) to the brain (cerebral). These impulses are processed by one or multiple axons (actions) and stored. Unlike traditional analogies of handling state and interactions as something "outside the components", think of **cerebral** as something "inside the components". This will make a lot of sense when you look at the code!
+Read this article introducing Cerebral: [Cerebral developer preview](https://github.com/christianalfoni/EmptyBox/blob/master/drafts/2015_05_12_Cerebral-developer-preview.md)
 
 ## Short history
 I have been writing about and researching traditional and flux architecture for quite some time. Look at my blog [www.christianalfoni.com](http://www.christianalfoni.com) for more information. Though I think we are moving towards better abstractions for reasoning about our applications there are core issues that are yet to be solved. This library is heavily inspired by articles, videos, other projects and my own experiences building applications.
