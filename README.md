@@ -27,15 +27,7 @@ I have been writing about and researching traditional and flux architecture for 
 - Requires React as your UI layer
 
 ## Creating an application
-All examples are shown in ES6 code using Webpack as module loader. Though the concept is heavily inspired by nerves, impulses etc. it felt weird naming methods as such. So the naming is:
-
-- **cerebral**: The brain
-- **state**: Memory
-- **signals**: Impulses  
-- **actions**: Axons
-- **facets**: A composition of memory and/or replacement of lacking memory
-
-Please watch [this video for a complete introduction to **Cerebral**](http://) (SOON!)
+All examples are shown in ES6 code.
 
 You can use the [cerebral-boilerplate](https://github.com/christianalfoni/cerebral/edit/master/README.md) to quickly get up and running. It is a Webpack and Node setup.
 
