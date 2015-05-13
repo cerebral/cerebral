@@ -94,7 +94,7 @@ var createAsyncSignalMethod = function(helpers, store) {
 
       };
 
-      if (store.isRemembering) {
+      if (store.isRemembering || typeof requestAnimationFrame === 'undefined') {
         runMutation();
       } else {
         requestAnimationFrame(runMutation);
