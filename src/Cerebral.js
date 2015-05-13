@@ -10,6 +10,11 @@
       - After signal (and async signal) <-
       - Each mutation
       - Generally batch up events
+    - Document signals
+      - Trigger update on signal end
+      - runs request animationframe
+      - Runs all the way down to React
+      - Trigger update on async action
     - Add toJS method documentation
 */
 var utils = require('./utils.js');

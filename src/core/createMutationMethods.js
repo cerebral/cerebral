@@ -44,7 +44,7 @@ var createMutationMethods = function(helpers, store) {
       }
 
       helpers.currentState.__.eventStore.addMutation({
-        signalId: helpers.nextSignal,
+        signalId: helpers.currentSignal,
         name: mutator,
         timestamp: Date.now(),
         path: path.__.path.slice(),

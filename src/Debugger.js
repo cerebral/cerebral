@@ -87,6 +87,13 @@ var Debugger = React.createClass({
         );
       });
   },
+  renderFPS: function (duration) {
+
+    var color = duration >= 16 ? '#d9534f' : duration >= 10 ? '#f0ad4e' : '#5cb85c';
+    return DOM.strong(null, DOM.small({
+      style: {color: color}
+    }, ' (' + duration + 'ms)'));
+  },
   render: function() {
     var cerebral = this.context.cerebral;
     var lockInput = cerebral.hasExecutingAsyncSignals();
@@ -109,7 +116,7 @@ var Debugger = React.createClass({
         value: value,
         steps: steps
       }),
-      DOM.h2({style:{color: '#999'}}, signal ? signal.name + ':' : null),
+      DOM.h2({style:{color: '#999'}}, signal ? DOM.span(null, signal.name,  this.renderFPS(signal.duration)) : null),
       DOM.ul({style: MutationsStyle}, this.renderMutations()),
       lockInput ? DOM.strong({
         style: {color: 'orange'}

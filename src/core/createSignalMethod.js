@@ -9,80 +9,96 @@ var createAsyncSignalMethod = function(helpers, store) {
 
     store.signals[name] = function() {
       var args = [].slice.call(arguments);
-      var timestamp = Date.now();
       var executionArray = callbacks.slice();
       var signalId = ++helpers.nextSignal;
-      var execute = function() {
+      var runMutation = function() {
 
-        if (executionArray.length) {
+        var timestamp = Date.now();
+        var execute = function() {
 
-          var signalArgs = [].slice.call(arguments);
-          var callback = executionArray.shift();
+          if (executionArray.length) {
 
-          store.allowMutations = true;
-          var result = store.isRemembering && callback.isAsync ? callback.results[name][signalId] : callback.apply(null, signalArgs);
-          if (utils.isObject(result) && !utils.isPromise(result)) {
-            Object.freeze(result);
-          }
-          store.allowMutations = false;
+            var signalArgs = [].slice.call(arguments);
+            var callback = executionArray.shift();
 
-          if (utils.isPromise(result)) {
+            // Run mutation
+            store.allowMutations = true;
+            helpers.currentSignal = signalId;
+            var result = store.isRemembering && callback.isAsync ? callback.results[name][signalId] : callback.apply(null, signalArgs);
+            if (utils.isObject(result) && !utils.isPromise(result)) {
+              Object.freeze(result);
+            }
+            store.allowMutations = false;
 
-            helpers.currentState.__.eventStore.addAsyncSignal({
-              signalId: signalId,
-              name: name,
-              start: timestamp,
-              args: args.slice()
-            });
+            if (utils.isPromise(result)) {
 
-            result.then(function(result) {
-
-              var originCallback = callbacks[callbacks.indexOf(callback)];
-              originCallback.isAsync = true;
-              originCallback.results = originCallback.results || {};
-              originCallback.results[name] = originCallback.results[name] || {};
-              originCallback.results[name][signalId] = result;
-              
               helpers.currentState.__.eventStore.addAsyncSignal({
                 signalId: signalId,
                 name: name,
                 start: timestamp,
-                end: Date.now()
+                args: args.slice()
               });
 
-              // Have to update again after an async action
-              var result = execute(result);
-              store.emit('update');
-              return result;
-            }).catch(function(err) {
-              console.error(err);
-              helpers.currentState.__.eventStore.addAsyncSignal({
-                signalId: signalId,
-                name: name,
-                start: timestamp,
-                failed: err,
-                end: Date.now()
-              });
-            });
+              result.then(function(result) {
 
-          } else {
-            execute(result);
+                if (utils.isObject(result) && !utils.isPromise(result)) {
+                  Object.freeze(result);
+                }
+
+                var originCallback = callbacks[callbacks.indexOf(callback)];
+                originCallback.isAsync = true;
+                originCallback.results = originCallback.results || {};
+                originCallback.results[name] = originCallback.results[name] || {};
+                originCallback.results[name][signalId] = result;
+
+                helpers.currentState.__.eventStore.addAsyncSignal({
+                  signalId: signalId,
+                  name: name,
+                  start: timestamp,
+                  end: Date.now()
+                });
+
+                // Have to update again after an async action
+                var result = execute(result);
+                store.emit('update');
+                return result;
+              }).catch(function(err) {
+                helpers.currentState.__.eventStore.addAsyncSignal({
+                  signalId: signalId,
+                  name: name,
+                  start: timestamp,
+                  failed: err,
+                  end: Date.now()
+                });
+              });
+
+            } else {
+              execute(result);
+            }
+
           }
 
-        }
+        }.bind(null, store);
 
-      }.bind(null, store);
+        execute.apply(null, args);
 
-      execute.apply(null, args);
+        helpers.currentState.__.eventStore.addSignal({
+          id: signalId,
+          name: name,
+          timestamp: timestamp,
+          duration: Date.now() - timestamp,
+          args: args.slice()
+        });
 
-      helpers.currentState.__.eventStore.addSignal({
-        id: signalId,
-        name: name,
-        timestamp: timestamp,
-        args: args.slice()
-      });
+        store.emit('update');
 
-      store.emit('update');
+      };
+
+      if (store.isRemembering) {
+        runMutation();
+      } else {
+        requestAnimationFrame(runMutation);
+      }
 
     };
 
