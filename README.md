@@ -9,6 +9,10 @@ More video preview at: [Cerebral - a React framework in the making ](https://www
 
 | [API](API.md) |
 
+## Video introductions
+
+- **[Get started - 4:13](http://www.youtube.com/watch?v=Mm4B5F432SQ)**. See how you get started with your Cerebral app. Using a boilerplate you have everything you need for a great workflow and even a server you can put into production.
+
 ## Cerebral - The abstraction
 Read this article introducing Cerebral: [Cerebral developer preview](https://github.com/christianalfoni/EmptyBox/blob/master/drafts/2015_05_12_Cerebral-developer-preview.md) (WIP)
 
