@@ -13,12 +13,13 @@ More video preview at: [Cerebral - a React framework in the making ](https://www
 Read this article introducing Cerebral: [Cerebral developer preview](https://github.com/christianalfoni/EmptyBox/blob/master/drafts/2015_05_12_Cerebral-developer-preview.md) (WIP)
 
 ## Short history
-I have been writing about and researching traditional and flux architecture for quite some time. Look at my blog [www.christianalfoni.com](http://www.christianalfoni.com) for more information. Though I think we are moving towards better abstractions for reasoning about our applications there are core issues that are yet to be solved. This library is heavily inspired by articles, videos, other projects and my own experiences building applications.
+I have been writing about, researching and developing both traditional and Flux architecture for quite some time. Look at my blog [www.christianalfoni.com](http://www.christianalfoni.com) for more information. Though I think we are moving towards better abstractions for reasoning about our applications there are core issues that are yet to be solved. This library is heavily inspired by articles, videos, other projects and my own experiences building applications.
 
 ## Core features
-- An architecture inspired by flux and Baobab
+- An architecture inspired by Flux and Baobab
 - A single object for all application state
 - One way flow of state
+- Has complete control of your application state flow using signals
 - Can retrace state changes live in the UI
 - Specific concepts for handling asynchronous code and relational data
 - Immutable data
@@ -36,7 +37,7 @@ You can use the [cerebral-boilerplate](https://github.com/christianalfoni/cerebr
 ```js
 import Cerebral from 'cerebral';
 
-var state = {
+let state = {
   todos: [],
   newTodoTitle: ''
 };
@@ -86,24 +87,28 @@ An action is named "what to do with the signal". An action is by default **synch
 import React from 'react';
 import mixin from 'cerebral/mixin';
 
-class App extends React.Component {
+let App = React.createClass({
+  mixins: [mixin],
   getCerebralState() {
     return ['todos', 'newTodoTitle'];
-  }
+  },
   renderItem(todo, index) {
     return (
       <li key={index}>{todo.title}</li>
     );
-  }
-  submitNewTodo(event) {
+  },
+  onNewTodoSubmitted(event) {
     event.preventDefault();
     this.signals.newTodoTitleSubmitted();
-  }
+  },
+  onNewTodoTitleChanged(event) {
+    this.signals.newTodoTitleChanged(event.target.title);
+  },
   render() {
     return (
       <div>
-        <form onSubmit={this.submitNewTodo}>
-          <input type="text" onChange={this.signals.newTodoTitleChanged} value={this.state.newTodoTitle}/>
+        <form onSubmit={this.onNewTodoSubmitted}>
+          <input type="text" onChange={this.onNewTodoTileChanged} value={this.state.newTodoTitle}/>
         </form>
         <ul>
           {this.state.todos.map(this.renderItem)}
@@ -111,9 +116,9 @@ class App extends React.Component {
       </div>
     );
   }
-}
+});
 
-export default mixin(App);
+export default App;
 ```
 The **mixin** allows you to expose state from the **cerebral** to the component. You do that by returning an array with paths or an object with key/path. The mixin includes a **PureRenderMixin** that checks changes to the state and props of the component, to avoid unnecessary renders. This runs really fast as the **cerebral** is immutable.
 
@@ -131,7 +136,7 @@ cerebral.signal('newTodoTitleSubmitted', addNewTodo);
 
 let Wrapper = cerebral.injectInto(App);
 
-React.render(<Wrapper/>, document.body);
+React.render(<Wrapper/>, document.querySelector('#app'));
 ```
 To expose the **cerebral** to the components you need to inject it. The returned wrapper can be used to render the application. This is also beneficial for isomorphic apps.
 
