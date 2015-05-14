@@ -1,7 +1,7 @@
 "use strict";
 var utils = require('./../utils.js');
 
-var createFacetMethod = function(store, facets, helpers) {
+var createMapMethod = function(store, maps, helpers) {
 
   return function(path, depPaths, callback) {
     
@@ -36,14 +36,14 @@ var createFacetMethod = function(store, facets, helpers) {
       }
     };
 
-    var facetPath = facets;
+    var mapPath = maps;
     var pathCopy = path.slice();
     while(pathCopy.length) {
-      facetPath = facetPath[pathCopy.shift()] = pathCopy.length ? {} : update;
+      mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : update;
     }
   
   };
 
 };
 
-module.exports = createFacetMethod;
+module.exports = createMapMethod;

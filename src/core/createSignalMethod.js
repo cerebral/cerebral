@@ -10,7 +10,15 @@ var createAsyncSignalMethod = function(helpers, store) {
     store.signals[name] = function() {
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
-      var signalId = ++helpers.nextSignal;
+      var signal = {
+        id: ++helpers.nextSignal,
+        name: name,
+        actions: [],
+        timestamp: timestamp,
+        duration: 0,
+        args: args.slice()
+      };
+
       var runMutation = function() {
 
         var timestamp = Date.now();
@@ -82,13 +90,8 @@ var createAsyncSignalMethod = function(helpers, store) {
 
         execute.apply(null, args);
 
-        helpers.currentState.__.eventStore.addSignal({
-          id: signalId,
-          name: name,
-          timestamp: timestamp,
-          duration: Date.now() - timestamp,
-          args: args.slice()
-        });
+        signal.duration = Date.now() - signal.timestamp
+        helpers.currentState.__.eventStore.addSignal(signal);
 
         store.emit('update');
 

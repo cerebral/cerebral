@@ -25,7 +25,7 @@ cerebral.signal('toggleAllChecked', toggleAllChecked, setVisibleTodos, setCounte
 
 // FACETS
 
-cerebral.facet('visibleTodos', ['todos'], function (cerebral, ids) {
+cerebral.map('visibleTodos', ['todos'], function (cerebral, ids) {
   return ids.map(function (index) {
     return cerebral.get('todos')[index];
   });
