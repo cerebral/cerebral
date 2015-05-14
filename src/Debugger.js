@@ -16,6 +16,11 @@ var debuggerStyle = {
   color: '#666',
 };
 
+var LogLink = {
+  textDecoration: 'underline',
+  cursor: 'pointer'
+};
+
 var MutationsStyle = {
   listStyleType: 'none',
   color: '#999',
@@ -61,6 +66,11 @@ var Debugger = React.createClass({
   travelThroughTime: function(value) {
     this.context.cerebral.remember(value - 1);
   },
+  logPath: function (name, path, event) {
+      event.preventDefault();
+      var value = this.context.cerebral.get(path);
+      console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
+  },
   renderMutations: function() {
     var currentSignalIndex = this.context.cerebral.getMemoryIndex();
     var signals = this.context.cerebral.getMemories();
@@ -91,7 +101,7 @@ var Debugger = React.createClass({
             color: '#555'
           }
         }, 
-        action.name,
+        (index + 1) + '. ' + action.name,
         DOM.small({
             style: {
               color: action.isAsync ? 'orange' : '#555'
@@ -110,6 +120,7 @@ var Debugger = React.createClass({
             var mutationArgs = mutation.args.slice();
             var path = mutation.name === 'set' ? mutation.path.concat(mutationArgs.shift()) : mutation.path;
             var color = mutationColors[mutation.name];
+            var pathName = path.length ? path.join('.') : '$root';
 
             return DOM.li({
                 key: index,
@@ -121,7 +132,8 @@ var Debugger = React.createClass({
                     color: color
                   }
                 }, mutation.name),
-                ' ' + path.join('.'),
+                ' ',
+                DOM.a({style: LogLink, onClick: this.logPath.bind(null, pathName, path)}, pathName),
                 DOM.div({
                   style: MutationArgsStyle
                 }, mutationArgs.map(function(mutationArg) {
@@ -130,12 +142,10 @@ var Debugger = React.createClass({
               )
             );
 
-          })
+          }, this)
         )
       );
-    });
-
-
+    }, this);
 
     var mutations = this.context.cerebral.getMemories().mutations;
     return mutations.filter(function(mutation) {

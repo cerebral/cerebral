@@ -45,7 +45,7 @@ var createAsyncSignalMethod = function(helpers, store) {
             var actionStart = Date.now();
             var result = store.isRemembering && callback.isAsync ? callback.results[name][signalIndex] : callback.apply(null, signalArgs);
             var isPromise = utils.isPromise(result);
-
+            
             signal.duration += action.duration = Date.now() - actionStart;
             action.isAsync = !!(isPromise || (store.isRemembering && callback.isAsync));
 
