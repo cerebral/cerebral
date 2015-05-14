@@ -15,6 +15,12 @@ Read this article introducing Cerebral: [Cerebral developer preview](https://git
 ## Short history
 I have been writing about, researching and developing both traditional and Flux architecture for quite some time. Look at my blog [www.christianalfoni.com](http://www.christianalfoni.com) for more information. Though I think we are moving towards better abstractions for reasoning about our applications there are core issues that are yet to be solved. This library is heavily inspired by articles, videos, other projects and my own experiences building applications.
 
+## Contributors
+- Logo and illustrations - **Petter Stenberg Hansen**
+- Article review - **Jesse Wood**
+
+Thanks guys!
+
 ## Core features
 - An architecture inspired by Flux and Baobab
 - A single object for all application state

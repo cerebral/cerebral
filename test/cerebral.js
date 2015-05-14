@@ -38,8 +38,9 @@ exports['should store mutation change for travelling'] = function(test) {
     cerebral.set('foo', 'bar2');
   });
   cerebral.signals.test();
-  test.equal(cerebral.getMemories().signals.length, 1);
-  test.equal(cerebral.getMemories().mutations.length, 1);
+  test.equal(cerebral.getMemories().length, 1);
+  test.equal(cerebral.getMemories()[0].actions.length, 1);
+  test.equal(cerebral.getMemories()[0].actions[0].mutations.length, 1);
   test.done();
 };
 

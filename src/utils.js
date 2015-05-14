@@ -38,7 +38,7 @@ var utils = {
     if (!objA || !objB) {
       return false;
     }
-    
+
     var key;
     // Test for A's keys different from B.
     for (key in objA) {
@@ -55,8 +55,8 @@ var utils = {
     }
     return true;
   },
-  getFacetPath: function (path, facets) {
-    
+  getMapPath: function(path, facets) {
+
     // No facets if no path
     if (!path.length) {
       return;
@@ -67,12 +67,18 @@ var utils = {
     while (currentPath && path.length) {
       currentPath = currentPath[path.shift()];
     }
-    
+
     return currentPath && !path.length ? currentPath : null;
 
   },
-  isPromise: function (value) {
-    return value && value.then && typeof value.then === 'function';
+  isPromise: function(value) {
+    return !!(value && value.then && typeof value.then === 'function');
+  },
+  getFunctionName: function(fun) {
+    var ret = fun.toString();
+    ret = ret.substr('function '.length);
+    ret = ret.substr(0, ret.indexOf('('));
+    return ret;
   }
 };
 

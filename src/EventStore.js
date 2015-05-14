@@ -6,7 +6,6 @@ var EventStore = function(state, store) {
   this.initialState = state;
   this.signals = [];
   this.asyncSignals = [];
-  this.mutations = [];
   this.hasExecutingSignals = false;
   this.hasExecutingAsyncSignals = false;
   this.currentIndex = -1;
@@ -40,26 +39,26 @@ EventStore.prototype.addSignal = function(signal) {
   }
   if (this.currentIndex < this.signals.length - 1) {
 
-    var removedSignals = this.signals.splice(this.currentIndex + 1, this.signals.length - this.currentIndex);
-    var lastSignal = removedSignals[0];
-    if (lastSignal) {
-      this.mutations = this.mutations.filter(function(mutation) {
-        return mutation.timestamp < lastSignal.timestamp || mutation.timestamp >= signal.timestamp;
-      });
-    } else if (this.currentIndex === 0) {
-      this.mutations = [];
-    }
+    this.signals.splice(this.currentIndex + 1, this.signals.length - this.currentIndex);
 
   }
   this.signals.push(signal);
   this.currentIndex = this.signals.length - 1;
 };
 
+EventStore.prototype.addAction = function (action) {
+  if (this.hasExecutingSignals) {
+    return;
+  }
+  this.signals[action.signalIndex].actions.push(action);
+};
+
 EventStore.prototype.addMutation = function(mutation) {
   if (this.hasExecutingSignals) {
     return;
   }
-  this.mutations.push(mutation);
+  var signal = this.signals[mutation.signalIndex];
+  signal.actions[signal.actions.length - 1].mutations.push(mutation);
 };
 
 EventStore.prototype.travel = function(index, state) {

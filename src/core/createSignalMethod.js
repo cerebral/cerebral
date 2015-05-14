@@ -10,18 +10,19 @@ var createAsyncSignalMethod = function(helpers, store) {
     store.signals[name] = function() {
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
-      var signal = {
-        id: ++helpers.nextSignal,
-        name: name,
-        actions: [],
-        timestamp: timestamp,
-        duration: 0,
-        args: args.slice()
-      };
-
+      var signalIndex = helpers.nextSignal++;
       var runMutation = function() {
 
         var timestamp = Date.now();
+        var signal = {
+          index: signalIndex,
+          name: name,
+          actions: [],
+          duration: 0,
+          timestamp: timestamp,
+          args: args.slice()
+        };
+
         var execute = function() {
 
           if (executionArray.length) {
@@ -29,19 +30,34 @@ var createAsyncSignalMethod = function(helpers, store) {
             var signalArgs = [].slice.call(arguments);
             var callback = executionArray.shift();
 
-            // Run mutation
             store.allowMutations = true;
-            helpers.currentSignal = signalId;
-            var result = store.isRemembering && callback.isAsync ? callback.results[name][signalId] : callback.apply(null, signalArgs);
+            helpers.currentSignal = signalIndex;
+
+            // Run action
+            var action = {
+              signalIndex: signalIndex,
+              index: callbacks.indexOf(callback),
+              name: utils.getFunctionName(callback),
+              duration: 0,
+              mutations: []
+            };
+            helpers.eventStore.addAction(action);
+            var actionStart = Date.now();
+            var result = store.isRemembering && callback.isAsync ? callback.results[name][signalIndex] : callback.apply(null, signalArgs);
+            var isPromise = utils.isPromise(result);
+
+            signal.duration += action.duration = Date.now() - actionStart;
+            action.isAsync = !!(isPromise || (store.isRemembering && callback.isAsync));
+
             if (utils.isObject(result) && !utils.isPromise(result)) {
               Object.freeze(result);
             }
             store.allowMutations = false;
 
-            if (utils.isPromise(result)) {
+            if (isPromise) {
 
-              helpers.currentState.__.eventStore.addAsyncSignal({
-                signalId: signalId,
+              helpers.eventStore.addAsyncSignal({
+                signalIndex: signalIndex,
                 name: name,
                 start: timestamp,
                 args: args.slice()
@@ -57,10 +73,10 @@ var createAsyncSignalMethod = function(helpers, store) {
                 originCallback.isAsync = true;
                 originCallback.results = originCallback.results || {};
                 originCallback.results[name] = originCallback.results[name] || {};
-                originCallback.results[name][signalId] = result;
+                originCallback.results[name][signalIndex] = result;
 
-                helpers.currentState.__.eventStore.addAsyncSignal({
-                  signalId: signalId,
+                helpers.eventStore.addAsyncSignal({
+                  signalIndex: signalIndex,
                   name: name,
                   start: timestamp,
                   end: Date.now()
@@ -71,8 +87,8 @@ var createAsyncSignalMethod = function(helpers, store) {
                 store.emit('update');
                 return result;
               }).catch(function(err) {
-                helpers.currentState.__.eventStore.addAsyncSignal({
-                  signalId: signalId,
+                helpers.eventStore.addAsyncSignal({
+                  signalIndex: signalIndex,
                   name: name,
                   start: timestamp,
                   failed: err,
@@ -88,10 +104,8 @@ var createAsyncSignalMethod = function(helpers, store) {
 
         }.bind(null, store);
 
+        helpers.eventStore.addSignal(signal);
         execute.apply(null, args);
-
-        signal.duration = Date.now() - signal.timestamp
-        helpers.currentState.__.eventStore.addSignal(signal);
 
         store.emit('update');
 

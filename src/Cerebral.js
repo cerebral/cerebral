@@ -3,17 +3,7 @@
 /*
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
-    - Only run Debugger when not in production
-    - Document signals
-      - Trigger update on signal end
-      - runs request animationframe
-      - Runs all the way down to React
-      - Trigger update on async action
-    - Use helpers to set current action
-    - Show what actions that are run in the debugger
     - Freeze data returned from facets? what about arrays with objects?  
-    - Refactor event store to have one array with all data, using signalId and signalId-callbackIndex to map
-
 */
 var utils = require('./utils.js');
 var React = require('react');
@@ -39,33 +29,38 @@ function Cerebral(state) {
   var maps = {};
 
   cerebral.signals = {};
-  
+
   cerebral.signal = createSignalMethod(helpers, cerebral);
   cerebral.map = createMapMethod(cerebral, maps, helpers);
 
-  cerebral.hasExecutingAsyncSignals = function () {
+  cerebral.hasExecutingAsyncSignals = function() {
     return helpers.eventStore.hasExecutingAsyncSignals;
   };
 
-  cerebral.injectInto = function (component) {
+  cerebral.injectInto = function(component) {
     var Wrapper = React.createClass({
       childContextTypes: {
         cerebral: React.PropTypes.object
       },
-      getChildContext: function () {
+      getChildContext: function() {
         return {
           cerebral: cerebral
         };
       },
-      render: function () {
-        return React.DOM.div(null,
-          React.DOM.div({
-            style: {
-              paddingRight: '400px'
-            }
-          }, React.createElement(component, this.props)),
-          CerebralDebugger()
-        );
+      render: function() {
+
+        if (process.env.NODE_ENV === 'production') {
+          return component(this.props);
+        } else {
+          return React.DOM.div(null,
+            React.DOM.div({
+              style: {
+                paddingRight: '400px'
+              }
+            }, React.createElement(component, this.props)),
+            CerebralDebugger()
+          );
+        }
       }
     });
 
@@ -81,25 +76,22 @@ function Cerebral(state) {
 
   // Get signals and mutations done to cerebral
   cerebral.getMemories = function() {
-    return {
-      signals: helpers.eventStore.signals.slice(0),
-      mutations: helpers.eventStore.mutations.slice(0)
-    };
+    return helpers.eventStore.signals.slice(0);
   };
 
-  cerebral.getMemoryIndex = function () {
+  cerebral.getMemoryIndex = function() {
     return helpers.eventStore.currentIndex;
   };
 
-  cerebral.extractState = function () {
+  cerebral.extractState = function() {
     return helpers.currentState.toJS();
   };
 
-  cerebral.ref = function () {
+  cerebral.ref = function() {
     return helpers.nextRef++;
   };
 
-  cerebral.getByRef = function (path, ref) {
+  cerebral.getByRef = function(path, ref) {
     var items = this.get(path);
     for (var x = 0; x < items.length; x++) {
       if (items[x].ref === ref) {
@@ -115,8 +107,8 @@ function Cerebral(state) {
     if (typeof path === 'string') {
       path = [].slice.call(arguments);
     }
-    
-    var mapPath = utils.getFacetPath(path, maps);
+
+    var mapPath = utils.getMapPath(path, maps);
     if (mapPath) {
       return mapPath();
     }

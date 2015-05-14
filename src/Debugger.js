@@ -4,7 +4,7 @@ var DOM = React.DOM;
 
 var debuggerStyle = {
   position: 'absolute',
-  fontFamily: 'Monospace, Verdana',
+  fontFamily: 'Consolas, Verdana',
   fontWeight: 'normal',
   right: 0,
   top: 0,
@@ -16,15 +16,20 @@ var debuggerStyle = {
 };
 
 var MutationsStyle = {
-  listStyleType : 'none',
+  listStyleType: 'none',
   color: '#999',
+  paddingLeft: '10px'
+};
+
+var ActionStyle = {
+  listStyleType: 'none',
   paddingLeft: 0
 };
 
 var MutationStyle = {
   marginBottom: '5px',
   paddingBottom: '5px',
-  borderBottom: '1px dashed #444'
+  paddingLeft: '5px'
 };
 
 var MutationArgsStyle = {
@@ -57,57 +62,111 @@ var Debugger = React.createClass({
   },
   renderMutations: function() {
     var currentSignalIndex = this.context.cerebral.getMemoryIndex();
-    var signals = this.context.cerebral.getMemories().signals
+    var signals = this.context.cerebral.getMemories();
     var signal = signals[currentSignalIndex];
 
     if (!signal) {
       return null;
     }
 
+    return signal.actions.map(function(action, index) {
+      return DOM.li({
+          key: index,
+          style: {
+            position: 'relative',
+            borderTop: '1px solid #555',
+            paddingTop: '15px',
+            marginTop: '15px'
+          }
+        },
+        DOM.h3({
+          style: {
+            position: 'absolute',
+            top: '-11px',
+            left: '10px',
+            backgroundColor: '#333',
+            padding: '0 10px 0 10px',
+            margin: 0,
+            color: '#555'
+          }
+        }, 
+        action.name,
+        DOM.small({
+            style: {
+              color: action.isAsync ? 'orange' : '#555'
+            }
+          },
+          action.isAsync && cerebral.hasExecutingAsyncSignals() && index === signal.actions.length - 1 ?
+          ' async action running' :
+          action.isAsync ? ' async' :
+          null
+        )),
+        DOM.ul({
+            style: ActionStyle
+          },
+          action.mutations.map(function(mutation, index) {
+
+            var mutationArgs = mutation.args.slice();
+            var path = mutation.name === 'set' ? mutation.path.concat(mutationArgs.shift()) : mutation.path;
+            var color = mutationColors[mutation.name];
+
+            return DOM.li({
+                key: index,
+                style: MutationStyle
+              },
+              DOM.strong(null,
+                DOM.span({
+                  style: {
+                    color: color
+                  }
+                }, mutation.name),
+                ' ' + path.join('.'),
+                DOM.div({
+                  style: MutationArgsStyle
+                }, mutationArgs.map(function(mutationArg) {
+                  return JSON.stringify(mutationArg)
+                }).join(' , '))
+              )
+            );
+
+          })
+        )
+      );
+    });
+
+
+
     var mutations = this.context.cerebral.getMemories().mutations;
     return mutations.filter(function(mutation) {
-        return mutation.signalId === signal.id;
+        return mutation.signalIndex === signal.index;
       })
       .map(function(mutation, index) {
-        var mutationArgs = mutation.args.slice();
-        var path = mutation.name === 'set' ? mutation.path.concat(mutationArgs.shift()) : mutation.path;
-        var color = mutationColors[mutation.name];
 
-        return DOM.li({
-          key: index,
-          style: MutationStyle
-        },
-          DOM.strong(null, 
-            DOM.span({style: {color: color}}, mutation.name), 
-            ' ' + path.join('.'),
-            DOM.div({style: MutationArgsStyle}, mutationArgs.map(function (mutationArg) {
-              return JSON.stringify(mutationArg)
-            }).join(' , '))
-          )
-        );
       });
   },
-  renderFPS: function (duration) {
+  renderFPS: function(duration) {
 
     var color = duration >= 16 ? '#d9534f' : duration >= 10 ? '#f0ad4e' : '#5cb85c';
     return DOM.strong(null, DOM.small({
-      style: {color: color}
+      style: {
+        color: color
+      }
     }, ' (' + duration + 'ms)'));
   },
   render: function() {
     var cerebral = this.context.cerebral;
     var lockInput = cerebral.hasExecutingAsyncSignals();
     var value = cerebral.getMemoryIndex() + 1;
-    var steps = cerebral.getMemories().signals.length;
+    var steps = cerebral.getMemories().length;
     var currentSignalIndex = this.context.cerebral.getMemoryIndex();
-    var signals = this.context.cerebral.getMemories().signals
+    var signals = this.context.cerebral.getMemories();
     var signal = signals[currentSignalIndex];
 
     return DOM.div({
         style: debuggerStyle
       },
       DOM.h1(null, 'Cerebral Debugger'),
-      DOM.h4(null, 
+      DOM.h4(null,
         DOM.span(null, value + ' / ' + steps)
       ),
       Range({
@@ -116,11 +175,15 @@ var Debugger = React.createClass({
         value: value,
         steps: steps
       }),
-      DOM.h2({style:{color: '#999'}}, signal ? DOM.span(null, signal.name,  this.renderFPS(signal.duration)) : null),
-      DOM.ul({style: MutationsStyle}, this.renderMutations()),
-      lockInput ? DOM.strong({
-        style: {color: 'orange'}
-      }, 'Async running...') : null
+      DOM.h2({
+        style: {
+          color: '#999',
+          marginBottom: '25px'
+        }
+      }, signal ? DOM.span(null, signal.name, this.renderFPS(signal.duration)) : null),
+      DOM.ul({
+        style: MutationsStyle
+      }, this.renderMutations())
     );
   }
 });
