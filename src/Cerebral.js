@@ -50,7 +50,7 @@ function Cerebral(state) {
       render: function() {
 
         if (process.env.NODE_ENV === 'production') {
-          return component(this.props);
+          return React.createElement(component, this.props);
         } else {
           return React.DOM.div(null,
             React.DOM.div({
