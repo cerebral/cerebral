@@ -36,7 +36,7 @@ Thanks guys!
 ## Creating an application
 All examples are shown in ES6 code.
 
-You can use the [cerebral-boilerplate](https://github.com/christianalfoni/cerebral/edit/master/README.md) to quickly get up and running. It is a Webpack and Node setup.
+You can use the [cerebral-boilerplate](https://github.com/christianalfoni/cerebral/edit/master/README.md) to quickly get up and running. It is a Webpack and Express setup.
 
 ### Create a cerebral
 *cerebral.js*
