@@ -67,8 +67,8 @@ A signal can be triggered by any component. The name of a signal should be "what
 ### Create actions
 *actions/changeNewTodoTitle.js*
 ```js
-let changeNewTodoTitle = function (cerebral, event) {
-  cerebral.set('newTodoTitle', event.target.value);
+let changeNewTodoTitle = function (cerebral, title) {
+  cerebral.set('newTodoTitle', title);
 };
 
 default export changeNewTodoTitle;
@@ -144,7 +144,7 @@ let Wrapper = cerebral.injectInto(App);
 
 React.render(<Wrapper/>, document.querySelector('#app'));
 ```
-To expose the **cerebral** to the components you need to inject it. The returned wrapper can be used to render the application. This is also beneficial for isomorphic apps.
+To expose the **cerebral** to the components you need to inject it. The returned wrapper can be used to render the application. This is also beneficial for isomorphic apps. When not running in a production enviroment the wrapper includes the Cerebral Debugger.
 
 ### Handle async actions
 *actions/addNewTodo.js*

@@ -23,7 +23,7 @@
 - [getMemories](#getmemories)
 - [remember](#remember)
 
-All examples are shown with ES6 + Webpack syntax. You can of course use normal React syntax and ES5 code.
+All examples are shown with ES6 syntax. You can of course use normal React syntax and ES5.
 
 ### Create
 *cerebral.js*
@@ -46,11 +46,11 @@ To create a cerebral just pass the initial state of the application.
 ```js
 import React from 'react';
 
-class App extends React.Component {
-  render: function () {
+let App = React.createClass({
+  render() {
     return <h1>Hello world!</h1>
   }
-}
+});
 
 export default App;
 ```
@@ -71,6 +71,41 @@ React.render(<Wrapper/>, document.querySelector('#app'));
 import React from 'react';
 import mixin from 'cerebral/mixin';
 
+let App = React.createClass({
+  mixins: [mixin],
+  getCerebralState() {
+    return ['todos'];
+  },
+  renderTodo(todo, index) {
+    return (
+      <li key={index}>{todo.title}</li>
+    );
+  },
+  render() {
+    return (
+      <ul>
+        {this.state.todos.map(this.renderTodo)}
+      </ul>
+    );
+  }
+});
+
+export default App;
+```
+You can also return an object, using keys to define a custom name for the specific component:
+```js
+  getCerebralState() {
+    return {
+      list: ['todos']
+    };
+  }
+```
+
+With ES6 class syntax you would:
+```js
+import React from 'react';
+import mixin from 'cerebral/mixin';
+
 class App extends React.Component {
   getCerebralState() {
     return ['todos'];
@@ -80,7 +115,7 @@ class App extends React.Component {
       <li key={index}>{todo.title}</li>
     );
   }
-  render: function () {
+  render() {
     return (
       <ul>
         {this.state.todos.map(this.renderTodo)}
@@ -90,14 +125,6 @@ class App extends React.Component {
 }
 
 export default mixin(App);
-```
-You can also return an object, using keys to define a custom name for the specific component:
-```js
-  getCerebralState() {
-    return {
-      list: ['todos']
-    };
-  }
 ```
 
 ### Signals
@@ -127,19 +154,19 @@ export default setNewTodoTitle;
 import React from 'react';
 import mixin from 'cerebral/mixin';
 
-class App extends React.Component {
+let App = React.createClass({
   getCerebralState() {
     return ['todos', 'newTodoTitle'];
-  }
+  },
   onNewTitleChange(event) {
     this.signals.newTodoTitleChanged(event.target.value);
-  }
+  },
   renderTodo(todo, index) {
     return (
       <li key={index}>{todo.title}</li>
     );
-  }
-  render: function () {
+  },
+  render() {
     return (
       <div>
         <input 
@@ -152,7 +179,7 @@ class App extends React.Component {
       </div>
     );
   }
-}
+});
 
 export default mixin(App);
 ```
@@ -198,23 +225,24 @@ export default saveToLocalStorage;
 import React from 'react';
 import mixin from 'cerebral/mixin';
 
-class App extends React.Component {
+let App = React.createClass({
+  mixins: [mixin],
   getCerebralState() {
     return ['todos', 'newTodoTitle'];
-  }
+  },
   onNewTitleChange(event) {
     this.signals.newTodoTitleChanged(event.target.value);
-  }
+  },
   onSubmit(event) {
     event.preventDefault();
     this.signals.newTodoTitleSubmitted();
-  } 
+  },
   renderTodo(todo, index) {
     return (
       <li key={index}>{todo.title}</li>
     );
-  }
-  render: function () {
+  },
+  render() {
     return (
       <div>
         <form onSubmit={this.onSubmit}>
@@ -229,10 +257,11 @@ class App extends React.Component {
       </div>
     );
   }
-}
+});
 
-export default mixin(App);
+export default App;
 ```
+
 ### Async signal
 *main.js*
 ```js
@@ -261,7 +290,7 @@ let addNewTodo = function (cerebral) {
   };
   cerebral.push('todos', todo);
   cerebral.set('newTodoTitle', '');
-  return todo.ref;
+  return todo;
 };
 
 export default addNewTodo;
@@ -270,20 +299,19 @@ export default addNewTodo;
 ```js
 import ajax from 'ajax';
 
-let saveTodo = function (cerebral, ref) {
-  let todo = cerebral.getByRef('todos', ref);
+let saveTodo = function (cerebral, todo) {
   return ajax.post('/todos', {
     title: todo.title
   })
   .then(function (id) {
     return {
-      ref: ref,
+      ref: todo.ref,
       $isSaving: false
     };
   })
   .catch(function (err) {
     return {
-      ref: ref,
+      ref: todo.ref,
       $error: err,
       $isSaving: false
     };
@@ -300,6 +328,7 @@ let updateTodo = function (cerebral, updatedTodo) {
 }
 export default updateTodo;
 ```
+
 ### Mutate state
 All mutation methods takes a **path** and a **value**. The path can be:
 
@@ -325,15 +354,18 @@ cerebral.set([todo, 'title'], 'Something');
 ```
 
 The examples below will be shown using the *array* syntax.
+
 #### set
 ```js
 cerebral.set(['user', 'name'], 'foo');
 ```
+
 #### unset
 ```js
 cerebral.unset(['user', 'name']);
 ```
 Removes the name key on the user.
+
 #### merge
 ```js
 cerebral.merge(['user'], {
@@ -341,12 +373,14 @@ cerebral.merge(['user'], {
   age: 30
 });
 ```
+
 #### push
 ```js
 cerebral.push(['todos'], {
   title: 'foo'
 });
 ```
+
 #### splice
 ```js
 cerebral.splice(['todos'], 0, 1, {
@@ -354,6 +388,7 @@ cerebral.splice(['todos'], 0, 1, {
 });
 ```
 Note that this works just like the natuve `Array.prototype.splice` method. The last argument is optional.
+
 #### concat
 ```js
 cerebral.concat(['todos'], [{
@@ -362,16 +397,19 @@ cerebral.concat(['todos'], [{
   title: 'newTodo2'
 }]);
 ```
+
 #### pop
 ```js
 cerebral.pop(['todos']);
 ```
 Removes last item in array.
+
 #### shift
 ```js
 cerebral.shift(['todos']);
 ```
 Removes first item in array.
+
 #### unshift
 ```js
 cerebral.unshift(['todos'], {
@@ -379,12 +417,13 @@ cerebral.unshift(['todos'], {
 });
 ```
 Adds item at beginning of array.
-<<<<<<< HEAD
+
 ### get
 ```js
 cerebral.get('todos');
 cerebral.get(['user', 'name']);
 ```
+
 ### ref
 ```js
 let todo = {
@@ -393,11 +432,13 @@ let todo = {
 };
 ```
 Use Cerebral refs to create unique IDs in the client. It is important that you use Cerebrals internal reference implementation as the IDs will be created chronologically.
+
 ### getByRef
 ```js
 let todo = cerebral.getByRef('todos', todo.ref);
 ```
 Values returned from cerebral are immutable!
+
 ### map
 ```js
 cerebral.map('visibleTodos', ['todos'], function (cerebral, refs) {
@@ -406,7 +447,8 @@ cerebral.map('visibleTodos', ['todos'], function (cerebral, refs) {
   });
 });
 ```
-You can map state to new state values. In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` array. Whenever the changes are done to either arrays the callback will run and any components using the state will get the returned value.
+You can map state to new state values. In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` array. Whenever the changes are done to either arrays the callback will run and any components using the state will update with the new value.
+
 ### toJS
 ```js
 let todo = cerebral.get('todos', 0);
@@ -421,14 +463,11 @@ copy.title; // "bar"
 ### getMemories
 ```js
 let memories = getMemories();
-memories.signals; // [signals...]
-memories.mutations; // [mutations...]
 ```
-Returns two arrays. One for signals and one for mutations. Use the *signalId* property to determine what mutations belongs to what signals.
+Returns an array of signals. Each signal has an array of actions. Each actions has an array of mutations. Have fun!
+
 ### remember
 ```js
 cerebral.remember(-1); // Go to beginning
 cerebral.remember(5); // Remember up to signal 5
 ```
-=======
->>>>>>> 4b6405c2f6031ba344020825541ec6d211a5cf7a
