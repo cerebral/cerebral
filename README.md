@@ -3,10 +3,6 @@ A modern application framework for React
 
 <img src="images/logo.jpg" width="300" align="center">
 
-Video Preview at: [Immutable-store gets signals and a time machine ](https://www.youtube.com/watch?v=Txpw4wU4BCU)
-
-More video preview at: [Cerebral - a React framework in the making ](https://www.youtube.com/watch?v=tM_K_lR_JT8)
-
 | [API](API.md) |
 
 ## Video introductions
