@@ -1,7 +1,7 @@
 {
   "name": "cerebral",
   "version": "0.2.1",
-  "description": "A modern application framework for React",
+  "description": "An intelligent react application framework",
   "main": "src/Cerebral.js",
   "scripts": {
     "demo": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --content-base demo --config demo.config.js",

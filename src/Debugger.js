@@ -5,6 +5,7 @@ var DOM = React.DOM;
 var debuggerStyle = {
   position: 'absolute',
   fontFamily: 'Consolas, Verdana',
+  fontSize: '14px',
   fontWeight: 'normal',
   right: 0,
   top: 0,
