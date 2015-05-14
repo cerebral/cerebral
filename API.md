@@ -15,6 +15,7 @@
   - [shift](#shift)
   - [unshift](#unshift)
 - [get](#get)
+- [map](#map)
 - [toJS](#tojs)
 - [ref](#ref)
 - [getByRef](#getbyref)
@@ -384,17 +385,6 @@ Adds item at beginning of array.
 cerebral.get('todos');
 cerebral.get(['user', 'name']);
 ```
-Values returned from cerebral are immutable!
-### toJS
-```js
-let todo = cerebral.get('todos', 0);
-todo.title; // "foo"
-todo.title = 'bar';
-todo.title; // "foo"
-let copy = todo.toJS();
-copy.title = 'bar';
-copy.title; // "bar"
-```
 ### ref
 ```js
 let todo = {
@@ -407,6 +397,27 @@ Use Cerebral refs to create unique IDs in the client. It is important that you u
 ```js
 let todo = cerebral.getByRef('todos', todo.ref);
 ```
+Values returned from cerebral are immutable!
+### map
+```js
+cerebral.map('visibleTodos', ['todos'], function (cerebral, refs) {
+  return refs.map(function (ref) {
+    return cerebral.getByRef('todos', ref);
+  });
+});
+```
+You can map state to new state values. In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` array. Whenever the changes are done to either arrays the callback will run and any components using the state will get the returned value.
+### toJS
+```js
+let todo = cerebral.get('todos', 0);
+todo.title; // "foo"
+todo.title = 'bar';
+todo.title; // "foo"
+let copy = todo.toJS();
+copy.title = 'bar';
+copy.title; // "bar"
+```
+
 ### getMemories
 ```js
 let memories = getMemories();

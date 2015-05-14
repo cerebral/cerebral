@@ -143,8 +143,6 @@ To expose the **cerebral** to the components you need to inject it. The returned
 ### Handle async actions
 *actions/addNewTodo.js*
 ```js
-import uuid from 'uuid';
-
 let addNewTodo = function (cerebral) {
   let todo = {
     ref: cerebral.ref(),
@@ -154,7 +152,7 @@ let addNewTodo = function (cerebral) {
   };
   cerebral.push('todos', todo);
   cerebral.set('newTodoTitle', '');
-  return todo.ref;
+  return todo;
 };
 
 export default addNewTodo;
@@ -163,21 +161,20 @@ export default addNewTodo;
 ```js
 import ajax from 'ajax';
 
-let saveTodo = function (cerebral, ref) {
-  let todo = cerebral.getByRef('todos', ref);
+let saveTodo = function (cerebral, todo) {
   return ajax.post('/todos', {
       title: todo.title,
       created: todo.created
     })
     .then(function (result) {
       return {
-        ref: ref,
+        ref: todo.ref,
         $isSaving: false
       };
     })
     .fail(function (error) {
       return {
-        ref: ref,
+        ref: todo.ref,
         $isSaving: false,
         $error: error
       };
@@ -216,9 +213,9 @@ React.render(<App/>, document.body);
 ```
 When you return a **promise** from an action it will become an **async action**. The next action will not be triggered until the async action is done. The value you return in a promise is passed to the next action. You will not be able to **remember** during an async action, but you will be able to **remember** synchronously when it is done. Any mutations to the **cerebral** outside of a signal or in an async callback will throw an error.
 
-Note that we never return state from one action that can be mutated in the next. To reference the same object across actions we use `cerebral.ref()`. This is cerebrals own internal referencing which is helpful both to you as a developer, but also internals of cerebral depends on it.
+Note that values returned from actions will be frozen. You can not change them in the next action. This is due to Cerebrals immutable environment. You can use `cerebral.ref()` to create references on objects to extract them from the cerebral.
 
-### Facets
+### Map
 *cerebral.js*
 ```js
 import Cerebral from 'cerebral';
@@ -245,7 +242,7 @@ import App from './App.js';
 cerebral.signal('newTodoTitleChanged', changeNewTodoTitle);
 cerebral.signal('newTodoTitleSubmitted', addNewTodo, saveTodo, updateTodo);
 
-cerebral.facet('visibleTodos', ['todos'], function (cerebral, refs) {
+cerebral.map('visibleTodos', ['todos'], function (cerebral, refs) {
   return refs.map(function (ref) {
     return cerebral.getByRef('todos', ref);
   });
@@ -255,16 +252,16 @@ App = cerebral.injectInto(App);
 
 React.render(<App/>, document.body);
 ```
-**Facets** lets you compose state. This is extremely handy with relational data. If you have an array of todos and only want to show some of them and you want the shown todos to keep in sync with the original array of todos, facets will help you. You create a facet by pointing to the entry state, what state it depends on and a function that returns the actual state. 
+**Map** lets you compose state. This is extremely handy with relational data. If you have an array of todos and only want to show some of them and you want the shown todos to keep in sync with the original array of todos, map will help you. When calling the map method you point to the state value you want to map over, what state it depends on and a function that returns the new state.
 
-Just like our own memory can have complex relationships, so can our application state. Our brain can even create memories if something is missing, this is also possible with a facet. An example of this is if each todo has an **authorId**. If the author is not in our state the facet has to create a temporary state while we go grab the real state from the server. This can be expressed like:
+Just like our own memory can have complex relationships, so can our application state. Our brain can even create memories if something is missing, this is also possible with mapping. An example of this is if each todo has an **authorId**. If the author is not in our state the map callback has to create a temporary state while we go grab the real state from the server. This can be expressed like:
 
 ```js
-cerebral.facet('visibleTodos', ['todos', 'authors'], function (cerebral, uuids) {
+cerebral.map('visibleTodos', ['todos', 'authors'], function (cerebral, refs) {
 
-  return uuids.map(function (uuid) {
+  return refs.map(function (ref) {
 
-    let todo = cerebral.get('todos')[uuid].toJS();
+    let todo = cerebral.getByRef('todos', ref).toJS();
     todo.author = cerebral.get('authors')[todo.authorId];
 
     if (!todo.author) {
@@ -281,7 +278,7 @@ cerebral.facet('visibleTodos', ['todos', 'authors'], function (cerebral, uuids) 
 
 });
 ```
-The **missingAuthor** signal could go grab the author from the server and update the authors map. That would trigger an update of the facet and the UI would rerender.
+The **missingAuthor** signal could go grab the author from the server and update the authors map. That would trigger the map callback again and the UI would rerender.
 
 ## Remember
 What makes **cerebral** truly unique is how you are able to debug it. The signals implementation gives **cerebral** full control of your state flow, even asynchronous flow. That way it is very easy to retrace your steps. By using the built in debugger you can reproduce states very easily and use the logging information to identify how state flows and what changes are made to the state.
