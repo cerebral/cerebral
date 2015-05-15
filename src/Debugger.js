@@ -14,6 +14,8 @@ var debuggerStyle = {
   padding: '15px',
   backgroundColor: '#333',
   color: '#666',
+  overflowY: 'scroll',
+  boxSizing: 'border-box'
 };
 
 var LogLink = {
