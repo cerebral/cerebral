@@ -23,6 +23,19 @@ var LogLink = {
   cursor: 'pointer'
 };
 
+var LockStateButton = {
+  display: 'inline-block',
+  verticalAlign: 'top',
+  width: '30px',
+  height: '30px',
+  backgroundColor: '#222',
+  lineHeight: '25px',
+  textAlign: 'center',
+  cursor: 'pointer',
+  border: '1px solid #444',
+  borderRadius: '3px'
+};
+
 var MutationsStyle = {
   listStyleType: 'none',
   color: '#999',
@@ -71,10 +84,10 @@ var Debugger = React.createClass({
   travelThroughTime: function(value) {
     this.context.cerebral.remember(value - 1);
   },
-  logPath: function (name, path, event) {
-      event.preventDefault();
-      var value = this.context.cerebral.get(path);
-      console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
+  logPath: function(name, path, event) {
+    event.preventDefault();
+    var value = this.context.cerebral.get(path);
+    console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
   },
   renderMutations: function() {
     var currentSignalIndex = this.context.cerebral.getMemoryIndex();
@@ -96,27 +109,26 @@ var Debugger = React.createClass({
           }
         },
         DOM.h3({
-          style: {
-            position: 'absolute',
-            top: '-11px',
-            left: '10px',
-            backgroundColor: '#333',
-            padding: '0 10px 0 10px',
-            margin: 0,
-            color: '#555'
-          }
-        }, 
-        (index + 1) + '. ' + action.name,
-        DOM.small({
             style: {
-              color: action.isAsync ? 'orange' : '#555'
+              position: 'absolute',
+              top: '-11px',
+              left: '10px',
+              backgroundColor: '#333',
+              padding: '0 10px 0 10px',
+              margin: 0,
+              color: '#555'
             }
-          },
-          action.isAsync && this.context.cerebral.hasExecutingAsyncSignals() && index === signal.actions.length - 1 ?
-          ' async action running' :
-          action.isAsync ? ' async' :
-          null
-        )),
+          }, (index + 1) + '. ' + action.name,
+          DOM.small({
+              style: {
+                color: action.isAsync ? 'orange' : '#555'
+              }
+            },
+            action.isAsync && this.context.cerebral.hasExecutingAsyncSignals() && index === signal.actions.length - 1 ?
+            ' async action running' :
+            action.isAsync ? ' async' :
+            null
+          )),
         DOM.ul({
             style: ActionStyle
           },
@@ -138,7 +150,10 @@ var Debugger = React.createClass({
                   }
                 }, mutation.name),
                 ' ',
-                DOM.a({style: LogLink, onClick: this.logPath.bind(null, pathName, path)}, pathName),
+                DOM.a({
+                  style: LogLink,
+                  onClick: this.logPath.bind(null, pathName, path)
+                }, pathName),
                 DOM.div({
                   style: MutationArgsStyle
                 }, mutationArgs.map(function(mutationArg) {
@@ -169,21 +184,42 @@ var Debugger = React.createClass({
       }
     }, ' (' + duration + 'ms)'));
   },
+  reset: function () {
+    this.context.cerebral.reset();
+  },
   render: function() {
     var cerebral = this.context.cerebral;
-    var lockInput = cerebral.hasExecutingAsyncSignals();
     var value = cerebral.getMemoryIndex() + 1;
     var steps = cerebral.getMemories().length;
     var currentSignalIndex = this.context.cerebral.getMemoryIndex();
     var signals = this.context.cerebral.getMemories();
     var signal = signals[currentSignalIndex];
+    var keepState = cerebral.willKeepState();
+    var lockInput = cerebral.hasExecutingAsyncSignals() || !keepState;
+
+    LockStateButton.backgroundColor = keepState ? '#d9534f' : '#222';
+    LockStateButton.color = keepState ? 'white' : '#666';
 
     return DOM.div({
         style: debuggerStyle
       },
-      DOM.h1(null, 'Cerebral Debugger'),
+      DOM.h1({
+        style: {
+          lineHeight: '30px'
+        }
+      }, 'Cerebral Debugger ', DOM.span({
+        onClick: cerebral.toggleKeepState,
+        style: LockStateButton
+      }, '⦿')),
       DOM.h4(null,
-        DOM.span(null, value + ' / ' + steps)
+        DOM.span(null, value + ' / ' + steps + ' - ', DOM.a({
+          onClick: this.reset,
+          style: {
+            textDecoration: cerebral.hasExecutingAsyncSignals() ? 'none' :'underline', 
+            cursor: cerebral.hasExecutingAsyncSignals() ? 'default' : 'pointer',
+            color: cerebral.hasExecutingAsyncSignals() ? '#444' : '#888'
+          }
+        }, 'reset'))
       ),
       Range({
         onChange: this.travelThroughTime,

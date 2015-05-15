@@ -86,6 +86,31 @@ var utils = {
       depState[dep] = getPath(dep, state);
       return depState;
     }, {});
+  },
+  mergeFunctions: function (target, source) {
+    var currentPath = [];
+    var traverse = function (obj) {
+      Object.keys(obj).forEach(function (key) {
+        currentPath.push(key);
+        if (typeof obj[key] === 'function') {
+          utils.setWithPath(target, currentPath, obj[key]);
+        } else if (utils.isObject(obj[key])) {
+          traverse(obj[key]);
+        }
+        currentPath.pop();
+      });
+    }
+    traverse(source);
+    return target;
+  },
+  setWithPath: function (target, path, value) {
+    while(path.length) {
+      if (path.length === 1) {
+        target[path.shift()] = value;
+      } else {
+        target = target[path.shift()];  
+      }
+    }
   }
 };
 

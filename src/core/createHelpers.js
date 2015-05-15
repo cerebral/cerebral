@@ -5,6 +5,8 @@ var updatePath = require('./updatePath.js');
 
 var createHelpers = function(state, store) {
   
+  var eventStore = new EventStore(state, store);
+
   var helpers = {
     currentPath: [],
     currentState: null,
@@ -12,11 +14,13 @@ var createHelpers = function(state, store) {
       helpers.currentState = updatePath(helpers, path, cb);
       return helpers.currentState;
     },
-    eventStore: new EventStore(state, store),
+    eventStore: eventStore,
     nextRef: 0,
-    nextSignal: 0,
-    currentSignal: 0,
-    onFunction: null
+    currentSignal: eventStore.currentIndex,
+    onFunction: null,
+    asyncCallbacks: localStorage.getItem('cerebral_asyncCallbacks') ? 
+      JSON.parse(localStorage.getItem('cerebral_asyncCallbacks')) : 
+      {}
   };
 
   return helpers;

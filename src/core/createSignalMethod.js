@@ -10,7 +10,7 @@ var createAsyncSignalMethod = function(helpers, store) {
     store.signals[name] = function() {
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
-      var signalIndex = helpers.nextSignal++;
+      var signalIndex = helpers.eventStore.willKeepState ? helpers.eventStore.currentIndex + 1 : 0;
       var runMutation = function() {
 
         var timestamp = Date.now();
@@ -30,6 +30,7 @@ var createAsyncSignalMethod = function(helpers, store) {
             var signalArgs = [].slice.call(arguments);
             var callback = executionArray.shift();
             var result = null;
+            var isAsync = false;
 
             store.allowMutations = true;
             helpers.currentSignal = signalIndex;
@@ -45,20 +46,27 @@ var createAsyncSignalMethod = function(helpers, store) {
             helpers.eventStore.addAction(action);
             var actionStart = Date.now();
 
-            if (store.isRemembering && callback.isAsync) {
-              result = callback.results[name][signalIndex];
+            isAsync = (
+              helpers.asyncCallbacks[name] &&
+              helpers.asyncCallbacks[name][signalIndex] &&
+              helpers.asyncCallbacks[name][signalIndex][action.name] &&
+              helpers.asyncCallbacks[name][signalIndex][action.name][action.index]
+            );
+
+            if (store.isRemembering && isAsync) {
+              result = helpers.asyncCallbacks[name][signalIndex][action.name][action.index];
             } else if (Array.isArray(callback)) {
-              result = Promise.all(callback.map(function (callback) {
+              result = Promise.all(callback.map(function(callback) {
                 return callback.apply(null, signalArgs);
               }));
             } else {
               result = callback.apply(null, signalArgs);
             }
-            
+
             var isPromise = utils.isPromise(result);
-            
+
             signal.duration += action.duration = Date.now() - actionStart;
-            action.isAsync = !!(isPromise || (store.isRemembering && callback.isAsync));
+            action.isAsync = !!(isPromise || (store.isRemembering && isAsync));
 
             if (utils.isObject(result) && !utils.isPromise(result)) {
               Object.freeze(result);
@@ -66,12 +74,12 @@ var createAsyncSignalMethod = function(helpers, store) {
             store.allowMutations = false;
 
             if (isPromise) {
-              
+
               // Have to run update when next action is async
               if (callbacks.indexOf(callback) !== 0) {
-                store.emit('update');
+                !helpers.eventStore.isSilent && store.emit('update');
               }
-              
+
               helpers.eventStore.addAsyncSignal({
                 signalIndex: signalIndex,
                 name: name,
@@ -85,11 +93,10 @@ var createAsyncSignalMethod = function(helpers, store) {
                   Object.freeze(result);
                 }
 
-                var originCallback = callbacks[callbacks.indexOf(callback)];
-                originCallback.isAsync = true;
-                originCallback.results = originCallback.results || {};
-                originCallback.results[name] = originCallback.results[name] || {};
-                originCallback.results[name][signalIndex] = result;
+                helpers.asyncCallbacks[name] = helpers.asyncCallbacks[name] || {};
+                helpers.asyncCallbacks[name][signalIndex] = helpers.asyncCallbacks[name][signalIndex] || {};
+                helpers.asyncCallbacks[name][signalIndex][action.name] = helpers.asyncCallbacks[name][signalIndex][action.name] || {};
+                helpers.asyncCallbacks[name][signalIndex][action.name][action.index] = result;
 
                 helpers.eventStore.addAsyncSignal({
                   signalIndex: signalIndex,
@@ -117,7 +124,7 @@ var createAsyncSignalMethod = function(helpers, store) {
             }
 
           } else {
-            store.emit('update');
+            !helpers.eventStore.isSilent && store.emit('update');
           }
 
         }.bind(null, store);

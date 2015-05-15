@@ -5,6 +5,7 @@
     - [OPTIMIZE] If setting the same value, avoid doing extra work
     - Freeze data returned from facets? what about arrays with objects?  
     - Allow object in state function deps
+    - In development put all memories into localstorage and on refresh put it back in, SWEET!!
     - Comment all code
 */
 var utils = require('./utils.js');
@@ -21,6 +22,10 @@ var createStore = require('./core/createStore.js');
 
 function Cerebral(state) {
 
+  state = localStorage.getItem('cerebral_state') ?
+    utils.mergeFunctions(JSON.parse(localStorage.getItem('cerebral_state')), state) : 
+    state;
+
   if (!state || (typeof state !== 'object' || Array.isArray(state) || state === null)) {
     throw new Error('You have to pass an object to the cerebral');
   }
@@ -36,7 +41,7 @@ function Cerebral(state) {
     map(path, description.deps, description.get);
     return description.value;
   };
-  
+
   helpers.currentState = createStore(helpers, state);
 
   cerebral.signals = {};
@@ -48,6 +53,10 @@ function Cerebral(state) {
   };
 
   cerebral.injectInto = function(component) {
+
+    // Set store in correct state
+    helpers.eventStore.rememberNow(helpers.currentState);
+
     var Wrapper = React.createClass({
       childContextTypes: {
         cerebral: React.PropTypes.object
@@ -93,6 +102,14 @@ function Cerebral(state) {
     return helpers.eventStore.currentIndex;
   };
 
+  cerebral.toggleKeepState = function () {
+    helpers.eventStore.toggleKeepState();
+  };
+
+  cerebral.willKeepState = function () {
+    return helpers.eventStore.willKeepState;
+  };
+
   cerebral.extractState = function() {
     return helpers.currentState.toJS();
   };
@@ -108,6 +125,13 @@ function Cerebral(state) {
         return items[x];
       }
     }
+  };
+
+  cerebral.reset = function () {
+    helpers.nextRef = 0;
+    helpers.currentSignal = 0;
+    helpers.asyncCallbacks = {};
+    helpers.eventStore.reset(helpers.currentState);
   };
 
   cerebral.get = function(path) {
@@ -127,6 +151,20 @@ function Cerebral(state) {
   };
 
   createMutationMethods(helpers, cerebral);
+
+
+  window.addEventListener('beforeunload', function() {
+    if (helpers.eventStore.willKeepState) {
+      localStorage.setItem('cerebral_state', JSON.stringify(helpers.eventStore.initialState));
+      localStorage.setItem('cerebral_signals', JSON.stringify(helpers.eventStore.signals));
+      localStorage.setItem('cerebral_asyncCallbacks', JSON.stringify(helpers.asyncCallbacks));
+    } else {
+      localStorage.removeItem('cerebral_state');
+      localStorage.removeItem('cerebral_signals');
+      localStorage.removeItem('cerebral_asyncCallbacks');
+    }
+    localStorage.setItem('cerebral_keepState', helpers.eventStore.willKeepState.toString());
+  });
 
   return cerebral;
 
