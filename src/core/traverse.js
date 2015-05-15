@@ -4,6 +4,11 @@ var StoreObject = require('./StoreObject.js');
 var StoreArray = require('./StoreArray.js');
 
 var traverse = function(helpers, value) {
+
+  if (typeof value === 'function') {
+    value = helpers.onFunction(helpers.currentPath, value);
+  } 
+
   if (Array.isArray(value) && !value.__) {
     var array = value.map(function(item, index) {
       helpers.currentPath.push(index);

@@ -4,7 +4,9 @@
 - [Inject](#inject)
 - [Mixin](#mixin)
 - [Signals](#signals)
+- [Async singals](#async-signals)
 - [Compose signals](#compose-signals)
+- [Compose state](#compose-state)
 - [Mutate state](#mutate-state)
   - [set](#set)
   - [merge](#merge)
@@ -15,7 +17,6 @@
   - [shift](#shift)
   - [unshift](#unshift)
 - [get](#get)
-- [map](#map)
 - [toJS](#tojs)
 - [ref](#ref)
 - [getByRef](#getbyref)
@@ -26,7 +27,6 @@
 All examples are shown with ES6 syntax. You can of course use normal React syntax and ES5.
 
 ### Create
-*cerebral.js*
 ```js
 import Cerebral from 'cerebral';
 
@@ -184,6 +184,73 @@ let App = React.createClass({
 export default mixin(App);
 ```
 
+### Async signal
+*main.js*
+```js
+import React from 'react';
+import cerebral from './cerebral.js';
+import App from './App.js';
+import setNewTodoTitle from './actions/setNewTodoTitle.js';
+import addNewTodo from './actions/addNewTodo.js';
+import saveToLocalStorage from './actions/saveToLocalStorage.js';
+import saveTodo from './actions/saveTodo.js';
+
+cerebral.signal('newTodoTitleChanged', setNewTodoTitle);
+cerebral.signal('newTodoTitleSubmitted', addNewTodo, saveTodo, updateTodo, saveToLocalStorage);
+
+let Wrapper = cerebral.injectInto(App);
+
+React.render(<Wrapper/>, document.querySelector('#app'));
+```
+*actions/addNewTodo.js*
+```js
+let addNewTodo = function (cerebral) {
+  let todo = {
+    ref: cerebral.ref(),
+    title: cerebral.get('newTodoTitle'),
+    $isSaving: true
+  };
+  cerebral.push('todos', todo);
+  cerebral.set('newTodoTitle', '');
+  return todo;
+};
+
+export default addNewTodo;
+```
+*actions/saveTodo.js*
+```js
+import ajax from 'ajax';
+
+let saveTodo = function (cerebral, todo) {
+  return ajax.post('/todos', {
+    title: todo.title
+  })
+  .then(function (id) {
+    return {
+      ref: todo.ref,
+      $isSaving: false
+    };
+  })
+  .catch(function (err) {
+    return {
+      ref: todo.ref,
+      $error: err,
+      $isSaving: false
+    };
+  });
+};
+
+export default saveTodo;
+```
+*actions/updateTodo.js*
+```js
+let updateTodo = function (cerebral, updatedTodo) {
+  let todo = cerebral.getByRef('todos', updatedTodo.ref);
+  cerebral.merge(todo, updatedTodo);
+}
+export default updateTodo;
+```
+
 ### Compose signals
 *main.js*
 ```js
@@ -262,72 +329,34 @@ let App = React.createClass({
 export default App;
 ```
 
-### Async signal
-*main.js*
+### Compose state
 ```js
-import React from 'react';
-import cerebral from './cerebral.js';
-import App from './App.js';
-import setNewTodoTitle from './actions/setNewTodoTitle.js';
-import addNewTodo from './actions/addNewTodo.js';
-import saveToLocalStorage from './actions/saveToLocalStorage.js';
-import saveTodo from './actions/saveTodo.js';
+import Cerebral from 'cerebral';
 
-cerebral.signal('newTodoTitleChanged', setNewTodoTitle);
-cerebral.signal('newTodoTitleSubmitted', addNewTodo, saveTodo, updateTodo, saveToLocalStorage);
-
-let Wrapper = cerebral.injectInto(App);
-
-React.render(<Wrapper/>, document.querySelector('#app'));
-```
-*actions/addNewTodo.js*
-```js
-let addNewTodo = function (cerebral) {
-  let todo = {
-    ref: cerebral.ref(),
-    title: cerebral.get('newTodoTitle'),
-    $isSaving: true
+let visibleTodos = function () {
+  return {
+    value: [],
+    deps: ['todos'],
+    get(cerebral, deps, refs) {
+      return refs.map(function (ref) {
+        return deps.todos.filter(function (ref) {
+          return todo.ref === ref;
+        }).pop();
+      });
+    }
   };
-  cerebral.push('todos', todo);
-  cerebral.set('newTodoTitle', '');
-  return todo;
 };
 
-export default addNewTodo;
-```
-*actions/saveTodo.js*
-```js
-import ajax from 'ajax';
+let cerebral = Cerebral({
+  todos: [],
+  visibleTodos: visibleTodos,
+  count: 0,
+  newTodoTitle: ''
+});
 
-let saveTodo = function (cerebral, todo) {
-  return ajax.post('/todos', {
-    title: todo.title
-  })
-  .then(function (id) {
-    return {
-      ref: todo.ref,
-      $isSaving: false
-    };
-  })
-  .catch(function (err) {
-    return {
-      ref: todo.ref,
-      $error: err,
-      $isSaving: false
-    };
-  });
-};
-
-export default saveTodo;
+export default cerebral;
 ```
-*actions/updateTodo.js*
-```js
-let updateTodo = function (cerebral, updatedTodo) {
-  let todo = cerebral.getByRef('todos', updatedTodo.ref);
-  cerebral.merge(todo, updatedTodo);
-}
-export default updateTodo;
-```
+In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` array. Whenever the changes are done to either arrays the callback will run and any components using the state will update with the new value.
 
 ### Mutate state
 All mutation methods takes a **path** and a **value**. The path can be:
@@ -438,16 +467,6 @@ Use Cerebral refs to create unique IDs in the client. It is important that you u
 let todo = cerebral.getByRef('todos', todo.ref);
 ```
 Values returned from cerebral are immutable!
-
-### map
-```js
-cerebral.map('visibleTodos', ['todos'], function (cerebral, refs) {
-  return refs.map(function (ref) {
-    return cerebral.getByRef('todos', ref);
-  });
-});
-```
-You can map state to new state values. In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` array. Whenever the changes are done to either arrays the callback will run and any components using the state will update with the new value.
 
 ### toJS
 ```js

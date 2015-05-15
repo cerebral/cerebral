@@ -221,49 +221,41 @@ When you return a **promise** from an action it will become an **async action**.
 
 Note that values returned from actions will be frozen. You can not change them in the next action. This is due to Cerebrals immutable environment. You can use `cerebral.ref()` to create references on objects to extract them from the cerebral.
 
-### Map
+### Compose state
 *cerebral.js*
 ```js
 import Cerebral from 'cerebral';
 
-var state = {
+let visibleTodos = function () {
+  return {
+    value: [],
+    deps: ['todos'],
+    get: function (cerebral, deps, refs) {
+      return refs.map(function (ref) {
+        return deps.todos.filter(function (todo) {
+          return todo.ref === ref;
+        }).pop();
+      });  
+    }
+  };
+};
+
+let state = {
   todos: [],
-  visibleTodos: [],
+  visibleTodos: visibleTodos,
   newTodoTitle: ''
 };
 
 export default Cerebral(state);
 ```
 
-*main.js*
+By setting a function as value you are able to modify its behaviour. This is extremely handy with relational data. Very often you want to reference other state to avoid duplicates. The value returned from the function is an object defining the initial value of the state, its dependencies and a `get()` method which will run whenever the state has changed or its dependencies.
+
+Just like our own memory can have complex relationships, so can our application state. Our brain can even create memories if something is missing, this is also possible when composing state. An example of this is if each todo has an **authorId**. If the author is not in our state the `get()` method has to create a temporary state while we go grab the real state from the server. This can be expressed like:
+
+*state/visibleTodos.js*
 ```js
-import React from 'react';
-import cerebral from './cerebral.js';
-import changeNewTodoTitle from './actions/changeNewTodoTitle.js';
-import addNewTodo from './actions/addNewTodo.js';
-import saveTodo from './actions/saveTodo.js';
-import updateTodo from './actions/updateTodo.js';
-import App from './App.js';
-
-cerebral.signal('newTodoTitleChanged', changeNewTodoTitle);
-cerebral.signal('newTodoTitleSubmitted', addNewTodo, saveTodo, updateTodo);
-
-cerebral.map('visibleTodos', ['todos'], function (cerebral, refs) {
-  return refs.map(function (ref) {
-    return cerebral.getByRef('todos', ref);
-  });
-});
-
-App = cerebral.injectInto(App);
-
-React.render(<App/>, document.body);
-```
-**Map** lets you compose state. This is extremely handy with relational data. If you have an array of todos and only want to show some of them and you want the shown todos to keep in sync with the original array of todos, map will help you. When calling the map method you point to the state value you want to map over, what state it depends on and a function that returns the new state.
-
-Just like our own memory can have complex relationships, so can our application state. Our brain can even create memories if something is missing, this is also possible with mapping. An example of this is if each todo has an **authorId**. If the author is not in our state the map callback has to create a temporary state while we go grab the real state from the server. This can be expressed like:
-
-```js
-cerebral.map('visibleTodos', ['todos', 'authors'], function (cerebral, refs) {
+let visibleTodos = function () {
 
   return refs.map(function (ref) {
 
@@ -281,10 +273,26 @@ cerebral.map('visibleTodos', ['todos', 'authors'], function (cerebral, refs) {
     return todo;
 
   });
+  
+};
 
-});
+export default visibleTodos;
 ```
-The **missingAuthor** signal could go grab the author from the server and update the authors map. That would trigger the map callback again and the UI would rerender.
+
+*cerebral.js*
+```js
+import Cerebral from 'cerebral';
+import visibleTodos from './state/visibleTodos.js';
+
+let state = {
+  todos: [],
+  visibleTodos: visibleTodos,
+  newTodoTitle: ''
+};
+
+export default Cerebral(state);
+```
+The **missingAuthor** signal could go grab the author from the server and update the authors map. That would trigger the `get()` method again and the UI would rerender.
 
 ## Remember
 What makes **cerebral** truly unique is how you are able to debug it. The signals implementation gives **cerebral** full control of your state flow, even asynchronous flow. That way it is very easy to retrace your steps. By using the built in debugger you can reproduce states very easily and use the logging information to identify how state flows and what changes are made to the state.

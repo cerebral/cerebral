@@ -15,6 +15,7 @@ var createSignalMethod = require('./core/createSignalMethod.js');
 var createMapMethod = require('./core/createMapMethod.js');
 var createMutationMethods = require('./core/createMutationMethods.js');
 var CerebralDebugger = React.createFactory(require('./Debugger.js'));
+var createStore = require('./core/createStore.js');
 
 function Cerebral(state) {
 
@@ -27,11 +28,19 @@ function Cerebral(state) {
   var cerebral = Object.create(emitter);
   var helpers = createHelpers(state, cerebral);
   var maps = {};
+  var map = createMapMethod(cerebral, maps, helpers);
+
+  helpers.onFunction = function(path, func) {
+    var description = func();
+    map(path, description.deps, description.get);
+    return description.value;
+  };
+  
+  helpers.currentState = createStore(helpers, state);
 
   cerebral.signals = {};
 
   cerebral.signal = createSignalMethod(helpers, cerebral);
-  cerebral.map = createMapMethod(cerebral, maps, helpers);
 
   cerebral.hasExecutingAsyncSignals = function() {
     return helpers.eventStore.hasExecutingAsyncSignals;

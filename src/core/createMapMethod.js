@@ -6,7 +6,9 @@ var createMapMethod = function(store, maps, helpers) {
   return function(path, depPaths, callback) {
     
     var prevResult = null;
-    path = typeof path === 'string' ? [path] : path;
+    var state = null;
+    var deps = depPaths;
+    path = (typeof path === 'string' ? [path] : path).slice();
     depPaths = depPaths.concat(path);
 
     var grabState = function() {
@@ -16,10 +18,9 @@ var createMapMethod = function(store, maps, helpers) {
       }, {});
     };
 
-    var state = grabState();
-
     var update = function() {
       var newState = grabState();
+      state = state || newState;
       var hasChanged = Object.keys(newState).reduce(function(hasChanged, key) {
         if (hasChanged) {
           return hasChanged;
@@ -29,7 +30,8 @@ var createMapMethod = function(store, maps, helpers) {
 
       if (hasChanged || !prevResult) {
         state = newState;
-        prevResult = callback(store, utils.getPath(path, helpers.currentState));
+        var depsState = utils.convertDepsToState(deps, helpers.currentState);
+        prevResult = callback(store, depsState, utils.getPath(path, helpers.currentState));
         return prevResult;
       } else {
         return prevResult;

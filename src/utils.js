@@ -79,6 +79,13 @@ var utils = {
     ret = ret.substr('function '.length);
     ret = ret.substr(0, ret.indexOf('('));
     return ret;
+  },
+  convertDepsToState: function (deps, state) {
+    var getPath = this.getPath;
+    return deps.reduce(function (depState, dep) {
+      depState[dep] = getPath(dep, state);
+      return depState;
+    }, {});
   }
 };
 

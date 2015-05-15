@@ -55,7 +55,12 @@ var createAsyncSignalMethod = function(helpers, store) {
             store.allowMutations = false;
 
             if (isPromise) {
-
+              
+              // Have to run update when next action is async
+              if (callbacks.indexOf(callback) !== 0) {
+                store.emit('update');
+              }
+              
               helpers.eventStore.addAsyncSignal({
                 signalIndex: signalIndex,
                 name: name,
@@ -84,7 +89,7 @@ var createAsyncSignalMethod = function(helpers, store) {
 
                 // Have to update again after an async action
                 var result = execute(result);
-                //store.emit('update');
+
                 return result;
               }).catch(function(err) {
                 helpers.eventStore.addAsyncSignal({

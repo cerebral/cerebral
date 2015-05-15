@@ -2,7 +2,6 @@
 
 var EventStore = require('./../EventStore.js');
 var updatePath = require('./updatePath.js');
-var createStore = require('./createStore.js');
 
 var createHelpers = function(state, store) {
   
@@ -16,10 +15,9 @@ var createHelpers = function(state, store) {
     eventStore: new EventStore(state, store),
     nextRef: 0,
     nextSignal: 0,
-    currentSignal: 0
+    currentSignal: 0,
+    onFunction: null
   };
-
-  helpers.currentState = createStore(helpers, state);
 
   return helpers;
 

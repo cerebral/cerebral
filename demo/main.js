@@ -23,14 +23,6 @@ cerebral.signal('removeTodo', removeTodo, setVisibleTodos, setAllChecked, setCou
 cerebral.signal('toggleCompleted', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
 cerebral.signal('toggleAllChecked', toggleAllChecked, setVisibleTodos, setCounters);
 
-// FACETS
-
-cerebral.map('visibleTodos', ['todos'], function (cerebral, ids) {
-  return ids.map(function (index) {
-    return cerebral.get('todos')[index];
-  });
-});
-
 // RENDER
 
 let Wrapper = cerebral.injectInto(App);
