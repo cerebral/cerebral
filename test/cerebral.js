@@ -28,33 +28,3 @@ exports['should be able to use paths from passed immutables'] = function(test) {
   });
   cerebral.signals.test();
 };
-
-
-exports['should store mutation change for travelling'] = function(test) {
-  var cerebral = new Cerebral({
-    foo: 'bar'
-  });
-  cerebral.signal('test', function(cerebral) {
-    cerebral.set('foo', 'bar2');
-  });
-  cerebral.signals.test();
-  test.equal(cerebral.getMemories().length, 1);
-  test.equal(cerebral.getMemories()[0].actions.length, 1);
-  test.equal(cerebral.getMemories()[0].actions[0].mutations.length, 1);
-  test.done();
-};
-
-
-exports['should be able to travel back in time'] = function (test) {
-  var cerebral = new Cerebral({
-    foo: 'bar'
-  });
-  cerebral.signal('test', function (cerebral) {
-    cerebral.set('foo', 'bar2');
-  });
-  cerebral.signals.test();
-  test.equal(cerebral.get('foo'), 'bar2');
-  cerebral.remember(-1);
-  test.equal(cerebral.get('foo'), 'bar');
-  test.done();
-};

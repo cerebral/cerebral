@@ -4,7 +4,7 @@
 - [Inject](#inject)
 - [Mixin](#mixin)
 - [Signals](#signals)
-- [Async singals](#async-signals)
+- [Async signals](#async-signals)
 - [Compose signals](#compose-signals)
 - [Compose state](#compose-state)
 - [Mutate state](#mutate-state)
@@ -250,6 +250,26 @@ let updateTodo = function (cerebral, updatedTodo) {
 }
 export default updateTodo;
 ```
+
+You can also run async actions in parallell with:
+
+```js
+*main.js*
+```js
+import React from 'react';
+import cerebral from './cerebral.js';
+import App from './App.js';
+import getUsers from './actions/getUsers.js';
+import getProjects from './actions/getProjects.js';
+import setInitialState from './actions/setInitialState.js';
+
+cerebral.signal('appRendered', [getUsers, getProjects], setInitialState);
+
+let Wrapper = cerebral.injectInto(App);
+
+React.render(<Wrapper/>, document.querySelector('#app'));
+```
+`getUsers()` and `getProjects` will run at the same time and when both are done `setInitialState` will run. The value passed is an array of resolved values.
 
 ### Compose signals
 *main.js*

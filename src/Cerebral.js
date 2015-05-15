@@ -4,6 +4,8 @@
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
     - Freeze data returned from facets? what about arrays with objects?  
+    - Allow object in state function deps
+    - Comment all code
 */
 var utils = require('./utils.js');
 var React = require('react');
@@ -22,7 +24,6 @@ function Cerebral(state) {
   if (!state || (typeof state !== 'object' || Array.isArray(state) || state === null)) {
     throw new Error('You have to pass an object to the cerebral');
   }
-
 
   var emitter = new EventEmitter();
   var cerebral = Object.create(emitter);

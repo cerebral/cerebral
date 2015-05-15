@@ -29,6 +29,7 @@ var createAsyncSignalMethod = function(helpers, store) {
 
             var signalArgs = [].slice.call(arguments);
             var callback = executionArray.shift();
+            var result = null;
 
             store.allowMutations = true;
             helpers.currentSignal = signalIndex;
@@ -43,7 +44,17 @@ var createAsyncSignalMethod = function(helpers, store) {
             };
             helpers.eventStore.addAction(action);
             var actionStart = Date.now();
-            var result = store.isRemembering && callback.isAsync ? callback.results[name][signalIndex] : callback.apply(null, signalArgs);
+
+            if (store.isRemembering && callback.isAsync) {
+              result = callback.results[name][signalIndex];
+            } else if (Array.isArray(callback)) {
+              result = Promise.all(callback.map(function (callback) {
+                return callback.apply(null, signalArgs);
+              }));
+            } else {
+              result = callback.apply(null, signalArgs);
+            }
+            
             var isPromise = utils.isPromise(result);
             
             signal.duration += action.duration = Date.now() - actionStart;
