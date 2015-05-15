@@ -1,6 +1,6 @@
-let setCounters = function(store) {
+let setCounters = function(cerebral, value) {
 
-  let counts = store.get('todos').reduce(function(counts, todo) {
+  let counts = cerebral.get('todos').reduce(function(counts, todo) {
     if (todo.completed) {
       counts.completedCount++;
     } else if (!todo.completed) {
@@ -12,10 +12,12 @@ let setCounters = function(store) {
     remainingCount: 0
   });
 
-  store.merge({
+  cerebral.merge({
     remainingCount: counts.remainingCount,
     completedCount: counts.completedCount
   });
+
+  return value;
 
 };
 

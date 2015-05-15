@@ -49,7 +49,8 @@ var mutationColors = {
   set: '#f0ad4e',
   push: '#286090',
   splice: '#d9534f',
-  merge: '#5cb85c'
+  merge: '#5cb85c',
+  unset: '#d9534f'
 };
 
 var Debugger = React.createClass({
@@ -111,7 +112,7 @@ var Debugger = React.createClass({
               color: action.isAsync ? 'orange' : '#555'
             }
           },
-          action.isAsync && cerebral.hasExecutingAsyncSignals() && index === signal.actions.length - 1 ?
+          action.isAsync && this.context.cerebral.hasExecutingAsyncSignals() && index === signal.actions.length - 1 ?
           ' async action running' :
           action.isAsync ? ' async' :
           null

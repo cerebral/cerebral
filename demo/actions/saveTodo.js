@@ -1,9 +1,9 @@
-let saveTodo = function (store, ref) {
+let saveTodo = function (cerebral, todo) {
   return new Promise(function (resolve, reject) {
     
     setTimeout(function () {
       resolve({
-        ref: ref,
+        ref: todo.ref,
         $isSaving: false
       });
     }, 3000);

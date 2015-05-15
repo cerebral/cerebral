@@ -24,7 +24,7 @@ class TodosList extends React.Component {
           id="toggle-all" 
           type="checkbox" 
           checked={this.state.isAllChecked}
-          onChange={this.signals.toggleAllChecked}
+          onChange={this.signals.toggleAllChanged}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul id="todo-list">

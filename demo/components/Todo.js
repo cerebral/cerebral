@@ -9,7 +9,7 @@ class Todo extends React.Component {
   }
 
   edit() {
-     actions.editTodo(this.props.todo);
+     this.signals.todoDoubleClicked(this.props.todo);
 
     // FOCUS fix
     setTimeout(() => {
@@ -19,10 +19,8 @@ class Todo extends React.Component {
     }, 0);   
   }
 
-  changeNewTitle(event) {
-    this.setState({
-      newTitle: event.target.value
-    });
+  onNewTitleChanged(event) {
+    this.signals.newTitleChanged(this.props.todo, event.target.value);
   }
 
   saveEdit(event) {
@@ -30,31 +28,47 @@ class Todo extends React.Component {
     actions.saveEdit(this.props.todo, this.state.newTitle);
   }  
 
+  onNewTitleSubmitted(event) {
+    event.preventDefault();
+    this.refs.edit.getDOMNode().blur();
+  }
+
   render() {
 
     var className = classNames({
       completed: this.props.todo.completed,
-      editing: this.props.isEditing
+      editing: this.props.todo.$isEditing
     });
 
     return (
       <li className={className}>
         <div className="view">
-          <input 
-            className="toggle" 
-            type="checkbox" 
-            onChange={this.signals.toggleCompleted.bind(this, this.props.todo)}
-            checked={this.props.todo.completed}/>
+          {
+            this.props.todo.$isSaving ? 
+            null : 
+            <input 
+              className="toggle" 
+              type="checkbox" 
+              disabled={this.props.todo.$isSaving}
+              onChange={this.signals.toggleCompletedChanged.bind(this, this.props.todo)}
+              checked={this.props.todo.completed}/>
+          }
           <label onDoubleClick={this.edit.bind(this)}>{this.props.todo.title}</label>
-          <button className="destroy" onClick={this.signals.removeTodo.bind(this, this.props.todo)}></button>
+          {
+            this.props.todo.$isSaving ? 
+            null : 
+            <button 
+              className="destroy" 
+              onClick={this.signals.removeTodoClicked.bind(this, this.props.todo)}/>
+          }
         </div>
-        <form onSubmit={this.saveEdit.bind(this)}>
+        <form onSubmit={this.onNewTitleSubmitted.bind(this)}>
           <input 
             ref="edit"
             className="edit" 
-            value={''} 
-            onBlur={this.saveEdit.bind(this)}
-            onChange={this.changeNewTitle.bind(this)}
+            value={this.props.todo.$newTitle || this.props.todo.title} 
+            onBlur={this.signals.newTitleSubmitted.bind(null, this.props.todo)}
+            onChange={this.onNewTitleChanged.bind(this)}
           />
         </form>
       </li>

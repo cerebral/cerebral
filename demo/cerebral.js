@@ -8,7 +8,9 @@ var state = localStorage.store ? JSON.parse(localStorage.store) : {
       deps: ['todos'],
       get: function (cerebral, deps, refs) {
         return refs.map(function (ref) {
-          return deps.todos[ref];
+          return deps.todos.filter(function (todo) {
+            return todo.ref === ref;
+          }).pop();
         });
       }
     };
@@ -21,7 +23,7 @@ var state = localStorage.store ? JSON.parse(localStorage.store) : {
   showNotCompleted: true,
   remainingCount: 0,
   completedCount: 0,
-  activeRoute: ''
+  filter: 'all'
 };
 
 export default Cerebral(state);

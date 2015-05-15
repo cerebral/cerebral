@@ -4,24 +4,34 @@ import React from 'react/addons';
 import App from './App.js';
 import cerebral from './cerebral.js';
 import Page from 'page';
-import addTodo from './signals/addTodo.js';
-import removeTodo from './signals/removeTodo.js';
-import toggleTodoCompleted from './signals/toggleTodoCompleted.js';
-import setVisibleTodos from './signals/setVisibleTodos.js';
-import setNewTodoTitle from './signals/setNewTodoTitle.js';
-import setAllChecked from './signals/setAllChecked.js';
-import setCounters from './signals/setCounters.js';
-import toggleAllChecked from './signals/toggleAllChecked.js';
-import saveTodo from './signals/saveTodo.js';
-import updateTodo from './signals/updateTodo.js';
+import addTodo from './actions/addTodo.js';
+import removeTodo from './actions/removeTodo.js';
+import toggleTodoCompleted from './actions/toggleTodoCompleted.js';
+import setVisibleTodos from './actions/setVisibleTodos.js';
+import setNewTodoTitle from './actions/setNewTodoTitle.js';
+import setAllChecked from './actions/setAllChecked.js';
+import setCounters from './actions/setCounters.js';
+import toggleAllChecked from './actions/toggleAllChecked.js';
+import saveTodo from './actions/saveTodo.js';
+import updateTodo from './actions/updateTodo.js';
+import setFilter from './actions/setFilter.js';
+import clearCompleted from './actions/clearCompleted.js';
+import editTodo from './actions/editTodo.js';
+import setTodoNewTitle from './actions/setTodoNewTitle.js';
+import stopEditingTodo from './actions/stopEditingTodo.js';
 
 // SIGNALS
 
 cerebral.signal('newTodoTitleChanged', setNewTodoTitle);
-cerebral.signal('newTodoSubmitted', addTodo, saveTodo, updateTodo, setVisibleTodos, setAllChecked, setCounters);
-cerebral.signal('removeTodo', removeTodo, setVisibleTodos, setAllChecked, setCounters);
-cerebral.signal('toggleCompleted', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
-cerebral.signal('toggleAllChecked', toggleAllChecked, setVisibleTodos, setCounters);
+cerebral.signal('newTodoSubmitted', addTodo, setVisibleTodos, setAllChecked, setCounters, saveTodo, updateTodo);
+cerebral.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
+cerebral.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
+cerebral.signal('toggleAllChanged', toggleAllChecked, setVisibleTodos, setCounters);
+cerebral.signal('routeChanged', setFilter, setVisibleTodos);
+cerebral.signal('clearCompletedClicked', clearCompleted, setVisibleTodos, setAllChecked, setCounters);
+cerebral.signal('todoDoubleClicked', editTodo);
+cerebral.signal('newTitleChanged', setTodoNewTitle);
+cerebral.signal('newTitleSubmitted', stopEditingTodo);
 
 // RENDER
 
@@ -30,15 +40,8 @@ let Wrapper = cerebral.injectInto(App);
 React.render(<Wrapper/>, document.querySelector('#app'));
 
 // ROUTER
-
-if (!location.hash) {
-  location.hash = '#/';
-}
-
-global.cerebral = cerebral;
-/*
-Page('/', store.signals.setRoute);
-Page('/active', store.signals.setRoute);
-Page('/completed', store.signals.setRoute);
+Page('/', cerebral.signals.routeChanged);
+Page('/active', cerebral.signals.routeChanged);
+Page('/completed', cerebral.signals.routeChanged);
 Page.start();
-*/
+
