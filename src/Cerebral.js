@@ -112,6 +112,7 @@ function Cerebral(state) {
     if (mapPath) {
       return mapPath();
     }
+
     return utils.getPath(path, helpers.currentState);
   };
 

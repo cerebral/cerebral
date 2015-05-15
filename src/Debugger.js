@@ -55,9 +55,11 @@ var Debugger = React.createClass({
     cerebral: React.PropTypes.object.isRequired
   },
   componentWillMount: function() {
+    this.context.cerebral.on('eventStoreUpdate', this.update);
     this.context.cerebral.on('update', this.update);
   },
   componentWillUnmount: function() {
+    this.context.cerebral.off('eventStoreUpdate', this.update);
     this.context.cerebral.off('update', this.update);
   },
   update: function() {

@@ -84,7 +84,7 @@ var createAsyncSignalMethod = function(helpers, store) {
 
                 // Have to update again after an async action
                 var result = execute(result);
-                store.emit('update');
+                //store.emit('update');
                 return result;
               }).catch(function(err) {
                 helpers.eventStore.addAsyncSignal({
@@ -100,14 +100,14 @@ var createAsyncSignalMethod = function(helpers, store) {
               execute(result);
             }
 
+          } else {
+            store.emit('update');
           }
 
         }.bind(null, store);
 
         helpers.eventStore.addSignal(signal);
         execute.apply(null, args);
-
-        store.emit('update');
 
       };
 

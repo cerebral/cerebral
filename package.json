@@ -16,6 +16,7 @@
     "babel-loader": "^5.0.0",
     "classnames": "^2.1.1",
     "css-loader": "^0.9.1",
+    "es6-promise": "^2.1.1",
     "event-emitter": "^0.3.3",
     "jshint": "^2.6.0",
     "jshint-loader": "^0.8.2",

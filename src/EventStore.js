@@ -23,12 +23,12 @@ EventStore.prototype.addAsyncSignal = function (signal) {
     this.asyncSignals.push(signal);
     if (this.asyncSignals.length === 1) {
       this.hasExecutingAsyncSignals = true;
-      this.store.emit('update');
+      this.store.emit('eventStoreUpdate');
     }
   }
   if (!this.asyncSignals.length) {
     this.hasExecutingAsyncSignals = false;
-    this.store.emit('update');
+    this.store.emit('eventStoreUpdate');
   }
 
 };
@@ -80,7 +80,7 @@ EventStore.prototype.travel = function(index, state) {
     this.currentIndex = index;
     this.hasExecutingSignals = false;
     store.isRemembering = false;
-    store.emit('update');
+    store.emit('eventStoreUpdate');
     return store;
 
   } else {
@@ -99,7 +99,7 @@ EventStore.prototype.travel = function(index, state) {
 
   this.hasExecutingSignals = false;
   store.isRemembering = false;
-  store.emit('update');
+  store.emit('eventStoreUpdate');
 
   return store;
 };
