@@ -2,6 +2,7 @@
 
 var EventStore = require('./../EventStore.js');
 var updatePath = require('./updatePath.js');
+var utils = require('./../utils.js');
 
 var createHelpers = function(state, store) {
   
@@ -18,7 +19,7 @@ var createHelpers = function(state, store) {
     nextRef: 0,
     currentSignal: eventStore.currentIndex,
     onFunction: null,
-    asyncCallbacks: localStorage.getItem('cerebral_asyncCallbacks') ? 
+    asyncCallbacks: utils.hasLocalStorage() && localStorage.getItem('cerebral_asyncCallbacks') ? 
       JSON.parse(localStorage.getItem('cerebral_asyncCallbacks')) : 
       {}
   };

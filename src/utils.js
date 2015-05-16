@@ -111,6 +111,9 @@ var utils = {
         target = target[path.shift()];  
       }
     }
+  },
+  hasLocalStorage: function () {
+    return typeof global.localStorage !== 'undefined';
   }
 };
 

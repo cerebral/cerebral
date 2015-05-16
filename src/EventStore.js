@@ -4,11 +4,12 @@ var utils = require('./utils.js');
 
 var EventStore = function(state, store) {
 
-  var signals = localStorage.getItem('cerebral_signals') ?
+  var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
     JSON.parse(localStorage.getItem('cerebral_signals')) : [];
 
   this.initialState = state;
-  this.willKeepState = localStorage.getItem('cerebral_keepState') ? JSON.parse(localStorage.getItem('cerebral_keepState')) : true;
+  this.willKeepState = utils.hasLocalStorage() && localStorage.getItem('cerebral_keepState') ?
+    JSON.parse(localStorage.getItem('cerebral_keepState')) : true;
   this.signals = signals;
   this.asyncSignals = [];
   this.hasExecutingSignals = false;
@@ -77,7 +78,7 @@ EventStore.prototype.addMutation = function(mutation) {
 };
 
 EventStore.prototype.rememberNow = function(state) {
-  
+
   if (!this.signals.length) {
     return;
   }
@@ -96,7 +97,7 @@ EventStore.prototype.rememberNow = function(state) {
 
 EventStore.prototype.reset = function(state) {
   if (!this.hasExecutingAsyncSignals) {
-    
+
     this.signals = [];
 
     // Make sure we do not trigger any events

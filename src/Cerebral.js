@@ -22,8 +22,8 @@ var createStore = require('./core/createStore.js');
 
 function Cerebral(state) {
 
-  state = localStorage.getItem('cerebral_state') ?
-    utils.mergeFunctions(JSON.parse(localStorage.getItem('cerebral_state')), state) : 
+  state = utils.hasLocalStorage() && localStorage.getItem('cerebral_state') ?
+    utils.mergeFunctions(JSON.parse(localStorage.getItem('cerebral_state')), state) :
     state;
 
   if (!state || (typeof state !== 'object' || Array.isArray(state) || state === null)) {
@@ -102,11 +102,11 @@ function Cerebral(state) {
     return helpers.eventStore.currentIndex;
   };
 
-  cerebral.toggleKeepState = function () {
+  cerebral.toggleKeepState = function() {
     helpers.eventStore.toggleKeepState();
   };
 
-  cerebral.willKeepState = function () {
+  cerebral.willKeepState = function() {
     return helpers.eventStore.willKeepState;
   };
 
@@ -127,7 +127,7 @@ function Cerebral(state) {
     }
   };
 
-  cerebral.reset = function () {
+  cerebral.reset = function() {
     helpers.nextRef = 0;
     helpers.currentSignal = 0;
     helpers.asyncCallbacks = {};
@@ -152,19 +152,26 @@ function Cerebral(state) {
 
   createMutationMethods(helpers, cerebral);
 
+  if (global.addEventListener) {
 
-  window.addEventListener('beforeunload', function() {
-    if (helpers.eventStore.willKeepState) {
-      localStorage.setItem('cerebral_state', JSON.stringify(helpers.eventStore.initialState));
-      localStorage.setItem('cerebral_signals', JSON.stringify(helpers.eventStore.signals));
-      localStorage.setItem('cerebral_asyncCallbacks', JSON.stringify(helpers.asyncCallbacks));
-    } else {
-      localStorage.removeItem('cerebral_state');
-      localStorage.removeItem('cerebral_signals');
-      localStorage.removeItem('cerebral_asyncCallbacks');
-    }
-    localStorage.setItem('cerebral_keepState', helpers.eventStore.willKeepState.toString());
-  });
+    window.addEventListener('beforeunload', function() {
+      if (!utils.hasLocalStorage()) {
+        return;
+      }
+
+      if (helpers.eventStore.willKeepState) {
+        localStorage.setItem('cerebral_state', JSON.stringify(helpers.eventStore.initialState));
+        localStorage.setItem('cerebral_signals', JSON.stringify(helpers.eventStore.signals));
+        localStorage.setItem('cerebral_asyncCallbacks', JSON.stringify(helpers.asyncCallbacks));
+      } else {
+        localStorage.removeItem('cerebral_state');
+        localStorage.removeItem('cerebral_signals');
+        localStorage.removeItem('cerebral_asyncCallbacks');
+      }
+      localStorage.setItem('cerebral_keepState', helpers.eventStore.willKeepState.toString());
+    });
+
+  }
 
   return cerebral;
 
