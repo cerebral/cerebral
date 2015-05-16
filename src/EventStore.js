@@ -100,7 +100,7 @@ EventStore.prototype.reset = function(state) {
 
     this.signals = [];
 
-    store.removeAllListeners('mapUpdate');
+    this.store.removeAllListeners('mapUpdate');
 
     // First remove all state, as there might have been some
     // additions

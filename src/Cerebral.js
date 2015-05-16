@@ -7,6 +7,8 @@
     - Allow object in state function deps
     - In development put all memories into localstorage and on refresh put it back in, SWEET!!
     - Comment all code
+    - Do not record when in production
+    - More tests! reset, async travelling...
 */
 var utils = require('./utils.js');
 var React = require('react');
