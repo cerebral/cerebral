@@ -152,7 +152,7 @@ To expose the **cerebral** to the components you need to inject it. The returned
 ```js
 let addNewTodo = function (cerebral) {
   let todo = {
-    ref: cerebral.ref(),
+    $ref: cerebral.ref(),
     $isSaving: true,
     title: cerebral.get('newTodoTitle'),
     created: Date.now()
@@ -175,13 +175,13 @@ let saveTodo = function (cerebral, todo) {
     })
     .then(function (result) {
       return {
-        ref: todo.ref,
+        $ref: todo.$ref,
         $isSaving: false
       };
     })
     .fail(function (error) {
       return {
-        ref: todo.ref,
+        $ref: todo.$ref,
         $isSaving: false,
         $error: error
       };

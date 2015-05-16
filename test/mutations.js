@@ -1,12 +1,5 @@
 var Cerebral = require('./../src/Cerebral.js');
 
-exports['throws if passing wrong argument'] = function(test) {
-  test.throws(function() {
-    new Cerebral();
-  });
-  test.done();
-};
-
 exports['does not throw is passing an object'] = function(test) {
   test.doesNotThrow(function() {
     new Cerebral({});

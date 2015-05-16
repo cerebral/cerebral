@@ -1,6 +1,6 @@
 let addTodo = function(cerebral) {
   let todo = {
-    ref: cerebral.ref(),
+    $ref: cerebral.ref(),
     $isSaving: true,
     title: cerebral.get('newTodoTitle'),
     completed: false

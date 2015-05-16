@@ -6,11 +6,12 @@ import mixin from './../src/mixin.js';
 
 var App = React.createClass({
   getCerebralState: function () {
-    return ['visibleTodos', 'todos'];
+    return ['visibleTodos', 'todos', 'foo'];
   },
   render: function() {
     return (
       <div id="todoapp-wrapper">
+      <div>{this.state.foo}</div>
         <section id="todoapp">
           <header id="header">
             <h1>todos</h1>

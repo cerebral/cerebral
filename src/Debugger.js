@@ -205,7 +205,8 @@ var Debugger = React.createClass({
       },
       DOM.h1({
         style: {
-          lineHeight: '30px'
+          lineHeight: '30px',
+          fontSize: '2em'
         }
       }, 'Cerebral Debugger ', DOM.span({
         onClick: cerebral.toggleKeepState,

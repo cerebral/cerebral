@@ -1,5 +1,5 @@
 let updateTodo = function(cerebral, updatedTodo) {
-  let todo = cerebral.getByRef('todos', updatedTodo.ref);
+  let todo = cerebral.getByRef('todos', updatedTodo.$ref);
   cerebral.merge(todo, updatedTodo);
 };
 

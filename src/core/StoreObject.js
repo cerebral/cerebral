@@ -3,7 +3,6 @@ var utils = require('./../utils.js');
 
 var StoreObjectProto = {
   set: function(key, value) {
-
     return this.__.update(this.__.path, function(obj, helpers, traverse) {
 
       // If an array is set there might be immutable objects in it that needs

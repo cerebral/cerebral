@@ -10,7 +10,7 @@ let setVisibleTodos = function(cerebral, value) {
     );
   })
   .map(function (todo) {
-    return todo.ref;
+    return todo.$ref;
   });
   cerebral.set('visibleTodos', visibleTodos);
 

@@ -206,7 +206,7 @@ React.render(<Wrapper/>, document.querySelector('#app'));
 ```js
 let addNewTodo = function (cerebral) {
   let todo = {
-    ref: cerebral.ref(),
+    $ref: cerebral.ref(),
     title: cerebral.get('newTodoTitle'),
     $isSaving: true
   };
@@ -227,13 +227,13 @@ let saveTodo = function (cerebral, todo) {
   })
   .then(function (id) {
     return {
-      ref: todo.ref,
+      $ref: todo.$ref,
       $isSaving: false
     };
   })
   .catch(function (err) {
     return {
-      ref: todo.ref,
+      $ref: todo.$ref,
       $error: err,
       $isSaving: false
     };
@@ -245,7 +245,7 @@ export default saveTodo;
 *actions/updateTodo.js*
 ```js
 let updateTodo = function (cerebral, updatedTodo) {
-  let todo = cerebral.getByRef('todos', updatedTodo.ref);
+  let todo = cerebral.getByRef('todos', updatedTodo.$ref);
   cerebral.merge(todo, updatedTodo);
 }
 export default updateTodo;
@@ -484,7 +484,7 @@ Use Cerebral refs to create unique IDs in the client. It is important that you u
 
 ### getByRef
 ```js
-let todo = cerebral.getByRef('todos', todo.ref);
+let todo = cerebral.getByRef('todos', todo.$ref);
 ```
 Values returned from cerebral are immutable!
 

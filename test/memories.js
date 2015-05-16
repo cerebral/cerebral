@@ -65,11 +65,11 @@ exports['should run async actions synchronously'] = function(test) {
   var cerebral = new Cerebral({
     foo: 'bar'
   });
-  cerebral.signal('test', function(cerebral, value) {
+  cerebral.signal('test', function Action1(cerebral, value) {
     return new Promise(function(resolve) {
       resolve(value);
     });
-  }, function(cerebral, value) {
+  }, function Action2(cerebral, value) {
     cerebral.set('foo', value);
   });
   cerebral.once('update', function() {

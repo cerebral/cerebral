@@ -20,11 +20,15 @@ var createMutationMethods = require('./core/createMutationMethods.js');
 var CerebralDebugger = React.createFactory(require('./Debugger.js'));
 var createStore = require('./core/createStore.js');
 
-function Cerebral(state) {
+function Cerebral(initialState) {
 
-  state = utils.hasLocalStorage() && localStorage.getItem('cerebral_state') ?
-    utils.mergeFunctions(JSON.parse(localStorage.getItem('cerebral_state')), state) :
-    state;
+  var state = {};
+  var localStorageState = utils.hasLocalStorage() && localStorage.getItem('cerebral_state') ?
+    JSON.parse(localStorage.getItem('cerebral_state')) :
+    {};
+
+  state = utils.applyObjectDiff(state, initialState);
+  state = utils.applyObjectDiff(state, localStorageState);
 
   if (!state || (typeof state !== 'object' || Array.isArray(state) || state === null)) {
     throw new Error('You have to pass an object to the cerebral');
@@ -32,7 +36,7 @@ function Cerebral(state) {
 
   var emitter = new EventEmitter();
   var cerebral = Object.create(emitter);
-  var helpers = createHelpers(state, cerebral);
+  var helpers = createHelpers(initialState, cerebral);
   var maps = {};
   var map = createMapMethod(cerebral, maps, helpers);
 
@@ -55,7 +59,12 @@ function Cerebral(state) {
   cerebral.injectInto = function(component) {
 
     // Set store in correct state
-    helpers.eventStore.rememberNow(helpers.currentState);
+    try {
+      helpers.eventStore.rememberNow(helpers.currentState);
+    } catch (e) {
+      console.warn('Cerebral was unable to remember your state, probably due to an incompatible change in the code. State has been reset!');
+      helpers.eventStore.reset(helpers.currentState);
+    }
 
     var Wrapper = React.createClass({
       childContextTypes: {
@@ -118,10 +127,10 @@ function Cerebral(state) {
     return helpers.nextRef++;
   };
 
-  cerebral.getByRef = function(path, ref) {
+  cerebral.getByRef = function(path, $ref) {
     var items = this.get(path);
     for (var x = 0; x < items.length; x++) {
-      if (items[x].ref === ref) {
+      if (items[x].$ref === $ref) {
         return items[x];
       }
     }

@@ -15,8 +15,8 @@ var utils = {
     }
   },
   getPath: function(path, state) {
-    path = typeof path === 'string' ? [path] : path
-    path = path.slice();
+    path = typeof path === 'string' ? [path] : path.slice();
+
     var currentPath = state;
     while (path.length) {
       var key = path.shift();
@@ -80,40 +80,56 @@ var utils = {
     ret = ret.substr(0, ret.indexOf('('));
     return ret;
   },
-  convertDepsToState: function (deps, state) {
+  convertDepsToState: function(deps, state) {
     var getPath = this.getPath;
-    return deps.reduce(function (depState, dep) {
+    return deps.reduce(function(depState, dep) {
       depState[dep] = getPath(dep, state);
       return depState;
     }, {});
   },
-  mergeFunctions: function (target, source) {
-    var currentPath = [];
-    var traverse = function (obj) {
-      Object.keys(obj).forEach(function (key) {
-        currentPath.push(key);
-        if (typeof obj[key] === 'function') {
-          utils.setWithPath(target, currentPath, obj[key]);
-        } else if (utils.isObject(obj[key])) {
-          traverse(obj[key]);
-        }
-        currentPath.pop();
-      });
-    }
-    traverse(source);
-    return target;
-  },
-  setWithPath: function (target, path, value) {
-    while(path.length) {
+  setWithPath: function(target, path, value) {
+    while (path.length) {
       if (path.length === 1) {
         target[path.shift()] = value;
       } else {
-        target = target[path.shift()];  
+        target = target[path.shift()];
       }
     }
   },
-  hasLocalStorage: function () {
+  hasLocalStorage: function() {
     return typeof global.localStorage !== 'undefined';
+  },
+  applyObjectDiff: function(targetObject, sourceObject) {
+    
+    var currentPath = [];
+
+    var analyze = function(key, value) {
+      currentPath.push(key);
+      var path = utils.getPath(currentPath, targetObject);
+      if (!path) {
+        utils.setWithPath(targetObject, currentPath, value);
+      } else {
+        traverse(value);
+      }
+      currentPath.pop();
+    };
+    
+    var traverse = function(obj) {
+
+      if (Array.isArray(obj)) {
+        obj.forEach(function (value, index) {
+          analyze(index, value);
+        });
+      } else if (utils.isObject(obj)) {
+        Object.keys(obj).forEach(function (key) {
+          analyze(key, obj[key]);
+        });
+      }
+
+      return targetObject;
+
+    };
+    return traverse(sourceObject);
   }
 };
 

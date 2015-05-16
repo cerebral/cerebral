@@ -40,6 +40,7 @@ var createMutationMethods = function(helpers, store) {
       try {
         helpers.currentState = path[mutator].apply(path, args);
       } catch (e) {
+        console.log('helpers.currentState', e);
         throw new Error('Unable to run a "' + mutator + '" on: ' + JSON.stringify(path));
       }
 

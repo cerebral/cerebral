@@ -3,7 +3,7 @@ let saveTodo = function (cerebral, todo) {
     
     setTimeout(function () {
       resolve({
-        ref: todo.ref,
+        $ref: todo.$ref,
         $isSaving: false
       });
     }, 3000);

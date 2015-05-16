@@ -49,12 +49,11 @@ var createAsyncSignalMethod = function(helpers, store) {
             isAsync = (
               helpers.asyncCallbacks[name] &&
               helpers.asyncCallbacks[name][signalIndex] &&
-              helpers.asyncCallbacks[name][signalIndex][action.name] &&
-              helpers.asyncCallbacks[name][signalIndex][action.name][action.index]
+              helpers.asyncCallbacks[name][signalIndex][action.name]
             );
 
             if (store.isRemembering && isAsync) {
-              result = helpers.asyncCallbacks[name][signalIndex][action.name][action.index];
+              result = helpers.asyncCallbacks[name][signalIndex][action.name];
             } else if (Array.isArray(callback)) {
               result = Promise.all(callback.map(function(callback) {
                 return callback.apply(null, signalArgs);
@@ -95,8 +94,7 @@ var createAsyncSignalMethod = function(helpers, store) {
 
                 helpers.asyncCallbacks[name] = helpers.asyncCallbacks[name] || {};
                 helpers.asyncCallbacks[name][signalIndex] = helpers.asyncCallbacks[name][signalIndex] || {};
-                helpers.asyncCallbacks[name][signalIndex][action.name] = helpers.asyncCallbacks[name][signalIndex][action.name] || {};
-                helpers.asyncCallbacks[name][signalIndex][action.name][action.index] = result;
+                helpers.asyncCallbacks[name][signalIndex][action.name] = result;
 
                 helpers.eventStore.addAsyncSignal({
                   signalIndex: signalIndex,

@@ -100,6 +100,12 @@ EventStore.prototype.reset = function(state) {
 
     this.signals = [];
 
+    // First remove all state, as there might have been some
+    // additions
+    Object.keys(state).forEach(function (key) {
+      state = state.unset(key);
+    });
+
     // Make sure we do not trigger any events
     Object.keys(this.initialState).forEach(function(key) {
       state = state.set(key, this.initialState[key]);

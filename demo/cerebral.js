@@ -6,10 +6,10 @@ var state = localStorage.store ? JSON.parse(localStorage.store) : {
     return {
       value: [],
       deps: ['todos'],
-      get: function (cerebral, deps, refs) {
-        return refs.map(function (ref) {
+      get: function (cerebral, deps, $refs) {
+        return $refs.map(function ($ref) {
           return deps.todos.filter(function (todo) {
-            return todo.ref === ref;
+            return todo.$ref === $ref;
           }).pop();
         });
       }
