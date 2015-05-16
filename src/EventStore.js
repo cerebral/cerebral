@@ -14,7 +14,7 @@ var EventStore = function(state, store) {
   this.asyncSignals = [];
   this.hasExecutingSignals = false;
   this.hasExecutingAsyncSignals = false;
-  this.currentIndex = signals.length - 1;
+  this.currentIndex = -1;
   this.store = store;
   this.isSilent = false;
 

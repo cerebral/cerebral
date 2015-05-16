@@ -116,7 +116,8 @@ var Debugger = React.createClass({
               backgroundColor: '#333',
               padding: '0 10px 0 10px',
               margin: 0,
-              color: '#555'
+              color: '#555',
+              fontSize: '1.25em'
             }
           }, (index + 1) + '. ' + action.name,
           DOM.small({
@@ -231,7 +232,8 @@ var Debugger = React.createClass({
       DOM.h2({
         style: {
           color: '#999',
-          marginBottom: '25px'
+          marginBottom: '25px',
+          fontSize: '1.5em'
         }
       }, signal ? DOM.span(null, signal.name, this.renderFPS(signal.duration)) : null),
       DOM.ul({
