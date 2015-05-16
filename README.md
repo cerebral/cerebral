@@ -8,7 +8,7 @@ An intelligent react application framework
 ## Video introductions
 
 - **[Get started - 4:13](http://www.youtube.com/watch?v=Mm4B5F432SQ)**. See how you get started with your Cerebral app. Using a boilerplate you have everything you need for a great workflow and even a server you can put into production.
-- **[The debugger - 6:36](https://www.youtube.com/watch?v=K9HLc6xGqX4)**. We take a look at the debugger for the cerebral framework.
+- **[The debugger - 6:36](http://www.youtube.com/watch?v=Fo86aiBoomE)**. We take a look at the powerful debugger for Cerebral. Giving you complete overview and control of your application state flow.
 
 ## Cerebral - The abstraction
 Read this article introducing Cerebral: [Cerebral developer preview](https://github.com/christianalfoni/EmptyBox/blob/master/drafts/2015_05_12_Cerebral-developer-preview.md) (WIP)
