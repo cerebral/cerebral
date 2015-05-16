@@ -42,7 +42,7 @@ function Cerebral(initialState) {
 
   helpers.onFunction = function(path, func) {
     var description = func();
-    map(path, description.deps, description.get);
+    map(path, description);
     return description.value;
   };
 
@@ -63,7 +63,7 @@ function Cerebral(initialState) {
       helpers.eventStore.rememberNow(helpers.currentState);
     } catch (e) {
       console.warn('Cerebral was unable to remember your state, probably due to an incompatible change in the code. State has been reset!');
-      helpers.eventStore.reset(helpers.currentState);
+      helpers.eventStore.reset(helpers);
     }
 
     var Wrapper = React.createClass({
@@ -140,7 +140,7 @@ function Cerebral(initialState) {
     helpers.nextRef = 0;
     helpers.currentSignal = 0;
     helpers.asyncCallbacks = {};
-    helpers.eventStore.reset(helpers.currentState);
+    helpers.eventStore.reset(helpers);
   };
 
   cerebral.get = function(path) {
@@ -151,9 +151,9 @@ function Cerebral(initialState) {
       path = [].slice.call(arguments);
     }
 
-    var mapPath = utils.getMapPath(path, maps);
-    if (mapPath) {
-      return mapPath();
+    var mapValue = utils.getMapPath(path, maps);
+    if (mapValue) {
+      return mapValue;
     }
 
     return utils.getPath(path, helpers.currentState);

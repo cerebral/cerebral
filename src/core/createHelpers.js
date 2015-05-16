@@ -16,9 +16,11 @@ var createHelpers = function(state, store) {
       return helpers.currentState;
     },
     eventStore: eventStore,
+    runningSignal: null,
     nextRef: 0,
     currentSignal: eventStore.currentIndex,
     onFunction: null,
+    mapCallbacks: [],
     asyncCallbacks: utils.hasLocalStorage() && localStorage.getItem('cerebral_asyncCallbacks') ? 
       JSON.parse(localStorage.getItem('cerebral_asyncCallbacks')) : 
       {}

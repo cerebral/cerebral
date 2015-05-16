@@ -129,7 +129,11 @@ var Debugger = React.createClass({
             ' async action running' :
             action.isAsync ? ' async' :
             null
-          )),
+          ),
+            DOM.small({
+              style: {color: '#888'}
+            }, action.signalName !== signal.name ? ' (' + action.signalName + ')' : null)
+          ),
         DOM.ul({
             style: ActionStyle
           },

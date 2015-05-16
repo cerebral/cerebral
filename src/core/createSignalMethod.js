@@ -10,7 +10,10 @@ var createAsyncSignalMethod = function(helpers, store) {
     store.signals[name] = function() {
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
-      var signalIndex = helpers.eventStore.willKeepState ? helpers.eventStore.currentIndex + 1 : 0;
+      var signalIndex = helpers.eventStore.willKeepState ? 
+        !!helpers.runningSignal ? helpers.eventStore.currentIndex : ++helpers.eventStore.currentIndex : 0;
+      var initiatedSignal = helpers.runningSignal || name;
+
       var runMutation = function() {
 
         var timestamp = Date.now();
@@ -38,6 +41,7 @@ var createAsyncSignalMethod = function(helpers, store) {
             // Run action
             var action = {
               signalIndex: signalIndex,
+              signalName: name,
               index: callbacks.indexOf(callback),
               name: utils.getFunctionName(callback),
               duration: 0,
@@ -46,14 +50,14 @@ var createAsyncSignalMethod = function(helpers, store) {
             helpers.eventStore.addAction(action);
             var actionStart = Date.now();
 
-            isAsync = (
-              helpers.asyncCallbacks[name] &&
-              helpers.asyncCallbacks[name][signalIndex] &&
-              helpers.asyncCallbacks[name][signalIndex][action.name]
+            isAsync = !!(
+              helpers.asyncCallbacks[helpers.runningSignal] &&
+              helpers.asyncCallbacks[helpers.runningSignal][signalIndex] &&
+              (action.name in helpers.asyncCallbacks[helpers.runningSignal][signalIndex])
             );
 
             if (store.isRemembering && isAsync) {
-              result = helpers.asyncCallbacks[name][signalIndex][action.name];
+              result = helpers.asyncCallbacks[helpers.runningSignal][signalIndex][action.name];
             } else if (Array.isArray(callback)) {
               result = Promise.all(callback.map(function(callback) {
                 return callback.apply(null, signalArgs);
@@ -92,9 +96,9 @@ var createAsyncSignalMethod = function(helpers, store) {
                   Object.freeze(result);
                 }
 
-                helpers.asyncCallbacks[name] = helpers.asyncCallbacks[name] || {};
-                helpers.asyncCallbacks[name][signalIndex] = helpers.asyncCallbacks[name][signalIndex] || {};
-                helpers.asyncCallbacks[name][signalIndex][action.name] = result;
+                helpers.asyncCallbacks[initiatedSignal] = helpers.asyncCallbacks[initiatedSignal] || {};
+                helpers.asyncCallbacks[initiatedSignal][signalIndex] = helpers.asyncCallbacks[initiatedSignal][signalIndex] || {};
+                helpers.asyncCallbacks[initiatedSignal][signalIndex][action.name] = result || null; // JS or Chrome bug causing undefined not to set key
 
                 helpers.eventStore.addAsyncSignal({
                   signalIndex: signalIndex,
@@ -123,16 +127,21 @@ var createAsyncSignalMethod = function(helpers, store) {
 
           } else {
             !helpers.eventStore.isSilent && store.emit('update');
+            store.emit('mapUpdate');
+            helpers.runningSignal = null;
           }
 
         }.bind(null, store);
 
-        helpers.eventStore.addSignal(signal);
+        if (!helpers.runningSignal) {
+          helpers.runningSignal = helpers.runningSignal || name;
+          helpers.eventStore.addSignal(signal);
+        }
         execute.apply(null, args);
 
       };
 
-      if (store.isRemembering || typeof requestAnimationFrame === 'undefined') {
+      if (!!helpers.runningSignal || store.isRemembering || typeof requestAnimationFrame === 'undefined') {
         runMutation();
       } else {
         requestAnimationFrame(runMutation);

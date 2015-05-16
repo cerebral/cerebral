@@ -3,10 +3,12 @@ var utils = require('./../utils.js');
 
 var createMapMethod = function(store, maps, helpers) {
 
-  return function(path, depPaths, callback) {
-    
+  return function(path, description) {
+
     var prevResult = null;
     var state = null;
+    var depPaths = description.deps;
+    var callback = description.get;
     var deps = depPaths;
     path = (typeof path === 'string' ? [path] : path).slice();
     depPaths = depPaths.concat(path);
@@ -32,18 +34,25 @@ var createMapMethod = function(store, maps, helpers) {
         state = newState;
         var depsState = utils.convertDepsToState(deps, helpers.currentState);
         prevResult = callback(store, depsState, utils.getPath(path, helpers.currentState));
-        return prevResult;
+        setValue(prevResult);
       } else {
-        return prevResult;
+        setValue(prevResult);
       }
     };
 
-    var mapPath = maps;
-    var pathCopy = path.slice();
-    while(pathCopy.length) {
-      mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : update;
-    }
-  
+    var setValue = function(value) {
+      var mapPath = maps;
+      var pathCopy = path.slice();
+      while (pathCopy.length) {
+        mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : value;
+      }
+    };
+
+    setValue(description.value);
+
+    store.on('mapUpdate', update);
+    helpers.mapCallbacks.push(update);
+
   };
 
 };

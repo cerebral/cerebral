@@ -61,7 +61,7 @@ exports['should be able to revert state'] = function(test) {
   test.done();
 };
 
-exports['should run async actions synchronously'] = function(test) {
+exports['should run async actions synchronously when remembering'] = function(test) {
   var cerebral = new Cerebral({
     foo: 'bar'
   });
@@ -73,11 +73,16 @@ exports['should run async actions synchronously'] = function(test) {
     cerebral.set('foo', value);
   });
   cerebral.once('update', function() {
-    cerebral.remember(-1);
-    test.equals(cerebral.get('foo'), 'bar');
-    cerebral.remember(0);
-    test.equals(cerebral.get('foo'), 'bar2');
-    test.done();
+
+    // Can not test this synchronously due to signals being
+    // able to run after each other
+    setTimeout(function() {
+      cerebral.remember(-1);
+      test.equals(cerebral.get('foo'), 'bar');
+      cerebral.remember(0);
+      test.equals(cerebral.get('foo'), 'bar2');
+      test.done();
+    }, 0);
   });
   cerebral.signals.test('bar2');
 };

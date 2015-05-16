@@ -100,6 +100,8 @@ EventStore.prototype.reset = function(state) {
 
     this.signals = [];
 
+    store.removeAllListeners('mapUpdate');
+
     // First remove all state, as there might have been some
     // additions
     Object.keys(state).forEach(function (key) {
@@ -125,6 +127,7 @@ EventStore.prototype.travel = function(index, state) {
   // Create new store with initial state
   this.hasExecutingSignals = true;
   store.isRemembering = true;
+  store.removeAllListeners('mapUpdate');
 
   // Make sure we do not trigger any events
   Object.keys(this.initialState).forEach(function(key) {
@@ -142,12 +145,15 @@ EventStore.prototype.travel = function(index, state) {
 
   } else {
     // Run through events
+    this.currentIndex = -1;
+
     for (var x = 0; x <= index; x++) {
 
       var signal = this.signals[x];
       if (!signal) {
         break;
       }
+
       store.signals[signal.name].apply(store, signal.args);
       this.currentIndex = x;
 
@@ -156,7 +162,7 @@ EventStore.prototype.travel = function(index, state) {
 
   this.hasExecutingSignals = false;
   store.isRemembering = false;
-  store.emit('eventStoreUpdate');
+  store.emit('update');
 
   return store;
 };
