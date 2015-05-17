@@ -9,6 +9,7 @@ var createMapMethod = function(store, maps, helpers) {
     var state = null;
     var depPaths = description.deps;
     var callback = description.get;
+    var values = [];
     var deps = depPaths;
     path = (typeof path === 'string' ? [path] : path).slice();
     depPaths = depPaths.concat(path);
@@ -35,23 +36,30 @@ var createMapMethod = function(store, maps, helpers) {
         var depsState = utils.convertDepsToState(deps, helpers.currentState);
         prevResult = callback(store, depsState, utils.getPath(path, helpers.currentState));
         setValue(prevResult);
-      } else {
-        setValue(prevResult);
       }
     };
 
     var setValue = function(value) {
-      var mapPath = maps;
-      var pathCopy = path.slice();
-      while (pathCopy.length) {
-        mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : value;
+
+      values.unshift(value);
+
+      // When remembering subsignals that are async we need to reverse the values
+      // as the async value should be picked instea
+      if (!!helpers.subSignal && store.isRemembering) {
+        values.reverse();
       }
+
     };
+
+    var mapPath = maps;
+    var pathCopy = path.slice();
+    while (pathCopy.length) {
+      mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : values;
+    }
 
     setValue(description.value);
 
     store.on('mapUpdate', update);
-    helpers.mapCallbacks.push(update);
 
   };
 

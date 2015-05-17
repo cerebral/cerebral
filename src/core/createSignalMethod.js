@@ -10,7 +10,7 @@ var createAsyncSignalMethod = function(helpers, store) {
     store.signals[name] = function() {
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
-      var signalIndex = helpers.eventStore.willKeepState ? 
+      var signalIndex = helpers.eventStore.willKeepState ?
         !!helpers.runningSignal ? helpers.eventStore.currentIndex : ++helpers.eventStore.currentIndex : 0;
       var initiatedSignal = helpers.runningSignal || name;
 
@@ -29,6 +29,9 @@ var createAsyncSignalMethod = function(helpers, store) {
         var execute = function() {
 
           if (executionArray.length) {
+
+            helpers.runningSignal = helpers.runningSignal || name;
+            helpers.subSignal = helpers.runningSignal === name ? null : name;
 
             var signalArgs = [].slice.call(arguments);
             var callback = executionArray.shift();
@@ -80,6 +83,7 @@ var createAsyncSignalMethod = function(helpers, store) {
 
               // Have to run update when next action is async
               if (callbacks.indexOf(callback) !== 0) {
+                store.emit('mapUpdate');
                 !helpers.eventStore.isSilent && store.emit('update');
               }
 
@@ -107,10 +111,8 @@ var createAsyncSignalMethod = function(helpers, store) {
                   end: Date.now()
                 });
 
-                // Have to update again after an async action
-                var result = execute(result);
+                return execute(result);
 
-                return result;
               }).catch(function(err) {
                 helpers.eventStore.addAsyncSignal({
                   signalIndex: signalIndex,
@@ -126,15 +128,14 @@ var createAsyncSignalMethod = function(helpers, store) {
             }
 
           } else {
-            !helpers.eventStore.isSilent && store.emit('update');
             store.emit('mapUpdate');
+            !helpers.eventStore.isSilent && store.emit('update');
             helpers.runningSignal = null;
           }
 
         }.bind(null, store);
 
         if (!helpers.runningSignal) {
-          helpers.runningSignal = helpers.runningSignal || name;
           helpers.eventStore.addSignal(signal);
         }
         execute.apply(null, args);

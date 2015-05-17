@@ -155,7 +155,7 @@ function Cerebral(initialState) {
 
     var mapValue = utils.getMapPath(path, maps);
     if (mapValue) {
-      return mapValue;
+      return mapValue[0];
     }
 
     return utils.getPath(path, helpers.currentState);
