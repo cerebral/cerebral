@@ -1,4 +1,4 @@
-# cerebral (WIP) ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
+# cerebral - alpha ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
 An intelligent react application framework
 
 <img src="images/logo.jpg" width="300" align="center">
