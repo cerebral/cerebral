@@ -44,7 +44,8 @@ var createMapMethod = function(store, maps, helpers) {
       values.unshift(value);
 
       // When remembering subsignals that are async we need to reverse the values
-      // as the async value should be picked instea
+      // as the async value should be picked instead. Might need to check if this
+      // signal actually is async
       if (!!helpers.subSignal && store.isRemembering) {
         values.reverse();
       }
