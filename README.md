@@ -12,7 +12,7 @@ An intelligent react application framework
 - **[Building your first app - 14:24](https://www.youtube.com/watch?v=ZG1omJek6SY)**. We build the hello world application in the boilerplate using our debugger to explain a pretty awesome workflow.
 
 ## Cerebral - The abstraction
-Read this article introducing Cerebral: [Cerebral developer preview](https://github.com/christianalfoni/EmptyBox/blob/master/drafts/2015_05_12_Cerebral-developer-preview.md) (WIP)
+Read this article introducing Cerebral: [Cerebral developer preview](http://christianalfoni.com/articles/2015_05_18_Cerebral-developer-preview)
 
 ## Short history
 I have been writing about, researching and developing both traditional and Flux architecture for quite some time. Look at my blog [www.christianalfoni.com](http://www.christianalfoni.com) for more information. Though I think we are moving towards better abstractions for reasoning about our applications there are core issues that are yet to be solved. This library is heavily inspired by articles, videos, other projects and my own experiences building applications.
