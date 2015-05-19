@@ -27,8 +27,7 @@ function Cerebral(initialState) {
 
   var state = {};
   var localStorageState = utils.hasLocalStorage() && localStorage.getItem('cerebral_state') ?
-    JSON.parse(localStorage.getItem('cerebral_state')) :
-    {};
+    JSON.parse(localStorage.getItem('cerebral_state')) : {};
 
   state = utils.applyObjectDiff(state, initialState);
   state = utils.applyObjectDiff(state, localStorageState);
@@ -66,8 +65,10 @@ function Cerebral(initialState) {
     try {
       helpers.eventStore.rememberNow(helpers.currentState);
     } catch (e) {
-      console.warn('Cerebral was unable to remember your state, probably due to an incompatible change in the code. State has been reset!');
       helpers.eventStore.reset(helpers.currentState);
+      alert('Cerebral was unable to remember your state, probably due to an incompatible change in the code. State has been reset and application will reload!')
+      return location.reload();
+
     }
 
     var Wrapper = React.createClass({

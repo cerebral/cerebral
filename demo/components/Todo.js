@@ -9,7 +9,12 @@ class Todo extends React.Component {
   }
 
   edit() {
-     this.signals.todoDoubleClicked(this.props.todo);
+
+    if (this.props.todo.$isSaving) {
+      return;
+    }
+
+    this.signals.todoDoubleClicked(this.props.todo);
 
     // FOCUS fix
     setTimeout(() => {

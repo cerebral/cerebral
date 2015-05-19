@@ -15,16 +15,24 @@ var utils = {
     }
   },
   getPath: function(path, state) {
+
+    var originalPath = path.slice();
     path = typeof path === 'string' ? [path] : path.slice();
 
     var currentPath = state;
-    while (path.length) {
-      var key = path.shift();
-      if (key.__ && key.__.path) {
-        path = key.__.path.concat(path);
-        continue;
+    try {
+
+      while (path.length) {
+        var key = path.shift();
+        if (key.__ && key.__.path) {
+          path = key.__.path.concat(path);
+          continue;
+        }
+        currentPath = currentPath[key];
       }
-      currentPath = currentPath[key];
+
+    } catch (e) {
+      throw new Error('The path ' + JSON.stringify(originalPath) + ' is not a valid cerebral path');
     }
     return currentPath;
   },
@@ -100,7 +108,7 @@ var utils = {
     return typeof global.localStorage !== 'undefined';
   },
   applyObjectDiff: function(targetObject, sourceObject) {
-    
+
     var currentPath = [];
 
     var analyze = function(key, value) {
@@ -113,15 +121,15 @@ var utils = {
       }
       currentPath.pop();
     };
-    
+
     var traverse = function(obj) {
 
       if (Array.isArray(obj)) {
-        obj.forEach(function (value, index) {
+        obj.forEach(function(value, index) {
           analyze(index, value);
         });
       } else if (utils.isObject(obj)) {
-        Object.keys(obj).forEach(function (key) {
+        Object.keys(obj).forEach(function(key) {
           analyze(key, obj[key]);
         });
       }
