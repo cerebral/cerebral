@@ -5,35 +5,48 @@ var createMapMethod = function(store, maps, helpers) {
 
   return function(path, description) {
 
+    path = (typeof path === 'string' ? [path] : path).slice();
+
     var prevResult = null;
     var state = null;
-    var depPaths = description.deps;
     var callback = description.get;
     var values = [];
-    var deps = depPaths;
-    path = (typeof path === 'string' ? [path] : path).slice();
-    depPaths = depPaths.concat(path);
 
+    // Convert deps to key/value to expose state
+    var depPathsObject = utils.pathsToObject(description.deps);
+
+    // Convert deps + state path to array to use for state retrieval and equality check
+    var allPaths = utils.objectToPaths(description.deps).concat(path);
+
+    // Get all depending state values
     var grabState = function() {
-      return depPaths.reduce(function(state, path) {
-        state[path] = utils.getPath(path, helpers.currentState);
-        return state;
-      }, {});
+      return allPaths.map(function(path) {
+        return utils.getPath(path, helpers.currentState);
+      });
     };
 
+    // Update map if necessary
     var update = function() {
-      var newState = grabState();
-      state = state || newState;
-      var hasChanged = Object.keys(newState).reduce(function(hasChanged, key) {
-        if (hasChanged) {
-          return hasChanged;
-        }
-        return state[key] !== newState[key];
-      }, false);
 
-      if (hasChanged || !prevResult) {
+      // Grab latest values
+      var newState = grabState();
+
+      // Set state if this is first iteration
+      state = state || newState;
+
+      // Filter out changes
+      var hasChanged = newState.filter(function(newState, index) {
+        return state[index] !== newState;
+      });
+
+      // If first run or has any changes grab latest dep values and
+      // run the map
+      if (hasChanged.length || !prevResult) {
         state = newState;
-        var depsState = utils.convertDepsToState(deps, helpers.currentState);
+        var depsState = Object.keys(depPathsObject).reduce(function (state, key) {
+          state[key] = utils.getPath(depPathsObject[key], helpers.currentState);
+          return state;
+        }, {});
         prevResult = callback(store, depsState, utils.getPath(path, helpers.currentState));
         setValue(prevResult);
       }
@@ -60,6 +73,8 @@ var createMapMethod = function(store, maps, helpers) {
     setValue(description.value);
 
     store.on('mapUpdate', update);
+
+    helpers.mapUpdates.push(update);
 
   };
 

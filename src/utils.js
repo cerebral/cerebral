@@ -88,13 +88,6 @@ var utils = {
     ret = ret.substr(0, ret.indexOf('('));
     return ret;
   },
-  convertDepsToState: function(deps, state) {
-    var getPath = this.getPath;
-    return deps.reduce(function(depState, dep) {
-      depState[dep] = getPath(dep, state);
-      return depState;
-    }, {});
-  },
   setWithPath: function(target, path, value) {
     while (path.length) {
       if (path.length === 1) {
@@ -138,6 +131,27 @@ var utils = {
 
     };
     return traverse(sourceObject);
+  },
+
+  // Converts an array of paths to key/value
+  pathsToObject: function (obj) {
+    if (!Array.isArray(obj)) {
+      return obj;
+    }
+    return obj.reduce(function (obj, value) {
+      obj[typeof value === 'string' ? value : value.slice().pop()] = value;
+      return obj;
+    }, {})
+  },
+
+  // Converts an object to array of paths
+  objectToPaths: function (obj) {
+    if (Array.isArray(obj)) {
+      return obj;
+    }
+    return Object.keys(obj).map(function (key) {
+      return obj[key];
+    });
   }
 };
 

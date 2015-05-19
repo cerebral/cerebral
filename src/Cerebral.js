@@ -3,8 +3,7 @@
 /*
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
-    - Freeze data returned from facets? what about arrays with objects?  
-    - Allow object in state function deps
+    - Freeze data returned from maps? Create a store maybe?
     - Comment all code
     - Do not record when in production
     - More tests! reset, async travelling...
@@ -24,42 +23,68 @@ var createMutationMethods = require('./core/createMutationMethods.js');
 var CerebralDebugger = React.createFactory(require('./Debugger.js'));
 var createStore = require('./core/createStore.js');
 
+// The Cerebral instance
 function Cerebral(initialState) {
 
+  // The actual state object which will be used on instance
   var state = {};
+
+  // If localStorage is available we try to grab any state stored there
   var localStorageState = utils.hasLocalStorage() && localStorage.getItem('cerebral_state') ?
     JSON.parse(localStorage.getItem('cerebral_state')) : {};
 
+  // We apply any diffs from the passed initial state. This ensures that if you add properties
+  // to the initial state and save, these will be avilable 
   state = utils.applyObjectDiff(state, initialState);
+
+  // Then we apply any changes from the state in localStorage
   state = utils.applyObjectDiff(state, localStorageState);
 
-  if (!state || (typeof state !== 'object' || Array.isArray(state) || state === null)) {
-    throw new Error('You have to pass an object to the cerebral');
-  }
-
+  // Using default Node EventEmitter
   var emitter = new EventEmitter();
+
+  // Use emitter as prototype
   var cerebral = Object.create(emitter);
+
+  // Helpers is an object being passed around to share state
   var helpers = createHelpers(initialState, cerebral);
+
+  // Maps will contain the latest calculated values of state maps
   var maps = {};
+
+  // TODO: Create a REF implementation
   var refIds = {};
+
+  // The method that create maps
   var map = createMapMethod(cerebral, maps, helpers);
 
+  // When the initial state is traversed by immutable-store this function will
+  // trigger when it meets a function. In our case it creates a map and returns
+  // the value to replace the function
   helpers.onFunction = function(path, func) {
     var description = func();
     map(path, description);
     return description.value;
   };
 
+  // Creates the immutable-store
   helpers.currentState = createStore(helpers, state);
 
+  // Placeholder for the signals
   cerebral.signals = {};
 
+  // The method that creates the signals
   cerebral.signal = createSignalMethod(helpers, cerebral);
 
+  // Handy for Debugger etc. to verify if any async signals are running
   cerebral.hasExecutingAsyncSignals = function() {
     return helpers.eventStore.hasExecutingAsyncSignals;
   };
 
+  // Method to create a wrapper component exposing the cerebral and debugger.
+  // It also remembers current state, but will reset and reload page if anything
+  // wrong happens. This typically happens when the cerebral is unable to handle
+  // the state stored in localStorage
   cerebral.injectInto = function(component) {
 
     // Set store in correct state
@@ -101,7 +126,8 @@ function Cerebral(initialState) {
     return Wrapper;
   };
 
-  // Go back in time
+  // The method that resets cerebral helper state and runs the travel method
+  // of EventStore
   cerebral.remember = function(index) {
     helpers.nextRef = 0;
     helpers.nextSignal = 0;
@@ -109,27 +135,35 @@ function Cerebral(initialState) {
     return helpers.eventStore.travel(index, helpers.currentState);
   };
 
-  // Get signals and mutations done to cerebral
+  // Get signals form EventStore
   cerebral.getMemories = function() {
     return helpers.eventStore.signals.slice(0);
   };
 
+  // Get current signal index
   cerebral.getMemoryIndex = function() {
     return helpers.eventStore.currentIndex;
   };
 
+  // Toggle if the EventStore should keep previous
+  // signals
   cerebral.toggleKeepState = function() {
     helpers.eventStore.toggleKeepState();
   };
 
+  // Check if the EventStore is keeping previous signals
   cerebral.willKeepState = function() {
     return helpers.eventStore.willKeepState;
   };
 
+  // Extracts all the state of the application. Used to put into
+  // localStorage
   cerebral.extractState = function() {
     return helpers.currentState.toJS();
   };
 
+  // The ref method creates a reference that can be used by objects without ID.
+  // It is chronological as required by EventStore
   cerebral.ref = function(id) {
 
     // Will map an ID to a ref to allow optimistic updates very easily
@@ -143,6 +177,7 @@ function Cerebral(initialState) {
 
   };
 
+  // Allows to quickly grab an object from en array using the $ref
   cerebral.getByRef = function(path, $ref) {
     var items = this.get(path);
     for (var x = 0; x < items.length; x++) {
@@ -152,6 +187,7 @@ function Cerebral(initialState) {
     }
   };
 
+  // Resets any helpers state and resets the EventStore
   cerebral.reset = function() {
     helpers.nextRef = 0;
     helpers.currentSignal = 0;
@@ -160,6 +196,7 @@ function Cerebral(initialState) {
     helpers.eventStore.reset(helpers.currentState);
   };
 
+  // Use a path to grab any state
   cerebral.get = function(path) {
     if (!path) {
       throw new Error('You have to pass a path to the get method');
@@ -176,8 +213,11 @@ function Cerebral(initialState) {
     return utils.getPath(path, helpers.currentState);
   };
 
+  // Creates all the mutation methods like set, push, splice, unset etc.
   createMutationMethods(helpers, cerebral);
 
+  // If we are running in the browser we want to move all state, signals and async
+  // callbacks to localStorage when the browser is unloading
   if (global.addEventListener) {
 
     window.addEventListener('beforeunload', function() {
@@ -198,6 +238,12 @@ function Cerebral(initialState) {
     });
 
   }
+
+  // Run all map updates extracted from the initial state to set the actual
+  // initial state
+  helpers.mapUpdates.forEach(function (update) {
+    update();
+  });
 
   return cerebral;
 

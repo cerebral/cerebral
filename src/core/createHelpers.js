@@ -20,6 +20,9 @@ var createHelpers = function(state, store) {
     subSignal: null,
     nextRef: 0,
     currentSignal: eventStore.currentIndex,
+
+    // Map update functions to run when initializing
+    mapUpdates: [],
     onFunction: null,
     mapCallbacks: [],
     asyncCallbacks: utils.hasLocalStorage() && localStorage.getItem('cerebral_asyncCallbacks') ? 
