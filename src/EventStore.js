@@ -53,9 +53,10 @@ EventStore.prototype.addSignal = function(signal) {
   if (!this.willKeepState) {
     this.signals = [];
   }
-  
-  if (this.currentIndex <= this.signals.length - 1) {
-    this.signals.splice(this.currentIndex, this.signals.length - this.currentIndex);
+  if (this.currentIndex < this.signals.length - 1) {
+
+    this.signals.splice(this.currentIndex + 1, this.signals.length - this.currentIndex);
+
   }
   this.signals.push(signal);
   this.currentIndex = this.signals.length - 1;

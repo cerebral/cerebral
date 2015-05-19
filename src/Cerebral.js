@@ -40,6 +40,7 @@ function Cerebral(initialState) {
   var cerebral = Object.create(emitter);
   var helpers = createHelpers(initialState, cerebral);
   var maps = {};
+  var refIds = {};
   var map = createMapMethod(cerebral, maps, helpers);
 
   helpers.onFunction = function(path, func) {
@@ -101,6 +102,7 @@ function Cerebral(initialState) {
   cerebral.remember = function(index) {
     helpers.nextRef = 0;
     helpers.nextSignal = 0;
+    refIds = {};
     return helpers.eventStore.travel(index, helpers.currentState);
   };
 
@@ -125,8 +127,17 @@ function Cerebral(initialState) {
     return helpers.currentState.toJS();
   };
 
-  cerebral.ref = function() {
-    return helpers.nextRef++;
+  cerebral.ref = function(id) {
+
+    // Will map an ID to a ref to allow optimistic updates very easily
+    if (id && id in refIds) {
+      return refIds[id];
+    } else if (id) {
+      return refIds[id] = helpers.nextRef++;
+    } else {
+      return helpers.nextRef++;
+    }
+
   };
 
   cerebral.getByRef = function(path, $ref) {
@@ -142,6 +153,7 @@ function Cerebral(initialState) {
     helpers.nextRef = 0;
     helpers.currentSignal = 0;
     helpers.asyncCallbacks = {};
+    refIds = {};
     helpers.eventStore.reset(helpers.currentState);
   };
 

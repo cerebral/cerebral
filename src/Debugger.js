@@ -15,6 +15,7 @@ var debuggerStyle = {
   backgroundColor: '#333',
   color: '#666',
   overflowY: 'scroll',
+  overflowX: 'hidden',
   boxSizing: 'border-box'
 };
 
@@ -89,6 +90,9 @@ var Debugger = React.createClass({
     var value = this.context.cerebral.get(path);
     console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
   },
+  logArg: function (arg) {
+    console.log(arg);
+  },
   renderMutations: function() {
     var currentSignalIndex = this.context.cerebral.getMemoryIndex();
     var signals = this.context.cerebral.getMemories();
@@ -162,8 +166,17 @@ var Debugger = React.createClass({
                 DOM.div({
                   style: MutationArgsStyle
                 }, mutationArgs.map(function(mutationArg) {
-                  return JSON.stringify(mutationArg)
-                }).join(' , '))
+                  var argString = JSON.stringify(mutationArg, index);
+                  if (argString.length > 50) {
+                    return DOM.a({
+                      key: index,
+                      style: {cursor: 'pointer'},
+                      onClick: this.logArg.bind(null, mutationArg)
+                    }, argString.substr(0, 50) + '...');
+                  } else {
+                    return argString;
+                  }
+                }, this))
               )
             );
 
