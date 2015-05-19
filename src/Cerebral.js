@@ -9,6 +9,7 @@
     - Comment all code
     - Do not record when in production
     - More tests! reset, async travelling...
+    - Fix bug where toggling record/not record
 */
 var utils = require('./utils.js');
 var React = require('react');
