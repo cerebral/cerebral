@@ -1,5 +1,5 @@
 let toggleAllChecked = function(cerebral, todo) {
-    var isCompleted = !store.get('isAllChecked');
+    var isCompleted = !cerebral.get('isAllChecked');
     cerebral.get('todos').forEach(function (todo) {
       cerebral.set([todo, 'completed'], isCompleted);
     });

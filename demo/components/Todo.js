@@ -58,7 +58,7 @@ class Todo extends React.Component {
               onChange={this.signals.toggleCompletedChanged.bind(this, this.props.todo)}
               checked={this.props.todo.completed}/>
           }
-          <label onDoubleClick={this.edit.bind(this)}>{this.props.todo.title}</label>
+          <label onDoubleClick={this.edit.bind(this)}>{this.props.todo.title} {this.props.todo.$isSaving ? <small>(saving)</small> : null}</label>
           {
             this.props.todo.$isSaving ? 
             null : 

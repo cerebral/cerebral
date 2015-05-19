@@ -40,8 +40,13 @@ let Wrapper = cerebral.injectInto(App);
 React.render(<Wrapper/>, document.querySelector('#app'));
 
 // ROUTER
+
+console.log('location.pathname', location.pathname.substr(0, location.pathname.length - 1));
+Page.base(location.pathname.substr(0, location.pathname.length - 1));
+
 Page('/', cerebral.signals.routeChanged);
 Page('/active', cerebral.signals.routeChanged);
 Page('/completed', cerebral.signals.routeChanged);
+
 Page.start();
 

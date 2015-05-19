@@ -124,11 +124,11 @@ var createAsyncSignalMethod = function(helpers, store) {
               });
 
             } else {
+              store.emit('mapUpdate');
               execute(result);
             }
 
           } else {
-            store.emit('mapUpdate');
             !helpers.eventStore.isSilent && store.emit('update');
             helpers.runningSignal = null;
           }
