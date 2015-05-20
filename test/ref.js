@@ -7,7 +7,7 @@ exports['should be able to create a new ref'] = function(test) {
     ids: []
   });
   var newRef = ref.create();
-  test.equal(newRef, 0);
+  test.equal(newRef, 'cerebral_ref_0');
   test.done();
 };
 
@@ -66,10 +66,19 @@ exports['should throw error when ID already exists'] = function(test) {
   });
   var newRef = ref.create('123');
   test.throws(function() {
-    ref.create('123');
-  });
-  test.throws(function() {
     ref.update(0, '123');
   });
+  test.done();
+};
+
+exports['should return existing ref if id already exists'] = function(test) {
+  var ref = Ref({
+    nextRef: 0,
+    refs: [],
+    ids: []
+  });
+  var newRef = ref.create('123');
+  var sameRef = ref.create('123');
+  test.equal(sameRef, 'cerebral_ref_0');
   test.done();
 };

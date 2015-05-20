@@ -1,11 +1,13 @@
-let updateTodo = function(cerebral, updatedTodo) {
+let updateTodo = function(cerebral, result) {
 
-  let todo = cerebral.get(['todos', updatedTodo.ref]);
+  let todo = cerebral.get('todos', result.ref);
 
-  cerebral.ref.update(updatedTodo.ref, updatedTodo.data.id);
+  cerebral.ref.update(result.ref, result.id);
   
-  cerebral.merge(todo, updatedTodo.data);
-  cerebral.set([todo, '$isSaving'], false);
+  cerebral.merge(todo, {
+    id: result.id,
+    $isSaving: false
+  });
 };
 
 export default updateTodo;

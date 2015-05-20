@@ -10,10 +10,7 @@ let addTodo = function(cerebral) {
   cerebral.set(['todos', ref], todo);
   cerebral.set('newTodoTitle', '');
 
-  return {
-    ref: ref,
-    data: todo
-  };
+  return ref;
 };
 
 export default addTodo;
