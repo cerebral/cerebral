@@ -1,5 +1,7 @@
-let stopEditingTodo = function (cerebral, todo) {
-  todo = cerebral.getByRef('todos', todo.$ref);
+let stopEditingTodo = function (cerebral, id) {
+
+  let ref = cerebral.ref.get(id);
+  let todo = cerebral.get(['todos', ref]);
 
   if (!todo.$newTitle) {
     return;

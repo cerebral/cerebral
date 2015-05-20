@@ -1,16 +1,14 @@
 import Cerebral from './../src/Cerebral.js';
 
 var state = localStorage.store ? JSON.parse(localStorage.store) : {
-  todos: [],
-  visibleTodos: function () {
+  todos: {},
+  visibleTodos: function() {
     return {
       value: [],
       deps: ['todos'],
-      get: function (cerebral, deps, $refs) {
-        return $refs.map(function ($ref) {
-          return deps.todos.filter(function (todo) {
-            return todo.$ref === $ref;
-          }).pop();
+      get: function(cerebral, deps, refs) {
+        return refs.map(function(ref) {
+          return deps.todos[ref];
         });
       }
     };

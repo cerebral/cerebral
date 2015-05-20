@@ -20,6 +20,7 @@ var createHelpers = require('./core/createHelpers.js');
 var createSignalMethod = require('./core/createSignalMethod.js');
 var createMapMethod = require('./core/createMapMethod.js');
 var createMutationMethods = require('./core/createMutationMethods.js');
+var createRefMethods = require('./core/createRefMethods.js');
 var CerebralDebugger = React.createFactory(require('./Debugger.js'));
 var createStore = require('./core/createStore.js');
 
@@ -131,6 +132,8 @@ function Cerebral(initialState) {
   cerebral.remember = function(index) {
     helpers.nextRef = 0;
     helpers.nextSignal = 0;
+    helpers.refs = [];
+    helpers.ids = [];
     refIds = {};
     return helpers.eventStore.travel(index, helpers.currentState);
   };
@@ -162,36 +165,15 @@ function Cerebral(initialState) {
     return helpers.currentState.toJS();
   };
 
-  // The ref method creates a reference that can be used by objects without ID.
-  // It is chronological as required by EventStore
-  cerebral.ref = function(id) {
-
-    // Will map an ID to a ref to allow optimistic updates very easily
-    if (id && id in refIds) {
-      return refIds[id];
-    } else if (id) {
-      return refIds[id] = helpers.nextRef++;
-    } else {
-      return helpers.nextRef++;
-    }
-
-  };
-
-  // Allows to quickly grab an object from en array using the $ref
-  cerebral.getByRef = function(path, $ref) {
-    var items = this.get(path);
-    for (var x = 0; x < items.length; x++) {
-      if (items[x].$ref === $ref) {
-        return items[x];
-      }
-    }
-  };
+  cerebral.ref = createRefMethods(helpers);
 
   // Resets any helpers state and resets the EventStore
   cerebral.reset = function() {
     helpers.nextRef = 0;
     helpers.currentSignal = 0;
     helpers.asyncCallbacks = {};
+    helpers.refs = [];
+    helpers.ids = [];
     refIds = {};
     helpers.eventStore.reset(helpers.currentState);
   };
