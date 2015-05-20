@@ -1,7 +1,7 @@
-let removeTodo = function(cerebral, todo) {
-  var path = todo.getPath();
-  var index = path.pop();
-  cerebral.splice(path, index, 1);
+let removeTodo = function(cerebral, id) {
+  let ref = cerebral.ref.get(id);
+  cerebral.unset('todos', ref);
+  cerebral.ref.remove(id);
 };
 
 export default removeTodo;

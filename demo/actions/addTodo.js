@@ -1,13 +1,19 @@
 let addTodo = function(cerebral) {
+
+  let ref = cerebral.ref.create();
   let todo = {
-    $ref: cerebral.ref(),
     $isSaving: true,
     title: cerebral.get('newTodoTitle'),
     completed: false
   };
-  cerebral.push('todos', todo);
+  
+  cerebral.set(['todos', ref], todo);
   cerebral.set('newTodoTitle', '');
-  return todo;
+
+  return {
+    ref: ref,
+    data: todo
+  };
 };
 
 export default addTodo;

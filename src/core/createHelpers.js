@@ -19,6 +19,8 @@ var createHelpers = function(state, store) {
     runningSignal: null,
     subSignal: null,
     nextRef: 0,
+    refs: [],
+    ids: [],
     currentSignal: eventStore.currentIndex,
     onFunction: null,
     mapCallbacks: [],

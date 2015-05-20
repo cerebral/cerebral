@@ -4,17 +4,13 @@ import mixin from './../../src/mixin.js';
 
 class Todo extends React.Component {
 
-  toggleCompleted() {
-    actions.toggleCompleted(this.props.todo);
-  }
-
   edit() {
 
     if (this.props.todo.$isSaving) {
       return;
     }
 
-    this.signals.todoDoubleClicked(this.props.todo);
+    this.signals.todoDoubleClicked(this.props.todo.id);
 
     // FOCUS fix
     setTimeout(() => {
@@ -25,12 +21,12 @@ class Todo extends React.Component {
   }
 
   onNewTitleChanged(event) {
-    this.signals.newTitleChanged(this.props.todo, event.target.value);
+    this.signals.newTitleChanged(this.props.todo.id, event.target.value);
   }
 
   saveEdit(event) {
     event.preventDefault();
-    actions.saveEdit(this.props.todo, this.state.newTitle);
+    actions.saveEdit(this.props.todo.id, this.state.newTitle);
   }  
 
   onNewTitleSubmitted(event) {
@@ -55,16 +51,21 @@ class Todo extends React.Component {
               className="toggle" 
               type="checkbox" 
               disabled={this.props.todo.$isSaving}
-              onChange={this.signals.toggleCompletedChanged.bind(this, this.props.todo)}
+              onChange={this.signals.toggleCompletedChanged.bind(null, this.props.todo.id)}
               checked={this.props.todo.completed}/>
           }
-          <label onDoubleClick={this.edit.bind(this)}>{this.props.todo.title} {this.props.todo.$isSaving ? <small>(saving)</small> : null}</label>
+          <label onDoubleClick={this.edit.bind(this)}>
+            {this.props.todo.title} {this.props.todo.$isSaving ? 
+              <small>(saving)</small> : 
+              null
+            }
+          </label>
           {
             this.props.todo.$isSaving ? 
             null : 
             <button 
               className="destroy" 
-              onClick={this.signals.removeTodoClicked.bind(this, this.props.todo)}/>
+              onClick={this.signals.removeTodoClicked.bind(null, this.props.todo.id)}/>
           }
         </div>
         <form onSubmit={this.onNewTitleSubmitted.bind(this)}>
@@ -72,7 +73,7 @@ class Todo extends React.Component {
             ref="edit"
             className="edit" 
             value={this.props.todo.$newTitle || this.props.todo.title} 
-            onBlur={this.signals.newTitleSubmitted.bind(null, this.props.todo)}
+            onBlur={this.signals.newTitleSubmitted.bind(null, this.props.todo.id)}
             onChange={this.onNewTitleChanged.bind(this)}
           />
         </form>

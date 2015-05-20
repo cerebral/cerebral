@@ -1,6 +1,6 @@
-let setTodoNewTitle = function (cerebral, todo, title) {
-  todo = cerebral.get('todos', todo.$ref);
-  cerebral.merge(todo, {
+let setTodoNewTitle = function (cerebral, id, title) {
+  let ref = cerebral.ref.get(id);
+  cerebral.merge(['todos', ref], {
     $newTitle: title
   });
 };

@@ -19,7 +19,7 @@ var App = React.createClass({
           </header>
           
           {this.state.visibleTodos.length ? <TodosList/> : null}        
-          {this.state.todos.length ? <TodosFooter/> : null}
+          {Object.keys(this.state.todos).length ? <TodosFooter/> : null}
         </section>
         <footer id="info">
           <p>Double-click to edit a todo</p>

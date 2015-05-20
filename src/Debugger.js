@@ -121,7 +121,7 @@ var Debugger = React.createClass({
               padding: '0 10px 0 10px',
               margin: 0,
               color: '#555',
-              fontSize: '1.25em'
+              fontSize: '1em'
             }
           }, (index + 1) + '. ' + action.name,
           DOM.small({
@@ -250,7 +250,7 @@ var Debugger = React.createClass({
         style: {
           color: '#999',
           marginBottom: '25px',
-          fontSize: '1.5em'
+          fontSize: '1.25em'
         }
       }, signal ? DOM.span(null, signal.name, this.renderFPS(signal.duration)) : null),
       DOM.ul({
