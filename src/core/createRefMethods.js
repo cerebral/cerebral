@@ -6,7 +6,7 @@ module.exports = function(helpers) {
 
   return {
     create: function(id) {
-      var ref = helpers.refs[helpers.refs.length] = helpers.nextRef++;
+      var ref = helpers.refs[helpers.refs.length] = 'cerebral_ref_' + helpers.nextRef++;
       if (arguments.length) {
         if (helpers.ids.indexOf(id) >= 0) {
           throw new Error('Cerebral - The id to reference already exists. Make sure all ids are unique and that you update refs with ids.');

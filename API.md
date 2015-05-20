@@ -19,8 +19,10 @@
 - [get](#get)
 - [toJS](#tojs)
 - [ref](#ref)
-- [getByRef](#getbyref)
-
+  - [create](#create)
+  - [update](#update)
+  - [get](#update)
+  - [remove](#update)
 - [getMemories](#getmemories)
 - [remember](#remember)
 
@@ -474,19 +476,113 @@ cerebral.get(['user', 'name']);
 ```
 
 ### ref
+Cerebral has a reference implementation. The reason it has this implementation is for you to easily do optimistic updates, relational data and general lookups in the cerebral. Lets us first look at the four methods and then look at a scenario.
+
+#### create
 ```js
-let todo = {
-  ref: cerebral.ref(),
-  title: 'foo'
+let ref = cerebral.ref.create();
+```
+Returns a reference value created by the cerebral.
+
+```js
+let ref = cerebral.ref.create(foo.id);
+```
+Returns a reference value that is now linked with the id of foo.
+
+#### update
+```js
+let ref = cerebral.ref.create();
+cerebral.ref.update(ref, foo.id);
+```
+Links an id to the ref.
+
+#### get
+```js
+let ref = cerebral.ref.get(foo.id);
+```
+Return the ref related to the id of foo.
+
+#### remove
+```js
+cerebral.ref.remove(ref);
+cerebral.ref.remove(foo.id);
+```
+Both these removes the ref and linked id.
+
+**So why use this?**. When you download and update data in the client you should put that data in a map (object) and use arrays to display that data. The reason is that these gives you a data storage of sorts. Displaying data will be used by referencing this source data. To give complete control of all this referencing you can use cerebrals implementation.
+
+Let us optimistically update our application with a new todo.
+```js
+let addTodo = function (cerebral) {
+  let ref = cerebral.ref.create();
+  let todo = {
+    $isSaving: true,
+    title: cerebral.get('newTodoTitle'),
+    completed: false
+  };
+  cerebral.set(['todos', ref], todo);
+  return ref;
 };
 ```
-Use Cerebral refs to create unique IDs in the client. It is important that you use Cerebrals internal reference implementation as the IDs will be created chronologically.
-
-### getByRef
+We create an action that adds a new todo to our projects map using a created ref. Then it returns that ref. Our next action will now save that todo.
 ```js
-let todo = cerebral.getByRef('todos', todo.$ref);
+let saveTodo = function (cerebral, ref) {
+  let todo = cerebral.get(['todos', ref]);
+  return ajax.post('/todos', {
+    title: todo.title,
+    completed: todo.completed
+  })
+  .success(function (id) {
+    cerebral.ref.update(todo.ref, id);
+    return id;
+  });
+};
 ```
-Values returned from cerebral are immutable!
+Our action now grabs the todo using the ref and declares exactly what properties to send to the server. This has two benefits. You can see in your code exactly what you pass to the server and you avoid sending unnecessary data, like the client side $isSaving property. When the server responds with an ID we update our reference and link it to the new id. Then we return the id for the next action which will actually set the id on our todo.
+
+```js
+let setTodoId = function (cerebral, id) {
+  let ref = cerebral.ref.get(id);
+  let todo = cerebral.get(['todos', ref]);
+  cerebral.set([todo, 'id'], id);
+};
+```
+We can now use the id to get our ref. The ref is used to grab the todo and we set the id to it.
+
+What we have achieved with this implementation is to remove the need for ids completely. The client, with cerebral, is in full control of all objects and you can use both refs and ids to find what you need. This implementation becomes especially useful when mapping relational data.
+
+```js
+let cerebral = Cerebral({
+  projects: {},
+  users: {},
+  projectRows = function () {
+    return {
+      value: [],
+      deps: ['projects', 'users'],
+      get(cerebral, deps, projectRefs) {
+
+        return projectRefs.map(function (ref) {
+
+          let project = deps.projects[ref].toJS();
+          let userRef = cerebral.ref.get(project.authorId);
+
+          if (userRef) {
+            project.author = deps.users[userRef];
+          } else {
+            project.author = {
+              $notFound: true
+            };
+          }
+          
+          return project;
+
+        });
+
+      }
+    };
+  }
+})
+```
 
 ### toJS
 ```js
