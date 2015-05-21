@@ -8,7 +8,7 @@ module.exports = function(helpers) {
     create: function(id) {
       var ref = helpers.refs[helpers.refs.length] = 'cerebral_ref_' + helpers.nextRef++;
       if (arguments.length) {
-        if (helpers.ids.indexOf(id) >= 0) {
+        if (id && helpers.ids.indexOf(id) >= 0) {
           return helpers.refs[helpers.ids.indexOf(id)];
         }
         helpers.ids[helpers.ids.length] = id;
