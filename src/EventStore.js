@@ -19,8 +19,13 @@ var EventStore = function(state, cerebral) {
   this.initialState = state;
 
   // Indicates if signals should be stored or replaced. Grabs from localStorage if available
-  this.willKeepState = utils.hasLocalStorage() && localStorage.getItem('cerebral_keepState') ?
-    JSON.parse(localStorage.getItem('cerebral_keepState')) : true;
+  this.willKeepState = (
+    process.env.NODE_ENV === 'production' ?
+    false :
+    utils.hasLocalStorage() && localStorage.getItem('cerebral_keepState') ?
+    JSON.parse(localStorage.getItem('cerebral_keepState')) : 
+    true
+  );
 
   this.signals = signals;
   this.asyncSignals = [];
@@ -62,7 +67,7 @@ EventStore.prototype.addAsyncSignal = function(signal) {
     }).pop();
     this.asyncSignals.splice(this.asyncSignals.indexOf(startSignal), 1);
 
-  // Or add it to the list
+    // Or add it to the list
   } else {
 
     this.asyncSignals.push(signal);
@@ -90,7 +95,7 @@ EventStore.prototype.addSignal = function(signal) {
   if (this.hasExecutingSignals) {
     return;
   }
-  
+
   // If we are not keeping the state around reset the signals to just
   // keep the latest one
   if (!this.willKeepState) {
@@ -103,6 +108,7 @@ EventStore.prototype.addSignal = function(signal) {
     this.signals.splice(this.currentIndex, this.signals.length - this.currentIndex);
   }
 
+  signal.index = this.signals.length;
   // Add signal and set the current signal to be the recently added signal
   this.signals.push(signal);
   this.currentIndex = this.signals.length - 1;
@@ -138,16 +144,6 @@ EventStore.prototype.rememberNow = function(state) {
   // app is loaded
   this.isSilent = true;
 
-  /*
-  TODO: Is this needed? As it only runs when starting app. Maybe when using react-hot-loader?
-  if (this.hasExecutingAsyncSignals) {
-    var lastAsyncSignal = this.asyncSignals.sort(function(a, b) {
-        return a.signalIndex - b.signalIndex;
-      })
-      .pop();
-    this.signals.splice(lastAsyncSignal.signalIndex, this.signals.length - lastAsyncSignal.signalIndex);
-  }
-  */
   this.travel(this.signals.length - 1, state);
   this.isSilent = false;
 };
@@ -165,7 +161,7 @@ EventStore.prototype.reset = function(state) {
 
     // First remove all state, as some code might have added
     // new props
-    Object.keys(state).forEach(function (key) {
+    Object.keys(state).forEach(function(key) {
       state = state.unset(key);
     });
 

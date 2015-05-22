@@ -7,16 +7,23 @@ var createMapMethod = function(store, maps, helpers) {
 
     path = (typeof path === 'string' ? [path] : path).slice();
 
+    if (!('initialState' in description) ||
+      !('lookupState' in description) ||
+      !('get' in description)
+      ) {
+      throw new Error('Cerebral - You have to pass "initialState", "lookupState" and "get" properties to the mapping description');
+    }
+
     var prevResult = null;
     var state = null;
     var callback = description.get;
     var values = [];
 
     // Convert deps to key/value to expose state
-    var depPathsObject = utils.pathsToObject(description.deps);
+    var depPathsObject = utils.pathsToObject(description.lookupState);
 
     // Convert deps + state path to array to use for state retrieval and equality check
-    var allPaths = utils.objectToPaths(description.deps).concat(path);
+    var allPaths = utils.objectToPaths(description.lookupState).concat(path);
 
     // Get all depending state values
     var grabState = function() {
@@ -61,7 +68,6 @@ var createMapMethod = function(store, maps, helpers) {
       if (!!helpers.subSignal && store.isRemembering) {
         values.reverse();
       }
-
     };
 
     var mapPath = maps;
@@ -70,7 +76,7 @@ var createMapMethod = function(store, maps, helpers) {
       mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : values;
     }
 
-    setValue(description.value);
+    setValue(description.initialState);
 
     store.on('mapUpdate', update);
 

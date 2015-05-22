@@ -1,4 +1,4 @@
-"use strict";
+  "use strict";
 
 var mixin = require('./mixin.js');
 var utils = require('./utils.js');
@@ -7,7 +7,7 @@ var React = require('react');
 module.exports = function() {
 
   var createWrapper = function(Component, state) {
-    var Wrapper = React.createClass({
+    var DecoratorWrapper = React.createClass({
       mixins: [mixin],
       getCerebralState: function() {
         return state;
@@ -16,10 +16,11 @@ module.exports = function() {
         Component.prototype.signals = this.signals;
       },
       render: function() {
+        console.log('this.context', this.context);
         return React.createElement(Component, utils.extend({}, this.props, this.state));
       }
     });
-    return Wrapper;
+    return DecoratorWrapper;
   };
 
   if (arguments.length === 2 && typeof arguments[0] === 'function') {

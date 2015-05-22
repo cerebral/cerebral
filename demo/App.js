@@ -2,10 +2,11 @@ import React from 'react';
 import AddTodo from './components/AddTodo.js';
 import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
-import mixin from './../src/decorator.js';
+import Cerebral from './../src/decorator.js';
 
-var App = React.createClass({
-  render: function() {
+@Cerebral(['visibleTodos', 'todos', 'foo'])
+class App extends React.Component {
+  render() {
     return (
       <div id="todoapp-wrapper">
       <div>{this.props.foo}</div>
@@ -28,6 +29,6 @@ var App = React.createClass({
       </div>
     );
   }
-});
+}
 
-module.exports = mixin(App, ['visibleTodos', 'todos', 'foo']);
+module.exports = App;

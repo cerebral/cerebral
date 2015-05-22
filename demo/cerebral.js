@@ -4,11 +4,11 @@ var state = localStorage.store ? JSON.parse(localStorage.store) : {
   todos: {},
   visibleTodos: function() {
     return {
-      value: [],
-      deps: ['todos'],
-      get: function(cerebral, deps, refs) {
+      initialState: [],
+      lookupState: ['todos'],
+      get: function(cerebral, sourceState, refs) {
         return refs.map(function(ref) {
-          return deps.todos[ref];
+          return sourceState.todos[ref];
         });
       }
     };

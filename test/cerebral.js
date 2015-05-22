@@ -28,3 +28,16 @@ exports['should be able to use paths from passed immutables'] = function(test) {
   });
   cerebral.signals.test();
 };
+
+exports['should be able to export all state to plain JS'] = function(test) {
+  var cerebral = new Cerebral({
+    list: [{
+      title: 'foo'
+    }]
+  });
+  var js = cerebral.toJS();
+  test.deepEqual(js, {list: [{title: 'foo'}]});
+  js.list = [];
+  test.deepEqual(js, {list: []});
+  test.done();
+};

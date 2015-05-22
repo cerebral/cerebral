@@ -2,6 +2,7 @@ import './../node_modules/todomvc-common/base.css';
 import './../node_modules/todomvc-app-css/index.css';
 import React from 'react/addons';
 import App from './App.js';
+import Table from './components/Table.js';
 import cerebral from './cerebral.js';
 import Page from 'page';
 import addTodo from './actions/addTodo.js';
@@ -35,7 +36,7 @@ cerebral.signal('newTitleSubmitted', stopEditingTodo);
 
 // RENDER
 
-let Wrapper = cerebral.injectInto(App);
+let Wrapper = cerebral.injectInto(Table);
 
 React.render(<Wrapper/>, document.querySelector('#app'));
 

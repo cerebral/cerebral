@@ -357,11 +357,11 @@ import Cerebral from 'cerebral';
 
 let visibleTodos = function () {
   return {
-    value: [],
-    deps: ['todos'],
-    get(cerebral, deps, refs) {
+    initialState: [],
+    sourceState: ['todos'],
+    get(cerebral, sourceState, refs) {
       return refs.map(function (ref) {
-        return deps.todos.filter(function (ref) {
+        return sourceState.todos.filter(function (ref) {
           return todo.ref === ref;
         }).pop();
       });
@@ -557,23 +557,23 @@ let cerebral = Cerebral({
   users: {},
   projectRows = function () {
     return {
-      value: [],
-      deps: ['projects', 'users'],
-      get(cerebral, deps, projectRefs) {
+      initialState: [],
+      sourceState: ['projects', 'users'],
+      get(cerebral, sourceState, projectRefs) {
 
         return projectRefs.map(function (ref) {
 
-          let project = deps.projects[ref].toJS();
+          let project = sourceState.projects[ref].toJS();
           let userRef = cerebral.ref.get(project.authorId);
 
           if (userRef) {
-            project.author = deps.users[userRef];
+            project.author = sourceState.users[userRef];
           } else {
             project.author = {
               $notFound: true
             };
           }
-          
+
           return project;
 
         });
@@ -593,6 +593,8 @@ todo.title; // "foo"
 let copy = todo.toJS();
 copy.title = 'bar';
 copy.title; // "bar"
+
+cerebral.toJS(); // The whole cerebral
 ```
 
 ### getMemories

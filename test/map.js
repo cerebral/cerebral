@@ -1,13 +1,14 @@
 var Cerebral = require('./../src/Cerebral.js');
 
+
 exports['should run maps on instantiation'] = function(test) {
   var cerebral = new Cerebral({
     foo: function () {
       return {
-        value: [],
-        deps: ['bar'],
-        get: function (cerebral, deps, array) {
-          return deps.bar;
+        initialState: [],
+        sourceState: ['bar'],
+        get: function (cerebral, sourceState, array) {
+          return sourceState.bar;
         }
       };
     },
@@ -21,12 +22,12 @@ exports['should allow object definition of deps'] = function(test) {
   var cerebral = new Cerebral({
     foo: function () {
       return {
-        value: [],
-        deps: {
+        initialState: [],
+        sourceState: {
           foo: 'bar'
         },
-        get: function (cerebral, deps, array) {
-          return deps.foo;
+        get: function (cerebral, sourceState, array) {
+          return sourceState.foo;
         }
       };
     },
@@ -40,10 +41,10 @@ exports['should allow array definition of deps'] = function(test) {
   var cerebral = new Cerebral({
     foo: function () {
       return {
-        value: [],
-        deps: [['bar', 'foo']],
-        get: function (cerebral, deps, array) {
-          return deps.foo;
+        initialState: [],
+        sourceState: [['bar', 'foo']],
+        get: function (cerebral, sourceState, array) {
+          return sourceState.foo;
         }
       };
     },
@@ -59,10 +60,10 @@ exports['should update when state changes'] = function(test) {
   var cerebral = new Cerebral({
     foo: function () {
       return {
-        value: [],
-        deps: ['bar'],
-        get: function (cerebral, deps, array) {
-          return array.length
+        initialState: [],
+        sourceState: ['bar'],
+        get: function (cerebral, sourceState, array) {
+          return array.length;
         }
       };
     },
@@ -77,14 +78,14 @@ exports['should update when state changes'] = function(test) {
   test.done();
 };
 
-exports['should update when deps changes'] = function(test) {
+exports['should update when sourceState changes'] = function(test) {
   var cerebral = new Cerebral({
     foo: function () {
       return {
-        value: [],
-        deps: ['bar'],
-        get: function (cerebral, deps, array) {
-          return deps.bar;
+        initialState: [],
+        sourceState: ['bar'],
+        get: function (cerebral, sourceState, array) {
+          return sourceState.bar;
         }
       };
     },

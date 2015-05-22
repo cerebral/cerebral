@@ -65,7 +65,7 @@ function Cerebral(initialState) {
   helpers.onFunction = function(path, func) {
     var description = func();
     map(path, description);
-    return description.value;
+    return description.initialState;
   };
 
   // Creates the immutable-store
@@ -161,7 +161,7 @@ function Cerebral(initialState) {
 
   // Extracts all the state of the application. Used to put into
   // localStorage
-  cerebral.extractState = function() {
+  cerebral.toJS = function() {
     return helpers.currentState.toJS();
   };
 
@@ -188,7 +188,9 @@ function Cerebral(initialState) {
     }
 
     var mapValue = utils.getMapPath(path, maps);
+    console.log('getting value', mapValue);
     if (mapValue) {
+      console.log('returning', mapValue[0]);
       return mapValue[0];
     }
 
