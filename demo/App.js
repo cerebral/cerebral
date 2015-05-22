@@ -2,24 +2,21 @@ import React from 'react';
 import AddTodo from './components/AddTodo.js';
 import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
-import mixin from './../src/mixin.js';
+import mixin from './../src/decorator.js';
 
 var App = React.createClass({
-  getCerebralState: function () {
-    return ['visibleTodos', 'todos', 'foo'];
-  },
   render: function() {
     return (
       <div id="todoapp-wrapper">
-      <div>{this.state.foo}</div>
+      <div>{this.props.foo}</div>
         <section id="todoapp">
           <header id="header">
             <h1>todos</h1>
             <AddTodo/>
           </header>
           
-          {this.state.visibleTodos.length ? <TodosList/> : null}        
-          {Object.keys(this.state.todos).length ? <TodosFooter/> : null}
+          {this.props.visibleTodos.length ? <TodosList/> : null}        
+          {Object.keys(this.props.todos).length ? <TodosFooter/> : null}
         </section>
         <footer id="info">
           <p>Double-click to edit a todo</p>
@@ -33,4 +30,4 @@ var App = React.createClass({
   }
 });
 
-module.exports = mixin(App);
+module.exports = mixin(App, ['visibleTodos', 'todos', 'foo']);

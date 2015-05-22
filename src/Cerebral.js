@@ -226,7 +226,7 @@ function Cerebral(initialState) {
   helpers.mapUpdates.forEach(function (update) {
     update();
   });
-
+  
   return cerebral;
 
 }

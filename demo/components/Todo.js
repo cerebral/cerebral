@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
-import mixin from './../../src/mixin.js';
+import Cerebral from './../../src/decorator.js';
 
+@Cerebral()
 class Todo extends React.Component {
 
   edit() {
@@ -17,7 +18,7 @@ class Todo extends React.Component {
       var input = this.refs.edit.getDOMNode();
       input.focus();
       input.value = input.value;
-    }, 0);   
+    }, 0);
   }
 
   onNewTitleChanged(event) {
@@ -27,7 +28,7 @@ class Todo extends React.Component {
   saveEdit(event) {
     event.preventDefault();
     actions.saveEdit(this.props.todo.id, this.state.newTitle);
-  }  
+  }
 
   onNewTitleSubmitted(event) {
     event.preventDefault();
@@ -36,6 +37,7 @@ class Todo extends React.Component {
 
   render() {
 
+    console.log('this.props', this.props);
     var className = classNames({
       completed: this.props.todo.completed,
       editing: this.props.todo.$isEditing
@@ -84,4 +86,4 @@ class Todo extends React.Component {
 
 }
 
-export default mixin(Todo);
+export default Todo;

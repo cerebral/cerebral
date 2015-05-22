@@ -1,15 +1,7 @@
 import React from 'react';
-import mixin from './../../src/mixin.js';
+import State from './../../src/decorator.js';
 
 class AddTodo extends React.Component {
-
-  getCerebralState() {
-    return [
-      'isSaving',
-      'newTodoTitle'
-    ];
-  }
-
   addTodo(event) {
     event.preventDefault();
     this.signals.newTodoSubmitted();
@@ -26,8 +18,8 @@ class AddTodo extends React.Component {
           id="new-todo" 
           autoComplete="off"
           placeholder="What needs to be done?" 
-          disabled={this.state.isSaving}
-          value={this.state.newTodoTitle}
+          disabled={this.props.isSaving}
+          value={this.props.newTodoTitle}
           onChange={this.setNewTodoTitle.bind(this)}
         />
       </form>
@@ -36,4 +28,4 @@ class AddTodo extends React.Component {
 
 }
 
-export default mixin(AddTodo);
+export default State(AddTodo, ['isSaving', 'newTodoTitle']);

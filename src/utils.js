@@ -134,24 +134,34 @@ var utils = {
   },
 
   // Converts an array of paths to key/value
-  pathsToObject: function (obj) {
+  pathsToObject: function(obj) {
     if (!Array.isArray(obj)) {
       return obj;
     }
-    return obj.reduce(function (obj, value) {
+    return obj.reduce(function(obj, value) {
       obj[typeof value === 'string' ? value : value.slice().pop()] = value;
       return obj;
     }, {})
   },
 
   // Converts an object to array of paths
-  objectToPaths: function (obj) {
+  objectToPaths: function(obj) {
     if (Array.isArray(obj)) {
       return obj;
     }
-    return Object.keys(obj).map(function (key) {
+    return Object.keys(obj).map(function(key) {
       return obj[key];
     });
+  },
+  extend: function() {
+    var objects = [].slice.call(arguments);
+    var initialObject = objects.shift();
+    return objects.reduce(function(returnedObject, object) {
+      return Object.keys(object).reduce(function(returnedObject, key) {
+        returnedObject[key] = object[key];
+        return returnedObject;
+      }, returnedObject);
+    }, initialObject);
   }
 };
 
