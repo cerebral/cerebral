@@ -16,9 +16,9 @@ An intelligent react application framework
 
 - **[Building your first app - 14:24](https://www.youtube.com/watch?v=ZG1omJek6SY)**. We build the hello world application in the boilerplate using our debugger to explain a pretty awesome workflow.
 
-- **[Creating dynamic state - 5:32](https://www.youtube.com/watch?v=Dnz0HY35tf8)**. We are going to look at where and how you create dynamic state
+- **[Creating dynamic state - 5:32](https://www.youtube.com/watch?v=Dnz0HY35tf8)**. We are going to look at where and how you create dynamic state.
 
-- **[Caching and relational state  - 28:40](https://www.youtube.com/watch?v=6W0S2p01Paw)**. We are going to handle some really complex stuff. A table with pagination and caching in place, but also automatically request users from the servers as we load projects
+- **[Caching and relational state  - 28:40](https://www.youtube.com/watch?v=6W0S2p01Paw)**. We are going to handle some really complex stuff. A table with pagination and caching in place, but also automatically request users from the servers as we load projects.
 
 ## Cerebral - The abstraction
 Read this article introducing Cerebral: [Cerebral developer preview](http://christianalfoni.com/articles/2015_05_18_Cerebral-developer-preview)
