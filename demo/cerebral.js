@@ -6,7 +6,7 @@ var state = localStorage.store ? JSON.parse(localStorage.store) : {
     return {
       initialState: [],
       lookupState: ['todos'],
-      get: function(cerebral, sourceState, refs) {
+      get: function(sourceState, refs) {
         return refs.map(function(ref) {
           return sourceState.todos[ref];
         });

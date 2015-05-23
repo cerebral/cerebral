@@ -17,7 +17,9 @@ var createMapMethod = function(store, maps, helpers) {
     var prevResult = null;
     var state = null;
     var callback = description.get;
-    var values = [];
+
+    // Need something to hold the current value
+    var getter = {value: null};
 
     // Convert deps to key/value to expose state
     var depPathsObject = utils.pathsToObject(description.lookupState);
@@ -60,20 +62,13 @@ var createMapMethod = function(store, maps, helpers) {
     };
 
     var setValue = function(value) {
-
-      values.unshift(value);
-
-      // When remembering subsignals that are async we need to reverse the values
-      // as the async value should be picked instea
-      if (!!helpers.subSignal && store.isRemembering) {
-        values.reverse();
-      }
+      getter.value = value;
     };
 
     var mapPath = maps;
     var pathCopy = path.slice();
     while (pathCopy.length) {
-      mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : values;
+      mapPath = mapPath[pathCopy.shift()] = pathCopy.length ? {} : getter;
     }
 
     setValue(description.initialState);

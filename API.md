@@ -358,19 +358,17 @@ import Cerebral from 'cerebral';
 let visibleTodos = function () {
   return {
     initialState: [],
-    sourceState: ['todos'],
-    get(cerebral, sourceState, refs) {
+    lookupState: ['todos'],
+    get(cerebral, lookupState, refs) {
       return refs.map(function (ref) {
-        return sourceState.todos.filter(function (ref) {
-          return todo.ref === ref;
-        }).pop();
+        return lookupState.todos[ref];
       });
     }
   };
 };
 
 let cerebral = Cerebral({
-  todos: [],
+  todos: {},
   visibleTodos: visibleTodos,
   count: 0,
   newTodoTitle: ''
@@ -378,7 +376,7 @@ let cerebral = Cerebral({
 
 export default cerebral;
 ```
-In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` array. Whenever the changes are done to either arrays the callback will run and any components using the state will update with the new value.
+In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` map. See video []() on how to structure state. Whenever the changes are done to either the array or the map, the callback will run and any components using the state will update with the new value.
 
 ### Mutate state
 All mutation methods takes a **path** and a **value**. The path can be:
@@ -509,7 +507,8 @@ cerebral.ref.remove(foo.id);
 ```
 Both these removes the ref and linked id.
 
-**So why use this?**. When you download and update data in the client you should put that data in a map (object) and use arrays to display that data. The reason is that these gives you a data storage of sorts. Displaying data will be used by referencing this source data. To give complete control of all this referencing you can use cerebrals implementation.
+##### So why use this?
+When you download and update data in the client you should put that data in a map (object) and use arrays to display that data. The reason is that these gives you a data storage of sorts. Displaying data will be used by referencing this source data. To give complete control of all this referencing you can use Cerebrals implementation.
 
 Let us optimistically update our application with a new todo.
 ```js
@@ -533,23 +532,27 @@ let saveTodo = function (cerebral, ref) {
     completed: todo.completed
   })
   .success(function (id) {
-    cerebral.ref.update(todo.ref, id);
-    return id;
+    return {
+      ref: ref,
+      id: id
+    };
   });
 };
 ```
 Our action now grabs the todo using the ref and declares exactly what properties to send to the server. This has two benefits. You can see in your code exactly what you pass to the server and you avoid sending unnecessary data, like the client side $isSaving property. When the server responds with an ID we update our reference and link it to the new id. Then we return the id for the next action which will actually set the id on our todo.
 
 ```js
-let setTodoId = function (cerebral, id) {
-  let ref = cerebral.ref.get(id);
-  let todo = cerebral.get(['todos', ref]);
+let setTodoId = function (cerebral, result) {
+  cerebral.ref.update(result.ref, result.id);
+  let todo = cerebral.get(['todos', result.ref]);
   cerebral.set([todo, 'id'], id);
 };
 ```
-We can now use the id to get our ref. The ref is used to grab the todo and we set the id to it.
+We can now update the ref with the id. This allows us to do `cerebral.ref.get(todo.id)` and it returns the ref which can be used to `cerebral.get('todos', ref)`.
 
-What we have achieved with this implementation is to remove the need for ids completely. The client, with cerebral, is in full control of all objects and you can use both refs and ids to find what you need. This implementation becomes especially useful when mapping relational data.
+What we have achieved with this implementation is to remove the need for ids completely. The client, with Cerebral, is in full control of all objects and you can use both refs and ids to find what you need. This implementation becomes especially useful when mapping relational data.
+
+An example of this would be in a mpping function to grab a user from a usersmap using the referenced  `authorId`.
 
 ```js
 let cerebral = Cerebral({
@@ -558,21 +561,15 @@ let cerebral = Cerebral({
   projectRows = function () {
     return {
       initialState: [],
-      sourceState: ['projects', 'users'],
-      get(cerebral, sourceState, projectRefs) {
+      lookupState: ['projects', 'users'],
+      get(cerebral, lookupState, projectRefs) {
 
         return projectRefs.map(function (ref) {
 
-          let project = sourceState.projects[ref].toJS();
-          let userRef = cerebral.ref.get(project.authorId);
-
-          if (userRef) {
-            project.author = sourceState.users[userRef];
-          } else {
-            project.author = {
-              $notFound: true
-            };
-          }
+          let project = lookupState.projects[ref].toJS();
+          let userRef = lookupState.users[cerebral.ref.get(project.authorId)] || {
+            $notFound: true
+          };
 
           return project;
 

@@ -37,7 +37,6 @@ class Todo extends React.Component {
 
   render() {
 
-    console.log('this.props', this.props);
     var className = classNames({
       completed: this.props.todo.completed,
       editing: this.props.todo.$isEditing

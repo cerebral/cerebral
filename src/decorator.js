@@ -16,7 +16,6 @@ module.exports = function() {
         Component.prototype.signals = this.signals;
       },
       render: function() {
-        console.log('this.context', this.context);
         return React.createElement(Component, utils.extend({}, this.props, this.state));
       }
     });

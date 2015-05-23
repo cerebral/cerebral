@@ -2,7 +2,6 @@ import './../node_modules/todomvc-common/base.css';
 import './../node_modules/todomvc-app-css/index.css';
 import React from 'react/addons';
 import App from './App.js';
-import Table from './components/Table.js';
 import cerebral from './cerebral.js';
 import Page from 'page';
 import addTodo from './actions/addTodo.js';
@@ -36,13 +35,12 @@ cerebral.signal('newTitleSubmitted', stopEditingTodo);
 
 // RENDER
 
-let Wrapper = cerebral.injectInto(Table);
+let Wrapper = cerebral.injectInto(App);
 
 React.render(<Wrapper/>, document.querySelector('#app'));
 
 // ROUTER
 
-console.log('location.pathname', location.pathname.substr(0, location.pathname.length - 1));
 Page.base(location.pathname.substr(0, location.pathname.length - 1));
 
 Page('/', cerebral.signals.routeChanged);

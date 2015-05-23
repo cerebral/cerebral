@@ -3,11 +3,8 @@
 /*
   TODO:
     - [OPTIMIZE] If setting the same value, avoid doing extra work
-    - Freeze data returned from maps? Create a store maybe?
     - Comment all code
-    - Do not record when in production
     - More tests! reset, async travelling...
-    - Fix bug where toggling record/not record
     - Display error in debugger when promise fails
     - How to trigger signals correctly as async singals are running?
 */
@@ -187,11 +184,9 @@ function Cerebral(initialState) {
       path = [].slice.call(arguments);
     }
 
-    var mapValue = utils.getMapPath(path, maps);
-    console.log('getting value', mapValue);
-    if (mapValue) {
-      console.log('returning', mapValue[0]);
-      return mapValue[0];
+    var mapGetter = utils.getMapPath(path, maps);
+    if (mapGetter) {
+      return mapGetter.value;
     }
 
     return utils.getPath(path, helpers.currentState);

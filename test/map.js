@@ -6,9 +6,9 @@ exports['should run maps on instantiation'] = function(test) {
     foo: function () {
       return {
         initialState: [],
-        sourceState: ['bar'],
-        get: function (cerebral, sourceState, array) {
-          return sourceState.bar;
+        lookupState: ['bar'],
+        get: function (cerebral, lookupState, array) {
+          return lookupState.bar;
         }
       };
     },
@@ -23,11 +23,11 @@ exports['should allow object definition of deps'] = function(test) {
     foo: function () {
       return {
         initialState: [],
-        sourceState: {
+        lookupState: {
           foo: 'bar'
         },
-        get: function (cerebral, sourceState, array) {
-          return sourceState.foo;
+        get: function (cerebral, lookupState, array) {
+          return lookupState.foo;
         }
       };
     },
@@ -42,9 +42,9 @@ exports['should allow array definition of deps'] = function(test) {
     foo: function () {
       return {
         initialState: [],
-        sourceState: [['bar', 'foo']],
-        get: function (cerebral, sourceState, array) {
-          return sourceState.foo;
+        lookupState: [['bar', 'foo']],
+        get: function (cerebral, lookupState, array) {
+          return lookupState.foo;
         }
       };
     },
@@ -61,8 +61,8 @@ exports['should update when state changes'] = function(test) {
     foo: function () {
       return {
         initialState: [],
-        sourceState: ['bar'],
-        get: function (cerebral, sourceState, array) {
+        lookupState: ['bar'],
+        get: function (cerebral, lookupState, array) {
           return array.length;
         }
       };
@@ -78,14 +78,14 @@ exports['should update when state changes'] = function(test) {
   test.done();
 };
 
-exports['should update when sourceState changes'] = function(test) {
+exports['should update when lookupState changes'] = function(test) {
   var cerebral = new Cerebral({
     foo: function () {
       return {
         initialState: [],
-        sourceState: ['bar'],
-        get: function (cerebral, sourceState, array) {
-          return sourceState.bar;
+        lookupState: ['bar'],
+        get: function (cerebral, lookupState, array) {
+          return lookupState.bar;
         }
       };
     },
