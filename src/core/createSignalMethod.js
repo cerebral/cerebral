@@ -12,7 +12,6 @@ var createAsyncSignalMethod = function(helpers, store) {
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
       var signalIndex = helpers.eventStore.willKeepState ? ++helpers.eventStore.currentIndex : 0;
-      var initiatedSignal = helpers.runningSignal || name;
 
       var runSignal = function() {
 
@@ -100,9 +99,9 @@ var createAsyncSignalMethod = function(helpers, store) {
                   Object.freeze(result);
                 }
 
-                helpers.asyncCallbacks[initiatedSignal] = helpers.asyncCallbacks[initiatedSignal] || {};
-                helpers.asyncCallbacks[initiatedSignal][signalIndex] = helpers.asyncCallbacks[initiatedSignal][signalIndex] || {};
-                helpers.asyncCallbacks[initiatedSignal][signalIndex][action.name] = result || null; // JS or Chrome bug causing undefined not to set key
+                helpers.asyncCallbacks[name] = helpers.asyncCallbacks[name] || {};
+                helpers.asyncCallbacks[name][signalIndex] = helpers.asyncCallbacks[name][signalIndex] || {};
+                helpers.asyncCallbacks[name][signalIndex][action.name] = result || null; // JS or Chrome bug causing undefined not to set key
 
                 helpers.eventStore.addAsyncSignal({
                   signalIndex: signalIndex,
