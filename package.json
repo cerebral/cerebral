@@ -1,11 +1,11 @@
 {
   "name": "cerebral",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "An intelligent react application framework",
   "main": "src/Cerebral.js",
   "scripts": {
     "demo": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --progress --colors --content-base demo --config demo.config.js",
-    "deploydemo": "./node_modules/webpack/bin/webpack.js --config demo.production.config.js",
+    "deploydemo": "./node_modules/webpack/bin/webpack.js --p --config demo.production.config.js",
     "deploy": "NODE_ENV=production ./node_modules/webpack/bin/webpack.js -p",
     "start": "./node_modules/webpack-dev-server/bin/webpack-dev-server.js --devtool eval --progress --colors --content-base build",
     "devtest": "./node_modules/nodeunit-watcher/bin/nodeunit-watcher",
