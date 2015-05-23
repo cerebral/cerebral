@@ -156,6 +156,17 @@ function Cerebral(initialState) {
     return helpers.eventStore.willKeepState;
   };
 
+  // Toggle if the EventStore should store state
+  // in local storage
+  cerebral.toggleStoreState = function() {
+    helpers.eventStore.toggleStoreState();
+  };
+
+  // Check if the EventStore will store its state in localStorage
+  cerebral.willStoreState = function() {
+    return helpers.eventStore.willStoreState;
+  };
+
   // Extracts all the state of the application. Used to put into
   // localStorage
   cerebral.toJS = function() {
@@ -200,11 +211,12 @@ function Cerebral(initialState) {
   if (global.addEventListener) {
 
     window.addEventListener('beforeunload', function() {
+
       if (!utils.hasLocalStorage()) {
         return;
       }
 
-      if (helpers.eventStore.willKeepState) {
+      if (helpers.eventStore.willStoreState) {
         localStorage.setItem('cerebral_state', JSON.stringify(helpers.eventStore.initialState));
         localStorage.setItem('cerebral_signals', JSON.stringify(helpers.eventStore.signals));
         localStorage.setItem('cerebral_asyncCallbacks', JSON.stringify(helpers.asyncCallbacks));
@@ -213,7 +225,10 @@ function Cerebral(initialState) {
         localStorage.removeItem('cerebral_signals');
         localStorage.removeItem('cerebral_asyncCallbacks');
       }
+      
       localStorage.setItem('cerebral_keepState', helpers.eventStore.willKeepState.toString());
+      localStorage.setItem('cerebral_storeState', helpers.eventStore.willStoreState.toString());
+
     });
 
   }

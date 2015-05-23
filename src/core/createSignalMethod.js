@@ -8,13 +8,13 @@ var createAsyncSignalMethod = function(helpers, store) {
     var name = callbacks.shift();
 
     store.signals[name] = function() {
+
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
-      var signalIndex = helpers.eventStore.willKeepState ?
-        !!helpers.runningSignal ? helpers.eventStore.currentIndex : ++helpers.eventStore.currentIndex : 0;
+      var signalIndex = helpers.eventStore.willKeepState ? ++helpers.eventStore.currentIndex : 0;
       var initiatedSignal = helpers.runningSignal || name;
 
-      var runMutation = function() {
+      var runSignal = function() {
 
         var timestamp = Date.now();
         var signal = {
@@ -114,6 +114,17 @@ var createAsyncSignalMethod = function(helpers, store) {
                 return execute(result);
 
               }).catch(function(err) {
+
+                if (
+                  err instanceof EvalError ||
+                  err instanceof RangeError ||
+                  err instanceof ReferenceError ||
+                  err instanceof SyntaxError ||
+                  err instanceof TypeError
+                  ) {
+                  throw err;
+                }
+
                 helpers.eventStore.addAsyncSignal({
                   signalIndex: signalIndex,
                   name: name,
@@ -135,17 +146,15 @@ var createAsyncSignalMethod = function(helpers, store) {
 
         }.bind(null, store);
 
-        if (!helpers.runningSignal) {
-          helpers.eventStore.addSignal(signal);
-        }
+        helpers.eventStore.addSignal(signal);
         execute.apply(null, args);
 
       };
 
       if (!!helpers.runningSignal || store.isRemembering || typeof requestAnimationFrame === 'undefined') {
-        runMutation();
+        runSignal();
       } else {
-        requestAnimationFrame(runMutation);
+        requestAnimationFrame(runSignal);
       }
 
     };

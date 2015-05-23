@@ -27,6 +27,16 @@ var EventStore = function(state, cerebral) {
     true
   );
 
+  // Indicates if state should be stored into localStorage
+  this.willStoreState = (
+    process.env.NODE_ENV === 'production' ?
+    false :
+    utils.hasLocalStorage() && localStorage.getItem('cerebral_storeState') ?
+    JSON.parse(localStorage.getItem('cerebral_storeState')) : 
+    true
+  );
+
+
   this.signals = signals;
   this.asyncSignals = [];
 
@@ -53,6 +63,12 @@ var EventStore = function(state, cerebral) {
 // event to notify Debugger about the change
 EventStore.prototype.toggleKeepState = function() {
   this.willKeepState = !this.willKeepState;
+  this.cerebral.emit('eventStoreUpdate');
+};
+
+// Flips flag of storing state into localStorage
+EventStore.prototype.toggleStoreState = function() {
+  this.willStoreState = !this.willStoreState;
   this.cerebral.emit('eventStoreUpdate');
 };
 
@@ -111,7 +127,6 @@ EventStore.prototype.addSignal = function(signal) {
   signal.index = this.signals.length;
   // Add signal and set the current signal to be the recently added signal
   this.signals.push(signal);
-  this.currentIndex = this.signals.length - 1;
 
 };
 

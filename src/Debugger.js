@@ -27,10 +27,25 @@ var LogLink = {
 var LockStateButton = {
   display: 'inline-block',
   verticalAlign: 'top',
-  width: '30px',
+  padding: '3px 5px',
+  marginRight: '10px',
   height: '30px',
   backgroundColor: '#222',
-  lineHeight: '25px',
+  lineHeight: '30px',
+  textAlign: 'center',
+  cursor: 'pointer',
+  border: '1px solid #444',
+  borderRadius: '3px'
+};
+
+var StoreStateButton = {
+  display: 'inline-block',
+  verticalAlign: 'top',
+  padding: '3px 5px',
+  marginRight: '10px',
+  height: '30px',
+  backgroundColor: '#222',
+  lineHeight: '30px',
   textAlign: 'center',
   cursor: 'pointer',
   border: '1px solid #444',
@@ -90,7 +105,7 @@ var Debugger = React.createClass({
     var value = this.context.cerebral.get(path);
     console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
   },
-  logArg: function (arg) {
+  logArg: function(arg) {
     console.log(arg);
   },
   renderMutations: function() {
@@ -134,10 +149,12 @@ var Debugger = React.createClass({
             action.isAsync ? ' async' :
             null
           ),
-            DOM.small({
-              style: {color: '#888'}
-            }, action.signalName !== signal.name ? ' (' + action.signalName + ')' : null)
-          ),
+          DOM.small({
+            style: {
+              color: '#888'
+            }
+          }, action.signalName !== signal.name ? ' (' + action.signalName + ')' : null)
+        ),
         DOM.ul({
             style: ActionStyle
           },
@@ -170,7 +187,9 @@ var Debugger = React.createClass({
                   if (argString.length > 50) {
                     return DOM.a({
                       key: index,
-                      style: {cursor: 'pointer'},
+                      style: {
+                        cursor: 'pointer'
+                      },
                       onClick: this.logArg.bind(null, mutationArg)
                     }, argString.substr(0, 50) + '...');
                   } else {
@@ -202,7 +221,7 @@ var Debugger = React.createClass({
       }
     }, ' (' + duration + 'ms)'));
   },
-  reset: function () {
+  reset: function() {
     this.context.cerebral.reset();
   },
   render: function() {
@@ -213,28 +232,43 @@ var Debugger = React.createClass({
     var signals = this.context.cerebral.getMemories();
     var signal = signals[currentSignalIndex];
     var keepState = cerebral.willKeepState();
+    var storeState = cerebral.willStoreState();
     var lockInput = cerebral.hasExecutingAsyncSignals() || !keepState;
 
     LockStateButton.backgroundColor = keepState ? '#d9534f' : '#222';
     LockStateButton.color = keepState ? 'white' : '#666';
 
+    StoreStateButton.backgroundColor = storeState ? '#5cb85c' : '#222';
+    StoreStateButton.color = storeState ? 'white' : '#666';
+
     return DOM.div({
         style: debuggerStyle
       },
       DOM.h1({
-        style: {
-          lineHeight: '30px',
-          fontSize: '2em'
-        }
-      }, 'Cerebral Debugger ', DOM.span({
-        onClick: cerebral.toggleKeepState,
-        style: LockStateButton
-      }, '⦿')),
+          style: {
+            lineHeight: '30px',
+            fontSize: '2em'
+          }
+        },
+        'Cerebral Debugger '),
       DOM.h4(null,
-        DOM.span(null, value + ' / ' + steps + ' - ', DOM.a({
+        DOM.span({
+          onClick: cerebral.toggleKeepState,
+          style: LockStateButton
+        }, 'record'),
+        DOM.span({
+          onClick: cerebral.toggleStoreState,
+          style: StoreStateButton
+        }, 'store'),
+        DOM.span({
+          style: {
+            height: '38px',
+            lineHeight: '38px'
+          }
+        }, value + ' / ' + steps + ' - ', DOM.a({
           onClick: this.reset,
           style: {
-            textDecoration: cerebral.hasExecutingAsyncSignals() ? 'none' :'underline', 
+            textDecoration: cerebral.hasExecutingAsyncSignals() ? 'none' : 'underline',
             cursor: cerebral.hasExecutingAsyncSignals() ? 'default' : 'pointer',
             color: cerebral.hasExecutingAsyncSignals() ? '#444' : '#888'
           }

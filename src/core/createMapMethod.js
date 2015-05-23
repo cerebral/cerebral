@@ -6,6 +6,7 @@ var createMapMethod = function(store, maps, helpers) {
   return function(path, description) {
 
     path = (typeof path === 'string' ? [path] : path).slice();
+    description.lookupState = description.lookupState || [];
 
     if (!('initialState' in description) ||
       !('lookupState' in description) ||
