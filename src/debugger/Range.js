@@ -3,11 +3,13 @@ var DOM = React.DOM;
 
 var RangeStyle = {
   position: 'relative',
-  border: '1px solid #555',
+  border: '1px solid #CCC',
   borderRadius: '2px',
-  backgroundColor: '#444',
+  backgroundColor: '#DDD',
+  boxShadow: 'inset 0px 1px 1px rgba(0, 0, 0, 0.1)',
   height: '10px',
-  margin: '0 10px 0 10px'
+  margin: '5px 10px',
+  boxSizing: 'border-box'
 };
 
 var NodeStyle = {
@@ -16,9 +18,9 @@ var NodeStyle = {
   width: '20px',
   height: '20px',
   top: '-6px',
-  borderRadius: '3px',
-  backgroundColor: '#5bc0de',
-  border: '2px solid #46b8da',
+  borderRadius: '50%',
+  backgroundColor: '#EEE',
+  border: '1px solid #BBB',
   boxSizing: 'border-box',
   cursor: 'pointer'
 };
@@ -117,16 +119,12 @@ var Range = React.createClass({
   },
   render: function() {
     NodeStyle.left = (this.state.left - 10) + 'px';
-    if (this.state.isHoveringNode) {
-      NodeStyle.backgroundColor = '#31b0d5';
-    } else {
-      NodeStyle.backgroundColor = '#5bc0de';
-    }
+
     if (this.props.disabled) {
-      NodeStyle.backgroundColor = '#444';
-      NodeStyle.border = '1px solid #555';
-      NodeStyle.cursor = 'default';
+      RangeStyle.opacity = '0.5';
+      NodeStyle.pointer = 'none';
     } else {
+      RangeStyle.opacity = '1';
       NodeStyle.cursor = 'pointer';
     }
     if (!this.props.steps) {

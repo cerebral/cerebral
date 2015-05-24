@@ -15,7 +15,7 @@ var config = {
       loader: 'style!css'
     }, {
       test: /\.js$/,
-      loader: 'babel?optional=es7.classProperties',
+      loader: 'babel?optional=es7.decorators',
       exclude: node_modules
     }]
   }

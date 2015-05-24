@@ -83,7 +83,7 @@ var createAsyncSignalMethod = function(helpers, store) {
               // Have to run update when next action is async
               if (callbacks.indexOf(callback) !== 0) {
                 store.emit('mapUpdate');
-                !helpers.eventStore.isSilent && store.emit('update');
+                !store.isRemembering && store.emit('update');
               }
 
               helpers.eventStore.addAsyncSignal({
@@ -139,7 +139,7 @@ var createAsyncSignalMethod = function(helpers, store) {
             }
 
           } else {
-            !helpers.eventStore.isSilent && store.emit('update');
+            !store.isRemembering && store.emit('update');
             helpers.runningSignal = null;
           }
 

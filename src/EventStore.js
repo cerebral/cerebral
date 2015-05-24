@@ -241,10 +241,10 @@ EventStore.prototype.travel = function(index, state) {
 
   }
 
-  // Reset flags and emit event to Debugger
+  // Reset flags and emit event to set application in correct state
   this.hasExecutingSignals = false;
   cerebral.isRemembering = false;
-  cerebral.emit('eventStoreUpdate');
+  cerebral.emit('update');
 
   return cerebral;
 };
