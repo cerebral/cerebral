@@ -116,6 +116,7 @@ EventStore.prototype.addSignal = function(signal) {
   // keep the latest one
   if (!this.willKeepState) {
     this.signals = [];
+    this.currentIndex = 0;
   }
 
   // If we have travelled back and start adding new signals the signals not triggered should
