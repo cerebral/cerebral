@@ -25,6 +25,7 @@
   - [remove](#update)
 - [getMemories](#getmemories)
 - [remember](#remember)
+- [recording](#recording)
 
 All examples are shown with ES6 syntax. You can of course use normal React syntax and ES5.
 
@@ -138,6 +139,9 @@ import App from './App.js';
 import setNewTodoTitle from './actions/setNewTodoTitle.js';
 
 cerebral.signal('newTodoTitleChanged', setNewTodoTitle);
+
+// Supports namespacing signals
+cerebral.signal('titles.newTodoTitleChanged', setNewTodoTitle);
 
 let Wrapper = cerebral.injectInto(App);
 
@@ -605,3 +609,6 @@ Returns an array of signals. Each signal has an array of actions. Each actions h
 cerebral.remember(-1); // Go to beginning
 cerebral.remember(5); // Remember up to signal 5
 ```
+
+### recording
+You are able to implement recording of 

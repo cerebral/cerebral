@@ -53,14 +53,17 @@ var Toolbar = React.createClass({
         ),
         DOM.li({
             style: ToolbarItem
-          },
+          }, !this.props.isRemembering &&
+          (this.props.hasExecutingAsyncSignals || this.props.recorder.isPlaying || this.props.recorder.isRecording) ?
+          null :
           DOM.span({
             style: ResetButton,
             onClick: this.props.reset,
           }, 'reset')
         ),
         DOM.li({
-            style: ToolbarRightItem
+            style: ToolbarRightItem,
+            onClick: this.props.toggleDebugger
           },
           DOM.strong({
             style: CollapseButton
@@ -71,6 +74,9 @@ var Toolbar = React.createClass({
           },
           DOM.label(null, DOM.input({
             type: 'checkbox',
+            style: {
+              margin: '3px'
+            },
             onChange: this.props.toggleStoreState,
             checked: this.props.willStoreState
           }), 'store')
@@ -80,9 +86,12 @@ var Toolbar = React.createClass({
           },
           DOM.label(null, DOM.input({
             type: 'checkbox',
+            style: {
+              margin: '3px'
+            },
             onChange: this.props.toggleKeepState,
             checked: this.props.willKeepState
-          }), 'record')
+          }), 'keep signals')
         )
       )
     );

@@ -1,5 +1,4 @@
-let setTodoNewTitle = function (cerebral, id, title) {
-  let ref = cerebral.ref.get(id);
+let setTodoNewTitle = function (cerebral, ref, title) {
   cerebral.merge(['todos', ref], {
     $newTitle: title
   });

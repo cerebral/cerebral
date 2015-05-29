@@ -11,7 +11,6 @@ var ActionHeaderStyle = {
   padding: '3px 10px',
   backgroundColor: '#FCFCFC',
   margin: 0,
-  height: '20px',
   color: '#888',
   fontSize: '1em',
   borderTop: '1px solid #EEE',

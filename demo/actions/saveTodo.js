@@ -9,7 +9,7 @@ let saveTodo = function (cerebral, ref) {
         ref: ref,
         id: Date.now() + parseInt(Math.random() * 1000)
       });
-    }, 3000);
+    }, 1000);
 
   });
 };

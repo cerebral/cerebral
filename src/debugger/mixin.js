@@ -7,6 +7,9 @@ module.exports = {
   componentWillMount: function() {
     this.context.cerebral.on('eventStoreUpdate', this.update);
     this.context.cerebral.on('update', this.update);
+    this.setState({
+      recorder: this.context.cerebral.get('recorder')
+    });
   },
   componentDidMount: function () {
     this.isMounted = true;
@@ -19,7 +22,9 @@ module.exports = {
   },
   update: function() {
     if (this.isMounted) {
-      this.forceUpdate();
+      this.setState({
+        recorder: this.context.cerebral.get('recorder')
+      });
     }
   },
 };

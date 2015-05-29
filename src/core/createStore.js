@@ -4,6 +4,7 @@ var traverse = require('./traverse.js');
 var StoreObject = require('./StoreObject.js');
 
 var createStore = function(helpers, state) {
+
   var store = StoreObject({}, helpers);
   Object.keys(state).forEach(function(key) {
     helpers.currentPath.push(key);

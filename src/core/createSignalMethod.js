@@ -1,17 +1,23 @@
 "use strict";
 var utils = require('./../utils.js');
-var createAsyncSignalMethod = function(helpers, store) {
+var createAsyncSignalMethod = function(helpers, cerebral) {
 
   return function() {
 
     var callbacks = [].slice.call(arguments, 0);
     var name = callbacks.shift();
+    var signalPath = utils.getSignalPath(cerebral.signals, name);
 
-    store.signals[name] = function() {
+    signalPath.path[signalPath.key] = function() {
 
       var args = [].slice.call(arguments);
       var executionArray = callbacks.slice();
       var signalIndex = helpers.eventStore.willKeepState ? ++helpers.eventStore.currentIndex : 0;
+      var recorderSignalIndex = 0;
+      // The recorder has its own internal signal index handling
+      if (helpers.recorder.isPlaying || helpers.recorder.isRecording) {
+        recorderSignalIndex = helpers.recorder.currentRecording.signalIndex++;
+      }
 
       var runSignal = function() {
 
@@ -37,7 +43,7 @@ var createAsyncSignalMethod = function(helpers, store) {
             var result = null;
             var isAsync = false;
 
-            store.allowMutations = true;
+            cerebral.allowMutations = true;
             helpers.currentSignal = signalIndex;
 
             // Run action
@@ -52,14 +58,29 @@ var createAsyncSignalMethod = function(helpers, store) {
             helpers.eventStore.addAction(action);
             var actionStart = Date.now();
 
+            // We verify an async action by either checking general asyncCallbacks in cerebral
+            // or the ones specifically to the recording
             isAsync = !!(
-              helpers.asyncCallbacks[helpers.runningSignal] &&
-              helpers.asyncCallbacks[helpers.runningSignal][signalIndex] &&
-              (action.name in helpers.asyncCallbacks[helpers.runningSignal][signalIndex])
+              (
+                helpers.asyncCallbacks[helpers.runningSignal] &&
+                helpers.asyncCallbacks[helpers.runningSignal][signalIndex] &&
+                (action.name in helpers.asyncCallbacks[helpers.runningSignal][signalIndex])
+                ) ||
+              (
+                helpers.recorder.isPlaying &&
+                helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal] &&
+                helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal][recorderSignalIndex] &&
+                (action.name in helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal][recorderSignalIndex])     
+              )
             );
 
-            if (store.isRemembering && isAsync) {
+            // If we are remembering something async and the async is not from a recording playback
+            if (cerebral.isRemembering && isAsync && !helpers.recorder.isPlaying) {
               result = helpers.asyncCallbacks[helpers.runningSignal][signalIndex][action.name];
+
+            // If async and playing back recording, use recording async results
+            } else if (isAsync && helpers.recorder.isPlaying) {
+              result = helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal][recorderSignalIndex][action.name];
             } else if (Array.isArray(callback)) {
               result = Promise.all(callback.map(function(callback) {
                 return callback.apply(null, signalArgs);
@@ -71,19 +92,19 @@ var createAsyncSignalMethod = function(helpers, store) {
             var isPromise = utils.isPromise(result);
 
             signal.duration += action.duration = Date.now() - actionStart;
-            action.isAsync = !!(isPromise || (store.isRemembering && isAsync));
+            action.isAsync = !!(isPromise || (cerebral.isRemembering && isAsync) || (helpers.recorder.isPlaying && isAsync));
 
             if (utils.isObject(result) && !utils.isPromise(result)) {
               Object.freeze(result);
             }
-            store.allowMutations = false;
+            cerebral.allowMutations = false;
 
             if (isPromise) {
 
               // Have to run update when next action is async
               if (callbacks.indexOf(callback) !== 0) {
-                store.emit('mapUpdate');
-                !store.isRemembering && store.emit('update');
+                cerebral.emit('mapUpdate');
+                !cerebral.isRemembering && cerebral.emit('update');
               }
 
               helpers.eventStore.addAsyncSignal({
@@ -103,6 +124,13 @@ var createAsyncSignalMethod = function(helpers, store) {
                 helpers.asyncCallbacks[name][signalIndex] = helpers.asyncCallbacks[name][signalIndex] || {};
                 helpers.asyncCallbacks[name][signalIndex][action.name] = result || null; // JS or Chrome bug causing undefined not to set key
 
+                if (helpers.recorder.isRecording) {
+                  var currentRecording = helpers.recorder.currentRecording;
+                  currentRecording.asyncCallbacks[name] = currentRecording.asyncCallbacks[name] || {};
+                  currentRecording.asyncCallbacks[name][recorderSignalIndex] = currentRecording.asyncCallbacks[name][recorderSignalIndex] || {};
+                  currentRecording.asyncCallbacks[name][recorderSignalIndex][action.name] = result || null; // JS or Chrome bug causing undefined not to set key
+                }
+
                 helpers.eventStore.addAsyncSignal({
                   signalIndex: signalIndex,
                   name: name,
@@ -113,14 +141,13 @@ var createAsyncSignalMethod = function(helpers, store) {
                 return execute(result);
 
               }).catch(function(err) {
-
                 if (
                   err instanceof EvalError ||
                   err instanceof RangeError ||
                   err instanceof ReferenceError ||
                   err instanceof SyntaxError ||
                   err instanceof TypeError
-                  ) {
+                ) {
                   throw err;
                 }
 
@@ -134,23 +161,28 @@ var createAsyncSignalMethod = function(helpers, store) {
               });
 
             } else {
-              store.emit('mapUpdate');
+              cerebral.emit('mapUpdate');
               execute(result);
             }
 
           } else {
-            !store.isRemembering && store.emit('update');
+            !cerebral.isRemembering && cerebral.emit('update');
             helpers.runningSignal = null;
           }
 
-        }.bind(null, store);
+        }.bind(null, cerebral);
 
+        // Adds signal if recording. Any mutations and actions
+        // are added to this reference, so do not need to handle that
+        if (helpers.recorder.isRecording) {
+          helpers.recorder.addSignal(signal);
+        }
         helpers.eventStore.addSignal(signal);
         execute.apply(null, args);
 
       };
 
-      if (!!helpers.runningSignal || store.isRemembering || typeof requestAnimationFrame === 'undefined') {
+      if (!!helpers.runningSignal || cerebral.isRemembering || typeof requestAnimationFrame === 'undefined') {
         runSignal();
       } else {
         requestAnimationFrame(runSignal);

@@ -1,6 +1,5 @@
-let stopEditingTodo = function (cerebral, id) {
+let stopEditingTodo = function (cerebral, ref) {
 
-  let ref = cerebral.ref.get(id);
   let todo = cerebral.get(['todos', ref]);
 
   if (!todo.$newTitle) {

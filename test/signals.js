@@ -1,6 +1,7 @@
 var Cerebral = require('./../src/Cerebral.js');
 var Promise = require('es6-promise').Promise;
 
+
 exports['should be able to create a signal'] = function(test) {
   var cerebral = new Cerebral({
     foo: 'bar'
@@ -43,8 +44,8 @@ exports['should be able to run async actions'] = function(test) {
     counter++;
   });
   cerebral.once('update', function() {
-      test.equals(counter, 2);
-      test.done();
+    test.equals(counter, 2);
+    test.done();
   });
   cerebral.signals.test();
 };
@@ -59,7 +60,7 @@ exports['should be able to run async actions in parallell'] = function(test) {
       counter++;
       resolve('foo');
     });
-  }, function () {
+  }, function() {
     return new Promise(function(resolve) {
       counter++;
       resolve('bar');
@@ -69,8 +70,9 @@ exports['should be able to run async actions in parallell'] = function(test) {
     counter++;
   });
   cerebral.once('update', function() {
-      test.equals(counter, 3);
-      test.done();
+    test.equals(counter, 3);
+    test.done();
   });
   cerebral.signals.test();
 };
+

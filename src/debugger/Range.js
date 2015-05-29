@@ -21,8 +21,7 @@ var NodeStyle = {
   borderRadius: '50%',
   backgroundColor: '#EEE',
   border: '1px solid #BBB',
-  boxSizing: 'border-box',
-  cursor: 'pointer'
+  boxSizing: 'border-box'
 };
 
 var Range = React.createClass({
@@ -122,10 +121,8 @@ var Range = React.createClass({
 
     if (this.props.disabled) {
       RangeStyle.opacity = '0.5';
-      NodeStyle.pointer = 'none';
     } else {
       RangeStyle.opacity = '1';
-      NodeStyle.cursor = 'pointer';
     }
     if (!this.props.steps) {
       return DOM.div(null, 'No signals detected');

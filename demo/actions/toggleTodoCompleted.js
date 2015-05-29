@@ -1,5 +1,4 @@
-let toggleTodoCompleted = function(cerebral, id) {
-  let ref = cerebral.ref.get(id);
+let toggleTodoCompleted = function(cerebral, ref) {
   let todo = cerebral.get(['todos', ref]);
   cerebral.set([todo, 'completed'], !todo.completed);
 };

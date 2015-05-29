@@ -10,9 +10,11 @@ var mixin = {
   componentWillMount: function() {
     this._mergeInState = this._mergeInState;
     this.signals = this.context.cerebral.signals;
+    this.recorder = this.context.cerebral.recorder;
 
     if (this.getCerebralState) {
       this.context.cerebral.on('update', this._mergeInState);
+      this.context.cerebral.on('forceUpdate', this.runForceUpdate);
       this._mergeInState();
     }
   },
@@ -23,6 +25,11 @@ var mixin = {
   componentWillUnmount: function() {
     this.isUnMounting = true; // removeListener is async?
     this.context.cerebral.removeListener('update', this._mergeInState);
+    this.context.cerebral.removeListener('forceUpdate', this.runForceUpdate);
+  },
+  runForceUpdate: function () {
+    this._mergeInState();
+    this.forceUpdate();
   },
   _mergeInState: function() {
     if (this.isUnMounting) {

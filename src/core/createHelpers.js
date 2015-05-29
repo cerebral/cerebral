@@ -17,7 +17,6 @@ var createHelpers = function(state, store) {
     },
     eventStore: eventStore,
     runningSignal: null,
-    subSignal: null,
     nextRef: 0,
     refs: [],
     ids: [],

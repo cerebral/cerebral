@@ -18,8 +18,8 @@ module.exports = function(helpers) {
       return ref;
     },
     update: function(ref, id) {
-      if (helpers.ids.indexOf(id) >= 0) {
-        throw new Error('Cerebral - The id to reference already exists. Make sure all ids are unique and that you update refs with ids.');
+      if (helpers.ids.indexOf(id) >= 0 && helpers.refs[helpers.ids.indexOf(id)] !== ref) {
+        throw new Error('Cerebral - The id to reference already exists and you are trying to update with a different ref. Make sure all ids are unique and that you update refs with ids.');
       }
       helpers.ids[helpers.refs.indexOf(ref)] = id;
       return ref;

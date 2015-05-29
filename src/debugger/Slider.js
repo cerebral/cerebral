@@ -16,7 +16,7 @@ var Slider = React.createClass({
       },
       Range({
         onChange: this.props.travelThroughTime,
-        disabled: this.props.hasExecutingAsyncSignals || !this.props.willKeepState,
+        disabled: !this.props.isRemembering && (this.props.hasExecutingAsyncSignals || this.props.recorder.isPlaying || this.props.recorder.isRecording),
         value: this.props.value,
         steps: this.props.steps
       })

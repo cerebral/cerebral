@@ -36,8 +36,8 @@ exports['should be able to export all state to plain JS'] = function(test) {
     }]
   });
   var js = cerebral.toJS();
-  test.deepEqual(js, {list: [{title: 'foo'}]});
+  test.deepEqual(js, {list: [{title: 'foo'}], recorder: { isPlaying: false, isRecording: false, hasRecording: false }});
   js.list = [];
-  test.deepEqual(js, {list: []});
+  test.deepEqual(js, {list: [], recorder: { isPlaying: false, isRecording: false, hasRecording: false }});
   test.done();
 };

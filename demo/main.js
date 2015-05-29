@@ -1,5 +1,7 @@
 import './../node_modules/todomvc-common/base.css';
 import './../node_modules/todomvc-app-css/index.css';
+import './styles.css';
+
 import React from 'react/addons';
 import App from './App.js';
 import cerebral from './cerebral.js';

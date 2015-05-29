@@ -1,6 +1,5 @@
-let editTodo = function (cerebral, id) {
+let editTodo = function (cerebral, ref) {
 
-  let ref = cerebral.ref.get(id);
   let todo = cerebral.get(['todos', ref]);
 
   cerebral.merge(['todos', ref], {

@@ -14,10 +14,10 @@ var debuggerStyle = {
   top: 0,
   borderLeft: '1px solid #999',
   width: '400px',
-  height: '100%',
+  minHeight: '100%',
   backgroundColor: '#FFF',
   color: '#666',
-  overflowY: 'scroll',
+  overflowY: 'auto',
   overflowX: 'hidden',
   boxSizing: 'border-box'
 };
@@ -46,14 +46,20 @@ var Debugger = React.createClass({
         totalSignals: this.context.cerebral.getMemories().length,
         toggleStoreState: this.context.cerebral.toggleStoreState,
         toggleKeepState: this.context.cerebral.toggleKeepState,
-        reset: this.context.cerebral.reset
+        reset: this.context.cerebral.reset,
+        toggleDebugger : this.props.toggleDebugger,
+        hasExecutingAsyncSignals: this.context.cerebral.hasExecutingAsyncSignals(),
+        recorder: this.state.recorder,
+        isRemembering: this.context.cerebral.isRemembering
       }),
       Slider({
         travelThroughTime: this.travelThroughTime,
         hasExecutingAsyncSignals: this.context.cerebral.hasExecutingAsyncSignals(),
         willKeepState: this.context.cerebral.willKeepState(),
         value: this.context.cerebral.getMemoryIndex() + 1,
-        steps: this.context.cerebral.getMemories().length
+        steps: this.context.cerebral.getMemories().length,
+        recorder: this.state.recorder,
+        isRemembering: this.context.cerebral.isRemembering
       }),
       signal ? Signal({
         signal: signal, 

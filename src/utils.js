@@ -162,6 +162,22 @@ var utils = {
         return returnedObject;
       }, returnedObject);
     }, initialObject);
+  },
+  getSignalPath: function(currentPath, stringPath) {
+    
+    var path = stringPath.split('.');
+    var key = path.pop();
+
+    while (path.length) {
+      var nestedKey = path.shift();
+      currentPath[nestedKey] = currentPath[nestedKey] || {};
+      currentPath = currentPath[nestedKey];
+    }
+    
+    return {
+      path: currentPath,
+      key: key
+    };
   }
 };
 

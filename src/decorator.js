@@ -14,6 +14,7 @@ module.exports = function() {
       },
       componentWillMount: function() {
         Component.prototype.signals = this.signals;
+        Component.prototype.recorder = this.recorder;
       },
       render: function() {
         return React.createElement(Component, utils.extend({}, this.props, this.state));

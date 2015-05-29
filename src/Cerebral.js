@@ -9,7 +9,7 @@
     - How to trigger signals correctly as async singals are running?
 */
 var utils = require('./utils.js');
-var React = require('react');
+
 var EventEmitter = require('events').EventEmitter;
 var traverse = require('./core/traverse.js');
 var StoreObject = require('./core/StoreObject.js');
@@ -18,11 +18,19 @@ var createSignalMethod = require('./core/createSignalMethod.js');
 var createMapMethod = require('./core/createMapMethod.js');
 var createMutationMethods = require('./core/createMutationMethods.js');
 var createRefMethods = require('./core/createRefMethods.js');
-var CerebralDebugger = React.createFactory(require('./Debugger.js'));
 var createStore = require('./core/createStore.js');
+var createInjector = require('./core/createInjector.js');
+var Recorder = require('./Recorder.js');
 
 // The Cerebral instance
 function Cerebral(initialState) {
+
+  // Add recorder to initial state
+  initialState.recorder = {
+    isPlaying: false,
+    isRecording: false,
+    hasRecording: false
+  };
 
   // The actual state object which will be used on instance
   var state = {};
@@ -50,9 +58,6 @@ function Cerebral(initialState) {
   // Maps will contain the latest calculated values of state maps
   var maps = {};
 
-  // TODO: Create a REF implementation
-  var refIds = {};
-
   // The method that create maps
   var map = createMapMethod(cerebral, maps, helpers);
 
@@ -67,6 +72,8 @@ function Cerebral(initialState) {
 
   // Creates the immutable-store
   helpers.currentState = createStore(helpers, state);
+
+  helpers.recorder = new Recorder(cerebral, helpers);
 
   // Placeholder for the signals
   cerebral.signals = {};
@@ -83,46 +90,7 @@ function Cerebral(initialState) {
   // It also remembers current state, but will reset and reload page if anything
   // wrong happens. This typically happens when the cerebral is unable to handle
   // the state stored in localStorage
-  cerebral.injectInto = function(component) {
-
-    // Set store in correct state
-    try {
-      helpers.eventStore.rememberNow(helpers.currentState);
-    } catch (e) {
-      helpers.eventStore.reset(helpers.currentState);
-      alert('Cerebral was unable to remember your state, probably due to an incompatible change in the code. State has been reset and application will reload!')
-      return location.reload();
-
-    }
-
-    var Wrapper = React.createClass({
-      childContextTypes: {
-        cerebral: React.PropTypes.object
-      },
-      getChildContext: function() {
-        return {
-          cerebral: cerebral
-        };
-      },
-      render: function() {
-
-        if (process.env.NODE_ENV === 'production') {
-          return React.createElement(component, this.props);
-        } else {
-          return React.DOM.div(null,
-            React.DOM.div({
-              style: {
-                paddingRight: '400px'
-              }
-            }, React.createElement(component, this.props)),
-            CerebralDebugger()
-          );
-        }
-      }
-    });
-
-    return Wrapper;
-  };
+  cerebral.injectInto = createInjector(cerebral, helpers);
 
   // The method that resets cerebral helper state and runs the travel method
   // of EventStore
@@ -131,8 +99,7 @@ function Cerebral(initialState) {
     helpers.nextSignal = 0;
     helpers.refs = [];
     helpers.ids = [];
-    refIds = {};
-    return helpers.eventStore.travel(index, helpers.currentState);
+    return helpers.eventStore.travel(index, helpers);
   };
 
   // Get signals form EventStore
@@ -162,6 +129,10 @@ function Cerebral(initialState) {
     helpers.eventStore.toggleStoreState();
   };
 
+  cerebral.getRecording = function () {
+    return helpers.recorder.currentRecording;
+  };
+
   // Check if the EventStore will store its state in localStorage
   cerebral.willStoreState = function() {
     return helpers.eventStore.willStoreState;
@@ -173,6 +144,23 @@ function Cerebral(initialState) {
     return helpers.currentState.toJS();
   };
 
+  // Cleans up all state and adds new state
+  cerebral.wash = function(newState) {
+
+    // First remove all state, as some code might have added
+    // new props
+    Object.keys(state).forEach(function(key) {
+      helpers.currentState = helpers.currentState.unset(key);
+    });
+
+    // Now set the initial state
+    // TODO: Should this do the same object diffing?
+    Object.keys(newState).forEach(function(key) {
+      helpers.currentState = helpers.currentState.set(key, newState[key]);
+    });
+
+  };
+
   cerebral.ref = createRefMethods(helpers);
 
   // Resets any helpers state and resets the EventStore
@@ -182,7 +170,6 @@ function Cerebral(initialState) {
     helpers.asyncCallbacks = {};
     helpers.refs = [];
     helpers.ids = [];
-    refIds = {};
     helpers.eventStore.reset(helpers.currentState);
   };
 
@@ -225,7 +212,7 @@ function Cerebral(initialState) {
         localStorage.removeItem('cerebral_signals');
         localStorage.removeItem('cerebral_asyncCallbacks');
       }
-      
+
       localStorage.setItem('cerebral_keepState', helpers.eventStore.willKeepState.toString());
       localStorage.setItem('cerebral_storeState', helpers.eventStore.willStoreState.toString());
 
@@ -235,10 +222,16 @@ function Cerebral(initialState) {
 
   // Run all map updates extracted from the initial state to set the actual
   // initial state
-  helpers.mapUpdates.forEach(function (update) {
+  helpers.mapUpdates.forEach(function(update) {
     update();
   });
-  
+
+  // Add recorder signals
+  cerebral.signal('recorder.play', function play () { helpers.recorder.play(); });
+  cerebral.signal('recorder.stop', function stop () { helpers.recorder.stop(); });
+  cerebral.signal('recorder.record', function record () { helpers.recorder.record(); });
+  cerebral.signal('recorder.pause', function pause () { helpers.recorder.pause(); });
+
   return cerebral;
 
 }

@@ -172,20 +172,9 @@ EventStore.prototype.reset = function(state) {
     this.signals = [];
 
     // Remove all mapUpdate listeners as map functions will be added again
-    // TODO: Make sure added map functions are removed from helpers
     this.cerebral.removeAllListeners('mapUpdate');
 
-    // First remove all state, as some code might have added
-    // new props
-    Object.keys(state).forEach(function(key) {
-      state = state.unset(key);
-    });
-
-    // Now set the initial state
-    // TODO: Should this do the same object diffing?
-    Object.keys(this.initialState).forEach(function(key) {
-      state = state.set(key, this.initialState[key]);
-    }, this);
+    this.cerebral.wash(this.initialState);
 
     this.currentIndex = -1;
 
@@ -195,7 +184,7 @@ EventStore.prototype.reset = function(state) {
   }
 };
 
-EventStore.prototype.travel = function(index, state) {
+EventStore.prototype.travel = function(index, helpers) {
 
   var cerebral = this.cerebral;
 
@@ -209,7 +198,7 @@ EventStore.prototype.travel = function(index, state) {
 
   // TODO: This should also be part of general reset?
   Object.keys(this.initialState).forEach(function(key) {
-    state = state.set(key, this.initialState[key]);
+    helpers.currentState = helpers.currentState.set(key, this.initialState[key]);
   }, this);
 
   // If going back to initial state, just return and update
@@ -235,7 +224,12 @@ EventStore.prototype.travel = function(index, state) {
       }
 
       // Trigger signal and then set what has become the current signal
-      cerebral.signals[signal.name].apply(cerebral, signal.args);
+      var signalName = signal.name.split('.');
+      var signalPath = cerebral.signals;
+      while (signalName.length) {
+        signalPath = signalPath[signalName.shift()];
+      }
+      signalPath.apply(cerebral, signal.args);
       this.currentIndex = x;
 
     }
@@ -244,8 +238,8 @@ EventStore.prototype.travel = function(index, state) {
 
   // Reset flags and emit event to set application in correct state
   this.hasExecutingSignals = false;
-  cerebral.isRemembering = false;
   cerebral.emit('update');
+  cerebral.isRemembering = false;
 
   return cerebral;
 };
