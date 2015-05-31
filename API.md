@@ -382,6 +382,8 @@ export default cerebral;
 ```
 In this example we have an array of `visibleTodos`. This array will contain references to todos in the `todos` map. See video []() on how to structure state. Whenever the changes are done to either the array or the map, the callback will run and any components using the state will update with the new value.
 
+**Note!** You should not trigger new signals inside this mapping function. They are run on instantiation where signals are not available and you risk causing circular conditions.
+
 ### Mutate state
 All mutation methods takes a **path** and a **value**. The path can be:
 
@@ -611,4 +613,49 @@ cerebral.remember(5); // Remember up to signal 5
 ```
 
 ### recording
-You are able to implement recording of 
+**Note!** This feature is in preview stage.
+
+You are able to implement recording of state in Cerebral. This is done using the preset signals available when instantating cerebral.
+
+```js
+class SomeComponent extends React.Component {
+  render() {
+    return (
+      <button onClick={this.signals.recorder.play}>Play</button>
+      <button onClick={this.signals.recorder.stop}>Stop</button>
+      <button onClick={this.signals.recorder.record}>Record</button>
+    );
+  }
+}
+```
+
+You also have preset state available which indicates the state of your recording and playback.
+
+```js
+import Cerebral from 'cerebral/decorator';
+
+@Cerebral(['recorder'])
+class SomeComponent extends React.Component {
+  render() {
+    return (
+      <button 
+        disabled={!this.props.recorder.hasRecording}
+        onClick={this.signals.recorder.play}>
+        Play
+      </button>
+      <button
+        disabled={this.props.recorder.isRecording && this.props.recorder.isPlaying}
+        onClick={this.signals.recorder.record}>
+        Record
+      </button>
+      <button
+        disabled={!this.props.recorder.isRecording}
+        onClick={this.signals.recorder.stop}>
+        Stop
+      </button>
+    );
+  }
+}
+```
+Currently you can only **record**, **stop recording** and **play back recording**. Later versions will have possibility to stop playback, pause playback etc.
+
