@@ -3,7 +3,8 @@ An intelligent react application framework
 
 <img src="images/logo.jpg" width="300" align="center">
 
-| [API](API.md) |
+## API
+Read the **[API DOCUMENTATION](API.md)**
 
 ## Demos
 **TodoMVC**: [www.christianalfoni.com/todomvc](http://www.christianalfoni.com/todomvc)
