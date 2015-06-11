@@ -229,7 +229,7 @@ function Cerebral(initialState) {
   // Add recorder signals
   cerebral.signal('recorder.play', function play () { helpers.recorder.play(); });
   cerebral.signal('recorder.stop', function stop () { helpers.recorder.stop(); });
-  cerebral.signal('recorder.record', function record () { helpers.recorder.record(); });
+  cerebral.signal('recorder.record', function record () { helpers.recorder.record(); });
   cerebral.signal('recorder.pause', function pause () { helpers.recorder.pause(); });
 
   return cerebral;

@@ -15,7 +15,7 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
       var signalIndex = helpers.eventStore.willKeepState ? ++helpers.eventStore.currentIndex : 0;
       var recorderSignalIndex = 0;
       // The recorder has its own internal signal index handling
-      if (helpers.recorder.isPlaying || helpers.recorder.isRecording) {
+      if (helpers.recorder.isPlaying || helpers.recorder.isRecording) {
         recorderSignalIndex = helpers.recorder.currentRecording.signalIndex++;
       }
 
