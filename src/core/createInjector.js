@@ -47,9 +47,12 @@ module.exports = function(cerebral, helpers) {
         if (process.env.NODE_ENV === 'production') {
           return React.createElement(component, this.props);
         } else {
-          return React.DOM.div(null,
+          return React.DOM.div({
+            height: 'inherit'
+          },
             React.DOM.div({
               style: {
+                height: 'inherit',
                 paddingRight: this.state.showDebugger ? '400px' : '0'
               }
             }, React.createElement(component, this.props)),

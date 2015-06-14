@@ -73,7 +73,7 @@ function Cerebral(initialState) {
   // Creates the immutable-store
   helpers.currentState = createStore(helpers, state);
 
-  helpers.recorder = new Recorder(cerebral, helpers);
+  cerebral.recorder = helpers.recorder = new Recorder(cerebral, helpers);
 
   // Placeholder for the signals
   cerebral.signals = {};
@@ -225,12 +225,6 @@ function Cerebral(initialState) {
   helpers.mapUpdates.forEach(function(update) {
     update();
   });
-
-  // Add recorder signals
-  cerebral.signal('recorder.play', function play () { helpers.recorder.play(); });
-  cerebral.signal('recorder.stop', function stop () { helpers.recorder.stop(); });
-  cerebral.signal('recorder.record', function record () { helpers.recorder.record(); });
-  cerebral.signal('recorder.pause', function pause () { helpers.recorder.pause(); });
 
   return cerebral;
 

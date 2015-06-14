@@ -1,6 +1,6 @@
 "use strict";
 var utils = require('./../utils.js');
-var createAsyncSignalMethod = function(helpers, cerebral) {
+var createSignalMethod = function(helpers, cerebral) {
 
   return function() {
 
@@ -14,8 +14,10 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
       var executionArray = callbacks.slice();
       var signalIndex = helpers.eventStore.willKeepState ? ++helpers.eventStore.currentIndex : 0;
       var recorderSignalIndex = 0;
+      var recorderState = cerebral.get('recorder');
+
       // The recorder has its own internal signal index handling
-      if (helpers.recorder.isPlaying || helpers.recorder.isRecording) {
+      if (recorderState.isPlaying || recorderState.isRecording) {
         recorderSignalIndex = helpers.recorder.currentRecording.signalIndex++;
       }
 
@@ -67,7 +69,7 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
                 (action.name in helpers.asyncCallbacks[helpers.runningSignal][signalIndex])
                 ) ||
               (
-                helpers.recorder.isPlaying &&
+                recorderState.isPlaying &&
                 helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal] &&
                 helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal][recorderSignalIndex] &&
                 (action.name in helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal][recorderSignalIndex])     
@@ -75,11 +77,11 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
             );
 
             // If we are remembering something async and the async is not from a recording playback
-            if (cerebral.isRemembering && isAsync && !helpers.recorder.isPlaying) {
+            if (cerebral.isRemembering && isAsync && !recorderState.isPlaying) {
               result = helpers.asyncCallbacks[helpers.runningSignal][signalIndex][action.name];
 
             // If async and playing back recording, use recording async results
-            } else if (isAsync && helpers.recorder.isPlaying) {
+            } else if (isAsync && recorderState.isPlaying) {
               result = helpers.recorder.currentRecording.asyncCallbacks[helpers.runningSignal][recorderSignalIndex][action.name];
             } else if (Array.isArray(callback)) {
               result = Promise.all(callback.map(function(callback) {
@@ -92,7 +94,7 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
             var isPromise = utils.isPromise(result);
 
             signal.duration += action.duration = Date.now() - actionStart;
-            action.isAsync = !!(isPromise || (cerebral.isRemembering && isAsync) || (helpers.recorder.isPlaying && isAsync));
+            action.isAsync = !!(isPromise || (cerebral.isRemembering && isAsync) || (recorderState.isPlaying && isAsync));
 
             if (utils.isObject(result) && !utils.isPromise(result)) {
               Object.freeze(result);
@@ -124,7 +126,7 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
                 helpers.asyncCallbacks[name][signalIndex] = helpers.asyncCallbacks[name][signalIndex] || {};
                 helpers.asyncCallbacks[name][signalIndex][action.name] = result || null; // JS or Chrome bug causing undefined not to set key
 
-                if (helpers.recorder.isRecording) {
+                if (recorderState.isRecording) {
                   var currentRecording = helpers.recorder.currentRecording;
                   currentRecording.asyncCallbacks[name] = currentRecording.asyncCallbacks[name] || {};
                   currentRecording.asyncCallbacks[name][recorderSignalIndex] = currentRecording.asyncCallbacks[name][recorderSignalIndex] || {};
@@ -174,7 +176,7 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
 
         // Adds signal if recording. Any mutations and actions
         // are added to this reference, so do not need to handle that
-        if (helpers.recorder.isRecording) {
+        if (recorderState.isRecording) {
           helpers.recorder.addSignal(signal);
         }
         helpers.eventStore.addSignal(signal);
@@ -194,4 +196,4 @@ var createAsyncSignalMethod = function(helpers, cerebral) {
 
 };
 
-module.exports = createAsyncSignalMethod;
+module.exports = createSignalMethod;
