@@ -2,7 +2,6 @@ var utils = require('./utils.js');
 
 function Recorder(cerebral, helpers) {
 
-  this.runningSignal = false;
   this.cerebral = cerebral;
   this.helpers = helpers;
 
@@ -18,14 +17,12 @@ function Recorder(cerebral, helpers) {
 };
 
 // ACTION
-Recorder.prototype.play = function (seek) {
-
-  console.log('### PLAYING!!!');
+Recorder.prototype.seek = function (seek, startPlaying) {
 
   clearTimeout(this.durationTimer);
   this.playbackTimers.forEach(clearTimeout);
 
-  this.cerebral.merge(this.currentRecording.initialState);
+  this.cerebral.merge(this.path, this.currentRecording.initialState);
   this.cerebral.merge('recorder', {
     isPlaying: true,
     isRecording: false,
@@ -47,33 +44,36 @@ Recorder.prototype.play = function (seek) {
     return;
   }
 
-  this.createTimer();
-
+  // Runs the signal synchronously
   var triggerSignal = function (signal) {
+
     var signalPath = utils.getSignalPath(this.cerebral.signals, signal.name);
-    this.runningSignal = true;
+    this.helpers.runningSignal = signal.name;
     signalPath.path[signalPath.key].apply(this.cerebral, signal.args);
-    this.runningSignal = false;
+    
+    // Running catchup signals changes this to false
+    this.cerebral.allowMutations = true;
   };
 
   // Optimize with FOR loop
-  console.log('RECORDER - PLAY: seek', seek);
   var catchup = this.currentRecording.signals.filter(function (signal) {
     return signal.timestamp - this.currentRecording.start < seek;
   }, this);
   catchup.forEach(triggerSignal.bind(this));
 
-  console.log('RECORDER - PLAY: catchup.length', catchup.length);
+  if (startPlaying) {
+    this.createTimer();
+    var signalsCount = this.currentRecording.signals.length;
+    var startIndex = catchup.length;
+    for (var x = startIndex; x < signalsCount; x++) {
 
-  var signalsCount = this.currentRecording.signals.length;
-  var startIndex = catchup.length;
-  console.log('RECORDER - PLAY: startIndex', startIndex);
-  for (var x = startIndex; x < signalsCount; x++) {
+      var signal = this.currentRecording.signals[x];
+      var durationTarget = signal.timestamp - this.currentRecording.start - seek;
+      this.playbackTimers.push(setTimeout(triggerSignal.bind(this, signal), durationTarget));
 
-    var signal = this.currentRecording.signals[x];
-    var durationTarget = signal.timestamp - this.currentRecording.start - seek;
-    this.playbackTimers.push(setTimeout(triggerSignal.bind(this, signal), durationTarget));
-
+    }
+  } else {
+      this.cerebral.set(['recorder', 'isPlaying'], false);
   }
 
 };
@@ -90,7 +90,13 @@ Recorder.prototype.createTimer = function () {
   this.durationTimer = setTimeout(update, 500);
 };
 
-Recorder.prototype.record = function () {
+Recorder.prototype.resetState = function () {
+  this.cerebral.merge(this.path, this.currentRecording.initialState);
+};
+
+Recorder.prototype.record = function (path) {
+
+  this.path = path ? path.split('.') : [];
 
   this.cerebral.set(['recorder', 'isRecording'], true);
 
@@ -104,12 +110,14 @@ Recorder.prototype.record = function () {
 
   // If we are recording over the previous stuff, go back to start
   if (this.cerebral.get('recorder', 'hasRecording')) {
-    this.cerebral.merge(this.currentRecording.initialState);
+    this.resetState();
   }
 
   // Create initial state that not includes recorder
-  var initialState = this.cerebral.toJS();
-  delete initialState.recorder;
+  var initialState = this.cerebral.get(path).toJS();
+  if (!path.length) {
+    delete initialState.recorder;
+  }
 
   this.currentRecording = {
     initialState: initialState,
@@ -170,7 +178,6 @@ Recorder.prototype.pause = function pause() {
     return;
   }
 
-  console.log('RECORDER - PAUSE: Clearing timers');
   clearTimeout(this.durationTimer);
   this.playbackTimers.forEach(clearTimeout);
 
