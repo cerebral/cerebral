@@ -141,7 +141,6 @@ var createSignalMethod = function(helpers, cerebral) {
                   start: timestamp,
                   end: Date.now()
                 });
-                cerebral.emit('update');
                 return execute(result);
 
               }).catch(function(err) {
