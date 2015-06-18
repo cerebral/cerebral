@@ -43,9 +43,13 @@ exports['should be able to run async actions'] = function(test) {
   }, function() {
     counter++;
   });
+
+  // Triggers update after first promise and then after next action
   cerebral.once('update', function() {
-    test.equals(counter, 2);
-    test.done();
+    cerebral.once('update', function () {
+      test.equals(counter, 2);
+      test.done();
+    });
   });
   cerebral.signals.test();
 };
@@ -70,8 +74,10 @@ exports['should be able to run async actions in parallell'] = function(test) {
     counter++;
   });
   cerebral.once('update', function() {
-    test.equals(counter, 3);
-    test.done();
+    cerebral.once('update', function () {
+      test.equals(counter, 3);
+      test.done();
+    });
   });
   cerebral.signals.test();
 };

@@ -1,6 +1,7 @@
 let addTodo = function(cerebral) {
 
   let ref = cerebral.ref.create();
+  console.log('ref', ref);
   let todo = {
     $ref: ref,
     $isSaving: true,

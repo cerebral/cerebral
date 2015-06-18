@@ -37,7 +37,7 @@ var createSignalMethod = function(helpers, cerebral) {
 
         var execute = function() {
 
-          while (executionArray.length) {
+          if (executionArray.length) {
 
             helpers.runningSignal = helpers.runningSignal || name;
             helpers.subSignal = helpers.runningSignal === name ? null : name;
@@ -141,7 +141,7 @@ var createSignalMethod = function(helpers, cerebral) {
                   start: timestamp,
                   end: Date.now()
                 });
-
+                cerebral.emit('update');
                 return execute(result);
 
               }).catch(function(err) {
@@ -169,6 +169,9 @@ var createSignalMethod = function(helpers, cerebral) {
               execute(result);
             }
 
+          } else {
+            !cerebral.isRemembering && cerebral.emit('update');
+            helpers.runningSignal = null;
           }
 
         }.bind(null, cerebral);
@@ -186,8 +189,6 @@ var createSignalMethod = function(helpers, cerebral) {
       // Either run sync or batch up signals and run on animation frame and only trigger one update
       if (!!helpers.runningSignal || cerebral.isRemembering || typeof requestAnimationFrame === 'undefined') {
         runSignal();
-        !cerebral.isRemembering && cerebral.emit('update');
-        helpers.runningSignal = null;
       } else {
         batchedSignals.push(runSignal);
         if (!awaitingFrame) {
@@ -196,7 +197,6 @@ var createSignalMethod = function(helpers, cerebral) {
               runSignal();
             });
             batchedSignals = [];
-            cerebral.emit('update');
             awaitingFrame = false;
           });   
           helpers.runningSignal = null;
