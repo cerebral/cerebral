@@ -48,7 +48,9 @@ module.exports = function(cerebral, helpers) {
           return React.createElement(component, this.props);
         } else {
           return React.DOM.div({
-            height: 'inherit'
+            style: {
+              height: 'inherit'
+            }
           },
             React.DOM.div({
               style: {
