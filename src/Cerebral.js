@@ -226,6 +226,15 @@ function Cerebral(initialState) {
     update();
   });
 
+<<<<<<< HEAD
+=======
+  // Add recorder signals
+  cerebral.signal('recorder.play', function play () { helpers.recorder.play(); });
+  cerebral.signal('recorder.stop', function stop () { helpers.recorder.stop(); });
+  cerebral.signal('recorder.record', function record () { helpers.recorder.record(); });
+  cerebral.signal('recorder.pause', function pause () { helpers.recorder.pause(); });
+
+>>>>>>> 48119ff4e9cc97b7810e6b6f101201659a84172e
   return cerebral;
 
 }

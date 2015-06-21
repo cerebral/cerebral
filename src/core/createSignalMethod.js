@@ -19,7 +19,8 @@ var createSignalMethod = function(helpers, cerebral) {
       var recorderState = cerebral.get('recorder');
 
       // The recorder has its own internal signal index handling
-      if (recorderState.isPlaying || recorderState.isRecording) {
+
+      if (recorderState.isPlaying || recorderState.isRecording) {
         recorderSignalIndex = helpers.recorder.currentRecording.signalIndex++;
       }
 
