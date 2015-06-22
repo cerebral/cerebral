@@ -21,6 +21,9 @@ Read the **[API DOCUMENTATION](API.md)**
 
 - **[Caching and relational state  - 28:40](https://www.youtube.com/watch?v=6W0S2p01Paw)**. We are going to handle some really complex stuff. A table with pagination and caching in place, but also automatically request users from the servers as we load projects.
 
+## State of Cerebral and the future
+Cerebral is currently being used to implement a new type of learning platform. The platform has been developed over the last year, but with Cerebral the project has been rebuilt from scratch. Cerebral is this far performing very well and tweaks and changes will be made until the release of the platform. More information on this will be released at a later point.
+
 ## Cerebral - The abstraction
 Read this article introducing Cerebral: [Cerebral developer preview](http://christianalfoni.com/articles/2015_05_18_Cerebral-developer-preview)
 
