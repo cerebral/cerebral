@@ -1,7 +1,10 @@
-# cerebral - alpha ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
+# cerebral - ALPHA ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
 An intelligent react application framework
 
 <img src="images/logo.jpg" width="300" align="center">
+
+## Warning!
+Cerebral is a "work in progress". There are bugs, missing features and not complete correlation between video introductions and the current state of the API. Please look at this as a preview and play around with it if you want to. The framework will be released in parallell with a production ready service, where the focus currently is now.
 
 ## API
 Read the **[API DOCUMENTATION](API.md)**
