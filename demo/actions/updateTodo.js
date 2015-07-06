@@ -1,4 +1,4 @@
-let updateTodo = function(cerebral, result) {
+let updateTodo = (cerebral, result) => {
 
   console.log('result', result);
   let todo = cerebral.get('todos', result.ref);
