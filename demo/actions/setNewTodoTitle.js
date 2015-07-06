@@ -1,4 +1,4 @@
-let setNewTodoTitle = function (cerebral, title) {
+let setNewTodoTitle = (cerebral, title) => {
   cerebral.set('newTodoTitle', title);
 };
 
