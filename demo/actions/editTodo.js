@@ -1,4 +1,4 @@
-let editTodo = function (cerebral, ref) {
+let editTodo = (cerebral, ref) => {
 
   let todo = cerebral.get(['todos', ref]);
 

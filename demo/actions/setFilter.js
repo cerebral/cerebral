@@ -1,4 +1,4 @@
-let setFilter = function(cerebral, route) {
+let setFilter = (cerebral, route) => {
   let filter =
     route.pathname.indexOf('/#/active') !== -1 ?
     'active' : route.pathname.indexOf('/#/completed') !== -1 ?

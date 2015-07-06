@@ -1,6 +1,7 @@
-let addTodo = function(cerebral) {
+let addTodo = (cerebral) => {
 
   let ref = cerebral.ref.create();
+  // SHOULD THIS REALLY BE HERE?
   console.log('ref', ref);
   let todo = {
     $ref: ref,

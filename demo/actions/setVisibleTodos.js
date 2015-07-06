@@ -1,8 +1,8 @@
-let setVisibleTodos = function(cerebral, value) {
+let setVisibleTodos = (cerebral, value) => {
   
   let todos = cerebral.get('todos');
   let filter = cerebral.get('filter');
-  let visibleTodos = Object.keys(todos).filter(function(key) {
+  let visibleTodos = Object.keys(todos).filter((key) => {
 
     let todo = todos[key];
     

@@ -1,8 +1,8 @@
-let clearCompleted = function (cerebral) {
-
+let clearCompleted = (cerebral) => {
+  
   let todos = cerebral.get('todos');
 
-  Object.keys(todos).forEach(function (key) {
+  Object.keys(todos).forEach((key) => {
     if (todos[key].completed && !todos[key].$isSaving) {
       cerebral.unset('todos', key);
     }

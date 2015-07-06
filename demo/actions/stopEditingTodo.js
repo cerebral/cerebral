@@ -1,4 +1,4 @@
-let stopEditingTodo = function (cerebral, ref) {
+let stopEditingTodo = (cerebral, ref) => {
 
   let todo = cerebral.get(['todos', ref]);
 
