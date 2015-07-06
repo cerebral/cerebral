@@ -1,7 +1,7 @@
-let setCounters = function(cerebral, value) {
+let setCounters = (cerebral, value) => {
 
   let todos = cerebral.get('todos');
-  let counts = Object.keys(todos).reduce(function(counts, key) {
+  let counts = Object.keys(todos).reduce((counts, key) => {
 
     let todo = todos[key];
     
