@@ -1,9 +1,9 @@
-let toggleAllChecked = function(cerebral) {
+let toggleAllChecked = (cerebral) => {
 
     let isCompleted = !cerebral.get('isAllChecked');
     let todos = cerebral.get('todos');
 
-    Object.keys(todos).forEach(function (key) {
+    Object.keys(todos).forEach((key) => {
       let todo = todos[key];
       cerebral.set([todo, 'completed'], isCompleted);
     });
