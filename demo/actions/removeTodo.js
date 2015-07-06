@@ -1,4 +1,4 @@
-let removeTodo = function(cerebral, ref) {
+let removeTodo = (cerebral, ref) => {
   cerebral.unset('todos', ref);
   cerebral.ref.remove(ref);
 };
