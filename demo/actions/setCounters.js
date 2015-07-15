@@ -1,29 +1,27 @@
-let setCounters = function(cerebral, value) {
+let setCounters = function(args, state) {
 
-  let todos = cerebral.get('todos');
+  let todos = state.get('todos');
   let counts = Object.keys(todos).reduce(function(counts, key) {
 
     let todo = todos[key];
-    
+
     if (todo.completed) {
       counts.completedCount++;
     } else if (!todo.completed) {
       counts.remainingCount++;
     }
-    
+
     return counts;
-    
+
   }, {
     completedCount: 0,
     remainingCount: 0
   });
 
-  cerebral.merge({
+  state.merge({
     remainingCount: counts.remainingCount,
     completedCount: counts.completedCount
   });
-
-  return value;
 
 };
 

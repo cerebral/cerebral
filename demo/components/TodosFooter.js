@@ -1,9 +1,16 @@
 import React from 'react/addons';
-import Cerebral from './../../src/decorator.js';
+import StateComponent from './../StateComponent.js';
 
-class TodosFooter extends React.Component {
+class TodosFooter extends StateComponent {
+  getStatePaths() {
+    return {
+      remainingCount: ['remainingCount'],
+      filter: ['filter'],
+      completedCount: ['completedCount']
+    };
+  }
   renderRemainingCount() {
-    let count = this.props.remainingCount;
+    let count = this.state.remainingCount;
     if (count === 0 || count > 1) {
       return count + ' items left';
     } else {
@@ -12,13 +19,13 @@ class TodosFooter extends React.Component {
   }
 
   renderRouteClass(filter) {
-    return this.props.filter === filter ? 'selected' : '';
+    return this.state.filter === filter ? 'selected' : '';
   }
 
   renderCompletedButton() {
     return (
       <button id="clear-completed" onClick={this.signals.clearCompletedClicked}>
-        Clear completed ({this.props.completedCount})
+        Clear completed ({this.state.completedCount})
       </button>
     );
   }
@@ -38,11 +45,11 @@ class TodosFooter extends React.Component {
             <a className={this.renderRouteClass('completed')} href="#/completed">Completed</a>
           </li>
         </ul>
-        {this.props.completedCount ? this.renderCompletedButton() : null}
+        {this.state.completedCount ? this.renderCompletedButton() : null}
       </footer>
     );
   }
 
 }
 
-export default Cerebral(TodosFooter, ['remainingCount', 'completedCount', 'filter']);
+export default TodosFooter;

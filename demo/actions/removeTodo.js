@@ -1,6 +1,5 @@
-let removeTodo = function(cerebral, ref) {
-  cerebral.unset('todos', ref);
-  cerebral.ref.remove(ref);
+let removeTodo = function(args, state) {
+  state.unset('todos', args.ref);
 };
 
 export default removeTodo;

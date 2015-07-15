@@ -1,8 +1,9 @@
-let editTodo = function (cerebral, ref) {
+let editTodo = function (args, state) {
 
-  let todo = cerebral.get(['todos', ref]);
+  const path = ['todos', args.ref];
+  let todo = cerebral.get(path);
 
-  cerebral.merge(['todos', ref], {
+  cerebral.merge(path, {
     $isEditing: !todo.$isSaving && true
   });
 

@@ -1,11 +1,11 @@
-let setVisibleTodos = function(cerebral, value) {
-  
-  let todos = cerebral.get('todos');
-  let filter = cerebral.get('filter');
+let setVisibleTodos = function(args, state) {
+
+  let todos = state.get('todos');
+  let filter = state.get('filter');
   let visibleTodos = Object.keys(todos).filter(function(key) {
 
     let todo = todos[key];
-    
+
     return (
       filter === 'all' ||
       (filter === 'completed' && todo.completed) ||
@@ -13,10 +13,9 @@ let setVisibleTodos = function(cerebral, value) {
     );
 
   });
-  
-  cerebral.set('visibleTodos', visibleTodos);
+  console.log('visibleTodos', visibleTodos);
+  state.set('visibleTodos', visibleTodos);
 
-  return value;
 };
 
 export default setVisibleTodos;

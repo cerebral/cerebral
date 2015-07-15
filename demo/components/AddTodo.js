@@ -1,25 +1,33 @@
 import React from 'react';
-import State from './../../src/decorator.js';
+import StateComponent from './../StateComponent.js';
 
-class AddTodo extends React.Component {
+class AddTodo extends StateComponent {
+  getStatePaths() {
+    return {
+      isSaving: ['isSaving'],
+      newTodoTitle: ['newTodoTitle']
+    };
+  }
   addTodo(event) {
     event.preventDefault();
     this.signals.newTodoSubmitted();
   }
 
   setNewTodoTitle(event) {
-    this.signals.newTodoTitleChanged(event.target.value);
+    this.signals.newTodoTitleChanged({
+      title: event.target.value
+    });
   }
 
   render() {
     return (
       <form id="todo-form" onSubmit={this.addTodo.bind(this)}>
-        <input 
-          id="new-todo" 
+        <input
+          id="new-todo"
           autoComplete="off"
-          placeholder="What needs to be done?" 
-          disabled={this.props.isSaving}
-          value={this.props.newTodoTitle}
+          placeholder="What needs to be done?"
+          disabled={this.state.isSaving}
+          value={this.state.newTodoTitle}
           onChange={this.setNewTodoTitle.bind(this)}
         />
       </form>
@@ -28,4 +36,4 @@ class AddTodo extends React.Component {
 
 }
 
-export default State(AddTodo, ['isSaving', 'newTodoTitle']);
+export default AddTodo;

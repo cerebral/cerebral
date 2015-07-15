@@ -1,6 +1,6 @@
-let setTodoNewTitle = function (cerebral, ref, title) {
-  cerebral.merge(['todos', ref], {
-    $newTitle: title
+let setTodoNewTitle = function (args, state) {
+  state.merge(['todos', args.ref], {
+    $newTitle: args.title
   });
 };
 
