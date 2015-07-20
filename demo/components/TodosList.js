@@ -15,7 +15,6 @@ class TodosList extends StateComponent {
   }
 
   render() {
-    console.log(this.state);
     return (
       <section id="main">
         <input

@@ -12,7 +12,7 @@ class App extends StateComponent {
     };
   }
   record() {
-    this.recorder.record(this.context.controller.get([]));
+    this.recorder.record(this.context.controller.get([]).export());
   }
   stop() {
     this.recorder.stop();

@@ -13,38 +13,25 @@ module.exports = function (signalMethods, options) {
   var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
     JSON.parse(localStorage.getItem('cerebral_signals')) : [];
 
+
   // Indicates if signals should be stored or replaced. Grabs from localStorage if available
   var willKeepState = (
     process.env.NODE_ENV === 'production' ?
     false :
-    utils.hasLocalStorage() && localStorage.getItem('cerebral_keepState') ?
-    JSON.parse(localStorage.getItem('cerebral_keepState')) :
-    false
-  );
-
-  // Indicates if state should be stored into localStorage
-  var willStoreState = (
-    process.env.NODE_ENV === 'production' ?
-    false :
-    utils.hasLocalStorage() && localStorage.getItem('cerebral_storeState') ?
-    JSON.parse(localStorage.getItem('cerebral_storeState')) :
+    utils.hasLocalStorage() && localStorage.getItem('cerebral_willKeepState') ?
+    JSON.parse(localStorage.getItem('cerebral_willKeepState')) :
     false
   );
 
   var executingAsyncActionsCount = 0;
   var isRemembering = false;
-  var currentIndex = -1;
+  var currentIndex = signals.length - 1;
 
   return {
 
     // Flips flag of storing signals or replacing them
     toggleKeepState: function() {
       willKeepState = !willKeepState;
-    },
-
-    // Flips flag of storing state into localStorage
-    toggleStoreState: function() {
-      willStoreState = !willStoreState;
     },
 
     addAsyncAction: function() {
@@ -77,7 +64,7 @@ module.exports = function (signalMethods, options) {
         signals.splice(currentIndex, signals.length - currentIndex);
       }
 
-      signal.index = signals.length;
+      //signal.index = signals.length;
 
       // Add signal and set the current signal to be the recently added signal
       signals.push(signal);
@@ -165,10 +152,6 @@ module.exports = function (signalMethods, options) {
 
     willKeepState: function () {
       return willKeepState;
-    },
-
-    willStoreState: function () {
-      return willStoreState;
     },
 
     getCurrentIndex: function () {

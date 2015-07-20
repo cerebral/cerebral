@@ -1,11 +1,13 @@
+var utils = require('./utils.js');
+
 module.exports = function (signalStore, options) {
+
 
   var getDetail = function () {
     return {
       state: options.onGet([]),
       props: {
         signals: signalStore.getSignals(),
-        willStoreState: signalStore.willStoreState(),
         willKeepState: signalStore.willKeepState(),
         currentSignalIndex: signalStore.getCurrentIndex(),
         isExecutingAsync: signalStore.isExecutingAsync(),
@@ -21,7 +23,10 @@ module.exports = function (signalStore, options) {
     window.dispatchEvent(event);
   };
 
-  window.addEventListener('cerebral.dev.initialize', update.bind(null, 'cerebral.dev.initialized'));
+  window.addEventListener('cerebral.dev.initialize', function () {
+    signalStore.remember(signalStore.getSignals().length - 1);
+    update('cerebral.dev.initialized');
+  });
   update('cerebral.dev.initialized');
 
   window.addEventListener('cerebral.dev.toggleKeepState', function () {
@@ -49,7 +54,12 @@ module.exports = function (signalStore, options) {
     var value = options.onGet(event.detail.path);
     // toValue instead?
     console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
-  })
+  });
+
+  window.addEventListener('unload', function () {
+    utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', JSON.stringify(signalStore.getSignals()));
+    utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', JSON.stringify(signalStore.willKeepState()));
+  });
 
   return {
     update: update

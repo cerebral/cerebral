@@ -65,7 +65,9 @@ class Todo extends StateComponent {
             null :
             <button
               className="destroy"
-              onClick={this.signals.removeTodoClicked.bind(null, this.props.todo.$ref)}/>
+              onClick={this.signals.removeTodoClicked.bind(null, {
+                ref: this.props.todo.$ref
+              })}/>
           }
         </div>
         <form onSubmit={this.onNewTitleSubmitted.bind(this)}>
@@ -73,7 +75,9 @@ class Todo extends StateComponent {
             ref="edit"
             className="edit"
             value={this.props.todo.$newTitle || this.props.todo.title}
-            onBlur={this.signals.newTitleSubmitted.bind(null, this.props.todo.$ref)}
+            onBlur={this.signals.newTitleSubmitted.bind(null, {
+              ref: this.props.todo.$ref
+            })}
             onChange={this.onNewTitleChanged.bind(this)}
           />
         </form>

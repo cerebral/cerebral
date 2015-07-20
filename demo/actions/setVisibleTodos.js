@@ -13,7 +13,6 @@ let setVisibleTodos = function(args, state) {
     );
 
   });
-  console.log('visibleTodos', visibleTodos);
   state.set('visibleTodos', visibleTodos);
 
 };

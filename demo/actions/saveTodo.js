@@ -4,7 +4,6 @@ let saveTodo = function (args, state, promise) {
 
   // Simulating posting the todo.data and get an ID from
   // the server. We resolve with the new id and the ref
-  console.log('saving');
   setTimeout(function () {
 
     promise.resolve({

@@ -36,8 +36,8 @@ export default Controller({
     state = initialState;
   },
   onSeek: function (seek, isPlaying, currentRecording) {
-    state = currentRecording.initialState;
-    console.log(state);
+    state = state.import(currentRecording.initialState);
+    events.emit('change', state);
   },
   onUpdate: function () {
     events.emit('change', state);
@@ -49,8 +49,9 @@ export default Controller({
     const key = path.pop();
     state = Value(path, state).set(key, value);
   },
-  onUnset: function (path, value) {
-    state = Value(path, state).set(key, value);
+  onUnset: function (path, key) {
+    console.log(arguments);
+    state = Value(path, state).unset(key);
   },
   onPush: function (path, value) {
     state = Value(path, state).push(value);

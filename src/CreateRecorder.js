@@ -36,7 +36,7 @@ module.exports = function (signalStore, signalMethods, options) {
         while (signalName.length) {
           signalMethodPath = signalMethodPath[signalName.shift()];
         }
-        signalMethodPath.call(null, signal.payload, signal.asyncActionResults);
+        signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
 
       };
 
@@ -62,6 +62,10 @@ module.exports = function (signalStore, signalMethods, options) {
         isPlaying = true;
         started = Date.now();
       }
+      playbackTimers.push(setTimeout(function () {
+        isPlaying = false;
+        options.onUpdate && options.onUpdate();
+      }, currentRecording.end - currentRecording.start - seek ));
       options.onUpdate && options.onUpdate();
     },
 
