@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # cerebral - redefined (ALPHA) ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
 A state controller with its own debugger
 
