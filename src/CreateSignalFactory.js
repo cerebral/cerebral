@@ -23,7 +23,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
         // Accumulate the args in one object that will be passed
         // to each action
-        var signalArgs = payload || {};
+        var signalArgs = utils.merge(payload || {}, options.defaultArgs || {});
 
         // Describe the signal to later trigger as if it was live
         var signal = {
@@ -45,7 +45,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
           if (executionArray.length) {
 
             var actionFunc = executionArray.shift();
-            
+
             if (Array.isArray(actionFunc)) {
 
               var asyncActionArray = actionFunc;

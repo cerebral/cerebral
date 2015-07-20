@@ -25,7 +25,6 @@ exports['should store details about signal'] = function (test) {
     test.equal(signal.name, 'test');
     test.equal(signal.duration, 0);
     test.equal(signal.payload, true);
-    test.equal(signal.index, 0);
     test.equal(signal.actions.length, 1);
     test.done();
   });

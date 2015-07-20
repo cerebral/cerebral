@@ -137,3 +137,16 @@ exports['should only have access to the get method when async action'] = functio
   }]);
   ctrl.signals.test();
 };
+
+exports['should allow for default args'] = function (test) {
+  var ctrl = Lib.Controller({
+    defaultArgs: {
+      foo: 'bar'
+    }
+  });
+  ctrl.signal('test', function (args, state) {
+    test.deepEqual(args, {foo: 'bar'});
+    test.done();
+  });
+  ctrl.signals.test();
+};

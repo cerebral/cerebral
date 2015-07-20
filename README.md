@@ -1,21 +1,30 @@
-# cerebral - redefined ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
+# cerebral - redefined (ALPHA) ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
 A state controller with its own debugger
 
 <img src="images/logo.jpg" width="300" align="center">
 
+## Grab the Chrome debugger
+[Cerebral Debugger](https://chrome.google.com/webstore/detail/cerebral-debugger/ddefoknoniaeoikpgneklcbjlipfedbb)
+
 ## Cerebral scope is redefined
-To my surprise a lot of the feedback on React was its signaling implementation. Though it being an important concept in giving Cerebral its state control capabilities, it proves to also be a very good way to define the state flow of your application.
+To my surprise a lot of the feedback on Cerebral was its signaling implementation. Though it being an important concept in giving Cerebral its state control capabilities, it proves to also be a very good way to define the state flow of your application.
 
 This fact led me to change the scope. Cerebral is now a standalone "controller" implementation. It sits between the UI and the STATE STORE of your application. On one side you define signals and actions. On the other side you define "mutation hooks". This gives Cerebral all it needs to understand the complete state flow of your application and give you some pretty cool tools to help develop complex applications.
 
-The Cerebral Core API is a bit "low level", but extremely flexible. It is possible to build "plug`n`play" versions like "cerebral-react-baobab", "cerebral-angular-immutable-store" etc. to get packages that already has hooks and event emitting defined.
+The Cerebral Core API is a bit "low level", but extremely flexible. You can check out a few packages here that will instantly get you started with some of your favorite development tools:
+
+- [cerebral-react-immutable-store](https://github.com/christianalfoni/cerebral-react-immutable-store)
+- cerebral-angular-immutable-store
+- cerebral-react-baobab
+- cerebral-jquery-immutable-store
+- cerebral-react-immutable-js
 
 ## The API
 
 ### Define a Controller
 To define a Controller you need somewhere to store your state. You can use whatever you want in this regard, but to gain the full power of the developer tools the state store should be immutable. This specifically allows you to move back and forth in time in the debugger and you will gain benefits in rendering optimization.
 
-In this example we will use the [immutable-store]() project as a state store, but [freezer](), [baobab](), [immutable-js]() are also good alternatives.
+In this example we will use the [immutable-store](https://github.com/christianalfoni/immutable-store) project as a state store, but [freezer](https://github.com/arqex/freezer), [baobab](https://github.com/Yomguithereal/baobab), [immutable-js](https://github.com/facebook/immutable-js) are also good alternatives.
 
 *controller.js*
 ```js
