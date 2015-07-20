@@ -1,26 +1,31 @@
-import React from 'react/addons';
+import React from 'react';
 import Todo from './Todo.js';
-import Cerebral from './../../src/decorator.js';
+import StateComponent from './../StateComponent.js';
 
-@Cerebral(['isAllChecked', 'visibleTodos'])
-class TodosList extends React.Component {
+class TodosList extends StateComponent {
+  getStatePaths() {
+    return {
+      todos: ['visibleTodos'],
+      isAllChecked: ['isAllChecked'],
+      tod: ['todos']
+    };
+  }
   renderTodo(todo, index) {
     return <Todo key={index} index={index} todo={todo}/>
   }
 
   render() {
-    
     return (
       <section id="main">
-        <input 
-          id="toggle-all" 
-          type="checkbox" 
-          checked={this.props.isAllChecked}
+        <input
+          id="toggle-all"
+          type="checkbox"
+          checked={this.state.isAllChecked}
           onChange={this.signals.toggleAllChanged}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul id="todo-list">
-          {this.props.visibleTodos.map(this.renderTodo.bind(this))}
+          {this.state.todos.map(this.renderTodo.bind(this))}
         </ul>
       </section>
     );

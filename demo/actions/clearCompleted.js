@@ -1,13 +1,13 @@
-let clearCompleted = function (cerebral) {
+let clearCompleted = function (args, state) {
 
-  let todos = cerebral.get('todos');
+  let todos = state.get('todos');
 
   Object.keys(todos).forEach(function (key) {
     if (todos[key].completed && !todos[key].$isSaving) {
-      cerebral.unset('todos', key);
+      state.unset('todos', key);
     }
   });
-  
+
 };
 
 export default clearCompleted;

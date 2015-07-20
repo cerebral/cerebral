@@ -1,16 +1,17 @@
-let stopEditingTodo = function (cerebral, ref) {
+let stopEditingTodo = function (args, state) {
 
-  let todo = cerebral.get(['todos', ref]);
+  const path = ['todos', args.ref];
+  let todo = state.get(path);
 
   if (!todo.$newTitle) {
     return;
   }
 
-  cerebral.merge(todo, {
+  state.merge(path, {
     $isEditing: false,
     title: todo.$newTitle
   });
-  cerebral.unset(todo, '$newTitle');
+  state.unset(path, '$newTitle');
 };
 
 export default stopEditingTodo;

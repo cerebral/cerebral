@@ -1,9 +1,9 @@
-let setFilter = function(cerebral, route) {
+let setFilter = function(args, state) {
   let filter =
-    route.pathname.indexOf('/#/active') !== -1 ?
-    'active' : route.pathname.indexOf('/#/completed') !== -1 ?
+    args.pathname.indexOf('/#/active') !== -1 ?
+    'active' : args.pathname.indexOf('/#/completed') !== -1 ?
     'completed' : 'all';
-  cerebral.set('filter', filter);
+  state.set('filter', filter);
 };
 
 export default setFilter;

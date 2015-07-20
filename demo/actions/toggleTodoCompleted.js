@@ -1,6 +1,8 @@
-let toggleTodoCompleted = function(cerebral, ref) {
-  let todo = cerebral.get(['todos', ref]);
-  cerebral.set([todo, 'completed'], !todo.completed);
+let toggleTodoCompleted = function(args, state) {
+  console.log(args);
+  const path = ['todos', args.ref];
+  let todo = state.get(path);
+  state.set(path.concat('completed'), !todo.completed);
 };
 
 export default toggleTodoCompleted;

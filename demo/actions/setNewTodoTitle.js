@@ -1,5 +1,5 @@
-let setNewTodoTitle = function (cerebral, title) {
-  cerebral.set('newTodoTitle', title);
+let setNewTodoTitle = function (args, state) {
+  state.set('newTodoTitle', args.title);
 };
 
 export default setNewTodoTitle;

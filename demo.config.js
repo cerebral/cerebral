@@ -9,6 +9,11 @@ var config = {
     path: path.resolve(__dirname, 'demo'),
     filename: 'todomvc.js'
   },
+  resolve: {
+    alias: {
+      'cerebral': path.resolve(__dirname, 'src', 'index.js')
+    }
+  },
   module: {
     loaders: [{
       test: /\.css$/,

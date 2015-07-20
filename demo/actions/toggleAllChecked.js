@@ -1,14 +1,14 @@
-let toggleAllChecked = function(cerebral) {
+let toggleAllChecked = function(args, state) {
 
-    let isCompleted = !cerebral.get('isAllChecked');
-    let todos = cerebral.get('todos');
+    let isCompleted = !state.get('isAllChecked');
+    let todos = state.get('todos');
 
     Object.keys(todos).forEach(function (key) {
       let todo = todos[key];
-      cerebral.set([todo, 'completed'], isCompleted);
+      state.set(['todos', todo.ref, 'completed'], isCompleted);
     });
-    
-    cerebral.set('isAllChecked', isCompleted);
+
+    state.set('isAllChecked', isCompleted);
 };
 
 export default toggleAllChecked;
