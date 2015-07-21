@@ -24,7 +24,7 @@ module.exports = {
       store: signalStore,
       recorder: recorder,
       get: function () {
-        var path = typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0];
+        var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0];
         return options.onGet(path);
       }
     };
