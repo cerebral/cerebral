@@ -5,7 +5,6 @@ module.exports = function (signalStore, options) {
 
   var getDetail = function () {
     return {
-      state: options.onGet([]),
       props: {
         signals: signalStore.getSignals(),
         willKeepState: signalStore.willKeepState(),

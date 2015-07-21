@@ -19,7 +19,7 @@ A state controller with its own debugger
 - [How to create a custom Cerebral package](#how-to-create-a-custom-cerebral-package)
 
 ## What is Cerebral?
-To get a more complete introduction, [watch this video on Cerebral](). But to give you a quick overview, imagine your application in three parts. Your VIEW layer, your MODEL layer and smack in the middle, the CONTROLLER layer. The VIEW layer has historically had very few changes to its concept, though technically they have become a lot more effective.
+To get a more complete introduction, [watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA). But to give you a quick overview, imagine your application in three parts. Your VIEW layer, your MODEL layer and smack in the middle, the CONTROLLER layer. The VIEW layer has historically had very few changes to its concept, though technically they have become a lot more effective.
 
 If you are familiar with a Backbone View with a template or an Angular Controller/Directive with a template, that is pretty much how a VIEW works. The more recent React js VIEW (component) library is much the same concept in regards of being responsbile for rendering HTML based on STATE inside the VIEW, but it does it in a radically different way that is a lot faster.
 

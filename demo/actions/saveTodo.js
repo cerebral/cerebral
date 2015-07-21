@@ -3,7 +3,7 @@ let saveTodo = function (args, state, promise) {
   let todo = state.get('todos', args.ref);
 
   // Simulating posting the todo.data and get an ID from
-  // the server. We resolve with the new id and the ref
+  // the server. We resolve with the new id
   setTimeout(function () {
 
     promise.resolve({
