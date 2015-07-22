@@ -38,7 +38,7 @@ What makes Cerebral so special is the way it tracks signals and state mutations.
 The Cerebral Core API is "low level", but extremely flexible. You can check out a few packages here that will instantly get you started with some of your favorite development tools:
 
 - [cerebral-react-immutable-store](https://github.com/christianalfoni/cerebral-react-immutable-store)
-- cerebral-angular-immutable-store
+- [cerebral-angular-immutable-store](https://github.com/christianalfoni/cerebral-angular-immutable-store)
 - cerebral-react-baobab
 - cerebral-jquery-immutable-store
 - cerebral-react-immutable-js
