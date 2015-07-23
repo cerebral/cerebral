@@ -15,8 +15,15 @@ module.exports = function (signalStore, options) {
     };
   };
 
-  var update = function (name) {
-    var event = new CustomEvent(name || 'cerebral.dev.update', {
+  var update = utils.debounce(function () {
+    var event = new CustomEvent('cerebral.dev.update', {
+      detail: getDetail()
+    });
+    window.dispatchEvent(event);
+  }, 50);
+
+  var initialize = function () {
+    var event = new CustomEvent('cerebral.dev.initialized', {
       detail: getDetail()
     });
     window.dispatchEvent(event);
@@ -24,9 +31,9 @@ module.exports = function (signalStore, options) {
 
   window.addEventListener('cerebral.dev.initialize', function () {
     signalStore.remember(signalStore.getSignals().length - 1);
-    update('cerebral.dev.initialized');
+    initialize();
   });
-  update('cerebral.dev.initialized');
+  initialize();
 
   window.addEventListener('cerebral.dev.toggleKeepState', function () {
     signalStore.toggleKeepState();
