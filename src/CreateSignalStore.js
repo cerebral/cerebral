@@ -112,28 +112,38 @@ module.exports = function (signalMethods, options) {
         currentIndex = -1;
 
         // Go through signals
-        for (var x = 0; x <= index; x++) {
 
-          var signal = signals[x];
-          if (!signal) {
-            break;
+        try {
+
+          for (var x = 0; x <= index; x++) {
+
+            var signal = signals[x];
+            if (!signal) {
+              break;
+            }
+
+            // Trigger signal and then set what has become the current signal
+            var signalName = signal.name.split('.');
+            var signalMethodPath = signalMethods;
+            while (signalName.length) {
+              signalMethodPath = signalMethodPath[signalName.shift()];
+            }
+            signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
+            currentIndex = x;
+
           }
 
-          // Trigger signal and then set what has become the current signal
-          var signalName = signal.name.split('.');
-          var signalMethodPath = signalMethods;
-          while (signalName.length) {
-            signalMethodPath = signalMethodPath[signalName.shift()];
-          }
-          signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
-          currentIndex = x;
+          isRemembering = false;
+
+        } catch (e) {
+
+          isRemembering = false;
+          this.reset();
 
         }
 
       }
 
-      // Reset flags and emit event to set application in correct state
-      isRemembering = false;
       options.onUpdate && options.onUpdate();
 
     },
