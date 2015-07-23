@@ -1,3 +1,5 @@
+var utils = require('./utils.js');
+
 var createStateMutator = function (actions, options) {
 
   return function (hooks, key) {
@@ -25,9 +27,8 @@ var createStateMutator = function (actions, options) {
 
 module.exports = {
   sync: function (actions, signalArgs, options) {
-
     return [
-      signalArgs,
+      utils.merge(utils.merge({}, signalArgs), options.defaultArgs || {}),
       [
         'Get',
         'Set',
@@ -46,7 +47,7 @@ module.exports = {
   async: function (actions, signalArgs, options) {
 
     return [
-      signalArgs,
+      utils.merge(utils.merge({}, signalArgs), options.defaultArgs || {}),
       [
         'Get'
       ].reduce(createStateMutator(actions, options), {})

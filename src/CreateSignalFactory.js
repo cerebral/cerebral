@@ -23,7 +23,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
         // Accumulate the args in one object that will be passed
         // to each action
-        var signalArgs = utils.merge(payload || {}, options.defaultArgs || {});
+        var signalArgs = payload || {};
 
         // Describe the signal to later trigger as if it was live
         var signal = {

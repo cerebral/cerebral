@@ -40,6 +40,7 @@ module.exports = function (signalStore, options) {
 
   window.addEventListener('cerebral.dev.resetStore', function () {
     signalStore.reset();
+    options.onUpdate && options.onUpdate();
     update();
   });
 

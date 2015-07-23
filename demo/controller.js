@@ -34,6 +34,7 @@ let state = initialState;
 export default Controller({
   onReset: function () {
     state = initialState;
+    events.emit('change', state);
   },
   onSeek: function (seek, isPlaying, currentRecording) {
     state = state.import(currentRecording.initialState);

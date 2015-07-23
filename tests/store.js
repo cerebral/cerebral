@@ -19,12 +19,35 @@ exports['should store details about signal'] = function (test) {
   var state = {};
   var ctrl = Lib.Controller();
   ctrl.signal('test', function ActionA () {});
-  ctrl.signals.test(true);
+  ctrl.signals.test({
+    foo: true
+  });
   async(function () {
     var signal = ctrl.store.getSignals()[0];
     test.equal(signal.name, 'test');
     test.equal(signal.duration, 0);
-    test.equal(signal.payload, true);
+    test.deepEqual(signal.payload, {foo: true});
+    test.equal(signal.actions.length, 1);
+    test.done();
+  });
+};
+
+exports['should not store default args'] = function (test) {
+  var state = {};
+  var ctrl = Lib.Controller({
+    defaultArgs: {
+      utils: 'test'
+    }
+  });
+  ctrl.signal('test', function ActionA () {});
+  ctrl.signals.test({
+    foo: true
+  });
+  async(function () {
+    var signal = ctrl.store.getSignals()[0];
+    test.equal(signal.name, 'test');
+    test.equal(signal.duration, 0);
+    test.deepEqual(signal.payload, {foo: true});
     test.equal(signal.actions.length, 1);
     test.done();
   });
@@ -34,7 +57,9 @@ exports['should store details about actions'] = function (test) {
   var state = {};
   var ctrl = Lib.Controller();
   ctrl.signal('test', function ActionA () {});
-  ctrl.signals.test(true);
+  ctrl.signals.test({
+    foo: true
+  });
   async(function () {
     var action = ctrl.store.getSignals()[0].actions[0];
     test.equal(action.name, 'ActionA');
