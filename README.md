@@ -105,6 +105,12 @@ controller.signals.formSubmitted({
   formData: {foo: 'bar'}
 });
 ```
+Signals are batched up and run with "requestAnimationFrame", but you can force it to run synchronously by passing `true` as the first argument. This ensure that inputs and textareas updates correctly.
+```js
+controller.signals.inputChanged(true, {
+  value: event.target.value
+});
+```
 
 ### Get initial state
 When running the application you need to grab the initial state of the application. You can do this with the exposed "get" method.

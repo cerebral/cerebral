@@ -15,9 +15,13 @@ module.exports = function (signalStore, recorder, devtools, options) {
     var signalName = args.shift();
     var actions = args;
 
-    return function (payload, asyncActionResults) {
+    return function () {
 
       var executionArray = actions.slice();
+      var hasSyncArg = arguments[0] === true;
+      var runSync = hasSyncArg;
+      var payload = hasSyncArg ? arguments[1] : arguments[0]
+      var asyncActionResults = hasSyncArg ? arguments[2] : arguments[1];
 
       var runSignal = function () {
 
@@ -161,7 +165,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
       };
 
-      if (signalStore.isRemembering() || recorder.isCatchingUp()) {
+      if (runSync || signalStore.isRemembering() || recorder.isCatchingUp()) {
         runSignal();
       } else {
 

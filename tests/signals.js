@@ -150,3 +150,14 @@ exports['should allow for default args'] = function (test) {
   });
   ctrl.signals.test();
 };
+
+exports['should trigger signal synchronously when passing true as first argument'] = function (test) {
+  var ctrl = Lib.Controller();
+  var hasRun = false;
+  ctrl.signal('test', function () {
+    hasRun = true;
+  });
+  ctrl.signals.test(true);
+  test.ok(hasRun);
+  test.done();
+};
