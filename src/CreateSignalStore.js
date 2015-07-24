@@ -144,7 +144,7 @@ module.exports = function (signalMethods, options) {
 
       }
 
-      options.onUpdate && options.onUpdate();
+      options.onRemember && options.onRemember();
 
     },
 

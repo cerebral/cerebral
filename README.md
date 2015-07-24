@@ -239,6 +239,13 @@ module.exports = function (state, defaultArgs) {
       events.emit('change', state);
     },
 
+    // When the debugger has traversed time we can choose to handle
+    // this differently, but in this case we just update the UI the same
+    // way as the onUpdate
+    onRemember: function () {
+      events.emit('change', state);    
+    },
+
     // If the user wants to use the recorder the initial state of the
     // recording needs to be set and an event is emitted to indicate
     // the new state
