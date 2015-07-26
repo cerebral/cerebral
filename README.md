@@ -46,31 +46,12 @@ The Cerebral Core API is "low level", but extremely flexible. You can check out 
 ## How to use Cerebral with an existing package
 
 ### Instantiate a Controller
-```js
-import Controller from 'cerebral-some-package';
-
-// Define a single object representing all the base state
-// of your application
-const state = {
-  foo: 'bar'
-};
-
-// Define an optional object with utils etc. you want to
-// pass into each action. Typically ajax libs etc.
-const defaultArgs = {
-  foo: 'bar'
-};
-
-// Instantiate the controller
-const controller = Controller(state, defaultArgs);
-```
+This depends on the package. Please read the README of the selected package.
 
 ### Creating actions and signals
 Actions is where it all happens. This is where you define mutations to your application state based on information sent from the VIEW layer. Actions are pure functions that can run synchronously and asynchronously. They are easily reused across signals and can easily be tested.
 
 ```js
-const controller = Controller(state, defaultArgs);
-
 // Define an action with a function. It receives two arguments when run
 // synchronously
 const setLoading = function setLoading (args, state) {
