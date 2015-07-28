@@ -23,7 +23,7 @@ A state controller with its own debugger
 ## What is Cerebral?
 To get a more complete introduction, [watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA). But to give you a quick overview, imagine your application in three parts. Your VIEW layer, your MODEL layer and smack in the middle, the CONTROLLER layer. The VIEW layer has historically had very few changes to its concept, though technically they have become a lot more effective.
 
-If you are familiar with a Backbone View with a template or an Angular Controller/Directive with a template, that is pretty much how a VIEW works. The more recent React js VIEW (component) library is much the same concept in regards of being responsbile for rendering HTML based on STATE inside the VIEW, but it does it in a radically different way that is a lot faster.
+If you are familiar with a Backbone View with a template or an Angular Controller/Directive with a template, that is pretty much how a VIEW works. The more recent React js VIEW (component) library is much the same concept in regards of being responsible for rendering HTML based on STATE inside the VIEW, but it does it in a radically different way that is a lot faster.
 
 The traditional MODEL layer of your app, like Backbone Model or Angular Resource, are wrappers for your database entities. To make it easier to communicate changes back and forth to the server. This has changed radically the last year. Instead of thinking the MODEL layer as wrapped objects that allows for easier communication, it is now just one big plain object containing any data/state your application needs, it being a database entity or just some state indicating that your application is loading, show a modal etc.
 
@@ -76,7 +76,7 @@ const saveForm = function saveForm (args, state, promise) {
 };
 
 // The saveForm action runs async because it is in an array. You can have multiple
-// actions in one array that runs async in parallell.
+// actions in one array that runs async in parallel.
 controller.signal('formSubmitted', setLoading, [saveForm], unsetLoading);
 ```
 
