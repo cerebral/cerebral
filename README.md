@@ -6,18 +6,7 @@ A state controller with its own debugger
 <img src="images/logo.jpg" width="300" align="center">
 
 - [What is Cerebral?](#what-is-cerebral)
-- [Grab the Chrome Debugger](#grab-the-chrome-debugger)
 - [How to get started](#how-to-get-started)
-- [How to use Cerebral with an existing package](#how-to-use-cerebral-with-an-existing-package)
-  - [Instantiate a controller](#instantiate-a-controller)
-  - [Creating actions and signals](#creating-actions-and-signals)
-  - [Trigger a signal](#trigger-a-signal)
-  - [Get initial state](#get-initial-state)
-  - [Get state updates](#get-state-updates)
-  - [Mutations](#mutations)
-  - [Get state in actions](#get-state-in-actions)
-  - [Async actions](#async-actions)
-  - [Recording](#recording)
 - [How to create a custom Cerebral package](#how-to-create-a-custom-cerebral-package)
 
 ## What is Cerebral?
@@ -32,9 +21,6 @@ The CONTROLLER layer is the most loosely defined concept on the frontend. On the
 With Cerebral the CONTROLLER layer of your application has nothing to do with the router. Routing is just state changes, like anything else. Instead the CONTROLLER is responsible to move a request from the UI, called a signal, through middlewares, called actions, to make changes to the state of the application. When a signal is done running it can respond to the UI that it needs to update, most commonly with an even, passing the new state of the application.
 
 What makes Cerebral so special is the way it tracks signals and state mutations. It does not matter what you VIEW layer or MODEL layer is, you hook them on to the CONTROLLER on each side and off you go. The Chrome Debugger will help you analyze and control the state flow as you develop the app. This is a very powerful concept that makes it very easy to scale, reuse code and reduce development time.
-
-## Grab the Chrome debugger
-
 
 ## How to get started
 
@@ -51,7 +37,7 @@ The Cerebral Core API is "low level", but extremely flexible. If you do not have
 - cerebral-react-immutable-js
 
 ### 3. Signals and actions
-Depending on the package you choose you instantiate and create signals differently. Please continue with the README of the specific package you chose
+Depending on the package you choose you instantiate and create signals differently. Please continue with the README of the specific package you choose
 
 ## How to create a custom Cerebral package
 If the current packages does not meet your needs you are free to create your own package with its own VIEW and MODEL layer. To define a Controller you need somewhere to store the state. You can use whatever you want in this regard, but to gain the full power of the developer tools the state store should be immutable. This specifically allows you to move back and forth in time in the debugger and you will gain benefits in rendering optimization.
