@@ -37,6 +37,9 @@ exports['should play back recording'] = function (test) {
   var initialState = {};
   var state = initialState;
   var ctrl = Lib.Controller({
+    onGetRecordingState: function () {
+      return state;
+    },
     onSeek: function (seek, startPlaying, currentRecording) {
       state = currentRecording.initialState;
     },
@@ -77,6 +80,9 @@ exports['should seek to specific point in recording'] = function (test) {
   var initialState = {};
   var state = initialState;
   var ctrl = Lib.Controller({
+    onGetRecordingState: function () {
+      return state;
+    },
     onSeek: function (seek, startPlaying, currentRecording) {
       state = currentRecording.initialState;
     },
@@ -112,6 +118,9 @@ exports['should pause a playback'] = function (test) {
   var initialState = {};
   var state = initialState;
   var ctrl = Lib.Controller({
+    onGetRecordingState: function () {
+      return state;
+    },
     onSeek: function (seek, startPlaying, currentRecording) {
       state = currentRecording.initialState;
     },
@@ -159,6 +168,9 @@ exports['should resume a paused playback'] = function (test) {
   var initialState = {};
   var state = initialState;
   var ctrl = Lib.Controller({
+    onGetRecordingState: function () {
+      return state;
+    },
     onSeek: function (seek, startPlaying, currentRecording) {
       state = currentRecording.initialState;
     },

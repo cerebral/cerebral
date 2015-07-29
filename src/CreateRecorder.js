@@ -85,7 +85,7 @@ module.exports = function (signalStore, signalMethods, options) {
       options.onRecorderReset && options.onRecorderReset(currentRecording.initialState);
     },
 
-    record: function (initialState, meta) {
+    record: function () {
 
       if (signalStore.isRemembering()) {
         return;
@@ -98,10 +98,9 @@ module.exports = function (signalStore, signalMethods, options) {
       }
 
       currentRecording = {
-        initialState: initialState,
+        initialState: options.onGetRecordingState && options.onGetRecordingState(),
         start: Date.now(),
-        signals: [],
-        meta: meta
+        signals: []
       };
 
       isRecording = true;

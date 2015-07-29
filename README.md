@@ -7,7 +7,7 @@ A state controller with its own debugger
 
 - [What is Cerebral?](#what-is-cerebral)
 - [Grab the Chrome Debugger](#grab-the-chrome-debugger)
-- [Cerebral packages](#cerebral-packages)
+- [How to get started](#how-to-get-started)
 - [How to use Cerebral with an existing package](#how-to-use-cerebral-with-an-existing-package)
   - [Instantiate a controller](#instantiate-a-controller)
   - [Creating actions and signals](#creating-actions-and-signals)
@@ -34,10 +34,15 @@ With Cerebral the CONTROLLER layer of your application has nothing to do with th
 What makes Cerebral so special is the way it tracks signals and state mutations. It does not matter what you VIEW layer or MODEL layer is, you hook them on to the CONTROLLER on each side and off you go. The Chrome Debugger will help you analyze and control the state flow as you develop the app. This is a very powerful concept that makes it very easy to scale, reuse code and reduce development time.
 
 ## Grab the Chrome debugger
-[Cerebral Debugger](https://chrome.google.com/webstore/detail/cerebral-debugger/ddefoknoniaeoikpgneklcbjlipfedbb)
 
-## Cerebral packages
-The Cerebral Core API is "low level", but extremely flexible. You can check out a few packages here that will instantly get you started with some of your favorite development tools:
+
+## How to get started
+
+### 1. Install debugger
+Install the [Chrome Cerebral Debugger](https://chrome.google.com/webstore/detail/cerebral-debugger/ddefoknoniaeoikpgneklcbjlipfedbb)
+
+### 2. Choose a package
+The Cerebral Core API is "low level", but extremely flexible. If you do not have any specific needs in regards of VIEW or MODEL layer, you can choose one of the preset packages that will get you quickly up and running:
 
 - [cerebral-react-immutable-store](https://github.com/christianalfoni/cerebral-react-immutable-store)
 - [cerebral-angular-immutable-store](https://github.com/christianalfoni/cerebral-angular-immutable-store)
@@ -45,139 +50,11 @@ The Cerebral Core API is "low level", but extremely flexible. You can check out 
 - cerebral-jquery-immutable-store
 - cerebral-react-immutable-js
 
-## How to use Cerebral with an existing package
-
-### Instantiate a Controller
-This depends on the package. Please read the README of the selected package.
-
-### Creating actions and signals
-Actions is where it all happens. This is where you define mutations to your application state based on information sent from the VIEW layer. Actions are pure functions that can run synchronously and asynchronously. They are easily reused across signals and can easily be tested.
-
-```js
-// Define an action with a function. It receives two arguments when run
-// synchronously
-const setLoading = function setLoading (args, state) {
-  state.set('isLoading', true);
-};
-
-// There are many types of mutations you can do, "set" is just one of them
-const unsetLoading = function unsetLoading (args, state) {
-  state.set('isLoading', false);
-};
-
-// When an action is run asynchronously it receives a third argument,
-// a promise you can either resolve or reject. In this example we
-// are using an ajax util we passed as a default argument and an argument
-// we passed when the signal was triggered
-const saveForm = function saveForm (args, state, promise) {
-  args.utils.ajax.post('/form', args.formData, function (err, response) {
-    promise.resolve();
-  });
-};
-
-// The saveForm action runs async because it is in an array. You can have multiple
-// actions in one array that runs async in parallel.
-controller.signal('formSubmitted', setLoading, [saveForm], unsetLoading);
-```
-
-### Trigger a signal
-Depending on the package being used the controller needs to be exposed to the VIEW layer. This allows you to trigger a signal.
-
-```js
-controller.signals.formSubmitted({
-  formData: {foo: 'bar'}
-});
-```
-Signals are batched up and run with "requestAnimationFrame", but you can force it to run synchronously by passing `true` as the first argument. This ensure that inputs and textareas updates correctly.
-```js
-controller.signals.inputChanged(true, {
-  value: event.target.value
-});
-```
-
-### Get initial state
-When running the application you need to grab the initial state of the application. You can do this with the exposed "get" method.
-
-```js
-const state = controller.get(); // Returns all state
-state.isLoading // false
-```
-
-### Get state updates
-Depending on the package you are using you will get state updates. This might for example be an event triggered on the controller.
-
-```js
-controller.on('update', function (state) {
-  state.isLoading // false
-});
-```
-
-### Mutations
-You can do any traditional mutation to the state, the signature is just a bit different. You call the kind of mutation first, then the path and then an optional value. The path can either be a string or an array for nested paths.
-```js
-const someAction = function someAction (args, state) {
-  state.set('isLoading', false);
-  state.unset('isLoading');
-  state.merge('user', {name: 'foo'});
-  state.push('list', 'foo');
-  state.unshift('list', 'bar');
-  state.pop('list');
-  state.shift('list');
-  state.concat('list', [1, 2, 3]);
-  state.splice('list', 1, 1, [1]);
-
-  state.push(['admin', 'users'], {foo: 'bar'});
-
-};
-```
-
-### Get state in actions
-```js
-const someAction = function someAction (args, state) {
-  const isLoading = state.get('isLoading');
-};
-```
-
-### Async actions
-```js
-const someAction = function someAction (args, state, promise) {
-  args.utils.ajax('/foo', function (err, result) {
-    if (err) {
-      promise.reject({error: err});
-    } else {
-      promise.resolve({result: result});
-    }
-  })
-};
-```
-You can optionally redirect resolved and rejected async actions to different actions by inserting an object as the last entry in the async array definition.
-```js
-controller.signal('formSubmitted',
-  setLoading,
-  [saveForm, {
-    resolve: [closeModal],
-    reject: [setFormError]
-  }],
-  unsetLoading
-);
-```
-
-### Recording
-With the Cerebral controller you can record and replay state changes.
-```js
-// Start recording by passing the initial state of the recording
-controller.recorder.record(controller.get());
-
-// Stop recording
-controller.recorder.stop();
-
-// Seek to specific time and optionally start playback
-controller.recorder.seek(0, true);
-```
+### 3. Signals and actions
+Depending on the package you choose you instantiate and create signals differently. Please continue with the README of the specific package you chose
 
 ## How to create a custom Cerebral package
-
-To define a Controller you need somewhere to store the state. You can use whatever you want in this regard, but to gain the full power of the developer tools the state store should be immutable. This specifically allows you to move back and forth in time in the debugger and you will gain benefits in rendering optimization.
+If the current packages does not meet your needs you are free to create your own package with its own VIEW and MODEL layer. To define a Controller you need somewhere to store the state. You can use whatever you want in this regard, but to gain the full power of the developer tools the state store should be immutable. This specifically allows you to move back and forth in time in the debugger and you will gain benefits in rendering optimization.
 
 In this example we will use the [immutable-store](https://github.com/christianalfoni/immutable-store) project as a state store, but [freezer](https://github.com/arqex/freezer), [baobab](https://github.com/Yomguithereal/baobab), [immutable-js](https://github.com/facebook/immutable-js) are also good alternatives.
 
@@ -226,7 +103,7 @@ module.exports = function (state, defaultArgs) {
     // this differently, but in this case we just update the UI the same
     // way as the onUpdate
     onRemember: function () {
-      events.emit('change', state);    
+      events.emit('change', state);
     },
 
     // If the user wants to use the recorder the initial state of the
