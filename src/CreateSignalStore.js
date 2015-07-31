@@ -20,7 +20,7 @@ module.exports = function (signalMethods, options) {
     false :
     utils.hasLocalStorage() && localStorage.getItem('cerebral_willKeepState') ?
     JSON.parse(localStorage.getItem('cerebral_willKeepState')) :
-    false
+    true
   );
 
   var executingAsyncActionsCount = 0;

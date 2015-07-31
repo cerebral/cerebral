@@ -1,12 +1,6 @@
 var utils = require('./utils.js');
 
 module.exports = function (signalStore, options) {
-
-  // If not running in browser
-  if (typeof window === 'undefined') {
-    return;
-  }
-
   var getDetail = function () {
     return {
       props: {
@@ -41,11 +35,6 @@ module.exports = function (signalStore, options) {
 
   window.addEventListener('cerebral.dev.toggleKeepState', function () {
     signalStore.toggleKeepState();
-    update();
-  });
-
-  window.addEventListener('cerebral.dev.toggleStoreState', function () {
-    signalStore.toggleStoreState();
     update();
   });
 
