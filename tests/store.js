@@ -3,14 +3,14 @@ var async = function (cb) {
   setTimeout(cb, 0);
 };
 
-exports['should only store latest signal by default'] = function (test) {
+exports['should keep signals by default'] = function (test) {
   var state = {};
   var ctrl = Lib.Controller();
   ctrl.signal('test', function () {});
   ctrl.signals.test();
   ctrl.signals.test();
   async(function () {
-    test.equals(ctrl.store.getSignals().length, 1);
+    test.equals(ctrl.store.getSignals().length, 2);
     test.done();
   });
 };
@@ -92,7 +92,6 @@ exports['should store details about mutations'] = function (test) {
 exports['should store details about mutations correctly across sync and async signals'] = function (test) {
   var state = {};
   var ctrl = Lib.Controller();
-  ctrl.store.toggleKeepState();
   ctrl.signal('test', function ActionA (args, state) {
     state.set('foo', 'bar');
   });
@@ -143,6 +142,7 @@ exports['should indicate when async actions are running'] = function (test) {
       count++;
     }
   });
+  ctrl.store.toggleKeepState();
   ctrl.signal('test', [function (args, state, promise) {
     promise.resolve();
   }]);
@@ -170,7 +170,6 @@ exports['should be able to remember previous signal'] = function (test) {
       state[key] = value;
     }
   });
-  ctrl.store.toggleKeepState();
   ctrl.signal('test', function (args, state) {
     state.set('foo', args.foo);
   });
@@ -209,7 +208,6 @@ exports['should be able to remember async actions and run them synchronously whe
       }
     }
   });
-  ctrl.store.toggleKeepState();
   ctrl.signal('test', [function ActionA (args, state, promise) {
     promise.resolve({
       result: args.foo
