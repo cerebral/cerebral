@@ -5,7 +5,7 @@ let toggleAllChecked = function(args, state) {
 
     Object.keys(todos).forEach(function (key) {
       let todo = todos[key];
-      state.set(['todos', todo.ref, 'completed'], isCompleted);
+      state.set(['todos', todo.$ref, 'completed'], isCompleted);
     });
 
     state.set('isAllChecked', isCompleted);

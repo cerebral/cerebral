@@ -5,7 +5,9 @@ import './styles.css';
 import React from 'react';
 import App from './App.js';
 import controller from './controller.js';
-import Page from 'page';
+import ReactiveRouter from 'reactive-router';
+
+// ACTIONS
 import addTodo from './actions/addTodo.js';
 import removeTodo from './actions/removeTodo.js';
 import toggleTodoCompleted from './actions/toggleTodoCompleted.js';
@@ -21,6 +23,7 @@ import clearCompleted from './actions/clearCompleted.js';
 import editTodo from './actions/editTodo.js';
 import setTodoNewTitle from './actions/setTodoNewTitle.js';
 import stopEditingTodo from './actions/stopEditingTodo.js';
+import setUrl from './actions/setUrl.js';
 
 // SIGNALS
 
@@ -29,33 +32,26 @@ controller.signal('newTodoSubmitted', addTodo, setVisibleTodos, setAllChecked, s
 controller.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleAllChanged', toggleAllChecked, setVisibleTodos, setCounters);
-controller.signal('routeChanged', setFilter, setVisibleTodos);
+controller.signal('routeChanged', setUrl, setFilter, setVisibleTodos);
 controller.signal('clearCompletedClicked', clearCompleted, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('todoDoubleClicked', editTodo);
 controller.signal('newTitleChanged', setTodoNewTitle);
 controller.signal('newTitleSubmitted', stopEditingTodo);
 
 // RENDER
-const Wrapper = React.createClass({
-  childContextTypes: {
-    controller: React.PropTypes.object
-  },
-  getChildContext() {
-    return {
-      controller: controller
-    }
-  },
-  render() {
-    return <App/>;
-  }
-});
-React.render(<Wrapper/>, document.querySelector('#app'));
+React.render(controller.injectInto(App), document.querySelector('#app'));
 
 // ROUTER
-Page.base(location.pathname.substr(0, location.pathname.length - 1));
+const router = ReactiveRouter({
+  '/': controller.signals.routeChanged,
+  '/active': controller.signals.routeChanged,
+  '/completed': controller.signals.routeChanged
+});
 
-Page('/', controller.signals.routeChanged);
-Page('/active', controller.signals.routeChanged);
-Page('/completed', controller.signals.routeChanged);
+controller.eventEmitter.on('change', function (state) {
+  router.set(state.url);
+});
 
-Page.start();
+controller.eventEmitter.on('remember', function (state) {
+  router.setSilent(state.url);
+});

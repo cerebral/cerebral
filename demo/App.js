@@ -1,47 +1,45 @@
 import React from 'react';
-import StateComponent from './StateComponent.js';
+import {Decorator as Cerebral} from './CustomController.js';
 import AddTodo from './components/AddTodo.js';
 import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
 
-class App extends StateComponent {
-  getStatePaths() {
-    return {
-      visibleTodos: ['visibleTodos'],
-      todos: ['todos']
-    };
-  }
+@Cerebral({
+  visibleTodos: ['visibleTodos'],
+  todos: ['todos']
+})
+class App extends React.Component {
   record() {
-    this.recorder.record(this.context.controller.get([]).export());
+    this.props.recorder.record(this.props.get().export());
   }
   stop() {
-    this.recorder.stop();
+    this.props.recorder.stop();
   }
   play() {
-    this.recorder.seek(0, true);
+    this.props.recorder.seek(0, true);
   }
   render() {
     return (
       <div id="todoapp-wrapper">
         <div>
           {
-            this.recorder.isRecording() ?
-            <button className="btn btn-stop" onClick={this.stop.bind(this)}>Stop</button> :
+            this.props.recorder.isRecording() ?
+            <button className="btn btn-stop" onClick={() => this.stop()}>Stop</button> :
             null
           }
           {
-            this.recorder.isPlaying() ?
+            this.props.recorder.isPlaying() ?
             <button className="btn btn-play" disabled>Play</button> :
             null
           }
           {
-            !this.recorder.isRecording() && !this.recorder.isPlaying() && this.recorder.getRecording() ?
-            <button className="btn btn-play" onClick={this.play.bind(this)}>Play</button> :
+            !this.props.recorder.isRecording() && !this.props.recorder.isPlaying() && this.props.recorder.getRecording() ?
+            <button className="btn btn-play" onClick={() => this.play()}>Play</button> :
             null
           }
           {
-            !this.recorder.isRecording() && !this.recorder.isPlaying() && !this.recorder.getRecording() ?
-            <button className="btn btn-record" onClick={this.record.bind(this)}>Record</button> :
+            !this.props.recorder.isRecording() && !this.props.recorder.isPlaying() && !this.props.recorder.getRecording() ?
+            <button className="btn btn-record" onClick={() => this.record()}>Record</button> :
             null
           }
         </div>
@@ -51,8 +49,8 @@ class App extends StateComponent {
             <AddTodo/>
           </header>
 
-          {this.state.visibleTodos.length ? <TodosList/> : null}
-          {Object.keys(this.state.todos).length ? <TodosFooter/> : null}
+          {this.props.visibleTodos.length ? <TodosList/> : null}
+          {Object.keys(this.props.todos).length ? <TodosFooter/> : null}
         </section>
         <footer id="info">
           <p>Double-click to edit a todo</p>

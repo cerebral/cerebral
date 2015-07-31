@@ -1,34 +1,32 @@
 import React from 'react';
-import StateComponent from './../StateComponent.js';
+import {Decorator as Cerebral} from './../CustomController.js';
 
-class AddTodo extends StateComponent {
-  getStatePaths() {
-    return {
-      isSaving: ['isSaving'],
-      newTodoTitle: ['newTodoTitle']
-    };
-  }
-  addTodo(event) {
+@Cerebral({
+  isSaving: ['isSaving'],
+  newTodoTitle: ['newTodoTitle']
+})
+class AddTodo extends React.Component {
+  onFormSubmit(event) {
     event.preventDefault();
-    this.signals.newTodoSubmitted();
+    this.props.signals.newTodoSubmitted();
   }
 
-  setNewTodoTitle(event) {
-    this.signals.newTodoTitleChanged({
+  onNewTodoTitleChange(event) {
+    this.props.signals.newTodoTitleChanged({
       title: event.target.value
     });
   }
 
   render() {
     return (
-      <form id="todo-form" onSubmit={this.addTodo.bind(this)}>
+      <form id="todo-form" onSubmit={(e) => this.onFormSubmit(e)}>
         <input
           id="new-todo"
           autoComplete="off"
           placeholder="What needs to be done?"
-          disabled={this.state.isSaving}
-          value={this.state.newTodoTitle}
-          onChange={this.setNewTodoTitle.bind(this)}
+          disabled={this.props.isSaving}
+          value={this.props.newTodoTitle}
+          onChange={(e) => this.onNewTodoTitleChange(e)}
         />
       </form>
     );

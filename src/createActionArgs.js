@@ -12,10 +12,11 @@ var createStateMutator = function (actions, options) {
         // args can be (path, value), ([path], value), (value)
         var path = arguments.length === 1 ? [] : typeof arguments[0] === 'string' ? [arguments[0]] : arguments[0];
         var args = arguments.length === 1 ? [].slice.call(arguments) : [].slice.call(arguments).splice(1);
+        var name = key.toLowerCase();
         actions[actions.length - 1].mutations.push({
-          name: key.toLowerCase(),
-          path: path.slice(),
-          args: args
+          name: name,
+          path: name === 'unset' ? path.concat(args).slice() : path.slice(),
+          args: name === 'unset' ? [] : args
         });
         return options['on' + key] && options['on' + key].apply(null, [path].concat(args));
       }

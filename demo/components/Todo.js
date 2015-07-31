@@ -1,16 +1,16 @@
 import React from 'react';
 import classNames from 'classnames';
-import StateComponent from './../StateComponent.js';
+import {Decorator as Cerebral} from './../CustomController.js';
 
-class Todo extends StateComponent {
-
+@Cerebral()
+class Todo extends React.Component {
   edit() {
 
     if (this.props.todo.$isSaving) {
       return;
     }
 
-    this.signals.todoDoubleClicked({
+    this.props.signals.todoDoubleClicked({
       ref: this.props.todo.$ref
     });
 
@@ -20,20 +20,33 @@ class Todo extends StateComponent {
       input.focus();
       input.value = input.value;
     }, 0);
-  }
 
-  onNewTitleChanged(event) {
-    this.signals.newTitleChanged({
+  }
+  onNewTitleChange(event) {
+    this.props.signals.newTitleChanged({
       ref: this.props.todo.$ref,
       title: event.target.value
     });
   }
-
-  onNewTitleSubmitted(event) {
+  onNewTitleSubmit(event) {
     event.preventDefault();
     this.refs.edit.getDOMNode().blur();
   }
-
+  onCompletedToggle() {
+    this.props.signals.toggleCompletedChanged({
+      ref: this.props.todo.$ref
+    });
+  }
+  onRemoveClick() {
+    this.props.signals.removeTodoClicked({
+      ref: this.props.todo.$ref
+    });
+  }
+  onNewTitleBlur() {
+    this.props.signals.newTitleSubmitted({
+      ref: this.props.todo.$ref
+    });
+  }
   render() {
 
     var className = classNames({
@@ -51,10 +64,10 @@ class Todo extends StateComponent {
               className="toggle"
               type="checkbox"
               disabled={this.props.todo.$isSaving}
-              onChange={this.signals.toggleCompletedChanged.bind(null, {ref: this.props.todo.$ref})}
+              onChange={() => this.onCompletedToggle()}
               checked={this.props.todo.completed}/>
           }
-          <label onDoubleClick={this.edit.bind(this)}>
+          <label onDoubleClick={() => this.edit()}>
             {this.props.todo.title} {this.props.todo.$isSaving ?
               <small>(saving)</small> :
               null
@@ -65,20 +78,16 @@ class Todo extends StateComponent {
             null :
             <button
               className="destroy"
-              onClick={this.signals.removeTodoClicked.bind(null, {
-                ref: this.props.todo.$ref
-              })}/>
+              onClick={() => this.onRemoveClick()}/>
           }
         </div>
-        <form onSubmit={this.onNewTitleSubmitted.bind(this)}>
+        <form onSubmit={(e) => this.onNewTitleSubmit(e)}>
           <input
             ref="edit"
             className="edit"
             value={this.props.todo.$newTitle || this.props.todo.title}
-            onBlur={this.signals.newTitleSubmitted.bind(null, {
-              ref: this.props.todo.$ref
-            })}
-            onChange={this.onNewTitleChanged.bind(this)}
+            onBlur={() => this.onNewTitleBlur()}
+            onChange={(e) => this.onNewTitleChange(e)}
           />
         </form>
       </li>
