@@ -2,6 +2,10 @@ var utils = require('./utils.js');
 
 module.exports = function (signalStore, options) {
 
+  // If not running in browser
+  if (typeof window === 'undefined') {
+    return;
+  }
 
   var getDetail = function () {
     return {
