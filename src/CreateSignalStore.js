@@ -16,7 +16,7 @@ module.exports = function (signalMethods, options) {
 
   // Indicates if signals should be stored or replaced. Grabs from localStorage if available
   var willKeepState = (
-    process.env.NODE_ENV === 'production' ?
+    typeof process !== 'undefined' && process.env.NODE_ENV === 'production' ?
     false :
     utils.hasLocalStorage() && localStorage.getItem('cerebral_willKeepState') ?
     JSON.parse(localStorage.getItem('cerebral_willKeepState')) :
