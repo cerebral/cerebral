@@ -11,7 +11,7 @@ module.exports = {
     var signals = {};
     var devtools = null;
     var signalStore = CreateSignalStore(signals, options);
-    if (typeof window !== 'undefined') {
+    if (typeof window !== 'undefined' && typeof window.addEventListener !== 'undefined') {
       devtools = Devtools(signalStore, options);
     }
     var recorder = CreateRecorder(signalStore, signals, options);
