@@ -9,9 +9,10 @@ module.exports = {
     options = options || {};
 
     var signals = {};
+    var devtools = null;
     var signalStore = CreateSignalStore(signals, options);
     if (typeof window !== 'undefined') {
-      var devtools = Devtools(signalStore, options);
+      devtools = Devtools(signalStore, options);
     }
     var recorder = CreateRecorder(signalStore, signals, options);
     var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, options);
