@@ -33,7 +33,7 @@ The Cerebral Core API is "low level", but extremely flexible. If you do not have
 - [cerebral-react-immutable-store](https://github.com/christianalfoni/cerebral-react-immutable-store) - [Video introduction](https://www.youtube.com/watch?v=QG181MnRIXM)
 - [cerebral-react-native-immutable-store](https://github.com/christianalfoni/cerebral-react-native-immutable-store)
 - [cerebral-angular-immutable-store](https://github.com/christianalfoni/cerebral-angular-immutable-store) - [Video introduction](https://www.youtube.com/watch?v=YVmgLReFjLw)
-- cerebral-react-baobab
+- [cerebral-react-baobab](https://github.com/christianalfoni/cerebral-react-baobab)
 - cerebral-jquery-immutable-store
 - cerebral-react-immutable-js
 
