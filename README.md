@@ -12,8 +12,8 @@ A state controller with its own debugger
 ## What is Cerebral?
 To get an understanding of Cerebral I suggest you choose your preferred media:
 
-- [watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA)
-- [read this article on why you might need Cerebral](http://www.christianalfoni.com/articles/2015_08_02_Why-we-are-doing-MVC-and-FLUX-wrong)
+- [Watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA)
+- [Read this article on why you might need Cerebral](http://www.christianalfoni.com/articles/2015_08_02_Why-we-are-doing-MVC-and-FLUX-wrong)
 - [Check out a demo using the debugger](http://www.christianalfoni.com/todomvc)
 
 ## How to get started
