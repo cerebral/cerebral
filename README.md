@@ -10,18 +10,12 @@ A state controller with its own debugger
 - [How to create a custom Cerebral package](#how-to-create-a-custom-cerebral-package)
 
 ## What is Cerebral?
-To get a more complete introduction, [watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA). But to give you a quick overview, imagine your application in three parts. Your VIEW layer, your MODEL layer and smack in the middle, the CONTROLLER layer. The VIEW layer has historically had very few changes to its concept, though technically they have become a lot more effective.
+To get an understanding of Cerebral I suggest you choose your preferred media:
 
-If you are familiar with a Backbone View with a template or an Angular Controller/Directive with a template, that is pretty much how a VIEW works. The more recent React js VIEW (component) library is much the same concept in regards of being responsible for rendering HTML based on STATE inside the VIEW, but it does it in a radically different way that is a lot faster.
-
-The traditional MODEL layer of your app, like Backbone Model or Angular Resource, are wrappers for your database entities. To make it easier to communicate changes back and forth to the server. This has changed radically the last year. Instead of thinking the MODEL layer as wrapped objects that allows for easier communication, it is now just one big plain object containing any data/state your application needs, it being a database entity or just some state indicating that your application is loading, show a modal etc.
-
-The CONTROLLER layer is the most loosely defined concept on the frontend. On the backend the CONTROLLER in MVC starts with your router. It is what receives a request from the client and moves it through middleware which often communicates with the MODEL layer to create a response. Since we also have a concept of a router on the frontend I believe it has been a bit confusing how all of this should fit together.
-
-With Cerebral the CONTROLLER layer of your application has nothing to do with the router. Routing is just state changes, like anything else. Instead the CONTROLLER is responsible to move a request from the UI, called a signal, through middlewares, called actions, to make changes to the state of the application. When a signal is done running it can respond to the UI that it needs to update, most commonly with an even, passing the new state of the application.
-
-What makes Cerebral so special is the way it tracks signals and state mutations. It does not matter what you VIEW layer or MODEL layer is, you hook them on to the CONTROLLER on each side and off you go. The Chrome Debugger will help you analyze and control the state flow as you develop the app. This is a very powerful concept that makes it very easy to scale, reuse code and reduce development time.
-
+- [watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA)
+- [read this article on why you might need Cerebral](http://www.christianalfoni.com/articles/2015_08_02_Why-we-are-doing-MVC-and-FLUX-wrong)
+- [Check out a demo using the debugger](http://www.christianalfoni.com/todomvc)
+- 
 ## How to get started
 
 ### 1. Install debugger
