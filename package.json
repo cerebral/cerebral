@@ -1,6 +1,6 @@
 {
   "name": "cerebral",
-  "version": "0.13.5",
+  "version": "0.14.0",
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
@@ -31,8 +31,5 @@
     "todomvc-common": "^1.0.1",
     "webpack": "^1.5.3",
     "webpack-dev-server": "^1.7.0"
-  },
-  "dependencies": {
-    "tcomb": "^2.1.0"
   }
 }
