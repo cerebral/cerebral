@@ -44,6 +44,7 @@ To create a signal please read the README of the chosen package. To define a sig
 - [Async](#async)
 - [Outputs](#outputs)
 - [Types](#types)
+- [Custom Types](#custom-types)
 - [Groups](#groups)
 
 #### Naming
