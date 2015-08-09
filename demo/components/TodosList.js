@@ -4,8 +4,7 @@ import {Decorator as Cerebral} from './../CustomController.js';
 
 @Cerebral({
   todos: ['visibleTodos'],
-  isAllChecked: ['isAllChecked'],
-  tod: ['todos']
+  isAllChecked: ['isAllChecked']
 })
 class TodosList extends React.Component {
   renderTodo(todo, index) {

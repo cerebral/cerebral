@@ -1,5 +1,5 @@
-let setFilter = function(args, state) {
-  const filter = args.fragments[0] === '' ? 'all' : args.fragments[0];
+function setFilter (args, state) {
+  const filter = args.params.filter || 'all';
   state.set('filter', filter);
 };
 

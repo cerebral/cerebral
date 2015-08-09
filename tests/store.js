@@ -95,8 +95,8 @@ exports['should store details about mutations correctly across sync and async si
   ctrl.signal('test', function ActionA (args, state) {
     state.set('foo', 'bar');
   });
-  ctrl.signal('testAsync', [function ActionB (args, state, promise) {
-    promise.resolve({});
+  ctrl.signal('testAsync', [function ActionB (args, state, next) {
+    next();
   }], function ActionC (args, state) {
     state.set('foo', 'bar');
 
@@ -124,8 +124,8 @@ exports['should store details about mutations correctly across sync and async si
 
 exports['should indicate async actions'] = function (test) {
   var ctrl = Lib.Controller();
-  ctrl.signal('test', [function ActionA (args, state, promise) {
-    promise.resolve({});
+  ctrl.signal('test', [function ActionA (args, state, next) {
+    next();
   }], function () {
     async(function () {
       test.ok(ctrl.store.getSignals()[0].actions[0].isAsync);
@@ -143,8 +143,8 @@ exports['should indicate when async actions are running'] = function (test) {
     }
   });
   ctrl.store.toggleKeepState();
-  ctrl.signal('test', [function (args, state, promise) {
-    promise.resolve();
+  ctrl.signal('test', [function (args, state, next) {
+    next();
   }]);
   ctrl.signals.test();
   async(function () {
@@ -208,8 +208,8 @@ exports['should be able to remember async actions and run them synchronously whe
       }
     }
   });
-  ctrl.signal('test', [function ActionA (args, state, promise) {
-    promise.resolve({
+  ctrl.signal('test', [function ActionA (args, state, next) {
+    next({
       result: args.foo
     });
   }], function ActionB (args, state) {

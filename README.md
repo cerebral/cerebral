@@ -13,6 +13,7 @@ A state controller with its own debugger
 To get an understanding of Cerebral I suggest you choose your preferred media:
 
 - [Watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA)
+- [Watch this video on signals and actions](https://www.youtube.com/watch?v=ylJG4vUx_Tc)
 - [Read this article on why you might need Cerebral](http://www.christianalfoni.com/articles/2015_08_02_Why-we-are-doing-MVC-and-FLUX-wrong)
 - [Check out a demo using the debugger](http://www.christianalfoni.com/todomvc)
 
@@ -32,7 +33,244 @@ The Cerebral Core API is "low level", but extremely flexible. If you do not have
 - cerebral-react-immutable-js
 
 ### 3. Signals and actions
-Depending on the package you choose you instantiate and create signals differently. Please continue with the README of the specific package you choose
+To create a signal please read the README of the chosen package. To define a signals action chain, please read on. This is the same for all packages.
+
+- [Naming](#naming)
+- [Action](#action)
+- [Arguments](#arguments)
+- [Chain](#chain)
+- [Trigger](#trigger)
+- [Paths](#paths)
+- [Async](#async)
+- [Outputs](#outputs)
+- [Types](#types)
+- [Groups](#groups)
+
+#### Naming
+The way you think of signals is that something happened in your application. Either in your VIEW layer, a router, maybe a websocket connection etc. So the name of a signal should define what happened: "appMounted", "inputChanged", "formSubmitted". The actions are named by there purpose, like "setInputValue", "postForm" etc. This will make it very easy for you to read and understand the flow of the application. All signal definitions first tells you "what happened in your app". Then each action describes its part of the flow that occurs when the signal triggers.
+
+#### Action
+The convention is to create each action as its own module. This will keep your project clean and let you easily extend actions with type checks and other options. It is important to name your functions as that will make it easier to read debugging information.
+```js
+function MyAction () {
+
+};
+
+export default MyAction;
+```
+
+#### Arguments
+```js
+function MyAction (args, state, output) {
+  // Args contains all arguments passed to the signal itself
+  // and any args passed from one action to the next
+  args
+
+  // State contains the methods for mutating the state of
+  // your application.
+  state.set('isLoading', false);
+  state.unset('isLoading');
+  state.merge('user', {name: 'foo'});
+  state.push('list', 'foo');
+  state.unshift('list', 'bar');
+  state.pop('list');
+  state.shift('list');
+  state.concat('list', [1, 2, 3]);
+  state.splice('list', 1, 1, [1]);
+
+  // Use an array as path to reach nested values
+  state.push(['admin', 'users'], {foo: 'bar'});
+
+  // It also contains the method for getting state
+  state.get('foo');
+  state.get(['foo', 'bar']);
+
+  // The output argument is what you use to resolve arguments
+  // and choose paths. By default you can use "success" or "error"
+  // path
+  output({foo: 'bar'});
+  output.success({foo: 'bar'});
+  output.error({foo: 'bar'});
+};
+
+export default MyAction;
+```
+#### Chain
+*actions/SetLoading.js*
+```js
+function SetLoading (args, state) {
+  state.set('isLoading', true);
+};
+export default SetLoading;
+```
+*actions/SetTitle.js*
+```js
+function SetLoading (args, state) {
+  state.set('title', 'Welcome!');
+};
+export default SetTitle;
+```
+*main.js*
+```js
+import controller from './controller.js';
+
+import SetLoading from './actions/SetLoading.js';
+import SetTitle from './actions/SetTitle.js';
+
+controller.signal('appMounted',
+  SetLoading,
+  SetTitle
+);
+```
+#### Trigger
+```js
+controller.signal('appMounted',
+  SetLoading,
+  SetTitle
+);
+
+// Just trigger
+controller.signals.appMounted();
+
+// With argument
+controller.signals.appMounted({
+  foo: 'bar'
+});
+
+// Force sync trigger
+controller.signals.appMounted(true, {
+  foo: 'bar'
+});
+```
+
+#### Paths
+Paths allows you to conditionally run actions depending on the result of the previous action. This is typically useful with asynchronous actions, but you can use them next to any action you run. The default paths are `success` and `error`, but you can define custom paths if you need to.
+
+*main.js*
+```js
+import controller from './controller.js';
+
+import CheckSomething from './actions/CheckSomething.js';
+import SetSuccessMessage from './actions/SetSuccessMessage.js';
+import SetErrorMessage from './actions/SetErrorMessage.js';
+
+controller.signal('appMounted',
+  ChooseColor, {
+    success: [SetSuccessMessage],
+    error: [SetErrorMessage]
+  }
+);
+```
+
+#### Async
+Async actions are defined like normal actions, only inside an array.
+
+*main.js*
+```js
+import controller from './controller.js';
+
+import LoadUser from './actions/LoadUser.js';
+import SetUser from './actions/SetUser.js';
+import SetError from './actions/SetError.js';
+
+controller.signal('appMounted',
+  [LoadUser, {
+    success: [SetUser],
+    error: [SetError]
+  }]
+);
+```
+
+When defining multiple actions in an array, they will run async in parallel and their outputs will run after all initial async actions are done.
+*main.js*
+```js
+import controller from './controller.js';
+
+import LoadUser from './actions/LoadUser.js';
+import SetUser from './actions/SetUser.js';
+import SetError from './actions/SetError.js';
+import LoadProjects from './actions/LoadProjects.js';
+import SetProjects from './actions/SetProjects.js';
+import SetProjectsError from './actions/SetProjectsError.js';
+
+controller.signal('appMounted',
+  [
+    LoadUser, {
+      success: [SetUser],
+      error: [SetError]
+    },
+    LoadProjects, {
+      success: [SetProjects],
+      error: [SetProjectsError]
+    }
+  ]
+);
+```
+
+#### Outputs
+You can define custom outputs. This will override the default "success" and "error" outputs. What is especially nice with manually defining outputs is that they will be analyzed by Cerebral. You will get errors if you use your actions wrong, are missing paths for your outputs etc.
+
+```js
+function MyAction (args, state, output) {
+  if (state.get('isCool')) {
+    output.foo();
+  } else if (state.get('isAwesome')) {
+    output.bar();
+  } else {
+    output();
+  }
+};
+
+// The defaultOutput property lets you call "output"
+// to the default output path
+MyAction.defaultOutput = 'foo';
+MyAction.outputs = ['foo', 'bar'];
+
+export default MyAction;
+```
+
+#### Types
+You can type check the inputs and outputs of an action to be notified when you are using your signals the wrong way.
+
+```js
+import {Types} from './controller.js';
+
+function MyAction (args, state, output) {
+  output({foo: 'bar'});
+};
+
+// Define what args you expect to be received on this action
+MyAction.input = {
+  isCool: Types.Bool
+};
+
+// If the action only has one output
+MyAction.output = {
+    foo: Types.String
+};
+
+// If having multiple outputs
+MyAction.outputs = {
+  success: {
+    result: Types.Object
+  },
+  error: {
+    message: Types.String
+  }
+};
+
+export default MyAction;
+```
+The following types are available: **String, Number, Bool, Object, Array, Any**.
+
+#### Groups
+By using ES6 syntax you can easily create groups of actions that can be reused.
+```js
+const MyGroup = [Action1, Action2, Action3];
+controller.signal('appMounted', Action4, ...MyGroup);
+controller.signal('appMounted', Action5, ...MyGroup, Action6);
+```
+
 
 ## How to create a custom Cerebral package
 If the current packages does not meet your needs you are free to create your own package with its own VIEW and MODEL layer. To define a Controller you need somewhere to store the state. You can use whatever you want in this regard, but to gain the full power of the developer tools the state store should be immutable. This specifically allows you to move back and forth in time in the debugger and you will gain benefits in rendering optimization.
@@ -73,6 +311,11 @@ module.exports = function (state, defaultArgs) {
     // this is how you would do it with immutable-store
     onReset: function () {
       state = initialState;
+    },
+
+    // When an action fails for some reason you can react to that
+    onError: function (error) {
+      events.emit('error', error);
     },
 
     // We trigger a change event and passing the current state

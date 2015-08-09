@@ -1,4 +1,4 @@
-let stopEditingTodo = function (args, state) {
+function stopEditingTodo (args, state) {
 
   const path = ['todos', args.ref];
   let todo = state.get(path);

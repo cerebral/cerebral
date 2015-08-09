@@ -1,4 +1,4 @@
-let setCounters = function(args, state) {
+function setCounters (args, state) {
 
   let todos = state.get('todos');
   let counts = Object.keys(todos).reduce(function(counts, key) {

@@ -1,4 +1,4 @@
-const setUrl = function (args, state) {
-  state.set('url', args.url);
+function setUrl (args, state, next) {
+  state.set('url', args.path);
 };
 export default setUrl;

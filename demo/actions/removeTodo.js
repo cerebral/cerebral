@@ -1,4 +1,4 @@
-let removeTodo = function(args, state) {
+function removeTodo (args, state) {
   state.unset('todos', args.ref);
 };
 

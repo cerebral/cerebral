@@ -1,4 +1,4 @@
-let setNewTodoTitle = function (args, state) {
+function setNewTodoTitle (args, state) {
   state.set('newTodoTitle', args.title);
 };
 

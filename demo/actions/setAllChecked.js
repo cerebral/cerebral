@@ -1,4 +1,4 @@
-let setAllChecked = function(args, state) {
+function setAllChecked (args, state) {
 
   let visibleTodos = state.get('visibleTodos');
 

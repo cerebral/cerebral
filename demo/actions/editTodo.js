@@ -1,4 +1,4 @@
-let editTodo = function (args, state) {
+function editTodo (args, state) {
 
   const path = ['todos', args.ref];
   let todo = state.get(path);

@@ -6,7 +6,8 @@ var run_tests = new Array();
 var tests_available = {
     'signals' : 'tests/signals.js',
     'store': 'tests/store.js',
-    'recorder': 'tests/recorder.js'
+    'recorder': 'tests/recorder.js',
+    'types': 'tests/types.js'
 };
 
 var test_name;

@@ -33,5 +33,8 @@ module.exports = {
       timeout = setTimeout(later, wait);
       if (callNow) func.apply(context, args);
     };
+  },
+  isAction: function (action) {
+    return typeof action === 'function';
   }
 };

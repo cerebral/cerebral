@@ -1,0 +1,94 @@
+var utils = require('./utils.js');
+var types = require('./types.js');
+
+var validateOutput = function (action, path, arg, signalName) {
+  if ((!action.output && !action.outputs) || Array.isArray(action.outputs)) {
+    return;
+  }
+  if (!arg) {
+    throw new Error([
+      'Cerebral: There is no output of action "' +
+      utils.getFunctionName(action) + '" ' +
+      'in signal "' + signalName + '". It should have ' +
+      JSON.stringify(Object.keys(action.output || action.outputs[path]))
+    ].join(''));
+  } else {
+    var checkers = action.output || action.outputs[path || action.defaultOutput];
+    Object.keys(checkers).forEach(function (key) {
+      if (!types(checkers[key], arg[key])) {
+        throw new Error([
+          'Cerebral: There is a wrong output of action "' +
+          utils.getFunctionName(action) + '" ' +
+          'in signal "' + signalName + '". Check the following prop: "' + key + '"'
+        ].join(''));
+      }
+    });
+  }
+};
+
+var createNextFunction = function (action, signalName, resolver) {
+    var next = function () {
+      var path = typeof arguments[0] === 'string' ? arguments[0] : null;
+      var arg = path ? arguments[1] : arguments[0];
+
+      if (!path && !action.defaultOutput && action.outputs) {
+        throw new Error([
+          'Cerebral: There is a wrong output of action "' +
+          utils.getFunctionName(action) + '" ' +
+          'in signal "' + signalName + '". Set defaultOutput or use one of outputs ' +
+          JSON.stringify(Object.keys(action.output || action.outputs))
+        ].join(''));
+      }
+
+      validateOutput(action, path, arg, signalName);
+
+      // This is where I verify path and types
+      var result = {
+        path: path ? path : action.defaultOutput,
+        arg: arg
+      };
+
+      if (resolver) {
+        resolver(result);
+      } else {
+        next._result = result;
+      }
+    };
+    return next;
+};
+
+var addOutputs = function (action, next) {
+  if (!action.outputs) {
+    next.success = next.bind(null, 'success');
+    next.error = next.bind(null, 'error');
+  } else if (Array.isArray(action.outputs)) {
+    action.outputs.forEach(function (key) {
+      next[key] = next.bind(null, key);
+    });
+  } else {
+    Object.keys(action.outputs).forEach(function (key) {
+      next[key] = next.bind(null, key);
+    });
+  }
+};
+
+module.exports = {
+  sync: function (action, signalName) {
+    var next = createNextFunction(action, signalName);
+    addOutputs(action, next);
+    return next;
+  },
+  async: function (action, signalName) {
+    var resolver = null;
+    var promise = new Promise(function (resolve) {
+      resolver = resolve;
+    });
+    var next = createNextFunction(action, signalName, resolver);
+    addOutputs(action, next);
+    return {
+      fn: next,
+      promise: promise
+    };
+
+  }
+};

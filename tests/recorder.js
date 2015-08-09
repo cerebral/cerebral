@@ -50,8 +50,8 @@ exports['should play back recording'] = function (test) {
   });
   ctrl.signal('test', function (args, state) {
     state.set('foo', args.foo);
-  }, [function (args, state, promise) {
-    promise.resolve();
+  }, [function (args, state, next) {
+    next();
   }]);
   ctrl.recorder.record(state);
 

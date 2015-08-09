@@ -1,4 +1,4 @@
-let saveTodo = function (args, state, promise) {
+function saveTodo (args, state, next) {
 
   let todo = state.get('todos', args.ref);
 
@@ -6,7 +6,7 @@ let saveTodo = function (args, state, promise) {
   // the server. We resolve with the new id
   setTimeout(function () {
 
-    promise.resolve({
+    next.success({
       id: Date.now() + parseInt(Math.random() * 1000)
     });
 

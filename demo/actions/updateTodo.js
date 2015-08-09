@@ -1,4 +1,4 @@
-let updateTodo = function(args, state) {
+function updateTodo (args, state) {
 
   var path = ['todos', args.ref];
 

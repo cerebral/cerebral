@@ -1,4 +1,4 @@
-let addTodo = function(args, state) {
+function addTodo (args, state, output) {
 
   var ref = state.get('nextRef');
   let todo = {
@@ -12,9 +12,10 @@ let addTodo = function(args, state) {
   state.set('newTodoTitle', '');
   state.set('nextRef', ref + 1);
 
-  return {
+  output({
     ref: ref
-  };
+  });
+
 };
 
 export default addTodo;

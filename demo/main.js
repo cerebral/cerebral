@@ -28,7 +28,17 @@ import setUrl from './actions/setUrl.js';
 // SIGNALS
 
 controller.signal('newTodoTitleChanged', setNewTodoTitle);
-controller.signal('newTodoSubmitted', addTodo, setVisibleTodos, setAllChecked, setCounters, [saveTodo], updateTodo);
+controller.signal('newTodoSubmitted',
+  addTodo,
+  setVisibleTodos,
+  setAllChecked,
+  setCounters,
+  [
+    saveTodo, {
+      success: [updateTodo]
+    }
+  ]
+);
 controller.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleAllChanged', toggleAllChecked, setVisibleTodos, setCounters);
@@ -44,8 +54,9 @@ React.render(controller.injectInto(App), document.querySelector('#app'));
 // ROUTER
 const router = ReactiveRouter({
   '/': controller.signals.routeChanged,
-  '/active': controller.signals.routeChanged,
-  '/completed': controller.signals.routeChanged
+  '/:filter': controller.signals.routeChanged
+}, {
+  hashbang: true
 });
 
 controller.eventEmitter.on('change', function (state) {
