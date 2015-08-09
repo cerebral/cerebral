@@ -47,16 +47,16 @@ To create a signal please read the README of the chosen package. To define a sig
 - [Groups](#groups)
 
 #### Naming
-The way you think of signals is that something happened in your application. Either in your VIEW layer, a router, maybe a websocket connection etc. So the name of a signal should define what happened: "appMounted", "inputChanged", "formSubmitted". The actions are named by there purpose, like "setInputValue", "postForm" etc. This will make it very easy for you to read and understand the flow of the application. All signal definitions first tells you "what happened in your app". Then each action describes its part of the flow that occurs when the signal triggers.
+The way you think of signals is that something happened in your application. Either in your VIEW layer, a router, maybe a websocket connection etc. So the name of a signal should define what happened: "appMounted", "inputChanged", "formSubmitted". The actions are named by their purpose, like "setInputValue", "postForm" etc. This will make it very easy for you to read and understand the flow of the application. All signal definitions first tells you "what happened in your app". Then each action describes its part of the flow that occurs when the signal triggers.
 
 #### Action
 The convention is to create each action as its own module. This will keep your project clean and let you easily extend actions with type checks and other options. It is important to name your functions as that will make it easier to read debugging information.
 ```js
-function MyAction () {
+function myAction () {
 
 };
 
-export default MyAction;
+export default myAction;
 ```
 
 #### Arguments
@@ -96,37 +96,37 @@ function MyAction (args, state, output) {
 export default MyAction;
 ```
 #### Chain
-*actions/SetLoading.js*
+*actions/setLoading.js*
 ```js
-function SetLoading (args, state) {
+function setLoading (args, state) {
   state.set('isLoading', true);
 };
-export default SetLoading;
+export default setLoading;
 ```
-*actions/SetTitle.js*
+*actions/setTitle.js*
 ```js
-function SetLoading (args, state) {
+function setTitle (args, state) {
   state.set('title', 'Welcome!');
 };
-export default SetTitle;
+export default setTitle;
 ```
 *main.js*
 ```js
 import controller from './controller.js';
 
-import SetLoading from './actions/SetLoading.js';
-import SetTitle from './actions/SetTitle.js';
+import setLoading from './actions/setLoading.js';
+import setTitle from './actions/setTitle.js';
 
 controller.signal('appMounted',
-  SetLoading,
-  SetTitle
+  setLoading,
+  setTitle
 );
 ```
 #### Trigger
 ```js
 controller.signal('appMounted',
-  SetLoading,
-  SetTitle
+  setLoading,
+  setTitle
 );
 
 // Just trigger
@@ -150,14 +150,14 @@ Paths allows you to conditionally run actions depending on the result of the pre
 ```js
 import controller from './controller.js';
 
-import CheckSomething from './actions/CheckSomething.js';
-import SetSuccessMessage from './actions/SetSuccessMessage.js';
-import SetErrorMessage from './actions/SetErrorMessage.js';
+import checkSomething from './actions/checkSomething.js';
+import setSuccessMessage from './actions/setSuccessMessage.js';
+import setErrorMessage from './actions/setErrorMessage.js';
 
 controller.signal('appMounted',
-  ChooseColor, {
-    success: [SetSuccessMessage],
-    error: [SetErrorMessage]
+  chooseColor, {
+    success: [setSuccessMessage],
+    error: [setErrorMessage]
   }
 );
 ```
@@ -169,15 +169,17 @@ Async actions are defined like normal actions, only inside an array.
 ```js
 import controller from './controller.js';
 
-import LoadUser from './actions/LoadUser.js';
-import SetUser from './actions/SetUser.js';
-import SetError from './actions/SetError.js';
+import loadUser from './actions/loadUser.js';
+import setUser from './actions/setUser.js';
+import setError from './actions/setError.js';
 
 controller.signal('appMounted',
-  [LoadUser, {
-    success: [SetUser],
-    error: [SetError]
-  }]
+  [
+    loadUser, {
+      success: [setUser],
+      error: [setError]
+    }
+  ]
 );
 ```
 
@@ -186,22 +188,22 @@ When defining multiple actions in an array, they will run async in parallel and 
 ```js
 import controller from './controller.js';
 
-import LoadUser from './actions/LoadUser.js';
-import SetUser from './actions/SetUser.js';
-import SetError from './actions/SetError.js';
-import LoadProjects from './actions/LoadProjects.js';
-import SetProjects from './actions/SetProjects.js';
-import SetProjectsError from './actions/SetProjectsError.js';
+import loadUser from './actions/loadUser.js';
+import setUser from './actions/setUser.js';
+import setUserError from './actions/setUserError.js';
+import loadProjects from './actions/loadProjects.js';
+import setProjects from './actions/setProjects.js';
+import setProjectsError from './actions/setProjectsError.js';
 
 controller.signal('appMounted',
   [
-    LoadUser, {
-      success: [SetUser],
-      error: [SetError]
+    loadUser, {
+      success: [setUser],
+      error: [setUserError]
     },
-    LoadProjects, {
-      success: [SetProjects],
-      error: [SetProjectsError]
+    loadProjects, {
+      success: [setProjects],
+      error: [setProjectsError]
     }
   ]
 );
@@ -211,7 +213,7 @@ controller.signal('appMounted',
 You can define custom outputs. This will override the default "success" and "error" outputs. What is especially nice with manually defining outputs is that they will be analyzed by Cerebral. You will get errors if you use your actions wrong, are missing paths for your outputs etc.
 
 ```js
-function MyAction (args, state, output) {
+function myAction (args, state, output) {
   if (state.get('isCool')) {
     output.foo();
   } else if (state.get('isAwesome')) {
@@ -223,45 +225,60 @@ function MyAction (args, state, output) {
 
 // The defaultOutput property lets you call "output"
 // to the default output path
-MyAction.defaultOutput = 'foo';
-MyAction.outputs = ['foo', 'bar'];
+myAction.defaultOutput = 'foo';
+myAction.outputs = ['foo', 'bar'];
 
-export default MyAction;
+export default myAction;
 ```
 
 #### Types
 You can type check the inputs and outputs of an action to be notified when you are using your signals the wrong way.
 
 ```js
-import {Types} from './controller.js';
-
-function MyAction (args, state, output) {
+function myAction (args, state, output) {
   output({foo: 'bar'});
 };
 
 // Define what args you expect to be received on this action
-MyAction.input = {
-  isCool: Types.Bool
+myAction.input = {
+  isCool: String
 };
 
 // If the action only has one output
-MyAction.output = {
-    foo: Types.String
+myAction.output = {
+    foo: String
 };
 
 // If having multiple outputs
-MyAction.outputs = {
+myAction.outputs = {
   success: {
-    result: Types.Object
+    result: Object
   },
   error: {
-    message: Types.String
+    message: String
   }
 };
 
-export default MyAction;
+export default myAction;
 ```
-The following types are available: **String, Number, Bool, Object, Array, Any**.
+The following types are available: **String, Number, Boolean, Object, Array**, its the default type constructors in JavaScript. 
+
+#### Custom Types
+You can use a function instead. That allows you to use any typechecker.
+
+```js
+function myAction (args, state, output) {
+  output({foo: 'bar'});
+};
+
+// Define what args you expect to be received on this action
+myAction.input = {
+  isCool: function (value) {
+    return typeof value === 'string' || typeof value === 'number';
+  },
+  isNotCool: MyTypeChecker.isString
+};
+````
 
 #### Groups
 By using ES6 syntax you can easily create groups of actions that can be reused.
