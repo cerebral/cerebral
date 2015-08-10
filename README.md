@@ -62,10 +62,11 @@ export default myAction;
 
 #### Arguments
 ```js
-function MyAction (args, state, output) {
-  // Args contains all arguments passed to the signal itself
-  // and any args passed from one action to the next
-  args
+function MyAction (input, state, output) {
+  // Input contains all inputs passed to the signal itself
+  // and any outputs from the previous actions. Using packages
+  // you can also add default input like AJAX libs etc.
+  input // {}
 
   // State contains the methods for mutating the state of
   // your application.
@@ -86,9 +87,9 @@ function MyAction (args, state, output) {
   state.get('foo');
   state.get(['foo', 'bar']);
 
-  // The output argument is what you use to resolve arguments
-  // and choose paths. By default you can use "success" or "error"
-  // path
+  // The output argument is what you use to resolve values for
+  // the next actions and choose paths. By default you can use 
+  // "success" or "error" path
   output({foo: 'bar'});
   output.success({foo: 'bar'});
   output.error({foo: 'bar'});
@@ -99,14 +100,14 @@ export default MyAction;
 #### Chain
 *actions/setLoading.js*
 ```js
-function setLoading (args, state) {
+function setLoading (input, state) {
   state.set('isLoading', true);
 };
 export default setLoading;
 ```
 *actions/setTitle.js*
 ```js
-function setTitle (args, state) {
+function setTitle (input, state) {
   state.set('title', 'Welcome!');
 };
 export default setTitle;
@@ -214,7 +215,7 @@ controller.signal('appMounted',
 You can define custom outputs. This will override the default "success" and "error" outputs. What is especially nice with manually defining outputs is that they will be analyzed by Cerebral. You will get errors if you use your actions wrong, are missing paths for your outputs etc.
 
 ```js
-function myAction (args, state, output) {
+function myAction (input, state, output) {
   if (state.get('isCool')) {
     output.foo();
   } else if (state.get('isAwesome')) {
@@ -236,7 +237,7 @@ export default myAction;
 You can type check the inputs and outputs of an action to be notified when you are using your signals the wrong way.
 
 ```js
-function myAction (args, state, output) {
+function myAction (input, state, output) {
   output({foo: 'bar'});
 };
 
@@ -268,7 +269,7 @@ The following types are available: **String, Number, Boolean, Object, Array**, i
 You can use a function instead. That allows you to use any typechecker.
 
 ```js
-function myAction (args, state, output) {
+function myAction (input, state, output) {
   output({foo: 'bar'});
 };
 
