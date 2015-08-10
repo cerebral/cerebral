@@ -1,4 +1,6 @@
 # Cerebral ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
+
+[![Join the chat at https://gitter.im/christianalfoni/cerebral](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christianalfoni/cerebral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 A state controller with its own debugger
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christianalfoni/cerebral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
