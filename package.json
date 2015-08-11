@@ -31,5 +31,8 @@
     "todomvc-common": "^1.0.1",
     "webpack": "^1.5.3",
     "webpack-dev-server": "^1.7.0"
+  },
+  "dependencies": {
+    "type-detect": "^1.0.0"
   }
 }

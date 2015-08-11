@@ -1,29 +1,24 @@
+var typeDetect = require('type-detect');
+
+
+var typeToTypeDetect = {}
+typeToTypeDetect[String] = 'string'
+typeToTypeDetect[Number] = 'number'
+typeToTypeDetect[Array] = 'array'
+typeToTypeDetect[Object] = 'object'
+typeToTypeDetect[Boolean] = 'boolean'
+
+
 module.exports = function (type, value) {
 
-  if (type === String && typeof value !== 'string') {
-    return false;
+  if (typeToTypeDetect.hasOwnProperty(type)) {
+    return typeDetect(value) === typeToTypeDetect[type]
+  }
+  if (typeDetect(type) === 'function') {
+    return type(value)
   }
 
-  if (type === Number && typeof value !== 'number') {
-    return false;
-  }
-
-  if (type === Array && !Array.isArray(value)) {
-    return false;
-  }
-
-  if (type === Object && !(typeof value === 'object' && !Array.isArray(value) && value !== null)) {
-    return false;
-  }
-
-  if (type === Boolean && typeof value !== 'boolean') {
-    return false;
-  }
-
-  if (typeof type === 'function') {
-    return type(value);
-  }
-
+  // Right now we return `true` if the type passed in was not one we knew
+  // about and not a function.
   return true;
-
 };
