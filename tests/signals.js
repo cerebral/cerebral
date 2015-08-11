@@ -101,7 +101,7 @@ exports['should throw error when output is missing'] = function (test) {
     next();
   };
   action.output = {
-    foo: Lib.Types.String
+    foo: String
   };
   ctrl.signal('test', action, function () {
 
@@ -118,7 +118,7 @@ exports['should throw error when output type is wrong'] = function (test) {
     next({foo: false});
   };
   action.output = {
-    foo: Lib.Types.String
+    foo: String
   };
   ctrl.signal('test', action, function () {
 
@@ -136,7 +136,7 @@ exports['should throw when calling next directly with no defaultOutput and outpu
   };
   action.outputs = {
     foo: {
-      bar: Lib.Types.String
+      bar: String
     }
   };
   ctrl.signal('test', action, {
@@ -154,7 +154,7 @@ exports['should run when output type is correct'] = function (test) {
     next({foo: 'bar'});
   };
   action.output = {
-    foo: Lib.Types.String
+    foo: String
   };
   ctrl.signal('test', action, function () {
 
@@ -172,7 +172,7 @@ exports['should run when outputs type is correct'] = function (test) {
   };
   action.outputs = {
     foo: {
-      bar: Lib.Types.String
+      bar: String
     }
   };
   ctrl.signal('test', action, {
@@ -383,7 +383,7 @@ exports['should throw error when input is defined on action and value is missing
 
   };
   action.input = {
-    foo: Lib.Types.String
+    foo: String
   };
   ctrl.signal('test', function (args, state, next) {
     next();

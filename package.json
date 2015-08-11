@@ -9,7 +9,7 @@
     "deploy": "NODE_ENV=production webpack -p",
     "start": "webpack-dev-server --devtool eval --progress --colors --content-base build",
     "devtest": "nodeunit-watcher",
-    "test": "node test.js"
+    "test": "nodeunit tests"
   },
   "author": "Christian Alfoni",
   "license": "MIT",
