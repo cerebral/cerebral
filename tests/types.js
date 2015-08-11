@@ -64,6 +64,7 @@ exports['should validate outputs'] = function (test) {
 
 exports['should validate String'] = function (test) {
   test.ok(types(String, '123'));
+  test.ok(types(String, '')); // issue #49
   test.ok(!types(String, 123));
   test.ok(!types(String, true));
   test.ok(!types(String, {}));
@@ -74,6 +75,7 @@ exports['should validate String'] = function (test) {
 exports['should validate Number'] = function (test) {
   test.ok(!types(Number, '123'));
   test.ok(types(Number, 123));
+  test.ok(types(Number, 0)); // issue #49
   test.ok(!types(Number, true));
   test.ok(!types(Number, {}));
   test.ok(!types(Number, []));
