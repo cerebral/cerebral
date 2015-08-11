@@ -122,5 +122,6 @@ exports['should validate with function'] = function (test) {
 exports['should handle falsy values'] = function (test) {
   test.ok(types(String, ''));
   test.ok(types(Boolean, false));
+  test.ok(types(Number, 0));
   test.done();
 };
