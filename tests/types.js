@@ -118,3 +118,9 @@ exports['should validate with function'] = function (test) {
   }, '123'));
   test.done();
 };
+
+exports['should handle falsy values'] = function (test) {
+  test.ok(types(String, ''));
+  test.ok(types(Boolean, false));
+  test.done();
+};
