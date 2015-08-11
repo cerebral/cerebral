@@ -1,4 +1,4 @@
-# Cerebral ![build status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)
+# Cerebral [![Build Status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)](https://travis-ci.org/christianalfoni/cerebral)
 A state controller with its own debugger
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christianalfoni/cerebral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -88,7 +88,7 @@ function MyAction (input, state, output) {
   state.get(['foo', 'bar']);
 
   // The output argument is what you use to resolve values for
-  // the next actions and choose paths. By default you can use 
+  // the next actions and choose paths. By default you can use
   // "success" or "error" path
   output({foo: 'bar'});
   output.success({foo: 'bar'});
@@ -263,7 +263,7 @@ myAction.outputs = {
 
 export default myAction;
 ```
-The following types are available: **String, Number, Boolean, Object, Array**, its the default type constructors in JavaScript. 
+The following types are available: **String, Number, Boolean, Object, Array**, its the default type constructors in JavaScript.
 
 #### Custom Types
 You can use a function instead. That allows you to use any typechecker.
