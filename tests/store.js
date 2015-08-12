@@ -136,13 +136,7 @@ exports['should indicate async actions'] = function (test) {
 };
 
 exports['should indicate when async actions are running'] = function (test) {
-  var count = 0;
-  var ctrl = Lib.Controller({
-    onStoreChange: function () {
-      count++;
-    }
-  });
-  ctrl.store.toggleKeepState();
+  var ctrl = Lib.Controller();
   ctrl.signal('test', [function (args, state, next) {
     next();
   }]);
