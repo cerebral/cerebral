@@ -97,6 +97,10 @@ function MyAction (input, state, output) {
 
 export default MyAction;
 ```
+*Note*: Asynchronous actions *cannot* mutate state. Calling `set` or `merge` on the `state` parameter above will throw an error, as they will be undefined.
+
+It is best practice not to mutate state in async actions.
+
 #### Chain
 *actions/setLoading.js*
 ```js
