@@ -12,7 +12,7 @@ class AddTodo extends React.Component {
   }
 
   onNewTodoTitleChange(event) {
-    this.props.signals.newTodoTitleChanged({
+    this.props.signals.newTodoTitleChanged(true, {
       title: event.target.value
     });
   }
