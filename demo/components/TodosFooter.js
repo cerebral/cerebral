@@ -22,7 +22,7 @@ class TodosFooter extends React.Component {
 
   renderCompletedButton() {
     return (
-      <button id="clear-completed" onClick={this.props.signals.clearCompletedClicked}>
+      <button id="clear-completed" onClick={() => this.props.signals.clearCompletedClicked()}>
         Clear completed ({this.props.completedCount})
       </button>
     );

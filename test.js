@@ -7,7 +7,8 @@ var tests_available = {
     'signals' : 'tests/signals.js',
     'store': 'tests/store.js',
     'recorder': 'tests/recorder.js',
-    'types': 'tests/types.js'
+    'types': 'tests/types.js',
+    'mutations': 'tests/mutations.js'
 };
 
 var test_name;

@@ -344,10 +344,12 @@ exports['should handle arrays of actions to resolve to multiple paths'] = functi
   });
 };
 
-exports['should only have access to the get method when async action'] = function (test) {
+exports['should throw error when trying to mutate with an async action'] = function (test) {
   var ctrl = Lib.Controller();
   ctrl.signal('test', [function (args, state) {
-    test.deepEqual(Object.keys(state), ['get']);
+    test.throws(function () {
+      state.set('foo', 'bar');
+    });
     test.done();
   }]);
   ctrl.signals.test();

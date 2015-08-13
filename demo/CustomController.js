@@ -40,7 +40,9 @@ var Factory = function (state, defaultArgs) {
       var key = path.pop();
       state = Value(path, state).set(key, value);
     },
-    onUnset: function (path, key) {
+    onUnset: function (path) {
+      path = path.slice();
+      var key = path.pop();
       state = Value(path, state).unset(key);
     },
     onPush: function (path, value) {

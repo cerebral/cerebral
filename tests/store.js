@@ -46,7 +46,6 @@ exports['should not store default args'] = function (test) {
   async(function () {
     var signal = ctrl.store.getSignals()[0];
     test.equal(signal.name, 'test');
-    test.equal(signal.duration, 0);
     test.deepEqual(signal.payload, {foo: true});
     test.equal(signal.actions.length, 1);
     test.done();
@@ -63,7 +62,6 @@ exports['should store details about actions'] = function (test) {
   async(function () {
     var action = ctrl.store.getSignals()[0].actions[0];
     test.equal(action.name, 'ActionA');
-    test.equal(action.duration, 0);
     test.equal(action.mutations.length, 0);
     test.done();
   });

@@ -35,11 +35,12 @@ module.exports = function (signalStore, recorder, devtools, options) {
         var signalArgs = payload || {};
 
         // Describe the signal to later trigger as if it was live
+        var start = Date.now();
         var signal = {
           name: signalName,
+          start: start,
           actions: [],
           duration: 0,
-          start: Date.now(),
           payload: payload,
           asyncActionResults: []
         };
@@ -88,7 +89,12 @@ module.exports = function (signalStore, recorder, devtools, options) {
               } else {
 
                 options.onUpdate && options.onUpdate();
+                var currentDuration = Date.now() - start;
+                signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
                 signalStore.addAsyncAction();
+
+                // Use to track the output of an action
+                var actionOutputTracker = [];
                 Promise.all(asyncActionArray.map(function (actionFunc) {
 
                   if (utils.isAction(actionFunc)) {
@@ -97,9 +103,12 @@ module.exports = function (signalStore, recorder, devtools, options) {
                       name: utils.getFunctionName(actionFunc),
                       duration: 0,
                       mutations: [],
+                      output: null,
+                      path: null,
                       isAsync: true
                     };
                     signal.actions.push(action);
+                    actionOutputTracker.push(action);
 
                     var next = createNext.async(actionFunc);
                     actionFunc.apply(null, actionArgs.concat(next.fn));
@@ -113,14 +122,18 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
                     while(results.length) {
                       var result = results.shift();
+                      var action = actionOutputTracker.shift();
                       signal.asyncActionResults.push(result);
+                      action.output = result.arg;
                       utils.merge(signalArgs, result.arg);
                       if (result.path) {
                         var exits = results.shift();
+                        action.path = result.path;
                         executionArray.splice.apply(executionArray, [0, 0].concat(exits[result.path]));
                       }
                     }
                     signalStore.removeAsyncAction();
+                    start = Date.now();
                     execute();
 
                   })
@@ -144,6 +157,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
                   duration: 0,
                   isParallell: false,
                   mutations: [],
+                  output: null,
                   isAsync: false
                 };
                 signal.actions.push(action);
@@ -153,6 +167,8 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
                 var result = next._result || {};
                 utils.merge(signalArgs, result.arg);
+
+                action.output = result.arg;
 
                 if (result.path) {
                   var exits = executionArray.shift();
@@ -170,6 +186,8 @@ module.exports = function (signalStore, recorder, devtools, options) {
           } else if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
 
             options.onUpdate && options.onUpdate();
+            var currentDuration = Date.now() - start;
+            signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
             devtools && devtools.update();
 
           }
