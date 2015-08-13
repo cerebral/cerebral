@@ -12,7 +12,7 @@ A state controller with its own debugger
 ## What is Cerebral?
 To get an understanding of Cerebral I suggest you choose your preferred media:
 
-[Cerebral - The Big Introduction](https://www.youtube.com/watch?v=rHqIunT5qus)
+**Main introduction**: [Cerebral - The Big Introduction](https://www.youtube.com/watch?v=rHqIunT5qus)
 
 - [Watch this video on signals and actions](https://www.youtube.com/watch?v=zkeBjGdn7uM)
 - [Watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA)
