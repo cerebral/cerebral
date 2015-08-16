@@ -23,6 +23,7 @@ module.exports = function (Model, defaultInput) {
     signals[arguments[0]] = signalFactory.apply(null, arguments);
   };
 
+  controller.defaultInput = defaultInput;
   controller.signals = signals;
   controller.store = signalStore;
   controller.recorder = recorder;
