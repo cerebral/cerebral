@@ -52,7 +52,7 @@ exports['should play back recording'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        getRecordingState: function () {
+        getInitialRecordingState: function () {
           return state;
         },
         mutators: {
@@ -102,7 +102,7 @@ exports['should seek to specific point in recording'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        getRecordingState: function () {
+        getInitialRecordingState: function () {
           return state;
         },
         mutators: {
@@ -147,7 +147,7 @@ exports['should pause a playback'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        getRecordingState: function () {
+        getInitialRecordingState: function () {
           return state;
         },
         mutators: {
@@ -204,7 +204,7 @@ exports['should resume a paused playback'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        getRecordingState: function () {
+        getInitialRecordingState: function () {
           return state;
         },
         mutators: {
