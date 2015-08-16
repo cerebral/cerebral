@@ -1,5 +1,5 @@
 import React from 'react';
-import {Decorator as Cerebral} from './../CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 
 @Cerebral({
   isSaving: ['isSaving'],

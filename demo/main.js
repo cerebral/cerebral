@@ -6,6 +6,7 @@ import React from 'react';
 import App from './App.js';
 import controller from './controller.js';
 import ReactiveRouter from 'reactive-router';
+import {Container} from 'cerebral-react';
 
 // ACTIONS
 import addTodo from './actions/addTodo.js';
@@ -49,7 +50,7 @@ controller.signal('newTitleChanged', setTodoNewTitle);
 controller.signal('newTitleSubmitted', stopEditingTodo);
 
 // RENDER
-React.render(controller.injectInto(App), document.querySelector('#app'));
+React.render(<Container controller={controller} app={App}/>, document.querySelector('#app'));
 
 // ROUTER
 const router = ReactiveRouter({
@@ -59,10 +60,10 @@ const router = ReactiveRouter({
   hashbang: true
 });
 
-controller.eventEmitter.on('change', function (state) {
-  router.set(state.url);
+controller.on('change', function () {
+  router.set(controller.get('url'));
 });
 
-controller.eventEmitter.on('remember', function (state) {
-  router.setSilent(state.url);
+controller.on('remember', function () {
+  router.setSilent(controller.get('url'));
 });

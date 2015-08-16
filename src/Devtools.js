@@ -1,6 +1,6 @@
 var utils = require('./utils.js');
 
-module.exports = function (signalStore, options) {
+module.exports = function (signalStore, controller) {
   var getDetail = function () {
     return {
       props: {
@@ -40,7 +40,7 @@ module.exports = function (signalStore, options) {
 
   window.addEventListener('cerebral.dev.resetStore', function () {
     signalStore.reset();
-    options.onUpdate && options.onUpdate();
+    controller.emit('change');
     update();
   });
 
@@ -51,7 +51,7 @@ module.exports = function (signalStore, options) {
 
   window.addEventListener('cerebral.dev.logPath', function (event) {
     var name = event.detail.name;
-    var value = options.onGet(event.detail.path);
+    var value = controller.get(event.detail.path);
     // toValue instead?
     console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
   });

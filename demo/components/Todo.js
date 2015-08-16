@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import {Decorator as Cerebral} from './../CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 
 @Cerebral()
 class Todo extends React.Component {

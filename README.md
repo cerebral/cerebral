@@ -25,16 +25,60 @@ To get an understanding of Cerebral I suggest you choose your preferred media:
 Install the [Chrome Cerebral Debugger](https://chrome.google.com/webstore/detail/cerebral-debugger/ddefoknoniaeoikpgneklcbjlipfedbb)
 
 ### 2. Choose a package
-The Cerebral Core API is "low level", but extremely flexible. If you do not have any specific needs in regards of VIEW or MODEL layer, you can choose one of the preset packages that will get you quickly up and running:
+Cerebral is the **controller** layer of your application. You will also need a **model** layer to store your state and a **view** layer to produce your UI. The following packages are currently available:
+
+#### Model packages
+The API you use in Cerebral to change state is the same for all packages, but read their notes to see their differences.
+
+- **[cerebral-immutable-store](https://github.com/christianalfoni/cerebral-immutable-store)** by @christianalfoni. An immutable state store with the possibility to define [state that maps to other state](https://github.com/christianalfoni/immutable-store#mapping-state). This package also supports recording
+
+ - **[cerebral-baobab](https://github.com/christianalfoni/cerebral-baobab)** by @Yomguithereal. An immutable state store which allows you to use facets to map state. This package does not currently support recording and uses the BETA version of Baobab V2
+
+ - **cerebral-immutable-js** by @facebook (Coming soon).  Immutable state with very high performance, but lacks the possibility to map state. Does support recording
+
+#### View packages
+- **[cerebral-react](https://github.com/christianalfoni/cerebral-react)** by @facebook. An application wrapper component, mixin, decorators and HOC. Pure render is built in. Can also be used with **react-native**
+
+- **[cerebral-angular](https://github.com/christianalfoni/cerebral-angular)** by @angular. A provider for using Cerebral
+
+#### Deprecated packages
+As Cerebral now allows you to choose the model layer and view layer separately these packages are **deprecated**:
 
 - [cerebral-react-immutable-store](https://github.com/christianalfoni/cerebral-react-immutable-store) - [Video introduction](https://www.youtube.com/watch?v=QG181MnRIXM)
 - [cerebral-react-native-immutable-store](https://github.com/christianalfoni/cerebral-react-native-immutable-store)
 - [cerebral-angular-immutable-store](https://github.com/christianalfoni/cerebral-angular-immutable-store) - [Video introduction](https://www.youtube.com/watch?v=YVmgLReFjLw)
 - [cerebral-react-baobab](https://github.com/christianalfoni/cerebral-react-baobab)
-- cerebral-jquery-immutable-store
-- cerebral-react-immutable-js
 
-### 3. Signals and actions
+### 3. Get started
+Lets look at an example. Each **model** layer repo has a detailed description of how to create a controller, and each **view** layer repo has information on how to use the controller to produce UI and change state.
+
+```js
+import Controller from 'cerebral';
+import Model from 'cerebral-model-package';
+import request from 'superagent'; // Ajax lib
+
+// Define the initial state of your application
+const state = {
+  foo: 'bar'
+};
+
+// Define any default inputs to your signals. Often used
+// to pass in utils like ajax libs etc.
+const defaultInput = {
+  utils: {
+    request: request
+  }
+};
+
+// Instantiate the model
+const model = Model(state);
+
+// Instantiate the controller by passing the model it connects to
+// and any default inputs
+export default Controller(model, defaultInput)
+```
+
+### 4. Signals and actions
 To create a signal please read the README of the chosen package. To define a signals action chain, please read on. This is the same for all packages.
 
 - [Naming](#naming)
@@ -286,7 +330,7 @@ myAction.input = {
   },
   isNotCool: MyTypeChecker.isString
 };
-````
+```
 
 #### Groups
 By using ES6 syntax you can easily create groups of actions that can be reused.
@@ -296,103 +340,97 @@ controller.signal('appMounted', Action4, ...MyGroup);
 controller.signal('appMounted', Action5, ...MyGroup, Action6);
 ```
 
+## How to create a custom Cerebral VIEW package
+**view** packages in Cerebral just uses an instantiated Cerebral controller to get state, do state changes and listen to state changes. The package you create basically just needs to an instance of a Cerebral controller and you will have access to the following information.
 
-## How to create a custom Cerebral package
-If the current packages does not meet your needs you are free to create your own package with its own VIEW and MODEL layer. To define a Controller you need somewhere to store the state. You can use whatever you want in this regard, but to gain the full power of the developer tools the state store should be immutable. This specifically allows you to move back and forth in time in the debugger and you will gain benefits in rendering optimization.
+```js
+// The controller instantiated can be passed to the package. With React it is
+// done so with a wrapper component and with Angular using a provider. You have
+// to decide what makes sense for your view layer  
+function myCustomViewPackage (controller) {
 
-In this example we will use the [immutable-store](https://github.com/christianalfoni/immutable-store) project as a state store, but [freezer](https://github.com/arqex/freezer), [baobab](https://github.com/Yomguithereal/baobab), [immutable-js](https://github.com/facebook/immutable-js) are also good alternatives.
+  // Get state
+  controller.get(path);
+
+  // Listen to state changes
+  controller.on('change', function () {
+
+  });
+
+  // Listen to debugger time traversal
+  controller.on('remember', function () {
+
+  });
+
+};
+```
+That is basically all need to update the **view** layer.
+
+## How to create a custom Cerebral MODEL package
+In this example we will use the [immutable-store](https://github.com/christianalfoni/immutable-store) project as a model.
 
 *index.js*
 ```js
-
-var Cerebral = require('cerebral');
 var Store = require('immutable-store');
-var EventEmitter = require('events').EventEmitter;
 
-// The Cerebral controller
-var Controller = Cerebral.Controller;
+// Just a small helper to use an array to grab a value
+// from an object
+var getValue = function (path, obj) {
+  path = path.slice();
+  while (path.length) {
+    obj = obj[path.shift()];
+  }
+  return obj;
+};
 
-// Value is a helper function that takes a path and an object.
-// The returned result is the value at the path
-var Value = Cerebral.Value;
+module.exports = function (state) {
 
-// We return a function that will take two arguments. This is what the user of the
-// package will use to create a controller
-module.exports = function (state, defaultArgs) {
+  return function (controller) {
 
-  // We create an immutable store with the state passed
-  var initialState = Store(state);
+    // We create an immutable store with the state passed
+    var initialState = Store(state);
 
-  // We create an eventHub to notify about changes to the state
-  var events = new EventEmitter();
-
-  // We redefine the current state to be the initial state
-  state = initialState;
-
-  // Then we create a Cerebral controller
-  var controller = Controller({
+    // We redefine the current state to be the initial state
+    state = initialState;
 
     // Cerebral requires the state to be reset when using the debugger,
     // this is how you would do it with immutable-store
-    onReset: function () {
+    controller.on('reset', function () {
       state = initialState;
-    },
+    });
 
-    // When an action fails for some reason you can react to that
-    onError: function (error) {
-      events.emit('error', error);
-    },
-
-    // We trigger a change event and passing the current state
-    onUpdate: function () {
-      events.emit('change', state);
-    },
-
-    // When the debugger has traversed time we can choose to handle
-    // this differently, but in this case we just update the UI the same
-    // way as the onUpdate
-    onRemember: function () {
-      events.emit('change', state);
-    },
-
-    // If the user wants to use the recorder the initial state of the
-    // recording needs to be set and an event is emitted to indicate
-    // the new state
-    onSeek: function (seek, isPlaying, recording) {
+    // If you want to use the recorder the initial state of the
+    // recording needs to be set to the current state before recorder
+    // replays signals to current position
+    controller.on('seek', function (seek, isPlaying, recording) {
       state = state.import(recording.initialState);
-      events.emit('change', state);
-    },
+    });
 
-    // onGet is used to return some state
-    onGet: function (path) {
-      return Value(path, state);
-    },
+    // This object defines how to get state and do state changes
+    return {
 
-    // Mutations
-    onSet: function (path, value) {
-      var key = path.pop();
-      state = Value(path, state).set(key, value);
-    },
-    onUnset: function (path, key) {
-      state = Value(path, state).unset(key);
-    },
-    onPush: function (path, value) {
-      state = Value(path, state).push(value);
-    },
-    onSplice: function () {
-      var args = [].slice.call(arguments);
-      var value = Value(args.shift(), state);
-      state = value.splice.apply(value, args);
-    },
-    onMerge: function (path, value) {
-      state = Value(path, state).merge(value);
-    }
-  });
+      // You always receive an array here
+      get: function (path) {
+        return pathToValue(path, state);
+      },
 
-  // We attach the eventHub to the controller
-  controller.events = events;
+      // When recorder needs its initial state, return that here
+      getInitialRecordingState: function () {
+        return state.export();
+      },
 
-  return controller;
+      // You can add any mutation methods you want here. first
+      // argument is always a path array. The methods will be available
+      // on the state object passed to all sync actions
+      mutators: {
+        set: function (path, value) {
+          var key = path.pop(); // You can safely mutate the path
+          state = getValue(path, state).set(key, value);
+        }
+      }
+    };
+
+  };
 
 };
 ```
@@ -404,8 +442,8 @@ module.exports = function (state, defaultArgs) {
 Read this article introducing Cerebral: [Cerebral developer preview](http://christianalfoni.com/articles/2015_05_18_Cerebral-developer-preview)
 
 ## Contributors
-- Discussions and code contributions - **Marc**
-- Logo and illustrations - **Petter Stenberg Hansen**
-- Article review - **Jesse Wood**
+- **Marc Macleod**: Discussions and code contributions
+- **Petter Stenberg Hansen**: Logo and illustrations
+- **Jesse Wood**: Article review
 
 Thanks guys!

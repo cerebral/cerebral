@@ -1,10 +1,13 @@
 import React from 'react/addons';
-import {Decorator as Cerebral} from './../CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 
-@Cerebral({
-  remainingCount: ['remainingCount'],
-  filter: ['filter'],
-  completedCount: ['completedCount']
+@Cerebral((props) => {
+  console.log(props);
+  return {
+    remainingCount: ['remainingCount'],
+    filter: ['filter'],
+    completedCount: ['completedCount']
+  }
 })
 class TodosFooter extends React.Component {
   renderRemainingCount() {

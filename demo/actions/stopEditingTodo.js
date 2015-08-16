@@ -11,7 +11,7 @@ function stopEditingTodo (args, state) {
     $isEditing: false,
     title: todo.$newTitle
   });
-  state.unset(path, '$newTitle');
+  state.unset(path.concat('$newTitle'));
 };
 
 export default stopEditingTodo;

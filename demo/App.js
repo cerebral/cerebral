@@ -1,5 +1,5 @@
 import React from 'react';
-import {Decorator as Cerebral} from './CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 import AddTodo from './components/AddTodo.js';
 import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';

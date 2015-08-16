@@ -1,4 +1,5 @@
-import Controller from './CustomController.js';
+import Controller from './../src/index.js';
+import Model from 'cerebral-immutable-store';
 
 const VisibleTodos = function() {
   return {
@@ -28,4 +29,6 @@ const state =  {
   filter: 'all'
 };
 
-export default Controller(state);
+const model = Model(state);
+
+export default Controller(model);

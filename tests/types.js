@@ -1,8 +1,16 @@
-var Lib = require('./../src/index.js');
+var Controller = require('./../src/index.js');
 var types = require('./../src/types.js');
 
+var Model = function () {
+  return function () {
+    return {
+
+    };
+  };
+};
+
 exports['should validate inputs'] = function (test) {
-  var ctrl = Lib.Controller();
+  var ctrl = Controller(Model);
   var action = function () {};
   action.input = {
     foo: String
@@ -25,7 +33,7 @@ exports['should validate inputs'] = function (test) {
 };
 
 exports['should validate ouput'] = function (test) {
-  var ctrl = Lib.Controller();
+  var ctrl = Controller(Model());
   var action = function (args, state, output) {
     output({
       foo: 123
@@ -44,7 +52,7 @@ exports['should validate ouput'] = function (test) {
 };
 
 exports['should validate outputs'] = function (test) {
-  var ctrl = Lib.Controller();
+  var ctrl = Controller(Model());
   var action = function (args, state, output) {
     output.success({
       foo: 123

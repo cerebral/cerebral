@@ -7,7 +7,7 @@
 
 var utils = require('./utils.js');
 
-module.exports = function (signalMethods, options) {
+module.exports = function (signalMethods, controller) {
 
   // We grab the signals stored in localStorage, if any
   var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
@@ -89,7 +89,7 @@ module.exports = function (signalMethods, options) {
 
         currentIndex = -1;
 
-        options.onReset && options.onReset();
+        controller.emit('reset');
 
       }
     },
@@ -98,7 +98,7 @@ module.exports = function (signalMethods, options) {
 
       // Flag that we are remembering
       isRemembering = true;
-      options.onReset && options.onReset();
+      controller.emit('reset');
 
       // If going back to initial state, just return and update
       if (index === -1) {
@@ -144,7 +144,7 @@ module.exports = function (signalMethods, options) {
 
       }
 
-      options.onRemember && options.onRemember();
+      controller.emit('remember');
 
     },
 

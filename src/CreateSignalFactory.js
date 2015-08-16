@@ -10,7 +10,7 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0);
 };
 
-module.exports = function (signalStore, recorder, devtools, options) {
+module.exports = function (signalStore, recorder, devtools, controller, model, defaultInput) {
 
   return function () {
 
@@ -80,7 +80,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
                   utils.merge(signalArgs, result.arg);
                   if (result.path) {
                     var exits = asyncActionArray.shift();
-                    executionArray.splice.apply(executionArray, [0, 0].concat(exits[result.path]));
+                    executionArray.splice.apply(executionArray, [0, 0].concat(Array.isArray(exits[result.path]) ? exits[result.path] : [exits[result.path]]));
                   }
                 }
 
@@ -88,7 +88,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
               } else {
 
-                options.onUpdate && options.onUpdate();
+                controller.emit('change');
                 var currentDuration = Date.now() - start;
                 signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
                 signalStore.addAsyncAction();
@@ -96,9 +96,8 @@ module.exports = function (signalStore, recorder, devtools, options) {
                 // Use to track the output of an action
                 var actionOutputTracker = [];
                 Promise.all(asyncActionArray.map(function (actionFunc) {
-
                   if (utils.isAction(actionFunc)) {
-                    var actionArgs = createActionArgs.async(signal.actions, signalArgs, options);
+                    var actionArgs = createActionArgs.async(signal.actions, signalArgs, model, defaultInput);
                     var action = {
                       name: utils.getFunctionName(actionFunc),
                       duration: 0,
@@ -129,7 +128,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
                       if (result.path) {
                         var exits = results.shift();
                         action.path = result.path;
-                        executionArray.splice.apply(executionArray, [0, 0].concat(exits[result.path]));
+                        executionArray.splice.apply(executionArray, [0, 0].concat(Array.isArray(exits[result.path]) ? exits[result.path] : [exits[result.path]]));
                       }
                     }
                     signalStore.removeAsyncAction();
@@ -139,7 +138,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
                   })
                   .catch(function (error) {
                     // We just throw any unhandled errors
-                    options.onError && options.onError(error);
+                    controller.emit('error', error);
                     throw error;
                   });
 
@@ -151,7 +150,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
               try {
 
-                var actionArgs = createActionArgs.sync(signal.actions, signalArgs, options);
+                var actionArgs = createActionArgs.sync(signal.actions, signalArgs, model, defaultInput);
                 var action = {
                   name: utils.getFunctionName(actionFunc),
                   duration: 0,
@@ -177,7 +176,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
                 execute();
 
               } catch (error) {
-                options.onError && options.onError(error);
+                controller.emit('error', error);
                 throw error;
               }
 
@@ -185,7 +184,7 @@ module.exports = function (signalStore, recorder, devtools, options) {
 
           } else if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
 
-            options.onUpdate && options.onUpdate();
+            controller.emit('change');
             var currentDuration = Date.now() - start;
             signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
             devtools && devtools.update();

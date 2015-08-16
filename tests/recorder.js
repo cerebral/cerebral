@@ -1,18 +1,28 @@
-var Lib = require('./../src/index.js');
+var Controller = require('./../src/index.js');
 var async = function (cb) {
   setTimeout(cb, 0);
+};
+var Model = function () {
+  return function () {
+    return {
+      get: function () {
+
+      },
+      mutators: {
+        set: function (path, value) {
+          state = {};
+          state[path.pop()] = value;
+        }
+      }
+    }
+  };
 };
 
 exports['should record signals'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
-    }
-  });
+  var ctrl = Controller(Model());
   ctrl.signal('test', function (args, state) {
     state.set('foo', args.foo);
   });
@@ -36,18 +46,25 @@ exports['should play back recording'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
-    }
-  });
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, startPlaying, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        getRecordingState: function () {
+          return state;
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
   ctrl.signal('test', function (args, state) {
     state.set('foo', args.foo);
   }, [function (args, state, next) {
@@ -79,18 +96,25 @@ exports['should seek to specific point in recording'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
-    }
-  });
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, startPlaying, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        getRecordingState: function () {
+          return state;
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
   ctrl.signal('test', function (args, state) {
     state.set('foo', args.foo);
   });
@@ -117,18 +141,25 @@ exports['should pause a playback'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
-    }
-  });
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, startPlaying, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        getRecordingState: function () {
+          return state;
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
   ctrl.signal('test', function (args, state) {
     state.set('foo', args.foo);
   });
@@ -167,18 +198,25 @@ exports['should resume a paused playback'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
-    }
-  });
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, startPlaying, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        getRecordingState: function () {
+          return state;
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
   ctrl.signal('test', function (args, state) {
     state.set('foo', args.foo);
   });
