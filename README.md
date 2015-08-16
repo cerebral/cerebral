@@ -117,12 +117,12 @@ function MyAction (input, state, output) {
   // State contains the methods for mutating the state of
   // your application.
   state.set('isLoading', false);
-  state.unset('isLoading');
+  state.unset('isLoading'); // Or use array for deeper paths
   state.merge('user', {name: 'foo'});
   state.push('list', 'foo');
   state.unshift('list', 'bar');
-  state.pop('list');
-  state.shift('list');
+  state.pop('list'); // Or use array for deeper paths
+  state.shift('list'); // Or use array for deeper paths
   state.concat('list', [1, 2, 3]);
   state.splice('list', 1, 1, [1]);
 
@@ -341,7 +341,7 @@ controller.signal('appMounted', Action5, ...MyGroup, Action6);
 ```
 
 ## How to create a custom Cerebral VIEW package
-**view** packages in Cerebral just uses an instantiated Cerebral controller to get state, do state changes and listen to state changes. The package you create basically just needs to an instance of a Cerebral controller and you will have access to the following information.
+**view** packages in Cerebral just uses an instantiated Cerebral controller to get state, do state changes and listen to state changes. The package you create basically just needs an instance of a Cerebral controller and you will have access to the following information.
 
 ```js
 // The controller instantiated can be passed to the package. With React it is
