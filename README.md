@@ -25,7 +25,12 @@ To get an understanding of Cerebral I suggest you choose your preferred media:
 Install the [Chrome Cerebral Debugger](https://chrome.google.com/webstore/detail/cerebral-debugger/ddefoknoniaeoikpgneklcbjlipfedbb)
 
 ### 2. Choose a package
-Cerebral is the **controller** layer of your application. You will also need a **model** layer to store your state and a **view** layer to produce your UI. The following packages are currently available:
+Cerebral is the **controller** layer of your application. You will also need a **model** layer to store your state and a **view** layer to produce your UI.
+
+An example would be:
+`npm install cerebral && npm install cerebral-react && npm install cerebral-immutable-store`
+
+The following packages are currently available:
 
 #### Model packages
 The API you use in Cerebral to change state is the same for all packages, but read their notes to see their differences.
