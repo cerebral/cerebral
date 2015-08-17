@@ -9,7 +9,8 @@ A state controller with its own debugger
 You can access the webpage at [http://christianalfoni.com/cerebral/](http://christianalfoni.com/cerebral/)
 
 - [How to get started](#how-to-get-started)
-- [How to create a custom Cerebral package](#how-to-create-a-custom-cerebral-package)
+- [How to create a custom Cerebral VIEW package](#how-to-create-a-custom-cerebral-view-package)
+- [How to create a custom Cerebral MODEL package](#how-to-create-a-custom-cerebral-model-package)
 
 ## How to get started
 
