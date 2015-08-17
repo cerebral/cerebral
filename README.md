@@ -5,19 +5,11 @@ A state controller with its own debugger
 
 <img src="images/logo.jpg" width="300" align="center">
 
-- [What is Cerebral?](#what-is-cerebral)
+## The Cerebral Webpage is now launched
+You can access the webpage at [http://christianalfoni.com/cerebral/](http://christianalfoni.com/cerebral/)
+
 - [How to get started](#how-to-get-started)
 - [How to create a custom Cerebral package](#how-to-create-a-custom-cerebral-package)
-
-## What is Cerebral?
-To get an understanding of Cerebral I suggest you choose your preferred media:
-
-**Main introduction**: [Cerebral - The Big Introduction](https://www.youtube.com/watch?v=rHqIunT5qus)
-
-- [Watch this video on signals and actions](https://www.youtube.com/watch?v=zkeBjGdn7uM)
-- [Watch this video on Cerebral](https://www.youtube.com/watch?v=xCIv4-Q2dtA)
-- [Read this article on why you might need Cerebral](http://www.christianalfoni.com/articles/2015_08_02_Why-we-are-doing-MVC-and-FLUX-wrong)
-- [Check out a demo using the debugger](http://www.christianalfoni.com/todomvc)
 
 ## How to get started
 
