@@ -2,7 +2,14 @@ var utils = require('./utils.js');
 module.exports = function (signalName, actions) {
   var traverse = function (actions, parentActions, parentIndex) {
     actions.forEach(function (action, index) {
-
+      
+      if (typeof action === 'undefined') {
+        throw new Error([
+          'Cerebral: Action number "' + index + '" in signal "' + signalName +  
+          '" does not exist. Check that you have spelled it correctly!'
+        ].join(''));
+      }
+      
       if (Array.isArray(action)) {
         traverse(action, actions, index);
       } else {
