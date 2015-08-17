@@ -28,6 +28,7 @@ Install the [Chrome Cerebral Debugger](https://chrome.google.com/webstore/detail
 Cerebral is the **controller** layer of your application. You will also need a **model** layer to store your state and a **view** layer to produce your UI.
 
 An example would be:
+
 `npm install cerebral && npm install cerebral-react && npm install cerebral-immutable-store`
 
 The following packages are currently available:
