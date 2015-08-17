@@ -207,7 +207,7 @@ import setSuccessMessage from './actions/setSuccessMessage.js';
 import setErrorMessage from './actions/setErrorMessage.js';
 
 controller.signal('appMounted',
-  chooseColor, {
+  checkSomething, {
     success: [setSuccessMessage],
     error: [setErrorMessage]
   }
