@@ -36,5 +36,8 @@ module.exports = {
   },
   isAction: function (action) {
     return typeof action === 'function';
+  },
+  isDeveloping: function () {
+    return !global.process || global.process.env !== 'production';
   }
 };

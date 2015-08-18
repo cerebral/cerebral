@@ -28,6 +28,14 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
       var payload = hasSyncArg ? arguments[1] : arguments[0]
       var asyncActionResults = hasSyncArg ? arguments[2] : arguments[1];
 
+      if (utils.isDeveloping()) {
+        try {
+          JSON.stringify(payload);
+        } catch (e) {
+          throw new Error('Cerebral: You are passing a non-serializable payload to signal "' + signalName + '", maybe a mouse event? Only pass plain JS');
+        }
+      }
+
       var runSignal = function () {
 
         // Accumulate the args in one object that will be passed
