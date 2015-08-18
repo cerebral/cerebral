@@ -3,7 +3,7 @@ A state controller with its own debugger
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christianalfoni/cerebral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-<img src="images/logo.jpg" width="300" align="center">
+<img src="images/logo.png" width="300" align="center">
 
 ## The Cerebral Webpage is now launched
 You can access the webpage at [http://christianalfoni.com/cerebral/](http://christianalfoni.com/cerebral/)
