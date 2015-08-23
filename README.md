@@ -90,6 +90,7 @@ To create a signal please read the README of the chosen package. To define a sig
 - [Types](#types)
 - [Custom Types](#custom-type-checking)
 - [Groups](#groups)
+- [Events](#events)
 
 #### Naming
 The way you think of signals is that something happened in your application. Either in your VIEW layer, a router, maybe a websocket connection etc. So the name of a signal should define what happened: "appMounted", "inputChanged", "formSubmitted". The actions are named by their purpose, like "setInputValue", "postForm" etc. This will make it very easy for you to read and understand the flow of the application. All signal definitions first tells you "what happened in your app". Then each action describes its part of the flow that occurs when the signal triggers.
@@ -364,6 +365,16 @@ By using ES6 syntax you can easily create groups of actions that can be reused.
 const MyGroup = [Action1, Action2, Action3];
 controller.signal('appMounted', Action4, ...MyGroup);
 controller.signal('appMounted', Action5, ...MyGroup, Action6);
+```
+
+#### Events
+```js
+controller.on('change', function () {});
+controller.on('error', function (error) {});
+controller.on('signalStart', function () {});
+controller.on('signalEnd', function () {});
+controller.on('actionStart', function (isAsync) {});
+controller.on('actionEnd', function () {});
 ```
 
 ## How to create a custom Cerebral VIEW package
