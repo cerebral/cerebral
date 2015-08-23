@@ -352,12 +352,12 @@ exports['should throw error when trying to mutate with an async action'] = funct
   ctrl.signals.test();
 };
 
-exports['should allow for default args'] = function (test) {
+exports['should allow services'] = function (test) {
   var ctrl = Controller(Model(), {
     foo: 'bar'
   });
-  ctrl.signal('test', function (args, state) {
-    test.deepEqual(args, {foo: 'bar'});
+  ctrl.signal('test', function (input, state, output, services) {
+    test.deepEqual(services, {foo: 'bar'});
     test.done();
   });
   ctrl.signals.test();

@@ -61,20 +61,18 @@ const state = {
   foo: 'bar'
 };
 
-// Define any default inputs to your signals. Often used
-// to pass in utils like ajax libs etc.
-const defaultInput = {
-  utils: {
-    request: request
-  }
+// Services are utils you want to inject into each action. This is
+// typically ajax libs, Falcor, underscore etc.
+const services = {
+  request: request
 };
 
 // Instantiate the model
 const model = Model(state);
 
 // Instantiate the controller by passing the model it connects to
-// and any default inputs
-export default Controller(model, defaultInput)
+// and any services
+export default Controller(model, services)
 ```
 
 ### 4. Signals and actions
@@ -87,9 +85,10 @@ To create a signal please read the README of the chosen package. To define a sig
 - [Trigger](#trigger)
 - [Paths](#paths)
 - [Async](#async)
+- [Services](#services)
 - [Outputs](#outputs)
 - [Types](#types)
-- [Custom Types](#custom-types)
+- [Custom Types](#custom-type-checking)
 - [Groups](#groups)
 
 #### Naming
@@ -107,10 +106,9 @@ export default myAction;
 
 #### Arguments
 ```js
-function MyAction (input, state, output) {
+function MyAction (input, state, output, services) {
   // Input contains all inputs passed to the signal itself
-  // and any outputs from the previous actions. Using packages
-  // you can also add default input like AJAX libs etc.
+  // and any outputs from the previous actions
   input // {}
 
   // State contains the methods for mutating the state of
@@ -138,11 +136,14 @@ function MyAction (input, state, output) {
   output({foo: 'bar'});
   output.success({foo: 'bar'});
   output.error({foo: 'bar'});
+
+  // Services are any injected utils you want to use in your actions
+  services // {request: function () {}}
 };
 
 export default MyAction;
 ```
-*Note*: Asynchronous actions *cannot* mutate state. Calling `set` or `merge` on the `state` parameter above will throw an error, as they will be undefined.
+*Note*: Asynchronous actions *cannot* mutate state. Calling `set` or `merge` on the `state` parameter above will throw an error.
 
 It is best practice not to mutate state in async actions.
 
@@ -260,6 +261,21 @@ controller.signal('appMounted',
 );
 ```
 
+#### Services
+You can inject any services you need to talk to the server, do complex computations etc. These services are injected when instantiating the controller.
+
+```js
+function getUser(input, state, output, services) {
+  services.ajax.get('/user').then(output.success);
+}
+```
+You can also use ES6 syntax:
+```js
+function getUser(input, state, output, {ajax}) {
+  ajax.get('/user').then(output.success);
+}
+```
+
 #### Outputs
 You can define custom outputs. This will override the default "success" and "error" outputs. What is especially nice with manually defining outputs is that they will be analyzed by Cerebral. You will get errors if you use your actions wrong, are missing paths for your outputs etc.
 
@@ -283,7 +299,7 @@ export default myAction;
 ```
 
 #### Types
-You can type check the inputs and outputs of an action to be notified when you are using your signals the wrong way.
+You can type check the inputs and outputs of an action to be notified when you are using your signals the wrong way. The default type checking with Cerebral is very simple. If you know type checking well it is encouraged to use the "custom type checks" instead. But is type checking new to you, this is a good place to start.
 
 ```js
 function myAction (input, state, output) {
@@ -310,24 +326,35 @@ myAction.outputs = {
   }
 };
 
+// If not passing any value
+myAction.output = undefined;
+
+// If passing null or no value
+myAction.outputs = {
+  foo: null,
+  bar: undefined
+};
+
 export default myAction;
 ```
-The following types are available: **String, Number, Boolean, Object, Array**, its the default type constructors in JavaScript.
+The following types are available: **String, Number, Boolean, Object, Array, null** and in addition **undefined** where you do not want to pass a value.
 
-#### Custom Types
-You can use a function instead. That allows you to use any typechecker.
+#### Custom Type Checking
+You can use a function instead. That allows you to use any typechecker. We will use [tcomb](https://github.com/gcanti/tcomb) in this example.
 
 ```js
+import t from 'tcomb';
+
 function myAction (input, state, output) {
   output({foo: 'bar'});
 };
 
-// Define what args you expect to be received on this action
 myAction.input = {
-  isCool: function (value) {
-    return typeof value === 'string' || typeof value === 'number';
-  },
-  isNotCool: MyTypeChecker.isString
+  foo: t.String.is,
+  bar: t.maybe(t.Number).is,
+  signature: function (value) {
+    return typeof value === 'string';
+  }
 };
 ```
 
@@ -411,6 +438,13 @@ module.exports = function (state) {
       // You always receive an array here
       get: function (path) {
         return pathToValue(path, state);
+      },
+
+      // When the debugger logs out the model it calls this
+      // function. It should return an immutable version of the
+      // state
+      toJSON: function () {
+        return state.toJS();
       },
 
       // When recorder needs its initial state, return that here

@@ -31,16 +31,16 @@ var createStateArg = function (actions, model, isAsync) {
 };
 
 module.exports = {
-  sync: function (actions, signalArgs, model, defaultInput) {
+  sync: function (actions, signalArgs, model) {
     return [
-      utils.merge(utils.merge({}, signalArgs), defaultInput || {}),
+      signalArgs,
       createStateArg(actions, model, false)
     ];
 
   },
-  async: function (actions, signalArgs, model, defaultInput) {
+  async: function (actions, signalArgs, model) {
     return [
-      utils.merge(utils.merge({}, signalArgs), defaultInput || {}),
+      signalArgs,
       createStateArg(actions, model, true)
     ];
 

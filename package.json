@@ -1,6 +1,6 @@
 {
   "name": "cerebral",
-  "version": "0.16.0",
+  "version": "0.17.0",
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {

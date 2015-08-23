@@ -56,6 +56,10 @@ module.exports = function (signalStore, controller) {
     console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
   });
 
+  window.addEventListener('cerebral.dev.logModel', function (event) {
+    console.log('CEREBRAL - model:', (controller.toJSON || controller.get)());
+  });
+
   window.addEventListener('unload', function () {
     utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', JSON.stringify(signalStore.getSignals()));
     utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', JSON.stringify(signalStore.willKeepState()));

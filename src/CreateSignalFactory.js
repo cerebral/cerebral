@@ -10,7 +10,7 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0);
 };
 
-module.exports = function (signalStore, recorder, devtools, controller, model, defaultInput) {
+module.exports = function (signalStore, recorder, devtools, controller, model, services) {
 
   return function () {
 
@@ -18,7 +18,9 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
     var signalName = args.shift();
     var actions = args;
 
-    analyze(signalName, actions);
+    if (utils.isDeveloping()) {
+      analyze(signalName, actions);
+    }
 
     return function () {
 
@@ -27,14 +29,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
       var runSync = hasSyncArg;
       var payload = hasSyncArg ? arguments[1] : arguments[0]
       var asyncActionResults = hasSyncArg ? arguments[2] : arguments[1];
-
-      if (utils.isDeveloping()) {
-        try {
-          JSON.stringify(payload);
-        } catch (e) {
-          throw new Error('Cerebral: You are passing a non-serializable payload to signal "' + signalName + '", maybe a mouse event? Only pass plain JS');
-        }
-      }
 
       var runSignal = function () {
 
@@ -53,6 +47,8 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
           asyncActionResults: []
         };
 
+        controller.emit('signalStart');
+
         if (recorder.isRecording()) {
           recorder.addSignal(signal);
         }
@@ -64,7 +60,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
 
             var actionFunc = executionArray.shift();
 
-            if (actionFunc.input) {
+            if (utils.isDeveloping() && actionFunc.input) {
               Object.keys(actionFunc.input).forEach(function (key) {
                 if (typeof signalArgs[key] === 'undefined' || !types(actionFunc.input[key], signalArgs[key])) {
                   throw new Error([
@@ -96,6 +92,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
 
               } else {
 
+                controller.emit('actionStart', true);
                 controller.emit('change');
                 var currentDuration = Date.now() - start;
                 signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
@@ -105,7 +102,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
                 var actionOutputTracker = [];
                 Promise.all(asyncActionArray.map(function (actionFunc) {
                   if (utils.isAction(actionFunc)) {
-                    var actionArgs = createActionArgs.async(signal.actions, signalArgs, model, defaultInput);
+                    var actionArgs = createActionArgs.async(signal.actions, signalArgs, model);
                     var action = {
                       name: utils.getFunctionName(actionFunc),
                       duration: 0,
@@ -118,7 +115,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
                     actionOutputTracker.push(action);
 
                     var next = createNext.async(actionFunc);
-                    actionFunc.apply(null, actionArgs.concat(next.fn));
+                    actionFunc.apply(null, actionArgs.concat(next.fn, services));
                     return next.promise;
                   } else {
                     return actionFunc;
@@ -141,6 +138,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
                     }
                     signalStore.removeAsyncAction();
                     start = Date.now();
+                    controller.emit('actionEnd');
                     execute();
 
                   })
@@ -156,9 +154,10 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
 
             } else {
 
+              controller.emit('actionStart', false);
               try {
 
-                var actionArgs = createActionArgs.sync(signal.actions, signalArgs, model, defaultInput);
+                var actionArgs = createActionArgs.sync(signal.actions, signalArgs, model);
                 var action = {
                   name: utils.getFunctionName(actionFunc),
                   duration: 0,
@@ -170,7 +169,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
                 signal.actions.push(action);
 
                 var next = createNext.sync(actionFunc, signal.name);
-                actionFunc.apply(null, actionArgs.concat(next));
+                actionFunc.apply(null, actionArgs.concat(next, services));
 
                 var result = next._result || {};
                 utils.merge(signalArgs, result.arg);
@@ -181,6 +180,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
                   var exits = executionArray.shift();
                   executionArray.splice.apply(executionArray, [0, 0].concat(exits[result.path]));
                 }
+                controller.emit('actionEnd');
                 execute();
 
               } catch (error) {
@@ -192,6 +192,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, d
 
           } else if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
 
+            controller.emit('signalEnd');
             controller.emit('change');
             var currentDuration = Date.now() - start;
             signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
