@@ -33,7 +33,7 @@ module.exports = function (Model, services) {
     var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0];
     return model.get(path);
   };
-  controller.export = model.export;
+  controller.toJSON = model.toJSON;
 
   return controller;
 };
