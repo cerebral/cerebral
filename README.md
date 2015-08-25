@@ -392,7 +392,7 @@ controller.signal('appMounted', myAction);
 function actionFactory (someArg) {
   return function myCustomAction (input, state, output, services) {}
 }
-controller.signal('appMounted', actionFactory('someArg'));
+controller.signal('appMounted', actionFactory('someArg'), someOtherAction);
 ```
 Now the custom action has access to the argument passed to the factory. This is especially great for handling http requests where maybe only the url differs on the different requests.
 
@@ -401,7 +401,7 @@ Now the custom action has access to the argument passed to the factory. This is 
 function actionChainFactory (someArg) {
   return [actionFactory(someArg), actionFactoryB('someOtherArg'), actionC];
 }
-controller.signal('appMounted', ...actionChainFactory('someArg'));
+controller.signal('appMounted', ...actionChainFactory('someArg'), someOtherAction);
 ```
 By returning an array from a factory you are able to do some pretty nifty compositions. By using the ES6 spread operator you can easily inject this chain into any part of the signal chain.
 
