@@ -144,7 +144,7 @@ module.exports = function (signalMethods, controller) {
 
       }
 
-      controller.emit('remember');
+      controller.emit('change');
 
     },
 
