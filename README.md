@@ -91,6 +91,7 @@ To create a signal please read the README of the chosen package. To define a sig
 - [Custom Types](#custom-type-checking)
 - [Groups](#groups)
 - [Events](#events)
+- [Functional Traits](#functional-traits)
 
 #### Naming
 The way you think of signals is that something happened in your application. Either in your VIEW layer, a router, maybe a websocket connection etc. So the name of a signal should define what happened: "appMounted", "inputChanged", "formSubmitted". The actions are named by their purpose, like "setInputValue", "postForm" etc. This will make it very easy for you to read and understand the flow of the application. All signal definitions first tells you "what happened in your app". Then each action describes its part of the flow that occurs when the signal triggers.
@@ -376,6 +377,33 @@ controller.on('signalEnd', function () {});
 controller.on('actionStart', function (isAsync) {});
 controller.on('actionEnd', function () {});
 ```
+
+#### Functional Traits
+Since actions are pure functions it is very easy for you to compose functions and even action chains together. You might have a complex flow that is to be reused across signals.
+
+*Simple action*
+```js
+function myAction (input, state, output, services) {}
+controller.signal('appMounted', myAction);
+```
+
+*Action Factory*
+```js
+function actionFactory (someArg) {
+  return function myCustomAction (input, state, output, services) {}
+}
+controller.signal('appMounted', actionFactory('someArg'));
+```
+Now the custom action has access to the argument passed to the factory. This is especially great for handling http requests where maybe only the url differs on the different requests.
+
+*Action Chain Factory*
+```js
+function actionChainFactory (someArg) {
+  return [actionFactory(someArg), actionFactoryB('someOtherArg'), actionC];
+}
+controller.signal('appMounted', ...actionChainFactory('someArg'));
+```
+By returning an array from a factory you are able to do some pretty nifty compositions. By using the ES6 spread operator you can easily inject this chain into any part of the signal chain.
 
 ## How to create a custom Cerebral VIEW package
 **view** packages in Cerebral just uses an instantiated Cerebral controller to get state, do state changes and listen to state changes. The package you create basically just needs an instance of a Cerebral controller and you will have access to the following information.
