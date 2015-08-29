@@ -1,6 +1,7 @@
 var utils = require('./utils.js');
 
 module.exports = function (signalStore, controller) {
+
   var getDetail = function () {
     return {
       props: {

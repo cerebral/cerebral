@@ -24,7 +24,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     var signalChain = function () {
 
-      var executionArray = actions.slice();
+      var executionArray = signalChain.chain.slice();
       var hasSyncArg = arguments[0] === true;
       var runSync = hasSyncArg;
       var payload = hasSyncArg ? arguments[1] : arguments[0]
@@ -73,7 +73,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
             }
 
             if (Array.isArray(actionFunc)) {
-
               var asyncActionArray = actionFunc.slice();
 
               if (signalStore.isRemembering() || recorder.isPlaying()) {

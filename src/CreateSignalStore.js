@@ -83,6 +83,7 @@ module.exports = function (signalMethods, controller) {
 
     // Will reset the SignalStore
     reset: function() {
+
       if (!isRemembering) {
 
         signals = [];
@@ -128,6 +129,7 @@ module.exports = function (signalMethods, controller) {
             while (signalName.length) {
               signalMethodPath = signalMethodPath[signalName.shift()];
             }
+
             signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
             currentIndex = x;
 
@@ -136,7 +138,6 @@ module.exports = function (signalMethods, controller) {
           isRemembering = false;
 
         } catch (e) {
-
           isRemembering = false;
           this.reset();
 
