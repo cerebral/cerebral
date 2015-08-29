@@ -2,7 +2,6 @@ import React from 'react/addons';
 import {Decorator as Cerebral} from 'cerebral-react';
 
 @Cerebral((props) => {
-  console.log(props);
   return {
     remainingCount: ['remainingCount'],
     filter: ['filter'],

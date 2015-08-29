@@ -7,6 +7,7 @@ import App from './App.js';
 import controller from './controller.js';
 import ReactiveRouter from 'reactive-router';
 import {Container} from 'cerebral-react';
+import CerebralRouter from './../../cerebral-router/index.js';
 
 // ACTIONS
 import addTodo from './actions/addTodo.js';
@@ -43,7 +44,7 @@ controller.signal('newTodoSubmitted',
 controller.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleAllChanged', toggleAllChecked, setVisibleTodos, setCounters);
-controller.signal('routeChanged', setUrl, setFilter, setVisibleTodos);
+controller.signal('routeChanged', setFilter, setVisibleTodos);
 controller.signal('clearCompletedClicked', clearCompleted, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('todoDoubleClicked', editTodo);
 controller.signal('newTitleChanged', setTodoNewTitle);
@@ -53,6 +54,12 @@ controller.signal('newTitleSubmitted', stopEditingTodo);
 React.render(<Container controller={controller} app={App}/>, document.querySelector('#app'));
 
 // ROUTER
+CerebralRouter(controller, {
+  '/': 'routeChanged',
+  '/:filter': 'routeChanged'
+});
+
+/*
 const router = ReactiveRouter({
   '/': controller.signals.routeChanged,
   '/:filter': controller.signals.routeChanged
@@ -67,3 +74,4 @@ controller.on('change', function () {
 controller.on('remember', function () {
   router.setSilent(controller.get('url'));
 });
+*/

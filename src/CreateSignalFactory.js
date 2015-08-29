@@ -22,7 +22,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
       analyze(signalName, actions);
     }
 
-    return function () {
+    var signalChain = function () {
 
       var executionArray = actions.slice();
       var hasSyncArg = arguments[0] === true;
@@ -114,6 +114,10 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                     signal.actions.push(action);
                     actionOutputTracker.push(action);
 
+                    if (typeof actionFunc !== 'function') {
+                      throw new Error('Cerebral - There is something wrong with the chain in signal "' + signalName + '". Please verify outputs and that async signals are defined within an array.');
+                    }
+
                     var next = createNext.async(actionFunc);
                     actionFunc.apply(null, actionArgs.concat(next.fn, services));
                     return next.promise;
@@ -167,6 +171,10 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   isAsync: false
                 };
                 signal.actions.push(action);
+
+                if (typeof actionFunc !== 'function') {
+                  throw new Error('Cerebral - There is something wrong with the chain in signal "' + signalName + '". Please verify outputs and that async signals are defined within an array.');
+                }
 
                 var next = createNext.sync(actionFunc, signal.name);
                 actionFunc.apply(null, actionArgs.concat(next, services));
@@ -230,6 +238,10 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
       }
 
     };
+
+    signalChain.chain = actions;
+
+    return signalChain;
 
   };
 

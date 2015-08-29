@@ -10,6 +10,7 @@ var config = {
     filename: 'todomvc.js'
   },
   resolve: {
+    fallback: node_modules,
     alias: {
       'cerebral': path.resolve(__dirname, 'src', 'index.js')
     }
