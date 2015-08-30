@@ -77,7 +77,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
               if (signalStore.isRemembering() || recorder.isPlaying()) {
 
-                while(asyncActionResults.length) {
+                while(asyncActionResults.length && asyncActionArray.length) {
                   var result = asyncActionResults.shift();
                   asyncActionArray.shift(); // Keep in sync, to extract exits
                   utils.merge(signalArgs, result.arg);

@@ -50,14 +50,16 @@ controller.signal('todoDoubleClicked', editTodo);
 controller.signal('newTitleChanged', setTodoNewTitle);
 controller.signal('newTitleSubmitted', stopEditingTodo);
 
-// RENDER
-React.render(<Container controller={controller} app={App}/>, document.querySelector('#app'));
-
 // ROUTER
 CerebralRouter(controller, {
   '/': 'routeChanged',
   '/:filter': 'routeChanged'
-});
+}).start();
+
+// RENDER
+React.render(<Container controller={controller} app={App}/>, document.querySelector('#app'));
+
+
 
 /*
 const router = ReactiveRouter({

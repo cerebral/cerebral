@@ -113,7 +113,6 @@ module.exports = function (signalMethods, controller) {
         currentIndex = -1;
 
         // Go through signals
-
         try {
 
           for (var x = 0; x <= index; x++) {
@@ -135,11 +134,8 @@ module.exports = function (signalMethods, controller) {
 
           }
 
-          isRemembering = false;
-
         } catch (e) {
           console.warn('CEREBRAL - There was an error remembering state, it has been reset');
-          isRemembering = false;
           this.reset();
 
         }
@@ -147,6 +143,7 @@ module.exports = function (signalMethods, controller) {
       }
 
       controller.emit('change');
+      isRemembering = false;
 
     },
 
