@@ -138,6 +138,7 @@ module.exports = function (signalMethods, controller) {
           isRemembering = false;
 
         } catch (e) {
+          console.warn('CEREBRAL - There was an error remembering state, it has been reset');
           isRemembering = false;
           this.reset();
 

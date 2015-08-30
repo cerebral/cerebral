@@ -185,6 +185,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
                 if (result.path) {
                   var exits = executionArray.shift();
+                  action.path = result.path;
                   executionArray.splice.apply(executionArray, [0, 0].concat(exits[result.path]));
                 }
                 controller.emit('actionEnd');
