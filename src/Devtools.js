@@ -25,14 +25,9 @@ module.exports = function (signalStore, controller) {
     var event = new CustomEvent('cerebral.dev.initialized', {
       detail: getDetail()
     });
+    signalStore.remember(signalStore.getSignals().length - 1);
     window.dispatchEvent(event);
   };
-
-  window.addEventListener('cerebral.dev.initialize', function () {
-    signalStore.remember(signalStore.getSignals().length - 1);
-    initialize();
-  });
-  initialize();
 
   window.addEventListener('cerebral.dev.toggleKeepState', function () {
     signalStore.toggleKeepState();
@@ -67,7 +62,18 @@ module.exports = function (signalStore, controller) {
   });
 
   return {
-    update: update
+    update: update,
+    start: function () {
+      if (utils.isDeveloping()) {
+        if (window.CEREBRAL_DEBUGGER_INJECTED) {
+          initialize();
+        } else {
+          window.addEventListener('cerebral.dev.initialize', function () {
+            initialize();
+          });
+        }
+      }
+    }
   };
 
 };
