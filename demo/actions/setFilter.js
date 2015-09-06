@@ -1,6 +1,5 @@
 function setFilter (args, state) {
-  const filter = args.params.filter || 'all';
-  state.set('filter', filter);
+  state.set('filter', args.params.filter);
 };
 
 export default setFilter;

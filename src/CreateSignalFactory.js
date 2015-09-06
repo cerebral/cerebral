@@ -2,6 +2,7 @@ var utils = require('./utils.js');
 var createActionArgs = require('./createActionArgs.js');
 var createNext = require('./createNext.js');
 var analyze = require('./analyze.js');
+var staticTree = require('./staticTree');
 var types = require('./types.js');
 
 var batchedSignals = [];
@@ -16,19 +17,25 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     var args = [].slice.call(arguments);
     var signalName = args.shift();
-    var actions = args;
+    var chain = args;
 
     if (utils.isDeveloping()) {
-      analyze(signalName, actions);
+      analyze(signalName, chain);
     }
 
     var signalChain = function () {
 
-      var executionArray = signalChain.chain.slice();
+      var tree = staticTree(signalChain.chain);
+      var actions = tree.actions;
+
       var hasSyncArg = arguments[0] === true;
       var runSync = hasSyncArg;
       var payload = hasSyncArg ? arguments[1] : arguments[0]
-      var asyncActionResults = hasSyncArg ? arguments[2] : arguments[1];
+      var branches = hasSyncArg ? arguments[2] : arguments[1];
+
+      // When remembering, the branches with filled out values will be
+      // passed
+      branches = branches || tree.branches;
 
       var runSignal = function () {
 
@@ -41,19 +48,157 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         var signal = {
           name: signalName,
           start: start,
-          actions: [],
+          branches: branches,
           duration: 0,
-          payload: payload,
-          asyncActionResults: []
+          input: payload
         };
-
-        controller.emit('signalStart');
 
         if (recorder.isRecording()) {
           recorder.addSignal(signal);
         }
         signalStore.addSignal(signal);
 
+
+        var runBranch = function (branch, index) {
+
+          var currentBranch = branch[index];
+          if (!currentBranch && branch === signal.branches && !signalStore.isRemembering() && !recorder.isCatchingUp()) {
+
+             controller.emit('signalEnd');
+             controller.emit('change');
+             devtools && devtools.update();
+             return;
+
+          }
+
+          if (!currentBranch) {
+            return;
+          }
+
+          if (Array.isArray(currentBranch)) {
+
+            if (signalStore.isRemembering() || recorder.isPlaying()) {
+
+              currentBranch.forEach(function (action) {
+
+                utils.merge(signalArgs, action.output);
+
+                if (action.outputPath) {
+                  return runBranch(action.outputs[action.outputPath], 0);
+                } else {
+                  controller.emit('actionEnd');
+                  return runBranch(branch, index + 1);
+                }
+
+              });
+
+            } else {
+
+              controller.emit('actionStart', true);
+              controller.emit('change');
+              signalStore.addAsyncAction();
+
+              var promises = currentBranch.map(function (action) {
+
+                var actionFunc = actions[action.actionIndex];
+
+                if (utils.isDeveloping() && actionFunc.input) {
+                  utils.verifyInput(action.name, signal.name, actionFunc.input, signalArgs);
+                }
+
+                action.isExecuting = true;
+                action.input = utils.merge({}, signalArgs);
+                var actionArgs = createActionArgs.async(action, signalArgs, model);
+                var next = createNext.async(actionFunc);
+                actionFunc.apply(null, actionArgs.concat(next.fn, services));
+                return next.promise.then(function (result) {
+
+                  action.hasExecuted = true;
+                  action.isExecuting = false;
+                  action.output = result.arg;
+                  utils.merge(signalArgs, result.arg);
+                  signalStore.removeAsyncAction();
+                  if (result.path) {
+                    action.outputPath = result.path;
+                    return runBranch(action.outputs[result.path], 0);
+                  }
+
+                  devtools && devtools.update();
+
+                });
+
+              });
+              devtools && devtools.update();
+              return Promise.all(promises)
+              .then(function () {
+                return runBranch(branch, index + 1);
+              })
+              .catch(function (error) {
+                // We just throw any unhandled errors
+                controller.emit('error', error);
+                throw error;
+              });
+
+
+            }
+
+          } else {
+
+            controller.emit('actionStart', false);
+            try {
+
+              var action = currentBranch;
+              var actionArgs = createActionArgs.sync(action, signalArgs, model);
+              var actionFunc = actions[action.actionIndex];
+
+              if (utils.isDeveloping() && actionFunc.input) {
+                utils.verifyInput(action.name, signal.name, actionFunc.input, signalArgs);
+              }
+
+              action.mutations = []; // Reset mutations array
+              action.input = utils.merge({}, signalArgs);
+
+              var next = createNext.sync(actionFunc, signal.name);
+              actionFunc.apply(null, actionArgs.concat(next, services));
+
+              // TODO: Also add input here
+
+              var result = next._result || {};
+              utils.merge(signalArgs, result.arg);
+
+              action.isExecuting = false;
+              action.hasExecuted = true;
+              action.output = result.arg;
+
+              if (result.path) {
+                action.outputPath = result.path;
+                var result = runBranch(action.outputs[result.path], 0);
+                if (result && result.then) {
+                  return result.then(function () {
+                    return runBranch(branch, index + 1);
+                  });
+                } else {
+                  return runBranch(branch, index + 1);
+                }
+              } else {
+                controller.emit('actionEnd');
+                return runBranch(branch, index + 1);
+              }
+
+            } catch (error) {
+
+              controller.emit('error', error);
+              throw error;
+            }
+
+          }
+
+        };
+
+        runBranch(signal.branches, 0);
+
+        return;
+        /*
         var execute = function () {
 
           if (executionArray.length) {
@@ -211,7 +356,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         };
 
         execute();
-
+        */
       };
 
       if (runSync || signalStore.isRemembering() || recorder.isCatchingUp()) {
@@ -239,7 +384,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     };
 
-    signalChain.chain = actions;
+    signalChain.chain = chain;
 
     return signalChain;
 

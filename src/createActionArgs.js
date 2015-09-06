@@ -1,6 +1,6 @@
 var utils = require('./utils.js');
 
-var createStateArg = function (actions, model, isAsync) {
+var createStateArg = function (action, model, isAsync) {
   var state = {};
   state.get = function () {
     var path = arguments.length ? Array.isArray(arguments[0]) ? arguments[0] : [].slice.call(arguments) : [];
@@ -18,7 +18,7 @@ var createStateArg = function (actions, model, isAsync) {
       } else if (typeof args[0] === 'string') {
         path = [args.shift()];
       }
-      actions[actions.length - 1].mutations.push({
+      action.mutations.push({
         name: mutator,
         path: path.slice(),
         args: args
@@ -31,17 +31,17 @@ var createStateArg = function (actions, model, isAsync) {
 };
 
 module.exports = {
-  sync: function (actions, signalArgs, model) {
+  sync: function (action, signalArgs, model) {
     return [
       signalArgs,
-      createStateArg(actions, model, false)
+      createStateArg(action, model, false)
     ];
 
   },
-  async: function (actions, signalArgs, model) {
+  async: function (action, signalArgs, model) {
     return [
       signalArgs,
-      createStateArg(actions, model, true)
+      createStateArg(action, model, true)
     ];
 
   }

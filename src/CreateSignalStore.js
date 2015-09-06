@@ -129,12 +129,13 @@ module.exports = function (signalMethods, controller) {
               signalMethodPath = signalMethodPath[signalName.shift()];
             }
 
-            signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
+            signalMethodPath.call(null, signal.input, signal.branches);
             currentIndex = x;
 
           }
 
         } catch (e) {
+          console.log(e);
           console.warn('CEREBRAL - There was an error remembering state, it has been reset');
           this.reset();
 

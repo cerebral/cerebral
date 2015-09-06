@@ -36,7 +36,7 @@ module.exports = function (signalStore, signalMethods, controller, model) {
         while (signalName.length) {
           signalMethodPath = signalMethodPath[signalName.shift()];
         }
-        signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
+        signalMethodPath.call(null, signal.input, signal.branches);
 
       };
 
@@ -47,6 +47,7 @@ module.exports = function (signalStore, signalMethods, controller, model) {
       isCatchingUp = true;
       catchup.forEach(triggerSignal);
       isCatchingUp = false;
+
 
       if (startPlaying) {
         this.createTimer();
@@ -66,6 +67,7 @@ module.exports = function (signalStore, signalMethods, controller, model) {
         isPlaying = false;
         controller.emit('change');
       }, currentRecording.end - currentRecording.start - seek ));
+
       controller.emit('change');
     },
 

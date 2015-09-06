@@ -5,7 +5,6 @@ import './styles.css';
 import React from 'react';
 import App from './App.js';
 import controller from './controller.js';
-import ReactiveRouter from 'reactive-router';
 import {Container} from 'cerebral-react';
 import CerebralRouter from './../../cerebral-router/index.js';
 
@@ -26,9 +25,11 @@ import editTodo from './actions/editTodo.js';
 import setTodoNewTitle from './actions/setTodoNewTitle.js';
 import stopEditingTodo from './actions/stopEditingTodo.js';
 import setUrl from './actions/setUrl.js';
+import unsetFilter from './actions/unsetFilter.js';
 
 // SIGNALS
 
+controller.signal('allTodosClicked', unsetFilter, setVisibleTodos)
 controller.signal('newTodoTitleChanged', setNewTodoTitle);
 controller.signal('newTodoSubmitted',
   addTodo,
@@ -44,7 +45,7 @@ controller.signal('newTodoSubmitted',
 controller.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleAllChanged', toggleAllChecked, setVisibleTodos, setCounters);
-controller.signal('routeChanged', setFilter, setVisibleTodos);
+controller.signal('filterClicked', setFilter, setVisibleTodos);
 controller.signal('clearCompletedClicked', clearCompleted, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('todoDoubleClicked', editTodo);
 controller.signal('newTitleChanged', setTodoNewTitle);
@@ -52,8 +53,8 @@ controller.signal('newTitleSubmitted', stopEditingTodo);
 
 // ROUTER
 CerebralRouter(controller, {
-  '/': 'routeChanged',
-  '/:filter': 'routeChanged'
+  '/': 'allTodosClicked',
+  '/:filter': 'filterClicked'
 }).start();
 
 // RENDER

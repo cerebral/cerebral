@@ -65,10 +65,10 @@ exports['should play back recording'] = function (test) {
     };
   };
   var ctrl = Controller(Model());
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  }, [function (args, state, next) {
-    next();
+  ctrl.signal('test', function (input, state) {
+    state.set('foo', input.foo);
+  }, [function (input, state, output) {
+    output();
   }]);
   ctrl.recorder.record(state);
 
