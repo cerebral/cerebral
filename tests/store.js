@@ -143,17 +143,15 @@ exports['should indicate async actions'] = function (test) {
 
 exports['should indicate when async actions are running'] = function (test) {
   var ctrl = Controller(Model());
-  ctrl.signal('test', [function (args, state, next) {
-    next();
-  }]);
-  ctrl.signals.test();
-  async(function () {
+  ctrl.signal('test', [function (input, state, output) {
     test.ok(ctrl.store.isExecutingAsync());
-    async(function () {
-      test.ok(!ctrl.store.isExecutingAsync());
-      test.done();
-    });
+    output();
+  }]);
+  ctrl.on('signalEnd', function () {
+    test.ok(!ctrl.store.isExecutingAsync());
+    test.done();
   });
+  ctrl.signals.test();
 
 };
 
