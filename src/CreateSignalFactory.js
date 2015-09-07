@@ -48,6 +48,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         var signal = {
           name: signalName,
           start: start,
+          isExecuting: true,
           branches: branches,
           duration: 0,
           input: payload
@@ -64,6 +65,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
           var currentBranch = branch[index];
           if (!currentBranch && branch === signal.branches && !signalStore.isRemembering() && !recorder.isCatchingUp()) {
 
+             signal.isExecuting = false;
              controller.emit('signalEnd');
              controller.emit('change');
              devtools && devtools.update();
@@ -107,7 +109,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 }
 
                 signalStore.addAsyncAction();
-                
+
                 action.isExecuting = true;
                 action.input = utils.merge({}, signalArgs);
                 var actionArgs = createActionArgs.async(action, signalArgs, model);

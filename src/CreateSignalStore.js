@@ -148,6 +148,15 @@ module.exports = function (signalMethods, controller) {
 
     },
 
+    removeRunningSignals: function () {
+      for (var x = 0; x < signals.length; x++) {
+        if (signals[x].isExecuting) {
+          signals.splice(x, 1);
+          x--;
+        }
+      }
+    },
+
     getSignals: function () {
       return signals;
     },
