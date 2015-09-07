@@ -235,6 +235,23 @@ exports['should be able to resolve as an async action'] = function (test) {
   ctrl.signals.test();
 };
 
+exports['should trigger change event on individual async action paths'] = function (test) {
+  var ctrl = Controller(Model());
+  var changeCount = 0;
+  ctrl.signal('test', [function (input, state, output) {
+    output.success();
+  }, {success: []}, function (input, state, output) {
+    output.success();
+  }, {success: []}], function (input) {
+    test.equal(changeCount, 3);
+    test.done();
+  });
+  ctrl.on('change', function () {
+    changeCount++;
+  });
+  ctrl.signals.test();
+};
+
 exports['should be able to resolve to default path success'] = function (test) {
   var ctrl = Controller(Model());
   ctrl.signal('test', function (input, state, output) {
