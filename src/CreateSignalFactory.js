@@ -86,17 +86,17 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 if (action.outputPath) {
                   return runBranch(action.outputs[action.outputPath], 0);
                 } else {
-                  controller.emit('actionEnd');
                   return runBranch(branch, index + 1);
                 }
 
               });
 
+              return runBranch(branch, index + 1);
+
             } else {
 
               controller.emit('actionStart', true);
               controller.emit('change');
-              signalStore.addAsyncAction();
 
               var promises = currentBranch.map(function (action) {
 
@@ -106,6 +106,8 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   utils.verifyInput(action.name, signal.name, actionFunc.input, signalArgs);
                 }
 
+                signalStore.addAsyncAction();
+                
                 action.isExecuting = true;
                 action.input = utils.merge({}, signalArgs);
                 var actionArgs = createActionArgs.async(action, signalArgs, model);
