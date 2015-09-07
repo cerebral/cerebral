@@ -86,14 +86,12 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 utils.merge(signalArgs, action.output);
 
                 if (action.outputPath) {
-                  return runBranch(action.outputs[action.outputPath], 0);
-                } else {
-                  return runBranch(branch, index + 1);
+                  runBranch(action.outputs[action.outputPath], 0);
                 }
 
               });
 
-              return runBranch(branch, index + 1);
+              runBranch(branch, index + 1);
 
             } else {
 

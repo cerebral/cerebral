@@ -1,14 +1,13 @@
 var utils = require('./utils.js');
 
-var asyncSwitch = true;
-var traverse = function (item, parentItem, path, actions) {
+var traverse = function (item, parentItem, path, actions, isSync) {
 
   if (Array.isArray(item)) {
     item = item.slice(); // Will do some splicing, so make sure not messing up original array
-    asyncSwitch = !asyncSwitch;
+    isSync = !isSync;
     return item.map(function (subItem, index) {
       path.push(index);
-      var result = traverse(subItem, item, path, actions);
+      var result = traverse(subItem, item, path, actions, isSync);
       path.pop();
       return result;
     }).filter(function (action) { // Objects becomes null
@@ -21,7 +20,7 @@ var traverse = function (item, parentItem, path, actions) {
       output: null,
       duration: 0,
       mutations: [],
-      isAsync: asyncSwitch,
+      isAsync: !isSync,
       outputPath: null,
       isExecuting: false,
       hasExecuted: false,
@@ -34,8 +33,7 @@ var traverse = function (item, parentItem, path, actions) {
       parentItem.splice(parentItem.indexOf(nextItem), 1);
       action.outputs = Object.keys(nextItem).reduce(function (paths, key) {
         path = path.concat('outputs', key);
-        asyncSwitch = true;
-        paths[key] = traverse(nextItem[key], parentItem, path, actions);
+        paths[key] = traverse(nextItem[key], parentItem, path, actions, false);
         path.pop();
         path.pop();
         return paths;
@@ -48,9 +46,8 @@ var traverse = function (item, parentItem, path, actions) {
 
 module.exports = function (signals) {
 
-  asyncSwitch = true;
   var actions = [];
-  var branches = traverse(signals, [], [], actions);
+  var branches = traverse(signals, [], [], actions, false);
   return {
     branches: branches,
     actions: actions
