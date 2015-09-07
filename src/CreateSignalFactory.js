@@ -120,10 +120,13 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   signalStore.removeAsyncAction();
                   if (result.path) {
                     action.outputPath = result.path;
-                    return runBranch(action.outputs[result.path], 0);
+                    var result = runBranch(action.outputs[result.path], 0);
+                    controller.emit('change');
+                    devtools && devtools.update();
+                    return result;
+                  } else {
+                    devtools && devtools.update();
                   }
-
-                  devtools && devtools.update();
 
                 });
 

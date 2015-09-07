@@ -57,7 +57,7 @@ module.exports = function (signalStore, controller) {
   });
 
   window.addEventListener('unload', function () {
-    utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', JSON.stringify(signalStore.getSignals()));
+    utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', signalStore.willKeepState() ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]));
     utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', JSON.stringify(signalStore.willKeepState()));
   });
 
