@@ -29,16 +29,16 @@ The following packages are currently available:
 #### Model packages
 The API you use in Cerebral to change state is the same for all packages, but read their notes to see their differences.
 
-**[cerebral-immutable-store](https://github.com/christianalfoni/cerebral-immutable-store)** by @christianalfoni. An immutable state store with the possibility to define [state that maps to other state](https://github.com/christianalfoni/immutable-store#mapping-state). This package also supports recording
+**[cerebral-immutable-store](https://github.com/christianalfoni/cerebral-immutable-store)**. Immutable-store by @christianalfoni. An immutable state store with the possibility to define [state that maps to other state](https://github.com/christianalfoni/immutable-store#mapping-state). This package also supports recording
 
-**[cerebral-baobab](https://github.com/christianalfoni/cerebral-baobab)** by @Yomguithereal. An immutable state store which allows you to use facets to map state. This package does not currently support recording and uses the BETA version of Baobab V2
+**[cerebral-baobab](https://github.com/christianalfoni/cerebral-baobab)**- Baobab by @Yomguithereal. An immutable state store which allows you to use facets to map state. This package does not currently support recording and uses the BETA version of Baobab V2
 
-**cerebral-immutable-js** by @facebook (Coming soon).  Immutable state with very high performance, but lacks the possibility to map state. Does support recording
+**cerebral-immutable-js**- Immutable-JS by @facebook (Coming soon).  Immutable state with very high performance, but lacks the possibility to map state. Does support recording
 
 #### View packages
-**[cerebral-react](https://github.com/christianalfoni/cerebral-react)** by @facebook. An application wrapper component, mixin, decorators and HOC. Pure render is built in. Can also be used with **react-native**
+**[cerebral-react](https://github.com/christianalfoni/cerebral-react)**. React by @facebook. An application wrapper component, mixin, decorators and HOC. Pure render is built in. Can also be used with **react-native**
 
-**[cerebral-angular](https://github.com/christianalfoni/cerebral-angular)** by @angular. A provider for using Cerebral
+**[cerebral-angular](https://github.com/christianalfoni/cerebral-angular)** Angular by @angular. A provider for using Cerebral
 
 #### Deprecated packages
 As Cerebral now allows you to choose the model layer and view layer separately these packages are **deprecated**:
