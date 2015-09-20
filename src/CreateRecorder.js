@@ -100,7 +100,7 @@ module.exports = function (signalStore, signalMethods, controller, model) {
       }
 
       currentRecording = {
-        initialState: model.getInitialRecordingState && model.getInitialRecordingState(),
+        initialState: model.export && model.export(),
         start: Date.now(),
         signals: []
       };
@@ -174,6 +174,10 @@ module.exports = function (signalStore, signalMethods, controller, model) {
 
     getCurrentSeek: function () {
       return currentSeek;
+    },
+
+    loadRecording: function (recording) {
+      currentRecording = recording;
     }
 
   };

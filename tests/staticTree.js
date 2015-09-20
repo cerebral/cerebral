@@ -24,6 +24,19 @@ exports['should convert actions to objects'] = function (test) {
   test.done();
 };
 
+exports['should use display name of action if available'] = function (test) {
+  var action = function () {
+
+  };
+  action.displayName = 'foo';
+  var signal = [
+    action
+  ];
+  var tree = staticTree(signal).branches;
+  test.equal(tree[0].name, 'foo');
+  test.done();
+};
+
 exports['should bring along arrays and indicate async'] = function (test) {
   var signal = [
     [

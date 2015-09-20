@@ -19,7 +19,7 @@ module.exports = function (signalStore, controller) {
       detail: getDetail()
     });
     window.dispatchEvent(event);
-  }, 50);
+  }, 100);
 
   var initialize = function () {
     var event = new CustomEvent('cerebral.dev.initialized', {

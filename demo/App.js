@@ -6,39 +6,40 @@ import TodosFooter from './components/TodosFooter.js';
 
 @Cerebral({
   visibleTodos: ['visibleTodos'],
-  todos: ['todos']
+  todos: ['todos'],
+  recorder: ['recorder']
 })
 class App extends React.Component {
   record() {
-    this.props.recorder.record(this.props.get().export());
+    this.props.signals.recordClicked();
   }
   stop() {
-    this.props.recorder.stop();
+    this.props.signals.stopClicked();
   }
   play() {
-    this.props.recorder.seek(0, true);
+    this.props.signals.playClicked();
   }
   render() {
     return (
       <div id="todoapp-wrapper">
         <div>
           {
-            this.props.recorder.isRecording() ?
+            this.props.recorder.isRecording ?
             <button className="btn btn-stop" onClick={() => this.stop()}>Stop</button> :
             null
           }
           {
-            this.props.recorder.isPlaying() ?
+            this.props.recorder.isPlaying ?
             <button className="btn btn-play" disabled>Play</button> :
             null
           }
           {
-            !this.props.recorder.isRecording() && !this.props.recorder.isPlaying() && this.props.recorder.getRecording() ?
+            !this.props.recorder.isRecording && !this.props.recorder.isPlaying && this.props.recorder.hasRecorded ?
             <button className="btn btn-play" onClick={() => this.play()}>Play</button> :
             null
           }
           {
-            !this.props.recorder.isRecording() && !this.props.recorder.isPlaying() && !this.props.recorder.getRecording() ?
+            !this.props.recorder.isRecording && !this.props.recorder.isPlaying && !this.props.recorder.hasRecorded ?
             <button className="btn btn-record" onClick={() => this.record()}>Record</button> :
             null
           }

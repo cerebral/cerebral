@@ -25,6 +25,13 @@ exports['should run sync signals'] = function (test) {
   test.done();
 };
 
+exports['should allow namespaced signals'] = function (test) {
+  var ctrl = Controller(Model());
+  ctrl.signal('foo.bar');
+  test.ok(typeof ctrl.signals.foo.bar === 'function');
+  test.done();
+};
+
 exports['should trigger an action when run'] = function (test) {
   var ctrl = Controller(Model());
   ctrl.signal('test', function () {
@@ -432,24 +439,25 @@ exports['should throw error when trying to mutate with an async action'] = funct
   ctrl.signals.test();
 };
 
-exports['should allow services'] = function (test) {
+exports['should allow services and have recorder by default'] = function (test) {
   var ctrl = Controller(Model(), {
     foo: 'bar'
   });
   ctrl.signal('test', function (input, state, output, services) {
-    test.deepEqual(services, {foo: 'bar'});
+    test.ok(services.foo);
+    test.ok(services.recorder);
     test.done();
   });
   ctrl.signals.test();
 };
 
-exports['should trigger signal synchronously when passing true as first argument'] = function (test) {
+exports['should trigger signal synchronously when using sync method'] = function (test) {
   var ctrl = Controller(Model());
   var hasRun = false;
   ctrl.signal('test', function () {
     hasRun = true;
   });
-  ctrl.signals.test(true);
+  ctrl.signals.test.sync();
   test.ok(hasRun);
   test.done();
 };

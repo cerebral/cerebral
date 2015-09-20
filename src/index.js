@@ -22,7 +22,14 @@ module.exports = function (Model, services) {
   var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, controller, model, services);
 
   controller.signal = function () {
-    signals[arguments[0]] = signalFactory.apply(null, arguments);
+    var signalNamePath = arguments[0].split('.');
+    var signalName = signalNamePath.pop();
+    var signalMethodPath = signals;
+    while (signalNamePath.length) {
+      var pathName = signalNamePath.shift();
+      signalMethodPath = signalMethodPath[pathName] = signalMethodPath[pathName] || {};
+    }
+    signalMethodPath[signalName] = signalFactory.apply(null, arguments);
   };
 
   controller.services = services;
@@ -35,6 +42,8 @@ module.exports = function (Model, services) {
   };
   controller.devtools = devtools;
   controller.toJSON = model.toJSON;
+
+  services.recorder = recorder;
 
   return controller;
 };

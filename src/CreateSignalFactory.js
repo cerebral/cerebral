@@ -43,30 +43,47 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         // to each action
         var signalArgs = payload || {};
 
+        // Test payload
+        if (utils.isDeveloping()) {
+          try {
+            JSON.stringify(signalArgs);
+          } catch (e) {
+            console.log('Not serializable', signalArgs);
+            throw new Error('Cerebral - Could not serialize input to signal. Please check signal ' + signalName);
+          }
+        }
+
         // Describe the signal to later trigger as if it was live
         var start = Date.now();
         var signal = {
           name: signalName,
           start: start,
+          isSync: runSync,
           isExecuting: true,
           branches: branches,
           duration: 0,
           input: payload
         };
 
+        if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
+          controller.emit('signalStart', signal);
+        }
+
         if (recorder.isRecording()) {
           recorder.addSignal(signal);
         }
+
         signalStore.addSignal(signal);
 
 
-        var runBranch = function (branch, index) {
+        var runBranch = function (branch, index, start) {
 
           var currentBranch = branch[index];
           if (!currentBranch && branch === signal.branches && !signalStore.isRemembering() && !recorder.isCatchingUp()) {
 
+             branch[index - 1].duration = Date.now() - start;
              signal.isExecuting = false;
-             controller.emit('signalEnd');
+             controller.emit('signalEnd', signal);
              controller.emit('change');
              devtools && devtools.update();
              return;
@@ -122,7 +139,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   signalStore.removeAsyncAction();
                   if (result.path) {
                     action.outputPath = result.path;
-                    var result = runBranch(action.outputs[result.path], 0);
+                    var result = runBranch(action.outputs[result.path], 0, Date.now());
                     controller.emit('change');
                     devtools && devtools.update();
                     return result;
@@ -136,7 +153,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
               devtools && devtools.update();
               return Promise.all(promises)
               .then(function () {
-                return runBranch(branch, index + 1);
+                return runBranch(branch, index + 1, Date.now());
               })
               .catch(function (error) {
                 // We just throw any unhandled errors
@@ -149,219 +166,83 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
           } else {
 
-            controller.emit('actionStart', false);
-            try {
+            if (signalStore.isRemembering() || recorder.isPlaying()) {
 
               var action = currentBranch;
-              var actionArgs = createActionArgs.sync(action, signalArgs, model);
-              var actionFunc = actions[action.actionIndex];
-
-              if (utils.isDeveloping() && actionFunc.input) {
-                utils.verifyInput(action.name, signal.name, actionFunc.input, signalArgs);
-              }
-
-              action.mutations = []; // Reset mutations array
-              action.input = utils.merge({}, signalArgs);
-
-              var next = createNext.sync(actionFunc, signal.name);
-              actionFunc.apply(null, actionArgs.concat(next, services));
-
-              // TODO: Also add input here
-
-              var result = next._result || {};
-              utils.merge(signalArgs, result.arg);
-
-              action.isExecuting = false;
-              action.hasExecuted = true;
-              action.output = result.arg;
-
-              if (result.path) {
-                action.outputPath = result.path;
-                var result = runBranch(action.outputs[result.path], 0);
-                if (result && result.then) {
-                  return result.then(function () {
-                    return runBranch(branch, index + 1);
-                  });
-                } else {
-                  return runBranch(branch, index + 1);
-                }
-              } else {
-                controller.emit('actionEnd');
-                return runBranch(branch, index + 1);
-              }
-
-            } catch (error) {
-
-              controller.emit('error', error);
-              throw error;
-            }
-
-          }
-
-        };
-
-        runBranch(signal.branches, 0);
-
-        return;
-        /*
-        var execute = function () {
-
-          if (executionArray.length) {
-
-            var actionFunc = executionArray.shift();
-
-            if (utils.isDeveloping() && actionFunc.input) {
-              Object.keys(actionFunc.input).forEach(function (key) {
-                if (typeof signalArgs[key] === 'undefined' || !types(actionFunc.input[key], signalArgs[key])) {
-                  throw new Error([
-                    'Cerebral: You are giving the wrong input to the action "' +
-                    utils.getFunctionName(actionFunc) + '" ' +
-                    'in signal "' + signal.name + '". Check the following prop: "' + key + '"'
-                  ].join(''));
-                }
+              action.mutations.forEach(function (mutation) {
+                model.mutators[mutation.name].apply(null, [mutation.path.slice()].concat(mutation.args));
               });
-            }
 
-            if (Array.isArray(actionFunc)) {
-              var asyncActionArray = actionFunc.slice();
-
-              if (signalStore.isRemembering() || recorder.isPlaying()) {
-
-                while(asyncActionResults.length && asyncActionArray.length) {
-                  var result = asyncActionResults.shift();
-                  asyncActionArray.shift(); // Keep in sync, to extract exits
-                  utils.merge(signalArgs, result.arg);
-                  if (result.path) {
-                    var exits = asyncActionArray.shift();
-                    executionArray.splice.apply(executionArray, [0, 0].concat(Array.isArray(exits[result.path]) ? exits[result.path] : [exits[result.path]]));
-                  }
-                }
-
-                execute();
-
-              } else {
-
-                controller.emit('actionStart', true);
-                controller.emit('change');
-                var currentDuration = Date.now() - start;
-                signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
-                signalStore.addAsyncAction();
-
-                // Use to track the output of an action
-                var actionOutputTracker = [];
-                Promise.all(asyncActionArray.map(function (actionFunc) {
-                  if (utils.isAction(actionFunc)) {
-                    var actionArgs = createActionArgs.async(signal.actions, signalArgs, model);
-                    var action = {
-                      name: utils.getFunctionName(actionFunc),
-                      duration: 0,
-                      mutations: [],
-                      output: null,
-                      path: null,
-                      isAsync: true
-                    };
-                    signal.actions.push(action);
-                    actionOutputTracker.push(action);
-
-                    if (typeof actionFunc !== 'function') {
-                      throw new Error('Cerebral - There is something wrong with the chain in signal "' + signalName + '". Please verify outputs and that async signals are defined within an array.');
-                    }
-
-                    var next = createNext.async(actionFunc);
-                    actionFunc.apply(null, actionArgs.concat(next.fn, services));
-                    return next.promise;
-                  } else {
-                    return actionFunc;
-                  }
-
-                }))
-                  .then(function (results) {
-
-                    while(results.length) {
-                      var result = results.shift();
-                      var action = actionOutputTracker.shift();
-                      signal.asyncActionResults.push(result);
-                      action.output = result.arg;
-                      utils.merge(signalArgs, result.arg);
-                      if (result.path) {
-                        var exits = results.shift();
-                        action.path = result.path;
-                        executionArray.splice.apply(executionArray, [0, 0].concat(Array.isArray(exits[result.path]) ? exits[result.path] : [exits[result.path]]));
-                      }
-                    }
-                    signalStore.removeAsyncAction();
-                    start = Date.now();
-                    controller.emit('actionEnd');
-                    execute();
-
-                  })
-                  .catch(function (error) {
-                    // We just throw any unhandled errors
-                    controller.emit('error', error);
-                    throw error;
-                  });
-
-                devtools && devtools.update();
-
+              if (action.outputPath) {
+                runBranch(action.outputs[action.outputPath], 0);
               }
+
+              runBranch(branch, index + 1);
 
             } else {
 
               controller.emit('actionStart', false);
               try {
 
-                var actionArgs = createActionArgs.sync(signal.actions, signalArgs, model);
-                var action = {
-                  name: utils.getFunctionName(actionFunc),
-                  duration: 0,
-                  isParallell: false,
-                  mutations: [],
-                  output: null,
-                  isAsync: false
-                };
-                signal.actions.push(action);
+                var action = currentBranch;
+                var actionArgs = createActionArgs.sync(action, signalArgs, model);
+                var actionFunc = actions[action.actionIndex];
 
-                if (typeof actionFunc !== 'function') {
-                  throw new Error('Cerebral - There is something wrong with the chain in signal "' + signalName + '". Please verify outputs and that async signals are defined within an array.');
+                if (utils.isDeveloping() && actionFunc.input) {
+                  utils.verifyInput(action.name, signal.name, actionFunc.input, signalArgs);
                 }
+
+                action.mutations = []; // Reset mutations array
+                action.input = utils.merge({}, signalArgs);
 
                 var next = createNext.sync(actionFunc, signal.name);
                 actionFunc.apply(null, actionArgs.concat(next, services));
 
+                // TODO: Also add input here
+
                 var result = next._result || {};
                 utils.merge(signalArgs, result.arg);
 
+                action.isExecuting = false;
+                action.hasExecuted = true;
                 action.output = result.arg;
 
-                if (result.path) {
-                  var exits = executionArray.shift();
-                  action.path = result.path;
-                  executionArray.splice.apply(executionArray, [0, 0].concat(exits[result.path]));
+                if (!branch[index + 1] || Array.isArray(branch[index + 1])) {
+                  action.duration = Date.now() - start;
                 }
-                controller.emit('actionEnd');
-                execute();
+
+
+                if (result.path) {
+                  action.outputPath = result.path;
+                  var result = runBranch(action.outputs[result.path], 0, start);
+                  if (result && result.then) {
+                    return result.then(function () {
+                      return runBranch(branch, index + 1, Date.now());
+                    });
+                  } else {
+                    return runBranch(branch, index + 1, start);
+                  }
+                } else {
+                  controller.emit('actionEnd');
+                  return runBranch(branch, index + 1, start);
+                }
 
               } catch (error) {
+
                 controller.emit('error', error);
                 throw error;
               }
 
             }
 
-          } else if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
-
-            controller.emit('signalEnd');
-            controller.emit('change');
-            var currentDuration = Date.now() - start;
-            signal.duration = signal.duration > currentDuration ? signal.duration : currentDuration;
-            devtools && devtools.update();
-
           }
 
         };
 
-        execute();
-        */
+        runBranch(signal.branches, 0, Date.now());
+
+        return;
+
       };
 
       if (runSync || signalStore.isRemembering() || recorder.isCatchingUp()) {
@@ -390,6 +271,9 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
     };
 
     signalChain.chain = chain;
+    signalChain.sync = function (payload) {
+      signalChain(true, payload);
+    };
 
     return signalChain;
 

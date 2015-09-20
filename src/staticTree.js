@@ -15,7 +15,7 @@ var traverse = function (item, parentItem, path, actions, isSync) {
     });
   } else if (typeof item === 'function') {
     var action = {
-      name: utils.getFunctionName(item),
+      name: item.displayName || utils.getFunctionName(item),
       input: {},
       output: null,
       duration: 0,

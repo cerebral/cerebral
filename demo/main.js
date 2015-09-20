@@ -26,6 +26,10 @@ import setTodoNewTitle from './actions/setTodoNewTitle.js';
 import stopEditingTodo from './actions/stopEditingTodo.js';
 import setUrl from './actions/setUrl.js';
 import unsetFilter from './actions/unsetFilter.js';
+import setTodoError from './actions/setTodoError.js';
+import record from './actions/record.js';
+import stop from './actions/stop.js';
+import play from './actions/play.js';
 
 // SIGNALS
 
@@ -38,7 +42,8 @@ controller.signal('newTodoSubmitted',
   setCounters,
   [
     saveTodo, {
-      success: [updateTodo]
+      success: [updateTodo],
+      error: [setTodoError]
     }
   ]
 );
@@ -50,31 +55,17 @@ controller.signal('clearCompletedClicked', clearCompleted, setVisibleTodos, setA
 controller.signal('todoDoubleClicked', editTodo);
 controller.signal('newTitleChanged', setTodoNewTitle);
 controller.signal('newTitleSubmitted', stopEditingTodo);
+controller.signal('recordClicked', record);
+controller.signal('playClicked', play);
+controller.signal('stopClicked', stop);
 
 // ROUTER
 CerebralRouter(controller, {
   '/': 'allTodosClicked',
   '/:filter': 'filterClicked'
+}, {
+  baseUrl: '/todomvc'
 }).start();
 
 // RENDER
 React.render(<Container controller={controller} app={App}/>, document.querySelector('#app'));
-
-
-
-/*
-const router = ReactiveRouter({
-  '/': controller.signals.routeChanged,
-  '/:filter': controller.signals.routeChanged
-}, {
-  hashbang: true
-});
-
-controller.on('change', function () {
-  router.set(controller.get('url'));
-});
-
-controller.on('remember', function () {
-  router.setSilent(controller.get('url'));
-});
-*/

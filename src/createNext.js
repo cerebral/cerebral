@@ -29,6 +29,16 @@ var createNextFunction = function (action, signalName, resolver) {
       var path = typeof arguments[0] === 'string' ? arguments[0] : null;
       var arg = path ? arguments[1] : arguments[0];
 
+      // Test payload
+      if (utils.isDeveloping()) {
+        try {
+          JSON.stringify(arg);
+        } catch (e) {
+          console.log('Not serializable', arg);
+          throw new Error('Cerebral - Could not serialize output. Please check signal ' + signalName + ' and action ' + action.name);
+        }
+      }
+
       if (!path && !action.defaultOutput && action.outputs) {
         throw new Error([
           'Cerebral: There is a wrong output of action "' +
