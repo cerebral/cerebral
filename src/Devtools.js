@@ -53,7 +53,7 @@ module.exports = function (signalStore, controller) {
   });
 
   window.addEventListener('cerebral.dev.logModel', function (event) {
-    console.log('CEREBRAL - model:', (controller.toJSON || controller.get)());
+    console.log('CEREBRAL - model:', controller.get());
   });
 
   window.addEventListener('unload', function () {

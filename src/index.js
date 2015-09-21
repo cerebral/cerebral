@@ -41,7 +41,6 @@ module.exports = function (Model, services) {
     return model.get(path);
   };
   controller.devtools = devtools;
-  controller.toJSON = model.toJSON;
 
   services.recorder = recorder;
 
