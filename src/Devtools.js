@@ -35,6 +35,7 @@ module.exports = function (signalStore, controller) {
   });
 
   window.addEventListener('cerebral.dev.resetStore', function () {
+    console.log('Resetting!');
     signalStore.reset();
     controller.emit('change');
     update();
@@ -53,6 +54,7 @@ module.exports = function (signalStore, controller) {
   });
 
   window.addEventListener('cerebral.dev.logModel', function (event) {
+    console.log('Running model');
     console.log('CEREBRAL - model:', (controller.toJSON || controller.get)());
   });
 

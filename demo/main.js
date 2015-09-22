@@ -6,7 +6,7 @@ import React from 'react';
 import App from './App.js';
 import controller from './controller.js';
 import {Container} from 'cerebral-react';
-import CerebralRouter from './../../cerebral-router/index.js';
+import CerebralRouter from 'cerebral-router';
 
 // ACTIONS
 import addTodo from './actions/addTodo.js';
@@ -60,12 +60,12 @@ controller.signal('playClicked', play);
 controller.signal('stopClicked', stop);
 
 // ROUTER
-CerebralRouter(controller, {
+const router = CerebralRouter(controller, {
   '/': 'allTodosClicked',
   '/:filter': 'filterClicked'
 }, {
   baseUrl: '/todomvc'
-}).start();
+}).trigger();
 
 // RENDER
 React.render(<Container controller={controller} app={App}/>, document.querySelector('#app'));

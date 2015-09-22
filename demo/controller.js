@@ -1,5 +1,5 @@
 import Controller from './../src/index.js';
-import Model from './../../cerebral-baobab/index.js';
+import Model from 'cerebral-baobab';
 
 const VisibleTodos = function() {
   return {
