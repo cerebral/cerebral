@@ -25,8 +25,18 @@ module.exports = function (signalStore, controller) {
     var event = new CustomEvent('cerebral.dev.initialized', {
       detail: getDetail()
     });
-    signalStore.remember(signalStore.getSignals().length - 1);
-    window.dispatchEvent(event);
+
+    // Might be an async signal running here
+    if (signalStore.isExecutingAsync()) {
+      controller.once('signalEnd', function () {
+        signalStore.remember(signalStore.getSignals().length - 1);
+        window.dispatchEvent(event);
+      });
+    } else {
+      signalStore.remember(signalStore.getSignals().length - 1);
+      window.dispatchEvent(event);
+    }
+
   };
 
   window.addEventListener('cerebral.dev.toggleKeepState', function () {
