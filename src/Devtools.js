@@ -5,7 +5,7 @@ module.exports = function (signalStore, controller) {
   var getDetail = function () {
     return {
       props: {
-        signals: signalStore.getSignals(),
+        signals: JSON.parse(JSON.stringify(signalStore.getSignals())),
         willKeepState: signalStore.willKeepState(),
         currentSignalIndex: signalStore.getCurrentIndex(),
         isExecutingAsync: signalStore.isExecutingAsync(),
