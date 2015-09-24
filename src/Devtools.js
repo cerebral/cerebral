@@ -33,7 +33,7 @@ module.exports = function (signalStore, controller) {
         window.dispatchEvent(event);
       });
     } else {
-      signalStore.remember(signalStore.getSignals().length - 1);
+      signalStore.rememberInitial(signalStore.getSignals().length - 1);
       window.dispatchEvent(event);
     }
 

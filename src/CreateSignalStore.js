@@ -26,6 +26,7 @@ module.exports = function (signalMethods, controller) {
   var executingAsyncActionsCount = 0;
   var isRemembering = false;
   var currentIndex = signals.length - 1;
+  var hasRememberedInitial = false;
 
   return {
 
@@ -53,10 +54,12 @@ module.exports = function (signalMethods, controller) {
 
       // If we are not keeping the state around reset the signals to just
       // keep the latest one
+      /* ALWAYS KEEP STATE
       if (!willKeepState) {
         signals = [];
         currentIndex = 0;
       }
+      */
 
       // If we have travelled back and start adding new signals the signals not triggered should
       // be removed. This effectively "changes history"
@@ -95,6 +98,16 @@ module.exports = function (signalMethods, controller) {
       }
     },
 
+    rememberInitial: function (index) {
+
+      // Both router and debugger might try to do initial remembering
+      if (hasRememberedInitial) {
+        return;
+      }
+
+      hasRememberedInitial = true;
+      this.remember(index);
+    },
     remember: function(index) {
 
       // Flag that we are remembering
