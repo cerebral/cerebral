@@ -37,7 +37,24 @@ module.exports = function (type, value) {
   }
 
   if (types.indexOf(type) === -1 && typeof type === 'function') {
-    return type(value);
+    var result;
+    try {
+      result = type(value);
+    } catch(e) {
+      console.log('Type Error:', e);
+    }
+
+    if (result === undefined) return false;
+    
+    // tcomb returns the value if it passes so 0 and false evaluate to 
+    // a return value of false, where you actually want to test for number and boolean
+    if (typeof result === 'number') {
+      return true;
+    }
+    if (typeof result === 'boolean') {
+      return true;
+    }
+    return result;
   }
 
   return true;
