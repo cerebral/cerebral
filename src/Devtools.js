@@ -1,10 +1,11 @@
 var utils = require('./utils.js');
 
-module.exports = function (signalStore, options) {
+module.exports = function (signalStore, controller) {
+
   var getDetail = function () {
     return {
       props: {
-        signals: signalStore.getSignals(),
+        signals: JSON.parse(JSON.stringify(signalStore.getSignals())),
         willKeepState: signalStore.willKeepState(),
         currentSignalIndex: signalStore.getCurrentIndex(),
         isExecutingAsync: signalStore.isExecutingAsync(),
@@ -18,20 +19,25 @@ module.exports = function (signalStore, options) {
       detail: getDetail()
     });
     window.dispatchEvent(event);
-  }, 50);
+  }, 100);
 
   var initialize = function () {
     var event = new CustomEvent('cerebral.dev.initialized', {
       detail: getDetail()
     });
-    window.dispatchEvent(event);
-  };
 
-  window.addEventListener('cerebral.dev.initialize', function () {
-    signalStore.remember(signalStore.getSignals().length - 1);
-    initialize();
-  });
-  initialize();
+    // Might be an async signal running here
+    if (signalStore.isExecutingAsync()) {
+      controller.once('signalEnd', function () {
+        signalStore.remember(signalStore.getSignals().length - 1);
+        window.dispatchEvent(event);
+      });
+    } else {
+      signalStore.rememberInitial(signalStore.getSignals().length - 1);
+      window.dispatchEvent(event);
+    }
+
+  };
 
   window.addEventListener('cerebral.dev.toggleKeepState', function () {
     signalStore.toggleKeepState();
@@ -40,7 +46,7 @@ module.exports = function (signalStore, options) {
 
   window.addEventListener('cerebral.dev.resetStore', function () {
     signalStore.reset();
-    options.onUpdate && options.onUpdate();
+    controller.emit('change');
     update();
   });
 
@@ -51,18 +57,34 @@ module.exports = function (signalStore, options) {
 
   window.addEventListener('cerebral.dev.logPath', function (event) {
     var name = event.detail.name;
-    var value = options.onGet(event.detail.path);
+    var value = controller.get(event.detail.path);
     // toValue instead?
     console.log('CEREBRAL - ' + name + ':', value.toJS ? value.toJS() : value);
   });
 
+  window.addEventListener('cerebral.dev.logModel', function (event) {
+    console.log('CEREBRAL - model:', controller.get());
+  });
+
   window.addEventListener('unload', function () {
-    utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', JSON.stringify(signalStore.getSignals()));
+    signalStore.removeRunningSignals();
+    utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', signalStore.willKeepState() ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]));
     utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', JSON.stringify(signalStore.willKeepState()));
   });
 
   return {
-    update: update
+    update: update,
+    start: function () {
+      if (utils.isDeveloping()) {
+        if (window.CEREBRAL_DEBUGGER_INJECTED) {
+          initialize();
+        } else {
+          window.addEventListener('cerebral.dev.initialize', function () {
+            initialize();
+          });
+        }
+      }
+    }
   };
 
 };

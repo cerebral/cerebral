@@ -1,5 +1,21 @@
 module.exports = function (type, value) {
 
+  var types = [
+    String,
+    Number,
+    Array,
+    Object,
+    Boolean
+  ];
+
+  if (type === null && value !== null) {
+    return false;
+  }
+
+  if (type === undefined && value !== undefined) {
+    return false;
+  }
+
   if (type === String && typeof value !== 'string') {
     return false;
   }
@@ -20,7 +36,7 @@ module.exports = function (type, value) {
     return false;
   }
 
-  if (typeof type === 'function') {
+  if (types.indexOf(type) === -1 && typeof type === 'function') {
     return type(value);
   }
 

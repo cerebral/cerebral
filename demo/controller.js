@@ -1,4 +1,5 @@
-import Controller from './CustomController.js';
+import Controller from './../src/index.js';
+import Model from 'cerebral-baobab';
 
 const VisibleTodos = function() {
   return {
@@ -13,10 +14,26 @@ const VisibleTodos = function() {
 };
 
 const state =  {
+  recorder: {
+    isRecording: false,
+    isPlaying: false,
+    hasRecorded: false
+  },
   nextRef: 0,
   url: '/',
   todos: {},
-  visibleTodos: VisibleTodos,
+  visibleTodosIds: [],
+  visibleTodos: Model.monkey({
+    cursors: {
+      todos: ['todos'],
+      ids: ['visibleTodosIds']
+    },
+    get: function (data) {
+      return data.ids.map(function (id) {
+        return data.todos[id];
+      });
+    }
+  }),
   newTodoTitle: '',
   isSaving: false,
   isAllChecked: false,
@@ -28,4 +45,6 @@ const state =  {
   filter: 'all'
 };
 
-export default Controller(state);
+const model = Model(state);
+
+export default Controller(model);

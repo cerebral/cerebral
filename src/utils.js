@@ -1,3 +1,5 @@
+var types = require('./types.js');
+
 module.exports = {
   getFunctionName: function(fun) {
     var ret = fun.toString();
@@ -36,5 +38,19 @@ module.exports = {
   },
   isAction: function (action) {
     return typeof action === 'function';
+  },
+  isDeveloping: function () {
+    return !global.process || global.process.env !== 'production';
+  },
+  verifyInput: function (actionName, signalName, input, signalArgs) {
+    Object.keys(input).forEach(function (key) {
+      if (typeof signalArgs[key] === 'undefined' || !types(input[key], signalArgs[key])) {
+        throw new Error([
+          'Cerebral: You are giving the wrong input to the action "' +
+          actionName + '" ' +
+          'in signal "' + signalName + '". Check the following prop: "' + key + '"'
+        ].join(''));
+      }
+    });
   }
 };

@@ -1,6 +1,6 @@
 var utils = require('./utils.js');
 
-module.exports = function (signalStore, signalMethods, options) {
+module.exports = function (signalStore, signalMethods, controller, model) {
 
   var currentRecording = null;
   var lastSignal = null;
@@ -23,7 +23,7 @@ module.exports = function (signalStore, signalMethods, options) {
       clearTimeout(durationTimer);
       playbackTimers.forEach(clearTimeout);
 
-      options.onSeek && options.onSeek(seek, !!startPlaying, currentRecording);
+      controller.emit('seek', seek, !!startPlaying, currentRecording);
 
       if (signalStore.isRemembering()) {
         return;
@@ -36,7 +36,7 @@ module.exports = function (signalStore, signalMethods, options) {
         while (signalName.length) {
           signalMethodPath = signalMethodPath[signalName.shift()];
         }
-        signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
+        signalMethodPath.call(null, signal.input, signal.branches);
 
       };
 
@@ -47,6 +47,7 @@ module.exports = function (signalStore, signalMethods, options) {
       isCatchingUp = true;
       catchup.forEach(triggerSignal);
       isCatchingUp = false;
+
 
       if (startPlaying) {
         this.createTimer();
@@ -64,25 +65,26 @@ module.exports = function (signalStore, signalMethods, options) {
       }
       playbackTimers.push(setTimeout(function () {
         isPlaying = false;
-        options.onUpdate && options.onUpdate();
+        controller.emit('change');
       }, currentRecording.end - currentRecording.start - seek ));
-      options.onUpdate && options.onUpdate();
+
+      controller.emit('change');
     },
 
     createTimer: function () {
       var update = function () {
         duration += 500;
-        options.onDurationChange && options.onDurationChange(duration);
+        controller.emit('duration', duration);
         if (duration < currentRecording.duration) {
           durationTimer = setTimeout(update, 500);
-          options.onUpdate && options.onUpdate();
+          controller.emit('change');
         }
       }.bind(this);
       durationTimer = setTimeout(update, 500);
     },
 
     resetState: function () {
-      options.onRecorderReset && options.onRecorderReset(currentRecording.initialState);
+      controller.emit('recorderReset', currentRecording.initialState);
     },
 
     record: function () {
@@ -98,14 +100,14 @@ module.exports = function (signalStore, signalMethods, options) {
       }
 
       currentRecording = {
-        initialState: options.onGetRecordingState && options.onGetRecordingState(),
+        initialState: model.export && model.export(),
         start: Date.now(),
         signals: []
       };
 
       isRecording = true;
 
-      options.onUpdate && options.onUpdate();
+      controller.emit('change');
 
     },
 
@@ -126,7 +128,7 @@ module.exports = function (signalStore, signalMethods, options) {
       currentRecording.end = Date.now();
       currentRecording.duration = currentRecording.end - currentRecording.start;
 
-      options.onUpdate && options.onUpdate();
+      controller.emit('change');
 
     },
 
@@ -146,7 +148,7 @@ module.exports = function (signalStore, signalMethods, options) {
       clearTimeout(durationTimer);
       playbackTimers.forEach(clearTimeout);
 
-      options.onUpdate && options.onUpdate();
+      controller.emit('change');
 
     },
 
@@ -172,6 +174,10 @@ module.exports = function (signalStore, signalMethods, options) {
 
     getCurrentSeek: function () {
       return currentSeek;
+    },
+
+    loadRecording: function (recording) {
+      currentRecording = recording;
     }
 
   };

@@ -5,7 +5,6 @@ function setVisibleTodos (args, state) {
   let visibleTodos = Object.keys(todos).filter(function(key) {
 
     let todo = todos[key];
-
     return (
       filter === 'all' ||
       (filter === 'completed' && todo.completed) ||
@@ -13,7 +12,7 @@ function setVisibleTodos (args, state) {
     );
 
   });
-  state.set('visibleTodos', visibleTodos);
+  state.set('visibleTodosIds', visibleTodos);
 
 };
 

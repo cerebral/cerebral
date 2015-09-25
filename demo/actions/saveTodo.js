@@ -10,7 +10,9 @@ function saveTodo (args, state, next) {
       id: Date.now() + parseInt(Math.random() * 1000)
     });
 
-  }, 1000);
+    // Or error
+
+  }, 2000);
 
 };
 

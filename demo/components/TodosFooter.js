@@ -1,10 +1,12 @@
 import React from 'react/addons';
-import {Decorator as Cerebral} from './../CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 
-@Cerebral({
-  remainingCount: ['remainingCount'],
-  filter: ['filter'],
-  completedCount: ['completedCount']
+@Cerebral((props) => {
+  return {
+    remainingCount: ['remainingCount'],
+    filter: ['filter'],
+    completedCount: ['completedCount']
+  }
 })
 class TodosFooter extends React.Component {
   renderRemainingCount() {
@@ -22,7 +24,7 @@ class TodosFooter extends React.Component {
 
   renderCompletedButton() {
     return (
-      <button id="clear-completed" onClick={this.props.signals.clearCompletedClicked}>
+      <button id="clear-completed" onClick={() => this.props.signals.clearCompletedClicked()}>
         Clear completed ({this.props.completedCount})
       </button>
     );
