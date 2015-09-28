@@ -4,8 +4,14 @@ var createStateArg = function (action, model, isAsync) {
   var state = {};
   Object.keys(model.accessors || {}).reduce(function (state, accessor) {
     state[accessor] = function () {
-      var path = arguments.length ? Array.isArray(arguments[0]) ? arguments[0] : [].slice.call(arguments) : [];
-      return model.accessors[accessor](path);
+      var path = [];
+      var args = [].slice.call(arguments);
+      if (Array.isArray(args[0])) {
+        path = args.shift();
+      } else if (typeof args[0] === 'string') {
+        path = [args.shift()];
+      }
+      return model.accessors[accessor].apply(null, [path.slice()].concat(args));
     };
     return state;
   }, state);
