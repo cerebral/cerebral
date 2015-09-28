@@ -5,8 +5,10 @@ var async = function (cb) {
 var Model = function () {
   return function () {
     return {
-      get: function () {
+      accessors: {
+        get: function () {
 
+        }
       },
       mutators: {
         set: function (path, value) {

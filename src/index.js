@@ -36,11 +36,22 @@ module.exports = function (Model, services) {
   controller.signals = signals;
   controller.store = signalStore;
   controller.recorder = recorder;
-  controller.get = function () {
-    var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0];
-    return model.get(path);
-  };
   controller.devtools = devtools;
+
+  // make model accessors available on the controller
+  Object.keys(model.accessors || {}).reduce(function (state, accessor) {
+    state[accessor] = function () {
+      var path = [];
+      var args = [].slice.call(arguments);
+      if (Array.isArray(args[0])) {
+        path = args.shift();
+      } else if (typeof args[0] === 'string') {
+        path = [args.shift()];
+      }
+      return model.accessors[accessor].apply(null, [path.slice()].concat(args));
+    };
+    return state;
+  }, controller);
 
   services.recorder = recorder;
 

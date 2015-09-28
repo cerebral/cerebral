@@ -2,10 +2,19 @@ var utils = require('./utils.js');
 
 var createStateArg = function (action, model, isAsync) {
   var state = {};
-  state.get = function () {
-    var path = arguments.length ? Array.isArray(arguments[0]) ? arguments[0] : [].slice.call(arguments) : [];
-    return model.get(path);
-  };
+  Object.keys(model.accessors || {}).reduce(function (state, accessor) {
+    state[accessor] = function () {
+      var path = [];
+      var args = [].slice.call(arguments);
+      if (Array.isArray(args[0])) {
+        path = args.shift();
+      } else if (typeof args[0] === 'string') {
+        path = [args.shift()];
+      }
+      return model.accessors[accessor].apply(null, [path.slice()].concat(args));
+    };
+    return state;
+  }, state);
   Object.keys(model.mutators || {}).reduce(function (state, mutator) {
     state[mutator] = function () {
       if (isAsync) {
@@ -26,7 +35,7 @@ var createStateArg = function (action, model, isAsync) {
       return model.mutators[mutator].apply(null, [path.slice()].concat(args));
     };
     return state;
-  }, state)
+  }, state);
   return state;
 };
 
