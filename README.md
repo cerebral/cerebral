@@ -80,9 +80,13 @@ module.exports = function (state) {
     // This object defines how to get state and do state changes
     return {
 
-      // You always receive an array here
-      get: function (path) {
-        return pathToValue(path, state);
+      // You can add any accessor methods you want here. First
+      // argument is always a path array. The methods will be available
+      // on the controller and state object passed to all actions
+      accessors: {
+        get: function (path) {
+          return pathToValue(path, state);
+        }
       },
 
       // When the debugger logs out the model it calls this
@@ -97,7 +101,7 @@ module.exports = function (state) {
         return state.export();
       },
 
-      // You can add any mutation methods you want here. first
+      // You can add any mutation methods you want here. First
       // argument is always a path array. The methods will be available
       // on the state object passed to all sync actions
       mutators: {
