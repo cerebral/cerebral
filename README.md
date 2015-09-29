@@ -38,79 +38,95 @@ function myCustomViewPackage (controller) {
 That is basically all need to update the **view** layer.
 
 ## How to create a custom Cerebral MODEL package
-In this example we will use the [immutable-store](https://github.com/christianalfoni/immutable-store) project as a model.
+In this example we will use Baobab.
 
 *index.js*
 ```js
-var Store = require('immutable-store');
+var Baobab = require('baobab');
+var deepmerge = require('deepmerge');
 
-// Just a small helper to use an array to grab a value
-// from an object
-var getValue = function (path, obj) {
-  path = path.slice();
-  while (path.length) {
-    obj = obj[path.shift()];
-  }
-  return obj;
-};
+var Model = function (initialState, options) {
 
-module.exports = function (state) {
+  options = options || {};
 
-  return function (controller) {
+  var tree = new Baobab(initialState, options);
 
-    // We create an immutable store with the state passed
-    var initialState = Store(state);
+  var model = function (controller) {
 
-    // We redefine the current state to be the initial state
-    state = initialState;
-
-    // Cerebral requires the state to be reset when using the debugger,
-    // this is how you would do it with immutable-store
     controller.on('reset', function () {
-      state = initialState;
+      tree.set(initialState);
     });
 
-    // If you want to use the recorder the initial state of the
-    // recording needs to be set to the current state before recorder
-    // replays signals to current position
     controller.on('seek', function (seek, isPlaying, recording) {
-      state = state.import(recording.initialState);
+      var newState = deepmerge(initialState, recording.initialState);
+      tree.set(newState);
     });
 
-    // This object defines how to get state and do state changes
     return {
-
-      // You always receive an array here
-      get: function (path) {
-        return pathToValue(path, state);
-      },
-
-      // When the debugger logs out the model it calls this
-      // function. It should return an immutable version of the
-      // state
-      toJSON: function () {
-        return state.toJS();
-      },
-
-      // When recorder needs its initial state, return that here
-      getInitialRecordingState: function () {
-        return state.export();
-      },
-
-      // You can add any mutation methods you want here. first
-      // argument is always a path array. The methods will be available
-      // on the state object passed to all sync actions
-      mutators: {
-        set: function (path, value) {
-          var key = path.pop(); // You can safely mutate the path
-          state = getValue(path, state).set(key, value);
+        tree: tree,
+        get: function (path) {
+          return tree.get(path);
+        },
+        toJSON: function () {
+          return tree.toJSON();
+        },
+        export: function () {
+          return tree.serialize();
+        },
+        import: function (newState) {
+          var newState = deepmerge(initialState, newState);
+          tree.set(newState);
+        },
+        mutators: {
+          set: function (path, value) {
+            tree.set(path, value);
+          },
+          unset: function (path) {
+            tree.unset(path);
+          },
+          push: function (path, value) {
+            tree.push(path, value);
+          },
+          splice: function () {
+            tree.splice.apply(tree, arguments);
+          },
+          merge: function (path, value) {
+            tree.merge(path, value);
+          },
+          concat: function () {
+            tree.apply(path, function (existingValue) {
+              return existingValue.concat(value);
+            });
+          },
+          pop: function (path) {
+            tree.apply(path, function (existingValue) {
+              existingValue.pop();
+              return existingValue;
+            });
+          },
+          shift: function (path) {
+            tree.apply(path, function (existingValue) {
+              existingValue.shift();
+              return existingValue;
+            });
+          },
+          unshift: function (path, value) {
+            tree.unshift(path, value);
+          }
         }
-      }
     };
 
   };
 
+  model.tree = tree;
+
+  return model;
+
 };
+
+Model.monkey = Baobab.monkey;
+
+module.exports = Model;
 ```
 
 ## Demos

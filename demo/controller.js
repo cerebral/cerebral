@@ -1,19 +1,7 @@
 import Controller from './../src/index.js';
 import Model from 'cerebral-baobab';
 
-const VisibleTodos = function() {
-  return {
-    value: [],
-    deps: {
-      todos: ['todos']
-    },
-    get: function(refs, deps) {
-      return refs.map((ref) => deps.todos[ref]);
-    }
-  };
-};
-
-const state =  {
+const model = Model({
   recorder: {
     isRecording: false,
     isPlaying: false,
@@ -22,18 +10,7 @@ const state =  {
   nextRef: 0,
   url: '/',
   todos: {},
-  visibleTodosIds: [],
-  visibleTodos: Model.monkey({
-    cursors: {
-      todos: ['todos'],
-      ids: ['visibleTodosIds']
-    },
-    get: function (data) {
-      return data.ids.map(function (id) {
-        return data.todos[id];
-      });
-    }
-  }),
+  visibleTodos: [],
   newTodoTitle: '',
   isSaving: false,
   isAllChecked: false,
@@ -43,8 +20,16 @@ const state =  {
   remainingCount: 0,
   completedCount: 0,
   filter: 'all'
-};
+});
 
-const model = Model(state);
+const controller = Controller(model);
 
-export default Controller(model);
+controller.compute({
+  visibleTodos: function (get, refs) {
+    return refs.map(function (id) {
+      return get('todos')[id];
+    });
+  }  
+});
+
+export default controller;

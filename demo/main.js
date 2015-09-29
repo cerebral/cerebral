@@ -30,6 +30,8 @@ import setTodoError from './actions/setTodoError.js';
 import record from './actions/record.js';
 import stop from './actions/stop.js';
 import play from './actions/play.js';
+import setSaving from './actions/setSaving.js';
+import unsetSaving from './actions/unsetSaving.js';
 
 // SIGNALS
 
@@ -40,12 +42,14 @@ controller.signal('newTodoSubmitted',
   setVisibleTodos,
   setAllChecked,
   setCounters,
+  setSaving,
   [
     saveTodo, {
       success: [updateTodo],
       error: [setTodoError]
     }
-  ]
+  ],
+  unsetSaving
 );
 controller.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
 controller.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);

@@ -7,7 +7,8 @@ import TodosFooter from './components/TodosFooter.js';
 @Cerebral({
   visibleTodos: ['visibleTodos'],
   todos: ['todos'],
-  recorder: ['recorder']
+  recorder: ['recorder'],
+  isSaving: ['isSaving']
 })
 class App extends React.Component {
   record() {
@@ -25,7 +26,7 @@ class App extends React.Component {
         <div>
           {
             this.props.recorder.isRecording ?
-            <button className="btn btn-stop" onClick={() => this.stop()}>Stop</button> :
+            <button className="btn btn-stop" onClick={() => this.stop()} disabled={this.props.isSaving}>Stop</button> :
             null
           }
           {

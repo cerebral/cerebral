@@ -52,5 +52,41 @@ module.exports = {
         ].join(''));
       }
     });
+  },
+  extractMatchingPathFunctions: function (source, target) {
+
+    var incompatible = false;
+    var traverse = function (obj, currentTarget, path, results) {
+
+      if (incompatible) {
+        return incompatible;
+      }
+
+      if (typeof obj === 'function') {
+
+        results[path.join('.')] = obj;
+
+      } else if (typeof obj === 'object' && !Array.isArray(obj) && obj !== null) {
+
+        for (var key in obj) {
+          if (!(key in currentTarget)) {
+
+            return incompatible = path.slice().concat(key);
+
+          } else {
+
+            path.push(key);
+            traverse(obj[key], currentTarget[key], path, results);
+            path.pop(key);
+
+          }
+        }
+      }
+      return incompatible || results;
+
+    };
+
+    return traverse(source, target, [], {});
+
   }
 };

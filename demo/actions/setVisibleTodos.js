@@ -12,7 +12,7 @@ function setVisibleTodos (args, state) {
     );
 
   });
-  state.set('visibleTodosIds', visibleTodos);
+  state.set('visibleTodos', visibleTodos);
 
 };
 

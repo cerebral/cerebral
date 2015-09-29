@@ -9,7 +9,8 @@ var tests_available = {
     'recorder': 'tests/recorder.js',
     'types': 'tests/types.js',
     'mutations': 'tests/mutations.js',
-    'statictree': 'tests/staticTree.js'
+    'statictree': 'tests/staticTree.js',
+    'computation': 'tests/computation.js'
 };
 
 var test_name;

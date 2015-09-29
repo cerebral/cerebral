@@ -3,13 +3,13 @@
         min-width: inherit !important;
         max-width: inherit !important;
     }
-    
+
     #todoapp-wrapper {
         margin: 0 auto;
         min-width: 230px;
         max-width: 550px;
     }
-    
+
     .btn {
         margin: 15px;
         background-color: #999;
@@ -21,19 +21,19 @@
         font-weight: bold;
         cursor: pointer;
     }
-    
+
     .btn-stop {
         background-color: red;
     }
-    
+
     .btn-record {
         background-color: orange;
     }
-    
+
     .btn-play {
         background-color: green;
     }
-    
-    .btn-play[disabled] {
+
+    .btn[disabled] {
         opacity: 0.5;
     }

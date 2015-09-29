@@ -22,17 +22,20 @@ module.exports = function (signalStore, controller) {
   }, 100);
 
   var initialize = function () {
-    var event = new CustomEvent('cerebral.dev.initialized', {
-      detail: getDetail()
-    });
 
     // Might be an async signal running here
     if (signalStore.isExecutingAsync()) {
       controller.once('signalEnd', function () {
+        var event = new CustomEvent('cerebral.dev.initialized', {
+          detail: getDetail()
+        });
         signalStore.remember(signalStore.getSignals().length - 1);
         window.dispatchEvent(event);
       });
     } else {
+      var event = new CustomEvent('cerebral.dev.initialized', {
+        detail: getDetail()
+      });
       signalStore.rememberInitial(signalStore.getSignals().length - 1);
       window.dispatchEvent(event);
     }
