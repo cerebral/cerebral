@@ -48,6 +48,9 @@ module.exports = function (model) {
         }, {});
     },
     getComputedValue: function (path) {
+      if (!computationPaths) {
+        return;
+      }
       var compute = computationPaths[path.join('.')];
       return compute ? compute(model.get(path)) : undefined;
     }
