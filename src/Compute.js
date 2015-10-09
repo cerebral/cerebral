@@ -55,7 +55,7 @@ module.exports = function (model) {
       return compute ? compute(model.accessors.get(path)) : undefined;
     },
     getComputedPaths: function () {
-      return Object.keys(computationPaths).map(function (path) {
+      return Object.keys(computationPaths || {}).map(function (path) {
         return path.split('.');
       });
     }
