@@ -6,14 +6,16 @@ var async = function (cb) {
 var Model = function (state) {
   return function () {
     return {
-      get: function (path) {
-        path = typeof path === 'string' ? [].slice.call(arguments) : path;
-        path = path ? path.slice() : [];
-        var currentPath = state;
-        while(path.length) {
-          currentPath = currentPath[path.shift()];
+      accessors: {
+        get: function (path) {
+          path = typeof path === 'string' ? [].slice.call(arguments) : path;
+          path = path ? path.slice() : [];
+          var currentPath = state;
+          while(path.length) {
+            currentPath = currentPath[path.shift()];
+          }
+          return currentPath;
         }
-        return currentPath;
       },
       mutators: {
         set: function (path, value) {
@@ -224,9 +226,13 @@ exports['should rerun if value changes'] = function (test) {
   });
   test.expect(2);
   controller.get('foo');
-  controller.signal('test', function (input, state) {
-    state.set('foo', 'bar2')
-  });
+  var signal = [
+    function (input, state) {
+      state.set('foo', 'bar2')
+    }
+  ];
+
+  controller.signal('test', signal);
   controller.once('signalEnd', function () {
     controller.get('foo');
     test.done();
@@ -253,9 +259,13 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
   });
   test.expect(2);
   controller.get('foo');
-  controller.signal('test', function (input, state) {
-    state.set('test', 'hest2')
-  });
+  var signal = [
+    function (input, state) {
+      state.set('test', 'hest2')
+    }
+  ];
+
+  controller.signal('test', signal);
   controller.once('signalEnd', function () {
     controller.get('foo');
     test.done();
@@ -276,9 +286,13 @@ exports['should cache after value change'] = function (test) {
   });
   test.expect(2);
   controller.get('foo');
-  controller.signal('test', function (input, state) {
-    state.set('foo', 'bar2')
-  });
+  var signal = [
+    function (input, state) {
+      state.set('foo', 'bar2')
+    }
+  ];
+
+  controller.signal('test', signal);
   controller.once('signalEnd', function () {
     controller.get('foo');
     controller.get('foo');
@@ -306,9 +320,13 @@ exports['should cache after previously grabbed value change'] = function (test) 
   });
   test.expect(2);
   controller.get('foo');
-  controller.signal('test', function (input, state) {
-    state.set('test', 'hest2')
-  });
+  var signal = [
+    function (input, state) {
+      state.set('test', 'hest2')
+    }
+  ];
+
+  controller.signal('test', signal);
   controller.once('signalEnd', function () {
     controller.get('foo');
     controller.get('foo');
@@ -349,15 +367,19 @@ exports['should handle complex scenario'] = function (test) {
   test.deepEqual(controller.get(['lists', 'displayedMessages']), []);
   test.deepEqual(controller.get(['lists', 'likedMessages']), []);
 
-  controller.signal('test', function (input, state) {
-    state.merge(['data', 'messages'], {
-      '123': {title: 'test', liked: true},
-      '456': {title: 'test2', liked: true},
-      '789': {title: 'test3', liked: false},
-      '091': {title: 'test4', liked: false}
-    });
-    state.set(['lists', 'displayedMessages'], ['123']);
-  });
+  var signal = [
+    function (input, state) {
+      state.merge(['data', 'messages'], {
+        '123': {title: 'test', liked: true},
+        '456': {title: 'test2', liked: true},
+        '789': {title: 'test3', liked: false},
+        '091': {title: 'test4', liked: false}
+      });
+      state.set(['lists', 'displayedMessages'], ['123']);
+    }
+  ];
+  
+  controller.signal('test', signal);
 
   controller.once('signalEnd', function () {
 

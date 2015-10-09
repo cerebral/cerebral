@@ -8,6 +8,8 @@ import controller from './controller.js';
 import {Container} from 'cerebral-react';
 import CerebralRouter from 'cerebral-router';
 
+console.log(React.PropTypes.string(false, {foo: 'bar'}, 'foo'));
+
 // ACTIONS
 import addTodo from './actions/addTodo.js';
 import removeTodo from './actions/removeTodo.js';
@@ -35,9 +37,9 @@ import unsetSaving from './actions/unsetSaving.js';
 
 // SIGNALS
 
-controller.signal('allTodosClicked', unsetFilter, setVisibleTodos)
-controller.signal('newTodoTitleChanged', setNewTodoTitle);
-controller.signal('newTodoSubmitted',
+controller.signal('allTodosClicked', [unsetFilter, setVisibleTodos])
+controller.signal('newTodoTitleChanged', [setNewTodoTitle]);
+controller.signal('newTodoSubmitted', [
   addTodo,
   setVisibleTodos,
   setAllChecked,
@@ -50,18 +52,18 @@ controller.signal('newTodoSubmitted',
     }
   ],
   unsetSaving
-);
-controller.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
-controller.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
-controller.signal('toggleAllChanged', toggleAllChecked, setVisibleTodos, setCounters);
-controller.signal('filterClicked', setFilter, setVisibleTodos);
-controller.signal('clearCompletedClicked', clearCompleted, setVisibleTodos, setAllChecked, setCounters);
-controller.signal('todoDoubleClicked', editTodo);
-controller.signal('newTitleChanged', setTodoNewTitle);
-controller.signal('newTitleSubmitted', stopEditingTodo);
-controller.signal('recordClicked', record);
-controller.signal('playClicked', play);
-controller.signal('stopClicked', stop);
+]);
+controller.signal('removeTodoClicked', [removeTodo, setVisibleTodos, setAllChecked, setCounters]);
+controller.signal('toggleCompletedChanged', [toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters]);
+controller.signal('toggleAllChanged', [toggleAllChecked, setVisibleTodos, setCounters]);
+controller.signal('filterClicked', [setFilter, setVisibleTodos]);
+controller.signal('clearCompletedClicked', [clearCompleted, setVisibleTodos, setAllChecked, setCounters]);
+controller.signal('todoDoubleClicked', [editTodo]);
+controller.signal('newTitleChanged', [setTodoNewTitle]);
+controller.signal('newTitleSubmitted', [stopEditingTodo]);
+controller.signal('recordClicked', [record]);
+controller.signal('playClicked', [play]);
+controller.signal('stopClicked', [stop]);
 
 // ROUTER
 const router = CerebralRouter(controller, {

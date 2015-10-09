@@ -17,7 +17,14 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     var args = [].slice.call(arguments);
     var signalName = args.shift();
-    var chain = args;
+
+    if (args.length > 1 || typeof args[0] === 'function') {
+      console.warn('Cerebral - DEPRECATED signal definition with arguments. A signal is now defined with an array. This will lower threshold of readability for new devs using Cerebral');
+    }
+
+    var chain = args.length === 1 && Array.isArray(args[0]) ? args[0] : args;
+
+
 
     if (utils.isDeveloping()) {
       analyze(signalName, chain);
@@ -81,7 +88,11 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
           var currentBranch = branch[index];
           if (!currentBranch && branch === signal.branches && !signalStore.isRemembering() && !recorder.isCatchingUp()) {
 
-             branch[index - 1].duration = Date.now() - start;
+             // Might not be any actions passed
+             if (branch[index - 1]) {
+                branch[index - 1].duration = Date.now() - start;
+             }
+
              signal.isExecuting = false;
              controller.emit('signalEnd', signal);
              controller.emit('change');
@@ -118,16 +129,17 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
               var promises = currentBranch.map(function (action) {
 
                 var actionFunc = actions[action.actionIndex];
+                var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
+                var actionArgs = createActionArgs.async(action, inputArg, model);
 
                 if (utils.isDeveloping() && actionFunc.input) {
-                  utils.verifyInput(action.name, signal.name, actionFunc.input, signalArgs);
+                  utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg);
                 }
 
                 signalStore.addAsyncAction();
 
                 action.isExecuting = true;
-                action.input = utils.merge({}, signalArgs);
-                var actionArgs = createActionArgs.async(action, signalArgs, model);
+                action.input = utils.merge({}, inputArg);
                 var next = createNext.async(actionFunc);
                 actionFunc.apply(null, actionArgs.concat(next.fn, services));
                 return next.promise.then(function (result) {
@@ -185,15 +197,16 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
               try {
 
                 var action = currentBranch;
-                var actionArgs = createActionArgs.sync(action, signalArgs, model);
                 var actionFunc = actions[action.actionIndex];
+                var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
+                var actionArgs = createActionArgs.sync(action, inputArg, model);
 
                 if (utils.isDeveloping() && actionFunc.input) {
-                  utils.verifyInput(action.name, signal.name, actionFunc.input, signalArgs);
+                  utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg);
                 }
 
                 action.mutations = []; // Reset mutations array
-                action.input = utils.merge({}, signalArgs);
+                action.input = utils.merge({}, inputArg);
 
                 var next = createNext.sync(actionFunc, signal.name);
                 actionFunc.apply(null, actionArgs.concat(next, services));

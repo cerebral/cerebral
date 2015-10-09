@@ -13,17 +13,17 @@ module.exports = function (model) {
 
     var get = function(path) {
       path = typeof path === 'string' ? [].slice.call(arguments) : path;
-      return currentState[path.join('.')] = model.get(path);
+      return currentState[path.join('.')] = model.accessors.get(path);
     };
 
     return function() {
 
-        var freshValue = model.get(path);
+        var freshValue = model.accessors.get(path);
         var isSame = Object.keys(currentState).reduce(function (hasChanged, key) {
           if (hasChanged) {
             return true;
           }
-          return model.get(key.split('.')) === currentState[key];
+          return model.accessors.get(key.split('.')) === currentState[key];
         }, false) && freshValue=== currentPassedValue;
 
         if (isSame) {
@@ -38,7 +38,7 @@ module.exports = function (model) {
 
   return {
     register: function (computeTree) {
-        var match = utils.extractMatchingPathFunctions(computeTree, model.get());
+        var match = utils.extractMatchingPathFunctions(computeTree, model.accessors.get());
         if (Array.isArray(match)) {
           throw new Error('Cerebral - Computation tree does not match state store tree. Failed node: ' + match.join('.'));
         }
@@ -52,7 +52,12 @@ module.exports = function (model) {
         return;
       }
       var compute = computationPaths[path.join('.')];
-      return compute ? compute(model.get(path)) : undefined;
+      return compute ? compute(model.accessors.get(path)) : undefined;
+    },
+    getComputedPaths: function () {
+      return Object.keys(computationPaths).map(function (path) {
+        return path.split('.');
+      });
     }
   };
 

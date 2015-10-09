@@ -1,11 +1,14 @@
 var utils = require('./utils.js');
 
 var createStateArg = function (action, model, isAsync) {
-  var state = {};
-  state.get = function () {
-    var path = arguments.length ? Array.isArray(arguments[0]) ? arguments[0] : [].slice.call(arguments) : [];
-    return model.get(path);
-  };
+  var state = Object.keys(model.accessors || {}).reduce(function (state, accessor) {
+    state[accessor] = function () {
+      var args = [].slice.call(arguments);
+      var path = args[0] ? Array.isArray(args[0]) ? args.shift() : [args.shift()] : [];
+      return model.accessors[accessor].apply(null, [path].concat(args));
+    };
+    return state;
+  }, {});
   Object.keys(model.mutators || {}).reduce(function (state, mutator) {
     state[mutator] = function () {
       if (isAsync) {

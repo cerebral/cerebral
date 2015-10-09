@@ -5,8 +5,10 @@ var async = function (cb) {
 var Model = function () {
   return function () {
     return {
-      get: function () {
+      accessors: {
+        get: function () {
 
+        }
       },
       mutators: {
         set: function (path, value) {
@@ -23,9 +25,13 @@ exports['should record signals'] = function (test) {
   var initialState = {};
   var state = initialState;
   var ctrl = Controller(Model());
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  var signal = [
+    function (args, state) {
+      state.set('foo', args.foo);
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -52,8 +58,10 @@ exports['should play back recording'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        export: function () {
-          return state;
+        accessors: {
+          export: function () {
+            return state;
+          }
         },
         mutators: {
           set: function (path, value) {
@@ -65,11 +73,15 @@ exports['should play back recording'] = function (test) {
     };
   };
   var ctrl = Controller(Model());
-  ctrl.signal('test', function (input, state) {
-    state.set('foo', input.foo);
-  }, [function (input, state, output) {
-    output();
-  }]);
+  var signal = [
+    function (input, state) {
+      state.set('foo', input.foo);
+    }, [function (input, state, output) {
+      output();
+    }]
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -102,8 +114,10 @@ exports['should seek to specific point in recording'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        export: function () {
-          return state;
+        accessors: {
+          export: function () {
+            return state;
+          }
         },
         mutators: {
           set: function (path, value) {
@@ -115,9 +129,13 @@ exports['should seek to specific point in recording'] = function (test) {
     };
   };
   var ctrl = Controller(Model());
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  var signal = [
+    function (args, state) {
+      state.set('foo', args.foo);
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -147,8 +165,10 @@ exports['should pause a playback'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        export: function () {
-          return state;
+        accessors: {
+          export: function () {
+            return state;
+          }
         },
         mutators: {
           set: function (path, value) {
@@ -160,9 +180,13 @@ exports['should pause a playback'] = function (test) {
     };
   };
   var ctrl = Controller(Model());
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  var signal = [
+    function (args, state) {
+      state.set('foo', args.foo);
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -204,8 +228,10 @@ exports['should resume a paused playback'] = function (test) {
         state = currentRecording.initialState;
       });
       return {
-        export: function () {
-          return state;
+        accessors: {
+          export: function () {
+            return state;
+          }
         },
         mutators: {
           set: function (path, value) {
@@ -217,9 +243,13 @@ exports['should resume a paused playback'] = function (test) {
     };
   };
   var ctrl = Controller(Model());
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  var signal = [
+    function (args, state) {
+      state.set('foo', args.foo);
+    }
+  ];
+  
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {

@@ -2,6 +2,8 @@ var utils = require('./utils.js');
 
 module.exports = function (signalStore, controller) {
 
+  var isInitialized = false;
+
   var getDetail = function () {
     return {
       props: {
@@ -9,7 +11,8 @@ module.exports = function (signalStore, controller) {
         willKeepState: signalStore.willKeepState(),
         currentSignalIndex: signalStore.getCurrentIndex(),
         isExecutingAsync: signalStore.isExecutingAsync(),
-        isRemembering: signalStore.isRemembering()
+        isRemembering: signalStore.isRemembering(),
+        computedPaths: controller.getComputedPaths()
       }
     };
   };
@@ -22,6 +25,8 @@ module.exports = function (signalStore, controller) {
   }, 100);
 
   var initialize = function () {
+
+    isInitialized = true;
 
     // Might be an async signal running here
     if (signalStore.isExecutingAsync()) {
@@ -42,6 +47,10 @@ module.exports = function (signalStore, controller) {
 
   };
 
+  window.addEventListener('cerebral.dev.requestUpdate', function () {
+    update();
+  });
+
   window.addEventListener('cerebral.dev.toggleKeepState', function () {
     signalStore.toggleKeepState();
     update();
@@ -58,6 +67,10 @@ module.exports = function (signalStore, controller) {
     update();
   });
 
+  window.addEventListener('cerebral.dev.logComputedPath', function (event) {
+    console.log('CEREBRAL - Computed path:', controller.getComputedValue(event.detail));
+  });
+
   window.addEventListener('cerebral.dev.logPath', function (event) {
     var name = event.detail.name;
     var value = controller.get(event.detail.path);
@@ -71,8 +84,8 @@ module.exports = function (signalStore, controller) {
 
   window.addEventListener('unload', function () {
     signalStore.removeRunningSignals();
-    utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', signalStore.willKeepState() ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]));
-    utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', JSON.stringify(signalStore.willKeepState()));
+    utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', isInitialized && signalStore.willKeepState() ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]));
+    utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(signalStore.willKeepState()));
   });
 
   return {

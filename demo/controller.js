@@ -29,7 +29,7 @@ controller.compute({
     return refs.map(function (id) {
       return get('todos')[id];
     });
-  }  
+  }
 });
 
 export default controller;

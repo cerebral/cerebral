@@ -10,7 +10,8 @@ var tests_available = {
     'types': 'tests/types.js',
     'mutations': 'tests/mutations.js',
     'statictree': 'tests/staticTree.js',
-    'computation': 'tests/computation.js'
+    'computation': 'tests/computation.js',
+    'accessors': 'tests/accessors.js'
 };
 
 var test_name;

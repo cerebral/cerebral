@@ -15,7 +15,11 @@ exports['should validate inputs'] = function (test) {
   action.input = {
     foo: String
   };
-  ctrl.signal('test', action);
+  var signal = [
+    action
+  ];
+
+  ctrl.signal('test', signal);
   test.throws(function () {
     ctrl.signals.test(true);
   });
@@ -32,6 +36,26 @@ exports['should validate inputs'] = function (test) {
   test.done();
 };
 
+exports['should validate default inputs'] = function (test) {
+  var ctrl = Controller(Model);
+  var action = function () {};
+  action.input = {
+    foo: String
+  };
+  action.defaultInput = {
+    foo: 123
+  };
+  var signal = [
+    action
+  ];
+
+  ctrl.signal('test', signal);
+  test.throws(function () {
+    ctrl.signals.test.sync();
+  });
+  test.done();
+};
+
 exports['should validate ouput'] = function (test) {
   var ctrl = Controller(Model());
   var action = function (args, state, output) {
@@ -42,9 +66,13 @@ exports['should validate ouput'] = function (test) {
   action.output = {
     foo: String
   };
-  ctrl.signal('test', action, function () {
+  var signal = [
+    action, function () {
 
-  });
+    }
+  ];
+
+  ctrl.signal('test', signal);
   test.throws(function () {
     ctrl.signals.test(true);
   });
@@ -63,7 +91,10 @@ exports['should validate outputs'] = function (test) {
       foo: String
     }
   };
-  ctrl.signal('test', action, {success: []});
+  var signal = [
+    action, {success: []}
+  ];
+  ctrl.signal('test', signal);
   test.throws(function () {
     ctrl.signals.test(true);
   });

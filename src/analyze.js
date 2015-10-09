@@ -2,14 +2,14 @@ var utils = require('./utils.js');
 module.exports = function (signalName, actions) {
   var traverse = function (actions, parentActions, parentIndex) {
     actions.forEach(function (action, index) {
-      
+
       if (typeof action === 'undefined') {
         throw new Error([
-          'Cerebral: Action number "' + index + '" in signal "' + signalName +  
+          'Cerebral: Action number "' + index + '" in signal "' + signalName +
           '" does not exist. Check that you have spelled it correctly!'
         ].join(''));
       }
-      
+
       if (Array.isArray(action)) {
         traverse(action, actions, index);
       } else {
@@ -34,7 +34,7 @@ module.exports = function (signalName, actions) {
           throw new Error([
             'Cerebral: The action "' + utils.getFunctionName(action) +
             '" in signal "' + signalName +  '" has an output value. ' +
-            'There should be these paths: ' + JSON.stringify(Object.keys(action.outputs))
+            'There should be these paths: ' + JSON.stringify(Array.isArray(action.outputs) ? action.outputs : Object.keys(action.outputs))
           ].join(''));
 
         } else if (Array.isArray(action.outputs)) {
