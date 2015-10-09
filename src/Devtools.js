@@ -47,6 +47,12 @@ module.exports = function (signalStore, controller) {
 
   };
 
+  window.addEventListener('cerebral.dev.initialize', function () {
+    if (isInitialized) {
+      update();
+    }
+  });
+
   window.addEventListener('cerebral.dev.requestUpdate', function () {
     update();
   });
@@ -92,13 +98,7 @@ module.exports = function (signalStore, controller) {
     update: update,
     start: function () {
       if (utils.isDeveloping()) {
-        if (window.CEREBRAL_DEBUGGER_INJECTED) {
-          initialize();
-        } else {
-          window.addEventListener('cerebral.dev.initialize', function () {
-            initialize();
-          });
-        }
+        initialize();
       }
     }
   };
