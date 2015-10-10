@@ -1,6 +1,6 @@
 function setAllChecked (args, state) {
 
-  let visibleTodos = state.get('visibleTodos');
+  let visibleTodos = state.get(['visibleTodos']);
 
   state.set('isAllChecked', visibleTodos.filter(function(todo) {
     return !todo.completed;

@@ -2,14 +2,12 @@ var utils = require('./utils.js');
 
 module.exports = function (model) {
 
-  var computationPaths = null;
+  var computed = null;
 
   var createMapper = function(stringPath, cb) {
 
-    var path = stringPath.split('.');
     var currentState = {};
     var currentValue = null;
-    var currentPassedValue = null;
 
     var get = function(path) {
       path = typeof path === 'string' ? [].slice.call(arguments) : path;
@@ -18,46 +16,38 @@ module.exports = function (model) {
 
     return function() {
 
-        var freshValue = model.accessors.get(path);
         var isSame = Object.keys(currentState).reduce(function (hasChanged, key) {
           if (hasChanged) {
             return true;
           }
           return model.accessors.get(key.split('.')) === currentState[key];
-        }, false) && freshValue=== currentPassedValue;
+        }, false);
 
         if (isSame) {
           return currentValue;
         } else {
-          currentPassedValue = freshValue;
           currentState = {};
-          return currentValue = cb(get, currentPassedValue);
+          return currentValue = cb(get);
         }
     };
   };
 
   return {
     register: function (computeTree) {
-        var match = utils.extractMatchingPathFunctions(computeTree, model.accessors.get());
-        if (Array.isArray(match)) {
-          throw new Error('Cerebral - Computation tree does not match state store tree. Failed node: ' + match.join('.'));
-        }
-        computationPaths = Object.keys(match).reduce(function (computations, key) {
-          computations[key] = createMapper(key, match[key]);
-          return computations;
+        computed =  Object.keys(computeTree).reduce(function (computed, key) {
+          computed[key] = createMapper(key, computeTree[key]);
+          return computed;
         }, {});
     },
-    getComputedValue: function (path) {
-      if (!computationPaths) {
+    getComputedValue: function (name) {
+      if (!computed) {
         return;
       }
-      var compute = computationPaths[path.join('.')];
-      return compute ? compute(model.accessors.get(path)) : undefined;
+      var compute = computed[name];
+      return compute ? compute() : undefined;
     },
     getComputedPaths: function () {
-      return Object.keys(computationPaths || {}).map(function (path) {
-        return path.split('.');
-      });
+      return Object.keys(computationPaths || {});
     }
   };
 

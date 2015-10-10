@@ -40,8 +40,7 @@ module.exports = function (Model, services) {
   controller.recorder = recorder;
   controller.get = function () {
     var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0];
-    var computedValue = compute.getComputedValue(path);
-    return computedValue === undefined ? model.accessors.get(path) : computedValue;
+    return model.accessors.get(path);
   };
   controller.devtools = devtools;
   controller.compute = compute.register;
