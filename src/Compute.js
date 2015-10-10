@@ -47,7 +47,7 @@ module.exports = function (model) {
       return compute ? compute() : undefined;
     },
     getComputedPaths: function () {
-      return Object.keys(computationPaths || {});
+      return Object.keys(computed || {});
     }
   };
 
