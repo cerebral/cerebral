@@ -10,7 +10,7 @@ const model = Model({
   nextRef: 0,
   url: '/',
   todos: {},
-  visibleTodos: [],
+  visibleTodosRefs: [],
   newTodoTitle: '',
   isSaving: false,
   isAllChecked: false,
@@ -25,9 +25,9 @@ const model = Model({
 const controller = Controller(model);
 
 controller.compute({
-  visibleTodos: function (get, refs) {
-    return refs.map(function (id) {
-      return get('todos')[id];
+  visibleTodos: function (get) {
+    return get(['visibleTodosRefs']).map(function (id) {
+      return get(['todos', id]);
     });
   }
 });

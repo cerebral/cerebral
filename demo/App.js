@@ -5,7 +5,7 @@ import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
 
 @Cerebral({
-  visibleTodos: ['visibleTodos'],
+  visibleTodos: 'visibleTodos',
   todos: ['todos'],
   recorder: ['recorder'],
   isSaving: ['isSaving']

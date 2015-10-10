@@ -3,7 +3,7 @@ import Todo from './Todo.js';
 import {Decorator as Cerebral} from 'cerebral-react';
 
 @Cerebral({
-  todos: ['visibleTodos'],
+  todos: 'visibleTodos',
   isAllChecked: ['isAllChecked']
 })
 class TodosList extends React.Component {

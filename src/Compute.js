@@ -6,8 +6,9 @@ module.exports = function (model) {
 
   var createMapper = function(stringPath, cb) {
 
+    var initialRun = true;
     var currentState = {};
-    var currentValue = null;
+    var currentValue;
 
     var get = function(path) {
       path = typeof path === 'string' ? [].slice.call(arguments) : path;
@@ -16,18 +17,20 @@ module.exports = function (model) {
 
     return function() {
 
-        var isSame = Object.keys(currentState).reduce(function (hasChanged, key) {
+        var hasChanged = Object.keys(currentState).reduce(function (hasChanged, key) {
           if (hasChanged) {
             return true;
           }
-          return model.accessors.get(key.split('.')) === currentState[key];
+          return model.accessors.get(key.split('.')) !== currentState[key];
         }, false);
 
-        if (isSame) {
-          return currentValue;
-        } else {
+
+        if (hasChanged || initialRun) {
           currentState = {};
+          initialRun = false;
           return currentValue = cb(get);
+        } else {
+          return currentValue;
         }
     };
   };
