@@ -1,6 +1,6 @@
 var utils = require('./utils.js');
 
-var createStateArg = function (action, model, isAsync) {
+var createStateArg = function (action, model, isAsync, compute) {
   var state = Object.keys(model.accessors || {}).reduce(function (state, accessor) {
     state[accessor] = function () {
       var args = [].slice.call(arguments);
@@ -29,22 +29,25 @@ var createStateArg = function (action, model, isAsync) {
       return model.mutators[mutator].apply(null, [path.slice()].concat(args));
     };
     return state;
-  }, state)
+  }, state);
+
+  state.getComputed = compute.getComputedValue;
+
   return state;
 };
 
 module.exports = {
-  sync: function (action, signalArgs, model) {
+  sync: function (action, signalArgs, model, compute) {
     return [
       signalArgs,
-      createStateArg(action, model, false)
+      createStateArg(action, model, false, compute)
     ];
 
   },
-  async: function (action, signalArgs, model) {
+  async: function (action, signalArgs, model, compute) {
     return [
       signalArgs,
-      createStateArg(action, model, true)
+      createStateArg(action, model, true, compute)
     ];
 
   }

@@ -11,7 +11,7 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0);
 };
 
-module.exports = function (signalStore, recorder, devtools, controller, model, services) {
+module.exports = function (signalStore, recorder, devtools, controller, model, services, compute) {
 
   return function () {
 
@@ -130,7 +130,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
                 var actionFunc = actions[action.actionIndex];
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
-                var actionArgs = createActionArgs.async(action, inputArg, model);
+                var actionArgs = createActionArgs.async(action, inputArg, model, compute);
 
                 if (utils.isDeveloping() && actionFunc.input) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg);
@@ -199,7 +199,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 var action = currentBranch;
                 var actionFunc = actions[action.actionIndex];
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
-                var actionArgs = createActionArgs.sync(action, inputArg, model);
+                var actionArgs = createActionArgs.sync(action, inputArg, model, compute);
 
                 if (utils.isDeveloping() && actionFunc.input) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg);

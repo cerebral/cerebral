@@ -25,7 +25,7 @@ module.exports = function (Model, services, computed) {
   }
 
   var recorder = CreateRecorder(signalStore, signals, controller, model);
-  var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, controller, model, services);
+  var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, controller, model, services, compute);
 
   controller.signal = function () {
     var signalNamePath = arguments[0].split('.');

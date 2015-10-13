@@ -255,3 +255,27 @@ exports['should allow use of other computed'] = function (test) {
   controller.getComputedValue(['foo']);
   test.done();
 };
+
+exports['should allow use of computed inside actions'] = function (test) {
+  var model = Model({
+    foo: 'bar',
+    test: 'hest'
+  });
+  var computed = {
+    foo: function () {
+      return 'bar';
+    }
+  };
+  var controller = Controller(model, {}, computed);
+  test.expect(1);
+  controller.getComputedValue(['foo']);
+  var signal = [
+    function (input, state) {
+      test.equal(state.getComputed(['foo']), 'bar');
+      test.done();
+    }
+  ];
+
+  controller.signal('test', signal);
+  controller.signals.test.sync();
+};
