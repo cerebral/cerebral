@@ -2,6 +2,7 @@ var utils = require('./utils.js');
 
 module.exports = function (signalStore, signalMethods, controller, model) {
 
+  var currentSeek = 0;
   var currentRecording = null;
   var lastSignal = null;
   var durationTimer = null;
@@ -14,61 +15,42 @@ module.exports = function (signalStore, signalMethods, controller, model) {
   var isPlaying = false;
   var isRecording = false;
   var isCatchingUp = false;
-  var currentSeek = 0;
+  var startSeek = 0;
+  var catchup = null;
+
+  // Runs the signal synchronously
+  var triggerSignal = function (signal) {
+    var signalName = signal.name.split('.');
+    var signalMethodPath = signalMethods;
+    while (signalName.length) {
+      signalMethodPath = signalMethodPath[signalName.shift()];
+    }
+    signalMethodPath.call(null, signal.input, signal.branches);
+
+  };
 
   return {
 
-    seek: function (seek, startPlaying) {
+    seek: function (seek) {
 
+      startSeek = seek;
       clearTimeout(durationTimer);
       playbackTimers.forEach(clearTimeout);
 
-      controller.emit('seek', seek, !!startPlaying, currentRecording);
+      controller.emit('seek', startSeek, currentRecording);
 
       if (signalStore.isRemembering()) {
         return;
       }
 
-      // Runs the signal synchronously
-      var triggerSignal = function (signal) {
-        var signalName = signal.name.split('.');
-        var signalMethodPath = signalMethods;
-        while (signalName.length) {
-          signalMethodPath = signalMethodPath[signalName.shift()];
-        }
-        signalMethodPath.call(null, signal.input, signal.branches);
-
-      };
-
       // Optimize with FOR loop
-      var catchup = currentRecording.signals.filter(function (signal) {
-        return signal.start - currentRecording.start < seek;
+      catchup = currentRecording.signals.filter(function (signal) {
+        return signal.start - currentRecording.start < startSeek;
       });
       isCatchingUp = true;
       catchup.forEach(triggerSignal);
       isCatchingUp = false;
 
-
-      if (startPlaying) {
-        this.createTimer();
-        var signalsCount = currentRecording.signals.length;
-        var startIndex = catchup.length;
-        for (var x = startIndex; x < signalsCount; x++) {
-
-          var signal = currentRecording.signals[x];
-          var durationTarget = signal.start - currentRecording.start - seek;
-          playbackTimers.push(setTimeout(triggerSignal.bind(null, signal), durationTarget));
-
-        }
-        isPlaying = true;
-        started = Date.now();
-      }
-      playbackTimers.push(setTimeout(function () {
-        isPlaying = false;
-        controller.emit('change');
-      }, currentRecording.end - currentRecording.start - seek ));
-
-      controller.emit('change');
     },
 
     createTimer: function () {
@@ -85,6 +67,31 @@ module.exports = function (signalStore, signalMethods, controller, model) {
 
     resetState: function () {
       controller.emit('recorderReset', currentRecording.initialState);
+    },
+
+    play: function () {
+      if (isPlaying || isRecording) {
+        throw new Error('CEREBRAL Recorder - You can not play while already playing or recording');
+      }
+
+      this.createTimer();
+      var signalsCount = currentRecording.signals.length;
+      var startIndex = catchup.length;
+      for (var x = startIndex; x < signalsCount; x++) {
+
+        var signal = currentRecording.signals[x];
+        var durationTarget = signal.start - currentRecording.start - startSeek;
+        playbackTimers.push(setTimeout(triggerSignal.bind(null, signal), durationTarget));
+
+      }
+      isPlaying = true;
+      started = Date.now();
+
+      playbackTimers.push(setTimeout(function () {
+        isPlaying = false;
+        controller.emit('change');
+      }, currentRecording.end - currentRecording.start - startSeek ));
+
     },
 
     record: function () {
@@ -107,8 +114,6 @@ module.exports = function (signalStore, signalMethods, controller, model) {
 
       isRecording = true;
 
-      controller.emit('change');
-
     },
 
     stop: function () {
@@ -128,8 +133,6 @@ module.exports = function (signalStore, signalMethods, controller, model) {
       currentRecording.end = Date.now();
       currentRecording.duration = currentRecording.end - currentRecording.start;
 
-      controller.emit('change');
-
     },
 
     pause: function pause() {
@@ -147,8 +150,7 @@ module.exports = function (signalStore, signalMethods, controller, model) {
       currentSeek = ended - started;
       clearTimeout(durationTimer);
       playbackTimers.forEach(clearTimeout);
-
-      controller.emit('change');
+      isPlaying = false;
 
     },
 

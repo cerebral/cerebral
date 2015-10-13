@@ -2,9 +2,9 @@ import React from 'react';
 import Todo from './Todo.js';
 import {Decorator as Cerebral} from 'cerebral-react';
 
-@Cerebral({
-  todos: 'visibleTodos',
-  isAllChecked: ['isAllChecked']
+@Cerebral({}, {
+  isAllChecked: ['isAllChecked'],
+  todos: ['visibleTodos']
 })
 class TodosList extends React.Component {
   renderTodo(todo, index) {

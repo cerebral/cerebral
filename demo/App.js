@@ -5,10 +5,11 @@ import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
 
 @Cerebral({
-  visibleTodos: 'visibleTodos',
   todos: ['todos'],
   recorder: ['recorder'],
   isSaving: ['isSaving']
+}, {
+  visibleTodos: ['visibleTodos']
 })
 class App extends React.Component {
   record() {

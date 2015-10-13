@@ -5,7 +5,7 @@ var Devtools = require('./Devtools.js');
 var Compute = require('./Compute.js');
 var EventEmitter = require('events').EventEmitter;
 
-module.exports = function (Model, services) {
+module.exports = function (Model, services, computed) {
 
   var controller = new EventEmitter();
   var model = Model(controller);
@@ -18,6 +18,10 @@ module.exports = function (Model, services) {
 
   if (typeof window !== 'undefined' && typeof window.addEventListener !== 'undefined') {
     devtools = Devtools(signalStore, controller);
+  }
+
+  if (computed) {
+    compute.register(computed);
   }
 
   var recorder = CreateRecorder(signalStore, signals, controller, model);
@@ -43,7 +47,6 @@ module.exports = function (Model, services) {
     return model.accessors.get(path);
   };
   controller.devtools = devtools;
-  controller.compute = compute.register;
   controller.getComputedValue = compute.getComputedValue;
   controller.getComputedPaths = compute.getComputedPaths;
   services.recorder = recorder;

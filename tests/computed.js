@@ -44,25 +44,39 @@ var Model = function (state) {
   };
 };
 
-exports['should have a computation method'] = function (test) {
-  var controller = Controller(Model());
-  test.ok(controller.compute);
-  test.done();
-};
-
 exports['should pass get function to grab state from state store'] = function (test) {
   var model = Model({
     foo: 'bar'
   });
-  var controller = Controller(model);
-  controller.compute({
+  var computed = {
     foo: function (get) {
       test.ok(typeof get === 'function');
       test.equal(get(['foo']), 'bar');
     }
-  });
+  };
+
+  var controller = Controller(model, {}, computed);
   test.expect(2);
-  controller.getComputedValue('foo');
+  controller.getComputedValue(['foo']);
+  test.done();
+};
+
+exports['should allow nested computed'] = function (test) {
+  var model = Model({
+    foo: 'bar'
+  });
+  var computed = {
+    foo: {
+      bar: function (get) {
+        test.ok(typeof get === 'function');
+        test.equal(get(['foo']), 'bar');
+      }
+    }
+  };
+
+  var controller = Controller(model, {}, computed);
+  test.expect(2);
+  controller.getComputedValue(['foo', 'bar']);
   test.done();
 };
 
@@ -71,14 +85,14 @@ exports['should pass get function to grab state'] = function (test) {
     foo: 'bar',
     test: 'hest'
   });
-  var controller = Controller(model);
-  controller.compute({
+  var computed = {
     foo: function (get, value) {
       test.equal(get(['test']), 'hest');
     }
-  });
+  }
+  var controller = Controller(model, {}, computed);
   test.expect(1);
-  controller.getComputedValue('foo');
+  controller.getComputedValue(['foo']);
   test.done();
 };
 
@@ -87,15 +101,15 @@ exports['should not rerun if no values change'] = function (test) {
     foo: 'bar',
     test: 'hest'
   });
-  var controller = Controller(model);
-  controller.compute({
+  var computed = {
     foo: function (get, value) {
       test.equal(get(['test']), 'hest');
     }
-  });
+  };
+  var controller = Controller(model, {}, computed);
   test.expect(1);
-  controller.getComputedValue('foo');
-  controller.getComputedValue('foo');
+  controller.getComputedValue(['foo']);
+  controller.getComputedValue(['foo']);
   test.done();
 };
 
@@ -105,8 +119,7 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
     test: 'hest'
   });
   var run = 0;
-  var controller = Controller(model);
-  controller.compute({
+  var computed = {
     foo: function (get) {
       run++;
       if (run === 1) {
@@ -115,9 +128,10 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
         test.equal(get(['test']), 'hest2');
       }
     }
-  });
+  };
+  var controller = Controller(model, {}, computed);
   test.expect(2);
-  controller.getComputedValue('foo');
+  controller.getComputedValue(['foo']);
   var signal = [
     function (input, state) {
       state.set('test', 'hest2')
@@ -126,7 +140,7 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
 
   controller.signal('test', signal);
   controller.once('signalEnd', function () {
-    controller.getComputedValue('foo');
+    controller.getComputedValue(['foo']);
     test.done();
   });
   controller.signals.test();
@@ -138,8 +152,7 @@ exports['should cache after previously grabbed value change'] = function (test) 
     test: 'hest'
   });
   var run = 0;
-  var controller = Controller(model);
-  controller.compute({
+  var computed = {
     foo: function (get) {
       run++;
       if (run === 1) {
@@ -148,9 +161,10 @@ exports['should cache after previously grabbed value change'] = function (test) 
         test.equal(get(['test']), 'hest2');
       }
     }
-  });
+  };
+  var controller = Controller(model, {}, computed);
   test.expect(2);
-  controller.getComputedValue('foo');
+  controller.getComputedValue(['foo']);
   var signal = [
     function (input, state) {
       state.set(['test'], 'hest2')
@@ -159,8 +173,8 @@ exports['should cache after previously grabbed value change'] = function (test) 
 
   controller.signal('test', signal);
   controller.once('signalEnd', function () {
-    controller.getComputedValue('foo');
-    controller.getComputedValue('foo');
+    controller.getComputedValue(['foo']);
+    controller.getComputedValue(['foo']);
     test.done();
   });
   controller.signals.test.sync();
@@ -176,9 +190,7 @@ exports['should handle complex scenario'] = function (test) {
     }
   });
 
-  var controller = Controller(model);
-
-  controller.compute({
+  var computed = {
     displayedMessages: function (get) {
       return get(['lists', 'displayedMessagesIds']).map(function (id) { return get(['data', 'messages', id])});
     },
@@ -190,10 +202,11 @@ exports['should handle complex scenario'] = function (test) {
         return message.liked;
       });
     }
-  });
+  };
+  var controller = Controller(model, {}, computed);
 
-  test.deepEqual(controller.getComputedValue('displayedMessages'), []);
-  test.deepEqual(controller.getComputedValue('likedMessages'), []);
+  test.deepEqual(controller.getComputedValue(['displayedMessages']), []);
+  test.deepEqual(controller.getComputedValue(['likedMessages']), []);
 
   var signal = [
     function (input, state) {
@@ -211,15 +224,34 @@ exports['should handle complex scenario'] = function (test) {
 
   controller.once('signalEnd', function () {
 
-    test.deepEqual(controller.getComputedValue('displayedMessages'), [{
+    test.deepEqual(controller.getComputedValue(['displayedMessages']), [{
       title: 'test',
       liked: true
     }]);
-    test.equal(controller.getComputedValue('likedMessages').length, 2);
+    test.equal(controller.getComputedValue(['likedMessages']).length, 2);
     test.done();
 
   });
 
   controller.signals.test();
 
+};
+
+exports['should allow use of other computed'] = function (test) {
+  var model = Model({
+    foo: 'bar'
+  });
+  var computed = {
+    foo: function (get, getComputed) {
+      test.equal(getComputed(['bar']), 'foo');
+    },
+    bar: function () {
+      return 'foo';
+    }
+  };
+
+  var controller = Controller(model, {}, computed);
+  test.expect(1);
+  controller.getComputedValue(['foo']);
+  test.done();
 };

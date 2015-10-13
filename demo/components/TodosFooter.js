@@ -1,16 +1,14 @@
-import React from 'react/addons';
+import React from 'react';
 import {Decorator as Cerebral} from 'cerebral-react';
 
-@Cerebral((props) => {
-  return {
-    remainingCount: ['remainingCount'],
-    filter: ['filter'],
-    completedCount: ['completedCount']
-  }
+@Cerebral({
+  filter: ['filter']
+}, {
+  counts: ['counts']
 })
 class TodosFooter extends React.Component {
   renderRemainingCount() {
-    let count = this.props.remainingCount;
+    let count = this.props.counts.remainingCount;
     if (count === 0 || count > 1) {
       return count + ' items left';
     } else {
@@ -25,7 +23,7 @@ class TodosFooter extends React.Component {
   renderCompletedButton() {
     return (
       <button id="clear-completed" onClick={() => this.props.signals.clearCompletedClicked()}>
-        Clear completed ({this.props.completedCount})
+        Clear completed ({this.props.counts.completedCount})
       </button>
     );
   }
@@ -45,7 +43,7 @@ class TodosFooter extends React.Component {
             <a className={this.renderRouteClass('completed')} href="/completed">Completed</a>
           </li>
         </ul>
-        {this.props.completedCount ? this.renderCompletedButton() : null}
+        {this.props.counts.completedCount ? this.renderCompletedButton() : null}
       </footer>
     );
   }

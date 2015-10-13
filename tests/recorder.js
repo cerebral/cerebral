@@ -54,7 +54,7 @@ exports['should play back recording'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, startPlaying, currentRecording) {
+      controller.on('seek', function (seek, currentRecording) {
         state = currentRecording.initialState;
       });
       return {
@@ -91,7 +91,8 @@ exports['should play back recording'] = function (test) {
     setTimeout(function () {
       ctrl.recorder.stop();
       setTimeout(function () {
-        ctrl.recorder.seek(0, true);
+        ctrl.recorder.seek(0);
+        ctrl.recorder.play();
         test.deepEqual(state, {});
         setTimeout(function () {
           test.deepEqual(state, {foo: 'bar'});
@@ -110,7 +111,7 @@ exports['should seek to specific point in recording'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, startPlaying, currentRecording) {
+      controller.on('seek', function (seek, currentRecording) {
         state = currentRecording.initialState;
       });
       return {
@@ -146,6 +147,7 @@ exports['should seek to specific point in recording'] = function (test) {
       ctrl.recorder.stop();
       setTimeout(function () {
         ctrl.recorder.seek(150);
+        ctrl.recorder.play();
         test.deepEqual(state, {foo: 'bar'});
         test.done();
       }, 100);
@@ -161,7 +163,7 @@ exports['should pause a playback'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, startPlaying, currentRecording) {
+      controller.on('seek', function (seek, currentRecording) {
         state = currentRecording.initialState;
       });
       return {
@@ -202,7 +204,8 @@ exports['should pause a playback'] = function (test) {
         ctrl.recorder.stop();
 
         setTimeout(function () {
-          ctrl.recorder.seek(0, true);
+          ctrl.recorder.seek(0);
+          ctrl.recorder.play();
           test.deepEqual(state, {});
           setTimeout(function () {
             ctrl.recorder.pause();
@@ -224,7 +227,7 @@ exports['should resume a paused playback'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, startPlaying, currentRecording) {
+      controller.on('seek', function (seek, currentRecording) {
         state = currentRecording.initialState;
       });
       return {
@@ -248,7 +251,7 @@ exports['should resume a paused playback'] = function (test) {
       state.set('foo', args.foo);
     }
   ];
-  
+
   ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
@@ -265,14 +268,16 @@ exports['should resume a paused playback'] = function (test) {
         ctrl.recorder.stop();
 
         setTimeout(function () {
-          ctrl.recorder.seek(0, true);
+          ctrl.recorder.seek(0);
+          ctrl.recorder.play();
           test.deepEqual(state, {});
           setTimeout(function () {
             ctrl.recorder.pause();
             test.deepEqual(state, {foo: 'bar'});
 
             setTimeout(function () {
-              ctrl.recorder.seek(ctrl.recorder.getCurrentSeek(), true);
+              ctrl.recorder.seek(ctrl.recorder.getCurrentSeek());
+              ctrl.recorder.play();
               setTimeout(function () {
                 test.deepEqual(state, {foo: 'bar2'});
                 test.done();

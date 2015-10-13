@@ -1,6 +1,6 @@
 {
   "name": "cerebral",
-  "version": "0.20.5",
+  "version": "0.20.6",
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
@@ -26,7 +26,8 @@
     "jshint-loader": "^0.8.2",
     "nodeunit": "^0.9.0",
     "nodeunit-watcher": "0.0.3",
-    "react": "^0.13.3",
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
     "style-loader": "^0.8.3",
     "todomvc-app-css": "^1.0.1",
     "todomvc-common": "^1.0.1",
