@@ -107,7 +107,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
           if (Array.isArray(currentBranch)) {
 
-            if (signalStore.isRemembering() || recorder.isPlaying()) {
+            if (signalStore.isRemembering()) {
 
               currentBranch.forEach(function (action) {
 
@@ -178,7 +178,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
           } else {
 
-            if (signalStore.isRemembering() || recorder.isPlaying()) {
+            if (signalStore.isRemembering()) {
 
               var action = currentBranch;
               action.mutations.forEach(function (mutation) {

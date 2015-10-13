@@ -26,7 +26,7 @@ class App extends React.Component {
       <div id="todoapp-wrapper">
         <div>
           {
-            this.props.recorder.isRecording ?
+            this.props.recorder.isRecording && !this.props.recorder.isPlaying ?
             <button className="btn btn-stop" onClick={() => this.stop()} disabled={this.props.isSaving}>Stop</button> :
             null
           }

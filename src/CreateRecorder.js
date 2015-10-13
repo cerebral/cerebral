@@ -25,8 +25,11 @@ module.exports = function (signalStore, signalMethods, controller, model) {
     while (signalName.length) {
       signalMethodPath = signalMethodPath[signalName.shift()];
     }
-    signalMethodPath.call(null, signal.input, signal.branches);
-
+    if (isCatchingUp) {
+      signalMethodPath.call(null, signal.input, signal.branches);
+    } else {
+      signalMethodPath.call(null, signal.input);
+    }
   };
 
   return {
