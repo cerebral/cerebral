@@ -89,6 +89,11 @@ module.exports = function (model) {
     getComputedPaths: function () {
       var path = [];
       var paths = [];
+
+      if (!computed) {
+        return paths;
+      }
+
       var traverse = function (tree) {
         return Object.keys(tree).forEach(function (key) {
           path.push(key);
