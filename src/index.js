@@ -51,7 +51,5 @@ module.exports = function (Model, services, computed) {
   controller.getComputedPaths = compute.getComputedPaths;
   services.recorder = recorder;
 
-  controller.devtools.start();
-
   return controller;
 };

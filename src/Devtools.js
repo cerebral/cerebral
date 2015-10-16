@@ -30,6 +30,17 @@ module.exports = function (signalStore, controller) {
       return;
     }
 
+    var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
+      JSON.parse(localStorage.getItem('cerebral_signals')) : [];
+
+    var willKeepState = utils.hasLocalStorage() && localStorage.getItem('cerebral_willKeepState') ?
+      JSON.parse(localStorage.getItem('cerebral_willKeepState')) :
+      true;
+
+    if (willKeepState) {
+      signalStore.toggleKeepState();
+    }
+
     isInitialized = true;
 
     // Might be an async signal running here
@@ -38,6 +49,7 @@ module.exports = function (signalStore, controller) {
         var event = new CustomEvent('cerebral.dev.cerebralPong', {
           detail: getDetail()
         });
+        signalStore.setSignals(signals);
         signalStore.remember(signalStore.getSignals().length - 1);
         window.dispatchEvent(event);
       });
@@ -45,6 +57,7 @@ module.exports = function (signalStore, controller) {
       var event = new CustomEvent('cerebral.dev.cerebralPong', {
         detail: getDetail()
       });
+      signalStore.setSignals(signals);
       signalStore.rememberInitial(signalStore.getSignals().length - 1);
       window.dispatchEvent(event);
     }
@@ -93,7 +106,9 @@ module.exports = function (signalStore, controller) {
   });
 
   window.addEventListener('unload', function () {
+
     signalStore.removeRunningSignals();
+
     utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', isInitialized && signalStore.willKeepState() ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]));
     utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(signalStore.willKeepState()));
   });

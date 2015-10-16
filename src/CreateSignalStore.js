@@ -9,20 +9,8 @@ var utils = require('./utils.js');
 
 module.exports = function (signalMethods, controller) {
 
-  // We grab the signals stored in localStorage, if any
-  var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
-    JSON.parse(localStorage.getItem('cerebral_signals')) : [];
-
-
-  // Indicates if signals should be stored or replaced. Grabs from localStorage if available
-  var willKeepState = (
-    typeof process !== 'undefined' && process.env.NODE_ENV === 'production' ?
-    false :
-    utils.hasLocalStorage() && localStorage.getItem('cerebral_willKeepState') ?
-    JSON.parse(localStorage.getItem('cerebral_willKeepState')) :
-    true
-  );
-
+  var signals = [];
+  var willKeepState = false;
   var executingAsyncActionsCount = 0;
   var isRemembering = false;
   var currentIndex = signals.length - 1;
@@ -172,6 +160,10 @@ module.exports = function (signalMethods, controller) {
 
     getSignals: function () {
       return signals;
+    },
+
+    setSignals: function (newSignals) {
+      signals = signals.concat(newSignals);
     },
 
     isExecutingAsync: function () {
