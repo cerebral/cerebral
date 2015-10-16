@@ -26,19 +26,23 @@ module.exports = function (signalStore, controller) {
 
   var initialize = function () {
 
+    if (isInitialized) {
+      return;
+    }
+
     isInitialized = true;
 
     // Might be an async signal running here
     if (signalStore.isExecutingAsync()) {
       controller.once('signalEnd', function () {
-        var event = new CustomEvent('cerebral.dev.initialized', {
+        var event = new CustomEvent('cerebral.dev.cerebralPong', {
           detail: getDetail()
         });
         signalStore.remember(signalStore.getSignals().length - 1);
         window.dispatchEvent(event);
       });
     } else {
-      var event = new CustomEvent('cerebral.dev.initialized', {
+      var event = new CustomEvent('cerebral.dev.cerebralPong', {
         detail: getDetail()
       });
       signalStore.rememberInitial(signalStore.getSignals().length - 1);
@@ -47,9 +51,9 @@ module.exports = function (signalStore, controller) {
 
   };
 
-  window.addEventListener('cerebral.dev.initialize', function () {
-    if (isInitialized) {
-      update();
+  window.addEventListener('cerebral.dev.debuggerPing', function () {
+    if (utils.isDeveloping()) {
+      initialize();
     }
   });
 
@@ -98,7 +102,8 @@ module.exports = function (signalStore, controller) {
     update: update,
     start: function () {
       if (utils.isDeveloping()) {
-        initialize();
+        var event = new Event('cerebral.dev.cerebralPing');
+        window.dispatchEvent(event);
       }
     }
   };
