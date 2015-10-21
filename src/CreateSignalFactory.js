@@ -24,8 +24,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     var chain = args.length === 1 && Array.isArray(args[0]) ? args[0] : args;
 
-
-
     if (utils.isDeveloping()) {
       analyze(signalName, chain);
     }
@@ -62,6 +60,13 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
         // Describe the signal to later trigger as if it was live
         var start = Date.now();
+        var recorderSignal = {
+          name: signalName,
+          input: payload,
+          start: start,
+          asyncActionPaths: [],
+          asyncActionResults: []
+        };
         var signal = {
           name: signalName,
           start: start,
@@ -77,11 +82,10 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         }
 
         if (recorder.isRecording()) {
-          recorder.addSignal(signal);
+          recorder.addSignal(recorderSignal);
         }
 
         signalStore.addSignal(signal);
-
 
         var runBranch = function (branch, index, start) {
 
@@ -121,6 +125,21 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
               runBranch(branch, index + 1);
 
+            } else if (recorder.isCatchingUp()) {
+
+              var currentSignal = recorder.getCurrentSignal();
+              currentBranch.forEach(function (action) {
+                var recordedAction = currentSignal.asyncActionResults[currentSignal.asyncActionPaths.indexOf(action.path.join('.'))];
+                utils.merge(signalArgs, recordedAction.output);
+
+                if (action.outputPath) {
+                  runBranch(action.outputs[recordedAction.outputPath], 0);
+                }
+
+              });
+
+              runBranch(branch, index + 1);
+
             } else {
 
               controller.emit('actionStart', true);
@@ -149,6 +168,15 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   action.output = result.arg;
                   utils.merge(signalArgs, result.arg);
                   signalStore.removeAsyncAction();
+
+                  if (recorder.isRecording()) {
+                    recorderSignal.asyncActionPaths.push(action.path.join('.'));
+                    recorderSignal.asyncActionResults.push({
+                      output: result.arg,
+                      outputPath: result.path
+                    });
+                  }
+
                   if (result.path) {
                     action.outputPath = result.path;
                     var result = runBranch(action.outputs[result.path], 0, Date.now());

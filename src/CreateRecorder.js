@@ -2,6 +2,7 @@ var utils = require('./utils.js');
 
 module.exports = function (signalStore, signalMethods, controller, model) {
 
+  var currentSignal = null;
   var currentSeek = 0;
   var currentRecording = null;
   var lastSignal = null;
@@ -25,11 +26,8 @@ module.exports = function (signalStore, signalMethods, controller, model) {
     while (signalName.length) {
       signalMethodPath = signalMethodPath[signalName.shift()];
     }
-    if (isCatchingUp) {
-      signalMethodPath.call(null, signal.input, signal.branches);
-    } else {
-      signalMethodPath.call(null, signal.input);
-    }
+    currentSignal = signal;
+    signalMethodPath.call(null, signal.input);
   };
 
   return {
@@ -56,6 +54,10 @@ module.exports = function (signalStore, signalMethods, controller, model) {
 
     },
 
+    getCurrentSignal: function () {
+      return currentSignal;
+    },
+
     createTimer: function () {
       var update = function () {
         duration += 500;
@@ -73,6 +75,7 @@ module.exports = function (signalStore, signalMethods, controller, model) {
     },
 
     play: function () {
+
       if (isPlaying || isRecording) {
         throw new Error('CEREBRAL Recorder - You can not play while already playing or recording');
       }
