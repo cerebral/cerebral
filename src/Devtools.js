@@ -5,16 +5,14 @@ module.exports = function (signalStore, controller) {
   var isInitialized = false;
 
   var getDetail = function () {
-    return {
-      props: {
-        signals: JSON.parse(JSON.stringify(signalStore.getSignals())),
-        willKeepState: signalStore.willKeepState(),
-        currentSignalIndex: signalStore.getCurrentIndex(),
-        isExecutingAsync: signalStore.isExecutingAsync(),
-        isRemembering: signalStore.isRemembering(),
-        computedPaths: controller.getComputedPaths()
-      }
-    };
+    return JSON.stringify({
+      signals: signalStore.getSignals(),
+      willKeepState: signalStore.willKeepState(),
+      currentSignalIndex: signalStore.getCurrentIndex(),
+      isExecutingAsync: signalStore.isExecutingAsync(),
+      isRemembering: signalStore.isRemembering(),
+      computedPaths: controller.getComputedPaths()
+    });
   };
 
   var update = utils.debounce(function () {
