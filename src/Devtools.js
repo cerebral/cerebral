@@ -3,11 +3,13 @@ var utils = require('./utils.js');
 module.exports = function (signalStore, controller) {
 
   var isInitialized = false;
+  var disableDebugger = false;
 
   var getDetail = function () {
     return JSON.stringify({
       signals: signalStore.getSignals(),
       willKeepState: signalStore.willKeepState(),
+      disableDebugger: disableDebugger,
       currentSignalIndex: signalStore.getCurrentIndex(),
       isExecutingAsync: signalStore.isExecutingAsync(),
       isRemembering: signalStore.isRemembering(),
@@ -16,6 +18,11 @@ module.exports = function (signalStore, controller) {
   };
 
   var update = utils.debounce(function () {
+
+    if (disableDebugger) {
+      return;
+    }
+
     var event = new CustomEvent('cerebral.dev.update', {
       detail: getDetail()
     });
@@ -27,6 +34,9 @@ module.exports = function (signalStore, controller) {
     if (isInitialized) {
       return;
     }
+
+    disableDebugger = utils.hasLocalStorage() && localStorage.getItem('cerebral_disable_debugger') ?
+          JSON.parse(localStorage.getItem('cerebral_disable_debugger')) : false;
 
     var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
       JSON.parse(localStorage.getItem('cerebral_signals')) : [];
@@ -77,6 +87,14 @@ module.exports = function (signalStore, controller) {
     update();
   });
 
+  window.addEventListener('cerebral.dev.toggleDisableDebugger', function () {
+    disableDebugger = !disableDebugger;
+    var event = new CustomEvent('cerebral.dev.update', {
+      detail: getDetail()
+    });
+    window.dispatchEvent(event);
+  });
+
   window.addEventListener('cerebral.dev.resetStore', function () {
     signalStore.reset();
     controller.emit('change');
@@ -109,6 +127,7 @@ module.exports = function (signalStore, controller) {
 
     utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', isInitialized && signalStore.willKeepState() ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]));
     utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(signalStore.willKeepState()));
+    utils.hasLocalStorage() && localStorage.setItem('cerebral_disable_debugger', isInitialized && JSON.stringify(disableDebugger));
   });
 
   return {

@@ -33,32 +33,23 @@ module.exports = function (signalMethods, controller) {
 
     addSignal: function(signal) {
 
-      currentIndex++;
+      if (utils.isDeveloping()) {
+        currentIndex++;
 
-      // When executing signals in EventStore, do not add them again
-      if (isRemembering) {
-        return;
+        // When executing signals in EventStore, do not add them again
+        if (isRemembering) {
+          return;
+        }
+
+        // If we have travelled back and start adding new signals the signals not triggered should
+        // be removed. This effectively "changes history"
+        if (currentIndex < signals.length) {
+          signals.splice(currentIndex, signals.length - currentIndex);
+        }
+
+        // Add signal and set the current signal to be the recently added signal
+        signals.push(signal);  
       }
-
-      // If we are not keeping the state around reset the signals to just
-      // keep the latest one
-      /* ALWAYS KEEP STATE
-      if (!willKeepState) {
-        signals = [];
-        currentIndex = 0;
-      }
-      */
-
-      // If we have travelled back and start adding new signals the signals not triggered should
-      // be removed. This effectively "changes history"
-      if (currentIndex < signals.length) {
-        signals.splice(currentIndex, signals.length - currentIndex);
-      }
-
-      //signal.index = signals.length;
-
-      // Add signal and set the current signal to be the recently added signal
-      signals.push(signal);
 
     },
 
