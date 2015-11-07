@@ -30,6 +30,16 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     var signalChain = function () {
 
+      if (
+        utils.isDeveloping() &&
+        !signalStore.isRemembering() &&
+        signalStore.getCurrentIndex() !== -1 &&
+        signalStore.getCurrentIndex() < signalStore.getSignals().length - 1
+      ) {
+        console.warn('Cerebral - Looking in the past, ignored signal ' + signalName);
+        return;
+      }
+
       var tree = staticTree(signalChain.chain);
       var actions = tree.actions;
 
