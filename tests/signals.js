@@ -575,7 +575,7 @@ exports['should throw error when input is defined on action and value is missing
 
   ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };

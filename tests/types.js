@@ -21,15 +21,15 @@ exports['should validate inputs'] = function (test) {
 
   ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.throws(function () {
-    ctrl.signals.test(true, {
+    ctrl.signals.test.sync({
       foo: 123
     });
   });
   test.doesNotThrow(function () {
-    ctrl.signals.test(true, {
+    ctrl.signals.test.sync({
       foo: 'bar'
     });
   });
@@ -74,7 +74,7 @@ exports['should validate ouput'] = function (test) {
 
   ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };
@@ -96,7 +96,7 @@ exports['should validate outputs'] = function (test) {
   ];
   ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };

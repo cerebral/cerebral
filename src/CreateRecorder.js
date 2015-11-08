@@ -27,7 +27,9 @@ module.exports = function (signalStore, signalMethods, controller, model) {
       signalMethodPath = signalMethodPath[signalName.shift()];
     }
     currentSignal = signal;
-    signalMethodPath.call(null, signal.input);
+    signalMethodPath(signal.input, {
+      isRecorded: true
+    });
   };
 
   return {

@@ -28,7 +28,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
       analyze(signalName, chain);
     }
 
-    var signalChain = function () {
+    var signalChain = function (payload, options) {
 
       if (
         utils.isDeveloping() &&
@@ -40,17 +40,20 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         return;
       }
 
+      options = options || {};
+
+      if (recorder.isPlaying() && !options.isRecorded) {
+        return;
+      }
+
       var tree = staticTree(signalChain.chain);
       var actions = tree.actions;
 
-      var hasSyncArg = arguments[0] === true;
-      var runSync = hasSyncArg;
-      var payload = hasSyncArg ? arguments[1] : arguments[0]
-      var branches = hasSyncArg ? arguments[2] : arguments[1];
+      var runSync = options.isSync;
 
       // When remembering, the branches with filled out values will be
       // passed
-      branches = branches || tree.branches;
+      var branches = options.branches || tree.branches;
 
       var runSignal = function () {
 
@@ -323,7 +326,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     signalChain.chain = chain;
     signalChain.sync = function (payload) {
-      signalChain(true, payload);
+      signalChain(payload, {isSync: true});
     };
 
     return signalChain;

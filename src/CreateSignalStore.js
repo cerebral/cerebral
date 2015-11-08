@@ -48,7 +48,7 @@ module.exports = function (signalMethods, controller) {
         }
 
         // Add signal and set the current signal to be the recently added signal
-        signals.push(signal);  
+        signals.push(signal);
       }
 
     },
@@ -121,7 +121,7 @@ module.exports = function (signalMethods, controller) {
               signalMethodPath = signalMethodPath[signalName.shift()];
             }
 
-            signalMethodPath.call(null, signal.input, signal.branches);
+            signalMethodPath(signal.input, {branches: signal.branches});
             currentIndex = x;
 
           }

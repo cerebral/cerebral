@@ -1,6 +1,6 @@
 {
   "name": "cerebral",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
@@ -14,7 +14,7 @@
   "author": "Christian Alfoni",
   "license": "MIT",
   "devDependencies": {
-    "babel-loader": "^5.0.0",
+    "babel-loader": "^5.3.2",
     "cerebral-baobab": "^0.3.1",
     "cerebral-react": "^0.2.0",
     "cerebral-router": "^0.4.2",
