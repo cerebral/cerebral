@@ -89,6 +89,9 @@ module.exports = function (signalStore, controller) {
 
   window.addEventListener('cerebral.dev.toggleDisableDebugger', function () {
     disableDebugger = !disableDebugger;
+    if (disableDebugger && signalStore.willKeepState()) {
+      signalStore.toggleKeepState();
+    }
     var event = new CustomEvent('cerebral.dev.update', {
       detail: getDetail()
     });

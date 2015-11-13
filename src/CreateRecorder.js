@@ -72,8 +72,9 @@ module.exports = function (signalStore, signalMethods, controller, model) {
       durationTimer = setTimeout(update, 500);
     },
 
+    // TODO: Do I need this? Not in use?
     resetState: function () {
-      controller.emit('recorderReset', currentRecording.initialState);
+      controller.emit('recorderReset', currentRecording);
     },
 
     play: function () {
@@ -102,22 +103,31 @@ module.exports = function (signalStore, signalMethods, controller, model) {
 
     },
 
-    record: function () {
+    record: function (options) {
 
       if (signalStore.isRemembering()) {
         return;
       }
 
+      options = options || {};
 
       // If we are recording over the previous stuff, go back to start
       if (currentRecording) {
         this.resetState();
       }
 
+      var state = model.accessors.export && model.accessors.export();
+      var path = options.path || [];
+      var traversePath = path.slice();
+      while (traversePath.length) {
+        state = state[traversePath.shift()];
+      }
+
       currentRecording = {
-        initialState: model.accessors.export && model.accessors.export(),
+        initialState: state,
         start: Date.now(),
-        signals: []
+        signals: [],
+        path: path
       };
 
       isRecording = true;
