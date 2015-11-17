@@ -138,9 +138,6 @@ module.exports = function (signalStore, signalMethods, controller, model) {
 
       if (signalStore.isRemembering() || wasPlaying) {
         return;
-      } else if (signalStore.isExecutingAsync()) {
-        throw new Error('Cerebral - You can not stop when async signals are running, make sure to handle that with: cerebral.hasExecutingSignal()');
-        return;
       }
 
       currentRecording.end = Date.now();
@@ -149,11 +146,6 @@ module.exports = function (signalStore, signalMethods, controller, model) {
     },
 
     pause: function pause() {
-
-      if (signalStore.isExecutingAsync()) {
-        throw new Error('Cerebral - You can not stop when async signals are running, make sure to handle that with: cerebral.hasExecutingSignal()');
-        return;
-      }
 
       if (signalStore.isRemembering()) {
         return;
