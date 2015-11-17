@@ -96,11 +96,6 @@ module.exports = function (signalStore, signalMethods, controller, model) {
       isPlaying = true;
       started = Date.now();
 
-      playbackTimers.push(setTimeout(function () {
-        isPlaying = false;
-        controller.emit('change');
-      }, currentRecording.end - currentRecording.start - startSeek ));
-
     },
 
     record: function (options) {

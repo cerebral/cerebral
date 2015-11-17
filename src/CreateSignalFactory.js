@@ -235,56 +235,48 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
             } else {
 
               controller.emit('actionStart', false);
-              try {
+              var action = currentBranch;
+              var actionFunc = actions[action.actionIndex];
+              var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
+              var actionArgs = createActionArgs.sync(action, inputArg, model, compute);
 
-                var action = currentBranch;
-                var actionFunc = actions[action.actionIndex];
-                var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
-                var actionArgs = createActionArgs.sync(action, inputArg, model, compute);
+              if (utils.isDeveloping() && actionFunc.input) {
+                utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg);
+              }
 
-                if (utils.isDeveloping() && actionFunc.input) {
-                  utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg);
-                }
+              action.mutations = []; // Reset mutations array
+              action.input = utils.merge({}, inputArg);
 
-                action.mutations = []; // Reset mutations array
-                action.input = utils.merge({}, inputArg);
+              var next = createNext.sync(actionFunc, signal.name);
+              actionFunc.apply(null, actionArgs.concat(next, services));
 
-                var next = createNext.sync(actionFunc, signal.name);
-                actionFunc.apply(null, actionArgs.concat(next, services));
+              // TODO: Also add input here
 
-                // TODO: Also add input here
+              var result = next._result || {};
+              utils.merge(signalArgs, result.arg);
 
-                var result = next._result || {};
-                utils.merge(signalArgs, result.arg);
+              action.isExecuting = false;
+              action.hasExecuted = true;
+              action.output = result.arg;
 
-                action.isExecuting = false;
-                action.hasExecuted = true;
-                action.output = result.arg;
-
-                if (!branch[index + 1] || Array.isArray(branch[index + 1])) {
-                  action.duration = Date.now() - start;
-                }
+              if (!branch[index + 1] || Array.isArray(branch[index + 1])) {
+                action.duration = Date.now() - start;
+              }
 
 
-                if (result.path) {
-                  action.outputPath = result.path;
-                  var result = runBranch(action.outputs[result.path], 0, start);
-                  if (result && result.then) {
-                    return result.then(function () {
-                      return runBranch(branch, index + 1, Date.now());
-                    });
-                  } else {
-                    return runBranch(branch, index + 1, start);
-                  }
+              if (result.path) {
+                action.outputPath = result.path;
+                var result = runBranch(action.outputs[result.path], 0, start);
+                if (result && result.then) {
+                  return result.then(function () {
+                    return runBranch(branch, index + 1, Date.now());
+                  });
                 } else {
-                  controller.emit('actionEnd');
                   return runBranch(branch, index + 1, start);
                 }
-
-              } catch (error) {
-
-                controller.emit('error', error);
-                throw error;
+              } else {
+                controller.emit('actionEnd');
+                return runBranch(branch, index + 1, start);
               }
 
             }
