@@ -5,6 +5,9 @@ var createStateArg = function (action, model, isAsync, compute) {
     state[accessor] = function () {
       var args = [].slice.call(arguments);
       var path = args[0] ? Array.isArray(args[0]) ? args.shift() : [args.shift()] : [];
+      if (accessor === 'get' && typeof arguments[0] === 'function') {
+        return compute.getComputedValue(arguments[0]);
+      }
       return model.accessors[accessor].apply(null, [path].concat(args));
     };
     return state;
