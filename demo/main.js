@@ -44,7 +44,8 @@ const router = CerebralRouter(controller, {
   '/': 'allTodosClicked',
   '/:filter': 'filterClicked'
 }, {
-  baseUrl: '/todomvc'
+  onlyHash: true,
+  baseUrl: '/todomvc/'
 }).trigger();
 
 // RENDER

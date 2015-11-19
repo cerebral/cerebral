@@ -1,10 +1,10 @@
 import React from 'react';
-import {Decorator as Cerebral} from 'cerebral-react';
+import {Decorator as Cerebral} from '../../../cerebral-react';
+import counts from '../computed/counts.js';
 
 @Cerebral({
-  filter: ['filter']
-}, {
-  counts: ['counts']
+  filter: ['filter'],
+  counts: counts
 })
 class TodosFooter extends React.Component {
   renderRemainingCount() {
@@ -34,13 +34,13 @@ class TodosFooter extends React.Component {
         <span id="todo-count"><strong>{this.renderRemainingCount()}</strong></span>
         <ul id="filters">
           <li>
-            <a className={this.renderRouteClass('all')} href="/">All</a>
+            <a className={this.renderRouteClass('all')} href="#/">All</a>
           </li>
           <li>
-            <a className={this.renderRouteClass('active')} href="/active">Active</a>
+            <a className={this.renderRouteClass('active')} href="#/active">Active</a>
           </li>
           <li>
-            <a className={this.renderRouteClass('completed')} href="/completed">Completed</a>
+            <a className={this.renderRouteClass('completed')} href="#/completed">Completed</a>
           </li>
         </ul>
         {this.props.counts.completedCount ? this.renderCompletedButton() : null}

@@ -5,10 +5,6 @@ module.exports = function (model) {
   var registered = [];
   var computed = [];
 
-  var getComputedValue = function (computedFunc) {
-    return computed[registered.indexOf(computedFunc)]();
-  };
-
   var createMapper = function(cb) {
 
     var initialRun = true;
@@ -48,15 +44,26 @@ module.exports = function (model) {
     };
   };
 
+  var has = function (computedFunc) {
+    return registered.indexOf(computedFunc) !== -1;
+  };
+
+  var getComputedValue = function (computedFunc) {
+    if (!has(computedFunc)) {
+      registered.push(computedFunc);
+      computed.push(createMapper(computedFunc));
+    }
+
+    return computed[registered.indexOf(computedFunc)]();
+  };
+
   return {
     register: function (computeFunc) {
       registered.push(computeFunc);
       computed.push(createMapper(computeFunc));
       return this.getComputedValue(computeFunc);
     },
-    has: function (computedFunc) {
-      return registered.indexOf(computedFunc) !== -1;
-    },
+    has: has,
     getComputedValue: getComputedValue
   };
 

@@ -1,15 +1,15 @@
 import React from 'react';
-import {Decorator as Cerebral} from 'cerebral-react';
+import {Decorator as Cerebral} from '../../cerebral-react';
 import AddTodo from './components/AddTodo.js';
 import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
+import visibleTodos from './computed/visibleTodos.js';
 
 @Cerebral({
   todos: ['todos'],
   recorder: ['recorder'],
-  isSaving: ['isSaving']
-}, {
-  visibleTodos: ['visibleTodos']
+  isSaving: ['isSaving'],
+  visibleTodos: visibleTodos
 })
 class App extends React.Component {
   record() {
