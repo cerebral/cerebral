@@ -1,3 +1,19 @@
+# 0.24.0
+- Updated the computed experiment. Read more in release notes
+ 
+# 0.23.0
+### Updates
+- Cerebral will now ignore signals when looking into the past. The reason for this is to prepare for observables/streams. It also solves any issues with timeouts etc. which makes it hard to do debugging. Move back to present to continue "into the future" :-)
+- You can now disable the debugger. Cerebral will still store signals, but not pass them to the debugger. When enabling the debugger again it will update itself with the latest state
+- Signals are now not stored in production, one step closer to official production support :-)
+
+### Migration guide
+- Cerebral-Debugger v0.20
+- Cerebral v0.22.0
+
+# 0.21.0
+This version just has performance improvements on the debugger, use latest version: 0.19.0 of the debugger with this version of Cerebral
+
 # 0.20.2
 - Several updates to the webpage
 - IE 9 support
