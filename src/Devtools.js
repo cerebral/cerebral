@@ -13,7 +13,7 @@ module.exports = function (signalStore, controller) {
       currentSignalIndex: signalStore.getCurrentIndex(),
       isExecutingAsync: signalStore.isExecutingAsync(),
       isRemembering: signalStore.isRemembering(),
-      computedPaths: controller.getComputedPaths()
+      computedPaths: []
     });
   };
 
