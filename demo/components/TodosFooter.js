@@ -1,5 +1,5 @@
 import React from 'react';
-import {Decorator as Cerebral} from '../../../cerebral-react';
+import {Decorator as Cerebral} from 'cerebral-react';
 import counts from '../computed/counts.js';
 
 @Cerebral({
