@@ -40,7 +40,7 @@ module.exports = {
     return typeof action === 'function';
   },
   isDeveloping: function () {
-    return !global.process || global.process.env !== 'production';
+    return !global.process || global.process.env.NODE_ENV !== 'production';
   },
   verifyInput: function (actionName, signalName, input, signalArgs) {
     Object.keys(input).forEach(function (key) {
