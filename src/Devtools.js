@@ -2,6 +2,13 @@ var utils = require('./utils.js');
 
 module.exports = function (signalStore, controller) {
 
+  if (!utils.isDeveloping()) {
+    return {
+      update: function () {},
+      start: function () {}
+    };
+  }
+
   var isInitialized = false;
   var disableDebugger = false;
 
@@ -136,10 +143,8 @@ module.exports = function (signalStore, controller) {
   return {
     update: update,
     start: function () {
-      if (utils.isDeveloping()) {
-        var event = new Event('cerebral.dev.cerebralPing');
-        window.dispatchEvent(event);
-      }
+      var event = new Event('cerebral.dev.cerebralPing');
+      window.dispatchEvent(event);
     }
   };
 
