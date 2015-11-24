@@ -5,7 +5,7 @@ var Devtools = require('./Devtools.js');
 var Compute = require('./Compute.js');
 var EventEmitter = require('events').EventEmitter;
 
-module.exports = function (Model, services) {
+var Controller = function (Model, services) {
 
   var controller = new EventEmitter();
   var model = Model(controller);
@@ -50,3 +50,33 @@ module.exports = function (Model, services) {
 
   return controller;
 };
+
+Controller.ServerController = function (state) {
+  var model = {
+    accessors: {
+      get: function (path) {
+        path = path.slice();
+        var key = path.pop();
+        var grabbedState = state;
+        while (path.length) {
+          grabbedState = grabbedState[path.shift()];
+        }
+        return grabbedState[key];
+      }
+    }
+  };
+  var compute = Compute(model);
+
+  return {
+    isServer: true,
+    get: function (path) {
+      if (typeof arguments[0] === 'function') {
+        return compute.has(arguments[0]) ? compute.getComputedValue(arguments[0]) : compute.register(arguments[0]);
+      }
+      var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0];
+      return model.accessors.get(path);
+    }
+  }
+};
+
+module.exports = Controller;
