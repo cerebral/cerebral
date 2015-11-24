@@ -15,7 +15,7 @@ module.exports = function (model) {
       if (typeof path === 'function') {
         return currentState['COMPUTED_' + registered.indexOf(path)] = getComputedValue(path);
       } else {
-        return currentState[path.join('.')] = model.accessors.get(path);
+        return currentState[path.join('.%.')] = model.accessors.get(path);
       }
     };
 
@@ -28,7 +28,7 @@ module.exports = function (model) {
           if (key.indexOf('COMPUTED') === 0) {
             return getComputedValue(registered[key.split('_')[1]]) !== currentState[key];
           } else {
-            return model.accessors.get(key) !== currentState[key];
+            return model.accessors.get(key.split('.%.')) !== currentState[key];
           }
 
         }, false);
