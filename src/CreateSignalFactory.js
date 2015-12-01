@@ -91,7 +91,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         };
 
         if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
-          controller.emit('signalStart', signal);
+          controller.emit('signalStart', {signal});
         }
 
         if (recorder.isRecording()) {
@@ -111,8 +111,8 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
              }
 
              signal.isExecuting = false;
-             controller.emit('signalEnd', signal);
-             controller.emit('change');
+             controller.emit('signalEnd', {signal});
+             controller.emit('change', {signal});
              devtools && devtools.update();
              return;
 
@@ -155,11 +155,12 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
             } else {
 
-              controller.emit('actionStart', true);
-              controller.emit('change');
+              // @TODO: Check why this is needed
+              controller.emit('change', {signal});
 
               var promises = currentBranch.map(function (action) {
 
+                controller.emit('actionStart', {action, signal});
                 var actionFunc = actions[action.actionIndex];
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
                 var actionArgs = createActionArgs.async(action, inputArg, model, compute);
@@ -192,8 +193,9 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
                   if (result.path) {
                     action.outputPath = result.path;
+                    controller.emit('actionEnd', {action, signal});
                     var result = runBranch(action.outputs[result.path], 0, Date.now());
-                    controller.emit('change');
+                    controller.emit('change', {signal});
                     devtools && devtools.update();
                     return result;
                   } else {
@@ -234,8 +236,8 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
             } else {
 
-              controller.emit('actionStart', false);
               var action = currentBranch;
+              controller.emit('actionStart', {action, signal});
               var actionFunc = actions[action.actionIndex];
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
               var actionArgs = createActionArgs.sync(action, inputArg, model, compute);
@@ -275,7 +277,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   return runBranch(branch, index + 1, start);
                 }
               } else {
-                controller.emit('actionEnd');
+                controller.emit('actionEnd', {action, signal});
                 return runBranch(branch, index + 1, start);
               }
 
