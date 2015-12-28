@@ -30,14 +30,14 @@ var Controller = function (Model, services) {
       var pathName = signalNamePath.shift();
       signalMethodPath = signalMethodPath[pathName] = signalMethodPath[pathName] || {};
     }
-    signalMethodPath[signalName] = signalFactory.apply(null, arguments);
+    return signalMethodPath[signalName] = signalFactory.apply(null, arguments);
   };
 
   controller.signal = signal;
   controller.signalSync = function () {
     var defaultOptions = arguments[2] || {};
     defaultOptions.isSync = true;
-    signal.apply(null, [arguments[0], arguments[1], defaultOptions])
+    return signal.apply(null, [arguments[0], arguments[1], defaultOptions])
   }
   controller.services = services;
   controller.signals = signals;

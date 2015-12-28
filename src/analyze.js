@@ -62,6 +62,16 @@ module.exports = function (signalName, actions) {
             }
           });
 
+        } else if (!Array.isArray(action) && typeof action === 'object' && typeof action !== null) {
+          var prevAction = actions[index - 1];
+          Object.keys(action).forEach(function (key) {
+            if (!Array.isArray(action[key])) {
+              throw new Error([
+                'Cerebral: The paths for action "' + utils.getFunctionName(prevAction) +
+                '" in signal "' + signalName +  '" are not valid. They have to be an array"'
+              ].join(''));
+            }
+          })
         }
       }
 

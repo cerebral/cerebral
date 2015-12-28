@@ -19,7 +19,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
     var signalName = args.shift();
     var defaultOptions = args[1] || {};
 
-    var chain = args.length === 1 && Array.isArray(args[0]) ? args[0] : args;
+    var chain = args[0] || [];
 
     if (utils.isDeveloping()) {
       analyze(signalName, chain);
@@ -315,11 +315,11 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
       }
 
     };
-
     signalChain.chain = chain;
     signalChain.sync = function (payload) {
       signalChain(payload, {isSync: true});
     };
+    signalChain.signalName = signalName;
 
     return signalChain;
 

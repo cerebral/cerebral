@@ -2,7 +2,7 @@ var Controller = require('./../src/index.js');
 var async = function (cb) {
   setTimeout(cb, 0);
 };
-var Model = function () {
+var Model = function (state) {
   state = state || {};
   return function () {
     return {
@@ -22,8 +22,11 @@ var Model = function () {
 
 exports['should register signals'] = function (test) {
   var ctrl = Controller(Model());
-  ctrl.signal('test');
+  var signal = ctrl.signal('test');
   test.ok(typeof ctrl.signals.test === 'function');
+  test.ok(signal);
+  console.log(signal);
+  test.equal(signal.signalName, 'test');
   test.done();
 };
 
@@ -36,10 +39,10 @@ exports['should allow namespaced signals'] = function (test) {
 
 exports['should trigger an action when run'] = function (test) {
   var ctrl = Controller(Model());
-  ctrl.signal('test', function () {
+  ctrl.signal('test', [function () {
     test.ok(true);
     test.done();
-  });
+  }]);
   ctrl.signals.test();
 };
 
@@ -642,4 +645,22 @@ exports['should allow ASYNC actions to have default input'] = function (test) {
     test.done();
   });
   ctrl.signals.test();
+};
+
+exports['should throw error when output path is not an array'] = function (test) {
+  var ctrl = Controller(Model());
+  var action = function (input, state, output) {
+    output.success();
+  };
+  var signal = [
+    [
+      action, {
+        success: function () {}
+      }
+    ]
+  ];
+  test.throws(function () {
+    ctrl.signal('test', signal);
+  });
+  test.done();
 };
