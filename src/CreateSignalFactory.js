@@ -152,7 +152,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
             } else {
 
-              // @TODO: Check why this is needed
               controller.emit('change', {signal});
 
               var promises = currentBranch.map(function (action) {
@@ -273,7 +272,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 }
               } else if (result.then) {
                 return result.then(function () {
-                  controller.emit('actionEnd');
+                  controller.emit('actionEnd', {action, signal});
                   return runBranch(branch, index + 1, start);
                 });
               } else {
