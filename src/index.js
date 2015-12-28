@@ -54,16 +54,18 @@ var Controller = function (Model, services) {
   services.recorder = recorder;
 
   controller.extends = function (modules) {
+    var meta = {};
     Object.keys(modules).forEach(function (moduleName) {
       var module = modules[moduleName];
       Object.keys(module).forEach(function (key) {
         if (key === 'init') {
-          module[key](controller, moduleName);
+          meta[moduleName] = module[key](controller, moduleName);
         } else {
           controller.signal(moduleName + '.' + key, module[key]);
         }
       });
     });
+    return meta;
   };
 
   return controller;

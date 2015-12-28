@@ -39,15 +39,6 @@ controller.signal('recordClicked', recordClicked);
 controller.signal('playClicked', playClicked);
 controller.signal('stopClicked', stopClicked);
 
-controller.extends({
-  'test': {
-    init: function (controller, name) {
-      console.log(controller, name);
-    },
-    test: []
-  }
-});
-
 // ROUTER
 CerebralRouter(controller, {
   '/': 'allTodosClicked',
