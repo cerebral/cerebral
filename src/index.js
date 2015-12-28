@@ -22,8 +22,7 @@ var Controller = function (Model, services) {
 
   var recorder = CreateRecorder(signalStore, signals, controller, model);
   var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, controller, model, services, compute);
-
-  controller.signal = function () {
+  var signal = function () {
     var signalNamePath = arguments[0].split('.');
     var signalName = signalNamePath.pop();
     var signalMethodPath = signals;
@@ -34,6 +33,12 @@ var Controller = function (Model, services) {
     signalMethodPath[signalName] = signalFactory.apply(null, arguments);
   };
 
+  controller.signal = signal;
+  controller.signalSync = function () {
+    var defaultOptions = arguments[2] || {};
+    defaultOptions.isSync = true;
+    signal.apply(null, [arguments[0], arguments[1], defaultOptions])
+  }
   controller.services = services;
   controller.signals = signals;
   controller.store = signalStore;
@@ -47,6 +52,19 @@ var Controller = function (Model, services) {
   };
   controller.devtools = devtools;
   services.recorder = recorder;
+
+  controller.extends = function (modules) {
+    Object.keys(modules).forEach(function (moduleName) {
+      var module = modules[moduleName];
+      Object.keys(module).forEach(function (key) {
+        if (key === 'init') {
+          module[key](controller, moduleName);
+        } else {
+          controller.signal(moduleName + '.' + key, module[key]);
+        }
+      });
+    });
+  };
 
   return controller;
 };

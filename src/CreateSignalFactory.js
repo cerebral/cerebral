@@ -17,10 +17,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
     var args = [].slice.call(arguments);
     var signalName = args.shift();
-
-    if (args.length > 1 || typeof args[0] === 'function') {
-      console.warn('Cerebral - DEPRECATED signal definition with arguments. A signal is now defined with an array. This will lower threshold of readability for new devs using Cerebral');
-    }
+    var defaultOptions = args[1] || {};
 
     var chain = args.length === 1 && Array.isArray(args[0]) ? args[0] : args;
 
@@ -49,7 +46,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
       var tree = staticTree(signalChain.chain);
       var actions = tree.actions;
 
-      var runSync = options.isSync;
+      var runSync = defaultOptions.isSync || options.isSync;
 
       // When remembering, the branches with filled out values will be
       // passed
@@ -218,7 +215,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
             }
 
           } else {
-
             if (signalStore.isRemembering()) {
 
               var action = currentBranch;
@@ -263,7 +259,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 action.duration = Date.now() - start;
               }
 
-
               if (result.path) {
                 action.outputPath = result.path;
                 var result = runBranch(action.outputs[result.path], 0, start);
@@ -274,6 +269,11 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 } else {
                   return runBranch(branch, index + 1, start);
                 }
+              } else if (result.then) {
+                return result.then(function () {
+                  controller.emit('actionEnd');
+                  return runBranch(branch, index + 1, start);
+                });
               } else {
                 controller.emit('actionEnd');
                 return runBranch(branch, index + 1, start);

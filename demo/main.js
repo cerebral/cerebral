@@ -39,14 +39,23 @@ controller.signal('recordClicked', recordClicked);
 controller.signal('playClicked', playClicked);
 controller.signal('stopClicked', stopClicked);
 
+controller.extends({
+  'test': {
+    init: function (controller, name) {
+      console.log(controller, name);
+    },
+    test: []
+  }
+});
+
 // ROUTER
-const router = CerebralRouter(controller, {
+CerebralRouter(controller, {
   '/': 'allTodosClicked',
   '/:filter': 'filterClicked'
 }, {
   onlyHash: true,
   baseUrl: '/todomvc/'
-}).trigger();
+});
 
 // RENDER
 ReactDOM.render(

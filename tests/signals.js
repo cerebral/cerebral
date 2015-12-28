@@ -3,16 +3,16 @@ var async = function (cb) {
   setTimeout(cb, 0);
 };
 var Model = function () {
+  state = state || {};
   return function () {
     return {
       accessors: {
-        get: function () {
-
+        get: function (path) {
+          return state[path[0]];
         }
       },
       mutators: {
         set: function (path, value) {
-          state = {};
           state[path.pop()] = value;
         }
       }
@@ -20,7 +20,7 @@ var Model = function () {
   };
 };
 
-exports['should run sync signals'] = function (test) {
+exports['should register signals'] = function (test) {
   var ctrl = Controller(Model());
   ctrl.signal('test');
   test.ok(typeof ctrl.signals.test === 'function');
@@ -559,6 +559,21 @@ exports['should trigger signal synchronously when using sync method'] = function
   test.done();
 };
 
+exports['should trigger signal synchronously when defined as signalSync'] = function (test) {
+  var ctrl = Controller(Model());
+  var hasRun = false;
+  var signal = [
+    function () {
+      hasRun = true;
+    }
+  ];
+
+  ctrl.signalSync('test', signal);
+  ctrl.signals.test();
+  test.ok(hasRun);
+  test.done();
+};
+
 exports['should throw error when input is defined on action and value is missing or is wrong type'] = function (test) {
   var ctrl = Controller(Model());
   var action = function () {
@@ -627,36 +642,4 @@ exports['should allow ASYNC actions to have default input'] = function (test) {
     test.done();
   });
   ctrl.signals.test();
-};
-
-/* Not sure how to test async throws
-exports['should throw running output async in sync flow'] = function (test) {
-  var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    async(output);
-  };
-  ctrl.signal('test', action);
-
-  test.throws(function () {
-    ctrl.signals.test.sync();
-  });
-  async(test.done);
-};
-*/
-
-exports['should allow signals as arrays'] = function (test) {
-  var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    test.ok(true);
-  };
-  var signal = [
-    [
-      action
-    ]
-  ];
-
-  ctrl.signal('test', signal);
-  test.expect(1);
-  ctrl.signals.test.sync();
-  test.done();
 };

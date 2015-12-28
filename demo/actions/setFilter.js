@@ -1,5 +1,5 @@
-function setFilter (args, state) {
-  state.set('filter', args.route.params.filter);
+function setFilter (input, state) {
+  state.set('filter', input.filter);
 };
 
 export default setFilter;
