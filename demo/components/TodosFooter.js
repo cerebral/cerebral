@@ -34,13 +34,13 @@ class TodosFooter extends React.Component {
         <span id="todo-count"><strong>{this.renderRemainingCount()}</strong></span>
         <ul id="filters">
           <li>
-            <a className={this.renderRouteClass('all')} href="#/">All</a>
+            <a className={this.renderRouteClass('all')} onClick={() => this.props.signals.allTodosClicked()}>All</a>
           </li>
           <li>
-            <a className={this.renderRouteClass('active')} href="#/active">Active</a>
+            <a className={this.renderRouteClass('active')} onClick={() => this.props.signals.filterClicked({filter: 'active'})}>Active</a>
           </li>
           <li>
-            <a className={this.renderRouteClass('completed')} href="#/completed">Completed</a>
+            <a className={this.renderRouteClass('completed')} onClick={() => this.props.signals.filterClicked({filter: 'completed'})}>Completed</a>
           </li>
         </ul>
         {this.props.counts.completedCount ? this.renderCompletedButton() : null}

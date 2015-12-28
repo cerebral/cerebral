@@ -1,12 +1,12 @@
-# Cerebral [![Build Status](https://travis-ci.org/christianalfoni/cerebral.svg?branch=master)](https://travis-ci.org/christianalfoni/cerebral)
+# Cerebral [![Build Status](https://travis-ci.org/cerebral/cerebral.svg?branch=master)](https://travis-ci.org/cerebral/cerebral)
 A state controller with its own debugger
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/christianalfoni/cerebral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cerebral/cerebral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 <img src="images/logo.png" width="300" align="center">
 
 ## The Cerebral Webpage is now launched
-You can access the webpage at [http://christianalfoni.com/cerebral/](http://christianalfoni.com/cerebral/). You will find all the information you need there.
+You can access the webpage at [http://www.cerebraljs.com/](http://www.cerebraljs.com/). You will find all the information you need there.
 
 - [How to create a custom Cerebral VIEW package](#how-to-create-a-custom-cerebral-view-package)
 - [How to create a custom Cerebral MODEL package](#how-to-create-a-custom-cerebral-model-package)
