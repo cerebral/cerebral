@@ -58,12 +58,14 @@ var Controller = function (Model, services) {
     Object.keys(modules).forEach(function (moduleName) {
       var module = modules[moduleName];
       Object.keys(module).forEach(function (key) {
-        if (key === 'init') {
-          meta[moduleName] = module[key](controller, moduleName);
-        } else {
-          controller.signal(moduleName + '.' + key, module[key]);
+        var signalName = moduleName + '.' + key;
+        if (Array.isArray(module[key])) {
+          controller.signal(signalName, module[key]);
         }
       });
+      if (typeof module.init === 'function') {
+        meta[moduleName] = module.init(controller, moduleName, signals[moduleName]);
+      }
     });
     return meta;
   };
