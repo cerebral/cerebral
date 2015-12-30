@@ -11,7 +11,8 @@ var tests_available = {
     'mutations': 'tests/mutations.js',
     'statictree': 'tests/staticTree.js',
     'computed': 'tests/computed.js',
-    'accessors': 'tests/accessors.js'
+    'accessors': 'tests/accessors.js',
+    'staticTree': 'tests/staticTree.js'
 };
 
 var test_name;

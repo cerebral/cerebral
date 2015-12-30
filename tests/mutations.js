@@ -17,15 +17,15 @@ exports['should give correct path and value to mutation methods'] = function (te
   };
   var ctrl = Controller(Model({}));
   var signal = [
-    function (input, state) {
+    function (args) {
 
-      state.set('foo', 'value');
-      state.set(['foo'], 'value');
+      args.state.set('foo', 'value');
+      args.state.set(['foo'], 'value');
 
     }
   ];
-  
+
   ctrl.signal('test', signal);
-  ctrl.signals.test(true);
+  ctrl.signals.test.sync();
   test.done()
 };

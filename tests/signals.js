@@ -25,7 +25,6 @@ exports['should register signals'] = function (test) {
   var signal = ctrl.signal('test');
   test.ok(typeof ctrl.signals.test === 'function');
   test.ok(signal);
-  console.log(signal);
   test.equal(signal.signalName, 'test');
   test.done();
 };
@@ -48,14 +47,14 @@ exports['should trigger an action when run'] = function (test) {
 
 exports['should be able to define custom outputs as arrays'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output.foo({foo: 'bar'});
+  var action = function (args) {
+    args.output.foo({foo: 'bar'});
   };
   action.outputs = ['foo'];
   var signal = [
     action, {
-      foo: [function (input) {
-        test.deepEqual(input, {foo: 'bar'});
+      foo: [function (args) {
+        test.deepEqual(args.input, {foo: 'bar'});
         test.done();
       }]
     }
@@ -66,16 +65,16 @@ exports['should be able to define custom outputs as arrays'] = function (test) {
 
 exports['should be able to define default custom path'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output({foo: 'bar'});
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.defaultOutput = 'bar';
   action.outputs = ['foo', 'bar'];
   var signal = [
     action, {
       foo: [],
-      bar: [function (input) {
-        test.deepEqual(input, {foo: 'bar'});
+      bar: [function (args) {
+        test.deepEqual(args.input, {foo: 'bar'});
         test.done();
       }]
     }
@@ -87,8 +86,8 @@ exports['should be able to define default custom path'] = function (test) {
 
 exports['should throw error if paths are missing'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function MyAction (input, state, output) {
-    output({foo: 'bar'});
+  var action = function MyAction (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = ['foo', 'bar'];
   var signal = [
@@ -103,8 +102,8 @@ exports['should throw error if paths are missing'] = function (test) {
 
 exports['should throw error if outputs as array does not match paths'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output({foo: 'bar'});
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = ['foo', 'bar'];
   var signal = [
@@ -120,8 +119,8 @@ exports['should throw error if outputs as array does not match paths'] = functio
 
 exports['should throw error if outputs as object does not match paths'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output({foo: 'bar'});
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = {
     foo: true,
@@ -140,8 +139,8 @@ exports['should throw error if outputs as object does not match paths'] = functi
 
 exports['should throw error when output is missing'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output();
+  var action = function (args) {
+    args.output();
   };
   action.output = {
     foo: String
@@ -161,8 +160,8 @@ exports['should throw error when output is missing'] = function (test) {
 
 exports['should throw error when output type is wrong'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output({foo: false});
+  var action = function (args) {
+    args.output({foo: false});
   };
   action.output = {
     foo: String
@@ -181,8 +180,8 @@ exports['should throw error when output type is wrong'] = function (test) {
 
 exports['should throw when calling next directly with no defaultOutput and outputs defined'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output({foo: 'bar'});
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = {
     foo: {
@@ -204,8 +203,8 @@ exports['should throw when calling next directly with no defaultOutput and outpu
 
 exports['should run when output type is correct'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output({foo: 'bar'});
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.output = {
     foo: String
@@ -225,8 +224,8 @@ exports['should run when output type is correct'] = function (test) {
 
 exports['should run when outputs type is correct'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output.foo({bar: 'bar'});
+  var action = function (args) {
+    args.output.foo({bar: 'bar'});
   };
   action.outputs = {
     foo: {
@@ -249,8 +248,8 @@ exports['should run when outputs type is correct'] = function (test) {
 exports['should pass initial payload on first argument'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    function (input) {
-      test.deepEqual(input, {foo: 'bar'});
+    function (args) {
+      test.deepEqual(args.input, {foo: 'bar'});
       test.done();
     }
   ];
@@ -262,12 +261,12 @@ exports['should pass initial payload on first argument'] = function (test) {
 exports['should expose a output method to set new args'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    function (input, state, output) {
-      output({
+    function (args) {
+      args.output({
         result: true
       });
-    }, function (input) {
-      test.ok(input.result);
+    }, function (args) {
+      test.ok(args.input.result);
       test.done();
     }
   ];
@@ -279,14 +278,14 @@ exports['should expose a output method to set new args'] = function (test) {
 exports['should be able to resolve as an async action'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    [function (input, state, output) {
+    [function (args) {
       async(function () {
-        output({
+        args.output({
           result: true
         });
       });
-    }], function (input) {
-      test.ok(input.result);
+    }], function (args) {
+      test.ok(args.input.result);
       test.done();
     }
   ];
@@ -299,11 +298,11 @@ exports['should trigger change event on individual async action paths'] = functi
   var ctrl = Controller(Model());
   var changeCount = 0;
   var signal = [
-    [function (input, state, output) {
-      output.success();
-    }, {success: []}, function (input, state, output) {
-      output.success();
-    }, {success: []}], function (input) {
+    [function (args) {
+      args.output.success();
+    }, {success: []}, function (args) {
+      args.output.success();
+    }, {success: []}], function () {
       test.equal(changeCount, 3);
       test.done();
     }
@@ -319,11 +318,11 @@ exports['should trigger change event on individual async action paths'] = functi
 exports['should be able to resolve to default path success'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    function (input, state, output) {
-      output.success({result: true});
+    function (args) {
+      args.output.success({result: true});
     }, {
-      'success': [function (input) {
-        test.ok(input.result);
+      'success': [function (args) {
+        test.ok(args.input.result);
         test.done();
       }]
     }
@@ -336,11 +335,11 @@ exports['should be able to resolve to default path success'] = function (test) {
 exports['should be able to resolve to default path error'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    function (input, state, output) {
-      output.error({result: true});
+    function (args) {
+      args.output.error({result: true});
     }, {
-      'error': [function (input) {
-        test.ok(input.result);
+      'error': [function (args) {
+        test.ok(args.input.result);
         test.done();
       }]
     }
@@ -353,11 +352,11 @@ exports['should be able to resolve to default path error'] = function (test) {
 exports['should be able to resolve to default as async action'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    [function (input, state, output) {
-      output.success({result: true});
+    [function (args) {
+      args.output.success({result: true});
     }, {
-      'success': [function (input) {
-        test.ok(input.result);
+      'success': [function (args) {
+        test.ok(args.input.result);
         test.done();
       }]
     }]
@@ -370,9 +369,9 @@ exports['should be able to resolve to default as async action'] = function (test
 exports['should expose mutation and a get method, if passed'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    function (input, state) {
-      test.ok(typeof state.get === 'function');
-      test.ok(typeof state.set === 'function');
+    function (args) {
+      test.ok(typeof args.state.get === 'function');
+      test.ok(typeof args.state.set === 'function');
       test.done();
     }
   ];
@@ -384,16 +383,16 @@ exports['should expose mutation and a get method, if passed'] = function (test) 
 exports['should handle arrays of actions to run in parallell'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    [function (input, state, output) {
-      output({
+    [function (args) {
+      args.output({
         foo: true
       });
-    }, function (input, state, output) {
-      output({
+    }, function (args) {
+      args.output({
         bar: true
       });
-    }], function (input) {
-      test.deepEqual(input, {foo: true, bar: true});
+    }], function (args) {
+      test.deepEqual(args.input, {foo: true, bar: true});
       test.done();
     }
   ];
@@ -407,22 +406,22 @@ exports['should handle arrays of actions to resolve to multiple paths'] = functi
   var results = [];
   var signal = [
     [
-      function (input, state, output) {
-        output.success({
+      function (args) {
+        args.output.success({
           foo: true
         });
       }, {
-        'success': [function (input) {
-          results.push(input);
+        'success': [function (args) {
+          results.push(args.input);
         }],
       },
-      function (input, state, output) {
-        output.error({
+      function (args) {
+        args.output.error({
           bar: true
         });
       }, {
-        'error': [function (input) {
-          results.push(input);
+        'error': [function (args) {
+          results.push(args.input);
         }]
       }
     ]
@@ -449,24 +448,24 @@ exports['should trigger paths when individual async is done'] = function (test) 
   var results = [];
   var signal = [
     [
-      function (input, state, output) {
+      function (args) {
         async(function () {
-          output.success({
+          args.output.success({
             value: 'foo'
           });
         });
       }, {
-        'success': [function (input) {
-          results.push(input.value);
+        'success': [function (args) {
+          results.push(args.input.value);
         }],
       },
-      function (input, state, output) {
-        output.error({
+      function (args) {
+        args.output.error({
           value: 'bar'
         });
       }, {
-        'error': [function (input) {
-          results.push(input.value);
+        'error': [function (args) {
+          results.push(args.input.value);
         }]
       }
     ]
@@ -487,18 +486,18 @@ exports['should wait to resolve top level async array when nested async arrays a
   var results = [];
   var signal = [
     [
-      function (input, state, output) {
+      function (args) {
         async(function () {
-          output.success({
+          args.output.success({
             value: 'foo'
           });
         });
       }, {
         'success': [
           [
-            function (input, state, output) {
-              results.push(input.value);
-              output();
+            function (args) {
+              results.push(args.input.value);
+              args.output();
             }
           ]
         ],
@@ -519,9 +518,9 @@ exports['should wait to resolve top level async array when nested async arrays a
 exports['should throw error when trying to mutate with an async action'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    [function (input, state) {
+    [function (args) {
       test.throws(function () {
-        state.set('foo', 'bar');
+        args.state.set('foo', 'bar');
       });
       test.done();
     }]
@@ -536,9 +535,9 @@ exports['should allow services and have recorder by default'] = function (test) 
     foo: 'bar'
   });
   var signal = [
-    function (input, state, output, services) {
-      test.ok(services.foo);
-      test.ok(services.recorder);
+    function (args) {
+      test.ok(args.services.foo);
+      test.ok(args.services.recorder);
       test.done();
     }
   ];
@@ -586,8 +585,8 @@ exports['should throw error when input is defined on action and value is missing
     foo: String
   };
   var signal = [
-    function (input, state, output) {
-      output();
+    function (args) {
+      args.output();
     }, action
   ];
 
@@ -610,8 +609,8 @@ exports['should run signal without any actions'] = function (test) {
 
 exports['should allow actions to have default input'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input) {
-    test.equal(input.foo, 'bar');
+  var action = function (args) {
+    test.equal(args.input.foo, 'bar');
   };
   action.defaultInput = {
     foo: 'bar'
@@ -626,9 +625,9 @@ exports['should allow actions to have default input'] = function (test) {
 
 exports['should allow ASYNC actions to have default input'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    test.equal(input.foo, 'bar');
-    output();
+  var action = function (args) {
+    test.equal(args.input.foo, 'bar');
+    args.output();
   };
   action.defaultInput = {
     foo: 'bar'
@@ -649,8 +648,8 @@ exports['should allow ASYNC actions to have default input'] = function (test) {
 
 exports['should throw error when output path is not an array'] = function (test) {
   var ctrl = Controller(Model());
-  var action = function (input, state, output) {
-    output.success();
+  var action = function (args) {
+    args.output.success();
   };
   var signal = [
     [

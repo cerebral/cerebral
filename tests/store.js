@@ -96,8 +96,8 @@ exports['should store details about mutations'] = function (test) {
   var state = {};
   var ctrl = Controller(Model());
   var signal = [
-    function ActionA (args, state) {
-      state.set('foo', 'bar');
+    function ActionA (args) {
+      args.state.set('foo', 'bar');
     }
   ];
 
@@ -120,17 +120,17 @@ exports['should store details about mutations correctly across sync and async si
   var state = {};
   var ctrl = Controller(Model());
   var signalSync = [
-    function ActionA (input, state) {
-      state.set('foo', 'bar');
+    function ActionA (args) {
+      args.state.set('foo', 'bar');
     }
   ];
 
   ctrl.signal('test', signalSync);
   var signalAsync = [
-    [function ActionB (input, state, output) {
-      output();
-    }], function ActionC (args, state) {
-      state.set('foo', 'bar');
+    [function ActionB (args) {
+      args.output();
+    }], function ActionC (args) {
+      args.state.set('foo', 'bar');
 
       async(function () {
         var actionAsync = ctrl.store.getSignals()[0].branches[1];
@@ -158,8 +158,8 @@ exports['should store details about mutations correctly across sync and async si
 exports['should indicate async actions'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    [function ActionA (input, state, output) {
-      output();
+    [function ActionA (args) {
+      args.output();
     }], function () {
       async(function () {
         test.ok(ctrl.store.getSignals()[0].branches[0][0].isAsync);
@@ -175,9 +175,9 @@ exports['should indicate async actions'] = function (test) {
 exports['should indicate when async actions are running'] = function (test) {
   var ctrl = Controller(Model());
   var signal = [
-    [function (input, state, output) {
+    [function (args) {
       test.ok(ctrl.store.isExecutingAsync());
-      output();
+      args.output();
     }]
   ];
 
@@ -214,8 +214,8 @@ exports['should be able to remember previous signal'] = function (test) {
   };
   var ctrl = Controller(Model());
   var signal = [
-    function (args, state) {
-      state.set('foo', args.foo);
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
   ];
 
@@ -262,12 +262,12 @@ exports['should be able to remember async actions and run them synchronously whe
   };
   var ctrl = Controller(Model());
   var signal = [
-    [function ActionA (input, state, output) {
-      output({
-        result: input.foo
+    [function ActionA (args) {
+      args.output({
+        result: args.input.foo
       });
-    }], function ActionB (input, state) {
-      state.set('foo', input.result);
+    }], function ActionB (args) {
+      args.state.set('foo', args.input.result);
     }
   ];
 

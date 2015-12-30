@@ -19,10 +19,9 @@ exports['should call accessor methods added'] = function (test) {
   };
   var ctrl = Controller(Model({}));
   var signal = [
-    function (input, state) {
-
-      test.ok(state.get);
-      test.ok(state.keys);
+    function (args) {
+      test.ok(args.state.get);
+      test.ok(args.state.keys);
 
     }
   ];
@@ -49,10 +48,10 @@ exports['should have a path as first argument'] = function (test) {
   };
   var ctrl = Controller(Model({}));
   var signal = [
-    function (input, state) {
-      state.get('foo');
-      state.get(['foo']);
-      state.get('foo', 'bar');
+    function (args) {
+      args.state.get('foo');
+      args.state.get(['foo']);
+      args.state.get('foo', 'bar');
     }
   ];
 
@@ -79,11 +78,11 @@ exports['should receive the rest of the arguments'] = function (test) {
   };
   var ctrl = Controller(Model({}));
   var signal = [
-    function (input, state) {
-      state.get('foo', 'bar');
+    function (args) {
+      args.state.get('foo', 'bar');
     }
   ];
-  
+
   ctrl.signal('test', signal);
   test.expect(2);
   ctrl.signals.test.sync();

@@ -26,8 +26,8 @@ exports['should record signals'] = function (test) {
   var state = initialState;
   var ctrl = Controller(Model());
   var signal = [
-    function (args, state) {
-      state.set('foo', args.foo);
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
   ];
 
@@ -74,10 +74,10 @@ exports['should play back recording'] = function (test) {
   };
   var ctrl = Controller(Model());
   var signal = [
-    function (input, state) {
-      state.set('foo', input.foo);
-    }, [function (input, state, output) {
-      output();
+    function (args) {
+      args.state.set('foo', args.input.foo);
+    }, [function (args) {
+      args.output();
     }]
   ];
 
@@ -131,8 +131,8 @@ exports['should seek to specific point in recording'] = function (test) {
   };
   var ctrl = Controller(Model());
   var signal = [
-    function (args, state) {
-      state.set('foo', args.foo);
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
   ];
 
@@ -183,8 +183,8 @@ exports['should pause a playback'] = function (test) {
   };
   var ctrl = Controller(Model());
   var signal = [
-    function (args, state) {
-      state.set('foo', args.foo);
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
   ];
 
@@ -247,8 +247,8 @@ exports['should resume a paused playback'] = function (test) {
   };
   var ctrl = Controller(Model());
   var signal = [
-    function (args, state) {
-      state.set('foo', args.foo);
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
   ];
 

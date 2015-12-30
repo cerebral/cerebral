@@ -88,7 +88,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
         };
 
         if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
-          controller.emit('signalStart', {signal});
+          controller.emit('signalStart', {signal: signal});
         }
 
         if (recorder.isRecording()) {
@@ -108,8 +108,8 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
              }
 
              signal.isExecuting = false;
-             controller.emit('signalEnd', {signal});
-             controller.emit('change', {signal});
+             controller.emit('signalEnd', {signal: signal});
+             controller.emit('change', {signal: signal});
              devtools && devtools.update();
              return;
 
@@ -156,7 +156,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
               var promises = currentBranch.map(function (action) {
 
-                controller.emit('actionStart', {action, signal});
+                controller.emit('actionStart', {action: action, signal: signal});
                 var actionFunc = actions[action.actionIndex];
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
                 var actionArgs = createActionArgs.async(action, inputArg, model, compute);
@@ -170,7 +170,13 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 action.isExecuting = true;
                 action.input = utils.merge({}, inputArg);
                 var next = createNext.async(actionFunc);
-                actionFunc.apply(null, actionArgs.concat(next.fn, services));
+                actionFunc.call(null, {
+                  input: actionArgs[0],
+                  state: actionArgs[1],
+                  output: next.fn,
+                  services: services
+                });
+
                 return next.promise.then(function (result) {
 
                   action.hasExecuted = true;
@@ -189,9 +195,9 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
                   if (result.path) {
                     action.outputPath = result.path;
-                    controller.emit('actionEnd', {action, signal});
+                    controller.emit('actionEnd', {action: action, signal: signal});
                     var result = runBranch(action.outputs[result.path], 0, Date.now());
-                    controller.emit('change', {signal});
+                    controller.emit('change', {signal: signal});
                     devtools && devtools.update();
                     return result;
                   } else {
@@ -232,7 +238,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
             } else {
 
               var action = currentBranch;
-              controller.emit('actionStart', {action, signal});
+              controller.emit('actionStart', {action: action, signal: signal});
               var actionFunc = actions[action.actionIndex];
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs;
               var actionArgs = createActionArgs.sync(action, inputArg, model, compute);
@@ -245,7 +251,12 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
               action.input = utils.merge({}, inputArg);
 
               var next = createNext.sync(actionFunc, signal.name);
-              actionFunc.apply(null, actionArgs.concat(next, services));
+              actionFunc.call(null, {
+                input: actionArgs[0],
+                state: actionArgs[1],
+                output: next,
+                services: services
+              });
 
               // TODO: Also add input here
 
@@ -272,11 +283,11 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 }
               } else if (result.then) {
                 return result.then(function () {
-                  controller.emit('actionEnd', {action, signal});
+                  controller.emit('actionEnd', {action: action, signal: signal});
                   return runBranch(branch, index + 1, start);
                 });
               } else {
-                controller.emit('actionEnd', {action, signal});
+                controller.emit('actionEnd', {action: action, signal: signal});
                 return runBranch(branch, index + 1, start);
               }
 

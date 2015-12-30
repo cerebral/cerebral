@@ -106,8 +106,8 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
   test.expect(2);
   controller.get(foo);
   var signal = [
-    function (input, state) {
-      state.set('test', 'hest2')
+    function (args) {
+      args.state.set('test', 'hest2')
     }
   ];
 
@@ -137,8 +137,8 @@ exports['should cache after previously grabbed value change'] = function (test) 
   test.expect(2);
   controller.get(foo);
   var signal = [
-    function (input, state) {
-      state.set(['test'], 'hest2')
+    function (args) {
+      args.state.set(['test'], 'hest2')
     }
   ];
 
@@ -180,14 +180,14 @@ exports['should handle complex scenario'] = function (test) {
   test.deepEqual(controller.get(computed.likedMessages), []);
 
   var signal = [
-    function (input, state) {
-      state.merge(['data', 'messages'], {
+    function (args) {
+      args.state.merge(['data', 'messages'], {
         '123': {title: 'test', liked: true},
         '456': {title: 'test2', liked: true},
         '789': {title: 'test3', liked: false},
         '091': {title: 'test4', liked: false}
       });
-      state.set(['lists', 'displayedMessagesIds'], ['123']);
+      args.state.set(['lists', 'displayedMessagesIds'], ['123']);
     }
   ];
 
@@ -239,8 +239,8 @@ exports['should allow use of computed inside actions'] = function (test) {
   test.expect(1);
   controller.get(foo);
   var signal = [
-    function (input, state) {
-      test.equal(state.get(foo), 'bar');
+    function (args) {
+      test.equal(args.state.get(foo), 'bar');
       test.done();
     }
   ];
