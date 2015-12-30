@@ -57,7 +57,7 @@ var Controller = function (Model, services) {
   controller.extends = function (modules) {
     Object.keys(modules).forEach(function (moduleName) {
       var module = modules[moduleName];
-      Object.keys(module.signals).forEach(function (key) {
+      Object.keys(module.signals || {}).forEach(function (key) {
         if (Array.isArray(module.signals[key])) {
           var signalName = moduleName + '.' + key;
           controller.signal(signalName, module.signals[key]);
