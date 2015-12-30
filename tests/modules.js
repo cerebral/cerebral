@@ -36,3 +36,18 @@ exports['should pass the controller its name and its signals to the init method'
   });
   test.done();
 };
+
+exports['should be able to add a signal'] = function (test) {
+  var ctrl = Controller(Model);
+  ctrl.register({
+    test: {
+      init: function () {},
+      signals: {
+        test: []
+      }
+    }
+  });
+  console.log(ctrl.modules.test);
+  test.ok(ctrl.modules.test.signals.test);
+  test.done();
+};

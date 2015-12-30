@@ -5,18 +5,19 @@ module.exports = function (controller) {
       var signals = Object.keys(module.signals || {}).reduce(function (signals, key) {
         if (Array.isArray(module.signals[key])) {
           var signalName = moduleName + '.' + key;
-          signals[signalName] = controller.signal(signalName, module.signals[key]);
+          signals[key] = controller.signal(signalName, module.signals[key]);
         }
         return signals;
       }, {});
       signals = Object.keys(module.signalsSync || {}).reduce(function (signals, key) {
         if (Array.isArray(module.signalsSync[key])) {
           var signalName = moduleName + '.' + key;
-          signals[signalName] = controller.signalSync(signalName, module.signalsSync[key]);
+          signals[key] = controller.signalSync(signalName, module.signalsSync[key]);
         }
         return signals;
       }, signals);
       controller.modules[moduleName] = {
+        name: moduleName,
         signals: signals,
         services: module.services
       };
