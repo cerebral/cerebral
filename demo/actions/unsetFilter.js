@@ -1,4 +1,4 @@
-function unsetFilter (args, state) {
+function unsetFilter ({state}) {
   state.set('filter', 'all');
 };
 

@@ -1,6 +1,5 @@
-function toggleTodoCompleted (args, state) {
-  console.log(args);
-  const path = ['todos', args.ref];
+function toggleTodoCompleted ({input, state}) {
+  const path = ['todos', input.ref];
   let todo = state.get(path);
   state.set(path.concat('completed'), !todo.completed);
 };

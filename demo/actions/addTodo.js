@@ -1,4 +1,4 @@
-function addTodo (args, state, output) {
+function addTodo ({state, output}) {
 
   var ref = state.get('nextRef');
   let todo = {

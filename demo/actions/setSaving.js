@@ -1,4 +1,4 @@
-function setSaving (args, state) {
+function setSaving ({state}) {
   state.set('isSaving', true);
 };
 

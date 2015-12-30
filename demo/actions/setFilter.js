@@ -1,4 +1,4 @@
-function setFilter (input, state) {
+function setFilter ({input, state}) {
   state.set('filter', input.filter);
 };
 

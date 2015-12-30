@@ -1,4 +1,4 @@
-function unsetSaving (args, state) {
+function unsetSaving ({state}) {
   state.set('isSaving', false);
 };
 

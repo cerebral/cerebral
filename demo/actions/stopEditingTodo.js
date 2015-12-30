@@ -1,6 +1,6 @@
-function stopEditingTodo (args, state) {
+function stopEditingTodo ({input, state}) {
 
-  const path = ['todos', args.ref];
+  const path = ['todos', input.ref];
   let todo = state.get(path);
 
   if (!todo.$newTitle) {

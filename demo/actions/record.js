@@ -1,4 +1,4 @@
-function record (input, state, output, services) {
+function record ({state, services}) {
   state.set(['recorder', 'isRecording'], true);
   services.recorder.record();
 }

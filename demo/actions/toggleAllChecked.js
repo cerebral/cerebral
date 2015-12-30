@@ -1,4 +1,4 @@
-function toggleAllChecked (args, state) {
+function toggleAllChecked ({state}) {
 
     let isCompleted = !state.get('isAllChecked');
     let todos = state.get('todos');

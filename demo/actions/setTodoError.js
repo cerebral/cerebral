@@ -1,4 +1,4 @@
-function setTodoError (input, state) {
+function setTodoError ({input, state}) {
 
   var path = ['todos', input.ref];
 

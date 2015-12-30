@@ -1,4 +1,4 @@
-function setVisibleTodos (args, state) {
+function setVisibleTodos ({state}) {
 
   let todos = state.get('todos');
   let filter = state.get('filter');

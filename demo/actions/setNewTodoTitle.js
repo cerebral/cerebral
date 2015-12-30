@@ -1,4 +1,4 @@
-function setNewTodoTitle (input, state, output) {
+function setNewTodoTitle ({input, state}) {
   state.set('newTodoTitle', input.title);
 };
 

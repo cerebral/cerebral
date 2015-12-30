@@ -1,4 +1,4 @@
-function clearCompleted (args, state) {
+function clearCompleted ({state}) {
 
   let todos = state.get('todos');
 
