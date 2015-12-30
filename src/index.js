@@ -63,6 +63,12 @@ var Controller = function (Model, services) {
           controller.signal(signalName, module.signals[key]);
         }
       });
+      Object.keys(module.syncSignals || {}).forEach(function (key) {
+        if (Array.isArray(module.syncSignals[key])) {
+          var signalName = moduleName + '.' + key;
+          controller.signalSync(signalName, module.syncSignals[key]);
+        }
+      });
       controller.modules[moduleName] = {
         signals: signals[moduleName],
         services: module.services
