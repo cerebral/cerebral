@@ -1,6 +1,7 @@
 var CreateSignalFactory = require('./CreateSignalFactory.js');
 var CreateSignalStore = require('./CreateSignalStore.js');
 var CreateRecorder = require('./CreateRecorder.js');
+var CreateRegisterModules = require('./CreateRegisterModules.js');
 var Devtools = require('./Devtools.js');
 var Compute = require('./Compute.js');
 var EventEmitter = require('events').EventEmitter;
@@ -54,41 +55,7 @@ var Controller = function (Model, services) {
   services.recorder = recorder;
 
   controller.modules = {};
-  controller.extends = function (modules) {
-    Object.keys(modules).forEach(function (moduleName) {
-      var module = modules[moduleName];
-      Object.keys(module.signals || {}).forEach(function (key) {
-        if (Array.isArray(module.signals[key])) {
-          var signalName = moduleName + '.' + key;
-          controller.signal(signalName, module.signals[key]);
-        }
-      });
-      Object.keys(module.syncSignals || {}).forEach(function (key) {
-        if (Array.isArray(module.syncSignals[key])) {
-          var signalName = moduleName + '.' + key;
-          controller.signalSync(signalName, module.syncSignals[key]);
-        }
-      });
-      controller.modules[moduleName] = {
-        signals: signals[moduleName],
-        services: module.services
-      };
-      if (typeof module.init === 'function') {
-        var meta = module.init({
-          controller,
-          name: moduleName,
-          signals: signals[moduleName]
-        });
-        if (typeof meta === 'object') {
-          Object.keys(meta).forEach(function (key) {
-            controller.modules[moduleName][key] = meta[key];
-          });
-        }
-      }
-      controller.services[moduleName] = controller.modules[moduleName].services;
-    });
-    return controller.modules;
-  };
+  controller.register = CreateRegisterModules(controller);
 
   return controller;
 };

@@ -12,7 +12,8 @@ var tests_available = {
     'statictree': 'tests/staticTree.js',
     'computed': 'tests/computed.js',
     'accessors': 'tests/accessors.js',
-    'staticTree': 'tests/staticTree.js'
+    'staticTree': 'tests/staticTree.js',
+    'modules': 'tests/modules.js'
 };
 
 var test_name;
