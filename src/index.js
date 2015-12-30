@@ -64,6 +64,7 @@ var Controller = function (Model, services) {
         }
       });
       controller.modules[moduleName] = {
+        name: moduleName,
         signals: signals[moduleName],
         services: module.services
       };
