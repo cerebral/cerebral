@@ -47,7 +47,38 @@ exports['should be able to add a signal'] = function (test) {
       }
     }
   });
-  console.log(ctrl.modules.test);
   test.ok(ctrl.modules.test.signals.test);
+  test.done();
+};
+
+exports['should be able to add a sync signal'] = function (test) {
+  var ctrl = Controller(Model);
+  ctrl.register({
+    test: {
+      init: function () {},
+      signals: {
+        test: []
+      },
+      signalsSync: {
+        testSync: []
+      }
+    }
+  });
+  test.ok(ctrl.modules.test.signals.test);
+  test.ok(ctrl.modules.test.signals.testSync);
+  test.done();
+};
+
+exports['should be able to add a service'] = function (test) {
+  var ctrl = Controller(Model);
+  ctrl.register({
+    test: {
+      init: function () {},
+      services: {
+        test: function () {}
+      }
+    }
+  });
+  test.ok(ctrl.modules.test.services.test);
   test.done();
 };
