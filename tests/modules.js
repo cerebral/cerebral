@@ -48,6 +48,7 @@ exports['should be able to add a signal'] = function (test) {
     }
   });
   test.ok(ctrl.modules.test.signals.test);
+  test.ok(ctrl.signals.test.test);
   test.done();
 };
 
@@ -65,7 +66,9 @@ exports['should be able to add a sync signal'] = function (test) {
     }
   });
   test.ok(ctrl.modules.test.signals.test);
+  test.ok(ctrl.signals.test.test);
   test.ok(ctrl.modules.test.signals.testSync);
+  test.ok(ctrl.signals.test.test);
   test.done();
 };
 
@@ -75,10 +78,10 @@ exports['should be able to add a service'] = function (test) {
     test: {
       init: function () {},
       services: {
-        test: function () {}
+        method: function () {}
       }
     }
   });
-  test.ok(ctrl.modules.test.services.test);
+  test.ok(ctrl.services.test.method);
   test.done();
 };
