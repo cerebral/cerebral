@@ -53,21 +53,35 @@ var Controller = function (Model, services) {
   controller.devtools = devtools;
   services.recorder = recorder;
 
+  controller.modules = {};
   controller.extends = function (modules) {
-    var meta = {};
     Object.keys(modules).forEach(function (moduleName) {
       var module = modules[moduleName];
-      Object.keys(module).forEach(function (key) {
-        var signalName = moduleName + '.' + key;
-        if (Array.isArray(module[key])) {
-          controller.signal(signalName, module[key]);
+      Object.keys(module.signals).forEach(function (key) {
+        if (Array.isArray(module.signals[key])) {
+          var signalName = moduleName + '.' + key;
+          controller.signal(signalName, module.signals[key]);
         }
       });
+      controller.modules[moduleName] = {
+        signals: signals[moduleName],
+        services: module.services
+      };
       if (typeof module.init === 'function') {
-        meta[moduleName] = module.init(controller, moduleName, signals[moduleName]);
+        var meta = module.init({
+          controller,
+          name: moduleName,
+          signals: signals[moduleName]
+        });
+        if (typeof meta === 'object') {
+          Object.keys(meta).forEach(function (key) {
+            controller.modules[moduleName][key] = meta[key];
+          });
+        }
       }
+      controller.services[moduleName] = controller.modules[moduleName].services;
     });
-    return meta;
+    return controller.modules;
   };
 
   return controller;
