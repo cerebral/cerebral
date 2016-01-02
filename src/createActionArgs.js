@@ -4,7 +4,12 @@ var createStateArg = function (action, model, isAsync, compute) {
   var state = Object.keys(model.accessors || {}).reduce(function (state, accessor) {
     state[accessor] = function () {
       var args = [].slice.call(arguments);
-      var path = args[0] ? Array.isArray(args[0]) ? args.shift() : [args.shift()] : [];
+      var path = [];
+      if (args[0] && Array.isArray(args[0])) {
+        path = args.shift();
+      } else if (args[0] && typeof args[0] === 'string') {
+        path = args.shift().split('.');
+      }
       if (accessor === 'get' && typeof arguments[0] === 'function') {
         return compute.getComputedValue(arguments[0]);
       }
@@ -33,8 +38,6 @@ var createStateArg = function (action, model, isAsync, compute) {
     };
     return state;
   }, state);
-
-  state.getComputed = compute.getComputedValue;
 
   return state;
 };

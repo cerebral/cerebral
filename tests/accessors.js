@@ -88,3 +88,31 @@ exports['should receive the rest of the arguments'] = function (test) {
   ctrl.signals.test.sync();
   test.done()
 };
+
+exports['should allow dot notation'] = function (test) {
+  var Model = function (state) {
+    return function (controller) {
+
+      return {
+        accessors: {
+          get: function (path) {
+            test.deepEqual(path, ['foo', 'bar']);
+          }
+        }
+      };
+
+    };
+  };
+  var ctrl = Controller(Model({}));
+  var signal = [
+    function (args) {
+      args.state.get(['foo', 'bar']);
+      args.state.get('foo.bar');
+    }
+  ];
+
+  ctrl.signal('test', signal);
+  test.expect(2);
+  ctrl.signals.test.sync();
+  test.done()
+};
