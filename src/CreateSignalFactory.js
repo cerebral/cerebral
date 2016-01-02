@@ -152,7 +152,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
             } else {
 
-              controller.emit('change', {signal});
+              controller.emit('change', {signal: signal});
 
               var promises = currentBranch.map(function (action) {
 
