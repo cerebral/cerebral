@@ -23,7 +23,7 @@ module.exports = function (controller) {
       };
       if (typeof module.init === 'function') {
         var meta = module.init({
-          controller,
+          controller: controller,
           name: moduleName,
           signals: signals
         });
