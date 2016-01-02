@@ -33,7 +33,10 @@ module.exports = function (controller) {
           });
         }
       }
-      controller.services[moduleName] = controller.modules[moduleName].services;
+      controller.services[moduleName] = controller.services[moduleName] || {};
+      Object.keys(module.services || {}).forEach(function (key) {
+        controller.services[moduleName][key] = module.services[key];
+      });
     });
     return controller.modules;
   };
