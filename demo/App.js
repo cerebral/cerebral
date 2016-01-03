@@ -42,7 +42,7 @@ class App extends React.Component {
           }
           {
             !this.props.recorder.isRecording && !this.props.recorder.isPlaying && !this.props.recorder.hasRecorded ?
-            <button className="btn btn-record" onClick={() => this.record()}>Record</button> :
+            <button disabled={this.props.isSaving} className="btn btn-record" onClick={() => this.record()}>Record</button> :
             null
           }
         </div>
