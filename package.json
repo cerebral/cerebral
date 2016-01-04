@@ -4,10 +4,8 @@
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
-    "demo": "webpack-dev-server --progress --colors --content-base demo --config demo.config.js",
-    "deploydemo": "webpack --config demo.production.config.js",
-    "deploy": "NODE_ENV=production webpack -p",
-    "start": "webpack-dev-server --devtool eval --progress --colors --content-base build",
+    "demo": "webpack-dev-server --progress --colors --content-base demo --config demo/webpack.config.js",
+    "deploydemo": "webpack --config demo/webpack.config.js",
     "devtest": "nodeunit-watcher",
     "test": "nodeunit tests"
   },
