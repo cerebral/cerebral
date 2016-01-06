@@ -1,5 +1,5 @@
-function removeTodo (args, state) {
-  state.unset('todos', args.ref);
+function removeTodo ({input, state}) {
+  state.unset(['todos', input.ref]);
 };
 
 export default removeTodo;

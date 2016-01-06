@@ -1,10 +1,10 @@
-function clearCompleted (args, state) {
+function clearCompleted ({state}) {
 
   let todos = state.get('todos');
 
   Object.keys(todos).forEach(function (key) {
     if (todos[key].completed && !todos[key].$isSaving) {
-      state.unset('todos', key);
+      state.unset(['todos', key]);
     }
   });
 

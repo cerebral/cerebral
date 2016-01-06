@@ -7,25 +7,14 @@
 
 var utils = require('./utils.js');
 
-module.exports = function (signalMethods, options) {
+module.exports = function (signalMethods, controller) {
 
-  // We grab the signals stored in localStorage, if any
-  var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
-    JSON.parse(localStorage.getItem('cerebral_signals')) : [];
-
-
-  // Indicates if signals should be stored or replaced. Grabs from localStorage if available
-  var willKeepState = (
-    typeof process !== 'undefined' && process.env.NODE_ENV === 'production' ?
-    false :
-    utils.hasLocalStorage() && localStorage.getItem('cerebral_willKeepState') ?
-    JSON.parse(localStorage.getItem('cerebral_willKeepState')) :
-    true
-  );
-
+  var signals = [];
+  var willKeepState = false;
   var executingAsyncActionsCount = 0;
   var isRemembering = false;
   var currentIndex = signals.length - 1;
+  var hasRememberedInitial = false;
 
   return {
 
@@ -44,30 +33,23 @@ module.exports = function (signalMethods, options) {
 
     addSignal: function(signal) {
 
-      currentIndex++;
+      if (utils.isDeveloping()) {
+        currentIndex++;
 
-      // When executing signals in EventStore, do not add them again
-      if (isRemembering) {
-        return;
+        // When executing signals in EventStore, do not add them again
+        if (isRemembering) {
+          return;
+        }
+
+        // If we have travelled back and start adding new signals the signals not triggered should
+        // be removed. This effectively "changes history"
+        if (currentIndex < signals.length) {
+          signals.splice(currentIndex, signals.length - currentIndex);
+        }
+
+        // Add signal and set the current signal to be the recently added signal
+        signals.push(signal);
       }
-
-      // If we are not keeping the state around reset the signals to just
-      // keep the latest one
-      if (!willKeepState) {
-        signals = [];
-        currentIndex = 0;
-      }
-
-      // If we have travelled back and start adding new signals the signals not triggered should
-      // be removed. This effectively "changes history"
-      if (currentIndex < signals.length) {
-        signals.splice(currentIndex, signals.length - currentIndex);
-      }
-
-      //signal.index = signals.length;
-
-      // Add signal and set the current signal to be the recently added signal
-      signals.push(signal);
 
     },
 
@@ -83,22 +65,33 @@ module.exports = function (signalMethods, options) {
 
     // Will reset the SignalStore
     reset: function() {
+
       if (!isRemembering) {
 
         signals = [];
 
         currentIndex = -1;
 
-        options.onReset && options.onReset();
+        controller.emit('reset');
 
       }
     },
 
+    rememberInitial: function (index) {
+
+      // Both router and debugger might try to do initial remembering
+      if (hasRememberedInitial) {
+        return;
+      }
+
+      hasRememberedInitial = true;
+      this.remember(index);
+    },
     remember: function(index) {
 
       // Flag that we are remembering
       isRemembering = true;
-      options.onReset && options.onReset();
+      controller.emit('reset');
 
       // If going back to initial state, just return and update
       if (index === -1) {
@@ -112,7 +105,6 @@ module.exports = function (signalMethods, options) {
         currentIndex = -1;
 
         // Go through signals
-
         try {
 
           for (var x = 0; x <= index; x++) {
@@ -128,28 +120,41 @@ module.exports = function (signalMethods, options) {
             while (signalName.length) {
               signalMethodPath = signalMethodPath[signalName.shift()];
             }
-            signalMethodPath.call(null, signal.payload, signal.asyncActionResults.slice());
+
+            signalMethodPath(signal.input, {branches: signal.branches});
             currentIndex = x;
 
           }
 
-          isRemembering = false;
-
         } catch (e) {
-
-          isRemembering = false;
+          console.log(e);
+          console.warn('CEREBRAL - There was an error remembering state, it has been reset');
           this.reset();
 
         }
 
       }
 
-      options.onRemember && options.onRemember();
+      controller.emit('change');
+      isRemembering = false;
 
+    },
+
+    removeRunningSignals: function () {
+      for (var x = 0; x < signals.length; x++) {
+        if (signals[x].isExecuting) {
+          signals.splice(x, 1);
+          x--;
+        }
+      }
     },
 
     getSignals: function () {
       return signals;
+    },
+
+    setSignals: function (newSignals) {
+      signals = signals.concat(newSignals);
     },
 
     isExecutingAsync: function () {

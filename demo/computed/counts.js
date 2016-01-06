@@ -1,6 +1,5 @@
-function setCounters (args, state) {
-
-  let todos = state.get('todos');
+export default function (get) {
+  let todos = get(['todos']);
   let counts = Object.keys(todos).reduce(function(counts, key) {
 
     let todo = todos[key];
@@ -18,11 +17,9 @@ function setCounters (args, state) {
     remainingCount: 0
   });
 
-  state.merge({
+  return {
     remainingCount: counts.remainingCount,
     completedCount: counts.completedCount
-  });
+  };
 
-};
-
-export default setCounters;
+}

@@ -1,21 +1,37 @@
-var Lib = require('./../src/index.js');
+var Controller = require('./../src/index.js');
 var async = function (cb) {
   setTimeout(cb, 0);
+};
+var Model = function () {
+  return function () {
+    return {
+      accessors: {
+        get: function () {
+
+        }
+      },
+      mutators: {
+        set: function (path, value) {
+          state = {};
+          state[path.pop()] = value;
+        }
+      }
+    }
+  };
 };
 
 exports['should record signals'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
-  });
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -36,23 +52,36 @@ exports['should play back recording'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
-    }
-  });
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  }, [function (args, state, next) {
-    next();
-  }]);
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        accessors: {
+          export: function () {
+            return state;
+          }
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.state.set('foo', args.input.foo);
+    }, [function (args) {
+      args.output();
+    }]
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -62,7 +91,8 @@ exports['should play back recording'] = function (test) {
     setTimeout(function () {
       ctrl.recorder.stop();
       setTimeout(function () {
-        ctrl.recorder.seek(0, true);
+        ctrl.recorder.seek(0);
+        ctrl.recorder.play();
         test.deepEqual(state, {});
         setTimeout(function () {
           test.deepEqual(state, {foo: 'bar'});
@@ -79,21 +109,34 @@ exports['should seek to specific point in recording'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        accessors: {
+          export: function () {
+            return state;
+          }
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
-  });
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -104,6 +147,7 @@ exports['should seek to specific point in recording'] = function (test) {
       ctrl.recorder.stop();
       setTimeout(function () {
         ctrl.recorder.seek(150);
+        ctrl.recorder.play();
         test.deepEqual(state, {foo: 'bar'});
         test.done();
       }, 100);
@@ -117,21 +161,34 @@ exports['should pause a playback'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        accessors: {
+          export: function () {
+            return state;
+          }
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
-  });
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -147,7 +204,8 @@ exports['should pause a playback'] = function (test) {
         ctrl.recorder.stop();
 
         setTimeout(function () {
-          ctrl.recorder.seek(0, true);
+          ctrl.recorder.seek(0);
+          ctrl.recorder.play();
           test.deepEqual(state, {});
           setTimeout(function () {
             ctrl.recorder.pause();
@@ -167,21 +225,34 @@ exports['should resume a paused playback'] = function (test) {
 
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onGetRecordingState: function () {
-      return state;
-    },
-    onSeek: function (seek, startPlaying, currentRecording) {
-      state = currentRecording.initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
+  var Model = function () {
+    return function (controller) {
+      controller.on('seek', function (seek, currentRecording) {
+        state = currentRecording.initialState;
+      });
+      return {
+        accessors: {
+          export: function () {
+            return state;
+          }
+        },
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      }
+    };
+  };
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
-  });
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.recorder.record(state);
 
   setTimeout(function () {
@@ -197,14 +268,16 @@ exports['should resume a paused playback'] = function (test) {
         ctrl.recorder.stop();
 
         setTimeout(function () {
-          ctrl.recorder.seek(0, true);
+          ctrl.recorder.seek(0);
+          ctrl.recorder.play();
           test.deepEqual(state, {});
           setTimeout(function () {
             ctrl.recorder.pause();
             test.deepEqual(state, {foo: 'bar'});
 
             setTimeout(function () {
-              ctrl.recorder.seek(ctrl.recorder.getCurrentSeek(), true);
+              ctrl.recorder.seek(ctrl.recorder.getCurrentSeek());
+              ctrl.recorder.play();
               setTimeout(function () {
                 test.deepEqual(state, {foo: 'bar2'});
                 test.done();

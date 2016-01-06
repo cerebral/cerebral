@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import {Decorator as Cerebral} from './../CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 
 @Cerebral()
 class Todo extends React.Component {
@@ -16,7 +16,7 @@ class Todo extends React.Component {
 
     // FOCUS fix
     setTimeout(() => {
-      var input = this.refs.edit.getDOMNode();
+      var input = this.refs.edit;
       input.focus();
       input.value = input.value;
     }, 0);
@@ -30,7 +30,7 @@ class Todo extends React.Component {
   }
   onNewTitleSubmit(event) {
     event.preventDefault();
-    this.refs.edit.getDOMNode().blur();
+    this.refs.edit.blur();
   }
   onCompletedToggle() {
     this.props.signals.toggleCompletedChanged({

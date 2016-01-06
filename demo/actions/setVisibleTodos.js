@@ -1,11 +1,10 @@
-function setVisibleTodos (args, state) {
+function setVisibleTodos ({state}) {
 
   let todos = state.get('todos');
   let filter = state.get('filter');
-  let visibleTodos = Object.keys(todos).filter(function(key) {
+  let visibleTodosRefs = Object.keys(todos).filter(function(key) {
 
     let todo = todos[key];
-
     return (
       filter === 'all' ||
       (filter === 'completed' && todo.completed) ||
@@ -13,7 +12,7 @@ function setVisibleTodos (args, state) {
     );
 
   });
-  state.set('visibleTodos', visibleTodos);
+  state.set(['visibleTodosRefs'], visibleTodosRefs);
 
 };
 

@@ -3,6 +3,13 @@ module.exports = function (signalName, actions) {
   var traverse = function (actions, parentActions, parentIndex) {
     actions.forEach(function (action, index) {
 
+      if (typeof action === 'undefined') {
+        throw new Error([
+          'Cerebral: Action number "' + index + '" in signal "' + signalName +
+          '" does not exist. Check that you have spelled it correctly!'
+        ].join(''));
+      }
+
       if (Array.isArray(action)) {
         traverse(action, actions, index);
       } else {
@@ -27,7 +34,7 @@ module.exports = function (signalName, actions) {
           throw new Error([
             'Cerebral: The action "' + utils.getFunctionName(action) +
             '" in signal "' + signalName +  '" has an output value. ' +
-            'There should be these paths: ' + JSON.stringify(Object.keys(action.outputs))
+            'There should be these paths: ' + JSON.stringify(Array.isArray(action.outputs) ? action.outputs : Object.keys(action.outputs))
           ].join(''));
 
         } else if (Array.isArray(action.outputs)) {
@@ -55,6 +62,16 @@ module.exports = function (signalName, actions) {
             }
           });
 
+        } else if (!Array.isArray(action) && typeof action === 'object' && typeof action !== null) {
+          var prevAction = actions[index - 1];
+          Object.keys(action).forEach(function (key) {
+            if (!Array.isArray(action[key])) {
+              throw new Error([
+                'Cerebral: The paths for action "' + utils.getFunctionName(prevAction) +
+                '" in signal "' + signalName +  '" are not valid. They have to be an array"'
+              ].join(''));
+            }
+          })
         }
       }
 

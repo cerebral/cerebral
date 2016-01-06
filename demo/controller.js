@@ -1,22 +1,16 @@
-import Controller from './CustomController.js';
+import Controller from './../src/index.js';
+import Model from 'cerebral-baobab';
 
-const VisibleTodos = function() {
-  return {
-    value: [],
-    deps: {
-      todos: ['todos']
-    },
-    get: function(refs, deps) {
-      return refs.map((ref) => deps.todos[ref]);
-    }
-  };
-};
-
-const state =  {
+const model = Model({
+  recorder: {
+    isRecording: false,
+    isPlaying: false,
+    hasRecorded: false
+  },
   nextRef: 0,
   url: '/',
   todos: {},
-  visibleTodos: VisibleTodos,
+  visibleTodosRefs: [],
   newTodoTitle: '',
   isSaving: false,
   isAllChecked: false,
@@ -26,6 +20,8 @@ const state =  {
   remainingCount: 0,
   completedCount: 0,
   filter: 'all'
-};
+});
 
-export default Controller(state);
+const services = {};
+
+export default Controller(model, services);

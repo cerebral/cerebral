@@ -1,5 +1,5 @@
 import React from 'react';
-import {Decorator as Cerebral} from './../CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 
 @Cerebral({
   isSaving: ['isSaving'],
@@ -12,7 +12,7 @@ class AddTodo extends React.Component {
   }
 
   onNewTodoTitleChange(event) {
-    this.props.signals.newTodoTitleChanged({
+    this.props.signals.newTodoTitleChanged.sync({
       title: event.target.value
     });
   }

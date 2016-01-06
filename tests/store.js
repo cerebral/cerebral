@@ -1,12 +1,28 @@
-var Lib = require('./../src/index.js');
+var Controller = require('./../src/index.js');
 var async = function (cb) {
   setTimeout(cb, 0);
+};
+var Model = function () {
+  return function () {
+    return {
+      mutators: {
+        set: function (path, value) {
+          state = {};
+          state[path.pop()] = value;
+        }
+      }
+    }
+  };
 };
 
 exports['should keep signals by default'] = function (test) {
   var state = {};
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function () {});
+  var ctrl = Controller(Model());
+  var signal = [
+    function () {}
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
   ctrl.signals.test();
   async(function () {
@@ -17,53 +33,60 @@ exports['should keep signals by default'] = function (test) {
 
 exports['should store details about signal'] = function (test) {
   var state = {};
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function ActionA () {});
+  var ctrl = Controller(Model());
+  var signal = [
+    function ActionA () {}
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test({
     foo: true
   });
   async(function () {
     var signal = ctrl.store.getSignals()[0];
     test.equal(signal.name, 'test');
-    test.equal(signal.duration, 0);
-    test.deepEqual(signal.payload, {foo: true});
-    test.equal(signal.actions.length, 1);
+    test.deepEqual(signal.input, {foo: true});
+    test.equal(signal.branches.length, 1);
     test.done();
   });
 };
 
 exports['should not store default args'] = function (test) {
   var state = {};
-  var ctrl = Lib.Controller({
-    defaultArgs: {
-      utils: 'test'
-    }
+  var ctrl = Controller(Model(), {
+    utils: 'test'
   });
-  ctrl.signal('test', function ActionA () {});
+  var signal = [
+    function ActionA () {}
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test({
     foo: true
   });
   async(function () {
     var signal = ctrl.store.getSignals()[0];
     test.equal(signal.name, 'test');
-    test.equal(signal.duration, 0);
-    test.deepEqual(signal.payload, {foo: true});
-    test.equal(signal.actions.length, 1);
+    test.deepEqual(signal.input, {foo: true});
+    test.equal(signal.branches.length, 1);
     test.done();
   });
 };
 
 exports['should store details about actions'] = function (test) {
   var state = {};
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function ActionA () {});
+  var ctrl = Controller(Model());
+  var signal = [
+    function ActionA () {}
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test({
     foo: true
   });
   async(function () {
-    var action = ctrl.store.getSignals()[0].actions[0];
+    var action = ctrl.store.getSignals()[0].branches[0];
     test.equal(action.name, 'ActionA');
-    test.equal(action.duration, 0);
     test.equal(action.mutations.length, 0);
     test.done();
   });
@@ -71,15 +94,19 @@ exports['should store details about actions'] = function (test) {
 
 exports['should store details about mutations'] = function (test) {
   var state = {};
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function ActionA (args, state) {
-    state.set('foo', 'bar');
-  });
+  var ctrl = Controller(Model());
+  var signal = [
+    function ActionA (args) {
+      args.state.set('foo', 'bar');
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 
   async(function () {
 
-    var action = ctrl.store.getSignals()[0].actions[0];
+    var action = ctrl.store.getSignals()[0].branches[0];
     test.deepEqual(action.mutations[0], {
       name: 'set',
       path: ['foo'],
@@ -91,69 +118,75 @@ exports['should store details about mutations'] = function (test) {
 
 exports['should store details about mutations correctly across sync and async signals'] = function (test) {
   var state = {};
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function ActionA (args, state) {
-    state.set('foo', 'bar');
-  });
-  ctrl.signal('testAsync', [function ActionB (args, state, next) {
-    next();
-  }], function ActionC (args, state) {
-    state.set('foo', 'bar');
+  var ctrl = Controller(Model());
+  var signalSync = [
+    function ActionA (args) {
+      args.state.set('foo', 'bar');
+    }
+  ];
 
-    async(function () {
-      var actionAsync = ctrl.store.getSignals()[0].actions[1];
-      test.deepEqual(actionAsync.mutations[0], {
-        name: 'set',
-        path: ['foo'],
-        args: ['bar']
-      });
-      var action = ctrl.store.getSignals()[1].actions[0];
-      test.deepEqual(action.mutations[0], {
-        name: 'set',
-        path: ['foo'],
-        args: ['bar']
-      });
-      test.done();
-    });
+  ctrl.signal('test', signalSync);
+  var signalAsync = [
+    [function ActionB (args) {
+      args.output();
+    }], function ActionC (args) {
+      args.state.set('foo', 'bar');
 
-  });
+      async(function () {
+        var actionAsync = ctrl.store.getSignals()[0].branches[1];
+        test.deepEqual(actionAsync.mutations[0], {
+          name: 'set',
+          path: ['foo'],
+          args: ['bar']
+        });
+        var action = ctrl.store.getSignals()[1].branches[0];
+        test.deepEqual(action.mutations[0], {
+          name: 'set',
+          path: ['foo'],
+          args: ['bar']
+        });
+        test.done();
+      });
+
+    }
+  ];
+  ctrl.signal('testAsync', signalAsync);
   ctrl.signals.testAsync();
   ctrl.signals.test();
 };
 
-
 exports['should indicate async actions'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', [function ActionA (args, state, next) {
-    next();
-  }], function () {
-    async(function () {
-      test.ok(ctrl.store.getSignals()[0].actions[0].isAsync);
-      test.done();
-    });
-  });
+  var ctrl = Controller(Model());
+  var signal = [
+    [function ActionA (args) {
+      args.output();
+    }], function () {
+      async(function () {
+        test.ok(ctrl.store.getSignals()[0].branches[0][0].isAsync);
+        test.done();
+      });
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should indicate when async actions are running'] = function (test) {
-  var count = 0;
-  var ctrl = Lib.Controller({
-    onStoreChange: function () {
-      count++;
-    }
+  var ctrl = Controller(Model());
+  var signal = [
+    [function (args) {
+      test.ok(ctrl.store.isExecutingAsync());
+      args.output();
+    }]
+  ];
+
+  ctrl.signal('test', signal);
+  ctrl.on('signalEnd', function () {
+    test.ok(!ctrl.store.isExecutingAsync());
+    test.done();
   });
-  ctrl.store.toggleKeepState();
-  ctrl.signal('test', [function (args, state, next) {
-    next();
-  }]);
   ctrl.signals.test();
-  async(function () {
-    test.ok(ctrl.store.isExecutingAsync());
-    async(function () {
-      test.ok(!ctrl.store.isExecutingAsync());
-      test.done();
-    });
-  });
 
 };
 
@@ -161,18 +194,32 @@ exports['should indicate when async actions are running'] = function (test) {
 exports['should be able to remember previous signal'] = function (test) {
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onReset: function () {
-      state = initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
+  var Model = function () {
+    return function (controller) {
+
+      controller.on('reset', function () {
+        state = initialState;
+      });
+
+      return {
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
+      };
+
+    };
+  };
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.state.set('foo', args.input.foo);
     }
-  });
-  ctrl.signal('test', function (args, state) {
-    state.set('foo', args.foo);
-  });
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test({
     foo: 'bar'
   });
@@ -186,35 +233,45 @@ exports['should be able to remember previous signal'] = function (test) {
   });
 };
 
-
 exports['should be able to remember async actions and run them synchronously when remembering'] = function (test) {
   var signalCount = 0;
   var initialState = {};
   var state = initialState;
-  var ctrl = Lib.Controller({
-    onReset: function () {
-      state = initialState;
-    },
-    onSet: function (key, value) {
-      state = {};
-      state[key] = value;
-    },
-    onUpdate: function () {
-      signalCount++;
-      if (signalCount === 3) {
-        ctrl.store.remember(0);
-        test.deepEqual(state, {foo: 'bar'});
-        test.done();
+  var Model = function () {
+    return function (controller) {
+      controller.on('reset', function () {
+        state = initialState;
+      });
+      controller.on('signalEnd', function () {
+        signalCount++;
+        if (signalCount === 2) {
+          controller.store.remember(0);
+          test.deepEqual(state, {foo: 'bar'});
+          test.done();
+        }
+      });
+      return {
+        mutators: {
+          set: function (path, value) {
+            state = {};
+            state[path.pop()] = value;
+          }
+        }
       }
+    };
+  };
+  var ctrl = Controller(Model());
+  var signal = [
+    [function ActionA (args) {
+      args.output({
+        result: args.input.foo
+      });
+    }], function ActionB (args) {
+      args.state.set('foo', args.input.result);
     }
-  });
-  ctrl.signal('test', [function ActionA (args, state, next) {
-    next({
-      result: args.foo
-    });
-  }], function ActionB (args, state) {
-    state.set('foo', args.result);
-  });
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test({
     foo: 'bar'
   });

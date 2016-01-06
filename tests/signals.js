@@ -1,334 +1,433 @@
-var Lib = require('./../src/index.js');
+var Controller = require('./../src/index.js');
 var async = function (cb) {
   setTimeout(cb, 0);
 };
+var Model = function (state) {
+  state = state || {};
+  return function () {
+    return {
+      accessors: {
+        get: function (path) {
+          return state[path[0]];
+        }
+      },
+      mutators: {
+        set: function (path, value) {
+          state[path.pop()] = value;
+        }
+      }
+    }
+  };
+};
 
-exports['should create a signal'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test');
+exports['should register signals'] = function (test) {
+  var ctrl = Controller(Model());
+  var signal = ctrl.signal('test');
   test.ok(typeof ctrl.signals.test === 'function');
+  test.ok(signal);
+  test.equal(signal.signalName, 'test');
+  test.done();
+};
+
+exports['should allow namespaced signals'] = function (test) {
+  var ctrl = Controller(Model());
+  ctrl.signal('foo.bar');
+  test.ok(typeof ctrl.signals.foo.bar === 'function');
   test.done();
 };
 
 exports['should trigger an action when run'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function () {
+  var ctrl = Controller(Model());
+  ctrl.signal('test', [function () {
     test.ok(true);
     test.done();
-  });
+  }]);
   ctrl.signals.test();
-
 };
 
 exports['should be able to define custom outputs as arrays'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next.foo({foo: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output.foo({foo: 'bar'});
   };
   action.outputs = ['foo'];
-  ctrl.signal('test', action, {
-    foo: [function (args) {
-      test.deepEqual(args, {foo: 'bar'});
-      test.done();
-    }]
-  });
+  var signal = [
+    action, {
+      foo: [function (args) {
+        test.deepEqual(args.input, {foo: 'bar'});
+        test.done();
+      }]
+    }
+  ];
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should be able to define default custom path'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next({foo: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.defaultOutput = 'bar';
   action.outputs = ['foo', 'bar'];
-  ctrl.signal('test', action, {
-    foo: [],
-    bar: [function (args) {
-      test.deepEqual(args, {foo: 'bar'});
-      test.done();
-    }]
-  });
+  var signal = [
+    action, {
+      foo: [],
+      bar: [function (args) {
+        test.deepEqual(args.input, {foo: 'bar'});
+        test.done();
+      }]
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should throw error if paths are missing'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function MyAction (args, state, next) {
-    next({foo: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function MyAction (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = ['foo', 'bar'];
+  var signal = [
+    action
+  ];
+
   test.throws(function () {
-    ctrl.signal('test', action);
+    ctrl.signal('test', signal);
   });
   test.done();
 };
 
 exports['should throw error if outputs as array does not match paths'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next({foo: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = ['foo', 'bar'];
-  test.throws(function () {
-    ctrl.signal('test', action, {
+  var signal = [
+    action, {
       bar: []
-    });
+    }
+  ];
+  test.throws(function () {
+    ctrl.signal('test', signal);
   });
   test.done();
 };
 
 exports['should throw error if outputs as object does not match paths'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next({foo: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = {
     foo: true,
     bar: true
   };
-  test.throws(function () {
-    ctrl.signal('test', action, {
+  var signal = [
+    action, {
       bar: []
-    });
+    }
+  ];
+  test.throws(function () {
+    ctrl.signal('test', signal);
   });
   test.done();
 };
 
 exports['should throw error when output is missing'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next();
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output();
   };
   action.output = {
     foo: String
   };
-  ctrl.signal('test', action, function () {
+  var signal = [
+    action, function () {
 
-  });
+    }
+  ];
+
+  ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };
 
 exports['should throw error when output type is wrong'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next({foo: false});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output({foo: false});
   };
   action.output = {
     foo: String
   };
-  ctrl.signal('test', action, function () {
+  var signal = [
+    action, function () {
 
-  });
+   }
+ ];
+  ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };
 
 exports['should throw when calling next directly with no defaultOutput and outputs defined'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next({foo: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.outputs = {
     foo: {
       bar: String
     }
   };
-  ctrl.signal('test', action, {
-    foo: []
-  });
+  var signal = [
+    action, {
+      foo: []
+    }
+  ];
+
+  ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };
 
 exports['should run when output type is correct'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next({foo: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output({foo: 'bar'});
   };
   action.output = {
     foo: String
   };
-  ctrl.signal('test', action, function () {
+  var signal = [
+    action, function () {
 
-  });
+    }
+  ];
+
+  ctrl.signal('test', signal);
   test.doesNotThrow(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };
 
 exports['should run when outputs type is correct'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
-    next.foo({bar: 'bar'});
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output.foo({bar: 'bar'});
   };
   action.outputs = {
     foo: {
       bar: String
     }
   };
-  ctrl.signal('test', action, {
-    foo: []
-  });
+  var signal = [
+    action, {
+      foo: []
+    }
+  ];
+
+  ctrl.signal('test', signal);
   test.doesNotThrow(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
   });
   test.done();
 };
 
 exports['should pass initial payload on first argument'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function (args) {
-    test.deepEqual(args, {foo: 'bar'});
-    test.done();
-  });
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      test.deepEqual(args.input, {foo: 'bar'});
+      test.done();
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test({foo: 'bar'});
 };
 
-exports['should expose a next method to set new args'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function (args, state, next) {
-    next({
-      result: true
-    });
-  }, function (args) {
-    test.ok(args.result);
-    test.done();
-  });
+exports['should expose a output method to set new args'] = function (test) {
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.output({
+        result: true
+      });
+    }, function (args) {
+      test.ok(args.input.result);
+      test.done();
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should be able to resolve as an async action'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', [function (args, state, next) {
-    async(function () {
-      next({
-        result: true
+  var ctrl = Controller(Model());
+  var signal = [
+    [function (args) {
+      async(function () {
+        args.output({
+          result: true
+        });
       });
-    });
-  }], function (args) {
-    test.ok(args.result);
-    test.done();
+    }], function (args) {
+      test.ok(args.input.result);
+      test.done();
+    }
+  ];
+
+  ctrl.signal('test', signal);
+  ctrl.signals.test();
+};
+
+exports['should trigger change event on individual async action paths'] = function (test) {
+  var ctrl = Controller(Model());
+  var changeCount = 0;
+  var signal = [
+    [function (args) {
+      args.output.success();
+    }, {success: []}, function (args) {
+      args.output.success();
+    }, {success: []}], function () {
+      test.equal(changeCount, 3);
+      test.done();
+    }
+  ];
+
+  ctrl.signal('test', signal);
+  ctrl.on('change', function () {
+    changeCount++;
   });
   ctrl.signals.test();
 };
 
 exports['should be able to resolve to default path success'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function (args, state, next) {
-    next.success({result: true});
-  }, {
-    'success': [function (args) {
-      test.ok(args.result);
-      test.done();
-    }]
-  });
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.output.success({result: true});
+    }, {
+      'success': [function (args) {
+        test.ok(args.input.result);
+        test.done();
+      }]
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should be able to resolve to default path error'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', function (args, state, next) {
-    next.error({result: true});
-  }, {
-    'error': [function (args) {
-      test.ok(args.result);
-      test.done();
-    }]
-  });
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      args.output.error({result: true});
+    }, {
+      'error': [function (args) {
+        test.ok(args.input.result);
+        test.done();
+      }]
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should be able to resolve to default as async action'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', [function (args, state, next) {
-    next.success({result: true});
-  }, {
-    'success': [function (args) {
-      test.ok(args.result);
-      test.done();
+  var ctrl = Controller(Model());
+  var signal = [
+    [function (args) {
+      args.output.success({result: true});
+    }, {
+      'success': [function (args) {
+        test.ok(args.input.result);
+        test.done();
+      }]
     }]
-  }]);
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should expose mutation and a get method, if passed'] = function (test) {
-  var ctrl = Lib.Controller({
-    onGet: function () {},
-    onSet: function () {},
-    onMerge: function () {},
-    onUnset: function () {},
-    onPush: function () {},
-    onPop: function () {},
-    onSplice: function () {},
-    onConcat: function () {},
-    onShift: function () {},
-    onUnshift: function () {}
-  });
-  ctrl.signal('test', function (args, state) {
-    test.ok(typeof state.get === 'function');
-    test.ok(typeof state.set === 'function');
-    test.ok(typeof state.merge === 'function');
-    test.ok(typeof state.unset === 'function');
-    test.ok(typeof state.push === 'function');
-    test.ok(typeof state.pop === 'function');
-    test.ok(typeof state.splice === 'function');
-    test.ok(typeof state.concat === 'function');
-    test.ok(typeof state.shift === 'function');
-    test.ok(typeof state.unshift === 'function');
-    test.done();
-  });
+  var ctrl = Controller(Model());
+  var signal = [
+    function (args) {
+      test.ok(typeof args.state.get === 'function');
+      test.ok(typeof args.state.set === 'function');
+      test.done();
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should handle arrays of actions to run in parallell'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', [function (args, state, next) {
-    next({
-      foo: true
-    });
-  }, function (args, state, next) {
-    next({
-      bar: true
-    });
-  }], function (args) {
-    test.deepEqual(args, {foo: true, bar: true});
-    test.done();
-  });
+  var ctrl = Controller(Model());
+  var signal = [
+    [function (args) {
+      args.output({
+        foo: true
+      });
+    }, function (args) {
+      args.output({
+        bar: true
+      });
+    }], function (args) {
+      test.deepEqual(args.input, {foo: true, bar: true});
+      test.done();
+    }
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
 exports['should handle arrays of actions to resolve to multiple paths'] = function (test) {
-  var ctrl = Lib.Controller();
+  var ctrl = Controller(Model());
   var results = [];
-  ctrl.signal('test', [
-    function (args, state, next) {
-      next.success({
-        foo: true
-      });
-    }, {
-      'success': [function (args) {
-        results.push(args);
-      }],
-    },
-    function (args, state, next) {
-      next.error({
-        bar: true
-      });
-    }, {
-      'error': [function (args) {
-        results.push(args);
-      }]
-    }]
-  );
+  var signal = [
+    [
+      function (args) {
+        args.output.success({
+          foo: true
+        });
+      }, {
+        'success': [function (args) {
+          results.push(args.input);
+        }],
+      },
+      function (args) {
+        args.output.error({
+          bar: true
+        });
+      }, {
+        'error': [function (args) {
+          results.push(args.input);
+        }]
+      }
+    ]
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
   // async trigger of signal
   async(function () {
@@ -344,52 +443,223 @@ exports['should handle arrays of actions to resolve to multiple paths'] = functi
   });
 };
 
-exports['should only have access to the get method when async action'] = function (test) {
-  var ctrl = Lib.Controller();
-  ctrl.signal('test', [function (args, state) {
-    test.deepEqual(Object.keys(state), ['get']);
+exports['should trigger paths when individual async is done'] = function (test) {
+  var ctrl = Controller(Model());
+  var results = [];
+  var signal = [
+    [
+      function (args) {
+        async(function () {
+          args.output.success({
+            value: 'foo'
+          });
+        });
+      }, {
+        'success': [function (args) {
+          results.push(args.input.value);
+        }],
+      },
+      function (args) {
+        args.output.error({
+          value: 'bar'
+        });
+      }, {
+        'error': [function (args) {
+          results.push(args.input.value);
+        }]
+      }
+    ]
+  ];
+
+  ctrl.signal('test', signal);
+  ctrl.once('signalEnd', function () {
+    test.equal(results[0], 'bar');
+    test.equal(results[1], 'foo');
     test.done();
-  }]);
+  });
+  ctrl.signals.test();
+
+};
+
+exports['should wait to resolve top level async array when nested async arrays are running'] = function (test) {
+  var ctrl = Controller(Model());
+  var results = [];
+  var signal = [
+    [
+      function (args) {
+        async(function () {
+          args.output.success({
+            value: 'foo'
+          });
+        });
+      }, {
+        'success': [
+          [
+            function (args) {
+              results.push(args.input.value);
+              args.output();
+            }
+          ]
+        ],
+      }
+    ], function () {
+        results.push('bar');
+      }
+  ];
+  ctrl.signal('test', signal);
+  ctrl.once('signalEnd', function () {
+    test.equal(results[0], 'foo');
+    test.equal(results[1], 'bar');
+    test.done();
+  });
   ctrl.signals.test();
 };
 
-exports['should allow for default args'] = function (test) {
-  var ctrl = Lib.Controller({
-    defaultArgs: {
-      foo: 'bar'
+exports['should throw error when trying to mutate with an async action'] = function (test) {
+  var ctrl = Controller(Model());
+  var signal = [
+    [function (args) {
+      test.throws(function () {
+        args.state.set('foo', 'bar');
+      });
+      test.done();
+    }]
+  ];
+
+  ctrl.signal('test', signal);
+  ctrl.signals.test();
+};
+
+exports['should allow services and have recorder by default'] = function (test) {
+  var ctrl = Controller(Model(), {
+    foo: 'bar'
+  });
+  var signal = [
+    function (args) {
+      test.ok(args.services.foo);
+      test.ok(args.services.recorder);
+      test.done();
     }
-  });
-  ctrl.signal('test', function (args, state) {
-    test.deepEqual(args, {foo: 'bar'});
-    test.done();
-  });
+  ];
+
+  ctrl.signal('test', signal);
   ctrl.signals.test();
 };
 
-exports['should trigger signal synchronously when passing true as first argument'] = function (test) {
-  var ctrl = Lib.Controller();
+exports['should trigger signal synchronously when using sync method'] = function (test) {
+  var ctrl = Controller(Model());
   var hasRun = false;
-  ctrl.signal('test', function () {
-    hasRun = true;
-  });
-  ctrl.signals.test(true);
+  var signal = [
+    function () {
+      hasRun = true;
+    }
+  ];
+
+  ctrl.signal('test', signal);
+  ctrl.signals.test.sync();
+  test.ok(hasRun);
+  test.done();
+};
+
+exports['should trigger signal synchronously when defined as signalSync'] = function (test) {
+  var ctrl = Controller(Model());
+  var hasRun = false;
+  var signal = [
+    function () {
+      hasRun = true;
+    }
+  ];
+
+  ctrl.signalSync('test', signal);
+  ctrl.signals.test();
   test.ok(hasRun);
   test.done();
 };
 
 exports['should throw error when input is defined on action and value is missing or is wrong type'] = function (test) {
-  var ctrl = Lib.Controller();
-  var action = function (args, state, next) {
+  var ctrl = Controller(Model());
+  var action = function () {
 
   };
   action.input = {
     foo: String
   };
-  ctrl.signal('test', function (args, state, next) {
-    next();
-  }, action);
+  var signal = [
+    function (args) {
+      args.output();
+    }, action
+  ];
+
+  ctrl.signal('test', signal);
   test.throws(function () {
-    ctrl.signals.test(true);
+    ctrl.signals.test.sync();
+  });
+  test.done();
+};
+
+exports['should run signal without any actions'] = function (test) {
+  var ctrl = Controller(Model());
+
+  ctrl.signal('test');
+  test.doesNotThrow(function () {
+    ctrl.signals.test.sync();
+  });
+  test.done();
+};
+
+exports['should allow actions to have default input'] = function (test) {
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    test.equal(args.input.foo, 'bar');
+  };
+  action.defaultInput = {
+    foo: 'bar'
+  };
+  var signal = [action];
+
+  ctrl.signal('test', signal);
+  test.expect(1);
+  ctrl.signals.test.sync();
+  test.done();
+};
+
+exports['should allow ASYNC actions to have default input'] = function (test) {
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    test.equal(args.input.foo, 'bar');
+    args.output();
+  };
+  action.defaultInput = {
+    foo: 'bar'
+  };
+  var signal = [
+    [
+      action
+    ]
+  ];
+
+  ctrl.signal('test', signal);
+  test.expect(1);
+  ctrl.once('signalEnd', function () {
+    test.done();
+  });
+  ctrl.signals.test();
+};
+
+exports['should throw error when output path is not an array'] = function (test) {
+  var ctrl = Controller(Model());
+  var action = function (args) {
+    args.output.success();
+  };
+  var signal = [
+    [
+      action, {
+        success: function () {}
+      }
+    ]
+  ];
+  test.throws(function () {
+    ctrl.signal('test', signal);
   });
   test.done();
 };

@@ -1,45 +1,48 @@
 import React from 'react';
-import {Decorator as Cerebral} from './CustomController.js';
+import {Decorator as Cerebral} from 'cerebral-react';
 import AddTodo from './components/AddTodo.js';
 import TodosList from './components/TodosList.js';
 import TodosFooter from './components/TodosFooter.js';
+import visibleTodos from './computed/visibleTodos.js';
 
 @Cerebral({
-  visibleTodos: ['visibleTodos'],
-  todos: ['todos']
+  todos: ['todos'],
+  recorder: ['recorder'],
+  isSaving: ['isSaving'],
+  visibleTodos: visibleTodos
 })
 class App extends React.Component {
   record() {
-    this.props.recorder.record(this.props.get().export());
+    this.props.signals.recordClicked();
   }
   stop() {
-    this.props.recorder.stop();
+    this.props.signals.stopClicked();
   }
   play() {
-    this.props.recorder.seek(0, true);
+    this.props.signals.playClicked();
   }
   render() {
     return (
       <div id="todoapp-wrapper">
         <div>
           {
-            this.props.recorder.isRecording() ?
-            <button className="btn btn-stop" onClick={() => this.stop()}>Stop</button> :
+            this.props.recorder.isRecording && !this.props.recorder.isPlaying ?
+            <button className="btn btn-stop" onClick={() => this.stop()} disabled={this.props.isSaving}>Stop</button> :
             null
           }
           {
-            this.props.recorder.isPlaying() ?
+            this.props.recorder.isPlaying ?
             <button className="btn btn-play" disabled>Play</button> :
             null
           }
           {
-            !this.props.recorder.isRecording() && !this.props.recorder.isPlaying() && this.props.recorder.getRecording() ?
+            !this.props.recorder.isRecording && !this.props.recorder.isPlaying && this.props.recorder.hasRecorded ?
             <button className="btn btn-play" onClick={() => this.play()}>Play</button> :
             null
           }
           {
-            !this.props.recorder.isRecording() && !this.props.recorder.isPlaying() && !this.props.recorder.getRecording() ?
-            <button className="btn btn-record" onClick={() => this.record()}>Record</button> :
+            !this.props.recorder.isRecording && !this.props.recorder.isPlaying && !this.props.recorder.hasRecorded ?
+            <button disabled={this.props.isSaving} className="btn btn-record" onClick={() => this.record()}>Record</button> :
             null
           }
         </div>

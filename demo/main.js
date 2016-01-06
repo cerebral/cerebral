@@ -3,66 +3,53 @@ import './../node_modules/todomvc-app-css/index.css';
 import './styles.css';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './App.js';
 import controller from './controller.js';
-import ReactiveRouter from 'reactive-router';
+import {Container} from 'cerebral-react';
+import CerebralRouter from 'cerebral-router';
 
-// ACTIONS
-import addTodo from './actions/addTodo.js';
-import removeTodo from './actions/removeTodo.js';
-import toggleTodoCompleted from './actions/toggleTodoCompleted.js';
-import setVisibleTodos from './actions/setVisibleTodos.js';
-import setNewTodoTitle from './actions/setNewTodoTitle.js';
-import setAllChecked from './actions/setAllChecked.js';
-import setCounters from './actions/setCounters.js';
-import toggleAllChecked from './actions/toggleAllChecked.js';
-import saveTodo from './actions/saveTodo.js';
-import updateTodo from './actions/updateTodo.js';
-import setFilter from './actions/setFilter.js';
-import clearCompleted from './actions/clearCompleted.js';
-import editTodo from './actions/editTodo.js';
-import setTodoNewTitle from './actions/setTodoNewTitle.js';
-import stopEditingTodo from './actions/stopEditingTodo.js';
-import setUrl from './actions/setUrl.js';
+import allTodosClicked from './signals/allTodosClicked.js';
+import newTodoTitleChanged from './signals/newTodoTitleChanged.js';
+import newTodoSubmitted from './signals/newTodoSubmitted.js';
+import removeTodoClicked from './signals/removeTodoClicked.js';
+import toggleCompletedChanged from './signals/toggleCompletedChanged.js';
+import toggleAllChanged from './signals/toggleAllChanged.js';
+import filterClicked from './signals/filterClicked.js';
+import clearCompletedClicked from './signals/clearCompletedClicked.js';
+import todoDoubleClicked from './signals/todoDoubleClicked.js';
+import newTitleChanged from './signals/newTitleChanged.js';
+import newTitleSubmitted from './signals/newTitleSubmitted.js';
+import recordClicked from './signals/recordClicked.js';
+import playClicked from './signals/playClicked.js';
+import stopClicked from './signals/stopClicked.js';
 
-// SIGNALS
-
-controller.signal('newTodoTitleChanged', setNewTodoTitle);
-controller.signal('newTodoSubmitted',
-  addTodo,
-  setVisibleTodos,
-  setAllChecked,
-  setCounters,
-  [
-    saveTodo, {
-      success: [updateTodo]
-    }
-  ]
-);
-controller.signal('removeTodoClicked', removeTodo, setVisibleTodos, setAllChecked, setCounters);
-controller.signal('toggleCompletedChanged', toggleTodoCompleted, setVisibleTodos, setAllChecked, setCounters);
-controller.signal('toggleAllChanged', toggleAllChecked, setVisibleTodos, setCounters);
-controller.signal('routeChanged', setUrl, setFilter, setVisibleTodos);
-controller.signal('clearCompletedClicked', clearCompleted, setVisibleTodos, setAllChecked, setCounters);
-controller.signal('todoDoubleClicked', editTodo);
-controller.signal('newTitleChanged', setTodoNewTitle);
-controller.signal('newTitleSubmitted', stopEditingTodo);
-
-// RENDER
-React.render(controller.injectInto(App), document.querySelector('#app'));
+controller.signal('allTodosClicked', allTodosClicked);
+controller.signal('newTodoTitleChanged', newTodoTitleChanged);
+controller.signal('newTodoSubmitted', newTodoSubmitted);
+controller.signal('removeTodoClicked', removeTodoClicked);
+controller.signal('toggleCompletedChanged', toggleCompletedChanged);
+controller.signal('toggleAllChanged', toggleAllChanged);
+controller.signal('filterClicked', filterClicked);
+controller.signal('clearCompletedClicked', clearCompletedClicked);
+controller.signal('todoDoubleClicked', todoDoubleClicked);
+controller.signal('newTitleChanged', newTitleChanged);
+controller.signal('newTitleSubmitted', newTitleSubmitted);
+controller.signal('recordClicked', recordClicked);
+controller.signal('playClicked', playClicked);
+controller.signal('stopClicked', stopClicked);
 
 // ROUTER
-const router = ReactiveRouter({
-  '/': controller.signals.routeChanged,
-  '/:filter': controller.signals.routeChanged
+CerebralRouter(controller, {
+  '/': 'allTodosClicked',
+  '/:filter': 'filterClicked'
 }, {
-  hashbang: true
+  onlyHash: true,
+  baseUrl: '/todomvc/'
 });
 
-controller.eventEmitter.on('change', function (state) {
-  router.set(state.url);
-});
-
-controller.eventEmitter.on('remember', function (state) {
-  router.setSilent(state.url);
-});
+// RENDER
+ReactDOM.render(
+  <Container controller={controller}>
+    <App/>
+  </Container>, document.querySelector('#app'));

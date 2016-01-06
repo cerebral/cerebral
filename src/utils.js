@@ -1,3 +1,5 @@
+var types = require('./types.js');
+
 module.exports = {
   getFunctionName: function(fun) {
     var ret = fun.toString();
@@ -36,5 +38,55 @@ module.exports = {
   },
   isAction: function (action) {
     return typeof action === 'function';
+  },
+  isDeveloping: function () {
+    return typeof process === 'undefined' || process.env.NODE_ENV !== 'production';
+  },
+  verifyInput: function (actionName, signalName, input, signalArgs) {
+    Object.keys(input).forEach(function (key) {
+      if (typeof signalArgs[key] === 'undefined' || !types(input[key], signalArgs[key])) {
+        throw new Error([
+          'Cerebral: You are giving the wrong input to the action "' +
+          actionName + '" ' +
+          'in signal "' + signalName + '". Check the following prop: "' + key + '"'
+        ].join(''));
+      }
+    });
+  },
+  extractMatchingPathFunctions: function (source, target) {
+
+    var incompatible = false;
+    var traverse = function (obj, currentTarget, path, results) {
+
+      if (incompatible) {
+        return incompatible;
+      }
+
+      if (typeof obj === 'function') {
+
+        results[path.join('.')] = obj;
+
+      } else if (typeof obj === 'object' && !Array.isArray(obj) && obj !== null) {
+
+        for (var key in obj) {
+          if (!(key in currentTarget)) {
+
+            return incompatible = path.slice().concat(key);
+
+          } else {
+
+            path.push(key);
+            traverse(obj[key], currentTarget[key], path, results);
+            path.pop(key);
+
+          }
+        }
+      }
+      return incompatible || results;
+
+    };
+
+    return traverse(source, target, [], {});
+
   }
 };

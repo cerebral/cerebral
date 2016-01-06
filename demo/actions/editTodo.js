@@ -1,6 +1,6 @@
-function editTodo (args, state) {
+function editTodo ({input, state}) {
 
-  const path = ['todos', args.ref];
+  const path = ['todos', input.ref];
   let todo = state.get(path);
 
   state.merge(path, {
