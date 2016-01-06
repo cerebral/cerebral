@@ -1,25 +1,32 @@
 import React from 'react';
 import {Decorator as Cerebral} from 'cerebral-react';
-import AddTodo from './components/AddTodo.js';
-import TodosList from './components/TodosList.js';
-import TodosFooter from './components/TodosFooter.js';
-import visibleTodos from './computed/visibleTodos.js';
+import NewTodoForm from './modules/NewTodo/components/NewTodo';
+import TodosList from './modules/List/components/List';
+import TodosFooter from './modules/Footer/components/Footer';
+import visibleTodos from './modules/List/computed/visibleTodos.js';
 
 @Cerebral({
-  todos: ['todos'],
+  todos: ['list', 'todos'],
   recorder: ['recorder'],
-  isSaving: ['isSaving'],
+  isSaving: ['new', 'isSaving'],
   visibleTodos: visibleTodos
 })
 class App extends React.Component {
   record() {
-    this.props.signals.recordClicked();
+    this.props.signals.recorder.recorded({
+      paths: [
+        ['new'],
+        ['list'],
+        ['footer'],
+        ['refs']
+      ]
+    });
   }
   stop() {
-    this.props.signals.stopClicked();
+    this.props.signals.recorder.stopped();
   }
   play() {
-    this.props.signals.playClicked();
+    this.props.signals.recorder.played();
   }
   render() {
     return (
@@ -49,7 +56,7 @@ class App extends React.Component {
         <section id="todoapp">
           <header id="header">
             <h1>todos</h1>
-            <AddTodo/>
+            <NewTodoForm/>
           </header>
 
           {this.props.visibleTodos.length ? <TodosList/> : null}

@@ -111,18 +111,23 @@ module.exports = function (signalStore, signalMethods, controller, model) {
         this.resetState();
       }
 
-      var state = model.accessors.export && model.accessors.export();
-      var path = options.path || [];
-      var traversePath = path.slice();
-      while (traversePath.length) {
-        state = state[traversePath.shift()];
-      }
+      var allState = model.accessors.export();
+      var paths = options.paths || [];
+      var state = paths.reduce(function (state, path) {
+        var traversePath = path.slice();
+        var traverseState = allState;
+        while (traversePath.length) {
+          var key = traversePath.shift();
+          state[key] = traversePath.length ? {} : traverseState[key];
+          traverseState = traverseState[key];
+        }
+        return state;
+      }, {});
 
       currentRecording = {
         initialState: state,
         start: Date.now(),
-        signals: [],
-        path: path
+        signals: []
       };
 
       isRecording = true;

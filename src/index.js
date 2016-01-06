@@ -6,7 +6,7 @@ var Devtools = require('./Devtools.js');
 var Compute = require('./Compute.js');
 var EventEmitter = require('events').EventEmitter;
 
-var Controller = function (Model, services) {
+var Controller = function (Model) {
 
   var controller = new EventEmitter();
   var model = Model(controller);
@@ -14,15 +14,15 @@ var Controller = function (Model, services) {
   var signals = {};
   var devtools = null;
   var signalStore = CreateSignalStore(signals, controller);
-
-  services = services || {};
+  var services = {};
+  var modules = {};
 
   if (typeof window !== 'undefined' && typeof window.addEventListener !== 'undefined') {
     devtools = Devtools(signalStore, controller);
   }
 
   var recorder = CreateRecorder(signalStore, signals, controller, model);
-  var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, controller, model, services, compute);
+  var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, controller, model, services, compute, modules);
   var signal = function () {
     var signalNamePath = arguments[0].split('.');
     var signalName = signalNamePath.pop();
@@ -40,8 +40,9 @@ var Controller = function (Model, services) {
     defaultOptions.isSync = true;
     return signal.apply(null, [arguments[0], arguments[1], defaultOptions])
   }
-  controller.services = services;
+
   controller.signals = signals;
+  controller.services = services;
   controller.store = signalStore;
   controller.recorder = recorder;
   controller.get = function () {
@@ -52,10 +53,10 @@ var Controller = function (Model, services) {
     return model.accessors.get(path);
   };
   controller.devtools = devtools;
-  services.recorder = recorder;
+  controller.recorder = recorder;
 
-  controller.modules = {};
-  controller.register = CreateRegisterModules(controller);
+  controller.modules = modules;
+  controller.registerModules = CreateRegisterModules(controller, model);
 
   return controller;
 };

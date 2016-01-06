@@ -11,7 +11,7 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0);
 };
 
-module.exports = function (signalStore, recorder, devtools, controller, model, services, compute) {
+module.exports = function (signalStore, recorder, devtools, controller, model, services, compute, modules) {
 
   return function () {
 
@@ -174,7 +174,9 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   input: actionArgs[0],
                   state: actionArgs[1],
                   output: next.fn,
-                  services: services
+                  services: services,
+                  modules: modules,
+                  module: defaultOptions.module
                 });
 
                 return next.promise.then(function (result) {
@@ -255,7 +257,9 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 input: actionArgs[0],
                 state: actionArgs[1],
                 output: next,
-                services: services
+                services: services,
+                modules: modules,
+                module: defaultOptions.module
               });
 
               // TODO: Also add input here
