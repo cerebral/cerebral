@@ -1,7 +1,8 @@
-# Cerebral [![Build Status](https://travis-ci.org/cerebral/cerebral.svg?branch=master)](https://travis-ci.org/cerebral/cerebral)
+# Cerebral
 A state controller with its own debugger
 
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/cerebral/cerebral?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Discord](https://img.shields.io/badge/discord-join%20chat-blue.svg?style=flat-square)](https://discord.gg/0kIweV4bd2bwwsvH)
+[![Build Status](https://img.shields.io/travis/cerebral/cerebral/master.svg?style=flat-square)](https://travis-ci.org/cerebral/cerebral)
 
 <img src="images/logo.png" width="300" align="center">
 
