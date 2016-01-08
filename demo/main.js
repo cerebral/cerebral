@@ -4,48 +4,31 @@ import './styles.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.js';
-import controller from './controller.js';
+import Controller from './../src/index.js';
+import Model from 'cerebral-baobab';
 import {Container} from 'cerebral-react';
-import CerebralRouter from 'cerebral-router';
 
-import allTodosClicked from './signals/allTodosClicked.js';
-import newTodoTitleChanged from './signals/newTodoTitleChanged.js';
-import newTodoSubmitted from './signals/newTodoSubmitted.js';
-import removeTodoClicked from './signals/removeTodoClicked.js';
-import toggleCompletedChanged from './signals/toggleCompletedChanged.js';
-import toggleAllChanged from './signals/toggleAllChanged.js';
-import filterClicked from './signals/filterClicked.js';
-import clearCompletedClicked from './signals/clearCompletedClicked.js';
-import todoDoubleClicked from './signals/todoDoubleClicked.js';
-import newTitleChanged from './signals/newTitleChanged.js';
-import newTitleSubmitted from './signals/newTitleSubmitted.js';
-import recordClicked from './signals/recordClicked.js';
-import playClicked from './signals/playClicked.js';
-import stopClicked from './signals/stopClicked.js';
+import App from './modules/App/components/App';
+import AppModule from './modules/App';
 
-controller.signal('allTodosClicked', allTodosClicked);
-controller.signal('newTodoTitleChanged', newTodoTitleChanged);
-controller.signal('newTodoSubmitted', newTodoSubmitted);
-controller.signal('removeTodoClicked', removeTodoClicked);
-controller.signal('toggleCompletedChanged', toggleCompletedChanged);
-controller.signal('toggleAllChanged', toggleAllChanged);
-controller.signal('filterClicked', filterClicked);
-controller.signal('clearCompletedClicked', clearCompletedClicked);
-controller.signal('todoDoubleClicked', todoDoubleClicked);
-controller.signal('newTitleChanged', newTitleChanged);
-controller.signal('newTitleSubmitted', newTitleSubmitted);
-controller.signal('recordClicked', recordClicked);
-controller.signal('playClicked', playClicked);
-controller.signal('stopClicked', stopClicked);
+import Refs from './modules/Refs';
+import Recorder from 'cerebral-module-recorder';
+import Router from './modules/Router';
 
-// ROUTER
-CerebralRouter(controller, {
-  '/': 'allTodosClicked',
-  '/:filter': 'filterClicked'
-}, {
-  onlyHash: true,
-  baseUrl: '/todomvc/'
+const controller = Controller(Model({}));
+
+controller.registerModules({
+  app: AppModule(),
+
+  refs: Refs(),
+  recorder: Recorder(),
+  router: Router({
+    '/': 'app.footer.allTodosClicked',
+    '/:filter': 'app.footer.filterClicked'
+  }, {
+    onlyHash: true,
+    baseUrl: '/todomvc/'
+  })
 });
 
 // RENDER

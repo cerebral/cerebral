@@ -4,6 +4,7 @@ var createNext = require('./createNext.js');
 var analyze = require('./analyze.js');
 var staticTree = require('./staticTree');
 var types = require('./types.js');
+var createModulesArg = require('./createModulesArg.js');
 
 var batchedSignals = [];
 var pending = false;
@@ -11,13 +12,14 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0);
 };
 
-module.exports = function (signalStore, recorder, devtools, controller, model, services, compute) {
+module.exports = function (signalStore, recorder, devtools, controller, model, services, compute, modules) {
 
   return function () {
 
     var args = [].slice.call(arguments);
     var signalName = args.shift();
     var defaultOptions = args[1] || {};
+    defaultOptions.modulePath = defaultOptions.modulePath || [];
 
     var chain = args[0] || [];
 
@@ -170,11 +172,16 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                 action.isExecuting = true;
                 action.input = utils.merge({}, inputArg);
                 var next = createNext.async(actionFunc);
+                var modulesArg = createModulesArg(modules, actionArgs[1], services);
                 actionFunc.call(null, {
                   input: actionArgs[0],
                   state: actionArgs[1],
                   output: next.fn,
-                  services: services
+                  services: services,
+                  modules: modulesArg,
+                  module: defaultOptions.modulePath.reduce(function (modules, key) {
+                    return modules[key];
+                  }, modulesArg)
                 });
 
                 return next.promise.then(function (result) {
@@ -251,11 +258,16 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
               action.input = utils.merge({}, inputArg);
 
               var next = createNext.sync(actionFunc, signal.name);
+              var modulesArg = createModulesArg(modules, actionArgs[1], services);
               actionFunc.call(null, {
                 input: actionArgs[0],
                 state: actionArgs[1],
                 output: next,
-                services: services
+                services: services,
+                modules: modulesArg,
+                module: defaultOptions.modulePath.reduce(function (exportedModule, key) {
+                  return exportedModule[key];
+                }, modulesArg)
               });
 
               // TODO: Also add input here

@@ -128,7 +128,7 @@ module.exports = function (signalStore, controller) {
   });
 
   window.addEventListener('cerebral.dev.logModel', function (event) {
-    console.log('CEREBRAL - model:', controller.get());
+    console.log('CEREBRAL - model:', controller.logModel());
   });
 
   window.addEventListener('unload', function () {

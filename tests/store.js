@@ -206,6 +206,9 @@ exports['should be able to remember previous signal'] = function (test) {
           set: function (path, value) {
             state = {};
             state[path.pop()] = value;
+          },
+          merge: function (path, value) {
+            state = {};
           }
         }
       };
@@ -255,6 +258,9 @@ exports['should be able to remember async actions and run them synchronously whe
           set: function (path, value) {
             state = {};
             state[path.pop()] = value;
+          },
+          merge: function (path, value) {
+            state = {};
           }
         }
       }
