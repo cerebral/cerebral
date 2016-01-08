@@ -12,19 +12,10 @@ import App from './modules/App/components/App';
 import AppModule from './modules/App';
 
 import Refs from './modules/Refs';
-import Recorder from './modules/Recorder';
+import Recorder from 'cerebral-module-recorder';
 import Router from './modules/Router';
 
-const controller = Controller(Model({
-  test: Model.monkey({
-    cursors: {
-      app: ['app']
-    },
-    get() {
-      return 'foo';
-    }
-  })
-}));
+const controller = Controller(Model({}));
 
 controller.registerModules({
   app: AppModule(),

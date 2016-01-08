@@ -1,5 +1,6 @@
 import React from 'react';
 import {Decorator as Cerebral} from 'cerebral-react';
+import SimpleRecorder from 'cerebral-module-recorder/react/SimpleRecorder';
 import NewTodoForm from '../../modules/NewTodo/components/NewTodo';
 import TodosList from '../../modules/List/components/List';
 import TodosFooter from '../../modules/Footer/components/Footer';
@@ -30,26 +31,7 @@ class App extends React.Component {
     return (
       <div id="todoapp-wrapper">
         <div>
-          {
-            this.props.recorder.isRecording && !this.props.recorder.isPlaying ?
-            <button className="btn btn-stop" onClick={() => this.stop()} disabled={this.props.isSaving}>Stop</button> :
-            null
-          }
-          {
-            this.props.recorder.isPlaying ?
-            <button className="btn btn-play" disabled>Play</button> :
-            null
-          }
-          {
-            !this.props.recorder.isRecording && !this.props.recorder.isPlaying && this.props.recorder.hasRecorded ?
-            <button className="btn btn-play" onClick={() => this.play()}>Play</button> :
-            null
-          }
-          {
-            !this.props.recorder.isRecording && !this.props.recorder.isPlaying && !this.props.recorder.hasRecorded ?
-            <button disabled={this.props.isSaving} className="btn btn-record" onClick={() => this.record()}>Record</button> :
-            null
-          }
+          <SimpleRecorder/>
         </div>
         <section id="todoapp">
           <header id="header">
