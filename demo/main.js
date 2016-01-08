@@ -4,31 +4,36 @@ import './styles.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App.js';
 import Controller from './../src/index.js';
 import Model from 'cerebral-baobab';
 import {Container} from 'cerebral-react';
 
-import NewTodo from './modules/NewTodo';
-import List from './modules/List';
-import Footer from './modules/Footer';
+import App from './modules/App/components/App';
+import AppModule from './modules/App';
 
 import Refs from './modules/Refs';
 import Recorder from './modules/Recorder';
 import Router from './modules/Router';
 
-const controller = Controller(Model({}));
+const controller = Controller(Model({
+  test: Model.monkey({
+    cursors: {
+      app: ['app']
+    },
+    get() {
+      return 'foo';
+    }
+  })
+}));
 
 controller.registerModules({
-  new: NewTodo(),
-  list: List(),
-  footer: Footer(),
+  app: AppModule(),
 
   refs: Refs(),
   recorder: Recorder(),
   router: Router({
-    '/': 'footer.allTodosClicked',
-    '/:filter': 'footer.filterClicked'
+    '/': 'app.footer.allTodosClicked',
+    '/:filter': 'app.footer.filterClicked'
   }, {
     onlyHash: true,
     baseUrl: '/todomvc/'

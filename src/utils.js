@@ -88,5 +88,18 @@ module.exports = {
 
     return traverse(source, target, [], {});
 
+  },
+  setDeep: function (object, stringPath, value) {
+    var path = stringPath.split('.');
+    var setKey = path.pop();
+    while (path.length) {
+      var key = path.shift();
+      object = object[key] = object[key] || {};
+    }
+    object[setKey] = object[setKey] ? Object.keys(object[setKey]).reduce(function (value, key) {
+      value[key] = object[setKey][key];
+      return value;
+    }, value) : value;
+    return value;
   }
 };

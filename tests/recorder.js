@@ -54,12 +54,15 @@ exports['should play back recording'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, currentRecording) {
-        state = currentRecording.initialState;
+      controller.on('seek', function (seek, recording) {
+        state = initialState;
       });
       return {
         accessors: {
-          export: function () {
+          get: function () {
+            return state;
+          },
+          merge: function () {
             return state;
           }
         },
@@ -91,7 +94,12 @@ exports['should play back recording'] = function (test) {
     setTimeout(function () {
       ctrl.recorder.stop();
       setTimeout(function () {
+        try{
         ctrl.recorder.seek(0);
+      } catch (e) {
+        console.log(e.stack);
+      }
+
         ctrl.recorder.play();
         test.deepEqual(state, {});
         setTimeout(function () {
@@ -111,12 +119,15 @@ exports['should seek to specific point in recording'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, currentRecording) {
-        state = currentRecording.initialState;
+      controller.on('seek', function (seek, recording) {
+        state = initialState;
       });
       return {
         accessors: {
-          export: function () {
+          get: function () {
+            return state;
+          },
+          merge: function () {
             return state;
           }
         },
@@ -163,12 +174,15 @@ exports['should pause a playback'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, currentRecording) {
-        state = currentRecording.initialState;
+      controller.on('seek', function (seek, recording) {
+        state = initialState;
       });
       return {
         accessors: {
-          export: function () {
+          get: function () {
+            return state;
+          },
+          merge: function () {
             return state;
           }
         },
@@ -227,12 +241,15 @@ exports['should resume a paused playback'] = function (test) {
   var state = initialState;
   var Model = function () {
     return function (controller) {
-      controller.on('seek', function (seek, currentRecording) {
-        state = currentRecording.initialState;
+      controller.on('seek', function (seek, recording) {
+        state = initialState;
       });
       return {
         accessors: {
-          export: function () {
+          get: function () {
+            return state;
+          },
+          merge: function () {
             return state;
           }
         },

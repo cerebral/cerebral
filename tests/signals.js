@@ -530,14 +530,13 @@ exports['should throw error when trying to mutate with an async action'] = funct
   ctrl.signals.test();
 };
 
-exports['should allow services and have recorder by default'] = function (test) {
+exports['should allow services'] = function (test) {
   var ctrl = Controller(Model(), {
     foo: 'bar'
   });
   var signal = [
     function (args) {
       test.ok(args.services.foo);
-      test.ok(args.services.recorder);
       test.done();
     }
   ];

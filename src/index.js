@@ -6,7 +6,7 @@ var Devtools = require('./Devtools.js');
 var Compute = require('./Compute.js');
 var EventEmitter = require('events').EventEmitter;
 
-var Controller = function (Model) {
+var Controller = function (Model, services) {
 
   var controller = new EventEmitter();
   var model = Model(controller);
@@ -14,8 +14,8 @@ var Controller = function (Model) {
   var signals = {};
   var devtools = null;
   var signalStore = CreateSignalStore(signals, controller);
-  var services = {};
   var modules = {};
+  services = services || {};
 
   if (typeof window !== 'undefined' && typeof window.addEventListener !== 'undefined') {
     devtools = Devtools(signalStore, controller);
@@ -53,6 +53,9 @@ var Controller = function (Model) {
     return model.accessors.get(path);
   };
   controller.devtools = devtools;
+  controller.logModel = function () {
+    return model.logModel();
+  };
   controller.recorder = recorder;
 
   controller.modules = modules;
