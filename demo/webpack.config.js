@@ -6,7 +6,7 @@ var config = {
   entry: path.resolve(__dirname, 'main.js'),
   devtool: TARGET === 'demo'? 'eval-source-map' : 'source-map',
   output: {
-    path: path.resolve(__dirname),
+    path: path.resolve(__dirname, '..', 'demo_dist'),
     filename: 'todomvc.js'
   },
   module: {

@@ -9,8 +9,14 @@ export default (options = {}) => {
       isSaving: false
     });
 
-    module.signal('submitted', submitted);
-    module.signalSync('titleChanged', titleChanged);
+    module.signalsSync({
+      titleChanged
+    });
+    
+    module.signals({
+      submitted
+    });
+
 
   };
 }

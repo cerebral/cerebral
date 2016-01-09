@@ -8,6 +8,10 @@ var EventEmitter = require('events').EventEmitter;
 
 var Controller = function (Model, services) {
 
+  if (services) {
+    console.warn('Passing services to controller is DEPRECATED. Please add them to controller with controller.services({})');
+  }
+
   var controller = new EventEmitter();
   var model = Model(controller);
   var compute = Compute(model);
@@ -33,18 +37,40 @@ var Controller = function (Model, services) {
     }
     return signalMethodPath[signalName] = signalFactory.apply(null, arguments);
   };
+  var service = function (name, service) {
+    var serviceNamePath = name.split('.');
+    var serviceName = serviceNamePath.pop();
+    var serviceMethodPath = services;
+    while (serviceNamePath.length) {
+      var pathName = serviceNamePath.shift();
+      serviceMethodPath = serviceMethodPath[pathName] = serviceMethodPath[pathName] || {};
+    }
+    return serviceMethodPath[serviceName] = service;
+  };
 
-  controller.signal = signal;
+  controller.signal = function () {
+    console.warn('This method is deprecated, use controller.signals() instead');
+    signal.apply(null, arguments);
+  };
   controller.signalSync = function () {
+    console.warn('This method is deprecated, use controller.signals() instead');
     var defaultOptions = arguments[2] || {};
     defaultOptions.isSync = true;
     return signal.apply(null, [arguments[0], arguments[1], defaultOptions])
-  }
+  };
 
-  controller.signals = signals;
-  controller.services = services;
-  controller.store = signalStore;
-  controller.recorder = recorder;
+  controller.getSignals = function () {
+    return signals;
+  };
+  controller.getServices = function () {
+    return services;
+  };
+  controller.getStore = function () {
+    return signalStore;
+  };
+  controller.getRecorder = function () {
+    return recorder;
+  };
   controller.get = function () {
     if (typeof arguments[0] === 'function') {
       return compute.has(arguments[0]) ? compute.getComputedValue(arguments[0]) : compute.register(arguments[0]);
@@ -52,14 +78,35 @@ var Controller = function (Model, services) {
     var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0];
     return model.accessors.get(path);
   };
-  controller.devtools = devtools;
+  controller.getDevtools = function () {
+    return devtools;
+  };
   controller.logModel = function () {
     return model.logModel();
   };
-  controller.recorder = recorder;
+  controller.getModules = function () {
+    return modules;
+  };
 
-  controller.modules = modules;
-  controller.registerModules = CreateRegisterModules(controller, model);
+  controller.modules = CreateRegisterModules(controller, model, modules);
+  controller.signals = function (signals, options) {
+    Object.keys(signals).forEach(function (key) {
+      signal(key, signals[key], options);
+    });
+  };
+  controller.signalsSync = function (signals, options) {
+    Object.keys(signals).forEach(function (key) {
+      options = options || {};
+      options.isSync = true;
+      signal.call(null, key, signals[key], options);
+    });
+  };
+  controller.services = function (newServices) {
+    Object.keys(newServices).forEach(function (key) {
+      service(key, newServices[key]);
+    });
+    return controller.getServices();
+  };
 
   return controller;
 };

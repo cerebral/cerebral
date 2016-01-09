@@ -6,14 +6,14 @@ export default (options = {}) => {
   return (module) => {
 
     module.state({
-      filter: 'all',
-      remainingCount: 0,
-      completedCount: 0
+      filter: 'all'
     });
 
-    module.signal('allTodosClicked', allTodosClicked);
-    module.signalSync('clearCompletedClicked', clearCompletedClicked);
-    module.signalSync('filterClicked', filterClicked);
+    module.signals({
+      allTodosClicked,
+      clearCompletedClicked,
+      filterClicked
+    });
 
   };
 }

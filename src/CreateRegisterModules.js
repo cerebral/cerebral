@@ -1,23 +1,36 @@
 var utils = require('./utils.js');
 
-module.exports = function (controller, model) {
+module.exports = function (controller, model, allModules) {
 
   var initialState = {};
 
-  var registerSignal = function (moduleName, name, chain) {
-    return controller.signal(moduleName + '.' + name, chain, {
+  var registerSignals = function (moduleName, signals) {
+    var scopedSignals = Object.keys(signals).reduce(function (scopedSignals, key) {
+      scopedSignals[moduleName + '.' + key] = signals[key];
+      return scopedSignals;
+    }, {});
+
+    return controller.signals(scopedSignals, {
       modulePath: moduleName.split('.')
     });
   };
 
-  var registerSignalSync = function (moduleName, name, chain) {
-    return controller.signalSync(moduleName + '.' + name, chain, {
+  var registerSignalsSync = function (moduleName, signals) {
+    var scopedSignals = Object.keys(signals).reduce(function (scopedSignals, key) {
+      scopedSignals[moduleName + '.' + key] = signals[key];
+      return scopedSignals;
+    }, {});
+    return controller.signalsSync(scopedSignals, {
       modulePath: moduleName.split('.')
     });
   };
 
-  var registerService = function (moduleName, name, service) {
-    utils.setDeep(controller.services, moduleName + '.' + name, service);
+  var registerServices = function (moduleName, services) {
+    var scopedServices = Object.keys(services).reduce(function (scopedServices, key) {
+      scopedServices[moduleName + '.' + key] = services[key];
+      return scopedServices;
+    }, {});
+    controller.services(scopedServices);
   };
 
   var registerInitialState = function (moduleName, state) {
@@ -48,23 +61,25 @@ module.exports = function (controller, model) {
       var module = {
         name: moduleName,
         alias: function (alias) {
-          controller.modules[alias] = moduleExport;
+          allModules[alias] = moduleExport;
         },
-        signal: registerSignal.bind(null, moduleName),
-        signalSync: registerSignalSync.bind(null, moduleName),
-        service: registerService.bind(null, moduleName),
+        signals: registerSignals.bind(null, moduleName),
+        signalsSync: registerSignalsSync.bind(null, moduleName),
+        services: registerServices.bind(null, moduleName),
         state: registerInitialState.bind(null, moduleName),
-        signals: signals,
-        registerModules: registerModules.bind(null, moduleName)
+        getSignals: function () {
+          return signals;
+        },
+        modules: registerModules.bind(null, moduleName)
       };
       var constructedModule = moduleConstructor(module, controller);
 
-      controller.modules[moduleName] = Object.keys(constructedModule || {}).reduce(function (module, key) {
+      allModules[moduleName] = Object.keys(constructedModule || {}).reduce(function (module, key) {
         module[key] = constructedModule[key];
         return module;
       }, moduleExport);
 
     });
-    return controller.modules;
+    return allModules;
   };
 };

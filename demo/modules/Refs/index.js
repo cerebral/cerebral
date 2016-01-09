@@ -7,10 +7,12 @@ export default (options = {}) => {
       nextRef: 0
     });
 
-    module.service('next', (state) => {
-      const nextId = state.get([module.name, 'nextRef']);
-      state.set([module.name, 'nextRef'], nextId + 1);
-      return nextId;
+    module.services({
+      next(state) {
+        const nextId = state.get([module.name, 'nextRef']);
+        state.set([module.name, 'nextRef'], nextId + 1);
+        return nextId;
+      }
     });
 
   };

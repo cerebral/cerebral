@@ -53,7 +53,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
       // When remembering, the branches with filled out values will be
       // passed
       var branches = options.branches || tree.branches;
-
       var runSignal = function () {
 
         // Accumulate the args in one object that will be passed

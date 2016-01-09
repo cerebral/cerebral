@@ -17,12 +17,17 @@ export default (options = {}) => {
       showNotCompleted: true
     });
 
-    module.signalSync('newTitleChanged', newTitleChanged);
-    module.signal('newTitleSubmitted', newTitleSubmitted);
-    module.signal('removeTodoClicked', removeTodoClicked);
-    module.signal('todoDoubleClicked', todoDoubleClicked);
-    module.signal('toggleAllChanged', toggleAllChanged);
-    module.signal('toggleCompletedChanged', toggleCompletedChanged);
+    module.signalsSync({
+      newTitleChanged
+    });
+
+    module.signals({
+      newTitleSubmitted,
+      removeTodoClicked,
+      todoDoubleClicked,
+      toggleAllChanged,
+      toggleCompletedChanged
+    });
 
   };
 }

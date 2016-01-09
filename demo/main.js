@@ -15,9 +15,9 @@ import Refs from './modules/Refs';
 import Recorder from 'cerebral-module-recorder';
 import Router from './modules/Router';
 
-const controller = Controller(Model({}));
+const controller = Controller(Model({}), {});
 
-controller.registerModules({
+controller.modules({
   app: AppModule(),
 
   refs: Refs(),
