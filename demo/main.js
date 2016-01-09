@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import Controller from './../src/index.js';
 import Model from 'cerebral-baobab';
-import {Container} from 'cerebral-react';
+import {Container} from 'cerebral-view-react';
 
 import App from './modules/App/components/App';
 import AppModule from './modules/App';

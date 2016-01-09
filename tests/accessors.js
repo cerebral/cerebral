@@ -26,9 +26,11 @@ exports['should call accessor methods added'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.expect(2)
-  ctrl.signals.test.sync();
+  ctrl.getSignals().test.sync();
   test.done()
 };
 
@@ -55,9 +57,11 @@ exports['should have a path as first argument'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.expect(3)
-  ctrl.signals.test.sync();
+  ctrl.getSignals().test.sync();
   test.done()
 };
 
@@ -83,9 +87,11 @@ exports['should receive the rest of the arguments'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.expect(2);
-  ctrl.signals.test.sync();
+  ctrl.getSignals().test.sync();
   test.done()
 };
 
@@ -111,8 +117,10 @@ exports['should allow dot notation'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.expect(2);
-  ctrl.signals.test.sync();
+  ctrl.getSignals().test.sync();
   test.done()
 };

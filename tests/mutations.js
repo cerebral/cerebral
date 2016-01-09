@@ -25,7 +25,9 @@ exports['should give correct path and value to mutation methods'] = function (te
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test.sync();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test.sync();
   test.done()
 };

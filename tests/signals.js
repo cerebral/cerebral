@@ -22,27 +22,31 @@ var Model = function (state) {
 
 exports['should register signals'] = function (test) {
   var ctrl = Controller(Model());
-  var signal = ctrl.signal('test');
-  test.ok(typeof ctrl.signals.test === 'function');
-  test.ok(signal);
-  test.equal(signal.signalName, 'test');
+  ctrl.signals({
+    'test': []
+  });
+  test.ok(typeof ctrl.getSignals().test === 'function');
   test.done();
 };
 
 exports['should allow namespaced signals'] = function (test) {
   var ctrl = Controller(Model());
-  ctrl.signal('foo.bar');
-  test.ok(typeof ctrl.signals.foo.bar === 'function');
+  ctrl.signals({
+    'foo.bar': []
+  });
+  test.ok(typeof ctrl.getSignals().foo.bar === 'function');
   test.done();
 };
 
 exports['should trigger an action when run'] = function (test) {
   var ctrl = Controller(Model());
-  ctrl.signal('test', [function () {
-    test.ok(true);
-    test.done();
-  }]);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': [function () {
+      test.ok(true);
+      test.done();
+    }]
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should be able to define custom outputs as arrays'] = function (test) {
@@ -59,8 +63,10 @@ exports['should be able to define custom outputs as arrays'] = function (test) {
       }]
     }
   ];
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should be able to define default custom path'] = function (test) {
@@ -80,8 +86,10 @@ exports['should be able to define default custom path'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should throw error if paths are missing'] = function (test) {
@@ -95,7 +103,9 @@ exports['should throw error if paths are missing'] = function (test) {
   ];
 
   test.throws(function () {
-    ctrl.signal('test', signal);
+    ctrl.signals({
+      'test': signal
+    });
   });
   test.done();
 };
@@ -112,7 +122,9 @@ exports['should throw error if outputs as array does not match paths'] = functio
     }
   ];
   test.throws(function () {
-    ctrl.signal('test', signal);
+    ctrl.signals({
+      'test': signal
+    });
   });
   test.done();
 };
@@ -132,7 +144,9 @@ exports['should throw error if outputs as object does not match paths'] = functi
     }
   ];
   test.throws(function () {
-    ctrl.signal('test', signal);
+    ctrl.signals({
+      'test': signal
+    });
   });
   test.done();
 };
@@ -151,9 +165,11 @@ exports['should throw error when output is missing'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.throws(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -171,9 +187,11 @@ exports['should throw error when output type is wrong'] = function (test) {
 
    }
  ];
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.throws(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -194,9 +212,11 @@ exports['should throw when calling next directly with no defaultOutput and outpu
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.throws(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -215,9 +235,11 @@ exports['should run when output type is correct'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.doesNotThrow(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -238,9 +260,11 @@ exports['should run when outputs type is correct'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.doesNotThrow(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -254,8 +278,10 @@ exports['should pass initial payload on first argument'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test({foo: 'bar'});
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test({foo: 'bar'});
 };
 
 exports['should expose a output method to set new args'] = function (test) {
@@ -271,8 +297,10 @@ exports['should expose a output method to set new args'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should be able to resolve as an async action'] = function (test) {
@@ -290,8 +318,10 @@ exports['should be able to resolve as an async action'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should trigger change event on individual async action paths'] = function (test) {
@@ -308,11 +338,13 @@ exports['should trigger change event on individual async action paths'] = functi
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   ctrl.on('change', function () {
     changeCount++;
   });
-  ctrl.signals.test();
+  ctrl.getSignals().test();
 };
 
 exports['should be able to resolve to default path success'] = function (test) {
@@ -328,8 +360,10 @@ exports['should be able to resolve to default path success'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should be able to resolve to default path error'] = function (test) {
@@ -345,8 +379,10 @@ exports['should be able to resolve to default path error'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should be able to resolve to default as async action'] = function (test) {
@@ -362,8 +398,10 @@ exports['should be able to resolve to default as async action'] = function (test
     }]
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should expose mutation and a get method, if passed'] = function (test) {
@@ -376,8 +414,10 @@ exports['should expose mutation and a get method, if passed'] = function (test) 
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should handle arrays of actions to run in parallell'] = function (test) {
@@ -397,8 +437,10 @@ exports['should handle arrays of actions to run in parallell'] = function (test)
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should handle arrays of actions to resolve to multiple paths'] = function (test) {
@@ -427,8 +469,10 @@ exports['should handle arrays of actions to resolve to multiple paths'] = functi
     ]
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
   // async trigger of signal
   async(function () {
     // async signals resolve
@@ -471,13 +515,15 @@ exports['should trigger paths when individual async is done'] = function (test) 
     ]
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   ctrl.once('signalEnd', function () {
     test.equal(results[0], 'bar');
     test.equal(results[1], 'foo');
     test.done();
   });
-  ctrl.signals.test();
+  ctrl.getSignals().test();
 
 };
 
@@ -506,13 +552,15 @@ exports['should wait to resolve top level async array when nested async arrays a
         results.push('bar');
       }
   ];
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   ctrl.once('signalEnd', function () {
     test.equal(results[0], 'foo');
     test.equal(results[1], 'bar');
     test.done();
   });
-  ctrl.signals.test();
+  ctrl.getSignals().test();
 };
 
 exports['should throw error when trying to mutate with an async action'] = function (test) {
@@ -526,14 +574,14 @@ exports['should throw error when trying to mutate with an async action'] = funct
     }]
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should allow services'] = function (test) {
-  var ctrl = Controller(Model(), {
-    foo: 'bar'
-  });
+  var ctrl = Controller(Model());
   var signal = [
     function (args) {
       test.ok(args.services.foo);
@@ -541,8 +589,14 @@ exports['should allow services'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test();
+  ctrl.services( {
+    foo: 'bar'
+  });
+
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test();
 };
 
 exports['should trigger signal synchronously when using sync method'] = function (test) {
@@ -554,8 +608,10 @@ exports['should trigger signal synchronously when using sync method'] = function
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.signals.test.sync();
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getSignals().test.sync();
   test.ok(hasRun);
   test.done();
 };
@@ -569,8 +625,10 @@ exports['should trigger signal synchronously when defined as signalSync'] = func
     }
   ];
 
-  ctrl.signalSync('test', signal);
-  ctrl.signals.test();
+  ctrl.signalsSync({
+    'test': signal
+  });
+  ctrl.getSignals().test();
   test.ok(hasRun);
   test.done();
 };
@@ -589,9 +647,11 @@ exports['should throw error when input is defined on action and value is missing
     }, action
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.throws(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -599,9 +659,11 @@ exports['should throw error when input is defined on action and value is missing
 exports['should run signal without any actions'] = function (test) {
   var ctrl = Controller(Model());
 
-  ctrl.signal('test');
+  ctrl.signals({
+    'test': []
+  });
   test.doesNotThrow(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -616,9 +678,11 @@ exports['should allow actions to have default input'] = function (test) {
   };
   var signal = [action];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.expect(1);
-  ctrl.signals.test.sync();
+  ctrl.getSignals().test.sync();
   test.done();
 };
 
@@ -637,12 +701,14 @@ exports['should allow ASYNC actions to have default input'] = function (test) {
     ]
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.expect(1);
   ctrl.once('signalEnd', function () {
     test.done();
   });
-  ctrl.signals.test();
+  ctrl.getSignals().test();
 };
 
 exports['should throw error when output path is not an array'] = function (test) {
@@ -658,7 +724,9 @@ exports['should throw error when output path is not an array'] = function (test)
     ]
   ];
   test.throws(function () {
-    ctrl.signal('test', signal);
+    ctrl.signals({
+      'test': signal
+    });
   });
   test.done();
 };

@@ -31,16 +31,18 @@ exports['should record signals'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.recorder.record(state);
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getRecorder().record(state);
 
   setTimeout(function () {
-    ctrl.signals.test({
+    ctrl.getSignals().test({
       foo: 'bar'
     });
     setTimeout(function () {
-      ctrl.recorder.stop();
-      test.equals(ctrl.recorder.getRecording().signals.length, 1);
+      ctrl.getRecorder().stop();
+      test.equals(ctrl.getRecorder().getRecording().signals.length, 1);
       test.done();
     }, 100);
   }, 100);
@@ -84,23 +86,25 @@ exports['should play back recording'] = function (test) {
     }]
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.recorder.record(state);
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getRecorder().record(state);
 
   setTimeout(function () {
-    ctrl.signals.test({
+    ctrl.getSignals().test({
       foo: 'bar'
     });
     setTimeout(function () {
-      ctrl.recorder.stop();
+      ctrl.getRecorder().stop();
       setTimeout(function () {
         try{
-        ctrl.recorder.seek(0);
+        ctrl.getRecorder().seek(0);
       } catch (e) {
         console.log(e.stack);
       }
 
-        ctrl.recorder.play();
+        ctrl.getRecorder().play();
         test.deepEqual(state, {});
         setTimeout(function () {
           test.deepEqual(state, {foo: 'bar'});
@@ -147,18 +151,20 @@ exports['should seek to specific point in recording'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.recorder.record(state);
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getRecorder().record(state);
 
   setTimeout(function () {
-    ctrl.signals.test({
+    ctrl.getSignals().test({
       foo: 'bar'
     });
     setTimeout(function () {
-      ctrl.recorder.stop();
+      ctrl.getRecorder().stop();
       setTimeout(function () {
-        ctrl.recorder.seek(150);
-        ctrl.recorder.play();
+        ctrl.getRecorder().seek(150);
+        ctrl.getRecorder().play();
         test.deepEqual(state, {foo: 'bar'});
         test.done();
       }, 100);
@@ -202,27 +208,29 @@ exports['should pause a playback'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.recorder.record(state);
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getRecorder().record(state);
 
   setTimeout(function () {
-    ctrl.signals.test({
+    ctrl.getSignals().test({
       foo: 'bar'
     });
     setTimeout(function () {
-      ctrl.signals.test({
+      ctrl.getSignals().test({
         foo: 'bar2'
       });
 
       setTimeout(function () {
-        ctrl.recorder.stop();
+        ctrl.getRecorder().stop();
 
         setTimeout(function () {
-          ctrl.recorder.seek(0);
-          ctrl.recorder.play();
+          ctrl.getRecorder().seek(0);
+          ctrl.getRecorder().play();
           test.deepEqual(state, {});
           setTimeout(function () {
-            ctrl.recorder.pause();
+            ctrl.getRecorder().pause();
             test.deepEqual(state, {foo: 'bar'});
             test.done();
           }, 150);
@@ -269,32 +277,34 @@ exports['should resume a paused playback'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
-  ctrl.recorder.record(state);
+  ctrl.signals({
+    'test': signal
+  });
+  ctrl.getRecorder().record(state);
 
   setTimeout(function () {
-    ctrl.signals.test({
+    ctrl.getSignals().test({
       foo: 'bar'
     });
     setTimeout(function () {
-      ctrl.signals.test({
+      ctrl.getSignals().test({
         foo: 'bar2'
       });
 
       setTimeout(function () {
-        ctrl.recorder.stop();
+        ctrl.getRecorder().stop();
 
         setTimeout(function () {
-          ctrl.recorder.seek(0);
-          ctrl.recorder.play();
+          ctrl.getRecorder().seek(0);
+          ctrl.getRecorder().play();
           test.deepEqual(state, {});
           setTimeout(function () {
-            ctrl.recorder.pause();
+            ctrl.getRecorder().pause();
             test.deepEqual(state, {foo: 'bar'});
 
             setTimeout(function () {
-              ctrl.recorder.seek(ctrl.recorder.getCurrentSeek());
-              ctrl.recorder.play();
+              ctrl.getRecorder().seek(ctrl.getRecorder().getCurrentSeek());
+              ctrl.getRecorder().play();
               setTimeout(function () {
                 test.deepEqual(state, {foo: 'bar2'});
                 test.done();

@@ -19,17 +19,19 @@ exports['should validate inputs'] = function (test) {
     action
   ];
 
-  ctrl.signal('test', signal);
-  test.throws(function () {
-    ctrl.signals.test.sync();
+  ctrl.signals({
+    'test': signal
   });
   test.throws(function () {
-    ctrl.signals.test.sync({
+    ctrl.getSignals().test.sync();
+  });
+  test.throws(function () {
+    ctrl.getSignals().test.sync({
       foo: 123
     });
   });
   test.doesNotThrow(function () {
-    ctrl.signals.test.sync({
+    ctrl.getSignals().test.sync({
       foo: 'bar'
     });
   });
@@ -49,9 +51,11 @@ exports['should validate default inputs'] = function (test) {
     action
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.throws(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -72,9 +76,11 @@ exports['should validate ouput'] = function (test) {
     }
   ];
 
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.throws(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };
@@ -94,9 +100,11 @@ exports['should validate outputs'] = function (test) {
   var signal = [
     action, {success: []}
   ];
-  ctrl.signal('test', signal);
+  ctrl.signals({
+    'test': signal
+  });
   test.throws(function () {
-    ctrl.signals.test.sync();
+    ctrl.getSignals().test.sync();
   });
   test.done();
 };

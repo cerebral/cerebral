@@ -1,6 +1,6 @@
 import React from 'react';
 import Todo from '../Todo';
-import {Decorator as Cerebral} from 'cerebral-react';
+import {Decorator as Cerebral} from 'cerebral-view-react';
 
 import isAllChecked from '../../computed/isAllChecked.js';
 import visibleTodos from '../../computed/visibleTodos.js';

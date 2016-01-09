@@ -1,5 +1,5 @@
 import React from 'react';
-import {Decorator as Cerebral} from 'cerebral-react';
+import {Decorator as Cerebral} from 'cerebral-view-react';
 import SimpleRecorder from 'cerebral-module-recorder/react/SimpleRecorder';
 import NewTodoForm from '../../modules/NewTodo/components/NewTodo';
 import TodosList from '../../modules/List/components/List';

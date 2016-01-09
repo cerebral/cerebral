@@ -53,7 +53,7 @@ exports['should pass get function to grab state from state store'] = function (t
     test.equal(get(['foo']), 'bar');
   };
 
-  var controller = Controller(model, {});
+  var controller = Controller(model);
   test.expect(2);
   controller.get(foo);
   test.done();
@@ -67,7 +67,7 @@ exports['should pass get function to grab state'] = function (test) {
   var foo = function (get, value) {
     test.equal(get(['test']), 'hest');
   };
-  var controller = Controller(model, {});
+  var controller = Controller(model);
   test.expect(1);
   controller.get(foo);
   test.done();
@@ -81,7 +81,7 @@ exports['should not rerun if no values change'] = function (test) {
   var foo = function (get, value) {
     test.equal(get(['test']), 'hest');
   };
-  var controller = Controller(model, {});
+  var controller = Controller(model);
   test.expect(1);
   controller.get(foo);
   controller.get(foo);
@@ -102,7 +102,7 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
       test.equal(get(['test']), 'hest2');
     }
   }
-  var controller = Controller(model, {});
+  var controller = Controller(model);
   test.expect(2);
   controller.get(foo);
   var signal = [
@@ -111,12 +111,14 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
     }
   ];
 
-  controller.signal('test', signal);
+  controller.signals({
+    'test': signal
+  });
   controller.once('signalEnd', function () {
     controller.get(foo);
     test.done();
   });
-  controller.signals.test();
+  controller.getSignals().test();
 };
 
 exports['should cache after previously grabbed value change'] = function (test) {
@@ -133,7 +135,7 @@ exports['should cache after previously grabbed value change'] = function (test) 
       test.equal(get(['test']), 'hest2');
     }
   }
-  var controller = Controller(model, {});
+  var controller = Controller(model);
   test.expect(2);
   controller.get(foo);
   var signal = [
@@ -142,13 +144,15 @@ exports['should cache after previously grabbed value change'] = function (test) 
     }
   ];
 
-  controller.signal('test', signal);
+  controller.signals({
+    'test': signal
+  });
   controller.once('signalEnd', function () {
     controller.get(foo);
     controller.get(foo);
     test.done();
   });
-  controller.signals.test.sync();
+  controller.getSignals().test.sync();
 };
 
 exports['should handle complex scenario'] = function (test) {
@@ -174,7 +178,7 @@ exports['should handle complex scenario'] = function (test) {
       });
     }
   };
-  var controller = Controller(model, {});
+  var controller = Controller(model);
 
   test.deepEqual(controller.get(computed.displayedMessages), []);
   test.deepEqual(controller.get(computed.likedMessages), []);
@@ -191,7 +195,9 @@ exports['should handle complex scenario'] = function (test) {
     }
   ];
 
-  controller.signal('test', signal);
+  controller.signals({
+    'test': signal
+  });
 
   controller.once('signalEnd', function () {
 
@@ -204,7 +210,7 @@ exports['should handle complex scenario'] = function (test) {
 
   });
 
-  controller.signals.test();
+  controller.getSignals().test();
 
 };
 
@@ -219,7 +225,7 @@ exports['should allow use of other computed'] = function (test) {
     test.equal(get(bar), 'foo');
   };
 
-  var controller = Controller(model, {});
+  var controller = Controller(model);
   test.expect(1);
   controller.get(foo);
 
@@ -235,7 +241,7 @@ exports['should allow use of computed inside actions'] = function (test) {
   var foo = function () {
     return 'bar';
   }
-  var controller = Controller(model, {});
+  var controller = Controller(model);
   test.expect(1);
   controller.get(foo);
   var signal = [
@@ -245,6 +251,8 @@ exports['should allow use of computed inside actions'] = function (test) {
     }
   ];
 
-  controller.signal('test', signal);
-  controller.signals.test.sync();
+  controller.signals({
+    'test': signal
+  });
+  controller.getSignals().test.sync();
 };

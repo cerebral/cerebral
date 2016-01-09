@@ -28,87 +28,97 @@ var Model = function (initialState) {
 
 exports['should be able to register a module'] = function (test) {
   var ctrl = Controller(Model({}));
-  ctrl.registerModules({
+  ctrl.modules({
     test: function () {}
   });
-  test.ok(ctrl.modules.test);
+  test.ok(ctrl.getModules().test);
   test.done();
 };
 
 exports['should pass the module and controller, and expose module name and path on controller'] = function (test) {
   var ctrl = Controller(Model({}));
   test.expect(5);
-  ctrl.registerModules({
+  ctrl.modules({
     test: function (module, controller) {
       test.equal(controller, ctrl);
       test.equal(module.name, 'test');
       test.deepEqual(module.signals, {});
     }
   });
-  test.equal(ctrl.modules.test.name, 'test');
-  test.deepEqual(ctrl.modules.test.path, ['test']);
+  test.equal(ctrl.getModules().test.name, 'test');
+  test.deepEqual(ctrl.getModules().test.path, ['test']);
   test.done();
 };
 
 exports['should be able to add a signal'] = function (test) {
   var ctrl = Controller(Model({}));
-  ctrl.registerModules({
+  ctrl.modules({
     test: function (module) {
-      module.signal('test', []);
-      module.signalSync('test2', []);
+      module.signals({
+        'test': []
+      });
+      module.signalsSync({
+        'test2': []
+      });
     }
   });
-  test.ok(ctrl.signals.test.test);
-  test.ok(ctrl.signals.test.test2);
+  test.ok(ctrl.getSignals().test.test);
+  test.ok(ctrl.getSignals().test.test2);
   test.done();
 };
 
 exports['should be able to add a service'] = function (test) {
   var ctrl = Controller(Model({}));
-  ctrl.registerModules({
+  ctrl.modules({
     test: function (module) {
-      module.service('test', {});
+      module.services({
+        'test': {}
+      });
     }
   });
-  test.ok(ctrl.services.test.test);
+  test.ok(ctrl.getServices().test.test);
   test.done();
 };
 
 exports['should expose module on actions running on a module signal'] = function (test) {
   var ctrl = Controller(Model({}));
   test.expect(1);
-  ctrl.registerModules({
+  ctrl.modules({
     test: function (module) {
-      module.signal('test', [
-        function action (arg) {
-          test.ok(arg.module);
-        }
-      ])
+      module.signals({
+        'test': [
+          function action (arg) {
+            test.ok(arg.module);
+          }
+        ]
+      })
     }
   });
-  ctrl.signals.test.test.sync();
+  ctrl.getSignals().test.test.sync();
   test.done();
 };
 
 exports['should expose modules on all actions'] = function (test) {
   var ctrl = Controller(Model({}));
   test.expect(1);
-  ctrl.signal('test', [
-    function action (arg) {
-      test.ok(arg.modules.test);
-    }
-  ])
-  ctrl.registerModules({
+  ctrl.signals({
+    'test': [
+      function action (arg) {
+        test.ok(arg.modules.test);
+      }
+    ]
+  })
+  ctrl.modules({
     test: function () {}
   });
-  ctrl.signals.test.sync();
+  ctrl.getSignals().test.sync();
   test.done();
 };
 
 exports['should be able to add namespaced state'] = function (test) {
   var ctrl = Controller(Model({}));
   test.expect(1);
-  ctrl.registerModules({
+  ctrl.modules({
     test: function (module) {
       module.state({
         foo: 'bar'
@@ -122,35 +132,39 @@ exports['should be able to add namespaced state'] = function (test) {
 exports['should be able to add an alias'] = function (test) {
   var ctrl = Controller(Model({}));
   test.expect(2);
-  ctrl.registerModules({
+  ctrl.modules({
     test: function (module) {
       module.alias('cerebral-module-test');
     }
   });
-  test.ok(ctrl.modules['cerebral-module-test']);
-  test.ok(ctrl.modules.test);
+  test.ok(ctrl.getModules()['cerebral-module-test']);
+  test.ok(ctrl.getModules().test);
   test.done();
 };
 
 exports['should be able to add a submodule with namespaced state, signals and services'] = function (test) {
   var ctrl = Controller(Model({}));
   test.expect(2);
-  ctrl.registerModules({
+  ctrl.modules({
     test: function (module) {
-      module.registerModules({
+      module.modules({
         sub: function (module) {
-          module.signal('test', [
-            function action (arg) {
-              test.ok(arg.modules.test.sub.services.test);
-              test.deepEqual(arg.state.get(), {test: {sub: {foo: 'bar'} } });
-            }
-          ]);
-          module.service('test', {});
+          module.signals({
+            'test': [
+              function action (arg) {
+                test.ok(arg.modules.test.sub.services.test);
+                test.deepEqual(arg.state.get(), {test: {sub: {foo: 'bar'} } });
+              }
+            ]
+          });
+          module.services({
+            'test': {}
+          });
           module.state({foo: 'bar'});
         }
       });
     }
   });
-  ctrl.signals.test.sub.test.sync();
+  ctrl.getSignals().test.sub.test.sync();
   test.done();
 };
