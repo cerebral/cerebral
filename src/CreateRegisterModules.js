@@ -4,13 +4,25 @@ module.exports = function (controller, model, allModules) {
 
   var initialState = {};
 
+  var registerDevToolsSignals = function(moduleName, signals) {
+    if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
+      for (var signal in signals) {
+        window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals[
+          moduleName + '.' + signal
+        ] = signals[signal];
+      }
+    }
+  };
+
   var registerSignals = function (moduleName, signals) {
     var scopedSignals = Object.keys(signals).reduce(function (scopedSignals, key) {
       scopedSignals[moduleName + '.' + key] = signals[key];
       return scopedSignals;
     }, {});
 
-    return controller.signals(scopedSignals, {
+    registerDevToolsSignals(moduleName, signals);
+
+    controller.signals(scopedSignals, {
       modulePath: moduleName.split('.')
     });
   };
@@ -20,6 +32,9 @@ module.exports = function (controller, model, allModules) {
       scopedSignals[moduleName + '.' + key] = signals[key];
       return scopedSignals;
     }, {});
+
+    registerDevToolsSignals(moduleName, signals);
+
     return controller.signalsSync(scopedSignals, {
       modulePath: moduleName.split('.')
     });
