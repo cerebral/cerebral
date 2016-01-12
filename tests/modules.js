@@ -169,3 +169,25 @@ exports['should be able to add a submodule with namespaced state, signals and se
   ctrl.getSignals().test.sub.test.sync();
   test.done();
 };
+
+exports['should expose signals added to module on the module object'] = function (test) {
+  var ctrl = Controller(Model({}));
+  test.expect(1);
+  ctrl.modules({
+    test: function (module) {
+      module.modules({
+        sub: function (module) {
+          module.signals({
+            'test': [
+              function action (arg) {
+                test.ok(module.getSignals().test);
+              }
+            ]
+          });
+        }
+      });
+    }
+  });
+  ctrl.getSignals().test.sub.test.sync();
+  test.done();
+};
