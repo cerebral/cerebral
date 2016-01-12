@@ -191,3 +191,25 @@ exports['should expose signals added to module on the module object'] = function
   ctrl.getSignals().test.sub.test.sync();
   test.done();
 };
+
+exports['should expose meta information returned'] = function (test) {
+  var ctrl = Controller(Model({}));
+  test.expect(2);
+  ctrl.modules({
+    test: function (module) {
+      module.signals({
+        test: [
+          function action(arg) {
+            test.equal(arg.module.meta.foo, 'bar');
+          }
+        ]
+      });
+      return {
+        foo: 'bar'
+      };
+    }
+  });
+  ctrl.getSignals().test.test.sync();
+  test.equal(ctrl.getModules().test.meta.foo, 'bar');
+  test.done();
+};

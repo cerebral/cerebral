@@ -3,8 +3,12 @@ var utils = require('./utils.js');
 module.exports = function (modules, state, services) {
   var modulesArg = {};
   Object.keys(modules).forEach(function (key) {
+
     var path = modules[key].path;
-    var module = {};
+    var module = {
+      meta: modules[key].meta
+    };
+
     module.state = Object.keys(state).reduce(function (module, key) {
       module[key] = function () {
         var args = [].slice.call(arguments);
