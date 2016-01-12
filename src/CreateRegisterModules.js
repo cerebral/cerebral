@@ -53,7 +53,6 @@ module.exports = function (controller, model, allModules) {
       if (parentModuleName) {
         moduleName = parentModuleName + '.' + moduleName;
       }
-      var signals = utils.setDeep(controller.signals, moduleName, {});
       var moduleExport = {
         name: actualName,
         path: moduleName.split('.')
@@ -68,16 +67,21 @@ module.exports = function (controller, model, allModules) {
         services: registerServices.bind(null, moduleName),
         state: registerInitialState.bind(null, moduleName),
         getSignals: function () {
-          return signals;
+          var signals = controller.getSignals();
+          var path = moduleName.split('.');
+          return path.reduce(function (signals, key) {
+            return signals[key];
+          }, signals);
         },
         modules: registerModules.bind(null, moduleName)
       };
       var constructedModule = moduleConstructor(module, controller);
 
-      allModules[moduleName] = Object.keys(constructedModule || {}).reduce(function (module, key) {
-        module[key] = constructedModule[key];
-        return module;
-      }, moduleExport);
+      moduleExport.meta = constructedModule;
+      module.meta = constructedModule;
+      allModules[moduleName] = moduleExport;
+
+      return moduleExport;
 
     });
     return allModules;

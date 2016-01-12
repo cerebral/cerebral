@@ -143,6 +143,9 @@ module.exports = function (signalStore, controller) {
   return {
     update: update,
     start: function () {
+      if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
+        window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals = controller.getSignals();
+      }
       var event = new Event('cerebral.dev.cerebralPing');
       window.dispatchEvent(event);
     }

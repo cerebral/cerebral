@@ -31,6 +31,7 @@ exports['should be able to register a module'] = function (test) {
   ctrl.modules({
     test: function () {}
   });
+
   test.ok(ctrl.getModules().test);
   test.done();
 };

@@ -12,7 +12,7 @@ export default (options = {}) => {
     module.signalsSync({
       titleChanged
     });
-    
+
     module.signals({
       submitted
     });
