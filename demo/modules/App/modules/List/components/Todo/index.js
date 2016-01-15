@@ -4,6 +4,11 @@ import {Decorator as Cerebral} from 'cerebral-view-react';
 
 @Cerebral()
 class Todo extends React.Component {
+  componentDidUpdate(prevProps) {
+    if (!prevProps.todo.$isEditing && this.props.todo.$isEditing) {
+      this.refs.edit.focus();
+    }
+  }
   edit() {
 
     if (this.props.todo.$isSaving) {
@@ -30,7 +35,9 @@ class Todo extends React.Component {
   }
   onNewTitleSubmit(event) {
     event.preventDefault();
-    this.refs.edit.blur();
+    this.props.signals.app.list.newTitleSubmitted({
+      ref: this.props.todo.$ref
+    });
   }
   onCompletedToggle() {
     this.props.signals.app.list.toggleCompletedChanged({
@@ -43,7 +50,7 @@ class Todo extends React.Component {
     });
   }
   onNewTitleBlur() {
-    this.props.signals.app.list.newTitleSubmitted({
+    this.props.signals.app.list.newTitleAborted({
       ref: this.props.todo.$ref
     });
   }

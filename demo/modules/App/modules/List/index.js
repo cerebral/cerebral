@@ -4,6 +4,7 @@ import removeTodoClicked from './signals/removeTodoClicked';
 import todoDoubleClicked from './signals/todoDoubleClicked';
 import toggleAllChanged from './signals/toggleAllChanged';
 import toggleCompletedChanged from './signals/toggleCompletedChanged';
+import newTitleAborted from './signals/newTitleAborted';
 
 export default (options = {}) => {
   return (module) => {
@@ -26,7 +27,8 @@ export default (options = {}) => {
       removeTodoClicked,
       todoDoubleClicked,
       toggleAllChanged,
-      toggleCompletedChanged
+      toggleCompletedChanged,
+      newTitleAborted
     });
 
   };
