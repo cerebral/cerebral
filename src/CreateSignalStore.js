@@ -7,7 +7,7 @@
 
 var utils = require('./utils.js');
 
-module.exports = function (signalMethods, controller) {
+module.exports = function (controller) {
 
   var signals = [];
   var willKeepState = false;
@@ -16,6 +16,8 @@ module.exports = function (signalMethods, controller) {
   var currentIndex = signals.length - 1;
   var hasRememberedInitial = false;
 
+  var asyncActionsRunning = [];
+
   return {
 
     // Flips flag of storing signals or replacing them
@@ -23,32 +25,27 @@ module.exports = function (signalMethods, controller) {
       willKeepState = !willKeepState;
     },
 
-    addAsyncAction: function() {
-      executingAsyncActionsCount++;
+    addAsyncAction: function(action) {
+      asyncActionsRunning.push(action);
     },
 
-    removeAsyncAction: function () {
-      executingAsyncActionsCount--;
+    removeAsyncAction: function (action) {
+      asyncActionsRunning.splice(asyncActionsRunning.indexOf(action), 1);
     },
 
     addSignal: function(signal) {
 
-      if (utils.isDeveloping()) {
-        currentIndex++;
+      if (utils.isDeveloping() && !isRemembering) {
 
-        // When executing signals in EventStore, do not add them again
-        if (isRemembering) {
-          return;
+        if (asyncActionsRunning.length) {
+            var currentAction = asyncActionsRunning[asyncActionsRunning.length - 1];
+            currentAction.signals = currentAction.signals || [];
+            currentAction.signals.push(signal);
+        } else {
+          currentIndex++;
+          signals.push(signal);
         }
 
-        // If we have travelled back and start adding new signals the signals not triggered should
-        // be removed. This effectively "changes history"
-        if (currentIndex < signals.length) {
-          signals.splice(currentIndex, signals.length - currentIndex);
-        }
-
-        // Add signal and set the current signal to be the recently added signal
-        signals.push(signal);
       }
 
     },
@@ -60,7 +57,8 @@ module.exports = function (signalMethods, controller) {
         return;
       }
 
-      this.remember(signals.length - 1);
+      currentIndex = signals.length - 1;
+      this.remember(currentIndex);
     },
 
     // Will reset the SignalStore
@@ -115,12 +113,9 @@ module.exports = function (signalMethods, controller) {
             }
 
             // Trigger signal and then set what has become the current signal
-            var signalName = signal.name.split('.');
-            var signalMethodPath = signalMethods;
-            while (signalName.length) {
-              signalMethodPath = signalMethodPath[signalName.shift()];
-            }
-
+            var signalMethodPath = signal.name.split('.').reduce(function (signals, key) {
+              return signals[key];
+            }, controller.getSignals());
             signalMethodPath(signal.input, {branches: signal.branches});
             currentIndex = x;
 
@@ -158,7 +153,7 @@ module.exports = function (signalMethods, controller) {
     },
 
     isExecutingAsync: function () {
-      return !!executingAsyncActionsCount;
+      return !!asyncActionsRunning.length;
     },
 
     isRemembering: function () {

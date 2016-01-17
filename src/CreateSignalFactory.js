@@ -126,6 +126,17 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
               currentBranch.forEach(function (action) {
 
+                // If any signals has run with this action, run them
+                // as well
+                if (action.signals) {
+                  action.signals.forEach(function (signal) {
+                    var signalMethodPath = signal.name.split('.').reduce(function (signals, key) {
+                      return signals[key];
+                    }, controller.getSignals());
+                    signalMethodPath(signal.input, {branches: signal.branches});
+                  });
+                }
+
                 utils.merge(signalArgs, action.output);
 
                 if (action.outputPath) {
@@ -166,7 +177,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg);
                 }
 
-                signalStore.addAsyncAction();
+                signalStore.addAsyncAction(action);
 
                 action.isExecuting = true;
                 action.input = utils.merge({}, inputArg);
@@ -189,7 +200,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   action.isExecuting = false;
                   action.output = result.arg;
                   utils.merge(signalArgs, result.arg);
-                  signalStore.removeAsyncAction();
+                  signalStore.removeAsyncAction(action);
 
                   if (recorder.isRecording()) {
                     recorderSignal.asyncActionPaths.push(action.path.join('.'));

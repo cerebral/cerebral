@@ -17,7 +17,7 @@ var Controller = function (Model, services) {
   var compute = Compute(model);
   var signals = {};
   var devtools = null;
-  var signalStore = CreateSignalStore(signals, controller);
+  var signalStore = CreateSignalStore(controller);
   var modules = {};
   services = services || {};
 

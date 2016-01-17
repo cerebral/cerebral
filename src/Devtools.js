@@ -48,6 +48,7 @@ module.exports = function (signalStore, controller) {
     var signals = utils.hasLocalStorage() && localStorage.getItem('cerebral_signals') ?
       JSON.parse(localStorage.getItem('cerebral_signals')) : [];
 
+
     var willKeepState = utils.hasLocalStorage() && localStorage.getItem('cerebral_willKeepState') ?
       JSON.parse(localStorage.getItem('cerebral_willKeepState')) :
       true;
@@ -69,11 +70,11 @@ module.exports = function (signalStore, controller) {
         window.dispatchEvent(event);
       });
     } else {
+      signalStore.setSignals(signals);
+      signalStore.rememberInitial(signalStore.getSignals().length - 1);
       var event = new CustomEvent('cerebral.dev.cerebralPong', {
         detail: getDetail()
       });
-      signalStore.setSignals(signals);
-      signalStore.rememberInitial(signalStore.getSignals().length - 1);
       window.dispatchEvent(event);
     }
 
@@ -113,6 +114,18 @@ module.exports = function (signalStore, controller) {
 
   window.addEventListener('cerebral.dev.remember', function (event) {
     signalStore.remember(event.detail);
+    update();
+  });
+
+  window.addEventListener('cerebral.dev.rememberNow', function (event) {
+    signalStore.rememberNow();
+    update();
+  });
+
+  window.addEventListener('cerebral.dev.rewrite', function (event) {
+    signalStore.remember(event.detail);
+    var signals = signalStore.getSignals();
+    signals.splice(event.detail + 1, signals.length - 1 - event.detail);
     update();
   });
 

@@ -5,7 +5,7 @@ import './styles.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Controller from './../src/index.js';
-import Model from 'cerebral-baobab';
+import Model from 'cerebral-model-baobab';
 import {Container} from 'cerebral-view-react';
 
 import App from './modules/App/components/App';
@@ -13,7 +13,7 @@ import AppModule from './modules/App';
 
 import Refs from './modules/Refs';
 import Recorder from 'cerebral-module-recorder';
-import Router from './modules/Router';
+import Router from 'cerebral-module-router';
 
 const controller = Controller(Model({}));
 
