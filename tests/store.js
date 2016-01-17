@@ -152,7 +152,8 @@ exports['should store details about mutations correctly across sync and async si
           path: ['foo'],
           args: ['bar']
         });
-        var action = ctrl.getStore().getSignals()[1].branches[0];
+
+        var action = ctrl.getStore().getSignals()[0].branches[0][0].signals[0].branches[0];
         test.deepEqual(action.mutations[0], {
           name: 'set',
           path: ['foo'],
@@ -308,3 +309,121 @@ exports['should be able to remember async actions and run them synchronously whe
     foo: 'bar2'
   });
 };
+
+exports['should be able to remember async actions and run them in the right order'] = function (test) {
+
+  var setsCount = 0;
+  var initialState = {
+    foo: true
+  };
+  var state = initialState;
+  var Model = function () {
+    return function (controller) {
+      controller.on('reset', function () {
+        state = initialState;
+      });
+      return {
+        mutators: {
+          set: function (path, value) {
+            setsCount++;
+            state[path.pop()] = value;
+          },
+          merge: function (path, value) {
+            state = {
+              foo: true
+            };
+          }
+        }
+      }
+    };
+  };
+
+  var ctrl = Controller(Model());
+
+  ctrl.signalsSync({
+    signalA: [
+      function (arg) {
+        arg.state.set(['foo'], false);
+      }
+    ],
+    signalB: [
+      [function (arg) {
+        async(arg.output)
+      }],
+      function (arg) {
+        arg.state.set(['foo'], true);
+      }
+    ]
+  });
+
+  ctrl.getSignals().signalB();
+  ctrl.getSignals().signalA();
+
+  async(function () {
+    async(function () {
+      ctrl.getStore().remember(0);
+      test.equals(setsCount, 4);
+      test.deepEqual(state, {foo: true});
+      test.done();
+    });
+  });
+
+};
+
+exports['should be able to run multiple async signals and store them correctly'] = function (test) {
+
+    var setsCount = 0;
+    var initialState = {
+      foo: true
+    };
+    var state = initialState;
+    var Model = function () {
+      return function (controller) {
+        controller.on('reset', function () {
+          state = initialState;
+        });
+        return {
+          mutators: {
+            set: function (path, value) {
+              setsCount++;
+              state[path.pop()] = value;
+            },
+            merge: function (path, value) {
+              state = {
+                foo: true
+              };
+            }
+          }
+        }
+      };
+    };
+
+    var ctrl = Controller(Model());
+
+    ctrl.signalsSync({
+      signalB: [
+        [function (arg) {
+          async(arg.output)
+        }],
+        function (arg) {
+          arg.state.set(['foo'], arg.input.foo);
+        }
+      ]
+    });
+
+    ctrl.getSignals().signalB({
+      foo: true
+    });
+    ctrl.getSignals().signalB({
+      foo: false
+    });
+
+    async(function () {
+      async(function () {
+        test.equals(setsCount, 2);
+        test.deepEqual(state, {foo: false});
+        test.done();
+      });
+    });
+
+}

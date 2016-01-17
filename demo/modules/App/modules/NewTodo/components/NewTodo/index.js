@@ -24,7 +24,6 @@ class NewTodo extends React.Component {
           id="new-todo"
           autoComplete="off"
           placeholder="What needs to be done?"
-          disabled={this.props.isSaving}
           value={this.props.title}
           onChange={(e) => this.onNewTodoTitleChange(e)}
         />
