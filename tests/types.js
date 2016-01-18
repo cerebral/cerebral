@@ -1,4 +1,5 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 var types = require('./../src/types.js')
 
 var Model = function () {
@@ -9,7 +10,7 @@ var Model = function () {
   }
 }
 
-exports['should validate inputs'] = function (test) {
+suite['should validate inputs'] = function (test) {
   var ctrl = Controller(Model)
   var action = function () {}
   action.input = {
@@ -38,7 +39,7 @@ exports['should validate inputs'] = function (test) {
   test.done()
 }
 
-exports['should validate default inputs'] = function (test) {
+suite['should validate default inputs'] = function (test) {
   var ctrl = Controller(Model)
   var action = function () {}
   action.input = {
@@ -60,7 +61,7 @@ exports['should validate default inputs'] = function (test) {
   test.done()
 }
 
-exports['should validate ouput'] = function (test) {
+suite['should validate ouput'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args, state, output) {
     output({
@@ -83,7 +84,7 @@ exports['should validate ouput'] = function (test) {
   test.done()
 }
 
-exports['should validate outputs'] = function (test) {
+suite['should validate outputs'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args, state, output) {
     output.success({
@@ -107,7 +108,7 @@ exports['should validate outputs'] = function (test) {
   test.done()
 }
 
-exports['should validate String'] = function (test) {
+suite['should validate String'] = function (test) {
   test.ok(types(String, '123'))
   test.ok(!types(String, undefined))
   test.ok(!types(String, null))
@@ -118,7 +119,7 @@ exports['should validate String'] = function (test) {
   test.done()
 }
 
-exports['should validate Number'] = function (test) {
+suite['should validate Number'] = function (test) {
   test.ok(!types(Number, '123'))
   test.ok(!types(Number, undefined))
   test.ok(!types(Number, null))
@@ -129,7 +130,7 @@ exports['should validate Number'] = function (test) {
   test.done()
 }
 
-exports['should validate Boolean'] = function (test) {
+suite['should validate Boolean'] = function (test) {
   test.ok(!types(Boolean, '123'))
   test.ok(!types(Boolean, undefined))
   test.ok(!types(Boolean, null))
@@ -140,7 +141,7 @@ exports['should validate Boolean'] = function (test) {
   test.done()
 }
 
-exports['should validate Object'] = function (test) {
+suite['should validate Object'] = function (test) {
   test.ok(!types(Object, '123'))
   test.ok(!types(Object, undefined))
   test.ok(!types(Object, null))
@@ -151,7 +152,7 @@ exports['should validate Object'] = function (test) {
   test.done()
 }
 
-exports['should validate Array'] = function (test) {
+suite['should validate Array'] = function (test) {
   test.ok(!types(Array, '123'))
   test.ok(!types(Array, undefined))
   test.ok(!types(Array, null))
@@ -162,7 +163,7 @@ exports['should validate Array'] = function (test) {
   test.done()
 }
 
-exports['should validate null'] = function (test) {
+suite['should validate null'] = function (test) {
   test.ok(types(null, null))
   test.ok(!types(null, undefined))
   test.ok(!types(null, 123))
@@ -172,7 +173,7 @@ exports['should validate null'] = function (test) {
   test.done()
 }
 
-exports['should validate undefined'] = function (test) {
+suite['should validate undefined'] = function (test) {
   test.ok(types(undefined, undefined))
   test.ok(!types(undefined, null))
   test.ok(!types(undefined, 123))
@@ -182,7 +183,7 @@ exports['should validate undefined'] = function (test) {
   test.done()
 }
 
-exports['should validate with function'] = function (test) {
+suite['should validate with function'] = function (test) {
   test.ok(types(function (value) {
     test.equals(value, '123')
     return true
@@ -194,9 +195,11 @@ exports['should validate with function'] = function (test) {
   test.done()
 }
 
-exports['should handle falsy values'] = function (test) {
+suite['should handle falsy values'] = function (test) {
   test.ok(types(String, ''))
   test.ok(types(Boolean, false))
   test.ok(types(Number, 0))
   test.done()
 }
+
+module.exports = { types: suite }

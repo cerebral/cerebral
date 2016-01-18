@@ -1,4 +1,5 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 var async = function (cb) {
   setTimeout(cb, 0)
 }
@@ -20,7 +21,7 @@ var Model = function (state) {
   }
 }
 
-exports['should register signals'] = function (test) {
+suite['should register signals'] = function (test) {
   var ctrl = Controller(Model())
   ctrl.signals({
     'test': []
@@ -29,7 +30,7 @@ exports['should register signals'] = function (test) {
   test.done()
 }
 
-exports['should allow namespaced signals'] = function (test) {
+suite['should allow namespaced signals'] = function (test) {
   var ctrl = Controller(Model())
   ctrl.signals({
     'foo.bar': []
@@ -38,7 +39,7 @@ exports['should allow namespaced signals'] = function (test) {
   test.done()
 }
 
-exports['should trigger an action when run'] = function (test) {
+suite['should trigger an action when run'] = function (test) {
   var ctrl = Controller(Model())
   ctrl.signals({
     'test': [
@@ -51,7 +52,7 @@ exports['should trigger an action when run'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should be able to define custom outputs as arrays'] = function (test) {
+suite['should be able to define custom outputs as arrays'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output.foo({foo: 'bar'})
@@ -73,7 +74,7 @@ exports['should be able to define custom outputs as arrays'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should be able to define default custom path'] = function (test) {
+suite['should be able to define default custom path'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output({foo: 'bar'})
@@ -98,7 +99,7 @@ exports['should be able to define default custom path'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should throw error if paths are missing'] = function (test) {
+suite['should throw error if paths are missing'] = function (test) {
   var ctrl = Controller(Model())
   var action = function MyAction (args) {
     args.output({foo: 'bar'})
@@ -116,7 +117,7 @@ exports['should throw error if paths are missing'] = function (test) {
   test.done()
 }
 
-exports['should throw error if outputs as array does not match paths'] = function (test) {
+suite['should throw error if outputs as array does not match paths'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output({foo: 'bar'})
@@ -135,7 +136,7 @@ exports['should throw error if outputs as array does not match paths'] = functio
   test.done()
 }
 
-exports['should throw error if outputs as object does not match paths'] = function (test) {
+suite['should throw error if outputs as object does not match paths'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output({foo: 'bar'})
@@ -157,7 +158,7 @@ exports['should throw error if outputs as object does not match paths'] = functi
   test.done()
 }
 
-exports['should throw error when output is missing'] = function (test) {
+suite['should throw error when output is missing'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output()
@@ -178,7 +179,7 @@ exports['should throw error when output is missing'] = function (test) {
   test.done()
 }
 
-exports['should throw error when output type is wrong'] = function (test) {
+suite['should throw error when output type is wrong'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output({foo: false})
@@ -198,7 +199,7 @@ exports['should throw error when output type is wrong'] = function (test) {
   test.done()
 }
 
-exports['should throw when calling next directly with no defaultOutput and outputs defined'] = function (test) {
+suite['should throw when calling next directly with no defaultOutput and outputs defined'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output({foo: 'bar'})
@@ -223,7 +224,7 @@ exports['should throw when calling next directly with no defaultOutput and outpu
   test.done()
 }
 
-exports['should run when output type is correct'] = function (test) {
+suite['should run when output type is correct'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output({foo: 'bar'})
@@ -244,7 +245,7 @@ exports['should run when output type is correct'] = function (test) {
   test.done()
 }
 
-exports['should run when outputs type is correct'] = function (test) {
+suite['should run when outputs type is correct'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output.foo({bar: 'bar'})
@@ -269,7 +270,7 @@ exports['should run when outputs type is correct'] = function (test) {
   test.done()
 }
 
-exports['should pass initial payload on first argument'] = function (test) {
+suite['should pass initial payload on first argument'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function (args) {
@@ -284,7 +285,7 @@ exports['should pass initial payload on first argument'] = function (test) {
   ctrl.getSignals().test({foo: 'bar'})
 }
 
-exports['should expose a output method to set new args'] = function (test) {
+suite['should expose a output method to set new args'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function (args) {
@@ -303,7 +304,7 @@ exports['should expose a output method to set new args'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should be able to resolve as an async action'] = function (test) {
+suite['should be able to resolve as an async action'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     [
@@ -326,7 +327,7 @@ exports['should be able to resolve as an async action'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should trigger change event on individual async action paths'] = function (test) {
+suite['should trigger change event on individual async action paths'] = function (test) {
   var ctrl = Controller(Model())
   var changeCount = 0
   var signal = [
@@ -349,7 +350,7 @@ exports['should trigger change event on individual async action paths'] = functi
   ctrl.getSignals().test()
 }
 
-exports['should be able to resolve to default path success'] = function (test) {
+suite['should be able to resolve to default path success'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function (args) {
@@ -370,7 +371,7 @@ exports['should be able to resolve to default path success'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should be able to resolve to default path error'] = function (test) {
+suite['should be able to resolve to default path error'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function (args) {
@@ -391,7 +392,7 @@ exports['should be able to resolve to default path error'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should be able to resolve to default as async action'] = function (test) {
+suite['should be able to resolve to default as async action'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     [ function (args) {
@@ -412,7 +413,7 @@ exports['should be able to resolve to default as async action'] = function (test
   ctrl.getSignals().test()
 }
 
-exports['should expose mutation and a get method, if passed'] = function (test) {
+suite['should expose mutation and a get method, if passed'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function (args) {
@@ -428,7 +429,7 @@ exports['should expose mutation and a get method, if passed'] = function (test) 
   ctrl.getSignals().test()
 }
 
-exports['should handle arrays of actions to run in parallell'] = function (test) {
+suite['should handle arrays of actions to run in parallell'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     [
@@ -447,7 +448,7 @@ exports['should handle arrays of actions to run in parallell'] = function (test)
   ctrl.getSignals().test()
 }
 
-exports['should handle arrays of actions to resolve to multiple paths'] = function (test) {
+suite['should handle arrays of actions to resolve to multiple paths'] = function (test) {
   var ctrl = Controller(Model())
   var results = []
   var signal = [
@@ -483,7 +484,7 @@ exports['should handle arrays of actions to resolve to multiple paths'] = functi
   })
 }
 
-exports['should trigger paths when individual async is done'] = function (test) {
+suite['should trigger paths when individual async is done'] = function (test) {
   var ctrl = Controller(Model())
   var results = []
   var signal = [
@@ -514,7 +515,7 @@ exports['should trigger paths when individual async is done'] = function (test) 
   ctrl.getSignals().test()
 }
 
-exports['should wait to resolve top level async array when nested async arrays are running'] = function (test) {
+suite['should wait to resolve top level async array when nested async arrays are running'] = function (test) {
   var ctrl = Controller(Model())
   var results = []
   var signal = [
@@ -550,7 +551,7 @@ exports['should wait to resolve top level async array when nested async arrays a
   ctrl.getSignals().test()
 }
 
-exports['should throw error when trying to mutate with an async action'] = function (test) {
+suite['should throw error when trying to mutate with an async action'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     [ function (args) {
@@ -567,7 +568,7 @@ exports['should throw error when trying to mutate with an async action'] = funct
   ctrl.getSignals().test()
 }
 
-exports['should allow services'] = function (test) {
+suite['should allow services'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function (args) {
@@ -586,7 +587,7 @@ exports['should allow services'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should trigger signal synchronously when using sync method'] = function (test) {
+suite['should trigger signal synchronously when using sync method'] = function (test) {
   var ctrl = Controller(Model())
   var hasRun = false
   var signal = [
@@ -603,7 +604,7 @@ exports['should trigger signal synchronously when using sync method'] = function
   test.done()
 }
 
-exports['should trigger signal synchronously when defined as signalSync'] = function (test) {
+suite['should trigger signal synchronously when defined as signalSync'] = function (test) {
   var ctrl = Controller(Model())
   var hasRun = false
   var signal = [
@@ -620,7 +621,7 @@ exports['should trigger signal synchronously when defined as signalSync'] = func
   test.done()
 }
 
-exports['should throw error when input is defined on action and value is missing or is wrong type'] = function (test) {
+suite['should throw error when input is defined on action and value is missing or is wrong type'] = function (test) {
   var ctrl = Controller(Model())
   var action = function () {}
   action.input = {
@@ -641,7 +642,7 @@ exports['should throw error when input is defined on action and value is missing
   test.done()
 }
 
-exports['should run signal without any actions'] = function (test) {
+suite['should run signal without any actions'] = function (test) {
   var ctrl = Controller(Model())
 
   ctrl.signals({
@@ -653,7 +654,7 @@ exports['should run signal without any actions'] = function (test) {
   test.done()
 }
 
-exports['should allow actions to have default input'] = function (test) {
+suite['should allow actions to have default input'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     test.equal(args.input.foo, 'bar')
@@ -671,7 +672,7 @@ exports['should allow actions to have default input'] = function (test) {
   test.done()
 }
 
-exports['should allow ASYNC actions to have default input'] = function (test) {
+suite['should allow ASYNC actions to have default input'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     test.equal(args.input.foo, 'bar')
@@ -696,7 +697,7 @@ exports['should allow ASYNC actions to have default input'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should throw error when output path is not an array'] = function (test) {
+suite['should throw error when output path is not an array'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
     args.output.success()
@@ -715,3 +716,5 @@ exports['should throw error when output path is not an array'] = function (test)
   })
   test.done()
 }
+
+module.exports = { signals: suite }

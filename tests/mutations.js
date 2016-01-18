@@ -1,6 +1,7 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 
-exports['should give correct path and value to mutation methods'] = function (test) {
+suite['should give correct path and value to mutation methods'] = function (test) {
   var Model = function (state) {
     return function (controller) {
       return {
@@ -27,3 +28,5 @@ exports['should give correct path and value to mutation methods'] = function (te
   ctrl.getSignals().test.sync()
   test.done()
 }
+
+module.exports = { mutations: suite }

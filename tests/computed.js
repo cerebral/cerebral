@@ -1,4 +1,5 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 
 var Model = function (state) {
   return function () {
@@ -41,7 +42,7 @@ var Model = function (state) {
   }
 }
 
-exports['should pass get function to grab state from state store'] = function (test) {
+suite['should pass get function to grab state from state store'] = function (test) {
   var model = Model({
     foo: 'bar'
   })
@@ -56,7 +57,7 @@ exports['should pass get function to grab state from state store'] = function (t
   test.done()
 }
 
-exports['should pass get function to grab state'] = function (test) {
+suite['should pass get function to grab state'] = function (test) {
   var model = Model({
     foo: 'bar',
     test: 'hest'
@@ -70,7 +71,7 @@ exports['should pass get function to grab state'] = function (test) {
   test.done()
 }
 
-exports['should not rerun if no values change'] = function (test) {
+suite['should not rerun if no values change'] = function (test) {
   var model = Model({
     foo: 'bar',
     test: 'hest'
@@ -85,7 +86,7 @@ exports['should not rerun if no values change'] = function (test) {
   test.done()
 }
 
-exports['should rerun if previously grabbed value changes'] = function (test) {
+suite['should rerun if previously grabbed value changes'] = function (test) {
   var model = Model({
     foo: 'bar',
     test: 'hest'
@@ -118,7 +119,7 @@ exports['should rerun if previously grabbed value changes'] = function (test) {
   controller.getSignals().test()
 }
 
-exports['should cache after previously grabbed value change'] = function (test) {
+suite['should cache after previously grabbed value change'] = function (test) {
   var model = Model({
     foo: 'bar',
     test: 'hest'
@@ -152,7 +153,7 @@ exports['should cache after previously grabbed value change'] = function (test) 
   controller.getSignals().test.sync()
 }
 
-exports['should handle complex scenario'] = function (test) {
+suite['should handle complex scenario'] = function (test) {
   var model = Model({
     data: {
       messages: {}
@@ -208,7 +209,7 @@ exports['should handle complex scenario'] = function (test) {
   controller.getSignals().test()
 }
 
-exports['should allow use of other computed'] = function (test) {
+suite['should allow use of other computed'] = function (test) {
   var model = Model({
     foo: 'bar'
   })
@@ -226,7 +227,7 @@ exports['should allow use of other computed'] = function (test) {
   test.done()
 }
 
-exports['should allow use of computed inside actions'] = function (test) {
+suite['should allow use of computed inside actions'] = function (test) {
   var model = Model({
     foo: 'bar',
     test: 'hest'
@@ -249,3 +250,5 @@ exports['should allow use of computed inside actions'] = function (test) {
   })
   controller.getSignals().test.sync()
 }
+
+module.exports = { computed: suite }

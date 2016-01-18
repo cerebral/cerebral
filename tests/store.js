@@ -1,4 +1,5 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 
 var async = function (cb) {
   setTimeout(cb, 0)
@@ -16,7 +17,7 @@ var Model = function () {
   }
 }
 
-exports['should keep signals by default'] = function (test) {
+suite['should keep signals by default'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function () {}
@@ -33,7 +34,7 @@ exports['should keep signals by default'] = function (test) {
   })
 }
 
-exports['should store details about signal'] = function (test) {
+suite['should store details about signal'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function ActionA () {}
@@ -54,7 +55,7 @@ exports['should store details about signal'] = function (test) {
   })
 }
 
-exports['should not store default args'] = function (test) {
+suite['should not store default args'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function ActionA () {}
@@ -78,7 +79,7 @@ exports['should not store default args'] = function (test) {
   })
 }
 
-exports['should store details about actions'] = function (test) {
+suite['should store details about actions'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function ActionA () {}
@@ -98,7 +99,7 @@ exports['should store details about actions'] = function (test) {
   })
 }
 
-exports['should store details about mutations'] = function (test) {
+suite['should store details about mutations'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     function ActionA (args) {
@@ -122,7 +123,7 @@ exports['should store details about mutations'] = function (test) {
   })
 }
 
-exports['should store details about mutations correctly across sync and async signals'] = function (test) {
+suite['should store details about mutations correctly across sync and async signals'] = function (test) {
   var ctrl = Controller(Model())
   var signalSync = [
     function ActionA (args) {
@@ -164,7 +165,7 @@ exports['should store details about mutations correctly across sync and async si
   ctrl.getSignals().test()
 }
 
-exports['should indicate async actions'] = function (test) {
+suite['should indicate async actions'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     [
@@ -183,7 +184,7 @@ exports['should indicate async actions'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should indicate when async actions are running'] = function (test) {
+suite['should indicate when async actions are running'] = function (test) {
   var ctrl = Controller(Model())
   var signal = [
     [
@@ -204,7 +205,7 @@ exports['should indicate when async actions are running'] = function (test) {
   ctrl.getSignals().test()
 }
 
-exports['should be able to remember previous signal'] = function (test) {
+suite['should be able to remember previous signal'] = function (test) {
   var initialState = {}
   var state = initialState
   var Model = function () {
@@ -249,7 +250,7 @@ exports['should be able to remember previous signal'] = function (test) {
   })
 }
 
-exports['should be able to remember async actions and run them synchronously when remembering'] = function (test) {
+suite['should be able to remember async actions and run them synchronously when remembering'] = function (test) {
   var signalCount = 0
   var initialState = {}
   var state = initialState
@@ -303,7 +304,7 @@ exports['should be able to remember async actions and run them synchronously whe
   })
 }
 
-exports['should be able to remember async actions and run them in the right order'] = function (test) {
+suite['should be able to remember async actions and run them in the right order'] = function (test) {
   var setsCount = 0
   var initialState = {
     foo: true
@@ -361,7 +362,7 @@ exports['should be able to remember async actions and run them in the right orde
   })
 }
 
-exports['should be able to run multiple async signals and store them correctly'] = function (test) {
+suite['should be able to run multiple async signals and store them correctly'] = function (test) {
   var setsCount = 0
   var initialState = {
     foo: true
@@ -416,3 +417,5 @@ exports['should be able to run multiple async signals and store them correctly']
     })
   })
 }
+
+module.exports = { store: suite }

@@ -1,4 +1,5 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 var Model = function () {
   return function () {
     return {
@@ -15,7 +16,7 @@ var Model = function () {
   }
 }
 
-exports['should record signals'] = function (test) {
+suite['should record signals'] = function (test) {
   var initialState = {}
   var state = initialState
   var ctrl = Controller(Model())
@@ -42,7 +43,7 @@ exports['should record signals'] = function (test) {
   }, 100)
 }
 
-exports['should play back recording'] = function (test) {
+suite['should play back recording'] = function (test) {
   var initialState = {}
   var state = initialState
   var Model = function () {
@@ -106,7 +107,7 @@ exports['should play back recording'] = function (test) {
   }, 100)
 }
 
-exports['should seek to specific point in recording'] = function (test) {
+suite['should seek to specific point in recording'] = function (test) {
   var initialState = {}
   var state = initialState
   var Model = function () {
@@ -160,7 +161,7 @@ exports['should seek to specific point in recording'] = function (test) {
   }, 100)
 }
 
-exports['should pause a playback'] = function (test) {
+suite['should pause a playback'] = function (test) {
   var initialState = {}
   var state = initialState
   var Model = function () {
@@ -225,7 +226,7 @@ exports['should pause a playback'] = function (test) {
   }, 100)
 }
 
-exports['should resume a paused playback'] = function (test) {
+suite['should resume a paused playback'] = function (test) {
   var initialState = {}
   var state = initialState
   var Model = function () {
@@ -297,3 +298,5 @@ exports['should resume a paused playback'] = function (test) {
     }, 100)
   }, 100)
 }
+
+module.exports = { recorder: suite }

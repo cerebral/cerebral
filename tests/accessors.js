@@ -1,6 +1,7 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 
-exports['should call accessor methods added'] = function (test) {
+suite['should call accessor methods added'] = function (test) {
   var Model = function (state) {
     return function (controller) {
       return {
@@ -27,7 +28,7 @@ exports['should call accessor methods added'] = function (test) {
   test.done()
 }
 
-exports['should have a path as first argument'] = function (test) {
+suite['should have a path as first argument'] = function (test) {
   var Model = function (state) {
     return function (controller) {
       return {
@@ -56,7 +57,7 @@ exports['should have a path as first argument'] = function (test) {
   test.done()
 }
 
-exports['should receive the rest of the arguments'] = function (test) {
+suite['should receive the rest of the arguments'] = function (test) {
   var Model = function (state) {
     return function (controller) {
       return {
@@ -84,7 +85,7 @@ exports['should receive the rest of the arguments'] = function (test) {
   test.done()
 }
 
-exports['should allow dot notation'] = function (test) {
+suite['should allow dot notation'] = function (test) {
   var Model = function (state) {
     return function (controller) {
       return {
@@ -111,3 +112,5 @@ exports['should allow dot notation'] = function (test) {
   ctrl.getSignals().test.sync()
   test.done()
 }
+
+module.exports = { accessors: suite }

@@ -1,4 +1,5 @@
 var Controller = require('./../src/index.js')
+var suite = {}
 
 var Model = function (initialState) {
   var state = initialState
@@ -25,7 +26,7 @@ var Model = function (initialState) {
   }
 }
 
-exports['should be able to register a module'] = function (test) {
+suite['should be able to register a module'] = function (test) {
   var ctrl = Controller(Model({}))
   ctrl.modules({
     test: function () {}
@@ -35,7 +36,7 @@ exports['should be able to register a module'] = function (test) {
   test.done()
 }
 
-exports['should pass the module and controller, and expose module name and path on controller'] = function (test) {
+suite['should pass the module and controller, and expose module name and path on controller'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(5)
   ctrl.modules({
@@ -50,7 +51,7 @@ exports['should pass the module and controller, and expose module name and path 
   test.done()
 }
 
-exports['should be able to add a signal'] = function (test) {
+suite['should be able to add a signal'] = function (test) {
   var ctrl = Controller(Model({}))
   ctrl.modules({
     test: function (module) {
@@ -67,7 +68,7 @@ exports['should be able to add a signal'] = function (test) {
   test.done()
 }
 
-exports['should be able to add a service'] = function (test) {
+suite['should be able to add a service'] = function (test) {
   var ctrl = Controller(Model({}))
   ctrl.modules({
     test: function (module) {
@@ -80,7 +81,7 @@ exports['should be able to add a service'] = function (test) {
   test.done()
 }
 
-exports['should expose module on actions running on a module signal'] = function (test) {
+suite['should expose module on actions running on a module signal'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
   ctrl.modules({
@@ -98,7 +99,7 @@ exports['should expose module on actions running on a module signal'] = function
   test.done()
 }
 
-exports['should expose modules on all actions'] = function (test) {
+suite['should expose modules on all actions'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
   ctrl.signals({
@@ -115,7 +116,7 @@ exports['should expose modules on all actions'] = function (test) {
   test.done()
 }
 
-exports['should be able to add namespaced state'] = function (test) {
+suite['should be able to add namespaced state'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
   ctrl.modules({
@@ -129,7 +130,7 @@ exports['should be able to add namespaced state'] = function (test) {
   test.done()
 }
 
-exports['should be able to add an alias'] = function (test) {
+suite['should be able to add an alias'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(2)
   ctrl.modules({
@@ -142,7 +143,7 @@ exports['should be able to add an alias'] = function (test) {
   test.done()
 }
 
-exports['should be able to add a submodule with namespaced state, signals and services'] = function (test) {
+suite['should be able to add a submodule with namespaced state, signals and services'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(2)
   ctrl.modules({
@@ -169,7 +170,7 @@ exports['should be able to add a submodule with namespaced state, signals and se
   test.done()
 }
 
-exports['should expose signals added to module on the module object'] = function (test) {
+suite['should expose signals added to module on the module object'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
   ctrl.modules({
@@ -191,7 +192,7 @@ exports['should expose signals added to module on the module object'] = function
   test.done()
 }
 
-exports['should expose meta information returned'] = function (test) {
+suite['should expose meta information returned'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(2)
   ctrl.modules({
@@ -212,3 +213,5 @@ exports['should expose meta information returned'] = function (test) {
   test.equal(ctrl.getModules().test.meta.foo, 'bar')
   test.done()
 }
+
+module.exports = { modules: suite }

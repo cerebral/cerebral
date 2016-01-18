@@ -1,6 +1,7 @@
 var staticTree = require('./../src/staticTree.js')
+var suite = {}
 
-exports['should convert actions to objects'] = function (test) {
+suite['should convert actions to objects'] = function (test) {
   var signal = [
     function sync1 () {}
   ]
@@ -22,7 +23,7 @@ exports['should convert actions to objects'] = function (test) {
   test.done()
 }
 
-exports['should use display name of action if available'] = function (test) {
+suite['should use display name of action if available'] = function (test) {
   var action = function () {}
   action.displayName = 'foo'
   var signal = [
@@ -33,7 +34,7 @@ exports['should use display name of action if available'] = function (test) {
   test.done()
 }
 
-exports['should bring along arrays and indicate async'] = function (test) {
+suite['should bring along arrays and indicate async'] = function (test) {
   var signal = [
     [
       function async1 () {}
@@ -47,7 +48,7 @@ exports['should bring along arrays and indicate async'] = function (test) {
   test.done()
 }
 
-exports['should keep paths'] = function (test) {
+suite['should keep paths'] = function (test) {
   var signal = [
     [
       function async1 () {}, {
@@ -66,7 +67,7 @@ exports['should keep paths'] = function (test) {
   test.done()
 }
 
-exports['should handle deeply nested structures'] = function (test) {
+suite['should handle deeply nested structures'] = function (test) {
   var signal = [
     [
       function async1 () {}, {
@@ -86,7 +87,7 @@ exports['should handle deeply nested structures'] = function (test) {
   test.done()
 }
 
-exports['should only keep one reference to an action'] = function (test) {
+suite['should only keep one reference to an action'] = function (test) {
   var action = function sync1 () {}
   var signal = [
     action,
@@ -97,3 +98,5 @@ exports['should only keep one reference to an action'] = function (test) {
   test.equals(tree[1].actionIndex, 0)
   test.done()
 }
+
+module.exports = { staticTree: suite }
