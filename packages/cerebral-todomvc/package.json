@@ -1,0 +1,34 @@
+{
+  "name": "cerebral-todomvc",
+  "version": "0.1.0",
+  "description": "Classic todomvc application powered with cerebral",
+  "scripts": {
+    "start": "webpack-dev-server --progress --colors",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral-todomvc.git"
+  },
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral-todomvc/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral-todomvc#readme",
+  "dependencies": {
+    "babel-loader": "^5.3.2",
+    "cerebral": "^0.32.0",
+    "cerebral-model-baobab": "^0.4.6",
+    "cerebral-module-recorder": "^0.4.1",
+    "cerebral-module-router": "^0.10.2",
+    "cerebral-view-react": "^0.10.3",
+    "react": "^0.14.6",
+    "react-dom": "^0.14.6",
+    "todomvc-app-css": "^1.0.4",
+    "todomvc-common": "^1.0.2",
+    "webpack": "^1.12.11",
+    "webpack-dev-server": "^1.14.1"
+  }
+}

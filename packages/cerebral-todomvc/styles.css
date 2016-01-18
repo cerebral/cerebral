@@ -1,0 +1,43 @@
+    body {
+        margin: 0 !important;
+        min-width: inherit !important;
+        max-width: inherit !important;
+    }
+
+    #todoapp-wrapper {
+        margin: 0 auto;
+        min-width: 230px;
+        max-width: 550px;
+    }
+
+    .btn {
+        margin: 15px;
+        background-color: #999;
+        border: 1px solid #666;
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: #eaeaea;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+
+    .btn-stop {
+        background-color: red;
+    }
+
+    .btn-record {
+        background-color: orange;
+    }
+
+    .btn-play {
+        background-color: green;
+    }
+
+    .btn[disabled] {
+        opacity: 0.5;
+    }
+
+    a {
+      cursor: pointer;
+    }
