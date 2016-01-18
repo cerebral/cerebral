@@ -4,34 +4,13 @@
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
-    "demo": "webpack-dev-server --progress --colors --content-base demo --config demo/webpack.config.js",
-    "deploydemo": "webpack --config demo/webpack.config.js",
     "devtest": "nodeunit-watcher",
     "test": "nodeunit tests"
   },
-  "author": "Christian Alfoni",
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
   "devDependencies": {
-    "babel-loader": "^5.3.2",
-    "cerebral-model-baobab": "^0.4.5",
-    "cerebral-module-recorder": "^0.4.1",
-    "cerebral-view-react": "^0.10.0",
-    "cerebral-module-router": "^0.10.1",
-    "classnames": "^2.1.1",
-    "css-loader": "^0.9.1",
-    "es6-promise": "^2.1.1",
-    "event-emitter": "^0.3.3",
-    "jshint": "^2.6.0",
-    "jshint-loader": "^0.8.2",
     "nodeunit": "^0.9.0",
-    "nodeunit-watcher": "0.0.3",
-    "path-to-regexp": "^1.2.1",
-    "react": "^0.14.0",
-    "react-dom": "^0.14.0",
-    "style-loader": "^0.8.3",
-    "todomvc-app-css": "^1.0.1",
-    "todomvc-common": "^1.0.1",
-    "webpack": "^1.5.3",
-    "webpack-dev-server": "^1.7.0"
+    "nodeunit-watcher": "0.0.3"
   }
 }
