@@ -4,13 +4,14 @@
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
-    "devtest": "nodeunit-watcher",
-    "test": "nodeunit tests"
+    "test": "nodeunit tests",
+    "test:watch": "nodeunit-watcher tests"
   },
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
   "devDependencies": {
     "nodeunit": "^0.9.0",
-    "nodeunit-watcher": "0.0.3"
+    "nodeunit-watcher": "0.0.3",
+    "standard": "^5.4.1"
   }
 }
