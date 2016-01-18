@@ -4,6 +4,7 @@
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
+    "pretest": "standard",
     "test": "nodeunit tests",
     "test:watch": "nodeunit-watcher tests"
   },
