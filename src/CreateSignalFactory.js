@@ -82,6 +82,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
           name: signalName,
           start: start,
           isSync: runSync,
+          isRouted: options.isRouted || false,
           isExecuting: true,
           branches: branches,
           duration: 0,
