@@ -1,11 +1,13 @@
 var path = require('path');
-var node_modules = path.resolve(__dirname, 'node_modules');
+var src = path.resolve(__dirname, 'src');
+var dist = path.resolve(__dirname, 'dist');
 var TARGET = process.env.npm_lifecycle_event;
 
 var config = {
-  entry: path.resolve(__dirname, 'main.js'),
+  entry: path.resolve(src, 'main.js'),
   devtool: TARGET === 'start'? 'eval-source-map' : 'source-map',
   output: {
+    path: dist,
     filename: 'todomvc.js'
   },
   module: {
@@ -15,7 +17,7 @@ var config = {
     }, {
       test: /\.js$/,
       loader: 'babel?optional=es7.decorators',
-      exclude: node_modules
+      include: src
     }]
   }
 };

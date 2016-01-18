@@ -26,6 +26,7 @@
     "cerebral-view-react": "^0.10.3",
     "classnames": "^2.2.3",
     "css-loader": "^0.23.1",
+    "file-loader": "^0.8.5",
     "react": "^0.14.6",
     "react-dom": "^0.14.6",
     "style-loader": "^0.13.0",

@@ -1,4 +1,4 @@
-# Cerebral Boilerplate
+# Cerebral TodoMVC demo application
 
 ## Install
 

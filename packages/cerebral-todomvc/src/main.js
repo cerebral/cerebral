@@ -1,6 +1,7 @@
-import './node_modules/todomvc-common/base.css';
-import './node_modules/todomvc-app-css/index.css';
+import 'todomvc-common/base.css';
+import 'todomvc-app-css/index.css';
 import './styles.css';
+import 'file?name=[name].[ext]!./index.html'
 
 import React from 'react';
 import ReactDOM from 'react-dom';
