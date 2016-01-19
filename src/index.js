@@ -50,11 +50,11 @@ var Controller = function (Model, services) {
   }
 
   controller.signal = function () {
-    console.warn('This method is deprecated, use controller.signals() instead')
+    console.warn('Cerebral: controller.signal() is deprecated, use controller.signals() instead')
     signal.apply(null, arguments)
   }
   controller.signalSync = function () {
-    console.warn('This method is deprecated, use controller.signals() instead')
+    console.warn('Cerebral: controller.signalSync() is deprecated, use controller.signals() instead')
     var defaultOptions = arguments[2] || {}
     defaultOptions.isSync = true
     return signal(arguments[0], arguments[1], defaultOptions)
