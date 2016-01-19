@@ -1,9 +1,9 @@
 var CreateSignalFactory = require('./CreateSignalFactory.js')
-var CreateSignalStore = require('./CreateSignalStore.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var Compute = require('./Compute.js')
 var EventEmitter = require('events').EventEmitter
 
+var SignalStore = require('./modules/signalStore')
 var Devtools = require('./modules/devtools')
 var Recorder = require('./modules/recorder')
 
@@ -16,11 +16,10 @@ var Controller = function (Model, services) {
   var model = Model(controller)
   var compute = Compute(model)
   var signals = {}
-  var signalStore = CreateSignalStore(controller)
   var modules = {}
   services = services || {}
 
-  var signalFactory = CreateSignalFactory(signalStore, controller, model, services, compute, modules)
+  var signalFactory = CreateSignalFactory(controller, model, services, compute, modules)
   var signal = function () {
     var signalNamePath = arguments[0].split('.')
     var signalName = signalNamePath.pop()
@@ -61,9 +60,6 @@ var Controller = function (Model, services) {
   controller.getServices = function () {
     return services
   }
-  controller.getStore = function () {
-    return signalStore
-  }
   controller.get = function () {
     if (typeof arguments[0] === 'function') {
       return compute.has(arguments[0]) ? compute.getComputedValue(arguments[0]) : compute.register(arguments[0])
@@ -99,6 +95,7 @@ var Controller = function (Model, services) {
   }
 
   controller.modules({
+    signalStore: SignalStore(),
     devtools: Devtools(),
     recorder: Recorder()
   })

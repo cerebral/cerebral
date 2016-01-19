@@ -11,9 +11,11 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0)
 }
 
-module.exports = function (signalStore, controller, model, services, compute, modules) {
+module.exports = function (controller, model, services, compute, modules) {
   return function () {
     var recorder = controller.getRecorder()
+    var signalStore = controller.getStore()
+
     var args = [].slice.call(arguments)
     var signalName = args.shift()
     var defaultOptions = args[1] || {}
