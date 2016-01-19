@@ -11,7 +11,7 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0)
 }
 
-module.exports = function (signalStore, recorder, devtools, controller, model, services, compute, modules) {
+module.exports = function (signalStore, recorder, controller, model, services, compute, modules) {
   return function () {
     var args = [].slice.call(arguments)
     var signalName = args.shift()
@@ -105,7 +105,6 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
             signal.isExecuting = false
             controller.emit('signalEnd', {signal: signal})
             controller.emit('change', {signal: signal})
-            devtools && devtools.update()
             return
           }
 
@@ -198,14 +197,10 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   if (result.path) {
                     action.outputPath = result.path
                     var branchResult = runBranch(action.outputs[result.path], 0, Date.now())
-                    devtools && devtools.update()
                     return branchResult
-                  } else {
-                    devtools && devtools.update()
                   }
                 })
               })
-              devtools && devtools.update()
               return Promise.all(promises)
                 .then(function () {
                   return runBranch(branch, index + 1, Date.now())
