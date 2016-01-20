@@ -149,5 +149,9 @@ module.exports = function SignalStore () {
     controller.getStore = function getStore () {
       return services
     }
+
+    controller.on('signalStart', function (args) {
+      services.addSignal(args.signal)
+    })
   }
 }

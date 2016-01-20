@@ -95,8 +95,6 @@ module.exports = function (controller, model, services, compute, modules) {
           recorder.addSignal(recorderSignal)
         }
 
-        signalStore.addSignal(signal)
-
         var runBranch = function (branch, index, start) {
           var currentBranch = branch[index]
           if (!currentBranch && branch === signal.branches && !signalStore.isRemembering() && !recorder.isCatchingUp()) {
