@@ -185,14 +185,24 @@ suite['should indicate async actions'] = function (test) {
 }
 
 suite['should indicate when async actions are running'] = function (test) {
+  test.expect(5)
   var ctrl = Controller(Model())
   var signal = [
+    function (args) {
+      test.ok(!ctrl.getStore().isExecutingAsync())
+    },
     [
       function (args) {
         test.ok(ctrl.getStore().isExecutingAsync())
+        ctrl.once('actionEnd', function () {
+          test.ok(!ctrl.getStore().isExecutingAsync())
+        })
         args.output()
       }
-    ]
+    ],
+    function (args) {
+      test.ok(!ctrl.getStore().isExecutingAsync())
+    }
   ]
 
   ctrl.signals({
