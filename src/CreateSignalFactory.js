@@ -47,7 +47,7 @@ module.exports = function (controller, model, services, compute, modules) {
       var tree = staticTree(signalChain.chain)
       var actions = tree.actions
 
-      var runSync = defaultOptions.isSync || options.isSync
+      var runSync = defaultOptions.isSync || options.isSync || options.branches
 
       // When remembering, the branches with filled out values will be
       // passed
@@ -80,13 +80,13 @@ module.exports = function (controller, model, services, compute, modules) {
           input: payload
         }
 
-        if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
+        if (!options.branches) {
           controller.emit('signalStart', {signal: signal})
         }
 
         var runBranch = function (branch, index, start) {
           var currentBranch = branch[index]
-          if (!currentBranch && branch === signal.branches && !signalStore.isRemembering() && !recorder.isCatchingUp()) {
+          if (!currentBranch && branch === signal.branches && !options.branches) {
             // Might not be any actions passed
             if (branch[index - 1]) {
               branch[index - 1].duration = Date.now() - start
@@ -103,7 +103,7 @@ module.exports = function (controller, model, services, compute, modules) {
           }
 
           if (Array.isArray(currentBranch)) {
-            if (signalStore.isRemembering() || recorder.isCatchingUp()) {
+            if (options.branches) {
               currentBranch.forEach(function (action) {
                 // If any signals has run with this action, run them
                 // as well
@@ -180,7 +180,7 @@ module.exports = function (controller, model, services, compute, modules) {
             }
           } else {
             var action = currentBranch
-            if (signalStore.isRemembering()) {
+            if (options.branches) {
               action.mutations.forEach(function (mutation) {
                 model.mutators[mutation.name].apply(null, [mutation.path.slice()].concat(mutation.args))
               })
@@ -192,6 +192,7 @@ module.exports = function (controller, model, services, compute, modules) {
               runBranch(branch, index + 1)
             } else {
               controller.emit('actionStart', {action: action, signal: signal})
+
               var actionFunc = actions[action.actionIndex]
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
               var actionArgs = createActionArgs.sync(action, inputArg, model, compute)
@@ -205,6 +206,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
               var next = createNext.sync(actionFunc, signal.name)
               var modulesArg = createModulesArg(modules, actionArgs[1], services)
+
               actionFunc({
                 input: actionArgs[0],
                 state: actionArgs[1],
@@ -242,10 +244,12 @@ module.exports = function (controller, model, services, compute, modules) {
               } else if (result.then) {
                 return result.then(function () {
                   controller.emit('actionEnd', {action: action, signal: signal})
+
                   return runBranch(branch, index + 1, start)
                 })
               } else {
                 controller.emit('actionEnd', {action: action, signal: signal})
+
                 return runBranch(branch, index + 1, start)
               }
             }
@@ -257,7 +261,7 @@ module.exports = function (controller, model, services, compute, modules) {
         return
       }
 
-      if (runSync || signalStore.isRemembering() || recorder.isCatchingUp()) {
+      if (runSync) {
         runSignal()
       } else {
         batchedSignals.push(runSignal)

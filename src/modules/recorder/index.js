@@ -25,7 +25,8 @@ module.exports = function Recorder () {
       }
       currentSignal = signal
       signalMethodPath(signal.input, {
-        isRecorded: true
+        isRecorded: !isCatchingUp,
+        branches: isCatchingUp && signal.branches
       })
     }
 

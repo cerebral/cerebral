@@ -98,7 +98,9 @@ module.exports = function SignalStore () {
               var signalMethodPath = signal.name.split('.').reduce(function (signals, key) {
                 return signals[key]
               }, controller.getSignals())
-              signalMethodPath(signal.input, {branches: signal.branches})
+              signalMethodPath(signal.input, {
+                branches: signal.branches
+              })
               currentIndex = x
             }
           } catch (e) {
