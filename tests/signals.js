@@ -717,4 +717,71 @@ suite['should throw error when output path is not an array'] = function (test) {
   test.done()
 }
 
+suite['should emit events in correct order'] = function (test) {
+  var ctrl = Controller(Model())
+  var i = 0
+  var signal = [
+    function () {},
+    [
+      function (args) { setTimeout(args.output, 30) },
+      function (args) { setTimeout(args.output, 10) }
+    ], [
+      function (args) { setTimeout(args.output, 10) }
+    ]
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+
+  ctrl.on('signalStart', function (args) {
+    test.equal(i, 0)
+    test.ok(args.signal.isExecuting)
+    i++
+  })
+  ctrl.on('actionStart', function (args) {
+    var action = args.action
+    switch (i) {
+      case 1:
+        test.equal(action.actionIndex, 0)
+        break
+      case 3:
+        test.equal(action.actionIndex, 1)
+        break
+      case 4:
+        test.equal(action.actionIndex, 2)
+        break
+      case 7:
+        test.equal(action.actionIndex, 3)
+        break
+    }
+    i++
+  })
+  ctrl.on('actionEnd', function (args) {
+    var action = args.action
+    switch (i) {
+      case 2:
+        test.equal(action.actionIndex, 0)
+        break
+      case 5:
+        test.equal(action.actionIndex, 2)
+        break
+      case 6:
+        test.equal(action.actionIndex, 1)
+        break
+      case 8:
+        test.equal(action.actionIndex, 3)
+        break
+    }
+    i++
+  })
+  ctrl.on('signalEnd', function (args) {
+    test.equal(i, 9)
+    test.ok(!args.signal.isExecuting)
+    test.done()
+  })
+
+  ctrl.getSignals().test()
+}
+
 module.exports = { signals: suite }
