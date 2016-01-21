@@ -1,6 +1,5 @@
 module.exports = function Recorder () {
   return function (module, controller) {
-    var signalStore = controller.getStore()
     var signalMethods = controller.getSignals()
 
     var currentSignal = null
@@ -37,10 +36,6 @@ module.exports = function Recorder () {
         playbackTimers.forEach(clearTimeout)
 
         controller.emit('seek', startSeek, currentRecording)
-
-        if (signalStore.isRemembering()) {
-          return
-        }
 
         // Optimize with FOR loop
         catchup = currentRecording.signals.filter(function (signal) {
@@ -90,10 +85,6 @@ module.exports = function Recorder () {
       },
 
       record: function (options) {
-        if (signalStore.isRemembering()) {
-          return
-        }
-
         options = options || {}
 
         // If we are recording over the previous stuff, go back to start
@@ -124,7 +115,7 @@ module.exports = function Recorder () {
         isPlaying = false
         isRecording = false
 
-        if (signalStore.isRemembering() || wasPlaying) {
+        if (wasPlaying) {
           return
         }
 
@@ -133,10 +124,6 @@ module.exports = function Recorder () {
       },
 
       pause: function pause () {
-        if (signalStore.isRemembering()) {
-          return
-        }
-
         ended = Date.now()
         currentSeek = ended - started
         clearTimeout(durationTimer)
