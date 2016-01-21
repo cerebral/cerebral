@@ -1,18 +1,40 @@
 {
   "name": "cerebral",
-  "version": "0.32.1",
+  "version": "0.0.0-semantically-released",
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
     "pretest": "standard",
     "test": "nodeunit tests",
-    "test:watch": "nodeunit-watcher tests"
+    "test:watch": "nodeunit-watcher tests",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cerebral/cerebral.git"
+  },
   "devDependencies": {
+    "commitizen": "^2.5.0",
+    "conventional-changelog": "0.0.17",
+    "cz-customizable": "^2.7.0",
+    "ghooks": "^1.0.3",
     "nodeunit": "^0.9.0",
     "nodeunit-watcher": "0.0.3",
-    "standard": "^5.4.1"
+    "semantic-release": "^4.3.5",
+    "standard": "^5.4.1",
+    "validate-commit-msg": "^1.1.1"
+  },
+  "config": {
+    "commitizen": {
+      "path": "node_modules/cz-customizable"
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
+    }
+  },
+  "release": {
+    "analyzeCommits": "./sr-prerelease.js"
   }
 }
