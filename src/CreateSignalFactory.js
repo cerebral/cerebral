@@ -77,9 +77,7 @@ module.exports = function (controller, model, services, compute, modules) {
           isExecuting: true,
           branches: branches,
           duration: 0,
-          input: payload,
-          asyncActionPaths: [],
-          asyncActionResults: []
+          input: payload
         }
 
         if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
@@ -105,7 +103,7 @@ module.exports = function (controller, model, services, compute, modules) {
           }
 
           if (Array.isArray(currentBranch)) {
-            if (signalStore.isRemembering()) {
+            if (signalStore.isRemembering() || recorder.isCatchingUp()) {
               currentBranch.forEach(function (action) {
                 // If any signals has run with this action, run them
                 // as well
@@ -122,19 +120,6 @@ module.exports = function (controller, model, services, compute, modules) {
 
                 if (action.outputPath) {
                   runBranch(action.outputs[action.outputPath], 0)
-                }
-              })
-
-              runBranch(branch, index + 1)
-            } else if (recorder.isCatchingUp()) {
-              var currentSignal = recorder.getCurrentSignal()
-
-              currentBranch.forEach(function (action) {
-                var recordedAction = currentSignal.asyncActionResults[currentSignal.asyncActionPaths.indexOf(action.path.join('.'))]
-                utils.merge(signalArgs, recordedAction.output)
-
-                if (action.outputPath) {
-                  runBranch(action.outputs[recordedAction.outputPath], 0)
                 }
               })
 
@@ -172,12 +157,6 @@ module.exports = function (controller, model, services, compute, modules) {
                   action.isExecuting = false
                   action.output = result.arg
                   utils.merge(signalArgs, result.arg)
-
-                  signal.asyncActionPaths.push(action.path.join('.'))
-                  signal.asyncActionResults.push({
-                    output: result.arg,
-                    outputPath: result.path
-                  })
 
                   controller.emit('actionEnd', {action: action, signal: signal})
                   controller.emit('change', {signal: signal})
