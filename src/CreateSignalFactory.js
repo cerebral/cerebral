@@ -184,6 +184,8 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
                   action.output = result.arg
                   utils.merge(signalArgs, result.arg)
                   signalStore.removeAsyncAction(action)
+                  controller.emit('actionEnd', {action: action, signal: signal})
+                  controller.emit('change', {signal: signal})
 
                   if (recorder.isRecording()) {
                     recorderSignal.asyncActionPaths.push(action.path.join('.'))
@@ -195,9 +197,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
                   if (result.path) {
                     action.outputPath = result.path
-                    controller.emit('actionEnd', {action: action, signal: signal})
                     var branchResult = runBranch(action.outputs[result.path], 0, Date.now())
-                    controller.emit('change', {signal: signal})
                     devtools && devtools.update()
                     return branchResult
                   } else {
