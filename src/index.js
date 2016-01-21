@@ -2,9 +2,10 @@ var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateSignalStore = require('./CreateSignalStore.js')
 var CreateRecorder = require('./CreateRecorder.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
-var Devtools = require('./Devtools.js')
 var Compute = require('./Compute.js')
 var EventEmitter = require('events').EventEmitter
+
+var Devtools = require('./modules/devtools')
 
 var Controller = function (Model, services) {
   if (services) {
@@ -15,17 +16,12 @@ var Controller = function (Model, services) {
   var model = Model(controller)
   var compute = Compute(model)
   var signals = {}
-  var devtools = null
   var signalStore = CreateSignalStore(controller)
   var modules = {}
   services = services || {}
 
-  if (typeof window !== 'undefined' && typeof window.addEventListener !== 'undefined') {
-    devtools = Devtools(signalStore, controller)
-  }
-
   var recorder = CreateRecorder(signalStore, signals, controller, model)
-  var signalFactory = CreateSignalFactory(signalStore, recorder, devtools, controller, model, services, compute, modules)
+  var signalFactory = CreateSignalFactory(signalStore, recorder, controller, model, services, compute, modules)
   var signal = function () {
     var signalNamePath = arguments[0].split('.')
     var signalName = signalNamePath.pop()
@@ -50,11 +46,11 @@ var Controller = function (Model, services) {
   }
 
   controller.signal = function () {
-    console.warn('This method is deprecated, use controller.signals() instead')
+    console.warn('Cerebral: controller.signal() is deprecated, use controller.signals() instead')
     signal.apply(null, arguments)
   }
   controller.signalSync = function () {
-    console.warn('This method is deprecated, use controller.signals() instead')
+    console.warn('Cerebral: controller.signalSync() is deprecated, use controller.signals() instead')
     var defaultOptions = arguments[2] || {}
     defaultOptions.isSync = true
     return signal(arguments[0], arguments[1], defaultOptions)
@@ -78,9 +74,6 @@ var Controller = function (Model, services) {
     }
     var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0]
     return model.accessors.get(path)
-  }
-  controller.getDevtools = function () {
-    return devtools
   }
   controller.logModel = function () {
     return model.logModel()
@@ -108,6 +101,10 @@ var Controller = function (Model, services) {
     })
     return controller.getServices()
   }
+
+  controller.modules({
+    devtools: Devtools()
+  })
 
   return controller
 }
