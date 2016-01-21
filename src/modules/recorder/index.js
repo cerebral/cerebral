@@ -179,5 +179,9 @@ module.exports = function Recorder () {
       console.warn('Cerebral: controller.getRecorder() is deprecated. Please upgrade recorder module.')
       return services
     }
+
+    controller.on('signalStart', function (args) {
+      if (isRecording) services.addSignal(args.signal)
+    })
   }
 }

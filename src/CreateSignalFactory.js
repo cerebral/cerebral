@@ -69,13 +69,6 @@ module.exports = function (controller, model, services, compute, modules) {
 
         // Describe the signal to later trigger as if it was live
         var start = Date.now()
-        var recorderSignal = {
-          name: signalName,
-          input: payload,
-          start: start,
-          asyncActionPaths: [],
-          asyncActionResults: []
-        }
         var signal = {
           name: signalName,
           start: start,
@@ -84,15 +77,13 @@ module.exports = function (controller, model, services, compute, modules) {
           isExecuting: true,
           branches: branches,
           duration: 0,
-          input: payload
+          input: payload,
+          asyncActionPaths: [],
+          asyncActionResults: []
         }
 
         if (!signalStore.isRemembering() && !recorder.isCatchingUp()) {
           controller.emit('signalStart', {signal: signal})
-        }
-
-        if (recorder.isRecording()) {
-          recorder.addSignal(recorderSignal)
         }
 
         var runBranch = function (branch, index, start) {
@@ -181,16 +172,15 @@ module.exports = function (controller, model, services, compute, modules) {
                   action.isExecuting = false
                   action.output = result.arg
                   utils.merge(signalArgs, result.arg)
+
+                  signal.asyncActionPaths.push(action.path.join('.'))
+                  signal.asyncActionResults.push({
+                    output: result.arg,
+                    outputPath: result.path
+                  })
+
                   controller.emit('actionEnd', {action: action, signal: signal})
                   controller.emit('change', {signal: signal})
-
-                  if (recorder.isRecording()) {
-                    recorderSignal.asyncActionPaths.push(action.path.join('.'))
-                    recorderSignal.asyncActionResults.push({
-                      output: result.arg,
-                      outputPath: result.path
-                    })
-                  }
 
                   if (result.path) {
                     action.outputPath = result.path
