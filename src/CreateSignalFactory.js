@@ -161,8 +161,6 @@ module.exports = function (controller, model, services, compute, modules) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
                 }
 
-                signalStore.addAsyncAction(action)
-
                 action.isExecuting = true
                 action.input = utils.merge({}, inputArg)
                 var next = createNext.async(actionFunc, signal.name)
@@ -183,7 +181,6 @@ module.exports = function (controller, model, services, compute, modules) {
                   action.isExecuting = false
                   action.output = result.arg
                   utils.merge(signalArgs, result.arg)
-                  signalStore.removeAsyncAction(action)
                   controller.emit('actionEnd', {action: action, signal: signal})
                   controller.emit('change', {signal: signal})
 

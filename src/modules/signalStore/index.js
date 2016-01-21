@@ -153,5 +153,13 @@ module.exports = function SignalStore () {
     controller.on('signalStart', function (args) {
       services.addSignal(args.signal)
     })
+    controller.on('actionStart', function (args) {
+      var action = args.action
+      if (action.isAsync) services.addAsyncAction(args.action)
+    })
+    controller.on('actionEnd', function (args) {
+      var action = args.action
+      if (action.isAsync) services.removeAsyncAction(args.action)
+    })
   }
 }
