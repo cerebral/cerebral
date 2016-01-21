@@ -165,7 +165,7 @@ module.exports = function (signalStore, recorder, devtools, controller, model, s
 
                 action.isExecuting = true
                 action.input = utils.merge({}, inputArg)
-                var next = createNext.async(actionFunc)
+                var next = createNext.async(actionFunc, signal.name)
                 var modulesArg = createModulesArg(modules, actionArgs[1], services)
                 actionFunc({
                   input: actionArgs[0],
