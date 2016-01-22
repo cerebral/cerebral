@@ -83,6 +83,7 @@ module.exports = function (controller, model, services, compute, modules) {
         }
 
         if (signal.isPrevented) {
+          console.log('Cerebral - Preventing signal run after signalStart is deprecated. Use `signalTrigger` event instead.')
           controller.emit('signalEnd', {signal: signal})
           return
         }
