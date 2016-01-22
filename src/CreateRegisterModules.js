@@ -37,51 +37,59 @@ module.exports = function (controller, model, allModules) {
     model.mutators.set(moduleName.split('.'), state)
   }
 
-  controller.on('reset', function () {
-    model.mutators.merge([], initialState)
-  })
-
-  return function registerModules (parentModuleName, modules) {
+  var registerModules = function (parentModuleName, modules) {
     if (arguments.length === 1) {
       modules = parentModuleName
       parentModuleName = null
     }
+
     Object.keys(modules).forEach(function (moduleName) {
-      var moduleConstructor = modules[moduleName]
-      var actualName = moduleName
-      if (parentModuleName) {
-        moduleName = parentModuleName + '.' + moduleName
-      }
-      var moduleExport = {
-        name: actualName,
-        path: moduleName.split('.')
-      }
-      var module = {
-        name: moduleName,
-        alias: function (alias) {
-          allModules[alias] = moduleExport
-        },
-        signals: registerSignals.bind(null, moduleName),
-        signalsSync: registerSignalsSync.bind(null, moduleName),
-        services: registerServices.bind(null, moduleName),
-        state: registerInitialState.bind(null, moduleName),
-        getSignals: function () {
-          var signals = controller.getSignals()
-          var path = moduleName.split('.')
-          return path.reduce(function (signals, key) {
-            return signals[key]
-          }, signals)
-        },
-        modules: registerModules.bind(null, moduleName)
-      }
-      var constructedModule = moduleConstructor(module, controller)
-
-      moduleExport.meta = constructedModule
-      module.meta = constructedModule
-      allModules[moduleName] = moduleExport
-
-      return moduleExport
+      registerModule(moduleName, parentModuleName, modules)
     })
+
     return allModules
   }
+
+  var registerModule = function (moduleName, parentModuleName, modules) {
+    var moduleConstructor = modules[moduleName]
+    var actualName = moduleName
+    if (parentModuleName) {
+      moduleName = parentModuleName + '.' + moduleName
+    }
+    var moduleExport = {
+      name: actualName,
+      path: moduleName.split('.')
+    }
+    var module = {
+      name: moduleName,
+      alias: function (alias) {
+        allModules[alias] = moduleExport
+      },
+      signals: registerSignals.bind(null, moduleName),
+      signalsSync: registerSignalsSync.bind(null, moduleName),
+      services: registerServices.bind(null, moduleName),
+      state: registerInitialState.bind(null, moduleName),
+      getSignals: function () {
+        var signals = controller.getSignals()
+        var path = moduleName.split('.')
+        return path.reduce(function (signals, key) {
+          return signals[key]
+        }, signals)
+      },
+      modules: registerModules.bind(null, moduleName)
+    }
+    var constructedModule = moduleConstructor(module, controller)
+
+    moduleExport.meta = constructedModule
+    module.meta = constructedModule
+    allModules[moduleName] = moduleExport
+
+    return moduleExport
+  }
+
+  controller.on('reset', function () {
+    model.mutators.merge([], initialState)
+  })
+
+  return registerModules
 }
