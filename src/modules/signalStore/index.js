@@ -15,28 +15,28 @@ module.exports = function SignalStore () {
 
     var asyncActionsRunning = []
 
-    var services = {
-      addAsyncAction: function (action) {
-        asyncActionsRunning.push(action)
-      },
+    var addAsyncAction = function (action) {
+      asyncActionsRunning.push(action)
+    }
 
-      removeAsyncAction: function (action) {
-        asyncActionsRunning.splice(asyncActionsRunning.indexOf(action), 1)
-      },
+    var removeAsyncAction = function (action) {
+      asyncActionsRunning.splice(asyncActionsRunning.indexOf(action), 1)
+    }
 
-      addSignal: function (signal) {
-        if (utils.isDeveloping() && !isRemembering) {
-          if (asyncActionsRunning.length) {
-            var currentAction = asyncActionsRunning[asyncActionsRunning.length - 1]
-            currentAction.signals = currentAction.signals || []
-            currentAction.signals.push(signal)
-          } else {
-            currentIndex++
-            signals.push(signal)
-          }
+    var addSignal = function (signal) {
+      if (utils.isDeveloping() && !isRemembering) {
+        if (asyncActionsRunning.length) {
+          var currentAction = asyncActionsRunning[asyncActionsRunning.length - 1]
+          currentAction.signals = currentAction.signals || []
+          currentAction.signals.push(signal)
+        } else {
+          currentIndex++
+          signals.push(signal)
         }
-      },
+      }
+    }
 
+    var services = {
       // This is used when loading up the app and producing the last known state
       rememberNow: function () { // +
         if (!signals.length) {
@@ -151,15 +151,15 @@ module.exports = function SignalStore () {
         console.warn('Cerebral - Looking in the past, ignored signal ' + signal.name)
       }
 
-      services.addSignal(signal)
+      addSignal(signal)
     })
     controller.on('actionStart', function (args) {
       var action = args.action
-      if (action.isAsync) services.addAsyncAction(args.action)
+      if (action.isAsync) addAsyncAction(args.action)
     })
     controller.on('actionEnd', function (args) {
       var action = args.action
-      if (action.isAsync) services.removeAsyncAction(args.action)
+      if (action.isAsync) removeAsyncAction(args.action)
     })
   }
 }
