@@ -153,7 +153,7 @@ module.exports = function SignalStore () {
         console.warn('Cerebral - Looking in the past, ignored signal ' + signal.name)
       }
 
-      addSignal(signal)
+      if (!signal.isPrevented) addSignal(signal)
     })
     controller.on('actionStart', function (args) {
       var action = args.action
