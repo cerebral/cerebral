@@ -73,15 +73,28 @@ module.exports = function (controller, model, services, compute, modules) {
           name: signalName,
           start: start,
           isSync: runSync,
-          isRouted: options.isRouted || false,
+          isRouted: options.isRouted || false, // could be removed
           isExecuting: true,
+          isPrevented: false,
           branches: branches,
+          options: options,
           duration: 0,
-          input: payload
+          input: payload,
+          preventSignalRun: function () {
+            if (signal.isExecuting) {
+              signal.isExecuting = false
+              signal.isPrevented = true
+            }
+          }
         }
 
         if (!options.branches) {
           controller.emit('signalStart', {signal: signal})
+        }
+
+        if (signal.isPrevented) {
+          controller.emit('signalEnd', {signal: signal})
+          return
         }
 
         var runBranch = function (branch, index, start) {

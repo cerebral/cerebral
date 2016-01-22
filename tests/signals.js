@@ -784,4 +784,26 @@ suite['should emit events in correct order'] = function (test) {
   ctrl.getSignals().test()
 }
 
+suite['should not run signal if prevented'] = function (test) {
+  var ctrl = Controller(Model())
+  var signal = [
+    function () { test.ok(false) }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+
+  ctrl.on('signalStart', function (args) {
+    args.signal.preventSignalRun()
+  })
+
+  ctrl.on('signalEnd', function (args) {
+    test.ok(args.signal.isPrevented)
+    test.done()
+  })
+
+  ctrl.getSignals().test()
+}
+
 module.exports = { signals: suite }
