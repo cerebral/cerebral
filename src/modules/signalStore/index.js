@@ -9,7 +9,6 @@ var utils = require('./../../utils.js')
 module.exports = function SignalStore () {
   return function (module, controller) {
     var signals = []
-    var willKeepState = false
     var isRemembering = false
     var currentIndex = signals.length - 1
     var hasRememberedInitial = false
@@ -17,11 +16,6 @@ module.exports = function SignalStore () {
     var asyncActionsRunning = []
 
     var services = {
-      // Flips flag of storing signals or replacing them
-      toggleKeepState: function () {
-        willKeepState = !willKeepState
-      },
-
       addAsyncAction: function (action) {
         asyncActionsRunning.push(action)
       },
@@ -137,10 +131,6 @@ module.exports = function SignalStore () {
 
       isRemembering: function () {
         return isRemembering
-      },
-
-      willKeepState: function () {
-        return willKeepState
       },
 
       getCurrentIndex: function () {

@@ -9,14 +9,16 @@ module.exports = function Devtools () {
 
   return function init (module, controller) {
     module.alias(MODULE)
+
     var signalStore = controller.getStore()
     var isInitialized = false
     var disableDebugger = false
+    var willKeepState = false
 
     var getDetail = function () {
       return JSON.stringify({
         signals: signalStore.getSignals(),
-        willKeepState: signalStore.willKeepState(),
+        willKeepState: willKeepState,
         disableDebugger: disableDebugger,
         currentSignalIndex: signalStore.getCurrentIndex(),
         isExecutingAsync: signalStore.isExecutingAsync(),
@@ -49,13 +51,9 @@ module.exports = function Devtools () {
         localStorage.getItem('cerebral_signals')
           ? JSON.parse(localStorage.getItem('cerebral_signals')) : []
 
-      var willKeepState = utils.hasLocalStorage() &&
+      willKeepState = utils.hasLocalStorage() &&
         localStorage.getItem('cerebral_willKeepState')
           ? JSON.parse(localStorage.getItem('cerebral_willKeepState')) : true
-
-      if (willKeepState) {
-        signalStore.toggleKeepState()
-      }
 
       isInitialized = true
 
@@ -90,14 +88,14 @@ module.exports = function Devtools () {
     })
 
     window.addEventListener('cerebral.dev.toggleKeepState', function () {
-      signalStore.toggleKeepState()
+      willKeepState = !willKeepState
       update()
     })
 
     window.addEventListener('cerebral.dev.toggleDisableDebugger', function () {
       disableDebugger = !disableDebugger
-      if (disableDebugger && signalStore.willKeepState()) {
-        signalStore.toggleKeepState()
+      if (disableDebugger && willKeepState) {
+        willKeepState = !willKeepState
       }
       var event = new CustomEvent('cerebral.dev.update', {
         detail: getDetail()
@@ -146,8 +144,8 @@ module.exports = function Devtools () {
     window.addEventListener('unload', function () {
       signalStore.removeRunningSignals()
 
-      utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', isInitialized && signalStore.willKeepState() ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]))
-      utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(signalStore.willKeepState()))
+      utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', isInitialized && willKeepState ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]))
+      utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(willKeepState))
       utils.hasLocalStorage() && localStorage.setItem('cerebral_disable_debugger', isInitialized && JSON.stringify(disableDebugger))
     })
 
