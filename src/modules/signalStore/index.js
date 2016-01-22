@@ -38,7 +38,7 @@ module.exports = function SignalStore () {
       },
 
       // This is used when loading up the app and producing the last known state
-      rememberNow: function () {
+      rememberNow: function () { // +
         if (!signals.length) {
           return
         }
@@ -48,7 +48,7 @@ module.exports = function SignalStore () {
       },
 
       // Will reset the SignalStore
-      reset: function () {
+      reset: function () { // +
         if (!isRemembering) {
           signals = []
 
@@ -58,7 +58,7 @@ module.exports = function SignalStore () {
         }
       },
 
-      rememberInitial: function (index) {
+      rememberInitial: function (index) { // +
         // Both router and debugger might try to do initial remembering
         if (hasRememberedInitial) {
           return
@@ -67,7 +67,7 @@ module.exports = function SignalStore () {
         hasRememberedInitial = true
         this.remember(index)
       },
-      remember: function (index) {
+      remember: function (index) { // +
         // Flag that we are remembering
         isRemembering = true
         controller.emit('reset')
@@ -108,7 +108,7 @@ module.exports = function SignalStore () {
         isRemembering = false
       },
 
-      removeRunningSignals: function () {
+      removeRunningSignals: function () { // +
         for (var x = 0; x < signals.length; x++) {
           if (signals[x].isExecuting) {
             signals.splice(x, 1)
@@ -117,23 +117,23 @@ module.exports = function SignalStore () {
         }
       },
 
-      getSignals: function () {
+      getSignals: function () { // +
         return signals
       },
 
-      setSignals: function (newSignals) {
+      setSignals: function (newSignals) { // +
         signals = signals.concat(newSignals)
       },
 
-      isExecutingAsync: function () {
+      isExecutingAsync: function () { // +
         return !!asyncActionsRunning.length
       },
 
-      isRemembering: function () {
+      isRemembering: function () { // +
         return isRemembering
       },
 
-      getCurrentIndex: function () {
+      getCurrentIndex: function () { // +
         return currentIndex
       }
     }

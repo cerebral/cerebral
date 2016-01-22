@@ -45,21 +45,14 @@ module.exports = function Devtools () {
     }, 100)
 
     var initialize = function () {
-      if (isInitialized) {
-        return
+      if (isInitialized) return
+      var signals = []
+
+      if (utils.hasLocalStorage()) {
+        disableDebugger = JSON.parse(localStorage.getItem('cerebral_disable_debugger'))
+        signals = JSON.parse(localStorage.getItem('cerebral_signals'))
+        willKeepState = JSON.parse(localStorage.getItem('cerebral_willKeepState'))
       }
-
-      disableDebugger = utils.hasLocalStorage() &&
-        localStorage.getItem('cerebral_disable_debugger')
-          ? JSON.parse(localStorage.getItem('cerebral_disable_debugger')) : false
-
-      var signals = utils.hasLocalStorage() &&
-        localStorage.getItem('cerebral_signals')
-          ? JSON.parse(localStorage.getItem('cerebral_signals')) : []
-
-      willKeepState = utils.hasLocalStorage() &&
-        localStorage.getItem('cerebral_willKeepState')
-          ? JSON.parse(localStorage.getItem('cerebral_willKeepState')) : true
 
       isInitialized = true
 
@@ -150,9 +143,11 @@ module.exports = function Devtools () {
     window.addEventListener('unload', function () {
       signalStore.removeRunningSignals()
 
-      utils.hasLocalStorage() && localStorage.setItem('cerebral_signals', isInitialized && willKeepState ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]))
-      utils.hasLocalStorage() && localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(willKeepState))
-      utils.hasLocalStorage() && localStorage.setItem('cerebral_disable_debugger', isInitialized && JSON.stringify(disableDebugger))
+      if (utils.hasLocalStorage()) {
+        localStorage.setItem('cerebral_signals', isInitialized && willKeepState ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]))
+        localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(willKeepState))
+        localStorage.setItem('cerebral_disable_debugger', isInitialized && JSON.stringify(disableDebugger))
+      }
     })
 
     var services = {
