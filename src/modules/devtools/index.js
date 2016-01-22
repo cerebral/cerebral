@@ -149,20 +149,22 @@ module.exports = function Devtools () {
     var services = {
       update: update,
       start: function () {
-        if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
-          window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals = controller.getSignals()
-        }
-        var event = new CustomEvent('cerebral.dev.cerebralPing')
-        window.dispatchEvent(event)
+        console.warn('Cerebral: devtools.start() method is deprecated. Devtools has started automatically.')
       }
     }
 
     module.services(services)
 
     controller.getDevtools = function () {
-      console.warn('Cerebral: controller.getDevtools() method is deprecated. Please upgrade your view package to latest version')
+      console.warn('Cerebral: controller.getDevtools() method is deprecated. Please upgrade your view package to latest version.')
       return services
     }
+
+    if (window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__) {
+      window.__CEREBRAL_DEVTOOLS_GLOBAL_HOOK__.signals = controller.getSignals()
+    }
+    var event = new CustomEvent('cerebral.dev.cerebralPing')
+    window.dispatchEvent(event)
 
     controller.on('signalStart', update)
     controller.on('actionStart', update)
