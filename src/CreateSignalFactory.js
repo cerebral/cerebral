@@ -30,11 +30,27 @@ module.exports = function (controller, model, services, compute, modules) {
       var tree = staticTree(signalChain.chain)
       var actions = tree.actions
 
-      var runSync = defaultOptions.isSync || options.isSync || options.branches
-
       // When remembering, the branches with filled out values will be
       // passed
       var branches = options.branches || tree.branches
+
+      var signal = {
+        name: signalName,
+        start: null,
+        isSync: defaultOptions.isSync || options.isSync || options.branches,
+        isRouted: options.isRouted || false, // could be removed
+        isExecuting: false,
+        isPrevented: false,
+        branches: branches,
+        options: options,
+        duration: 0,
+        input: payload,
+        preventSignalRun: function () {
+          signal.isExecuting = false
+          signal.isPrevented = true
+        }
+      }
+
       var runSignal = function () {
         // Accumulate the args in one object that will be passed
         // to each action
@@ -50,26 +66,8 @@ module.exports = function (controller, model, services, compute, modules) {
           }
         }
 
-        // Describe the signal to later trigger as if it was live
-        var start = Date.now()
-        var signal = {
-          name: signalName,
-          start: start,
-          isSync: runSync,
-          isRouted: options.isRouted || false, // could be removed
-          isExecuting: true,
-          isPrevented: false,
-          branches: branches,
-          options: options,
-          duration: 0,
-          input: payload,
-          preventSignalRun: function () {
-            if (signal.isExecuting) {
-              signal.isExecuting = false
-              signal.isPrevented = true
-            }
-          }
-        }
+        signal.start = Date.now()
+        signal.isExecuting = true
 
         if (!options.branches) {
           controller.emit('signalStart', {signal: signal})
@@ -257,7 +255,7 @@ module.exports = function (controller, model, services, compute, modules) {
         return
       }
 
-      if (runSync) {
+      if (signal.isSync) {
         runSignal()
       } else {
         batchedSignals.push(runSignal)

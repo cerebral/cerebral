@@ -1,5 +1,5 @@
 'use strict'
-// config to prevent bump major vaersion until we will reach 1.0.0
+// config to prevent bump major version until we will reach 1.0.0
 var parseRawCommit = require('conventional-changelog/lib/git').parseRawCommit
 
 module.exports = function (pluginConfig, _ref, cb) {
