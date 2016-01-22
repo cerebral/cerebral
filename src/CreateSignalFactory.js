@@ -52,6 +52,12 @@ module.exports = function (controller, model, services, compute, modules) {
         signal.isSync = true
         signal.branches = options.branches
         isPredefinedExecution = true
+      } else {
+        controller.emit('signalTrigger', { signal: signal })
+      }
+
+      if (signal.isPrevented) {
+        return
       }
 
       var runSignal = function () {
