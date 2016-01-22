@@ -153,7 +153,14 @@ module.exports = function SignalStore () {
     }
 
     controller.on('signalStart', function (args) {
-      services.addSignal(args.signal)
+      var signal = args.signal
+
+      if (isRemembering && currentIndex !== -1 && currentIndex < signals.length - 1) {
+        signal.preventSignalRun()
+        console.warn('Cerebral - Looking in the past, ignored signal ' + signal.name)
+      }
+
+      services.addSignal(signal)
     })
     controller.on('actionStart', function (args) {
       var action = args.action

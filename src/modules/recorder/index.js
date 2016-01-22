@@ -1,3 +1,5 @@
+var utils = require('./../../utils.js')
+
 module.exports = function Recorder () {
   return function (module, controller) {
     var signalMethods = controller.getSignals()
@@ -169,6 +171,13 @@ module.exports = function Recorder () {
     }
 
     controller.on('signalStart', function (args) {
+      var signal = args.signal
+
+      if (isPlaying && !signal.options.isRecorded) {
+        signal.preventSignalRun()
+        if (utils.isDeveloping()) console.warn('Cerebral - Recording is replaying, ignored signal ' + signal.name)
+      }
+
       if (isRecording) services.addSignal(args.signal)
     })
   }

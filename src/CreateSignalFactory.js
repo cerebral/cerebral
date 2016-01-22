@@ -13,9 +13,6 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
 
 module.exports = function (controller, model, services, compute, modules) {
   return function () {
-    var recorder = controller.getRecorder()
-    var signalStore = controller.getStore()
-
     var args = [].slice.call(arguments)
     var signalName = args.shift()
     var defaultOptions = args[1] || {}
@@ -28,21 +25,7 @@ module.exports = function (controller, model, services, compute, modules) {
     }
 
     var signalChain = function (payload, options) {
-      if (
-        utils.isDeveloping() &&
-        !signalStore.isRemembering() &&
-        signalStore.getCurrentIndex() !== -1 &&
-        signalStore.getCurrentIndex() < signalStore.getSignals().length - 1
-      ) {
-        console.warn('Cerebral - Looking in the past, ignored signal ' + signalName)
-        return
-      }
-
       options = options || {}
-
-      if (recorder.isPlaying() && !options.isRecorded) {
-        return
-      }
 
       var tree = staticTree(signalChain.chain)
       var actions = tree.actions
