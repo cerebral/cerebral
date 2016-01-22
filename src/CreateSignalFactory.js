@@ -30,18 +30,14 @@ module.exports = function (controller, model, services, compute, modules) {
       var tree = staticTree(signalChain.chain)
       var actions = tree.actions
 
-      // When remembering, the branches with filled out values will be
-      // passed
-      var branches = options.branches || tree.branches
-
       var signal = {
         name: signalName,
         start: null,
-        isSync: defaultOptions.isSync || options.isSync || options.branches,
-        isRouted: options.isRouted || false, // could be removed
+        isSync: defaultOptions.isSync || options.isSync,
+        isRouted: options.isRouted || false, // will be removed
         isExecuting: false,
         isPrevented: false,
-        branches: branches,
+        branches: tree.branches,
         options: options,
         duration: 0,
         input: payload,
@@ -49,6 +45,13 @@ module.exports = function (controller, model, services, compute, modules) {
           signal.isExecuting = false
           signal.isPrevented = true
         }
+      }
+
+      var isPredefinedExecution = false
+      if (options.branches) {
+        signal.isSync = true
+        signal.branches = options.branches
+        isPredefinedExecution = true
       }
 
       var runSignal = function () {
@@ -69,7 +72,7 @@ module.exports = function (controller, model, services, compute, modules) {
         signal.start = Date.now()
         signal.isExecuting = true
 
-        if (!options.branches) {
+        if (!isPredefinedExecution) {
           controller.emit('signalStart', {signal: signal})
         }
 
@@ -80,7 +83,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
         var runBranch = function (branch, index, start) {
           var currentBranch = branch[index]
-          if (!currentBranch && branch === signal.branches && !options.branches) {
+          if (!currentBranch && branch === signal.branches && !isPredefinedExecution) {
             // Might not be any actions passed
             if (branch[index - 1]) {
               branch[index - 1].duration = Date.now() - start
@@ -97,7 +100,7 @@ module.exports = function (controller, model, services, compute, modules) {
           }
 
           if (Array.isArray(currentBranch)) {
-            if (options.branches) {
+            if (isPredefinedExecution) {
               currentBranch.forEach(function (action) {
                 // If any signals has run with this action, run them
                 // as well
@@ -174,7 +177,7 @@ module.exports = function (controller, model, services, compute, modules) {
             }
           } else {
             var action = currentBranch
-            if (options.branches) {
+            if (isPredefinedExecution) {
               action.mutations.forEach(function (mutation) {
                 model.mutators[mutation.name].apply(null, [mutation.path.slice()].concat(mutation.args))
               })
