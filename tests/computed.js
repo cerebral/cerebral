@@ -251,4 +251,27 @@ suite['should allow use of computed inside actions'] = function (test) {
   controller.getSignals().test.sync()
 }
 
+suite['should allow use of factories'] = function (test) {
+  var runCount = 0
+  var model = Model({
+    foo: 'bar'
+  })
+  var foo = function () {
+    var computed = function () {
+      runCount++
+      return 'foo'
+    }
+    computed.computedRef = JSON.stringify(arguments)
+    return computed
+  }
+  var controller = Controller(model)
+
+  test.expect(1)
+  controller.get(foo('foo'))
+  controller.get(foo('foo'))
+  controller.get(foo('foo2'))
+  test.equals(runCount, 2)
+  test.done()
+}
+
 module.exports = { computed: suite }

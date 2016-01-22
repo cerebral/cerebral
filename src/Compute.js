@@ -1,6 +1,7 @@
 module.exports = function (model) {
   var registered = []
   var computed = []
+  var cachedByRef = {}
 
   var createMapper = function (cb) {
     var initialRun = true
@@ -42,21 +43,35 @@ module.exports = function (model) {
   }
 
   var has = function (computedFunc) {
-    return registered.indexOf(computedFunc) !== -1
+    if (computedFunc.computedRef) {
+      return !!cachedByRef[computedFunc.computedRef]
+    } else {
+      return registered.indexOf(computedFunc) !== -1
+    }
   }
 
   var getComputedValue = function (computedFunc) {
     if (!has(computedFunc)) {
       registered.push(computedFunc)
+      if (computedFunc.computedRef) {
+        cachedByRef[computedFunc.computedRef] = computedFunc
+      }
       computed.push(createMapper(computedFunc))
     }
 
-    return computed[registered.indexOf(computedFunc)]()
+    if (computedFunc.computedRef) {
+      return computed[registered.indexOf(cachedByRef[computedFunc.computedRef])]()
+    } else {
+      return computed[registered.indexOf(computedFunc)]()
+    }
   }
 
   return {
     register: function (computeFunc) {
       registered.push(computeFunc)
+      if (computeFunc.computedRef) {
+        cachedByRef[computeFunc.computedRef] = computeFunc
+      }
       computed.push(createMapper(computeFunc))
       return this.getComputedValue(computeFunc)
     },
