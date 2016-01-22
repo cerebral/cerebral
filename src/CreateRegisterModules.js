@@ -1,5 +1,7 @@
 var utils = require('./utils.js')
 
+var Devtools = require('./modules/devtools')
+
 module.exports = function (controller, model, allModules) {
   var initialState = {}
 
@@ -41,6 +43,11 @@ module.exports = function (controller, model, allModules) {
     if (arguments.length === 1) {
       modules = parentModuleName
       parentModuleName = null
+
+      // TODO: remove after devtools extracted to external module
+      if (utils.isDeveloping() && !modules.devtools) {
+        modules.devtools = Devtools()
+      }
     }
 
     Object.keys(modules).forEach(function (moduleName) {

@@ -3,7 +3,6 @@ var CreateRegisterModules = require('./CreateRegisterModules.js')
 var Compute = require('./Compute.js')
 var EventEmitter = require('events').EventEmitter
 
-var Devtools = require('./modules/devtools')
 var Recorder = require('./modules/recorder')
 
 var Controller = function (Model, services) {
@@ -93,10 +92,8 @@ var Controller = function (Model, services) {
     return controller.getServices()
   }
 
-  controller.modules({
-    devtools: Devtools(),
-    recorder: Recorder()
-  })
+  // emulate loading recorder
+  Recorder()({}, controller)
 
   return controller
 }

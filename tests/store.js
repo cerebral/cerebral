@@ -25,6 +25,7 @@ var Model = function () {
 
 suite['should keep signals by default'] = function (test) {
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     function () {}
   ]
@@ -42,6 +43,7 @@ suite['should keep signals by default'] = function (test) {
 
 suite['should store details about signal'] = function (test) {
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     function ActionA () {}
   ]
@@ -63,6 +65,7 @@ suite['should store details about signal'] = function (test) {
 
 suite['should not store default args'] = function (test) {
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     function ActionA () {}
   ]
@@ -87,6 +90,7 @@ suite['should not store default args'] = function (test) {
 
 suite['should store details about actions'] = function (test) {
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     function ActionA () {}
   ]
@@ -107,6 +111,7 @@ suite['should store details about actions'] = function (test) {
 
 suite['should store details about mutations'] = function (test) {
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     function ActionA (args) {
       args.state.set('foo', 'bar')
@@ -131,6 +136,7 @@ suite['should store details about mutations'] = function (test) {
 
 suite['should store details about mutations correctly across sync and async signals'] = function (test) {
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signalSync = [
     function ActionA (args) {
       args.state.set('foo', 'bar')
@@ -173,6 +179,7 @@ suite['should store details about mutations correctly across sync and async sign
 
 suite['should indicate async actions'] = function (test) {
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     [
       function ActionA (args) { args.output() }
@@ -193,6 +200,7 @@ suite['should indicate async actions'] = function (test) {
 suite['should indicate when async actions are running'] = function (test) {
   test.expect(5)
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     function (args) {
       test.ok(!ctrl.getStore().isExecutingAsync())
@@ -244,6 +252,7 @@ suite['should be able to remember previous signal'] = function (test) {
     }
   }
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     function (args) {
       args.state.set('foo', args.input.foo)
@@ -297,6 +306,7 @@ suite['should be able to remember async actions and run them synchronously when 
     }
   }
   var ctrl = Controller(Model())
+  ctrl.modules({})
   var signal = [
     [
       function ActionA (args) {
@@ -348,6 +358,7 @@ suite['should be able to remember async actions and run them in the right order'
   }
 
   var ctrl = Controller(Model())
+  ctrl.modules({})
 
   ctrl.signalsSync({
     signalA: [
@@ -406,6 +417,7 @@ suite['should be able to run multiple async signals and store them correctly'] =
   }
 
   var ctrl = Controller(Model())
+  ctrl.modules({})
 
   ctrl.signalsSync({
     signalB: [
