@@ -125,10 +125,6 @@ module.exports = function Devtools () {
       update()
     })
 
-    window.addEventListener('cerebral.dev.logComputedPath', function (event) {
-      console.log('CEREBRAL - Computed path:', controller.getComputedValue(event.detail))
-    })
-
     window.addEventListener('cerebral.dev.logPath', function (event) {
       var name = event.detail.name
       var value = controller.get(event.detail.path)
