@@ -57,7 +57,7 @@ module.exports = function Devtools () {
       isInitialized = true
 
       // Might be an async signal running here
-      if (signalStore.isExecutingAsync()) {
+      if (willKeepState && signalStore.isExecutingAsync()) {
         controller.once('signalEnd', function () {
           var event = new CustomEvent('cerebral.dev.cerebralPong', {
             detail: getDetail()
