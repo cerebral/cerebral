@@ -3,7 +3,6 @@ var CreateRegisterModules = require('./CreateRegisterModules.js')
 var Compute = require('./Compute.js')
 var EventEmitter = require('events').EventEmitter
 
-var SignalStore = require('./modules/signalStore')
 var Devtools = require('./modules/devtools')
 var Recorder = require('./modules/recorder')
 
@@ -95,7 +94,6 @@ var Controller = function (Model, services) {
   }
 
   controller.modules({
-    signalStore: SignalStore(),
     devtools: Devtools(),
     recorder: Recorder()
   })

@@ -1,4 +1,10 @@
 var Controller = require('./../src/index.js')
+// trick to load devtools module with signalStore
+global.window = {
+  addEventListener: function () {},
+  dispatchEvent: function () {}
+}
+global.CustomEvent = function () {}
 var suite = {}
 
 var async = function (cb) {

@@ -138,6 +138,7 @@ module.exports = function SignalStore () {
       }
     }
 
+    module.services(services)
     controller.getStore = function getStore () {
       return services
     }

@@ -1,5 +1,6 @@
 /* eslint-env browser*/
 var MODULE = 'cerebral-module-devtools'
+var SignalStore = require('../signalStore')
 var utils = require('./../../utils.js')
 
 module.exports = function Devtools () {
@@ -10,7 +11,12 @@ module.exports = function Devtools () {
   return function init (module, controller) {
     module.alias(MODULE)
 
-    var signalStore = controller.getStore()
+    module.modules({
+      store: SignalStore()
+    })
+
+    var signalStore = controller.getServices()[module.name].store
+
     var isInitialized = false
     var disableDebugger = false
     var willKeepState = false
