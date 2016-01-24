@@ -13,20 +13,23 @@ import App from './modules/App/components/App';
 import AppModule from './modules/App';
 
 import Refs from './modules/Refs';
+import Devtools from 'cerebral-module-devtools';
 import Recorder from 'cerebral-module-recorder';
 import Router from 'cerebral-module-router';
 
-const controller = Controller(Model({}));
+const controller = window.controller = Controller(Model({}));
 
 controller.modules({
   app: AppModule(),
 
   refs: Refs(),
   recorder: Recorder(),
+  devtools: Devtools(),
   router: Router({
     '/': 'app.footer.allTodosClicked',
     '/:filter': 'app.footer.filterClicked'
   }, {
+    autoTrigger: true,
     onlyHash: true
   })
 });
