@@ -170,14 +170,16 @@ module.exports = function Recorder () {
       return services
     }
 
-    controller.on('signalStart', function (args) {
+    controller.on('signalTrigger', function (args) {
       var signal = args.signal
 
       if (isPlaying && !signal.options.isRecorded) {
         signal.preventSignalRun()
         if (utils.isDeveloping()) console.warn('Cerebral - Recording is replaying, ignored signal ' + signal.name)
       }
+    })
 
+    controller.on('signalStart', function (args) {
       if (isRecording) services.addSignal(args.signal)
     })
   }
