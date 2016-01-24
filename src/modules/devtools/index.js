@@ -50,7 +50,7 @@ module.exports = function Devtools () {
 
       if (utils.hasLocalStorage()) {
         disableDebugger = JSON.parse(localStorage.getItem('cerebral_disable_debugger'))
-        signals = JSON.parse(localStorage.getItem('cerebral_signals'))
+        signals = JSON.parse(localStorage.getItem('cerebral_signals')) || []
         willKeepState = JSON.parse(localStorage.getItem('cerebral_willKeepState'))
       }
 
@@ -141,8 +141,8 @@ module.exports = function Devtools () {
 
       if (utils.hasLocalStorage()) {
         localStorage.setItem('cerebral_signals', isInitialized && willKeepState ? JSON.stringify(signalStore.getSignals()) : JSON.stringify([]))
-        localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(willKeepState))
-        localStorage.setItem('cerebral_disable_debugger', isInitialized && JSON.stringify(disableDebugger))
+        localStorage.setItem('cerebral_willKeepState', isInitialized && JSON.stringify(!!willKeepState))
+        localStorage.setItem('cerebral_disable_debugger', isInitialized && JSON.stringify(!!disableDebugger))
       }
     })
 
