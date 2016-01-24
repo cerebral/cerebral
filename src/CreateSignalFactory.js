@@ -129,8 +129,6 @@ module.exports = function (controller, model, services, compute, modules) {
 
               runBranch(branch, index + 1)
             } else {
-              controller.emit('change', {signal: signal})
-
               var promises = currentBranch.map(function (action) {
                 controller.emit('actionStart', {action: action, signal: signal})
                 var actionFunc = actions[action.actionIndex]
@@ -172,6 +170,7 @@ module.exports = function (controller, model, services, compute, modules) {
                   }
                 })
               })
+              controller.emit('change', {signal: signal})
               return Promise.all(promises)
                 .then(function () {
                   return runBranch(branch, index + 1, Date.now())
