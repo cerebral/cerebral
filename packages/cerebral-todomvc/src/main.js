@@ -17,7 +17,7 @@ import Devtools from 'cerebral-module-devtools';
 import Recorder from 'cerebral-module-recorder';
 import Router from 'cerebral-module-router';
 
-const controller = window.controller = Controller(Model({}));
+const controller = Controller(Model({}));
 
 controller.modules({
   app: AppModule(),
