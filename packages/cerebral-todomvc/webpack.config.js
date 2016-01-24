@@ -19,6 +19,14 @@ var config = {
       loader: 'babel?optional=es7.decorators',
       include: src
     }]
+  },
+  resolve: {
+    extensions: [ '', '.js', '.jsx' ],
+    fallback: path.join(__dirname, 'node_modules')
+  },
+
+  resolveLoader: {
+    root: path.join(__dirname, 'node_modules')
   }
 };
 
