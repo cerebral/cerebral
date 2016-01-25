@@ -10,9 +10,15 @@ module.exports = function (model) {
 
     var get = function (path) {
       var value
-
       if (typeof path === 'function') {
-        value = currentState['COMPUTED_' + registered.indexOf(path)] = getComputedValue(path)
+        if (!has(path)) {
+          registered.push(path)
+          if (path.computedRef) {
+            cachedByRef[path.computedRef] = path
+          }
+          computed.push(createMapper(path))
+        }
+        value = currentState['COMPUTED_' + (path.computedRef ? path.computedRef : registered.indexOf(path))] = getComputedValue(path)
       } else {
         value = currentState[path.join('.%.')] = model.accessors.get(path)
       }
@@ -26,7 +32,8 @@ module.exports = function (model) {
           return true
         }
         if (key.indexOf('COMPUTED') === 0) {
-          return getComputedValue(registered[key.split('_')[1]]) !== currentState[key]
+          var index = key.split('_')[1]
+          return getComputedValue(registered[index] || cachedByRef[index]) !== currentState[key]
         } else {
           return model.accessors.get(key.split('.%.')) !== currentState[key]
         }
