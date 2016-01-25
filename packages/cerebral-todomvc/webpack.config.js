@@ -5,7 +5,7 @@ var TARGET = process.env.npm_lifecycle_event;
 
 var config = {
   entry: path.resolve(src, 'main.js'),
-  devtool: TARGET === 'start'? 'eval-source-map' : 'source-map',
+  devtool: 'source-map',
   output: {
     path: dist,
     filename: 'todomvc.js'

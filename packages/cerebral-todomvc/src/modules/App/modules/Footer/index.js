@@ -1,4 +1,3 @@
-import allTodosClicked from './signals/allTodosClicked';
 import clearCompletedClicked from './signals/clearCompletedClicked';
 import filterClicked from './signals/filterClicked';
 
@@ -10,7 +9,6 @@ export default (options = {}) => {
     });
 
     module.signals({
-      allTodosClicked,
       clearCompletedClicked,
       filterClicked
     });

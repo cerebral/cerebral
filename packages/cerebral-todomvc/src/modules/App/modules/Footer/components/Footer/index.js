@@ -34,7 +34,7 @@ class TodosFooter extends React.Component {
         <span id="todo-count"><strong>{this.renderRemainingCount()}</strong></span>
         <ul id="filters">
           <li>
-            <Link className={this.renderRouteClass('all')} signal="app.footer.allTodosClicked">All</Link>
+            <Link className={this.renderRouteClass('all')} signal="app.footer.filterClicked">All</Link>
           </li>
           <li>
             <Link className={this.renderRouteClass('active')} signal="app.footer.filterClicked" params={{filter: 'active'}}>Active</Link>

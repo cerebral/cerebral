@@ -26,11 +26,10 @@ controller.modules({
   recorder: Recorder(),
   devtools: Devtools(),
   router: Router({
-    '/': 'app.footer.allTodosClicked',
-    '/:filter': 'app.footer.filterClicked'
+    '/': 'app.footer.filterClicked'
   }, {
     autoTrigger: true,
-    onlyHash: true
+    mapper: { query: true }
   })
 });
 
