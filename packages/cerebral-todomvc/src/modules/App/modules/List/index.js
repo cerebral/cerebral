@@ -11,7 +11,6 @@ export default (options = {}) => {
 
     module.state({
       todos: {},
-      visibleTodosRefs: [],
       isAllChecked: false,
       editedTodo: null,
       showCompleted: true,
