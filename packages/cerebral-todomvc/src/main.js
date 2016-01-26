@@ -28,7 +28,6 @@ controller.modules({
   router: Router({
     '/': 'app.footer.filterClicked'
   }, {
-    autoTrigger: true,
     mapper: { query: true }
   })
 });
