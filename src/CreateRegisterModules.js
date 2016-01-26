@@ -54,6 +54,10 @@ module.exports = function (controller, model, allModules) {
       registerModule(moduleName, parentModuleName, modules)
     })
 
+    if (arguments.length === 1) {
+      controller.emit('modulesLoaded', { modules: allModules })
+    }
+
     return allModules
   }
 
