@@ -45,7 +45,7 @@ module.exports = function (controller, model, allModules) {
       parentModuleName = null
 
       // TODO: remove after devtools extracted to external module
-      if (utils.isDeveloping() && !modules.devtools) {
+      if (utils.isDeveloping() && !modules.devtools && !controller.getModules().devtools) {
         modules.devtools = Devtools()
       }
     }
