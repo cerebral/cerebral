@@ -52,6 +52,7 @@ module.exports = function (controller, model, services, compute, modules) {
         signal.isSync = true
         signal.branches = options.branches
         isPredefinedExecution = true
+        controller.emit('predefinedSignal', { signal: signal })
       } else {
         controller.emit('signalTrigger', { signal: signal })
       }
