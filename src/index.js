@@ -80,7 +80,20 @@ var Controller = function (Model, services) {
 
   controller.addSignals = function (signals, options) {
     Object.keys(signals).forEach(function (key) {
-      signal(key, signals[key], options)
+      if (signals[key].chain) {
+        options = Object.keys(signals[key]).reduce(function (options, configKey) {
+          if (configKey !== 'chain') {
+            options[configKey] = signals[key][configKey]
+          }
+          if (configKey === 'sync') {
+            options.isSync = signals[key][configKey]
+          }
+          return options
+        }, options || {})
+        signal(key, signals[key].chain, options)
+      } else {
+        signal(key, signals[key], options)
+      }
     })
   }
   controller.signals = function () {
