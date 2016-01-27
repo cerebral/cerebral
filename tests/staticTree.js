@@ -13,6 +13,7 @@ suite['should convert actions to objects'] = function (test) {
     duration: 0,
     path: [0],
     mutations: [],
+    serviceCalls: [],
     isExecuting: false,
     hasExecuted: false,
     isAsync: false,

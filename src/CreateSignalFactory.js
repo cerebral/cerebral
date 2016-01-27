@@ -134,7 +134,7 @@ module.exports = function (controller, model, services, compute, modules) {
                 controller.emit('actionStart', {action: action, signal: signal})
                 var actionFunc = actions[action.actionIndex]
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-                var actionArgs = createActionArgs.async(action, inputArg, model, compute)
+                var actionArgs = createActionArgs.async(action, inputArg, model, compute, services, Object.keys(modules))
 
                 if (utils.isDeveloping() && actionFunc.input) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
@@ -143,12 +143,12 @@ module.exports = function (controller, model, services, compute, modules) {
                 action.isExecuting = true
                 action.input = utils.merge({}, inputArg)
                 var next = createNext.async(actionFunc, signal.name)
-                var modulesArg = createModulesArg(modules, actionArgs[1], services)
+                var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2])
                 var actionArg = {
                   input: actionArgs[0],
                   state: actionArgs[1],
                   output: next.fn,
-                  services: services,
+                  services: actionArgs[2],
                   modules: modulesArg,
                   module: defaultOptions.modulePath.reduce(function (modules, key) {
                     return modules[key]
@@ -216,7 +216,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
               var actionFunc = actions[action.actionIndex]
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-              var actionArgs = createActionArgs.sync(action, inputArg, model, compute)
+              var actionArgs = createActionArgs.sync(action, inputArg, model, compute, services, Object.keys(modules))
 
               if (utils.isDeveloping() && actionFunc.input) {
                 utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
@@ -226,12 +226,13 @@ module.exports = function (controller, model, services, compute, modules) {
               action.input = utils.merge({}, inputArg)
 
               var next = createNext.sync(actionFunc, signal.name)
-              var modulesArg = createModulesArg(modules, actionArgs[1], services)
+              var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2])
+
               var actionArg = {
                 input: actionArgs[0],
                 state: actionArgs[1],
                 output: next,
-                services: services,
+                services: actionArgs[2],
                 modules: modulesArg,
                 module: defaultOptions.modulePath.reduce(function (exportedModule, key) {
                   return exportedModule[key]

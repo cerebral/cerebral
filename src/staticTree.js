@@ -19,6 +19,7 @@ var traverse = function (item, parentItem, path, actions, isSync) {
       output: null,
       duration: 0,
       mutations: [],
+      serviceCalls: [],
       isAsync: !isSync,
       outputPath: null,
       isExecuting: false,

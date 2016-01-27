@@ -40,17 +40,54 @@ var createStateArg = function (action, model, isAsync, compute) {
   return state
 }
 
+var createServicesArg = function (action, services, moduleKeys) {
+  var path = []
+
+  var convertServices = function (moduleServices) {
+    return Object.keys(moduleServices).reduce(function (newModuleServices, key) {
+      path.push(key)
+      if (typeof moduleServices[key] === 'function') {
+        var servicePath = path.slice()
+        var method = servicePath.pop()
+        newModuleServices[key] = function () {
+          action.serviceCalls.push({
+            name: servicePath.join('.'),
+            method: method,
+            args: [].slice.call(arguments)
+          })
+          return moduleServices[key].apply(moduleServices[key], arguments)
+        }
+      } else if (typeof moduleServices[key] === 'object' && !Array.isArray(moduleServices[key]) && moduleServices[key] !== null) {
+        newModuleServices[key] = convertServices(moduleServices[key])
+      } else {
+        newModuleServices[key] = moduleServices[key]
+      }
+      path.pop(key)
+      return newModuleServices
+    }, {})
+  }
+
+  return Object.keys(services).reduce(function (newServices, key) {
+    path.push(key)
+    newServices[key] = convertServices(services[key], key)
+    path.pop(key)
+    return newServices
+  }, {})
+}
+
 module.exports = {
-  sync: function (action, signalArgs, model, compute) {
+  sync: function (action, signalArgs, model, compute, services, moduleKeys) {
     return [
       signalArgs,
-      createStateArg(action, model, false, compute)
+      createStateArg(action, model, false, compute),
+      createServicesArg(action, services, moduleKeys)
     ]
   },
-  async: function (action, signalArgs, model, compute) {
+  async: function (action, signalArgs, model, compute, services, moduleKeys) {
     return [
       signalArgs,
-      createStateArg(action, model, true, compute)
+      createStateArg(action, model, true, compute),
+      createServicesArg(action, services, moduleKeys)
     ]
   }
 }

@@ -71,7 +71,9 @@ suite['should not store default args'] = function (test) {
   ]
 
   ctrl.services({
-    utils: 'test'
+    utils: function () {
+
+    }
   })
   ctrl.signals({
     'test': signal

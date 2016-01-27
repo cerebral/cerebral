@@ -608,7 +608,9 @@ suite['should allow services'] = function (test) {
   ]
 
   ctrl.services({
-    foo: 'bar'
+    foo: function () {
+
+    }
   })
 
   ctrl.signals({
@@ -854,6 +856,123 @@ suite['should attach error when failed action execution'] = function (test) {
     })
     ctrl.getSignals().test.sync()
   })
+}
+
+suite['should wrap and track use of services'] = function (test) {
+  var ctrl = Controller(Model())
+
+  var ModuleA = function (module) {
+    var action = function (args) {
+      args.module.services.test('foo')
+    }
+
+    module.addServices({
+      test: function () {
+
+      }
+    })
+
+    module.addSignals({
+      test: [action]
+    })
+  }
+
+  var ModuleB = function (module) {
+    var action = function (args) {
+      args.module.services.test('foo')
+    }
+
+    module.addServices({
+      test: function () {
+
+      }
+    })
+
+    module.addSignals({
+      test: [action]
+    })
+
+    module.addModules({
+      moduleC: ModuleC
+    })
+  }
+
+  var ModuleC = function (module) {
+    var action = function (args) {
+      args.module.services.test('foo')
+      args.module.services.test2.foo('foo')
+      args.module.services.test2.bar('foo')
+    }
+
+    module.addServices({
+      test: function () {
+
+      },
+      test2: {
+        foo: function () {
+
+        },
+        bar: function () {
+
+        },
+        string: 'hey',
+        array: []
+      }
+    })
+
+    module.addSignals({
+      test: [action]
+    })
+  }
+
+  ctrl.addModules({
+    moduleA: ModuleA,
+    moduleB: ModuleB
+  })
+
+  var assertModuleA = function (args) {
+    test.ok(ctrl.getServices().moduleA.test)
+    test.equal(args.signal.branches[0].serviceCalls[0].name, 'moduleA')
+    test.equal(args.signal.branches[0].serviceCalls[0].method, 'test')
+    test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
+  }
+  ctrl.on('signalEnd', assertModuleA)
+  ctrl.getSignals().moduleA.test.sync()
+  ctrl.removeListener('signalEnd', assertModuleA)
+
+  var assertModuleB = function (args) {
+    test.ok(ctrl.getServices().moduleB.test)
+    test.equal(args.signal.branches[0].serviceCalls[0].name, 'moduleB')
+    test.equal(args.signal.branches[0].serviceCalls[0].method, 'test')
+    test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
+  }
+  ctrl.on('signalEnd', assertModuleB)
+  ctrl.getSignals().moduleB.test.sync()
+  ctrl.removeListener('signalEnd', assertModuleB)
+
+  var assertModuleC = function (args) {
+    test.ok(ctrl.getServices().moduleB.moduleC.test)
+    test.ok(ctrl.getServices().moduleB.moduleC.test2)
+    test.equal(ctrl.getServices().moduleB.moduleC.test2.string, 'hey')
+    test.deepEqual(ctrl.getServices().moduleB.moduleC.test2.array, [])
+
+    test.equal(args.signal.branches[0].serviceCalls[0].name, 'moduleB.moduleC')
+    test.equal(args.signal.branches[0].serviceCalls[0].method, 'test')
+    test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
+
+    test.equal(args.signal.branches[0].serviceCalls[1].name, 'moduleB.moduleC.test2')
+    test.equal(args.signal.branches[0].serviceCalls[1].method, 'foo')
+    test.deepEqual(args.signal.branches[0].serviceCalls[1].args, ['foo'])
+
+    test.equal(args.signal.branches[0].serviceCalls[2].name, 'moduleB.moduleC.test2')
+    test.equal(args.signal.branches[0].serviceCalls[2].method, 'bar')
+    test.deepEqual(args.signal.branches[0].serviceCalls[2].args, ['foo'])
+  }
+  ctrl.on('signalEnd', assertModuleC)
+  ctrl.getSignals().moduleB.moduleC.test.sync()
+  ctrl.removeListener('signalEnd', assertModuleC)
+
+  test.done()
 }
 
 module.exports = { signals: suite }
