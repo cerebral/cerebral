@@ -42,11 +42,11 @@ var Controller = function (Model, services) {
   }
 
   controller.signal = function () {
-    console.warn('Cerebral: controller.signal() is deprecated, use controller.signals() instead')
+    console.warn('Cerebral: controller.signal() is DEPRECATED. Please use controller.addSignals() instead')
     signal.apply(null, arguments)
   }
   controller.signalSync = function () {
-    console.warn('Cerebral: controller.signalSync() is deprecated, use controller.signals() instead')
+    console.warn('Cerebral: controller.signalSync() is DEPRECATED. Please use controller.addSignals({mySignal: {chain: [], sync: true}}) instead')
     var defaultOptions = arguments[2] || {}
     defaultOptions.isSync = true
     return signal(arguments[0], arguments[1], defaultOptions)
@@ -72,24 +72,38 @@ var Controller = function (Model, services) {
     return modules
   }
 
-  controller.modules = CreateRegisterModules(controller, model, modules)
-  controller.signals = function (signals, options) {
+  controller.addModules = CreateRegisterModules(controller, model, modules)
+  controller.modules = function () {
+    console.warn('Cerebral: controller.modules() is DEPRECATED. Please use controller.addModules() instead')
+    controller.addModules.apply(controller, arguments)
+  }
+
+  controller.addSignals = function (signals, options) {
     Object.keys(signals).forEach(function (key) {
       signal(key, signals[key], options)
     })
   }
+  controller.signals = function () {
+    console.warn('Cerebral: controller.signals() is DEPRECATED. Please use controller.addSignals() instead')
+    controller.addSignals.apply(controller, arguments)
+  }
   controller.signalsSync = function (signals, options) {
+    console.warn('Cerebral: controller.signalsSync() is DEPRECATED. Please use controller.addSignals({mySignal: {chain: [], sync: true}}) instead')
     Object.keys(signals).forEach(function (key) {
       options = options || {}
       options.isSync = true
       signal(key, signals[key], options)
     })
   }
-  controller.services = function (newServices) {
+  controller.addServices = function (newServices) {
     Object.keys(newServices).forEach(function (key) {
       service(key, newServices[key])
     })
     return controller.getServices()
+  }
+  controller.services = function (newServices) {
+    console.warn('Cerebral: controller.services() is DEPRECATED. Please use controller.addServices() instead')
+    controller.addServices(newServices)
   }
 
   // emulate loading recorder

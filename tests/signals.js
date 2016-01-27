@@ -26,7 +26,21 @@ suite['should register signals'] = function (test) {
   ctrl.signals({
     'test': []
   })
+  ctrl.addSignals({
+    'test2': []
+  })
   test.ok(typeof ctrl.getSignals().test === 'function')
+  test.ok(typeof ctrl.getSignals().test2 === 'function')
+  test.done()
+}
+
+suite['should register sync signals'] = function (test) {
+  var ctrl = Controller(Model())
+  ctrl.signalsSync({
+    'test': []
+  })
+  test.ok(typeof ctrl.getSignals().test === 'function')
+
   test.done()
 }
 

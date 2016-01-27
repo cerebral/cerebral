@@ -31,8 +31,12 @@ suite['should be able to register a module'] = function (test) {
   ctrl.modules({
     test: function () {}
   })
+  ctrl.addModules({
+    test2: function () {}
+  })
 
   test.ok(ctrl.getModules().test)
+  test.ok(ctrl.getModules().test2)
   test.done()
 }
 
@@ -43,7 +47,7 @@ suite['should pass the module and controller, and expose module name and path on
     test: function (module, controller) {
       test.equal(controller, ctrl)
       test.equal(module.name, 'test')
-      test.deepEqual(module.signals, {})
+      test.equal(typeof module.getSignals, 'function')
     }
   })
   test.equal(ctrl.getModules().test.name, 'test')
