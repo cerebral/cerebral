@@ -144,7 +144,7 @@ module.exports = function (controller, model, services, compute, modules) {
                 action.input = utils.merge({}, inputArg)
                 var next = createNext.async(actionFunc, signal.name)
                 var modulesArg = createModulesArg(modules, actionArgs[1], services)
-                actionFunc({
+                var actionArg = {
                   input: actionArgs[0],
                   state: actionArgs[1],
                   output: next.fn,
@@ -153,7 +153,24 @@ module.exports = function (controller, model, services, compute, modules) {
                   module: defaultOptions.modulePath.reduce(function (modules, key) {
                     return modules[key]
                   }, modulesArg)
-                })
+                }
+
+                if (utils.isDeveloping()) {
+                  try {
+                    actionFunc(actionArg)
+                  } catch (e) {
+                    action.error = {
+                      name: e.name,
+                      message: e.message,
+                      stack: actionFunc.toString()
+                    }
+                    controller.emit('actionEnd', {action: action, signal: signal})
+                    controller.emit('change', {signal: signal})
+                    throw e
+                  }
+                } else {
+                  actionFunc(actionArg)
+                }
 
                 return next.promise.then(function (result) {
                   action.hasExecuted = true
@@ -210,8 +227,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
               var next = createNext.sync(actionFunc, signal.name)
               var modulesArg = createModulesArg(modules, actionArgs[1], services)
-
-              actionFunc({
+              var actionArg = {
                 input: actionArgs[0],
                 state: actionArgs[1],
                 output: next,
@@ -220,7 +236,24 @@ module.exports = function (controller, model, services, compute, modules) {
                 module: defaultOptions.modulePath.reduce(function (exportedModule, key) {
                   return exportedModule[key]
                 }, modulesArg)
-              })
+              }
+
+              if (utils.isDeveloping()) {
+                try {
+                  actionFunc(actionArg)
+                } catch (e) {
+                  action.error = {
+                    name: e.name,
+                    message: e.message,
+                    stack: e.stack
+                  }
+                  controller.emit('actionEnd', {action: action, signal: signal})
+                  controller.emit('change', {signal: signal})
+                  throw e
+                }
+              } else {
+                actionFunc(actionArg)
+              }
 
               // TODO: Also add input here
 
