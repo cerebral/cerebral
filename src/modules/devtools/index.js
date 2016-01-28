@@ -11,7 +11,7 @@ module.exports = function Devtools () {
   return function init (module, controller) {
     module.alias(MODULE)
 
-    module.modules({
+    module.addModules({
       store: SignalStore()
     })
 
@@ -153,7 +153,7 @@ module.exports = function Devtools () {
       }
     }
 
-    module.services(services)
+    module.addServices(services)
 
     controller.getDevtools = function () {
       console.warn('Cerebral: controller.getDevtools() method is deprecated. Please upgrade your view package to latest version.')
