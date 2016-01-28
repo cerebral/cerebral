@@ -836,4 +836,24 @@ suite['should not run signal if prevented'] = function (test) {
   ctrl.getSignals().test()
 }
 
+suite['should attach error when failed action execution'] = function (test) {
+  var ctrl = Controller(Model())
+  var testObject = {}
+  var signal = [
+    function () { testObject.unknown.property }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+
+  test.throws(function () {
+    ctrl.on('signalError', function (args) {
+      test.equal(args.action.error.name, 'TypeError')
+      test.done()
+    })
+    ctrl.getSignals().test.sync()
+  })
+}
+
 module.exports = { signals: suite }
