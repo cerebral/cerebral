@@ -164,7 +164,7 @@ module.exports = function (controller, model, services, compute, modules) {
                       message: e.message,
                       stack: actionFunc.toString()
                     }
-                    controller.emit('actionEnd', {action: action, signal: signal})
+                    controller.emit('signalError', {action: action, signal: signal})
                     controller.emit('change', {signal: signal})
                     throw e
                   }
@@ -247,7 +247,7 @@ module.exports = function (controller, model, services, compute, modules) {
                     message: e.message,
                     stack: e.stack
                   }
-                  controller.emit('actionEnd', {action: action, signal: signal})
+                  controller.emit('signalError', {action: action, signal: signal})
                   controller.emit('change', {signal: signal})
                   throw e
                 }
