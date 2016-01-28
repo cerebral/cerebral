@@ -139,7 +139,8 @@ module.exports = function SignalStore () {
       }
     }
 
-    module.services(services)
+    module.addServices(services)
+
     controller.getStore = function getStore () {
       console.warn('Cerebral: controller.getStore() method is deprecated.')
       return services
