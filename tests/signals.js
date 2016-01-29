@@ -925,9 +925,16 @@ suite['should wrap and track use of services'] = function (test) {
     })
   }
 
+  var ModuleD = function (module) {
+    module.addServices({
+      emitter: require('events').EventEmitter
+    })
+  }
+
   ctrl.addModules({
     moduleA: ModuleA,
-    moduleB: ModuleB
+    moduleB: ModuleB,
+    moduleD: ModuleD
   })
 
   var assertModuleA = function (args) {
