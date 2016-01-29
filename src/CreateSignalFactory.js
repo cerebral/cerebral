@@ -175,7 +175,7 @@ module.exports = function (controller, model, services, compute, modules) {
                 return next.promise.then(function (result) {
                   action.hasExecuted = true
                   action.isExecuting = false
-                  action.output = result.arg
+                  action.output = utils.merge({}, result.arg)
                   utils.merge(signalArgs, result.arg)
 
                   controller.emit('actionEnd', {action: action, signal: signal})
@@ -262,7 +262,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
               action.isExecuting = false
               action.hasExecuted = true
-              action.output = result.arg
+              action.output = utils.merge({}, result.arg)
 
               if (!branch[index + 1] || Array.isArray(branch[index + 1])) {
                 action.duration = Date.now() - start
