@@ -982,4 +982,32 @@ suite['should wrap and track use of services'] = function (test) {
   test.done()
 }
 
+suite['should handle circular references in services'] = function (test) {
+  test.expect(1)
+  var ctrl = Controller(Model())
+  var signal = [
+    function () { test.ok(true) }
+  ]
+
+  var service = {}
+  var obj1 = {}
+  var obj2 = {}
+
+  service.obj1 = obj1
+  service.obj2 = obj2
+  service.obj1.obj2 = obj2
+  service.obj2.obj1 = obj1
+
+  ctrl.addServices({
+    service: service
+  })
+
+  ctrl.addSignals({
+    'test': signal
+  })
+
+  ctrl.getSignals().test.sync()
+  test.done()
+}
+
 module.exports = { signals: suite }

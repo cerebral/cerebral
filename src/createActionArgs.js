@@ -42,6 +42,7 @@ var createStateArg = function (action, model, isAsync, compute) {
 
 var createServicesArg = function (action, services, moduleKeys) {
   var path = []
+  var objectReferences = []
 
   var convertServices = function (moduleServices) {
     return Object.keys(moduleServices).reduce(function (newModuleServices, key) {
@@ -57,7 +58,13 @@ var createServicesArg = function (action, services, moduleKeys) {
           })
           return moduleServices[key].apply(moduleServices[key], arguments)
         }
-      } else if (typeof moduleServices[key] === 'object' && !Array.isArray(moduleServices[key]) && moduleServices[key] !== null) {
+      } else if (
+        typeof moduleServices[key] === 'object' &&
+        !Array.isArray(moduleServices[key]) &&
+        moduleServices[key] !== null &&
+        objectReferences.indexOf(moduleServices[key]) === -1
+      ) {
+        objectReferences.push(moduleServices[key])
         newModuleServices[key] = convertServices(moduleServices[key])
       } else {
         newModuleServices[key] = moduleServices[key]
