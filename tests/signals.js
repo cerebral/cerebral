@@ -1010,4 +1010,51 @@ suite['should handle circular references in services'] = function (test) {
   test.done()
 }
 
+suite['should handle prototypes in service wrapping'] = function (test) {
+  test.expect(6)
+  var ctrl = Controller(Model())
+  var signal = [
+    function (args) {
+      test.ok(args.services.service.foo)
+      test.ok(args.services.service.foo !== proto.foo)
+
+      test.ok(args.services.module.service.foo)
+      test.ok(args.services.module.service.foo !== proto.foo)
+      test.ok(args.services.module.service.bar)
+      test.ok(args.services.module.service.bar !== proto2.bar)
+    }
+  ]
+
+  var proto = {
+    foo: function () {}
+  }
+  var proto2 = Object.create(proto)
+  proto2.bar = function () {
+
+  }
+  var service = Object.create(proto)
+  service.name = 'service1'
+  var service2 = Object.create(proto2)
+  service2.name = 'service2'
+
+  ctrl.addServices({
+    service: service
+  })
+
+  ctrl.addModules({
+    module: function (module) {
+      module.addServices({
+        service: service2
+      })
+    }
+  })
+
+  ctrl.addSignals({
+    'test': signal
+  })
+
+  ctrl.getSignals().test.sync()
+  test.done()
+}
+
 module.exports = { signals: suite }

@@ -40,61 +40,72 @@ var createStateArg = function (action, model, isAsync, compute) {
   return state
 }
 
-var createServicesArg = function (action, services, moduleKeys) {
+var recreateProtoChain = function (action, path, objectReferences, obj) {
+  var protos = []
+  var currentProto = Object.getPrototypeOf(obj)
+  while (currentProto !== Object.getPrototypeOf({})) {
+    protos.push(currentProto)
+    currentProto = Object.getPrototypeOf(currentProto)
+  }
+  if (protos.length) {
+    return protos.reverse().reduce(function (protoChain, proto) {
+      return convertServices(action, path, objectReferences, proto, protoChain)
+    }, {})
+  } else {
+    return null
+  }
+}
+
+var convertServices = function (action, path, objectReferences, services, proto) {
+  return Object.keys(services).reduce(function (newservices, key) {
+    path.push(key)
+    if (typeof services[key] === 'function') {
+      var servicePath = path.slice()
+      var method = servicePath.pop()
+      newservices[key] = function () {
+        action.serviceCalls.push({
+          name: servicePath.join('.'),
+          method: method,
+          args: [].slice.call(arguments)
+        })
+        return services[key].apply(this, arguments)
+      }
+    } else if (
+      typeof services[key] === 'object' &&
+      !Array.isArray(services[key]) &&
+      services[key] !== null &&
+      objectReferences.indexOf(services[key]) === -1
+    ) {
+      var proto = recreateProtoChain(action, path, objectReferences, services[key])
+      objectReferences.push(services[key])
+      newservices[key] = convertServices(action, path, objectReferences, services[key], proto)
+    } else {
+      newservices[key] = services[key]
+    }
+    path.pop(key)
+    return newservices
+  }, proto ? Object.create(proto) : {})
+}
+
+var createServicesArg = function (action, services) {
   var path = []
   var objectReferences = []
-
-  var convertServices = function (moduleServices) {
-    return Object.keys(moduleServices).reduce(function (newModuleServices, key) {
-      path.push(key)
-      if (typeof moduleServices[key] === 'function') {
-        var servicePath = path.slice()
-        var method = servicePath.pop()
-        newModuleServices[key] = function () {
-          action.serviceCalls.push({
-            name: servicePath.join('.'),
-            method: method,
-            args: [].slice.call(arguments)
-          })
-          return moduleServices[key].apply(moduleServices[key], arguments)
-        }
-      } else if (
-        typeof moduleServices[key] === 'object' &&
-        !Array.isArray(moduleServices[key]) &&
-        moduleServices[key] !== null &&
-        objectReferences.indexOf(moduleServices[key]) === -1
-      ) {
-        objectReferences.push(moduleServices[key])
-        newModuleServices[key] = convertServices(moduleServices[key])
-      } else {
-        newModuleServices[key] = moduleServices[key]
-      }
-      path.pop(key)
-      return newModuleServices
-    }, {})
-  }
-
-  return Object.keys(services).reduce(function (newServices, key) {
-    path.push(key)
-    newServices[key] = convertServices(services[key], key)
-    path.pop(key)
-    return newServices
-  }, {})
+  return convertServices(action, path, objectReferences, services)
 }
 
 module.exports = {
-  sync: function (action, signalArgs, model, compute, services, moduleKeys) {
+  sync: function (action, signalArgs, model, compute, services) {
     return [
       signalArgs,
       createStateArg(action, model, false, compute),
-      createServicesArg(action, services, moduleKeys)
+      createServicesArg(action, services)
     ]
   },
-  async: function (action, signalArgs, model, compute, services, moduleKeys) {
+  async: function (action, signalArgs, model, compute, services) {
     return [
       signalArgs,
       createStateArg(action, model, true, compute),
-      createServicesArg(action, services, moduleKeys)
+      createServicesArg(action, services)
     ]
   }
 }
