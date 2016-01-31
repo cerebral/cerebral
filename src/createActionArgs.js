@@ -73,6 +73,20 @@ var convertServices = function (action, path, objectReferences, services, proto)
         })
         return services[key].apply(this, arguments)
       }
+      Object.keys(services[key]).forEach(function (serviceKey) {
+        if (typeof services[key][serviceKey] === 'function') {
+          newservices[key][serviceKey] = function () {
+            action.serviceCalls.push({
+              name: servicePath.join('.'),
+              method: serviceKey,
+              args: [].slice.call(arguments)
+            })
+            return services[key][serviceKey].apply(this, arguments)
+          }
+        } else {
+          newservices[key][serviceKey] = services[key][serviceKey]
+        }
+      })
     } else if (
       typeof services[key] === 'object' &&
       !Array.isArray(services[key]) &&

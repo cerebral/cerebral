@@ -1057,4 +1057,35 @@ suite['should handle prototypes in service wrapping'] = function (test) {
   test.done()
 }
 
+suite['should handle properties on service functions'] = function (test) {
+  test.expect(2)
+  var ctrl = Controller(Model())
+  var arrayProp = []
+  var signal = [
+    function (args) {
+      args.services.service.foo()
+      test.equal(args.services.service.arrayProp, arrayProp)
+    }
+  ]
+
+  var service = function () {
+
+  }
+  service.foo = function () {
+    test.ok(true)
+  }
+  service.arrayProp = arrayProp
+
+  ctrl.addServices({
+    service: service
+  })
+
+  ctrl.addSignals({
+    'test': signal
+  })
+
+  ctrl.getSignals().test.sync()
+  test.done()
+}
+
 module.exports = { signals: suite }
