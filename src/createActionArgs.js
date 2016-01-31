@@ -77,7 +77,7 @@ var convertServices = function (action, path, objectReferences, services, proto)
         if (typeof services[key][serviceKey] === 'function') {
           newservices[key][serviceKey] = function () {
             action.serviceCalls.push({
-              name: servicePath.join('.'),
+              name: servicePath.concat(method).join('.'),
               method: serviceKey,
               args: [].slice.call(arguments)
             })
