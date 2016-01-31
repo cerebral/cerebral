@@ -1,3 +1,6 @@
+var win = typeof window !== 'undefined' ? window : null
+var doc = typeof document !== 'undefined' ? document : null
+
 var createStateArg = function (action, model, isAsync, compute) {
   var state = Object.keys(model.accessors || {}).reduce(function (state, accessor) {
     state[accessor] = function () {
@@ -74,7 +77,8 @@ var convertServices = function (action, path, objectReferences, services, proto)
       typeof services[key] === 'object' &&
       !Array.isArray(services[key]) &&
       services[key] !== null &&
-      objectReferences.indexOf(services[key]) === -1
+      objectReferences.indexOf(services[key]) === -1 &&
+      (!win || !(services[key] instanceof win.HTMLElement))
     ) {
       var proto = recreateProtoChain(action, path, objectReferences, services[key])
       objectReferences.push(services[key])
@@ -89,7 +93,7 @@ var convertServices = function (action, path, objectReferences, services, proto)
 
 var createServicesArg = function (action, services) {
   var path = []
-  var objectReferences = []
+  var objectReferences = [win, doc]
   return convertServices(action, path, objectReferences, services)
 }
 
