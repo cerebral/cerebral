@@ -1,0 +1,24 @@
+{
+  "name": "cerebral-module-useragent",
+  "version": "0.1.0",
+  "description": "Cerebral module to add useragent specs to your state model",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral-module-useragent.git"
+  },
+  "keywords": [
+    "cerebral",
+    "module",
+    "useragent"
+  ],
+  "author": "Max Frigge <maxfrigge@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral-module-useragent/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral-module-useragent#readme"
+}
