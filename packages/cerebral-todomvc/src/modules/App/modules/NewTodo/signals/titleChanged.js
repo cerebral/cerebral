@@ -1,5 +1,8 @@
 import setTitle from './../actions/setTitle.js';
 
-export default [
-  setTitle
-];
+export default {
+  chain: [
+    setTitle
+  ],
+  isSync: true
+};

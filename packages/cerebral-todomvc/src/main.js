@@ -19,7 +19,7 @@ import Router from 'cerebral-module-router';
 
 const controller = Controller(Model({}));
 
-controller.modules({
+controller.addModules({
   app: AppModule(),
 
   refs: Refs(),

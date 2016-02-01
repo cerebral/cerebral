@@ -5,7 +5,7 @@ import Footer from './modules/Footer';
 export default (options = {}) => {
   return (module) => {
 
-    module.modules({
+    module.addModules({
       new: NewTodo(),
       list: List(),
       footer: Footer()

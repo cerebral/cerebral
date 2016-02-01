@@ -4,16 +4,13 @@ import titleChanged from './signals/titleChanged';
 export default (options = {}) => {
   return (module) => {
 
-    module.state({
+    module.addState({
       title: '',
       isSaving: false
     });
 
-    module.signalsSync({
-      titleChanged
-    });
-
-    module.signals({
+    module.addSignals({
+      titleChanged,
       submitted
     });
 

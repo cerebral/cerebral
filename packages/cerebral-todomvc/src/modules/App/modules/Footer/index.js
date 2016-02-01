@@ -4,11 +4,11 @@ import filterClicked from './signals/filterClicked';
 export default (options = {}) => {
   return (module) => {
 
-    module.state({
+    module.addState({
       filter: 'all'
     });
 
-    module.signals({
+    module.addSignals({
       clearCompletedClicked,
       filterClicked
     });

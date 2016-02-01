@@ -13,7 +13,7 @@ import visibleTodos from '../../modules/List/computed/visibleTodos.js';
   visibleTodos: visibleTodos
 })
 class App extends React.Component {
-  record() {
+  record() {
     this.props.signals.recorder.recorded({
       paths: [
         ['app'],

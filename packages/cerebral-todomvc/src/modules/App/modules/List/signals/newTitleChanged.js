@@ -1,5 +1,8 @@
 import setTodoNewTitle from './../actions/setTodoNewTitle.js';
 
-export default [
-  setTodoNewTitle
-];
+export default {
+  chain: [
+    setTodoNewTitle
+  ],
+  isSync: true
+};

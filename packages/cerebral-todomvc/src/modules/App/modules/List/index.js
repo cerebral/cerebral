@@ -9,7 +9,7 @@ import newTitleAborted from './signals/newTitleAborted';
 export default (options = {}) => {
   return (module) => {
 
-    module.state({
+    module.addState({
       todos: {},
       isAllChecked: false,
       editedTodo: null,
@@ -17,11 +17,8 @@ export default (options = {}) => {
       showNotCompleted: true
     });
 
-    module.signalsSync({
-      newTitleChanged
-    });
-
-    module.signals({
+    module.addSignals({
+      newTitleChanged,
       newTitleSubmitted,
       removeTodoClicked,
       todoDoubleClicked,
