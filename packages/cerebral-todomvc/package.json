@@ -5,6 +5,8 @@
   "scripts": {
     "start": "webpack-dev-server --progress --colors",
     "build": "webpack",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist/",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -35,5 +37,8 @@
     "todomvc-common": "^1.0.2",
     "webpack": "^1.12.11",
     "webpack-dev-server": "^1.14.1"
+  },
+  "devDependencies": {
+    "gh-pages": "^0.9.0"
   }
 }
