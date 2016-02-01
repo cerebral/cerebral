@@ -28,6 +28,7 @@ controller.addModules({
   router: Router({
     '/': 'app.footer.filterClicked'
   }, {
+    onlyHash: true,
     mapper: { query: true }
   })
 });
