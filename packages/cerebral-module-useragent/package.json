@@ -1,7 +1,7 @@
 {
   "name": "cerebral-module-useragent",
   "version": "0.1.0",
-  "description": "Cerebral module to add useragent specs to your state model",
+  "description": "Adds useragent specs to your cerebral state model",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,5 +20,18 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral-module-useragent/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral-module-useragent#readme"
+  "homepage": "https://github.com/cerebral/cerebral-module-useragent#readme",
+  "dependencies": {
+    "match-media": "^0.2.0",
+    "raf": "^3.1.0",
+    "user-agent-parser": "^0.6.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.4.5",
+    "babel-loader": "^6.2.1",
+    "babel-plugin-react-transform": "^2.0.0",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-react": "^6.3.13",
+    "webpack": "^1.12.12"
+  }
 }

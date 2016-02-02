@@ -1,32 +1,47 @@
-import createFeatureDetection from './services/features'
-import uaParser from 'user-agent-parser'
-import screen from './services/screen'
+import matchMedia from './services/matchMedia'
+import parser from './services/parser'
+import window from './services/window'
+
+import windowChanged from './signals/windowChanged'
+import moduleRegistered from './signals/moduleRegistered'
 
 export default (options = {}) => {
-  const {forms} = options
-
   return (module) => {
     module.alias('cerebral-module-useragent')
 
-    module.state({
+    module.addState({
       browser: undefined,
       device: undefined,
       features: {},
       os: undefined,
-      screen: {
-        width: window.innerWidth,
-        height: window.innerHeight
+      window: {
+        width: undefined,
+        height: undefined,
+        orientation: undefined
       }
     })
 
-    module.services({
-      parser: uaParser,
-      screen,
-      features: createFeatureDetection(options.features)
+    module.addSignals({
+      moduleRegistered,
+      windowChanged
     })
 
+    module.addServices({
+      matchMedia,
+      parser,
+      window
+    })
+
+    if (options.window !== false) {
+      window.onChange(
+        module.getSignals().windowChanged
+      )
+    }
+
+    module.getSignals().moduleRegistered()
+
     return {
-      forms
+      options
     }
   }
 }
