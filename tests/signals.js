@@ -1088,4 +1088,59 @@ suite['should handle properties on service functions'] = function (test) {
   test.done()
 }
 
+suite['should emit active and idle events'] = function (test) {
+  test.expect(2)
+  var ctrl = Controller(Model())
+  var signal = [
+    function () {
+
+    }
+  ]
+
+  ctrl.addSignals({
+    signal: signal
+  })
+  ctrl.on('active', function () {
+    test.ok(true)
+  })
+  ctrl.on('idle', function () {
+    test.ok(true)
+  })
+  ctrl.getSignals().signal.sync()
+  test.done()
+}
+
+suite['should emit one active and one idle event on same execution'] = function (test) {
+  test.expect(2)
+  var ctrl = Controller(Model())
+  var signalAsync = [
+    [
+      function (args) {
+        args.output()
+      }
+    ]
+  ]
+  var signal = [
+    function () {
+
+    }
+  ]
+
+  ctrl.addSignals({
+    signalAsync: signalAsync,
+    signal: signal
+  })
+  ctrl.on('active', function () {
+    test.ok(true)
+  })
+  ctrl.on('idle', function () {
+    test.ok(true)
+    test.done()
+  })
+  ctrl.getSignals().signalAsync.sync()
+  ctrl.getSignals().signal.sync()
+  ctrl.getSignals().signal.sync()
+  ctrl.getSignals().signal.sync()
+}
+
 module.exports = { signals: suite }
