@@ -5,13 +5,19 @@ var analyze = require('./analyze.js')
 var staticTree = require('./staticTree')
 var createModulesArg = require('./createModulesArg.js')
 
-var batchedSignals = []
-var pending = false
 var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0)
 }
 
 module.exports = function (controller, model, services, compute, modules) {
+  var currentlyRunningSignals = 0
+  var batchedSignals = []
+  var pending = false
+
+  controller.isExecuting = function () {
+    return Boolean(currentlyRunningSignals)
+  }
+
   return function () {
     var args = [].slice.call(arguments)
     var signalName = args.shift()
@@ -80,11 +86,13 @@ module.exports = function (controller, model, services, compute, modules) {
         signal.isExecuting = true
 
         if (!isPredefinedExecution) {
+          currentlyRunningSignals++
           controller.emit('signalStart', {signal: signal})
         }
 
         if (signal.isPrevented) {
           console.log('Cerebral - Preventing signal run after signalStart is deprecated. Use `signalTrigger` event instead.')
+          currentlyRunningSignals--
           controller.emit('signalEnd', {signal: signal})
           return
         }
@@ -98,6 +106,7 @@ module.exports = function (controller, model, services, compute, modules) {
             }
 
             signal.isExecuting = false
+            currentlyRunningSignals--
             controller.emit('signalEnd', {signal: signal})
             controller.emit('change', {signal: signal})
             return

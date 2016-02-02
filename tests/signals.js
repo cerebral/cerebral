@@ -1088,4 +1088,59 @@ suite['should handle properties on service functions'] = function (test) {
   test.done()
 }
 
+suite['should expose an isExecuting method'] = function (test) {
+  var ctrl = Controller(Model())
+  test.equal(ctrl.isExecuting(), false)
+  test.done()
+}
+
+suite['should return true on isExecuting when executing signals'] = function (test) {
+  test.expect(2)
+  var ctrl = Controller(Model())
+  var signal = [
+    function (args) {
+      test.equal(ctrl.isExecuting(), true)
+    }
+  ]
+
+  ctrl.addSignals({
+    'test': signal
+  })
+  ctrl.getSignals().test.sync()
+  test.equal(ctrl.isExecuting(), false)
+  test.done()
+}
+
+suite['should handle multiple signals in same execution'] = function (test) {
+  test.expect(4)
+  var ctrl = Controller(Model())
+  var signal = [
+    function () {
+
+    }
+  ]
+  var signalAsync = [
+    [
+      function (args) {
+        args.output()
+      }
+    ]
+  ]
+
+  ctrl.addSignals({
+    'test': signal,
+    'testAsync': signalAsync
+  })
+  ctrl.getSignals().testAsync.sync()
+  test.equal(ctrl.isExecuting(), true)
+  ctrl.getSignals().test.sync()
+  test.equal(ctrl.isExecuting(), true)
+  ctrl.getSignals().test.sync()
+  test.equal(ctrl.isExecuting(), true)
+  async(function () {
+    test.equal(ctrl.isExecuting(), false)
+    test.done()
+  })
+}
+
 module.exports = { signals: suite }
