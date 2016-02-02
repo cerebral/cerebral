@@ -1,3 +1,4 @@
+import assign from '101/assign'
 import matchMedia from './services/matchMedia'
 import parser from './services/parser'
 import window from './services/window'
@@ -5,7 +6,19 @@ import window from './services/window'
 import windowChanged from './signals/windowChanged'
 import moduleRegistered from './signals/moduleRegistered'
 
-export default (options = {}) => {
+const defaultOptions = {
+  parse: {
+    browser: true,
+    device: true,
+    os: true
+  },
+  window: true
+}
+
+export default (userOptions = {}) => {
+  const options = {}
+  assign(options, defaultOptions, userOptions)
+  console.log(options)
   return (module, controller) => {
     module.alias('cerebral-module-useragent')
 

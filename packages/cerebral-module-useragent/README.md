@@ -4,7 +4,7 @@ A Cerebral module for everything user agent.
 
 - Window size & orientation
 - Browser, device & OS detection
-- Media queries (comming soon)
+- Media queries
 - Feature detection (comming soon)
 
 ## Install
@@ -85,4 +85,5 @@ controller.modules({
 })
 ```
 
-Those are the defaults. You can selectively disable any of these features.
+> Those are the defaults - you can selectively disable any of these features.<br>
+> By default there won't be any media queries. You have to define them from scratch.
