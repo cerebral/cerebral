@@ -3,7 +3,7 @@
 A Cerebral module for everything user agent.
 
 - Window size & orientation
-- Browser, device & os detection
+- Browser, device & OS detection
 - Media queries (comming soon)
 - Feature detection (comming soon)
 
