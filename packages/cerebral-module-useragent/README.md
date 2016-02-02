@@ -20,10 +20,12 @@ import controller from './controller'
 import Useragent form 'cerebral-module-useragent'
 
 const useragent = Useragent({
-  small: '(min-width: 600px)',
-  medium: '(min-width: 1024px)',
-  large: '(min-width: 1440px)',
-  portrait: '(orientation: portrait)'
+  media: {
+    small: '(min-width: 600px)',
+    medium: '(min-width: 1024px)',
+    large: '(min-width: 1440px)',
+    portrait: '(orientation: portrait)'
+  }
 })
 
 controller.modules({
