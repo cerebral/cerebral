@@ -10,6 +10,8 @@ function App (props) {
       <code>{ JSON.stringify(useragent.browser) }</code>
       <h1>useragent.device</h1>
       <code>{ JSON.stringify(useragent.device) }</code>
+      <h1>useragent.media</h1>
+      <code>{ JSON.stringify(useragent.media) }</code>
       <h1>useragent.os</h1>
       <code>{ JSON.stringify(useragent.os) }</code>
       <h1>useragent.window</h1>

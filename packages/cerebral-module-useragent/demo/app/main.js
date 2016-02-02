@@ -18,6 +18,12 @@ const useragent = Useragent({
   detect: {
     xxx: () => {}
   },
+  media: {
+    small: '(min-width: 600px)',
+    medium: '(min-width: 1024px)',
+    large: '(min-width: 1440px)',
+    portrait: '(orientation: portrait)'
+  },
   window: true
 })
 
