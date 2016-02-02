@@ -17,7 +17,8 @@ const useragent = Useragent({
   },
   detect: {
     xxx: () => {}
-  }
+  },
+  window: true
 })
 
 const devtools = Devtools()
