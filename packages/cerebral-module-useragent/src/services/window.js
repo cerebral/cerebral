@@ -3,7 +3,8 @@ import raf from 'raf'
 export function getSpecs () {
   return {
     orientation: getOrientation(),
-    size: getSize()
+    height: getHeight(),
+    width: getWidth()
   }
 }
 
@@ -20,13 +21,6 @@ export function getOrientation () {
   }
 
   return 'square'
-}
-
-export function getSize () {
-  return {
-    height: getHeight(),
-    width: getWidth()
-  }
 }
 
 export function getWidth () {
@@ -56,7 +50,6 @@ export function onChange (callbackSignal) {
 export default {
   getSpecs,
   getOrientation,
-  getSize,
   getWidth,
   getHeight,
   onChange
