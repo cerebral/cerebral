@@ -18,7 +18,7 @@ const defaultOptions = {
 export default (userOptions = {}) => {
   const options = {}
   assign(options, defaultOptions, userOptions)
-  console.log(options)
+
   return (module, controller) => {
     module.alias('cerebral-module-useragent')
 
