@@ -16,6 +16,8 @@ function App (props) {
       <code>{ JSON.stringify(useragent.os) }</code>
       <h1>useragent.window</h1>
       <code>{ JSON.stringify(useragent.window) }</code>
+      <h1>useragent.feature</h1>
+      <code>{ JSON.stringify(useragent.feature) }</code>
     </section>
   )
 }

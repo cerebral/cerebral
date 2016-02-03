@@ -2,11 +2,13 @@ import assign from '101/assign'
 import matchMedia from './services/matchMedia'
 import parser from './services/parser'
 import window from './services/window'
+import feature from './services/feature'
 
 import windowChanged from './signals/windowChanged'
 import moduleRegistered from './signals/moduleRegistered'
 
 const defaultOptions = {
+  feature: true,
   parse: {
     browser: true,
     device: true,
@@ -25,7 +27,7 @@ export default (userOptions = {}) => {
     module.addState({
       browser: undefined,
       device: undefined,
-      features: {},
+      feature: {},
       os: undefined,
       window: {
         width: undefined,
@@ -40,6 +42,7 @@ export default (userOptions = {}) => {
     })
 
     module.addServices({
+      feature,
       matchMedia,
       parser,
       window

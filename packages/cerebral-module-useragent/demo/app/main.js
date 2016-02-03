@@ -15,8 +15,10 @@ const useragent = Useragent({
     device: true,
     os: true
   },
-  detect: {
-    xxx: () => {}
+  feature: {
+    touch: true,
+    webGL: true,
+    getUserMedia: () => !!navigator.getUserMedia
   },
   media: {
     small: '(min-width: 600px)',
