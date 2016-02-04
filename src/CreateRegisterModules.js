@@ -73,6 +73,7 @@ module.exports = function (controller, model, allModules) {
     }
     var module = {
       name: moduleName,
+      path: moduleExport.path.slice(),
       alias: function (alias) {
         allModules[alias] = moduleExport
       },
