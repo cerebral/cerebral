@@ -2,10 +2,12 @@
 
 A Cerebral module for everything user agent.
 
-- Window size & orientation
-- Browser, device & OS detection
+- UA parser: browser, device & OS detection
+- Window: size & orientation
 - Media queries
-- Feature detection (comming soon)
+- Feature detection
+
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 
 ## Install
 
@@ -134,6 +136,7 @@ Fork repo
 - `npm install`
 - `cd demo` and `npm install`
 - `npm start` runs the demo which is currently used for testing
+- `npm lint` lint with [JavaScript Standard Style](http://standardjs.com)
 
 As you can see.. no tests or compilation to es5. 8-)
 Feel free to issue a pull request if you want this.
