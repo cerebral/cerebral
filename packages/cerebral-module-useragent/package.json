@@ -1,6 +1,6 @@
 {
   "name": "cerebral-module-useragent",
-  "version": "0.10.6",
+  "version": "0.10.7",
   "description": "Adds useragent specs to your cerebral state model",
   "main": "lib/index.js",
   "scripts": {
@@ -44,5 +44,7 @@
     "standard": "^5.4.1",
     "webpack": "^1.12.12"
   },
-  "peerDependecnies": {}
+  "peerDependencies": {
+    "cerebral": ">= 0.33.21"
+  }
 }
