@@ -113,4 +113,32 @@ suite['should allow dot notation'] = function (test) {
   test.done()
 }
 
+suite['should have a select method that returns a cursor'] = function (test) {
+  var Model = function (state) {
+    return function (controller) {
+      return {
+        accessors: {
+          get: function (path) {
+            return path
+          }
+        }
+      }
+    }
+  }
+  var ctrl = Controller(Model({}))
+  var signal = [
+    function (args) {
+      var cursor = args.state.select('foo')
+      test.deepEqual(cursor.get('bar'), ['foo', 'bar'])
+    }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+  test.expect(1)
+  ctrl.getSignals().test.sync()
+  test.done()
+}
+
 module.exports = { accessors: suite }
