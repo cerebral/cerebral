@@ -105,11 +105,13 @@ suite['should expose module on actions running on a module signal'] = function (
 
 suite['should expose modules on all actions'] = function (test) {
   var ctrl = Controller(Model({}))
-  test.expect(1)
+  test.expect(3)
   ctrl.signals({
     'test': [
       function action (arg) {
         test.ok(arg.modules.test)
+        test.equal(arg.modules.test.name, 'test')
+        test.deepEqual(arg.modules.test.path, ['test'])
       }
     ]
   })

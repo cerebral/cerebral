@@ -5,6 +5,8 @@ module.exports = function (modules, state, services) {
   Object.keys(modules).forEach(function (key) {
     var path = modules[key].path
     var module = {
+      name: modules[key].name,
+      path: modules[key].path,
       meta: modules[key].meta
     }
 
