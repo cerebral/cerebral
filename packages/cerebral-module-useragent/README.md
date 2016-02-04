@@ -103,7 +103,7 @@ controller.modules({
 
 ## User agent parser
 
-I am using the [user-agent-parser](https://www.npmjs.com/package/user-agent-parser) package to parse `navigator.userAgent`. Currently only the browser, device and OS parts are stored in the model, because I didn't see any use for cpu and engine.
+I am using the [ua-parser-js](https://www.npmjs.com/package/ua-parser-js) package to parse `navigator.userAgent`. Currently only the browser, device and OS parts are stored in the model, because I didn't see any use for cpu and engine.
 
 ## Window
 

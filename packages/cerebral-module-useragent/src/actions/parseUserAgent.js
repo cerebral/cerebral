@@ -2,7 +2,7 @@ import objectPath from 'object-path'
 
 export default function parseUserAgent ({state, services, module}) {
   const options = module.meta.options.parse
-  const uaParser = objectPath.get(services, [...module.path, 'parser'])
+  const uaParser = objectPath.get(services, [...module.path, 'uaParser'])
   const moduleState = state.select(module.path)
 
   Object.keys(options)

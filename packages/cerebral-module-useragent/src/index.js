@@ -1,6 +1,6 @@
 import assign from '101/assign'
 import matchMedia from './services/matchMedia'
-import parser from './services/parser'
+import uaParser from './services/uaParser'
 import window from './services/window'
 import feature from './services/feature'
 
@@ -44,7 +44,7 @@ export default (userOptions = {}) => {
     module.addServices({
       feature,
       matchMedia,
-      parser,
+      uaParser,
       window
     })
 
