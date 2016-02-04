@@ -33,7 +33,7 @@ const useragent = Useragent({
 const devtools = Devtools()
 
 controller.addModules({
-  useragent: useragent,
+  ua: useragent,
   devtools
 })
 

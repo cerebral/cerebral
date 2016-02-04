@@ -51,5 +51,5 @@ function App (props) {
 }
 
 export default Cerebral(App, {
-  useragent: ['useragent']
+  useragent: ['ua']
 })

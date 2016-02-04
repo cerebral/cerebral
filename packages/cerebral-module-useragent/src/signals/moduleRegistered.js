@@ -1,13 +1,13 @@
 import detectFeatures from '../actions/detectFeatures'
+import parseUserAgent from '../actions/parseUserAgent'
 import setMedia from '../actions/setMedia'
 import setWindow from '../actions/setWindow'
-import parseUserAgent from '../actions/parseUserAgent'
 
 const moduleRegistered = [
   detectFeatures,
+  parseUserAgent,
   setMedia,
-  setWindow,
-  parseUserAgent
+  setWindow
 ]
 
 export default moduleRegistered
