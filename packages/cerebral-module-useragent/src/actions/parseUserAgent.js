@@ -1,14 +1,14 @@
-export default function parseUserAgent ({module}) {
+export default function parseUserAgent ({state, services, module}) {
   Object.keys(module.meta.options.parse)
   .filter(isEnabled)
   .forEach(key => {
-    const parseFunction = getParseFunction(key, module)
+    const parseFunction = getParseFunction(key, services.useragent.parser)
 
     if (typeof parseFunction !== 'function') {
       throw new Error(`Parsing the ${key} from useragent is not supported.`)
     }
 
-    module.state.set([key], parseFunction.call(module.services.parser))
+    state.set(['useragent', key], parseFunction.call(services.useragent.parser))
   })
 
   function isEnabled (key) {
@@ -16,9 +16,9 @@ export default function parseUserAgent ({module}) {
   }
 }
 
-function getParseFunction (prop, module) {
+function getParseFunction (prop, parser) {
   const parseFunctionName = getParseFunctionName(prop)
-  return module.services.parser[parseFunctionName]
+  return parser[parseFunctionName]
 }
 
 function getParseFunctionName (prop) {

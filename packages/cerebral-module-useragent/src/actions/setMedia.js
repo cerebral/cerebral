@@ -1,5 +1,5 @@
-export default function setMedia ({module}) {
-  const matchMedia = module.services.matchMedia
+export default function setMedia ({state, services, module}) {
+  const matchMedia = services.useragent.matchMedia
   const queries = module.meta.options.media
 
   const media = Object.keys(queries)
@@ -11,5 +11,5 @@ export default function setMedia ({module}) {
     return result
   }, {})
 
-  module.state.set(['media'], media)
+  state.set(['useragent', 'media'], media)
 }

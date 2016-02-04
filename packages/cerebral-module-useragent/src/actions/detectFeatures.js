@@ -1,12 +1,12 @@
-export default function detectFeatures ({module}) {
+export default function detectFeatures ({state, services, module}) {
   const options = module.meta.options.feature
 
   let featureMap = {}
 
-  Object.keys(module.services.feature)
+  Object.keys(services.useragent.feature)
   .filter(isEnabled)
   .reduce((result, featureName) => {
-    result[featureName] = module.services.feature[featureName]
+    result[featureName] = services.useragent.feature[featureName]
     return result
   }, featureMap)
 
@@ -31,5 +31,5 @@ export default function detectFeatures ({module}) {
     return typeof options[featureName] === 'function'
   }
 
-  module.state.set(['feature'], featureMap)
+  state.set(['useragent', 'feature'], featureMap)
 }

@@ -1,3 +1,3 @@
-export default function setWindow ({module}) {
-  module.state.set(['window'], module.services.window.getSpecs())
+export default function setWindow ({state, services, module}) {
+  state.set(['window'], services.useragent.window.getSpecs())
 }
