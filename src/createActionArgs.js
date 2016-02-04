@@ -33,7 +33,7 @@ var createStateArg = function (action, model, isAsync, compute) {
         }
         action.mutations.push({
           name: mutator,
-          path: path.slice(),
+          path: parentPath.concat(path),
           args: args
         })
         return model.mutators[mutator].apply(null, [parentPath.concat(path)].concat(args))
