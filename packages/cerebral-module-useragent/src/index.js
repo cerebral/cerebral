@@ -14,6 +14,7 @@ const defaultOptions = {
     device: true,
     os: true
   },
+  media: {},
   window: true
 }
 
