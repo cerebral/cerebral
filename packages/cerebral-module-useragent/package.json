@@ -2,10 +2,13 @@
   "name": "cerebral-module-useragent",
   "version": "0.10.5",
   "description": "Adds useragent specs to your cerebral state model",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "lint": "standard src/**/*.js --verbose | snazzy",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prebuild": "npm run lint",
+    "build": "rimraf lib && babel src --out-dir lib",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublish": "npm run build"
   },
   "repository": {
     "type": "git",

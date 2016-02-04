@@ -138,9 +138,9 @@ Fork repo
 - `cd demo` and `npm install`
 - `npm start` runs the demo which is currently used for testing
 - `npm lint` lint with [JavaScript Standard Style](http://standardjs.com)
+- `npm run build` compiles es6 to es5
 
-As you can see.. no tests or compilation to es5. 8-)
-Feel free to issue a pull request if you want this.
+No tests yet. Feel free to issue a pull request if you want this.
 
 
 
