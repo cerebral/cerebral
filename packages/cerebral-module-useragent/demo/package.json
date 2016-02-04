@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "baobab": "^2.3.3",
-    "cerebral": "^0.33.18",
+    "cerebral": "^0.33.19",
     "cerebral-model-baobab": "^0.4.7",
     "cerebral-module-devtools": "^0.5.3",
     "cerebral-view-react": "^0.11.2",
@@ -22,7 +22,7 @@
     "babel-preset-react": "^6.3.13",
     "express": "^4.13.4",
     "html-webpack-plugin": "^2.8.1",
-    "webpack": "^1.12.12",
+    "webpack": "^1.12.13",
     "webpack-dev-middleware": "^1.5.1",
     "webpack-hot-middleware": "^2.6.4"
   }

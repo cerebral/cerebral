@@ -7,7 +7,8 @@ A Cerebral module for everything user agent.
 - Media queries
 - Feature detection
 
-[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
+[![js-standard-style][standard-image]][standard-url]
+[![Discord][discord-image]][discord-url]
 
 ## Install
 
@@ -140,3 +141,12 @@ Fork repo
 
 As you can see.. no tests or compilation to es5. 8-)
 Feel free to issue a pull request if you want this.
+
+
+
+[npm-image]: https://img.shields.io/npm/v/cerebral-module-useragent.svg?style=flat
+[npm-url]: https://npmjs.org/package/cerebral-module-useragent
+[standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg
+[standard-url]: http://standardjs.com/
+[discord-image]: https://img.shields.io/badge/discord-join%20chat-blue.svg
+[discord-url]: https://discord.gg/0kIweV4bd2bwwsvH

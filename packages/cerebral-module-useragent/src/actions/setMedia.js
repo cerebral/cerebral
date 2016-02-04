@@ -1,6 +1,9 @@
+import objectPath from 'object-path'
+
 export default function setMedia ({state, services, module}) {
-  const matchMedia = services.useragent.matchMedia
   const queries = module.meta.options.media
+  const matchMedia = objectPath.get(services, [...module.path, 'matchMedia'])
+  const moduleState = state.select(module.path)
 
   const media = Object.keys(queries)
   .map(name => {
@@ -11,5 +14,5 @@ export default function setMedia ({state, services, module}) {
     return result
   }, {})
 
-  state.set(['useragent', 'media'], media)
+  moduleState.set(['media'], media)
 }

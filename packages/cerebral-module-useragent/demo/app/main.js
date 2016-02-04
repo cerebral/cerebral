@@ -25,6 +25,7 @@ const useragent = Useragent({
     medium: '(min-width: 1024px)',
     large: '(min-width: 1440px)',
     portrait: '(orientation: portrait)'
+
   },
   window: true
 })
@@ -32,7 +33,7 @@ const useragent = Useragent({
 const devtools = Devtools()
 
 controller.addModules({
-  useragent,
+  useragent: useragent,
   devtools
 })
 
