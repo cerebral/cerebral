@@ -1,6 +1,6 @@
 var utils = require('./utils.js')
 
-module.exports = function (modules, state, services) {
+module.exports = function (modules, state, services, signalName, actionName) {
   var modulesArg = {}
   Object.keys(modules).forEach(function (key) {
     var path = modules[key].path
@@ -12,7 +12,7 @@ module.exports = function (modules, state, services) {
 
     module.state = Object.keys(state).reduce(function (module, key) {
       module[key] = function () {
-        console.warn('Calling STATE and SERVICES on module/modules arg is DEPRECATED, the arg will be removed. Please use normal STATE and SERVICES arg')
+        console.warn('Signal "' + signalName + '" with action "' + actionName + '" calls STATE on its module/modules arg. This is DEPRECATED, the module arg will be removed and modules will expose the same data as to components. Please use normal STATE and SERVICES arg')
         var args = [].slice.call(arguments)
         var statePath = path
         if (args[0] && Array.isArray(args[0])) {

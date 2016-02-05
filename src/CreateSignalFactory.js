@@ -152,7 +152,7 @@ module.exports = function (controller, model, services, compute, modules) {
                 action.isExecuting = true
                 action.input = utils.merge({}, inputArg)
                 var next = createNext.async(actionFunc, signal.name)
-                var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2])
+                var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2], signal.name, action.name)
                 var actionArg = {
                   input: actionArgs[0],
                   state: actionArgs[1],
@@ -235,7 +235,7 @@ module.exports = function (controller, model, services, compute, modules) {
               action.input = utils.merge({}, inputArg)
 
               var next = createNext.sync(actionFunc, signal.name)
-              var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2])
+              var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2], signal.name, action.name)
 
               var actionArg = {
                 input: actionArgs[0],
