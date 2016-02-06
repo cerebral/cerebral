@@ -1,8 +1,8 @@
 var utils = require('./utils.js')
 
 var traverse = function (item, parentItem, path, actions, isSync) {
-  if (Array.isArray(item)) {
-    item = item.slice() // Will do some splicing, so make sure not messing up original array
+  var nextItem
+  var returnAsync = function (item) {
     isSync = !isSync
     return item.map(function (subItem, index) {
       path.push(index)
@@ -12,6 +12,19 @@ var traverse = function (item, parentItem, path, actions, isSync) {
     }).filter(function (action) { // Objects becomes null
       return !!action
     })
+  }
+
+  if (typeof item === 'function' && item.outputAsync && isSync) {
+    nextItem = parentItem[parentItem.indexOf(item) + 1]
+    if (!Array.isArray(nextItem) && typeof nextItem === 'object') {
+      parentItem.splice(parentItem.indexOf(nextItem), 1)
+      return returnAsync([item, nextItem])
+    } else {
+      return returnAsync([item])
+    }
+  } else if (Array.isArray(item)) {
+    item = item.slice() // Will do some splicing, so make sure not messing up original array
+    return returnAsync(item)
   } else if (typeof item === 'function') {
     var action = {
       name: item.displayName || utils.getFunctionName(item),
@@ -28,7 +41,7 @@ var traverse = function (item, parentItem, path, actions, isSync) {
       outputs: null,
       actionIndex: actions.indexOf(item) === -1 ? actions.push(item) - 1 : actions.indexOf(item)
     }
-    var nextItem = parentItem[parentItem.indexOf(item) + 1]
+    nextItem = parentItem[parentItem.indexOf(item) + 1]
     if (!Array.isArray(nextItem) && typeof nextItem === 'object') {
       parentItem.splice(parentItem.indexOf(nextItem), 1)
       action.outputs = Object.keys(nextItem).reduce(function (paths, key) {

@@ -357,6 +357,59 @@ suite['should be able to resolve as an async action'] = function (test) {
   ctrl.getSignals().test()
 }
 
+suite['should be able to define action as async'] = function (test) {
+  var ctrl = Controller(Model())
+  var action = function (args) {
+    async(function () {
+      args.output({
+        result: true
+      })
+    })
+  }
+  action.outputAsync = true
+
+  var signal = [
+    action, function (args) {
+      test.ok(args.input.result)
+      test.done()
+    }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+  ctrl.getSignals().test()
+}
+
+suite['should be able to define action as async with paths'] = function (test) {
+  var ctrl = Controller(Model())
+  var action = function (args) {
+    async(function () {
+      args.output.success({
+        result: true
+      })
+    })
+  }
+  action.outputAsync = true
+
+  var signal = [
+    action, {
+      success: [
+        function (args) {
+          test.ok(args.input.result)
+          test.done()
+        }
+      ],
+      error: []
+    }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+  ctrl.getSignals().test()
+}
+
 suite['should trigger change event on individual async action paths'] = function (test) {
   var ctrl = Controller(Model())
   var changeCount = 0
