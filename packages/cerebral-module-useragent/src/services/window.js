@@ -37,7 +37,7 @@ export function onChange (callbackSignal) {
   }
 
   let running = false
-  window.addEventListener('resize', event => {
+  window.addEventListener('resize', (event) => {
     if (running) return
     running = true
     raf(() => {

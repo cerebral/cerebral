@@ -6,7 +6,7 @@ export default function setMedia ({state, services, module}) {
   const moduleState = state.select(module.path)
 
   const media = Object.keys(queries)
-  .map(name => {
+  .map((name) => {
     return { name, queryString: queries[name] }
   })
   .reduce((result, media) => {

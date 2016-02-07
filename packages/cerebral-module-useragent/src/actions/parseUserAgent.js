@@ -7,7 +7,7 @@ export default function parseUserAgent ({state, services, module}) {
 
   Object.keys(options)
   .filter(isEnabled)
-  .forEach(key => {
+  .forEach((key) => {
     const parseFunction = getParseFunction(key, uaParser)
 
     if (typeof parseFunction !== 'function') {

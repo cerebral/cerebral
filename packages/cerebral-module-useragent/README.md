@@ -7,6 +7,7 @@ A Cerebral module for everything user agent.
 - Media queries
 - Feature detection
 
+[![NPM version][npm-image]][npm-url]
 [![js-standard-style][standard-image]][standard-url]
 [![Discord][discord-image]][discord-url]
 
@@ -141,6 +142,7 @@ Fork repo
 - `npm run build` compiles es6 to es5
 
 No tests yet. Feel free to issue a pull request if you want this.
+
 
 
 
