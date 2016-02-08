@@ -1,6 +1,3 @@
-var win = typeof window !== 'undefined' ? window : null
-var doc = typeof document !== 'undefined' ? document : null
-
 var createStateArg = function (action, model, isAsync, compute) {
   var createStateObject = function (parentPath) {
     var state = Object.keys(model.accessors || {}).reduce(function (state, accessor) {
@@ -51,26 +48,15 @@ var createStateArg = function (action, model, isAsync, compute) {
   return createStateObject([])
 }
 
-var recreateProtoChain = function (action, path, objectReferences, obj) {
-  var protos = []
-  var currentProto = Object.getPrototypeOf(obj)
-  while (currentProto !== Object.getPrototypeOf({})) {
-    protos.push(currentProto)
-    currentProto = Object.getPrototypeOf(currentProto)
-  }
-  if (protos.length) {
-    return protos.reverse().reduce(function (protoChain, proto) {
-      return convertServices(action, path, objectReferences, proto, protoChain)
-    }, {})
-  } else {
-    return null
-  }
-}
-
-var convertServices = function (action, path, objectReferences, services, proto) {
+var convertServices = function (action, path, modulesPaths, services, proto) {
   return Object.keys(services).reduce(function (newservices, key) {
     path.push(key)
-    if (typeof services[key] === 'function') {
+    if (
+      typeof services[key] === 'function' &&
+      services[key].constructor.name === 'Function' &&
+      !Object.keys(services[key]).length &&
+      !Object.keys(services[key].prototype).length
+    ) {
       var servicePath = path.slice()
       var method = servicePath.pop()
       newservices[key] = function () {
@@ -81,57 +67,39 @@ var convertServices = function (action, path, objectReferences, services, proto)
         })
         return services[key].apply(this, arguments)
       }
-      Object.keys(services[key]).forEach(function (serviceKey) {
-        if (typeof services[key][serviceKey] === 'function') {
-          newservices[key][serviceKey] = function () {
-            action.serviceCalls.push({
-              name: servicePath.concat(method).join('.'),
-              method: serviceKey,
-              args: [].slice.call(arguments)
-            })
-            return services[key][serviceKey].apply(this, arguments)
-          }
-        } else {
-          newservices[key][serviceKey] = services[key][serviceKey]
-        }
-      })
     } else if (
       typeof services[key] === 'object' &&
       !Array.isArray(services[key]) &&
       services[key] !== null &&
-      objectReferences.indexOf(services[key]) === -1 &&
-      (!win || !(services[key] instanceof win.HTMLElement))
+      modulesPaths.indexOf(path.join('.')) >= 0
     ) {
-      var proto = recreateProtoChain(action, path, objectReferences, services[key])
-      objectReferences.push(services[key])
-      newservices[key] = convertServices(action, path, objectReferences, services[key], proto)
+      newservices[key] = convertServices(action, path, modulesPaths, services[key], proto)
     } else {
       newservices[key] = services[key]
     }
     path.pop(key)
     return newservices
-  }, proto ? Object.create(proto) : {})
+  }, {})
 }
 
-var createServicesArg = function (action, services) {
+var createServicesArg = function (action, services, modules) {
   var path = []
-  var objectReferences = [win, doc]
-  return convertServices(action, path, objectReferences, services)
+  return convertServices(action, path, modules, services)
 }
 
 module.exports = {
-  sync: function (action, signalArgs, model, compute, services) {
+  sync: function (action, signalArgs, model, compute, services, modulesPaths) {
     return [
       signalArgs,
       createStateArg(action, model, false, compute),
-      createServicesArg(action, services)
+      createServicesArg(action, services, modulesPaths)
     ]
   },
-  async: function (action, signalArgs, model, compute, services) {
+  async: function (action, signalArgs, model, compute, services, modulesPaths) {
     return [
       signalArgs,
       createStateArg(action, model, true, compute),
-      createServicesArg(action, services)
+      createServicesArg(action, services, modulesPaths)
     ]
   }
 }

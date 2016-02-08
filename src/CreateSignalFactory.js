@@ -143,7 +143,7 @@ module.exports = function (controller, model, services, compute, modules) {
                 controller.emit('actionStart', {action: action, signal: signal})
                 var actionFunc = actions[action.actionIndex]
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-                var actionArgs = createActionArgs.async(action, inputArg, model, compute, services)
+                var actionArgs = createActionArgs.async(action, inputArg, model, compute, services, Object.keys(modules))
 
                 if (utils.isDeveloping() && actionFunc.input) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
@@ -225,7 +225,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
               var actionFunc = actions[action.actionIndex]
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-              var actionArgs = createActionArgs.sync(action, inputArg, model, compute, services)
+              var actionArgs = createActionArgs.sync(action, inputArg, model, compute, services, Object.keys(modules))
 
               if (utils.isDeveloping() && actionFunc.input) {
                 utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
