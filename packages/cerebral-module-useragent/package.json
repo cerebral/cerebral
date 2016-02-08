@@ -7,7 +7,7 @@
     "lint": "standard src/**/*.js --verbose | snazzy",
     "prebuild": "npm run lint",
     "build": "rimraf lib && babel src --out-dir lib",
-    "test": "npm run rint",
+    "test": "npm run lint",
     "prepublish": "npm run build",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -46,11 +46,10 @@
     "babel-plugin-react-transform": "^2.0.0",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
-    "cz-conventional-changelog": "^1.1.5",
-    "snazzy": "^2.0.1",
+    "conventional-changelog": "0.0.17",
+    "semantic-release": "^4.3.5",
     "standard": "^6.0.3",
     "webpack": "^1.12.13"
-    "semantic-release": "^4.3.5"
   },
   "peerDependencies": {
     "cerebral": ">= 0.33.21"
