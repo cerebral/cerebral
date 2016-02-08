@@ -43,9 +43,12 @@
     "babel-preset-react": "^6.3.13",
     "cerebral": ">= 0.33.21",
     "conventional-changelog": "0.0.17",
+    "ghooks": "^1.0.3",
+    "rimraf": "^2.5.1",
     "semantic-release": "^4.3.5",
     "snazzy": "^2.0.1",
     "standard": "^6.0.4",
+    "validate-commit-msg": "^2.0.0",
     "webpack": "^1.12.13"
   },
   "peerDependencies": {
