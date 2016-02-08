@@ -1,18 +1,19 @@
 {
   "name": "cerebral-module-useragent",
-  "version": "0.10.9",
+  "version": "0.0.0-semantically-released",
   "description": "Adds useragent specs to your cerebral state model",
   "main": "lib/index.js",
   "scripts": {
     "lint": "standard src/**/*.js --verbose | snazzy",
     "prebuild": "npm run lint",
     "build": "rimraf lib && babel src --out-dir lib",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublish": "npm run build"
+    "test": "npm run rint",
+    "prepublish": "npm run build",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cerebral/cerebral-module-useragent.git"
+    "url": "https://github.com/cerebral/cerebral-module-useragent.git"
   },
   "keywords": [
     "cerebral",
@@ -49,13 +50,20 @@
     "snazzy": "^2.0.1",
     "standard": "^6.0.3",
     "webpack": "^1.12.13"
+    "semantic-release": "^4.3.5"
   },
   "peerDependencies": {
     "cerebral": ">= 0.33.21"
   },
   "config": {
     "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
+      "path": "node_modules/cz-customizable"
+    },
+    "ghooks": {
+      "commit-msg": "validate-commit-msg"
     }
+  },
+  "release": {
+    "analyzeCommits": "./sr-prerelease.js"
   }
 }
