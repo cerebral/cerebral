@@ -33,7 +33,7 @@ module.exports = function (model) {
           return true
         }
         if (key.indexOf('COMPUTED') === 0) {
-          var index = key.split('_')[1]
+          var index = key.substr(9)
           return getComputedValue(registered[index] || cachedByRef[index]) !== currentState[key]
         } else {
           return model.accessors.get(key.split('.%.')) !== currentState[key]
