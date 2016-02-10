@@ -173,9 +173,12 @@ module.exports = function (controller, model, services, compute, modules) {
                       message: e.message,
                       stack: actionFunc.toString()
                     }
-                    controller.emit('signalError', {action: action, signal: signal})
+                    var hadListeners = controller.emit('signalError', {action: action, signal: signal})
                     controller.emit('change', {signal: signal})
-                    throw e
+
+                    if (!hadListeners) {
+                      throw e
+                    }
                   }
                 } else {
                   actionFunc(actionArg)
@@ -204,8 +207,10 @@ module.exports = function (controller, model, services, compute, modules) {
                 })
                 .catch(function (error) {
                   // We just throw any unhandled errors
-                  controller.emit('error', error)
-                  throw error
+                  var hadListeners = controller.emit('error', error)
+                  if (!hadListeners) {
+                    throw error
+                  }
                 })
             }
           } else {
@@ -257,9 +262,12 @@ module.exports = function (controller, model, services, compute, modules) {
                     message: e.message,
                     stack: e.stack
                   }
-                  controller.emit('signalError', {action: action, signal: signal})
+                  var hadListeners = controller.emit('signalError', {action: action, signal: signal})
                   controller.emit('change', {signal: signal})
-                  throw e
+
+                  if (!hadListeners) {
+                    throw e
+                  }
                 }
               } else {
                 actionFunc(actionArg)

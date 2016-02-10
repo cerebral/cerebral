@@ -902,13 +902,50 @@ suite['should attach error when failed action execution'] = function (test) {
     'test': signal
   })
 
-  test.throws(function () {
+  ctrl.on('signalError', function (args) {
+    test.equal(args.action.error.name, 'TypeError')
+    test.done()
+  })
+  ctrl.getSignals().test.sync()
+}
+
+suite['should not throw error when listener attached to signalError'] = function (test) {
+  var ctrl = Controller(Model())
+  var testObject = {}
+  var signal = [
+    function () { testObject.unknown.property }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+
+  test.doesNotThrow(function () {
     ctrl.on('signalError', function (args) {
       test.equal(args.action.error.name, 'TypeError')
       test.done()
     })
     ctrl.getSignals().test.sync()
   })
+}
+
+suite['should throw error when no listener attached to signalError'] = function (test) {
+  var ctrl = Controller(Model())
+  var testObject = {}
+  var signal = [
+    function () { testObject.unknown.property }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+
+  try {
+    ctrl.getSignals().test.sync()
+  } catch (e) {
+    test.equal(e.name, 'TypeError')
+    test.done()
+  }
 }
 
 suite['should wrap and track use of services'] = function (test) {
