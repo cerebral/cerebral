@@ -43,6 +43,7 @@ module.exports = function (controller, model, services, compute, modules) {
         isRouted: options.isRouted || false, // will be removed
         isExecuting: false,
         isPrevented: false,
+        isRecorded: options.isRecorded || false,
         branches: tree.branches,
         options: options,
         duration: 0,
