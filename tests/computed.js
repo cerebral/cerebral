@@ -6,7 +6,6 @@ var Model = function (state) {
     return {
       accessors: {
         get: function (path) {
-          path = typeof path === 'string' ? [].slice.call(arguments) : path
           path = path ? path.slice() : []
           var currentPath = state
           while (path.length) {

@@ -26,7 +26,7 @@ var createStateArg = function (action, model, isAsync, compute) {
         if (Array.isArray(args[0])) {
           path = args.shift()
         } else if (typeof args[0] === 'string') {
-          path = [args.shift()]
+          path = args.shift().split('.')
         }
         action.mutations.push({
           name: mutator,

@@ -29,4 +29,30 @@ suite['should give correct path and value to mutation methods'] = function (test
   test.done()
 }
 
+suite['should be able to mutate with string'] = function (test) {
+  var Model = function (state) {
+    return function (controller) {
+      return {
+        mutators: {
+          set: function (path, value) {
+            test.deepEqual(path, ['foo', 'bar'])
+          }
+        }
+      }
+    }
+  }
+  var ctrl = Controller(Model({}))
+  var signal = [
+    function (args) {
+      args.state.set('foo.bar', 'value')
+    }
+  ]
+
+  ctrl.signals({
+    'test': signal
+  })
+  ctrl.getSignals().test.sync()
+  test.done()
+}
+
 module.exports = { mutations: suite }
