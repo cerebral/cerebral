@@ -10,6 +10,7 @@ module.exports = function (model) {
 
     var get = function (path) {
       var value
+      path = typeof path === 'string' ? path.split('.') : path
       if (typeof path === 'function') {
         if (!has(path)) {
           registered.push(path)

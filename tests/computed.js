@@ -70,6 +70,21 @@ suite['should pass get function to grab state'] = function (test) {
   test.done()
 }
 
+suite['should be able to grab state with DOT notation'] = function (test) {
+  var model = Model({
+    foo: {
+      bar: 'test'
+    }
+  })
+  var foo = function (get, value) {
+    test.equal(get('foo.bar'), 'test')
+  }
+  var controller = Controller(model)
+  test.expect(1)
+  controller.get(foo)
+  test.done()
+}
+
 suite['should not rerun if no values change'] = function (test) {
   var model = Model({
     foo: 'bar',
