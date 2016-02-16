@@ -366,7 +366,7 @@ suite['should be able to define action as async'] = function (test) {
       })
     })
   }
-  action.outputAsync = true
+  action.async = true
 
   var signal = [
     action, function (args) {
@@ -390,7 +390,7 @@ suite['should be able to define action as async with paths'] = function (test) {
       })
     })
   }
-  action.outputAsync = true
+  action.async = true
 
   var signal = [
     action, {

@@ -14,7 +14,7 @@ var traverse = function (item, parentItem, path, actions, isSync) {
     })
   }
 
-  if (typeof item === 'function' && item.outputAsync && isSync) {
+  if (typeof item === 'function' && item.async && isSync) {
     nextItem = parentItem[parentItem.indexOf(item) + 1]
     if (!Array.isArray(nextItem) && typeof nextItem === 'object') {
       parentItem.splice(parentItem.indexOf(nextItem), 1)
