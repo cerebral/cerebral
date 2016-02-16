@@ -1,6 +1,6 @@
-function setTodoNewTitle ({input, state, module}) {
+function setTodoNewTitle ({input, state}) {
 
-  module.state.merge(['todos', input.ref], {
+  state.merge(`app.list.todos.${input.ref}`, {
     $newTitle: input.title
   });
 };

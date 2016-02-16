@@ -1,5 +1,5 @@
-function setFilter ({input, module}) {
-  module.state.set(['filter'], input.filter || 'all');
+function setFilter ({input, state}) {
+  state.set('app.footer.filter', input.filter || 'all');
 };
 
 export default setFilter;

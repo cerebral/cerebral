@@ -1,7 +1,6 @@
-function toggleTodoCompleted ({input, state, module}) {
-  const todoPath = ['todos', input.ref];
-  let todo = module.state.get(todoPath);
-  module.state.set([...todoPath, 'completed'], !todo.completed);
+function toggleTodoCompleted ({input, state}) {
+  let todo = state.select(`app.list.todos.${input.ref}`);
+  todo.set('completed', !todo.get('completed'));
 };
 
 export default toggleTodoCompleted;

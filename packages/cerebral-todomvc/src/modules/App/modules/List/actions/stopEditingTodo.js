@@ -1,12 +1,11 @@
-function stopEditingTodo ({input, state, module}) {
+function stopEditingTodo ({input, state}) {
 
-  const todoPath = ['todos', input.ref];
-  let todo = module.state.get(todoPath);
+  let todo = state.select(`app.list.todos.${input.ref}`);
 
-  module.state.merge(todoPath, {
+  todo.merge({
     $isEditing: false
   });
-  module.state.unset([...todoPath, '$newTitle']);
+  todo.unset('$newTitle');
 };
 
 export default stopEditingTodo;

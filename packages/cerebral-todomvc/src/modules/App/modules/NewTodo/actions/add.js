@@ -1,15 +1,15 @@
-function addTodo ({state, output, services, module, modules}) {
+function addTodo ({state, output, services}) {
 
   var ref = services.refs.next(state);
   let todo = {
     $ref: ref,
     $isSaving: true,
-    title: module.state.get(['title']),
+    title: state.get('app.new.title'),
     completed: false
   };
 
-  modules.app.list.state.set(['todos', ref], todo);
-  module.state.set(['title'], '');
+  state.set(`app.list.todos.${ref}`, todo);
+  state.set('app.new.title', '');
 
   output({
     ref: ref

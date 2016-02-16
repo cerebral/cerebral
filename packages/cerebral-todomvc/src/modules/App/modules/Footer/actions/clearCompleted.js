@@ -1,10 +1,10 @@
-function clearCompleted ({modules}) {
+function clearCompleted ({state}) {
 
-  let todos = modules.app.list.state.get(['todos']);
+  let todos = state.get('app.list.todos');
 
   Object.keys(todos).forEach(function (key) {
     if (todos[key].completed && !todos[key].$isSaving) {
-      modules.app.list.state.unset(['todos', key]);
+      state.unset(`app.list.todos.${key}`);
     }
   });
 

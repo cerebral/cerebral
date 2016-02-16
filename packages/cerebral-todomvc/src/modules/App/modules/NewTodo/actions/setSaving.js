@@ -1,5 +1,5 @@
-function setSaving ({state, module}) {
-  module.state.set(['isSaving'], true);
+function setSaving ({state}) {
+  state.set('app.new.isSaving', true);
 };
 
 export default setSaving;

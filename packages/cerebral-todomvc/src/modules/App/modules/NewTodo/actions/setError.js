@@ -1,10 +1,8 @@
-function setError ({input, state, modules}) {
+function setError ({input, state}) {
 
-  var path = ['todos', input.ref];
+  let todo = state.get(`app.list.todos.${input.ref}`);
 
-  let todo = modules.app.list.state.get(path);
-
-  modules.app.list.state.merge(path, {
+  modules.app.list.state.merge(`app.list.todos.${input.ref}`, {
     id: args.id,
     $isSaving: false,
     $error: input.error

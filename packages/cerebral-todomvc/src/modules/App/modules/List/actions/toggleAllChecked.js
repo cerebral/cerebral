@@ -1,14 +1,14 @@
-function toggleAllChecked ({state, module}) {
+function toggleAllChecked ({state}) {
 
-    let isCompleted = !module.state.get(['isAllChecked']);
-    let todos = module.state.get(['todos']);
+    let isCompleted = !state.get('app.list.isAllChecked');
+    let todos = state.get('app.list.todos');
 
     Object.keys(todos).forEach(function (key) {
       let todo = todos[key];
-      module.state.set(['todos', todo.$ref, 'completed'], isCompleted);
+      state.set(`app.list.todos.${todo.$ref}.completed`, isCompleted);
     });
 
-    module.state.set(['isAllChecked'], isCompleted);
+    state.set('app.list.isAllChecked', isCompleted);
 };
 
 export default toggleAllChecked;

@@ -1,11 +1,12 @@
-function editTodo ({input, state}) {
+function updateTodo ({input, state}) {
 
   let todo = state.get(`app.list.todos.${input.ref}`);
 
   state.merge(`app.list.todos.${input.ref}`, {
-    $isEditing: !todo.$isSaving
+    id: input.id,
+    $isSaving: false
   });
 
 };
 
-export default editTodo;
+export default updateTodo;

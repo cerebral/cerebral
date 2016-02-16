@@ -1,5 +1,5 @@
-function setTitle ({input, state, module}) {
-  module.state.set(['title'], input.title);
+function setTitle ({input, state}) {
+  state.set('app.new.title', input.title);
 };
 
 export default setTitle;

@@ -1,6 +1,6 @@
-function saveTodo ({input, state, output, modules}) {
+function saveTodo ({input, state, output}) {
 
-  let todo = modules.app.list.state.get(['todos', input.ref]);
+  let todo = state.get(`app.list.todos.${input.ref}`);
 
   // Simulating posting the todo.data and get an ID from
   // the server. We resolve with the new id
