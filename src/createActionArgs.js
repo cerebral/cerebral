@@ -55,7 +55,7 @@ var convertServices = function (action, path, modulesPaths, services, proto) {
       typeof services[key] === 'function' &&
       services[key].constructor.name === 'Function' &&
       !Object.keys(services[key]).length &&
-      !Object.keys(services[key].prototype).length
+      (!services[key].prototype || !Object.keys(services[key].prototype).length)
     ) {
       var servicePath = path.slice()
       var method = servicePath.pop()

@@ -915,14 +915,22 @@ suite['should wrap and track use of services'] = function (test) {
   var ctrl = Controller(Model())
 
   var ModuleA = function (module) {
+    function NoPrototype () {
+
+    }
+
+    NoPrototype.prototype = null
+
     var action = function (args) {
       args.module.services.test('foo')
+      args.module.services.noPrototype('foo')
     }
 
     module.addServices({
       test: function () {
 
-      }
+      },
+      noPrototype: NoPrototype
     })
 
     module.addSignals({
@@ -992,9 +1000,13 @@ suite['should wrap and track use of services'] = function (test) {
 
   var assertModuleA = function (args) {
     test.ok(ctrl.getServices().moduleA.test)
+    test.ok(ctrl.getServices().moduleA.noPrototype)
     test.equal(args.signal.branches[0].serviceCalls[0].name, 'moduleA')
     test.equal(args.signal.branches[0].serviceCalls[0].method, 'test')
     test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
+    test.equal(args.signal.branches[0].serviceCalls[1].name, 'moduleA')
+    test.equal(args.signal.branches[0].serviceCalls[1].method, 'noPrototype')
+    test.deepEqual(args.signal.branches[0].serviceCalls[1].args, ['foo'])
   }
   ctrl.on('signalEnd', assertModuleA)
   ctrl.getSignals().moduleA.test.sync()
