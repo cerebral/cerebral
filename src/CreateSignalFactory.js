@@ -71,7 +71,7 @@ module.exports = function (controller, model, services, compute, modules) {
       var runSignal = function () {
         // Accumulate the args in one object that will be passed
         // to each action
-        var signalArgs = payload || {}
+        var signalArgs = utils.merge({}, payload || {})
 
         // Test payload
         if (utils.isDeveloping()) {

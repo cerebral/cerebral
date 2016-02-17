@@ -21,7 +21,24 @@ var Model = function (state) {
   }
 }
 
-suite['should register signals'] = function (test) {
+suite['should not affect payload'] = function (test) {
+  var ctrl = Controller(Model())
+  var payload = {foo: 'bar'}
+  ctrl.addSignals({
+    'test': [[
+      function action (context) {
+        context.output({bar: 'foo'})
+      }
+    ]]
+  })
+  ctrl.on('signalEnd', function (args) {
+    test.deepEqual(args.signal.input, {foo: 'bar'})
+    test.done()
+  })
+  ctrl.getSignals().test(payload)
+}
+
+suite['should make copy of payload'] = function (test) {
   var ctrl = Controller(Model())
   ctrl.signals({
     'test': []
