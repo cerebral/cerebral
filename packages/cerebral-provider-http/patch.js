@@ -18,6 +18,7 @@ function patch(url, dataPath) {
       .catch(output.error);
   }
 
+  action.async = true;
   action.displayName = 'http.patch (' + ([].slice.call(arguments).join(', ')) + ')';
 
   return action;

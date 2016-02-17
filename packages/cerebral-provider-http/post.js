@@ -18,6 +18,7 @@ function post(url, dataPath) {
       .catch(output.error);
   }
 
+  action.async = true;
   action.displayName = 'http.post (' + ([].slice.call(arguments).join(', ')) + ')';
 
   return action;

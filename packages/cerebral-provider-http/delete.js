@@ -16,6 +16,7 @@ function httpDelete(url) {
       .catch(output.error);
   }
 
+  action.async = true;
   action.displayName = 'http.delete ('  + ([].slice.call(arguments).join(', ')) + ')';
 
   return action;

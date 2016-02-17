@@ -16,6 +16,7 @@ function get(url) {
       .catch(output.error);
   }
 
+  action.async = true;
   action.displayName = 'http.get ('  + ([].slice.call(arguments).join(', ')) + ')';
 
   return action;
