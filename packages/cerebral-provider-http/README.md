@@ -37,7 +37,7 @@ function postTodo({state, output, services}) {
     .catch(output.error)
 }
 
-export default getUser;
+export default postTodo;
 ```
 
 The service returns a promise. Results of the http requests will be passed on an object: `{result, statusCode}`. That means you can easily output to `success` or `error` and grab those values off the input on the next action.
