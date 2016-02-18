@@ -23,7 +23,7 @@ npm install --save cerebral-module-useragent
 
 ```javascript
 import controller from './controller'
-import Useragent form 'cerebral-module-useragent'
+import Useragent from 'cerebral-module-useragent'
 
 const useragent = Useragent({
   media: {
@@ -34,7 +34,7 @@ const useragent = Useragent({
   }
 })
 
-controller.modules({
+controller.addModules({
   useragent
 })
 ```
