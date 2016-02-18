@@ -84,7 +84,7 @@ The module exposes all the user agent information in your state model.
 
 ```javascript
 import controller from './controller'
-import Useragent form 'cerebral-module-useragent'
+import Useragent from 'cerebral-module-useragent'
 
 const useragent = Useragent({
   feature: true, // store all feature tests in state
@@ -96,7 +96,7 @@ const useragent = Useragent({
   window: true // update window size on resize
 })
 
-controller.modules({
+controller.addModules({
   useragent
 })
 ```
