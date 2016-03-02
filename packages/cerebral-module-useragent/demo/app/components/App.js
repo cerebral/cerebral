@@ -35,6 +35,10 @@ function App (props) {
         <code style={ codeStyle }>{ JSON.stringify(useragent.media, null, 2) }</code>
       </section>
       <section style={ sectionStyle }>
+        <h1>useragent.network</h1>
+        <code style={ codeStyle }>{ JSON.stringify(useragent.network, null, 2) }</code>
+      </section>
+      <section style={ sectionStyle }>
         <h1>useragent.os</h1>
         <code style={ codeStyle }>{ JSON.stringify(useragent.os, null, 2) }</code>
       </section>
