@@ -6,6 +6,7 @@ A Cerebral module for everything user agent.
 - Window: size & orientation
 - Media queries
 - Feature detection
+- Internet connectivity
 
 [![NPM version][npm-image]][npm-url]
 [![Commitizen friendly][commitizen-image]][commitizen-url]
@@ -69,6 +70,9 @@ The module exposes all the user agent information in your state model.
       "large": false,
       "portrait": false
     },
+    "network": {
+      "offline": false
+    },
     "feature": {
       "deviceMotion":true,
       "contextMenu":false,
@@ -92,6 +96,15 @@ const useragent = Useragent({
     browser: true, // parse useragent.browser from ua string
     device: true, // parse useragent.device from ua string
     os: true  // parse useragent.os from ua string
+  },
+  offline: { // check the docs at: https://github.com/HubSpot/offline#advanced
+    checkOnLoad: false,
+    interceptRequests: true,
+    reconnect: {
+      initialDelay: 3,
+      delay: 1.5
+    },
+    requests: false
   },
   window: true // update window size on resize
 })
@@ -132,6 +145,10 @@ const useragent = Useragent({
 })
 ```
 > All tests from `feature.js` are executed even if you set the feature option to false. This is a limitation of the library.
+
+## Network detection
+
+I am using the [offline-js](https://www.npmjs.com/package/offline-js) package to detect internet connectivity. The application is initially assumed to be online.
 
 ## Contribute
 
