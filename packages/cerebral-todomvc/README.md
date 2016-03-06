@@ -10,3 +10,5 @@ npm i
 ## Start
 
 `npm start`
+
+Go to `localhost:8080`
