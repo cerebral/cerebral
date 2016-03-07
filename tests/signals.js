@@ -38,7 +38,7 @@ suite['should not affect payload'] = function (test) {
   ctrl.getSignals().test(payload)
 }
 
-suite['should make copy of payload'] = function (test) {
+suite['should register signals'] = function (test) {
   var ctrl = Controller(Model())
   ctrl.signals({
     'test': []
