@@ -220,4 +220,24 @@ suite['should expose meta information returned'] = function (test) {
   test.done()
 }
 
+suite['should return modules with getModules method'] = function (test) {
+  var ctrl = Controller(Model({}))
+
+  ctrl.modules({
+    foo: function (module) {
+      module.addModules({ bar: function (module) {
+        module.alias('baz')
+      } })
+    }
+  })
+
+  var modules = ctrl.getModules()
+
+  test.equal(modules.foo, ctrl.getModules('foo'))
+  test.equal(modules['foo.bar'], ctrl.getModules('foo.bar'))
+  test.equal(modules['foo.bar'], modules.baz)
+  test.equal(modules.baz, ctrl.getModules('baz'))
+  test.done()
+}
+
 module.exports = { modules: suite }

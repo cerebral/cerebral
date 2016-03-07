@@ -68,8 +68,10 @@ var Controller = function (Model, services) {
   controller.logModel = function () {
     return model.logModel()
   }
-  controller.getModules = function () {
-    return modules
+  controller.getModules = function (moduleName) {
+    return moduleName
+      ? modules[moduleName]
+      : modules
   }
 
   controller.addModules = CreateRegisterModules(controller, model, modules)
