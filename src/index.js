@@ -1,3 +1,4 @@
+var get = require('lodash/get')
 var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var Compute = require('./Compute.js')
@@ -52,11 +53,15 @@ var Controller = function (Model, services) {
     return signal(arguments[0], arguments[1], defaultOptions)
   }
 
-  controller.getSignals = function () {
-    return signals
+  controller.getSignals = function (path) {
+    return path
+      ? get(signals, path)
+      : signals
   }
-  controller.getServices = function () {
-    return services
+  controller.getServices = function (path) {
+    return path
+      ? get(services, path)
+      : services
   }
   controller.get = function () {
     if (typeof arguments[0] === 'function') {

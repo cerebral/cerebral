@@ -51,6 +51,29 @@ suite['should register signals'] = function (test) {
   test.done()
 }
 
+suite['should return signals with getSignals method'] = function (test) {
+  var ctrl = Controller(Model())
+
+  ctrl.addSignals({
+    'foo': [],
+    'bar': [],
+    'baz.foo': []
+  })
+
+  var signals = ctrl.getSignals()
+
+  test.equal(typeof signals.foo, 'function')
+  test.equal(typeof signals.bar, 'function')
+  test.equal(typeof signals.baz.foo, 'function')
+
+  test.equal(signals.foo, ctrl.getSignals('foo'))
+  test.equal(signals.foo, ctrl.getSignals(['foo']))
+  test.equal(signals.baz.foo, ctrl.getSignals('baz.foo'))
+  test.equal(signals.baz.foo, ctrl.getSignals(['baz', 'foo']))
+
+  test.done()
+}
+
 suite['should register sync signals'] = function (test) {
   test.expect(3)
   var run = 0

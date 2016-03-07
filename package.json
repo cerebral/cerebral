@@ -36,5 +36,8 @@
   },
   "release": {
     "analyzeCommits": "./sr-prerelease.js"
+  },
+  "dependencies": {
+    "lodash": "^4.6.1"
   }
 }
