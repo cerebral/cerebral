@@ -93,6 +93,7 @@ var Controller = function (Model, services) {
             options[configKey] = signals[key][configKey]
           }
           if (configKey === 'sync') {
+            console.warn('Cerebral: sync signal option is DEPRECATED. Please use immediate option instead.')
             options.isSync = signals[key][configKey]
           }
           return options

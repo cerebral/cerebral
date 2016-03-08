@@ -39,7 +39,7 @@ module.exports = function (controller, model, services, compute, modules) {
       var signal = {
         name: signalName,
         start: null,
-        isSync: defaultOptions.isSync || options.isSync,
+        isSync: defaultOptions.immediate || options.immediate,
         isRouted: options.isRouted || false, // will be removed
         isExecuting: false,
         isPrevented: false,
@@ -52,6 +52,11 @@ module.exports = function (controller, model, services, compute, modules) {
           signal.isExecuting = false
           signal.isPrevented = true
         }
+      }
+
+      if (defaultOptions.isSync || options.isSync) {
+        console.warn('Cerebral: isSync signal option is DEPRECATED. Please use immediate option instead.')
+        signal.isSync = true
       }
 
       var isPredefinedExecution = false
@@ -328,7 +333,7 @@ module.exports = function (controller, model, services, compute, modules) {
     }
     signalChain.chain = chain
     signalChain.sync = function (payload) {
-      signalChain(payload, {isSync: true})
+      signalChain(payload, {immediate: true})
     }
     signalChain.signalName = signalName
 
