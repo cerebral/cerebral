@@ -8,7 +8,7 @@ var Recorder = require('./modules/recorder')
 
 var Controller = function (Model, services) {
   if (services) {
-    console.warn('Passing services to controller is DEPRECATED. Please add them to controller with controller.services({})')
+    console.warn('Passing services to controller is DEPRECATED. Please add them to controller with controller.addServices({})')
   }
 
   var controller = new EventEmitter()
