@@ -79,11 +79,11 @@ module.exports = function (controller, model, allModules) {
       },
       addSignals: registerSignals.bind(null, moduleName),
       signals: function () {
-        console.warn('Cerebral: module.signals() is DEPRECATED. Please use controller.addSignals() instead')
+        console.warn('Cerebral: module.signals() is DEPRECATED. Please use module.addSignals() instead')
         module.addSignals.apply(module, arguments)
       },
       signalsSync: function () {
-        console.warn('Cerebral: module.signalsSync() is DEPRECATED. Please use module.addSignals({mySignal: {chain: [], sync: true}}) instead')
+        console.warn('Cerebral: module.signalsSync() is DEPRECATED. Please use module.addSignals({mySignal: {chain: [], immediate: true}}) instead')
         registerSignalsSync.apply(module, [moduleName].concat([].slice.call(arguments)))
       },
       addServices: registerServices.bind(null, moduleName),

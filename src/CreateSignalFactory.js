@@ -97,7 +97,7 @@ module.exports = function (controller, model, services, compute, modules) {
         }
 
         if (signal.isPrevented) {
-          console.warn('Cerebral: Preventing signal run after signalStart is deprecated. Use `signalTrigger` event instead.')
+          console.warn('Cerebral: Preventing signal, ' + signal.name + ', after signalStart is deprecated. Use `signalTrigger` event instead.')
           currentlyRunningSignals--
           controller.emit('signalEnd', {signal: signal})
           return
@@ -333,7 +333,7 @@ module.exports = function (controller, model, services, compute, modules) {
     }
     signalChain.chain = chain
     signalChain.sync = function (payload) {
-      console.warn('Cerebral: signal.sync() is DEPRECATED. Please use signal(payload, {immediate: true}) instead or define it as sync using object signal definition.')
+      console.warn('Cerebral: Signal ' + signalName + ' uses signal.sync(), but it is DEPRECATED. Please use signal(payload, {immediate: true}) instead or define it as sync using object signal definition.')
       signalChain(payload, {immediate: true})
     }
     signalChain.signalName = signalName
