@@ -919,13 +919,15 @@ suite['should not run signal if prevented'] = function (test) {
     'test': signal
   })
 
-  ctrl.on('signalStart', function (args) {
+  ctrl.on('signalTrigger', function (args) {
     args.signal.preventSignalRun()
+    test.ok(args.signal.isPrevented)
+    test.ok(!args.signal.isExecuting)
+    test.done()
   })
 
-  ctrl.on('signalEnd', function (args) {
-    test.ok(args.signal.isPrevented)
-    test.done()
+  ctrl.on('signalStart', function () {
+    test.ok(false)
   })
 
   ctrl.getSignals().test()
