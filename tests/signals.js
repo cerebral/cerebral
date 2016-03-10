@@ -40,7 +40,7 @@ suite['should not affect payload'] = function (test) {
 
 suite['should register signals'] = function (test) {
   var ctrl = Controller(Model())
-  ctrl.signals({
+  ctrl.addSignals({
     'test': []
   })
   ctrl.addSignals({
@@ -82,13 +82,11 @@ suite['should register sync signals'] = function (test) {
   }
 
   var ctrl = Controller(Model())
-  ctrl.signalsSync({
-    'test': []
-  })
   ctrl.addSignals({
+    'test': [],
     'test2': {
       chain: [action],
-      sync: true
+      immediate: true
     }
   })
 
@@ -102,7 +100,7 @@ suite['should register sync signals'] = function (test) {
 
 suite['should allow namespaced signals'] = function (test) {
   var ctrl = Controller(Model())
-  ctrl.signals({
+  ctrl.addSignals({
     'foo.bar': []
   })
   test.ok(typeof ctrl.getSignals().foo.bar === 'function')
@@ -111,7 +109,7 @@ suite['should allow namespaced signals'] = function (test) {
 
 suite['should trigger an action when run'] = function (test) {
   var ctrl = Controller(Model())
-  ctrl.signals({
+  ctrl.addSignals({
     'test': [
       function () {
         test.ok(true)
@@ -138,7 +136,7 @@ suite['should be able to define custom outputs as arrays'] = function (test) {
       ]
     }
   ]
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -163,7 +161,7 @@ suite['should be able to define default custom path'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -180,7 +178,7 @@ suite['should throw error if paths are missing'] = function (test) {
   ]
 
   test.throws(function () {
-    ctrl.signals({
+    ctrl.addSignals({
       'test': signal
     })
   })
@@ -199,7 +197,7 @@ suite['should throw error if outputs as array does not match paths'] = function 
     }
   ]
   test.throws(function () {
-    ctrl.signals({
+    ctrl.addSignals({
       'test': signal
     })
   })
@@ -221,7 +219,7 @@ suite['should throw error if outputs as object does not match paths'] = function
     }
   ]
   test.throws(function () {
-    ctrl.signals({
+    ctrl.addSignals({
       'test': signal
     })
   })
@@ -240,11 +238,11 @@ suite['should throw error when output is missing'] = function (test) {
     action, function () {}
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -260,11 +258,11 @@ suite['should throw error when output type is wrong'] = function (test) {
   var signal = [
     action, function () {}
   ]
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -285,11 +283,11 @@ suite['should throw when calling next directly with no defaultOutput and outputs
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -306,11 +304,11 @@ suite['should run when output type is correct'] = function (test) {
     action, function () {}
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.doesNotThrow(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -331,11 +329,11 @@ suite['should run when outputs type is correct'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.doesNotThrow(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -349,7 +347,7 @@ suite['should pass initial payload on first argument'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test({foo: 'bar'})
@@ -368,7 +366,7 @@ suite['should expose a output method to set new args'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -391,7 +389,7 @@ suite['should be able to resolve as an async action'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -415,7 +413,7 @@ suite['should be able to define action as async'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -444,7 +442,7 @@ suite['should be able to define action as async with paths'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -464,7 +462,7 @@ suite['should trigger change event on individual async action paths'] = function
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.on('change', function () {
@@ -488,7 +486,7 @@ suite['should be able to resolve to default path success'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -509,7 +507,7 @@ suite['should be able to resolve to default path error'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -530,7 +528,7 @@ suite['should be able to resolve to default as async action'] = function (test) 
     }]
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -546,7 +544,7 @@ suite['should expose mutation and a get method, if passed'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -565,7 +563,7 @@ suite['should handle arrays of actions to run in parallell'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -589,7 +587,7 @@ suite['should handle arrays of actions to resolve to multiple paths'] = function
     ]
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -627,7 +625,7 @@ suite['should trigger paths when individual async is done'] = function (test) {
     ]
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.once('signalEnd', function () {
@@ -663,7 +661,7 @@ suite['should wait to resolve top level async array when nested async arrays are
       results.push('bar')
     }
   ]
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.once('signalEnd', function () {
@@ -685,7 +683,7 @@ suite['should throw error when trying to mutate with an async action'] = functio
     }]
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -700,13 +698,13 @@ suite['should allow services'] = function (test) {
     }
   ]
 
-  ctrl.services({
+  ctrl.addServices({
     foo: function () {
 
     }
   })
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   ctrl.getSignals().test()
@@ -721,10 +719,10 @@ suite['should trigger signal synchronously when using sync method'] = function (
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.ok(hasRun)
   test.done()
 }
@@ -738,8 +736,11 @@ suite['should trigger signal synchronously when defined as signalSync'] = functi
     }
   ]
 
-  ctrl.signalsSync({
-    'test': signal
+  ctrl.addSignals({
+    'test': {
+      chain: signal,
+      immediate: true
+    }
   })
   ctrl.getSignals().test()
   test.ok(hasRun)
@@ -758,11 +759,11 @@ suite['should throw error when input is defined on action and value is missing o
     }, action
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -770,11 +771,11 @@ suite['should throw error when input is defined on action and value is missing o
 suite['should run signal without any actions'] = function (test) {
   var ctrl = Controller(Model())
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': []
   })
   test.doesNotThrow(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -789,11 +790,11 @@ suite['should allow actions to have default input'] = function (test) {
   }
   var signal = [action]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.expect(1)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
@@ -812,7 +813,7 @@ suite['should allow ASYNC actions to have default input'] = function (test) {
     ]
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.expect(1)
@@ -835,7 +836,7 @@ suite['should throw error when output path is not an array'] = function (test) {
     ]
   ]
   test.throws(function () {
-    ctrl.signals({
+    ctrl.addSignals({
       'test': signal
     })
   })
@@ -855,7 +856,7 @@ suite['should emit events in correct order'] = function (test) {
     ]
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
 
@@ -915,7 +916,7 @@ suite['should not run signal if prevented'] = function (test) {
     function () { test.ok(false) }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
 
@@ -940,7 +941,7 @@ suite['should attach error when failed action execution'] = function (test) {
     function () { testObject.unknown.property }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
 
@@ -949,7 +950,7 @@ suite['should attach error when failed action execution'] = function (test) {
       test.equal(args.action.error.name, 'TypeError')
       test.done()
     })
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
 }
 
@@ -1051,7 +1052,7 @@ suite['should wrap and track use of services'] = function (test) {
     test.deepEqual(args.signal.branches[0].serviceCalls[1].args, ['foo'])
   }
   ctrl.on('signalEnd', assertModuleA)
-  ctrl.getSignals().moduleA.test.sync()
+  ctrl.getSignals().moduleA.test({}, {immediate: true})
   ctrl.removeListener('signalEnd', assertModuleA)
 
   var assertModuleB = function (args) {
@@ -1061,7 +1062,7 @@ suite['should wrap and track use of services'] = function (test) {
     test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
   }
   ctrl.on('signalEnd', assertModuleB)
-  ctrl.getSignals().moduleB.test.sync()
+  ctrl.getSignals().moduleB.test({}, {immediate: true})
   ctrl.removeListener('signalEnd', assertModuleB)
 
   var assertModuleC = function (args) {
@@ -1075,7 +1076,7 @@ suite['should wrap and track use of services'] = function (test) {
     test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
   }
   ctrl.on('signalEnd', assertModuleC)
-  ctrl.getSignals().moduleB.moduleC.test.sync()
+  ctrl.getSignals().moduleB.moduleC.test({}, {immediate: true})
   ctrl.removeListener('signalEnd', assertModuleC)
 
   test.done()
@@ -1130,7 +1131,7 @@ suite['should NOT wrap and track use of special or nested services'] = function 
     test.done()
   }
   ctrl.on('signalEnd', assertNoServicesWrapped)
-  ctrl.getSignals().signal.sync()
+  ctrl.getSignals().signal({}, {immediate: true})
 }
 
 suite['should expose an isExecuting method'] = function (test) {
@@ -1151,7 +1152,7 @@ suite['should return true on isExecuting when executing signals'] = function (te
   ctrl.addSignals({
     'test': signal
   })
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.equal(ctrl.isExecuting(), false)
   test.done()
 }
@@ -1176,11 +1177,11 @@ suite['should handle multiple signals in same execution'] = function (test) {
     'test': signal,
     'testAsync': signalAsync
   })
-  ctrl.getSignals().testAsync.sync()
+  ctrl.getSignals().testAsync({}, {immediate: true})
   test.equal(ctrl.isExecuting(), true)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.equal(ctrl.isExecuting(), true)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.equal(ctrl.isExecuting(), true)
   async(function () {
     test.equal(ctrl.isExecuting(), false)

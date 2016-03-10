@@ -20,21 +20,21 @@ suite['should validate inputs'] = function (test) {
     action
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync({
+    ctrl.getSignals().test({
       foo: 123
-    })
+    }, {immediate: true})
   })
   test.doesNotThrow(function () {
-    ctrl.getSignals().test.sync({
+    ctrl.getSignals().test({
       foo: 'bar'
-    })
+    }, {immediate: true})
   })
   test.done()
 }
@@ -52,11 +52,11 @@ suite['should validate default inputs'] = function (test) {
     action
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -75,11 +75,11 @@ suite['should validate ouput'] = function (test) {
     action, function () {}
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }
@@ -99,11 +99,11 @@ suite['should validate outputs'] = function (test) {
   var signal = [
     action, {success: []}
   ]
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.throws(function () {
-    ctrl.getSignals().test.sync()
+    ctrl.getSignals().test({}, {immediate: true})
   })
   test.done()
 }

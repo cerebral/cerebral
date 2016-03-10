@@ -28,7 +28,7 @@ var Model = function (initialState) {
 
 suite['should be able to register a module'] = function (test) {
   var ctrl = Controller(Model({}))
-  ctrl.modules({
+  ctrl.addModules({
     test: function () {}
   })
   ctrl.addModules({
@@ -43,7 +43,7 @@ suite['should be able to register a module'] = function (test) {
 suite['should pass the module and controller, and expose module name and path on controller'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(5)
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module, controller) {
       test.equal(controller, ctrl)
       test.equal(module.name, 'test')
@@ -57,13 +57,14 @@ suite['should pass the module and controller, and expose module name and path on
 
 suite['should be able to add a signal'] = function (test) {
   var ctrl = Controller(Model({}))
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
-      module.signals({
-        'test': []
-      })
-      module.signalsSync({
-        'test2': []
+      module.addSignals({
+        'test': [],
+        'test2': {
+          chain: [],
+          immediate: true
+        }
       })
     }
   })
@@ -74,9 +75,9 @@ suite['should be able to add a signal'] = function (test) {
 
 suite['should be able to add a service'] = function (test) {
   var ctrl = Controller(Model({}))
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
-      module.services({
+      module.addServices({
         'test': {}
       })
     }
@@ -88,9 +89,9 @@ suite['should be able to add a service'] = function (test) {
 suite['should expose module on actions running on a module signal'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
-      module.signals({
+      module.addSignals({
         'test': [
           function action (arg) {
             test.ok(arg.module)
@@ -99,14 +100,14 @@ suite['should expose module on actions running on a module signal'] = function (
       })
     }
   })
-  ctrl.getSignals().test.test.sync()
+  ctrl.getSignals().test.test({}, {immediate: true})
   test.done()
 }
 
 suite['should expose modules on all actions'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(3)
-  ctrl.signals({
+  ctrl.addSignals({
     'test': [
       function action (arg) {
         test.ok(arg.modules.test)
@@ -115,19 +116,19 @@ suite['should expose modules on all actions'] = function (test) {
       }
     ]
   })
-  ctrl.modules({
+  ctrl.addModules({
     test: function () {}
   })
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
 suite['should be able to add namespaced state'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
-      module.state({
+      module.addState({
         foo: 'bar'
       })
     }
@@ -139,7 +140,7 @@ suite['should be able to add namespaced state'] = function (test) {
 suite['should be able to add an alias'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(2)
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
       module.alias('cerebral-module-test')
     }
@@ -152,11 +153,11 @@ suite['should be able to add an alias'] = function (test) {
 suite['should be able to add a submodule with namespaced state, signals and services'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(2)
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
-      module.modules({
+      module.addModules({
         sub: function (module) {
-          module.signals({
+          module.addSignals({
             'test': [
               function action (arg) {
                 test.ok(arg.modules.test.sub.services.test)
@@ -164,26 +165,26 @@ suite['should be able to add a submodule with namespaced state, signals and serv
               }
             ]
           })
-          module.services({
+          module.addServices({
             'test': {}
           })
-          module.state({foo: 'bar'})
+          module.addState({foo: 'bar'})
         }
       })
     }
   })
-  ctrl.getSignals().test.sub.test.sync()
+  ctrl.getSignals().test.sub.test({}, {immediate: true})
   test.done()
 }
 
 suite['should expose signals added to module on the module object'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
-      module.modules({
+      module.addModules({
         sub: function (module) {
-          module.signals({
+          module.addSignals({
             'test': [
               function action (arg) {
                 test.ok(module.getSignals().test)
@@ -194,16 +195,16 @@ suite['should expose signals added to module on the module object'] = function (
       })
     }
   })
-  ctrl.getSignals().test.sub.test.sync()
+  ctrl.getSignals().test.sub.test({}, {immediate: true})
   test.done()
 }
 
 suite['should expose meta information returned'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(2)
-  ctrl.modules({
+  ctrl.addModules({
     test: function (module) {
-      module.signals({
+      module.addSignals({
         test: [
           function action (arg) {
             test.equal(arg.module.meta.foo, 'bar')
@@ -215,7 +216,7 @@ suite['should expose meta information returned'] = function (test) {
       }
     }
   })
-  ctrl.getSignals().test.test.sync()
+  ctrl.getSignals().test.test({}, {immediate: true})
   test.equal(ctrl.getModules().test.meta.foo, 'bar')
   test.done()
 }
@@ -223,7 +224,7 @@ suite['should expose meta information returned'] = function (test) {
 suite['should return modules with getModules method'] = function (test) {
   var ctrl = Controller(Model({}))
 
-  ctrl.modules({
+  ctrl.addModules({
     foo: function (module) {
       module.addModules({ bar: function (module) {
         module.alias('baz')

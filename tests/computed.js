@@ -123,7 +123,7 @@ suite['should rerun if previously grabbed value changes'] = function (test) {
     }
   ]
 
-  controller.signals({
+  controller.addSignals({
     'test': signal
   })
   controller.once('signalEnd', function () {
@@ -156,7 +156,7 @@ suite['should cache after previously grabbed value change'] = function (test) {
     }
   ]
 
-  controller.signals({
+  controller.addSignals({
     'test': signal
   })
   controller.once('signalEnd', function () {
@@ -164,7 +164,7 @@ suite['should cache after previously grabbed value change'] = function (test) {
     controller.get(foo)
     test.done()
   })
-  controller.getSignals().test.sync()
+  controller.getSignals().test({}, {immediate: true})
 }
 
 suite['should handle complex scenario'] = function (test) {
@@ -207,7 +207,7 @@ suite['should handle complex scenario'] = function (test) {
     }
   ]
 
-  controller.signals({
+  controller.addSignals({
     'test': signal
   })
 
@@ -259,10 +259,10 @@ suite['should allow use of computed inside actions'] = function (test) {
     }
   ]
 
-  controller.signals({
+  controller.addSignals({
     'test': signal
   })
-  controller.getSignals().test.sync()
+  controller.getSignals().test({}, {immediate: true})
 }
 
 suite['should allow use of factories'] = function (test) {

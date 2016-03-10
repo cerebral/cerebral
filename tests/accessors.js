@@ -20,11 +20,11 @@ suite['should call accessor methods added'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.expect(2)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
@@ -49,11 +49,11 @@ suite['should have a path as first argument'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.expect(3)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
@@ -77,11 +77,11 @@ suite['should receive the rest of the arguments'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.expect(2)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
@@ -105,11 +105,11 @@ suite['should allow dot notation'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.expect(2)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
@@ -133,11 +133,11 @@ suite['should have a select method that returns a cursor'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
   test.expect(1)
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 

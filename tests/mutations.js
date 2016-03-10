@@ -22,10 +22,10 @@ suite['should give correct path and value to mutation methods'] = function (test
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
@@ -48,10 +48,10 @@ suite['should be able to mutate with string'] = function (test) {
     }
   ]
 
-  ctrl.signals({
+  ctrl.addSignals({
     'test': signal
   })
-  ctrl.getSignals().test.sync()
+  ctrl.getSignals().test({}, {immediate: true})
   test.done()
 }
 
