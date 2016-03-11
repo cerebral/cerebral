@@ -8,8 +8,16 @@ var validateOutput = function (action, path, arg, signalName) {
 
   var checkers = action.output || action.outputs[path || action.defaultOutput]
 
-  if (checkers === undefined && arg === undefined) {
+  if (checkers === undefined) {
     return
+  }
+
+  if (!arg) {
+    throw new Error([
+      'Cerebral: There is a wrong output of action "' +
+      utils.getFunctionName(action) + '" ' +
+      'in signal "' + signalName + '". You did not pass any values to the output'
+    ].join(''))
   }
 
   Object.keys(checkers).forEach(function (key) {
