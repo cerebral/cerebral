@@ -4,8 +4,6 @@ var CreateRegisterModules = require('./CreateRegisterModules.js')
 var Compute = require('./Compute.js')
 var EventEmitter = require('events').EventEmitter
 
-var Recorder = require('./modules/recorder')
-
 var Controller = function (Model, services) {
   if (services) {
     console.warn('Passing services to controller is DEPRECATED. Please add them to controller with controller.addServices({})')
@@ -130,9 +128,6 @@ var Controller = function (Model, services) {
     console.warn('Cerebral: controller.services() is DEPRECATED. Please use controller.addServices() instead')
     controller.addServices(newServices)
   }
-
-  // emulate loading recorder
-  Recorder()({}, controller)
 
   return controller
 }
