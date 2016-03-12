@@ -14,16 +14,6 @@ module.exports = function (controller, model, allModules) {
     })
   }
 
-  var registerSignalsSync = function (moduleName, signals) {
-    var scopedSignals = Object.keys(signals).reduce(function (scopedSignals, key) {
-      scopedSignals[moduleName + '.' + key] = signals[key]
-      return scopedSignals
-    }, {})
-    return controller.signalsSync(scopedSignals, {
-      modulePath: moduleName.split('.')
-    })
-  }
-
   var registerServices = function (moduleName, services) {
     var scopedServices = Object.keys(services).reduce(function (scopedServices, key) {
       scopedServices[moduleName + '.' + key] = services[key]
@@ -71,24 +61,8 @@ module.exports = function (controller, model, allModules) {
         allModules[alias] = moduleExport
       },
       addSignals: registerSignals.bind(null, moduleName),
-      signals: function () {
-        console.warn('Cerebral: module.signals() is DEPRECATED. Please use module.addSignals() instead')
-        module.addSignals.apply(module, arguments)
-      },
-      signalsSync: function () {
-        console.warn('Cerebral: module.signalsSync() is DEPRECATED. Please use module.addSignals({mySignal: {chain: [], immediate: true}}) instead')
-        registerSignalsSync.apply(module, [moduleName].concat([].slice.call(arguments)))
-      },
       addServices: registerServices.bind(null, moduleName),
-      services: function () {
-        console.warn('Cerebral: module.services() is DEPRECATED. Please use module.addServices() instead')
-        return module.addServices.apply(module, arguments)
-      },
       addState: registerInitialState.bind(null, moduleName),
-      state: function () {
-        console.warn('Cerebral: module.state() is DEPRECATED. Please use module.addState() instead')
-        module.addState.apply(module, arguments)
-      },
       getSignals: function () {
         var signals = controller.getSignals()
         var path = moduleName.split('.')
@@ -96,11 +70,7 @@ module.exports = function (controller, model, allModules) {
           return signals[key]
         }, signals)
       },
-      addModules: registerModules.bind(null, moduleName),
-      modules: function () {
-        console.warn('Cerebral: module.modules() is DEPRECATED. Please use module.addModules() instead')
-        module.addModules.apply(module, arguments)
-      }
+      addModules: registerModules.bind(null, moduleName)
     }
     var constructedModule = moduleConstructor(module, controller)
 

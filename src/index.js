@@ -4,17 +4,13 @@ var CreateRegisterModules = require('./CreateRegisterModules.js')
 var Compute = require('./Compute.js')
 var EventEmitter = require('events').EventEmitter
 
-var Controller = function (Model, services) {
-  if (services) {
-    console.warn('Passing services to controller is DEPRECATED. Please add them to controller with controller.addServices({})')
-  }
-
+var Controller = function (Model) {
   var controller = new EventEmitter()
   var model = Model(controller)
   var compute = Compute(model)
   var signals = {}
   var modules = {}
-  services = services || {}
+  var services = {}
 
   var signalFactory = CreateSignalFactory(controller, model, services, compute, modules)
   var signal = function () {
@@ -38,17 +34,6 @@ var Controller = function (Model, services) {
     }
     serviceMethodPath[serviceName] = service
     return service
-  }
-
-  controller.signal = function () {
-    console.warn('Cerebral: controller.signal() is DEPRECATED. Please use controller.addSignals() instead')
-    signal.apply(null, arguments)
-  }
-  controller.signalSync = function () {
-    console.warn('Cerebral: controller.signalSync() is DEPRECATED. Please use controller.addSignals({mySignal: {chain: [], sync: true}}) instead')
-    var defaultOptions = arguments[2] || {}
-    defaultOptions.isSync = true
-    return signal(arguments[0], arguments[1], defaultOptions)
   }
 
   controller.getSignals = function (path) {
@@ -78,10 +63,6 @@ var Controller = function (Model, services) {
   }
 
   controller.addModules = CreateRegisterModules(controller, model, modules)
-  controller.modules = function () {
-    console.warn('Cerebral: controller.modules() is DEPRECATED. Please use controller.addModules() instead')
-    controller.addModules.apply(controller, arguments)
-  }
 
   controller.addSignals = function (signals, options) {
     Object.keys(signals).forEach(function (name) {
@@ -106,27 +87,11 @@ var Controller = function (Model, services) {
       }
     })
   }
-  controller.signals = function () {
-    console.warn('Cerebral: controller.signals() is DEPRECATED. Please use controller.addSignals() instead')
-    controller.addSignals.apply(controller, arguments)
-  }
-  controller.signalsSync = function (signals, options) {
-    console.warn('Cerebral: controller.signalsSync() is DEPRECATED. Please use controller.addSignals({mySignal: {chain: [], sync: true}}) instead')
-    Object.keys(signals).forEach(function (key) {
-      options = options || {}
-      options.isSync = true
-      signal(key, signals[key], options)
-    })
-  }
   controller.addServices = function (newServices) {
     Object.keys(newServices).forEach(function (key) {
       service(key, newServices[key])
     })
     return controller.getServices()
-  }
-  controller.services = function (newServices) {
-    console.warn('Cerebral: controller.services() is DEPRECATED. Please use controller.addServices() instead')
-    controller.addServices(newServices)
   }
 
   return controller
