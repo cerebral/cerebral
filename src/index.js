@@ -77,10 +77,6 @@ var Controller = function (Model) {
           }
           return signalOptions
         }, optionsCopy)
-        if (signalOptions.hasOwnProperty('sync')) {
-          console.warn('Cerebral: sync signal option is DEPRECATED. Please use immediate option instead.')
-          signalOptions.isSync = signalOptions.sync
-        }
         signal(name, signals[name].chain, signalOptions)
       } else {
         signal(name, signals[name], options)

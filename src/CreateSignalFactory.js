@@ -54,11 +54,6 @@ module.exports = function (controller, model, services, compute, modules) {
         }
       }
 
-      if (defaultOptions.isSync || options.isSync) {
-        console.warn('Cerebral: isSync signal option is DEPRECATED. Please use immediate option instead.')
-        signal.isSync = true
-      }
-
       var isPredefinedExecution = false
       if (options.branches) {
         signal.isSync = true
@@ -336,10 +331,6 @@ module.exports = function (controller, model, services, compute, modules) {
       }
     }
     signalChain.chain = chain
-    signalChain.sync = function (payload) {
-      console.warn('Cerebral: Signal ' + signalName + ' uses signal.sync(), but it is DEPRECATED. Please use signal(payload, {immediate: true}) instead or define it as sync using object signal definition.')
-      signalChain(payload, {immediate: true})
-    }
     signalChain.signalName = signalName
 
     return signalChain
