@@ -49,8 +49,7 @@ module.exports = function (controller, model, services, compute, modules) {
         duration: 0,
         input: payload,
         preventSignalRun: function () {
-          signal.isExecuting = false
-          signal.isPrevented = true
+          if (signal.isExecuting === false) signal.isPrevented = true
         }
       }
 
@@ -93,13 +92,6 @@ module.exports = function (controller, model, services, compute, modules) {
         if (!isPredefinedExecution) {
           currentlyRunningSignals++
           controller.emit('signalStart', {signal: signal})
-        }
-
-        if (signal.isPrevented) {
-          console.warn('Cerebral: Preventing signal, ' + signal.name + ', after signalStart is deprecated. Use `signalTrigger` event instead.')
-          currentlyRunningSignals--
-          controller.emit('signalEnd', {signal: signal})
-          return
         }
 
         var runBranch = function (branch, index, start) {
