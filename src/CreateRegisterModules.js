@@ -28,9 +28,14 @@ module.exports = function (controller, model, allModules) {
   }
 
   var registerModules = function (parentModuleName, modules) {
+    var warnSignalTrigger = null
     if (arguments.length === 1) {
       modules = parentModuleName
       parentModuleName = null
+      warnSignalTrigger = function (event) {
+        throw new Error('Cerebral - You triggered a signal ' + event.signal.name + ' while modules are being registered. Do not trigger signals until Cerebral has initialized your application.')
+      }
+      controller.on('signalTrigger', warnSignalTrigger)
     }
 
     Object.keys(modules).forEach(function (moduleName) {
@@ -38,6 +43,7 @@ module.exports = function (controller, model, allModules) {
     })
 
     if (arguments.length === 1) {
+      controller.removeListener('signalTrigger', warnSignalTrigger)
       controller.emit('modulesLoaded', { modules: allModules })
     }
 

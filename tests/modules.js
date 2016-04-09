@@ -196,4 +196,21 @@ suite['should return modules with getModules method'] = function (test) {
   test.done()
 }
 
+suite['should throw error if signals are triggered when instantiating'] = function (test) {
+  test.expect(1)
+  var ctrl = Controller(Model({}))
+
+  ctrl.addSignals({
+    test: []
+  })
+  test.throws(function () {
+    ctrl.addModules({
+      foo: function (module, controller) {
+        controller.getSignals().test()
+      }
+    })
+  })
+  test.done()
+}
+
 module.exports = { modules: suite }
