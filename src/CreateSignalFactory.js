@@ -30,8 +30,15 @@ module.exports = function (controller, model, services, compute, modules) {
       analyze(signalName, chain)
     }
 
-    var signalChain = function (payload, options) {
-      options = options || {}
+    var signalChain = function (payload, passedOptions) {
+      var defaultOptionsCopy = Object.keys(defaultOptions).reduce(function (defaultOptionsCopy, key) {
+        defaultOptionsCopy[key] = defaultOptions[key]
+        return defaultOptionsCopy
+      }, {})
+      var options = Object.keys(passedOptions || {}).reduce(function (defaultOptionsCopy, key) {
+        defaultOptionsCopy[key] = passedOptions[key]
+        return defaultOptionsCopy
+      }, defaultOptionsCopy)
 
       var tree = staticTree(signalChain.chain)
       var actions = tree.actions
@@ -39,13 +46,10 @@ module.exports = function (controller, model, services, compute, modules) {
       var signal = {
         name: signalName,
         start: null,
-        isSync: defaultOptions.immediate || options.immediate,
-        isRouted: options.isRouted || false, // will be removed
+        isSync: options.immediate,
         isExecuting: false,
         isPrevented: false,
-        isRecorded: options.isRecorded || false,
         branches: tree.branches,
-        options: options,
         duration: 0,
         input: payload,
         preventSignalRun: function () {
@@ -58,10 +62,10 @@ module.exports = function (controller, model, services, compute, modules) {
         signal.isSync = true
         signal.branches = options.branches
         isPredefinedExecution = true
-        controller.emit('predefinedSignal', { signal: signal })
+        controller.emit('predefinedSignal', { signal: signal, options: options })
       } else {
         var prevIsSync = signal.isSync
-        controller.emit('signalTrigger', { signal: signal })
+        controller.emit('signalTrigger', { signal: signal, options: options })
         if (prevIsSync !== signal.isSync) {
           console.warn('Cerebral: You are running an older version of the cerebral-module-router. Please update the package')
         }
@@ -91,7 +95,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
         if (!isPredefinedExecution) {
           currentlyRunningSignals++
-          controller.emit('signalStart', {signal: signal})
+          controller.emit('signalStart', {signal: signal, options: options})
         }
 
         var runBranch = function (branch, index, start) {
@@ -104,8 +108,8 @@ module.exports = function (controller, model, services, compute, modules) {
 
             signal.isExecuting = false
             currentlyRunningSignals--
-            controller.emit('signalEnd', {signal: signal})
-            controller.emit('change', {signal: signal})
+            controller.emit('signalEnd', {signal: signal, options: options})
+            controller.emit('change', {signal: signal, options: options})
             return
           }
 
@@ -137,7 +141,7 @@ module.exports = function (controller, model, services, compute, modules) {
               runBranch(branch, index + 1)
             } else {
               var promises = currentBranch.map(function (action) {
-                controller.emit('actionStart', {action: action, signal: signal})
+                controller.emit('actionStart', {action: action, signal: signal, options: options})
                 var actionFunc = actions[action.actionIndex]
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
                 var actionArgs = createActionArgs.async(action, inputArg, model, compute, services, Object.keys(modules))
@@ -170,8 +174,8 @@ module.exports = function (controller, model, services, compute, modules) {
                       message: e.message,
                       stack: actionFunc.toString()
                     }
-                    controller.emit('signalError', {action: action, signal: signal})
-                    controller.emit('change', {signal: signal})
+                    controller.emit('signalError', {action: action, signal: signal, options: options})
+                    controller.emit('change', {signal: signal, options: options})
                     throw e
                   }
                 } else {
@@ -184,8 +188,8 @@ module.exports = function (controller, model, services, compute, modules) {
                   action.output = utils.merge({}, result.arg)
                   utils.merge(signalArgs, result.arg)
 
-                  controller.emit('actionEnd', {action: action, signal: signal})
-                  controller.emit('change', {signal: signal})
+                  controller.emit('actionEnd', {action: action, signal: signal, options: options})
+                  controller.emit('change', {signal: signal, options: options})
 
                   if (result.path) {
                     action.outputPath = result.path
@@ -194,7 +198,7 @@ module.exports = function (controller, model, services, compute, modules) {
                   }
                 })
               })
-              controller.emit('change', {signal: signal})
+              controller.emit('change', {signal: signal, options: options})
               return Promise.all(promises)
                 .then(function () {
                   return runBranch(branch, index + 1, Date.now())
@@ -218,7 +222,7 @@ module.exports = function (controller, model, services, compute, modules) {
 
               runBranch(branch, index + 1)
             } else {
-              controller.emit('actionStart', {action: action, signal: signal})
+              controller.emit('actionStart', {action: action, signal: signal, options: options})
 
               var actionFunc = actions[action.actionIndex]
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
@@ -254,8 +258,8 @@ module.exports = function (controller, model, services, compute, modules) {
                     message: e.message,
                     stack: e.stack
                   }
-                  controller.emit('signalError', {action: action, signal: signal})
-                  controller.emit('change', {signal: signal})
+                  controller.emit('signalError', {action: action, signal: signal, options: options})
+                  controller.emit('change', {signal: signal, options: options})
                   throw e
                 }
               } else {
@@ -287,12 +291,12 @@ module.exports = function (controller, model, services, compute, modules) {
                 }
               } else if (result.then) {
                 return result.then(function () {
-                  controller.emit('actionEnd', {action: action, signal: signal})
+                  controller.emit('actionEnd', {action: action, signal: signal, options: options})
 
                   return runBranch(branch, index + 1, start)
                 })
               } else {
-                controller.emit('actionEnd', {action: action, signal: signal})
+                controller.emit('actionEnd', {action: action, signal: signal, options: options})
 
                 return runBranch(branch, index + 1, start)
               }

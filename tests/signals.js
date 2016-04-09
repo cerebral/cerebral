@@ -1220,4 +1220,32 @@ suite['should handle multiple signals in same execution'] = function (test) {
   })
 }
 
+suite['should emit options passed to events'] = function (test) {
+  var ctrl = Controller(Model())
+  var testOptions = function (args) {
+    test.equal(args.options.foo, 'bar')
+    test.equal(args.options.immediate, true)
+    test.deepEqual(args.options.context, {})
+  }
+  ctrl.addSignals({
+    'test': {
+      chain: [[
+        function action () {
+
+        }
+      ]],
+      immediate: true,
+      context: {},
+      foo: 'bar'
+    }
+  })
+  ctrl.on('change', testOptions)
+  ctrl.on('signalStart', testOptions)
+  ctrl.on('signalEnd', testOptions)
+  ctrl.on('actionStart', testOptions)
+  ctrl.on('actionEnd', testOptions)
+  ctrl.getSignals().test()
+  test.done()
+}
+
 module.exports = { signals: suite }
