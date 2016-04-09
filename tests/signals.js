@@ -1312,4 +1312,29 @@ suite['should pass default context to context function'] = function (test) {
   test.done()
 }
 
+suite['should emit payload passed to events'] = function (test) {
+  test.expect(5)
+  var ctrl = Controller(Model())
+  var testOptions = function (args) {
+    test.equal(args.payload.foo, 'bar')
+  }
+  ctrl.addSignals({
+    'test': {
+      chain: [
+        function action () {
+
+        }
+      ],
+      immediate: true
+    }
+  })
+  ctrl.on('change', testOptions)
+  ctrl.on('signalStart', testOptions)
+  ctrl.on('signalEnd', testOptions)
+  ctrl.on('actionStart', testOptions)
+  ctrl.on('actionEnd', testOptions)
+  ctrl.getSignals().test({foo: 'bar'})
+  test.done()
+}
+
 module.exports = { signals: suite }
