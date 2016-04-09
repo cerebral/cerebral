@@ -1,9 +1,12 @@
 var utils = require('./utils.js')
-var createActionArgs = require('./createActionArgs.js')
 var createNext = require('./createNext.js')
 var analyze = require('./analyze.js')
 var staticTree = require('./staticTree')
-var createModulesArg = require('./createModulesArg.js')
+var createContext = require('./createContext')
+var inputProvider = require('./contextProviders/inputProvider')
+var stateProvider = require('./contextProviders/stateProvider')
+var servicesProvider = require('./contextProviders/servicesProvider')
+var outputProvider = require('./contextProviders/outputProvider')
 
 var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0)
@@ -22,7 +25,6 @@ module.exports = function (controller, model, services, compute, modules) {
     var args = [].slice.call(arguments)
     var signalName = args.shift()
     var defaultOptions = args[1] || {}
-    defaultOptions.modulePath = defaultOptions.modulePath || []
 
     var chain = args[0] || []
 
@@ -144,7 +146,13 @@ module.exports = function (controller, model, services, compute, modules) {
                 controller.emit('actionStart', {action: action, signal: signal, options: options})
                 var actionFunc = actions[action.actionIndex]
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-                var actionArgs = createActionArgs.async(action, inputArg, model, compute, services, Object.keys(modules))
+                var next = createNext.async(actionFunc, signal.name)
+                var context = createContext([
+                  inputProvider(inputArg),
+                  stateProvider(action, model, compute, true),
+                  servicesProvider(action, modules, services),
+                  outputProvider(next.fn)
+                ].concat(options.context || []))
 
                 if (utils.isDeveloping() && actionFunc.input) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
@@ -152,22 +160,10 @@ module.exports = function (controller, model, services, compute, modules) {
 
                 action.isExecuting = true
                 action.input = utils.merge({}, inputArg)
-                var next = createNext.async(actionFunc, signal.name)
-                var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2], signal.name, action.name)
-                var actionArg = {
-                  input: actionArgs[0],
-                  state: actionArgs[1],
-                  output: next.fn,
-                  services: actionArgs[2],
-                  modules: modulesArg,
-                  module: defaultOptions.modulePath.reduce(function (modules, key) {
-                    return modules[key]
-                  }, modulesArg)
-                }
 
                 if (utils.isDeveloping()) {
                   try {
-                    actionFunc(actionArg)
+                    actionFunc(context)
                   } catch (e) {
                     action.error = {
                       name: e.name,
@@ -179,7 +175,7 @@ module.exports = function (controller, model, services, compute, modules) {
                     throw e
                   }
                 } else {
-                  actionFunc(actionArg)
+                  actionFunc(context)
                 }
 
                 return next.promise.then(function (result) {
@@ -226,7 +222,13 @@ module.exports = function (controller, model, services, compute, modules) {
 
               var actionFunc = actions[action.actionIndex]
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-              var actionArgs = createActionArgs.sync(action, inputArg, model, compute, services, Object.keys(modules))
+              var next = createNext.sync(actionFunc, signal.name)
+              var context = createContext([
+                inputProvider(inputArg),
+                stateProvider(action, model, compute, false),
+                servicesProvider(action, modules, services),
+                outputProvider(next)
+              ].concat(options.context || []))
 
               if (utils.isDeveloping() && actionFunc.input) {
                 utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
@@ -235,23 +237,9 @@ module.exports = function (controller, model, services, compute, modules) {
               action.mutations = [] // Reset mutations array
               action.input = utils.merge({}, inputArg)
 
-              var next = createNext.sync(actionFunc, signal.name)
-              var modulesArg = createModulesArg(modules, actionArgs[1], actionArgs[2], signal.name, action.name)
-
-              var actionArg = {
-                input: actionArgs[0],
-                state: actionArgs[1],
-                output: next,
-                services: actionArgs[2],
-                modules: modulesArg,
-                module: defaultOptions.modulePath.reduce(function (exportedModule, key) {
-                  return exportedModule[key]
-                }, modulesArg)
-              }
-
               if (utils.isDeveloping()) {
                 try {
-                  actionFunc(actionArg)
+                  actionFunc(context)
                 } catch (e) {
                   action.error = {
                     name: e.name,
@@ -263,7 +251,7 @@ module.exports = function (controller, model, services, compute, modules) {
                   throw e
                 }
               } else {
-                actionFunc(actionArg)
+                actionFunc(context)
               }
 
               // TODO: Also add input here

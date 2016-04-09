@@ -86,43 +86,6 @@ suite['should be able to add a service'] = function (test) {
   test.done()
 }
 
-suite['should expose module on actions running on a module signal'] = function (test) {
-  var ctrl = Controller(Model({}))
-  test.expect(1)
-  ctrl.addModules({
-    test: function (module) {
-      module.addSignals({
-        'test': [
-          function action (arg) {
-            test.ok(arg.module)
-          }
-        ]
-      })
-    }
-  })
-  ctrl.getSignals().test.test({}, {immediate: true})
-  test.done()
-}
-
-suite['should expose modules on all actions'] = function (test) {
-  var ctrl = Controller(Model({}))
-  test.expect(3)
-  ctrl.addSignals({
-    'test': [
-      function action (arg) {
-        test.ok(arg.modules.test)
-        test.equal(arg.modules.test.name, 'test')
-        test.deepEqual(arg.modules.test.path, ['test'])
-      }
-    ]
-  })
-  ctrl.addModules({
-    test: function () {}
-  })
-  ctrl.getSignals().test({}, {immediate: true})
-  test.done()
-}
-
 suite['should be able to add namespaced state'] = function (test) {
   var ctrl = Controller(Model({}))
   test.expect(1)
@@ -152,7 +115,7 @@ suite['should be able to add an alias'] = function (test) {
 
 suite['should be able to add a submodule with namespaced state, signals and services'] = function (test) {
   var ctrl = Controller(Model({}))
-  test.expect(2)
+  test.expect(1)
   ctrl.addModules({
     test: function (module) {
       module.addModules({
@@ -160,7 +123,6 @@ suite['should be able to add a submodule with namespaced state, signals and serv
           module.addSignals({
             'test': [
               function action (arg) {
-                test.ok(arg.modules.test.sub.services.test)
                 test.deepEqual(arg.state.get(), { test: { sub: { foo: 'bar' } } })
               }
             ]
@@ -173,6 +135,7 @@ suite['should be able to add a submodule with namespaced state, signals and serv
       })
     }
   })
+
   ctrl.getSignals().test.sub.test({}, {immediate: true})
   test.done()
 }
@@ -201,22 +164,14 @@ suite['should expose signals added to module on the module object'] = function (
 
 suite['should expose meta information returned'] = function (test) {
   var ctrl = Controller(Model({}))
-  test.expect(2)
+  test.expect(1)
   ctrl.addModules({
     test: function (module) {
-      module.addSignals({
-        test: [
-          function action (arg) {
-            test.equal(arg.module.meta.foo, 'bar')
-          }
-        ]
-      })
       return {
         foo: 'bar'
       }
     }
   })
-  ctrl.getSignals().test.test({}, {immediate: true})
   test.equal(ctrl.getModules().test.meta.foo, 'bar')
   test.done()
 }

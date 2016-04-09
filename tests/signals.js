@@ -168,7 +168,10 @@ suite['should be able to define custom outputs as arrays'] = function (test) {
     }
   ]
   ctrl.addSignals({
-    'test': signal
+    'test': {
+      chain: signal,
+      immediate: true
+    }
   })
   ctrl.getSignals().test()
 }
@@ -996,8 +999,8 @@ suite['should wrap and track use of services'] = function (test) {
     NoPrototype.prototype = null
 
     var action = function (args) {
-      args.module.services.test('foo')
-      args.module.services.noPrototype('foo')
+      args.services.moduleA.test('foo')
+      args.services.moduleA.noPrototype('foo')
     }
 
     module.addServices({
@@ -1014,7 +1017,7 @@ suite['should wrap and track use of services'] = function (test) {
 
   var ModuleB = function (module) {
     var action = function (args) {
-      args.module.services.test('foo')
+      args.services.moduleB.test('foo')
     }
 
     module.addServices({
@@ -1034,9 +1037,9 @@ suite['should wrap and track use of services'] = function (test) {
 
   var ModuleC = function (module) {
     var action = function (args) {
-      args.module.services.test('foo')
-      args.module.services.test2.foo('foo')
-      args.module.services.test2.bar('foo')
+      args.services.moduleB.moduleC.test('foo')
+      args.services.moduleB.moduleC.test2.foo('foo')
+      args.services.moduleB.moduleC.test2.bar('foo')
     }
 
     module.addServices({
@@ -1244,6 +1247,67 @@ suite['should emit options passed to events'] = function (test) {
   ctrl.on('signalEnd', testOptions)
   ctrl.on('actionStart', testOptions)
   ctrl.on('actionEnd', testOptions)
+  ctrl.getSignals().test()
+  test.done()
+}
+
+suite['should allow you to change context of actions for all signals'] = function (test) {
+  var ctrl = Controller(Model())
+  ctrl.addSignals({
+    'test': [
+      function action (context) {
+        test.equal(context.foo, 'bar')
+      }
+    ]
+  }, {
+    immediate: true,
+    context: {foo: 'bar'}
+  })
+  ctrl.getSignals().test()
+  test.done()
+}
+
+suite['should allow you to change context of actions with a function'] = function (test) {
+  var ctrl = Controller(Model())
+  ctrl.addSignals({
+    'test': {
+      chain: [
+        function action (context) {
+          test.equal(context.foo, 'bar')
+        }
+      ],
+      immediate: true,
+      context: function () {
+        return {
+          foo: 'bar'
+        }
+      }
+    }
+  })
+  ctrl.getSignals().test()
+  test.done()
+}
+
+suite['should pass default context to context function'] = function (test) {
+  test.expect(4)
+  var ctrl = Controller(Model())
+  ctrl.addSignals({
+    'test': {
+      chain: [
+        function action () {
+
+        }
+      ],
+      immediate: true,
+      context: function (context) {
+        test.ok(context.input)
+        test.ok(context.state)
+        test.ok(context.output)
+        test.ok(context.services)
+        return context
+      }
+    }
+  })
   ctrl.getSignals().test()
   test.done()
 }
