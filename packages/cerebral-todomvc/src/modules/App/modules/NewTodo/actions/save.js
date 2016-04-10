@@ -16,4 +16,6 @@ function saveTodo ({input, state, output}) {
 
 };
 
+saveTodo.async = true;
+
 export default saveTodo;

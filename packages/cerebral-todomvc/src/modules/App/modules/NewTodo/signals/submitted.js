@@ -8,11 +8,9 @@ import setError from './../actions/setError.js';
 export default [
   add,
   setSaving,
-  [
-    save, {
-      success: [updateTodo],
-      error: [setError]
-    }
-  ],
+  save, {
+    success: [updateTodo],
+    error: [setError]
+  },
   unsetSaving
 ];
