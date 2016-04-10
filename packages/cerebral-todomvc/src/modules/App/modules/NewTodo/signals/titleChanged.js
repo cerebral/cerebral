@@ -4,5 +4,5 @@ export default {
   chain: [
     setTitle
   ],
-  isSync: true
+  immediate: true
 };

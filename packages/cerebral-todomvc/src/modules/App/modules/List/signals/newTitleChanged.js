@@ -4,5 +4,5 @@ export default {
   chain: [
     setTodoNewTitle
   ],
-  isSync: true
+  immediate: true
 };
