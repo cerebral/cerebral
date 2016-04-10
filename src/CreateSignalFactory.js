@@ -66,7 +66,11 @@ module.exports = function (controller, model, services, compute, modules) {
         isPredefinedExecution = true
         controller.emit('predefinedSignal', { signal: signal })
       } else {
+        var prevIsSync = signal.isSync
         controller.emit('signalTrigger', { signal: signal })
+        if (prevIsSync !== signal.isSync) {
+          console.warn('Cerebral: You are running an older version of the cerebral-module-router. Please update the package')
+        }
       }
 
       if (signal.isPrevented) {
