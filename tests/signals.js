@@ -1390,4 +1390,38 @@ suite['should only run unique context providers'] = function (test) {
   test.done()
 }
 
+suite['should expose execution details to context callback'] = function (test) {
+  test.expect(7)
+  var ctrl = Controller(Model())
+  var ModuleA = function (module) {
+    module.addSignals({
+      'test': {
+        chain: [
+          function action () {
+
+          }
+        ],
+        immediate: true
+      }
+    })
+  }
+  ctrl.addContextProvider(function (context, execution) {
+    test.ok(execution.action)
+    test.ok(execution.signal)
+    test.ok(execution.options)
+    test.ok(execution.payload)
+    test.equal(execution.payload.foo, 'bar')
+    test.ok(execution.options.immediate)
+    test.equal(execution.options.modulePath, 'moduleA')
+    return context
+  })
+  ctrl.addModules({
+    moduleA: ModuleA
+  })
+  ctrl.getSignals().moduleA.test({
+    foo: 'bar'
+  })
+  test.done()
+}
+
 module.exports = { signals: suite }

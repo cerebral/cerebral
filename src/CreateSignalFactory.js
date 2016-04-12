@@ -147,12 +147,18 @@ module.exports = function (controller, model, services, compute, modules, extern
                 var actionFunc = actions[action.actionIndex]
                 var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
                 var next = createNext.async(actionFunc, signal.name)
-                var context = createContext([
+                var contextProviders = [
                   inputProvider(inputArg),
                   stateProvider(action, model, compute, true),
                   servicesProvider(action, modules, services),
                   outputProvider(next.fn)
-                ].concat(externalContextProviders).concat(options.context || []))
+                ].concat(externalContextProviders).concat(options.context || [])
+                var context = createContext(contextProviders, {
+                  action: action,
+                  signal: signal,
+                  options: options,
+                  payload: payload
+                })
 
                 if (utils.isDeveloping() && actionFunc.input) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
@@ -223,12 +229,18 @@ module.exports = function (controller, model, services, compute, modules, extern
               var actionFunc = actions[action.actionIndex]
               var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
               var next = createNext.sync(actionFunc, signal.name)
-              var context = createContext([
+              var contextProviders = [
                 inputProvider(inputArg),
                 stateProvider(action, model, compute, false),
                 servicesProvider(action, modules, services),
                 outputProvider(next)
-              ].concat(externalContextProviders).concat(options.context || []))
+              ].concat(externalContextProviders).concat(options.context || [])
+              var context = createContext(contextProviders, {
+                action: action,
+                signal: signal,
+                options: options,
+                payload: payload
+              })
 
               if (utils.isDeveloping() && actionFunc.input) {
                 utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
