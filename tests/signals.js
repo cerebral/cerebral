@@ -1362,4 +1362,32 @@ suite['should be able to add external context providers'] = function (test) {
   test.done()
 }
 
+suite['should only run unique context providers'] = function (test) {
+  test.expect(2)
+  var ctrl = Controller(Model())
+  var contextProvider = function (context) {
+    test.ok(true)
+    return Object.keys(context).reduce(function (newContext, key) {
+      newContext[key] = context[key]
+      return newContext
+    }, {
+      foo: 'bar'
+    })
+  }
+  ctrl.addSignals({
+    'test': {
+      chain: [
+        function action (context) {
+          test.equal(context.foo, 'bar')
+        }
+      ],
+      immediate: true
+    }
+  })
+  ctrl.addContextProvider(contextProvider)
+  ctrl.addContextProvider(contextProvider)
+  ctrl.getSignals().test()
+  test.done()
+}
+
 module.exports = { signals: suite }
