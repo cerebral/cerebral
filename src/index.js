@@ -11,8 +11,9 @@ var Controller = function (Model) {
   var signals = {}
   var modules = {}
   var services = {}
+  var externalContextProviders = []
 
-  var signalFactory = CreateSignalFactory(controller, model, services, compute, modules)
+  var signalFactory = CreateSignalFactory(controller, model, services, compute, modules, externalContextProviders)
   var signal = function () {
     var signalNamePath = arguments[0].split('.')
     var signalName = signalNamePath.pop()
@@ -88,6 +89,9 @@ var Controller = function (Model) {
       service(key, newServices[key])
     })
     return controller.getServices()
+  }
+  controller.addContextProvider = function (provider) {
+    externalContextProviders.push(provider)
   }
 
   return controller

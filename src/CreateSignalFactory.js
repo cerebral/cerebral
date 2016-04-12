@@ -12,7 +12,7 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0)
 }
 
-module.exports = function (controller, model, services, compute, modules) {
+module.exports = function (controller, model, services, compute, modules, externalContextProviders) {
   var currentlyRunningSignals = 0
   var batchedSignals = []
   var pending = false
@@ -152,7 +152,7 @@ module.exports = function (controller, model, services, compute, modules) {
                   stateProvider(action, model, compute, true),
                   servicesProvider(action, modules, services),
                   outputProvider(next.fn)
-                ].concat(options.context || []))
+                ].concat(externalContextProviders).concat(options.context || []))
 
                 if (utils.isDeveloping() && actionFunc.input) {
                   utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
@@ -228,7 +228,7 @@ module.exports = function (controller, model, services, compute, modules) {
                 stateProvider(action, model, compute, false),
                 servicesProvider(action, modules, services),
                 outputProvider(next)
-              ].concat(options.context || []))
+              ].concat(externalContextProviders).concat(options.context || []))
 
               if (utils.isDeveloping() && actionFunc.input) {
                 utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)

@@ -1337,4 +1337,29 @@ suite['should emit payload passed to events'] = function (test) {
   test.done()
 }
 
+suite['should be able to add external context providers'] = function (test) {
+  test.expect(1)
+  var ctrl = Controller(Model())
+  ctrl.addSignals({
+    'test': {
+      chain: [
+        function action (context) {
+          test.equal(context.foo, 'bar')
+        }
+      ],
+      immediate: true
+    }
+  })
+  ctrl.addContextProvider(function (context) {
+    return Object.keys(context).reduce(function (newContext, key) {
+      newContext[key] = context[key]
+      return newContext
+    }, {
+      foo: 'bar'
+    })
+  })
+  ctrl.getSignals().test()
+  test.done()
+}
+
 module.exports = { signals: suite }
