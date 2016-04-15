@@ -86,21 +86,25 @@ var Controller = function (Model, services) {
   }
 
   controller.addSignals = function (signals, options) {
-    Object.keys(signals).forEach(function (key) {
-      if (signals[key].chain) {
-        options = Object.keys(signals[key]).reduce(function (options, configKey) {
-          if (configKey !== 'chain') {
-            options[configKey] = signals[key][configKey]
+    Object.keys(signals).forEach(function (name) {
+      if (signals[name].chain) {
+        var optionsCopy = Object.keys(options || {}).reduce(function (optionsCopy, key) {
+          optionsCopy[key] = options[key]
+          return optionsCopy
+        }, {})
+        var signalOptions = Object.keys(signals[name]).reduce(function (signalOptions, key) {
+          if (key !== 'chain') {
+            signalOptions[key] = signals[name][key]
           }
-          if (configKey === 'sync') {
-            console.warn('Cerebral: sync signal option is DEPRECATED. Please use immediate option instead.')
-            options.isSync = signals[key][configKey]
-          }
-          return options
-        }, options || {})
-        signal(key, signals[key].chain, options)
+          return signalOptions
+        }, optionsCopy)
+        if (signalOptions.hasOwnProperty('sync')) {
+          console.warn('Cerebral: sync signal option is DEPRECATED. Please use immediate option instead.')
+          signalOptions.isSync = signalOptions.sync
+        }
+        signal(name, signals[name].chain, signalOptions)
       } else {
-        signal(key, signals[key], options)
+        signal(name, signals[name], options)
       }
     })
   }
