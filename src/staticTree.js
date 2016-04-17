@@ -28,13 +28,15 @@ var traverse = function (item, parentItem, path, actions, isSync) {
   } else if (typeof item === 'function') {
     var action = {
       name: item.displayName || utils.getFunctionName(item),
-      input: {},
-      output: null,
+      options: {
+        output: item.output,
+        outputs: item.outputs,
+        defaultOutput: item.defaultOutput,
+        defaultInput: item.defaultInput,
+        input: item.input
+      },
       duration: 0,
-      mutations: [],
-      serviceCalls: [],
       isAsync: !isSync,
-      outputPath: null,
       isExecuting: false,
       hasExecuted: false,
       path: path.slice(),

@@ -76,7 +76,10 @@ module.exports = function (controller, model, allModules) {
           return signals[key]
         }, signals)
       },
-      addModules: registerModules.bind(null, moduleName)
+      addModules: registerModules.bind(null, moduleName),
+      addContextProvider: function (provider) {
+        controller.addContextProvider(provider, moduleName)
+      }
     }
     var constructedModule = moduleConstructor(module, controller)
 

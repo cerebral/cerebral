@@ -1,5 +1,4 @@
 var utils = require('./utils.js')
-var createNext = require('./createNext.js')
 var analyze = require('./analyze.js')
 var staticTree = require('./staticTree')
 var createContext = require('./createContext')
@@ -12,7 +11,7 @@ var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0)
 }
 
-module.exports = function (controller, model, services, compute, modules, externalContextProviders) {
+module.exports = function (controller, externalContextProviders) {
   var currentlyRunningSignals = 0
   var batchedSignals = []
   var pending = false
@@ -133,8 +132,6 @@ module.exports = function (controller, model, services, compute, modules, extern
                   })
                 }
 
-                utils.merge(signalArgs, action.output)
-
                 if (action.outputPath) {
                   runBranch(action.outputs[action.outputPath], 0)
                 }
@@ -143,29 +140,34 @@ module.exports = function (controller, model, services, compute, modules, extern
               runBranch(branch, index + 1)
             } else {
               var promises = currentBranch.map(function (action) {
-                controller.emit('actionStart', {action: action, signal: signal, options: options, payload: payload})
-                var actionFunc = actions[action.actionIndex]
-                var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-                var next = createNext.async(actionFunc, signal.name)
-                var contextProviders = [
-                  inputProvider(inputArg),
-                  stateProvider(action, model, compute, true),
-                  servicesProvider(action, modules, services),
-                  outputProvider(next.fn)
-                ].concat(externalContextProviders).concat(options.context || [])
-                var context = createContext(contextProviders, {
+                var resolver = null
+                var promise = new Promise(function (resolve) {
+                  resolver = resolve
+                })
+                controller.emit('actionStart', {
                   action: action,
                   signal: signal,
                   options: options,
                   payload: payload
                 })
+                var actionFunc = actions[action.actionIndex]
 
-                if (utils.isDeveloping() && actionFunc.input) {
-                  utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
-                }
+                var contextProviders = [
+                  inputProvider,
+                  stateProvider,
+                  servicesProvider,
+                  outputProvider
+                ].concat(utils.extractExternalContextProviders(externalContextProviders, options.modulePath))
+                var context = createContext(contextProviders, {
+                  action: action,
+                  signal: signal,
+                  options: options,
+                  payload: payload,
+                  input: signalArgs,
+                  resolve: resolver
+                }, controller)
 
                 action.isExecuting = true
-                action.input = utils.merge({}, inputArg)
 
                 if (utils.isDeveloping()) {
                   try {
@@ -184,18 +186,16 @@ module.exports = function (controller, model, services, compute, modules, extern
                   actionFunc(context)
                 }
 
-                return next.promise.then(function (result) {
+                return promise.then(function (actionOutput) {
                   action.hasExecuted = true
                   action.isExecuting = false
-                  action.output = utils.merge({}, result.arg)
-                  utils.merge(signalArgs, result.arg)
 
                   controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
                   controller.emit('change', {signal: signal, options: options, payload: payload})
 
-                  if (result.path) {
-                    action.outputPath = result.path
-                    var branchResult = runBranch(action.outputs[result.path], 0, Date.now())
+                  if (actionOutput.path) {
+                    action.outputPath = actionOutput.path
+                    var branchResult = runBranch(action.outputs[actionOutput.path], 0, Date.now())
                     return branchResult
                   }
                 })
@@ -213,9 +213,10 @@ module.exports = function (controller, model, services, compute, modules, extern
             }
           } else {
             var action = currentBranch
+
             if (isPredefinedExecution) {
               action.mutations.forEach(function (mutation) {
-                model.mutators[mutation.name].apply(null, [mutation.path.slice()].concat(mutation.args))
+                controller.getModel().mutators[mutation.name].apply(null, [mutation.path.slice()].concat(mutation.args))
               })
 
               if (action.outputPath) {
@@ -225,29 +226,26 @@ module.exports = function (controller, model, services, compute, modules, extern
               runBranch(branch, index + 1)
             } else {
               controller.emit('actionStart', {action: action, signal: signal, options: options, payload: payload})
-
+              var actionOutput = {path: null, payload: {}}
+              var resolver = function (resolvedResult) {
+                actionOutput = resolvedResult
+              }
               var actionFunc = actions[action.actionIndex]
-              var inputArg = actionFunc.defaultInput ? utils.merge({}, actionFunc.defaultInput, signalArgs) : signalArgs
-              var next = createNext.sync(actionFunc, signal.name)
+
               var contextProviders = [
-                inputProvider(inputArg),
-                stateProvider(action, model, compute, false),
-                servicesProvider(action, modules, services),
-                outputProvider(next)
-              ].concat(externalContextProviders).concat(options.context || [])
+                inputProvider,
+                stateProvider,
+                servicesProvider,
+                outputProvider
+              ].concat(utils.extractExternalContextProviders(externalContextProviders, options.modulePath))
               var context = createContext(contextProviders, {
                 action: action,
                 signal: signal,
                 options: options,
-                payload: payload
-              })
-
-              if (utils.isDeveloping() && actionFunc.input) {
-                utils.verifyInput(action.name, signal.name, actionFunc.input, inputArg)
-              }
-
-              action.mutations = [] // Reset mutations array
-              action.input = utils.merge({}, inputArg)
+                payload: payload,
+                input: signalArgs,
+                resolve: resolver
+              }, controller)
 
               if (utils.isDeveloping()) {
                 try {
@@ -266,22 +264,16 @@ module.exports = function (controller, model, services, compute, modules, extern
                 actionFunc(context)
               }
 
-              // TODO: Also add input here
-
-              var result = next._result || {}
-              utils.merge(signalArgs, result.arg)
-
               action.isExecuting = false
               action.hasExecuted = true
-              action.output = utils.merge({}, result.arg)
 
               if (!branch[index + 1] || Array.isArray(branch[index + 1])) {
                 action.duration = Date.now() - start
               }
 
-              if (result.path) {
-                action.outputPath = result.path
-                var branchResult = runBranch(action.outputs[result.path], 0, start)
+              if (actionOutput.path) {
+                action.outputPath = actionOutput.path
+                var branchResult = runBranch(action.outputs[actionOutput.path], 0, start)
                 if (branchResult && branchResult.then) {
                   return branchResult.then(function () {
                     return runBranch(branch, index + 1, Date.now())
@@ -289,12 +281,6 @@ module.exports = function (controller, model, services, compute, modules, extern
                 } else {
                   return runBranch(branch, index + 1, start)
                 }
-              } else if (result.then) {
-                return result.then(function () {
-                  controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
-
-                  return runBranch(branch, index + 1, start)
-                })
               } else {
                 controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
 

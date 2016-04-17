@@ -124,13 +124,20 @@ suite['should rerun if previously grabbed value changes'] = function (test) {
   ]
 
   controller.addSignals({
-    'test': signal
+    'test': {
+      chain: signal,
+      immediate: true
+    }
   })
   controller.once('signalEnd', function () {
     controller.get(foo)
     test.done()
   })
-  controller.getSignals().test()
+  try {
+    controller.getSignals().test()
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 suite['should cache after previously grabbed value change'] = function (test) {

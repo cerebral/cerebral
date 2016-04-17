@@ -92,5 +92,13 @@ module.exports = {
       return value
     }, value) : value
     return value
+  },
+  extractExternalContextProviders: function (providers, modulePath) {
+    var extractedProviders = providers.__cerebral_global__
+    if (modulePath && providers[modulePath.join('.')]) {
+      return extractedProviders.concat(providers[modulePath.join('.')])
+    }
+
+    return extractedProviders
   }
 }

@@ -8,16 +8,18 @@ suite['should convert actions to objects'] = function (test) {
   var tree = staticTree(signal).branches
   test.deepEqual(tree, [{
     name: 'sync1',
-    input: {},
-    output: null,
+    options: {
+      output: undefined,
+      outputs: undefined,
+      defaultOutput: undefined,
+      defaultInput: undefined,
+      input: undefined
+    },
     duration: 0,
     path: [0],
-    mutations: [],
-    serviceCalls: [],
     isExecuting: false,
     hasExecuted: false,
     isAsync: false,
-    outputPath: null,
     outputs: null,
     actionIndex: 0
   }])

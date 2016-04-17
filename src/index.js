@@ -11,9 +11,9 @@ var Controller = function (Model) {
   var signals = {}
   var modules = {}
   var services = {}
-  var externalContextProviders = []
+  var externalContextProviders = {__cerebral_global__: []}
 
-  var signalFactory = CreateSignalFactory(controller, model, services, compute, modules, externalContextProviders)
+  var signalFactory = CreateSignalFactory(controller, externalContextProviders)
   var signal = function () {
     var signalNamePath = arguments[0].split('.')
     var signalName = signalNamePath.pop()
@@ -46,6 +46,9 @@ var Controller = function (Model) {
     return path
       ? get(services, path)
       : services
+  }
+  controller.getModel = function () {
+    return model
   }
   controller.get = function () {
     if (typeof arguments[0] === 'function') {
@@ -90,8 +93,16 @@ var Controller = function (Model) {
     })
     return controller.getServices()
   }
-  controller.addContextProvider = function (provider) {
-    externalContextProviders.push(provider)
+  controller.addContextProvider = function (provider, scope) {
+    if (scope) {
+      if (!externalContextProviders[scope]) {
+        externalContextProviders[scope] = []
+      }
+      externalContextProviders[scope].push(provider)
+    } else {
+      externalContextProviders.__cerebral_global__.push(provider)
+    }
+    externalContextProviders[scope || '__cerebral_global__'].push(provider)
   }
 
   return controller

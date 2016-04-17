@@ -196,7 +196,10 @@ suite['should be able to define default custom path'] = function (test) {
   ]
 
   ctrl.addSignals({
-    'test': signal
+    'test': {
+      chain: signal,
+      immediate: true
+    }
   })
   ctrl.getSignals().test()
 }
@@ -491,18 +494,26 @@ suite['should trigger change event on individual async action paths'] = function
       function (args) { args.output.success() }, {success: []}
     ],
     function () {
+      console.log('hey')
       test.equal(changeCount, 3)
       test.done()
     }
   ]
 
   ctrl.addSignals({
-    'test': signal
+    'test': {
+      chain: signal,
+      immediate: true
+    }
   })
   ctrl.on('change', function () {
     changeCount++
   })
-  ctrl.getSignals().test()
+  try {
+    ctrl.getSignals().test()
+  } catch (e) {
+    console.log(e)
+  }
 }
 
 suite['should be able to resolve to default path success'] = function (test) {
@@ -685,6 +696,7 @@ suite['should wait to resolve top level async array when nested async arrays are
         'success': [
           [
             function (args) {
+              console.log(args.input)
               results.push(args.input.value)
               args.output()
             }
@@ -699,6 +711,7 @@ suite['should wait to resolve top level async array when nested async arrays are
     'test': signal
   })
   ctrl.once('signalEnd', function () {
+    console.log(results)
     test.equal(results[0], 'foo')
     test.equal(results[1], 'bar')
     test.done()
@@ -988,186 +1001,6 @@ suite['should attach error when failed action execution'] = function (test) {
   })
 }
 
-suite['should wrap and track use of services'] = function (test) {
-  var ctrl = Controller(Model())
-
-  var ModuleA = function (module) {
-    function NoPrototype () {
-
-    }
-
-    NoPrototype.prototype = null
-
-    var action = function (args) {
-      args.services.moduleA.test('foo')
-      args.services.moduleA.noPrototype('foo')
-    }
-
-    module.addServices({
-      test: function () {
-
-      },
-      noPrototype: NoPrototype
-    })
-
-    module.addSignals({
-      test: [action]
-    })
-  }
-
-  var ModuleB = function (module) {
-    var action = function (args) {
-      args.services.moduleB.test('foo')
-    }
-
-    module.addServices({
-      test: function () {
-
-      }
-    })
-
-    module.addSignals({
-      test: [action]
-    })
-
-    module.addModules({
-      moduleC: ModuleC
-    })
-  }
-
-  var ModuleC = function (module) {
-    var action = function (args) {
-      args.services.moduleB.moduleC.test('foo')
-      args.services.moduleB.moduleC.test2.foo('foo')
-      args.services.moduleB.moduleC.test2.bar('foo')
-    }
-
-    module.addServices({
-      test: function () {
-
-      },
-      test2: {
-        foo: function () {
-
-        },
-        bar: function () {
-
-        },
-        string: 'hey',
-        array: []
-      }
-    })
-
-    module.addSignals({
-      test: [action]
-    })
-  }
-
-  var ModuleD = function (module) {
-    module.addServices({
-      emitter: require('events').EventEmitter
-    })
-  }
-
-  ctrl.addModules({
-    moduleA: ModuleA,
-    moduleB: ModuleB,
-    moduleD: ModuleD
-  })
-
-  var assertModuleA = function (args) {
-    test.ok(ctrl.getServices().moduleA.test)
-    test.ok(ctrl.getServices().moduleA.noPrototype)
-    test.equal(args.signal.branches[0].serviceCalls[0].name, 'moduleA')
-    test.equal(args.signal.branches[0].serviceCalls[0].method, 'test')
-    test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
-    test.equal(args.signal.branches[0].serviceCalls[1].name, 'moduleA')
-    test.equal(args.signal.branches[0].serviceCalls[1].method, 'noPrototype')
-    test.deepEqual(args.signal.branches[0].serviceCalls[1].args, ['foo'])
-  }
-  ctrl.on('signalEnd', assertModuleA)
-  ctrl.getSignals().moduleA.test({}, {immediate: true})
-  ctrl.removeListener('signalEnd', assertModuleA)
-
-  var assertModuleB = function (args) {
-    test.ok(ctrl.getServices().moduleB.test)
-    test.equal(args.signal.branches[0].serviceCalls[0].name, 'moduleB')
-    test.equal(args.signal.branches[0].serviceCalls[0].method, 'test')
-    test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
-  }
-  ctrl.on('signalEnd', assertModuleB)
-  ctrl.getSignals().moduleB.test({}, {immediate: true})
-  ctrl.removeListener('signalEnd', assertModuleB)
-
-  var assertModuleC = function (args) {
-    test.ok(ctrl.getServices().moduleB.moduleC.test)
-    test.ok(ctrl.getServices().moduleB.moduleC.test2)
-    test.equal(ctrl.getServices().moduleB.moduleC.test2.string, 'hey')
-    test.deepEqual(ctrl.getServices().moduleB.moduleC.test2.array, [])
-
-    test.equal(args.signal.branches[0].serviceCalls[0].name, 'moduleB.moduleC')
-    test.equal(args.signal.branches[0].serviceCalls[0].method, 'test')
-    test.deepEqual(args.signal.branches[0].serviceCalls[0].args, ['foo'])
-  }
-  ctrl.on('signalEnd', assertModuleC)
-  ctrl.getSignals().moduleB.moduleC.test({}, {immediate: true})
-  ctrl.removeListener('signalEnd', assertModuleC)
-
-  test.done()
-}
-
-suite['should NOT wrap and track use of special or nested services'] = function (test) {
-  var ctrl = Controller(Model())
-  function MyClass () {
-
-  }
-  MyClass.prototype = {
-    constructor: MyClass
-  }
-
-  function Extended () {
-
-  }
-  Extended.foo = 'bar'
-
-  var moduleA = function (module) {
-    module.addServices({
-      MyClass: MyClass,
-      nested: {
-        foo: function () {
-
-        },
-        MyClass: MyClass,
-        extended: Extended
-      },
-      extended: Extended
-    })
-  }
-
-  var action = function (args) {
-    args.services.moduleA.MyClass()
-    args.services.moduleA.extended()
-    args.services.moduleA.nested.foo()
-    args.services.moduleA.nested.MyClass()
-    args.services.moduleA.nested.extended()
-  }
-
-  ctrl.addSignals({
-    signal: [action]
-  })
-
-  ctrl.addModules({
-    moduleA: moduleA
-  })
-
-  var assertNoServicesWrapped = function (args) {
-    test.ok(!args.signal.branches[0].serviceCalls.length)
-    test.done()
-  }
-  ctrl.on('signalEnd', assertNoServicesWrapped)
-  ctrl.getSignals().signal({}, {immediate: true})
-}
-
 suite['should expose an isExecuting method'] = function (test) {
   var ctrl = Controller(Model())
   test.equal(ctrl.isExecuting(), false)
@@ -1251,67 +1084,6 @@ suite['should emit options passed to events'] = function (test) {
   test.done()
 }
 
-suite['should allow you to change context of actions for all signals'] = function (test) {
-  var ctrl = Controller(Model())
-  ctrl.addSignals({
-    'test': [
-      function action (context) {
-        test.equal(context.foo, 'bar')
-      }
-    ]
-  }, {
-    immediate: true,
-    context: {foo: 'bar'}
-  })
-  ctrl.getSignals().test()
-  test.done()
-}
-
-suite['should allow you to change context of actions with a function'] = function (test) {
-  var ctrl = Controller(Model())
-  ctrl.addSignals({
-    'test': {
-      chain: [
-        function action (context) {
-          test.equal(context.foo, 'bar')
-        }
-      ],
-      immediate: true,
-      context: function () {
-        return {
-          foo: 'bar'
-        }
-      }
-    }
-  })
-  ctrl.getSignals().test()
-  test.done()
-}
-
-suite['should pass default context to context function'] = function (test) {
-  test.expect(4)
-  var ctrl = Controller(Model())
-  ctrl.addSignals({
-    'test': {
-      chain: [
-        function action () {
-
-        }
-      ],
-      immediate: true,
-      context: function (context) {
-        test.ok(context.input)
-        test.ok(context.state)
-        test.ok(context.output)
-        test.ok(context.services)
-        return context
-      }
-    }
-  })
-  ctrl.getSignals().test()
-  test.done()
-}
-
 suite['should emit payload passed to events'] = function (test) {
   test.expect(5)
   var ctrl = Controller(Model())
@@ -1359,6 +1131,56 @@ suite['should be able to add external context providers'] = function (test) {
     })
   })
   ctrl.getSignals().test()
+  test.done()
+}
+
+suite['should be able to add context provider for a specific module'] = function (test) {
+  test.expect(4)
+  var ctrl = Controller(Model())
+  var TestModule = function (module) {
+    module.addSignals({
+      'test': {
+        chain: [
+          function action (context) {
+            test.equal(context.foo, 'bar')
+            test.ok(context.isModule)
+          }
+        ],
+        immediate: true
+      }
+    })
+    module.addContextProvider(function (context) {
+      return Object.keys(context).reduce(function (newContext, key) {
+        newContext[key] = context[key]
+        return newContext
+      }, {
+        foo: 'bar',
+        isModule: true
+      })
+    })
+  }
+  ctrl.addSignals({
+    'test': {
+      chain: [
+        function action (context) {
+          test.equal(context.foo, 'bar')
+          test.ok(!context.isModule)
+        }
+      ],
+      immediate: true
+    }
+  })
+  ctrl.addContextProvider(function (context) {
+    return Object.keys(context).reduce(function (newContext, key) {
+      newContext[key] = context[key]
+      return newContext
+    }, {
+      foo: 'bar'
+    })
+  })
+  ctrl.addModules({test: TestModule})
+  ctrl.getSignals().test()
+  ctrl.getSignals().test.test()
   test.done()
 }
 
