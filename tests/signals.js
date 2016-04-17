@@ -98,6 +98,37 @@ suite['should register sync signals'] = function (test) {
   test.done()
 }
 
+suite['should handle local and global options'] = function (test) {
+  var run = 0
+  var immediate = 0
+
+  var ctrl = Controller(Model())
+  ctrl.addSignals({
+    'test': [],
+    'test2': {
+      chain: [],
+      immediate: true,
+      global: false
+    },
+    'test3': []
+  })
+
+  ctrl.on('signalStart', function (event) {
+    run++
+
+    if (event.signal.isSync === true) immediate++
+
+    if (run === 3) {
+      test.equal(immediate, 1)
+      test.done()
+    }
+  })
+
+  ctrl.getSignals().test()
+  ctrl.getSignals().test2()
+  ctrl.getSignals().test3()
+}
+
 suite['should allow namespaced signals'] = function (test) {
   var ctrl = Controller(Model())
   ctrl.addSignals({
