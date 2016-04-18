@@ -31,7 +31,7 @@ module.exports = function (controller, externalContextProviders) {
       analyze(signalName, chain)
     }
 
-    var signalChain = function (payload, passedOptions) {
+    var signalChain = function (signalPayload, passedOptions) {
       var defaultOptionsCopy = Object.keys(defaultOptions).reduce(function (defaultOptionsCopy, key) {
         defaultOptionsCopy[key] = defaultOptions[key]
         return defaultOptionsCopy
@@ -52,7 +52,6 @@ module.exports = function (controller, externalContextProviders) {
         isPrevented: false,
         branches: tree.branches,
         duration: 0,
-        input: payload,
         preventSignalRun: function () {
           if (signal.isExecuting === false) signal.isPrevented = true
         }
@@ -63,10 +62,10 @@ module.exports = function (controller, externalContextProviders) {
         signal.isSync = true
         signal.branches = options.branches
         isPredefinedExecution = true
-        controller.emit('predefinedSignal', { signal: signal, options: options, payload: payload })
+        controller.emit('predefinedSignal', { signal: signal, options: options, payload: signalPayload })
       } else {
         var prevIsSync = signal.isSync
-        controller.emit('signalTrigger', { signal: signal, options: options, payload: payload })
+        controller.emit('signalTrigger', { signal: signal, options: options, payload: signalPayload })
         if (prevIsSync !== signal.isSync) {
           console.warn('Cerebral: You are running an older version of the cerebral-module-router. Please update the package')
         }
@@ -77,29 +76,15 @@ module.exports = function (controller, externalContextProviders) {
       }
 
       var runSignal = function () {
-        // Accumulate the args in one object that will be passed
-        // to each action
-        var signalArgs = utils.merge({}, payload || {})
-
-        // Test payload
-        if (utils.isDeveloping()) {
-          try {
-            JSON.stringify(signalArgs)
-          } catch (e) {
-            console.log('Not serializable', signalArgs)
-            throw new Error('Cerebral - Could not serialize input to signal. Please check signal ' + signalName)
-          }
-        }
-
         signal.start = Date.now()
         signal.isExecuting = true
 
         if (!isPredefinedExecution) {
           currentlyRunningSignals++
-          controller.emit('signalStart', {signal: signal, options: options, payload: payload})
+          controller.emit('signalStart', {signal: signal, options: options, payload: signalPayload})
         }
 
-        var runBranch = function (branch, index, start) {
+        var runBranch = function (branch, index, start, payload) {
           var currentBranch = branch[index]
           if (!currentBranch && branch === signal.branches && !isPredefinedExecution) {
             // Might not be any actions passed
@@ -117,7 +102,6 @@ module.exports = function (controller, externalContextProviders) {
           if (!currentBranch) {
             return
           }
-
           if (Array.isArray(currentBranch)) {
             if (isPredefinedExecution) {
               currentBranch.forEach(function (action) {
@@ -163,7 +147,6 @@ module.exports = function (controller, externalContextProviders) {
                   signal: signal,
                   options: options,
                   payload: payload,
-                  input: signalArgs,
                   resolve: resolver
                 }, controller)
 
@@ -186,24 +169,26 @@ module.exports = function (controller, externalContextProviders) {
                   actionFunc(context)
                 }
 
-                return promise.then(function (actionOutput) {
+                return promise.then(function (resolvedAction) {
                   action.hasExecuted = true
                   action.isExecuting = false
 
                   controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
                   controller.emit('change', {signal: signal, options: options, payload: payload})
 
-                  if (actionOutput.path) {
-                    action.outputPath = actionOutput.path
-                    var branchResult = runBranch(action.outputs[actionOutput.path], 0, Date.now())
-                    return branchResult
+                  var newPayload = utils.merge({}, payload, resolvedAction.payload)
+                  if (resolvedAction.path) {
+                    action.outputPath = resolvedAction.path
+                    return runBranch(action.outputs[resolvedAction.path], 0, Date.now(), newPayload)
                   }
+
+                  return newPayload
                 })
               })
               controller.emit('change', {signal: signal, options: options, payload: payload})
               return Promise.all(promises)
-                .then(function () {
-                  return runBranch(branch, index + 1, Date.now())
+                .then(function (actionPayloads) {
+                  return runBranch(branch, index + 1, Date.now(), utils.merge.apply(null, [{}, payload].concat(actionPayloads)))
                 })
                 .catch(function (error) {
                   // We just throw any unhandled errors
@@ -226,9 +211,9 @@ module.exports = function (controller, externalContextProviders) {
               runBranch(branch, index + 1)
             } else {
               controller.emit('actionStart', {action: action, signal: signal, options: options, payload: payload})
-              var actionOutput = {path: null, payload: {}}
+              var resolvedAction = {path: null, payload: {}}
               var resolver = function (resolvedResult) {
-                actionOutput = resolvedResult
+                resolvedAction = resolvedResult
               }
               var actionFunc = actions[action.actionIndex]
 
@@ -243,7 +228,6 @@ module.exports = function (controller, externalContextProviders) {
                 signal: signal,
                 options: options,
                 payload: payload,
-                input: signalArgs,
                 resolve: resolver
               }, controller)
 
@@ -271,26 +255,30 @@ module.exports = function (controller, externalContextProviders) {
                 action.duration = Date.now() - start
               }
 
-              if (actionOutput.path) {
-                action.outputPath = actionOutput.path
-                var branchResult = runBranch(action.outputs[actionOutput.path], 0, start)
+              var branchResult = null
+              if (resolvedAction.path) {
+                action.outputPath = resolvedAction.path
+                branchResult = runBranch(action.outputs[resolvedAction.path], 0, start, utils.merge({}, payload, resolvedAction.payload))
                 if (branchResult && branchResult.then) {
-                  return branchResult.then(function () {
-                    return runBranch(branch, index + 1, Date.now())
+                  return branchResult.then(function (payload) {
+                    return runBranch(branch, index + 1, Date.now(), utils.merge({}, payload, resolvedAction.payload))
                   })
                 } else {
-                  return runBranch(branch, index + 1, start)
+                  return runBranch(branch, index + 1, start, utils.merge({}, payload, resolvedAction.payload))
                 }
               } else {
                 controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
-
-                return runBranch(branch, index + 1, start)
+                var newPayload = utils.merge({}, payload, resolvedAction.payload)
+                branchResult = runBranch(branch, index + 1, start, newPayload)
+                if (!branchResult) {
+                  return newPayload
+                }
               }
             }
           }
         }
 
-        runBranch(signal.branches, 0, Date.now())
+        runBranch(signal.branches, 0, Date.now(), signalPayload)
 
         return
       }

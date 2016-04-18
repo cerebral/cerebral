@@ -7,11 +7,14 @@ module.exports = {
     ret = ret.substr(0, ret.indexOf('('))
     return ret
   },
-  merge: function (target, source) {
-    source = source || {}
-    return Object.keys(source).reduce(function (target, key) {
-      target[key] = source[key]
-      return target
+  merge: function () {
+    var args = [].slice.call(arguments)
+    var target = args.shift()
+    return args.reduce(function (target, source) {
+      return Object.keys(source || {}).reduce(function (target, key) {
+        target[key] = source[key]
+        return target
+      }, target)
     }, target)
   },
   hasLocalStorage: function () {

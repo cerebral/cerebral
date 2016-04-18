@@ -31,7 +31,7 @@ var validateOutput = function (action, path, arg, signalName) {
   })
 }
 
-var createNextFunction = function (action, signalName, input, resolver) {
+var createNextFunction = function (action, signalName, resolver) {
   var next = function () {
     if (next.hasRun) {
       throw new Error('Cerebral - You are running an async output on a synchronous action in ' + signalName + '. The action is ' + action.name + '. Either put it in an array or make sure the output is synchronous')
@@ -68,9 +68,6 @@ var createNextFunction = function (action, signalName, input, resolver) {
       path: path || action.options.defaultOutput,
       payload: arg || {}
     }
-    Object.keys(result.payload).forEach(function (key) {
-      input[key] = result.payload[key]
-    })
     resolver(result)
   }
   return next
@@ -95,7 +92,7 @@ module.exports = function (context, execution) {
   var action = execution.action
   var signalName = execution.signal.name
   var resolve = execution.resolve
-  var next = createNextFunction(action, signalName, execution.input, resolve)
+  var next = createNextFunction(action, signalName, resolve)
   addOutputs(action, next)
 
   if (!Boolean(resolve) && utils.isDeveloping()) {

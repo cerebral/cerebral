@@ -21,7 +21,7 @@ var Model = function (state) {
   }
 }
 
-suite['should not affect payload'] = function (test) {
+suite['should not affect initial payload'] = function (test) {
   var ctrl = Controller(Model())
   var payload = {foo: 'bar'}
   ctrl.addSignals({
@@ -32,8 +32,34 @@ suite['should not affect payload'] = function (test) {
     ]]
   })
   ctrl.on('signalEnd', function (args) {
-    test.deepEqual(args.signal.input, {foo: 'bar'})
+    test.deepEqual(args.payload, {foo: 'bar', bar: 'foo'})
     test.done()
+  })
+  ctrl.getSignals().test(payload)
+}
+
+suite['should bring outputs down paths back up'] = function (test) {
+  var ctrl = Controller(Model())
+  var payload = {foo: 'bar'}
+  ctrl.addSignals({
+    'test': [[
+      function action (context) {
+        context.output.success({bar: 'foo'})
+      }, {
+        success: [
+          function success (context) {
+            context.output({mip: 'mop'})
+          }
+        ]
+      }
+    ], function afterAsync (context) {
+      test.deepEqual(context.input, {
+        foo: 'bar',
+        bar: 'foo',
+        mip: 'mop'
+      })
+      test.done()
+    }]
   })
   ctrl.getSignals().test(payload)
 }
@@ -494,7 +520,6 @@ suite['should trigger change event on individual async action paths'] = function
       function (args) { args.output.success() }, {success: []}
     ],
     function () {
-      console.log('hey')
       test.equal(changeCount, 3)
       test.done()
     }
@@ -642,7 +667,9 @@ suite['should handle arrays of actions to resolve to multiple paths'] = function
     async(function () {
       test.equals(results.length, 2)
       test.deepEqual(results[0], {
-        foo: true,
+        foo: true
+      })
+      test.deepEqual(results[1], {
         bar: true
       })
       test.done()
@@ -696,7 +723,6 @@ suite['should wait to resolve top level async array when nested async arrays are
         'success': [
           [
             function (args) {
-              console.log(args.input)
               results.push(args.input.value)
               args.output()
             }
@@ -711,7 +737,6 @@ suite['should wait to resolve top level async array when nested async arrays are
     'test': signal
   })
   ctrl.once('signalEnd', function () {
-    console.log(results)
     test.equal(results[0], 'foo')
     test.equal(results[1], 'bar')
     test.done()
