@@ -1,9 +1,11 @@
 import objectPath from 'object-path'
+import {getSpecs} from '../helper/module'
 
-export default function setMedia ({state, services, module}) {
-  const queries = module.meta.options.media
-  const matchMedia = objectPath.get(services, [...module.path, 'matchMedia'])
-  const moduleState = state.select(module.path)
+export default function setMedia (context) {
+  const {state, services, options, path} = getSpecs(context)
+  const queries = options.media
+  const matchMedia = objectPath.get(services, [...path, 'matchMedia'])
+  const moduleState = state.select(path)
 
   const media = Object.keys(queries)
   .map((name) => {

@@ -10,6 +10,8 @@ import moduleRegistered from './signals/moduleRegistered'
 import offlineChanged from './signals/offlineChanged'
 import windowChanged from './signals/windowChanged'
 
+import {MODULE, addContext} from './helper/module'
+
 const defaultOptions = {
   feature: true,
   offline: {
@@ -35,7 +37,7 @@ export default (userOptions = {}) => {
   assign(options, defaultOptions, userOptions)
 
   return (module, controller) => {
-    module.alias('cerebral-module-useragent')
+    module.alias(MODULE)
 
     module.addState({
       browser: undefined,
@@ -64,6 +66,11 @@ export default (userOptions = {}) => {
       network,
       uaParser,
       window
+    })
+
+    addContext(module, {
+      options,
+      path: module.path
     })
 
     controller.once('modulesLoaded', (event) => {

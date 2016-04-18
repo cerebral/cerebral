@@ -1,11 +1,13 @@
 import objectPath from 'object-path'
+import {getSpecs} from '../helper/module'
 
-export default function parseUserAgent ({state, services, module}) {
-  const options = module.meta.options.parse
-  const uaParser = objectPath.get(services, [...module.path, 'uaParser'])
-  const moduleState = state.select(module.path)
+export default function parseUserAgent (context) {
+  const {state, services, options, path} = getSpecs(context)
+  const parse = options.parse
+  const uaParser = objectPath.get(services, [...path, 'uaParser'])
+  const moduleState = state.select(path)
 
-  Object.keys(options)
+  Object.keys(parse)
   .filter(isEnabled)
   .forEach((key) => {
     const parseFunction = getParseFunction(key, uaParser)
@@ -18,7 +20,7 @@ export default function parseUserAgent ({state, services, module}) {
   })
 
   function isEnabled (key) {
-    return options[key] === true
+    return parse[key] === true
   }
 }
 

@@ -7,12 +7,12 @@
   },
   "dependencies": {
     "baobab": "^2.3.3",
-    "cerebral": "^0.33.19",
+    "cerebral": "^0.34.0-rc.2",
     "cerebral-model-baobab": "^0.4.7",
-    "cerebral-module-devtools": "^0.5.3",
+    "cerebral-module-devtools": "^0.7.0-rc.1",
     "cerebral-view-react": "^0.11.2",
-    "react": "^0.14.7",
-    "react-dom": "^0.14.7"
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
   },
   "devDependencies": {
     "babel-cli": "^6.4.5",
