@@ -66,7 +66,7 @@ export default (userOptions = {}) => {
       window
     })
 
-    controller.once('modulesLoaded', event => {
+    controller.once('modulesLoaded', (event) => {
       if (options.offline !== false) {
         onOfflineChange(
           module.getSignals().offlineChanged
