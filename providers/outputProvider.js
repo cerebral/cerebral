@@ -1,5 +1,5 @@
-var utils = require('../utils.js')
-var types = require('../types.js')
+var utils = require('../src/utils.js')
+var types = require('../src/types.js')
 
 var validateOutput = function (action, path, arg, signalName) {
   if ((!action.options.output && !action.options.outputs) || Array.isArray(action.options.outputs)) {
@@ -38,14 +38,14 @@ var createNextFunction = function (action, signalName, resolver) {
     }
 
     var path = typeof arguments[0] === 'string' ? arguments[0] : null
-    var arg = path ? arguments[1] : arguments[0]
+    var payload = path ? arguments[1] : arguments[0]
 
     // Test payload
     if (utils.isDeveloping()) {
       try {
-        JSON.stringify(arg)
+        JSON.stringify(payload)
       } catch (e) {
-        console.log('Not serializable', arg)
+        console.log('Not serializable', payload)
         throw new Error('Cerebral - Could not serialize output. Please check signal ' + signalName + ' and action ' + action.name)
       }
     }
@@ -60,13 +60,13 @@ var createNextFunction = function (action, signalName, resolver) {
     }
 
     if (utils.isDeveloping()) {
-      validateOutput(action, path, arg, signalName)
+      validateOutput(action, path, payload, signalName)
     }
 
     // This is where I verify path and types
     var result = {
       path: path || action.options.defaultOutput,
-      payload: arg || {}
+      payload: payload || {}
     }
     resolver(result)
   }

@@ -1,4 +1,4 @@
-var utils = require('../utils')
+var utils = require('../src/utils')
 
 module.exports = function (context, execution) {
   var action = execution.action
