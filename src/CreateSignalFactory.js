@@ -6,6 +6,7 @@ var inputProvider = require('../providers/inputProvider')
 var stateProvider = require('../providers/stateProvider')
 var servicesProvider = require('../providers/servicesProvider')
 var outputProvider = require('../providers/outputProvider')
+var deprecationProvider = require('../providers/deprecationProvider')
 
 var requestAnimationFrame = global.requestAnimationFrame || function (cb) {
   setTimeout(cb, 0)
@@ -138,6 +139,7 @@ module.exports = function (controller, externalContextProviders) {
                   servicesProvider,
                   outputProvider
                 ].concat(utils.extractExternalContextProviders(externalContextProviders, options.modulePath))
+                .concat(utils.isDeveloping() ? deprecationProvider : [])
                 var context = createContext(contextProviders, {
                   action: action,
                   signal: signal,
@@ -219,6 +221,7 @@ module.exports = function (controller, externalContextProviders) {
                 servicesProvider,
                 outputProvider
               ].concat(utils.extractExternalContextProviders(externalContextProviders, options.modulePath))
+              .concat(utils.isDeveloping() ? deprecationProvider : [])
               var context = createContext(contextProviders, {
                 action: action,
                 signal: signal,
