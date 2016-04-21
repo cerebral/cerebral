@@ -26,7 +26,7 @@
     "cerebral-module-devtools": "^0.6.4",
     "cerebral-module-recorder": "^0.5.9",
     "cerebral-module-router": "^0.14.3",
-    "cerebral-view-react": "^0.11.16",
+    "cerebral-view-react": "^0.11.17",
     "classnames": "^2.2.3",
     "css-loader": "^0.23.1",
     "file-loader": "^0.8.5",
