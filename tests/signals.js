@@ -925,7 +925,12 @@ suite['should emit events in correct order'] = function (test) {
       function (args) { setTimeout(args.output, 10) }
     ], [
       function (args) { setTimeout(args.output, 10) }
-    ]
+    ],
+    function (args) {
+      args.output.foo()
+    }, {
+      foo: [ function () {} ]
+    }
   ]
 
   ctrl.addSignals({
@@ -952,6 +957,12 @@ suite['should emit events in correct order'] = function (test) {
       case 7:
         test.equal(action.actionIndex, 3)
         break
+      case 9:
+        test.equal(action.actionIndex, 4)
+        break
+      case 11:
+        test.equal(action.actionIndex, 5)
+        break
     }
     i++
   })
@@ -970,11 +981,18 @@ suite['should emit events in correct order'] = function (test) {
       case 8:
         test.equal(action.actionIndex, 3)
         break
+      case 10:
+        test.equal(action.actionIndex, 4)
+        test.equal(action.outputPath, 'foo')
+        break
+      case 12:
+        test.equal(action.actionIndex, 5)
+        break
     }
     i++
   })
   ctrl.on('signalEnd', function (args) {
-    test.equal(i, 9)
+    test.equal(i, 13)
     test.ok(!args.signal.isExecuting)
     test.done()
   })

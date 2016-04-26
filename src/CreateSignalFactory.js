@@ -250,6 +250,7 @@ module.exports = function (controller, externalContextProviders) {
               var branchResult = null
               if (resolvedAction.path) {
                 action.outputPath = resolvedAction.path
+                controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
                 branchResult = runBranch(action.outputs[resolvedAction.path], 0, start, utils.merge({}, payload, resolvedAction.payload))
                 if (branchResult && branchResult.then) {
                   return branchResult.then(function (payload) {
