@@ -21,19 +21,13 @@ module.exports = function (controller, externalContextProviders) {
     return Boolean(currentlyRunningSignals)
   }
 
-  return function () {
-    var args = [].slice.call(arguments)
-    var signalName = args.shift()
-    var defaultOptions = args[1] || {}
-
-    var chain = args[0] || []
-
+  return function (signalName, chain, defaultOptions) {
     if (utils.isDeveloping()) {
-      analyze(signalName, chain)
+      analyze(signalName, chain || [])
     }
 
     var signalChain = function (signalPayload, passedOptions) {
-      var defaultOptionsCopy = Object.keys(defaultOptions).reduce(function (defaultOptionsCopy, key) {
+      var defaultOptionsCopy = Object.keys(defaultOptions || {}).reduce(function (defaultOptionsCopy, key) {
         defaultOptionsCopy[key] = defaultOptions[key]
         return defaultOptionsCopy
       }, {})
@@ -299,7 +293,7 @@ module.exports = function (controller, externalContextProviders) {
         }
       }
     }
-    signalChain.chain = chain
+    signalChain.chain = chain || []
     signalChain.signalName = signalName
 
     return signalChain
