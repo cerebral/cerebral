@@ -77,22 +77,21 @@ module.exports = function (controller, externalContextProviders) {
 
         var runBranch = function (branch, index, start, payload) {
           var currentBranch = branch[index]
-          if (!currentBranch && branch === signal.branches && !isPredefinedExecution) {
-            // Might not be any actions passed
-            if (branch[index - 1]) {
-              branch[index - 1].duration = Date.now() - start
-            }
-
-            signal.isExecuting = false
-            currentlyRunningSignals--
-            controller.emit('signalEnd', {signal: signal, options: options, payload: payload})
-            controller.emit('change', {signal: signal, options: options, payload: payload})
-            return
-          }
-
           if (!currentBranch) {
+            if (branch === signal.branches && !isPredefinedExecution) {
+              // Might not be any actions passed
+              if (branch[index - 1]) {
+                branch[index - 1].duration = Date.now() - start
+              }
+
+              signal.isExecuting = false
+              currentlyRunningSignals--
+              controller.emit('signalEnd', {signal: signal, options: options, payload: payload})
+              controller.emit('change', {signal: signal, options: options, payload: payload})
+            }
             return
           }
+
           if (Array.isArray(currentBranch)) {
             if (isPredefinedExecution) {
               currentBranch.forEach(function (action) {
