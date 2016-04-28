@@ -248,6 +248,8 @@ module.exports = function (controller, externalContextProviders) {
               }
 
               var branchResult = null
+              var newPayload = utils.merge({}, payload, resolvedAction.payload)
+
               if (resolvedAction.path) {
                 action.outputPath = resolvedAction.path
                 controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
@@ -257,16 +259,14 @@ module.exports = function (controller, externalContextProviders) {
                     return runBranch(branch, index + 1, Date.now(), utils.merge({}, payload, resolvedAction.payload))
                   })
                 } else {
-                  return runBranch(branch, index + 1, start, utils.merge({}, payload, resolvedAction.payload))
-                }
-              } else {
-                controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
-                var newPayload = utils.merge({}, payload, resolvedAction.payload)
-                branchResult = runBranch(branch, index + 1, start, newPayload)
-                if (!branchResult) {
+                  runBranch(branch, index + 1, start, utils.merge({}, newPayload, branchResult))
                   return newPayload
                 }
               }
+
+              controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
+              runBranch(branch, index + 1, start, newPayload)
+              return newPayload
             }
           }
         }

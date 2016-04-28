@@ -55,7 +55,7 @@ var createNextFunction = function (action, signalName, resolver) {
         'Cerebral: There is a wrong output of action "' +
         utils.getFunctionName(action) + '" ' +
         'in signal "' + signalName + '". Set defaultOutput or use one of outputs ' +
-        JSON.stringify(Object.keys(action.output || action.outputs))
+        JSON.stringify(Object.keys(action.output || action.outputs || {}))
       ].join(''))
     }
 
