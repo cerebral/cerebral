@@ -73,27 +73,16 @@ var createNextFunction = function (action, signalName, resolver) {
   return next
 }
 
-var addOutputs = function (action, next) {
-  if (!action.outputs) {
-    next.success = next.bind(null, 'success')
-    next.error = next.bind(null, 'error')
-  } else if (Array.isArray(action.outputs)) {
-    action.outputs.forEach(function (key) {
-      next[key] = next.bind(null, key)
-    })
-  } else {
-    Object.keys(action.outputs).forEach(function (key) {
-      next[key] = next.bind(null, key)
-    })
-  }
-}
-
 module.exports = function (context, execution) {
   var action = execution.action
   var signalName = execution.signal.name
   var resolve = execution.resolve
   var next = createNextFunction(action, signalName, resolve)
-  addOutputs(action, next)
+  if (action.outputs) {
+    Object.keys(action.outputs).forEach(function (key) {
+      next[key] = next.bind(null, key)
+    })
+  }
 
   if (!Boolean(resolve) && utils.isDeveloping()) {
     setTimeout(function () {
