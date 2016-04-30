@@ -102,4 +102,19 @@ suite['should only keep one reference to an action'] = function (test) {
   test.done()
 }
 
+suite['should throw if output path doesn\'t matches to action outputs'] = function (test) {
+  var action = function sync1 () {}
+  action.outputs = ['foo']
+  var signal = [
+    action, {
+      foo: [],
+      bar: []
+    }
+  ]
+  test.throws(function () {
+    staticTree(signal).branches
+  })
+  test.done()
+}
+
 module.exports = { staticTree: suite }

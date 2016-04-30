@@ -47,6 +47,9 @@ var traverse = function (item, parentItem, path, actions, isSync) {
     if (!Array.isArray(nextItem) && typeof nextItem === 'object') {
       parentItem.splice(parentItem.indexOf(nextItem), 1)
       action.outputs = Object.keys(nextItem).reduce(function (paths, key) {
+        if (Array.isArray(item.outputs) && !~item.outputs.indexOf(key)) {
+          throw new Error('Cerebral - output path ' + key + ' doesn\'t matches to possible otputs defined for ' + action.name + ' action')
+        }
         path = path.concat('outputs', key)
         paths[key] = traverse(nextItem[key], parentItem, path, actions, false)
         path.pop()
