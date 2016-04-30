@@ -293,8 +293,18 @@ module.exports = function (controller, externalContextProviders) {
         }
       }
     }
-    signalChain.chain = chain || []
     signalChain.signalName = signalName
+    Object.defineProperty(signalChain, 'chain', {
+      get: function () {
+        return chain
+      },
+      set: function (value) {
+        console.warn('Cerebral - signal chain property is DEPRECATED. Please describe your usage at https://github.com/cerebral/cerebral/issues/243')
+        chain = value
+      },
+      enumerable: true,
+      configurable: true
+    })
 
     return signalChain
   }
