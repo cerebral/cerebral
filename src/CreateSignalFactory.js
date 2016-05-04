@@ -170,16 +170,16 @@ module.exports = function (controller, externalContextProviders) {
                   var newPayload = utils.merge({}, payload, resolvedAction.payload)
                   if (resolvedAction.path) {
                     action.outputPath = resolvedAction.path
-                    return runBranch(action.outputs[resolvedAction.path], 0, Date.now(), newPayload)
+                    return runBranch(action.outputs[resolvedAction.path], 0, Date.now(), newPayload) || newPayload
                   }
-
                   return newPayload
                 })
               })
               controller.emit('change', {signal: signal, options: options, payload: payload})
               return Promise.all(promises)
                 .then(function (actionPayloads) {
-                  return runBranch(branch, index + 1, Date.now(), utils.merge.apply(null, [{}, payload].concat(actionPayloads)))
+                  var newPayload = utils.merge.apply(null, [{}, payload].concat(actionPayloads))
+                  return runBranch(branch, index + 1, Date.now(), newPayload) || newPayload
                 })
                 .catch(function (error) {
                   // We just throw any unhandled errors
