@@ -259,14 +259,12 @@ module.exports = function (controller, externalContextProviders) {
                     return runBranch(branch, index + 1, Date.now(), utils.merge({}, payload, resolvedAction.payload))
                   })
                 } else {
-                  runBranch(branch, index + 1, start, utils.merge({}, newPayload, branchResult))
-                  return newPayload
+                  return runBranch(branch, index + 1, start, utils.merge({}, newPayload, branchResult)) || newPayload
                 }
               }
 
               controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
-              runBranch(branch, index + 1, start, newPayload)
-              return newPayload
+              return runBranch(branch, index + 1, start, newPayload) || newPayload
             }
           }
         }

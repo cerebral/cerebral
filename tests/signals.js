@@ -93,7 +93,7 @@ suite['should bring outputs down paths back up on synchronous nesting'] = functi
   ctrl.getSignals().test({}, {immediate: true})
 }
 
-suite['should override payload properties propagated up the signal tree'] = function (test) {
+suite['should override payload properties propagated up the signal tree async'] = function (test) {
   var ctrl = Controller(Model())
 
   var ac1 = function ac1 (context) {
@@ -105,6 +105,67 @@ suite['should override payload properties propagated up the signal tree'] = func
     context.output.success({foo: 'bar2'})
   }
   ac2.async = true
+  ac2.outputs = ['success']
+  ctrl.addSignals({
+    'test': [
+      ac1, {
+        success: [
+          ac2, {
+            success: []
+          }
+        ]
+      },
+      function hm (context) {
+        test.deepEqual(context.input, {foo: 'bar2'})
+        test.done()
+      }
+    ]
+  })
+  ctrl.getSignals().test({}, {immediate: true})
+}
+
+suite['should handle async and sync actions outputting payload and propagating up the tree'] = function (test) {
+  var ctrl = Controller(Model())
+
+  var ac1 = function ac1 (context) {
+    context.output.success({foo: 'bar'})
+  }
+  ac1.async = true
+  ac1.outputs = ['success']
+  var ac2 = function ac2 (context) {
+    context.output({foo: 'bar2'})
+  }
+  var ac3 = function ac3 (context) {
+    context.output({foo: 'bar3'})
+  }
+  ac3.async = true
+  ctrl.addSignals({
+    'test': [
+      ac1, {
+        success: [
+          ac2,
+          ac3
+        ]
+      },
+      function hm (context) {
+        test.deepEqual(context.input, {foo: 'bar3'})
+        test.done()
+      }
+    ]
+  })
+  ctrl.getSignals().test({}, {immediate: true})
+}
+
+suite['should override payload properties propagated up the signal tree sync'] = function (test) {
+  var ctrl = Controller(Model())
+
+  var ac1 = function ac1 (context) {
+    context.output.success({foo: 'bar'})
+  }
+  ac1.outputs = ['success']
+  var ac2 = function ac2 (context) {
+    context.output.success({foo: 'bar2'})
+  }
   ac2.outputs = ['success']
   ctrl.addSignals({
     'test': [
