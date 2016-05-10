@@ -138,7 +138,7 @@ You can also only store certain test results in the model or define your own tes
 ```javascript
 const useragent = Useragent({
   feature: {
-    touh: true,
+    touch: true,
     serviceWorker: true,
     getUserMedia: () => !!navigator.getUserMedia
   }
