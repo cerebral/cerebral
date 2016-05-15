@@ -16,15 +16,12 @@ const controller = Controller(Model())
 
 controller.addModules({
 
-  // Can pass any default options which
-  // will be used on all requests
-  http: Http({
-    baseUrl: '/api'
-  })
+  // Pass any axios options
+  http: Http({})
 })
 ```
 
-For other options go to [axios repo](https://github.com/mzabriskie/axios).
+Go to [axios repo](https://github.com/mzabriskie/axios) for options
 
 ### The service
 The module exposes a services with all HTTP methods: `get, post, put, delete, patch`. You access these inside actions.
