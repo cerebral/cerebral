@@ -6,11 +6,11 @@ function get(url) {
   var urlGetters = convertToGetters(url);
 
   function action(args) {
-    var services = args.services;
-    var httpPath = args['cerebral-module-http'];
-    var http = httpPath.reduce(function (services, key) {
-      return services[key];
-    }, services);
+    var http = args.modules['cerebral-module-http'];
+    if( ! http) {
+      throw "Http action factories require 'cerebral-module-http' module to be added to controller or current module"
+    }
+
     var output = args.output;
 
     var fullUrl = createFullUrl(urlGetters, args);
