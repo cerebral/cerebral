@@ -41,6 +41,7 @@ The service returns a promise. Results of the http requests will be passed on an
 
 ### The action factories
 This module also exposes some action factories to express request directly in a signal. You got `get, post, put, patch, delete` available to you.
+(Note that the inclusion of the `Http` module in the `addModules()` section is still required, even if you're only using action factories.)
 
 ```js
 import httpGet from 'cerebral-module-http/get'
