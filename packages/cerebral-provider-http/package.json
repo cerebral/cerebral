@@ -21,9 +21,7 @@
   },
   "homepage": "https://github.com/cerebral/cerebral-module-http#readme",
   "dependencies": {
-    "axios": "^0.9.1"
-  },
-  "peerDependency": {
+    "axios": "^0.9.1",
     "cerebral-url-scheme-compiler": "^0.3.5"
   }
 }
