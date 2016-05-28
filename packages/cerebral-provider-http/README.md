@@ -37,7 +37,7 @@ function postTodo({state, output, services}) {
 export default postTodo;
 ```
 
-The service returns a promise. Results of the http requests will be passed on an object: `{result, statusCode}`. That means you can easily output to `success` or `error` and grab those values off the input on the next action.
+The service returns a promise. Results of the http requests will be passed on an object: `{result, status}`. That means you can easily output to `success` or `error` and grab those values off the input on the next action.
 
 ### The action factories
 This module also exposes some action factories to express request directly in a signal. You got `get, post, put, patch, delete` available to you.
