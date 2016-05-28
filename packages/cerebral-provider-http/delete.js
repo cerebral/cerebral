@@ -6,12 +6,16 @@ function httpDelete(url) {
   var urlGetters = convertToGetters(url);
 
   function action(args) {
-    var http = args.modules['cerebral-module-http'];
+    var services = args.services;
+    var httpPath = args['cerebral-module-http'];
+    var http = httpPath.reduce(function (services, key) {
+      return services[key];
+    }, services);
     var output = args.output;
 
     var fullUrl = createFullUrl(urlGetters, args);
 
-    http.services.delete(fullUrl)
+    http.delete(fullUrl)
       .then(output.success)
       .catch(output.error);
   }

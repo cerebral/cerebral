@@ -8,12 +8,16 @@ function post(url, dataPath) {
   var getValue = getCompiler(dataPath);
 
   function action(args) {
-    var http = args.modules['cerebral-module-http'];
+    var services = args.services;
+    var httpPath = args['cerebral-module-http'];
+    var http = httpPath.reduce(function (services, key) {
+      return services[key];
+    }, services);
     var output = args.output;
 
     var fullUrl = createFullUrl(urlGetters, args);
 
-    http.services.post(fullUrl, getValue(args))
+    http.post(fullUrl, getValue(args))
       .then(output.success)
       .catch(output.error);
   }

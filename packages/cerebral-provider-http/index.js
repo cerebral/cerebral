@@ -11,9 +11,11 @@ var configIndex = {
 
 module.exports = function (options) {
   options = options || {};
-  return function (module) {
+  return function (module, controller) {
 
-    module.alias('cerebral-module-http');
+    controller.addContextProvider({
+      'cerebral-module-http': module.path
+    });
 
     // Convert response to {result: response.data}
     var convert = function (services, key) {
@@ -39,11 +41,12 @@ module.exports = function (options) {
 
         return axios[key].apply(null, args).then(function (result) {
           return {
-            statusCode: result.statusCode,
+            status: result.status,
             result: result.data
           };
         }).catch(function (result) {
           throw {
+            status: result.status,
             result: result.data
           };
         });
