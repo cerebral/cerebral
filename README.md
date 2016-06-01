@@ -15,7 +15,12 @@ A state controller with its own debugger
 
 ## Testing new version
 
-Add `https://github.com/cerebral/cerebral.git#state-tree` as your cerebral dependency is `package.json` and install deps.
+Add
+
+- `https://github.com/cerebral/cerebral.git#state-tree`
+- `https://github.com/cerebral/cerebral-view-react.git#state-tree`
+
+in `package.json` and install deps.
 
 Everything should actually just work with a couple of minor tweaks:
 
@@ -23,7 +28,7 @@ Everything should actually just work with a couple of minor tweaks:
 ```js
 import Controller from 'cerebral';
 
-const controller = Controller({}); // No model
+const controller = Controller({}); // No Model
 ```
 
 ### Computed
@@ -44,17 +49,6 @@ computed({
 ```
 
 Computed are more explicit and has the same signature as Decorators.
-
-### Decorator
-Currently the decorator for the new state stuff is a lot simpler in its implementation and it is available here:
-
-```js
-import Cerebral from 'cerebral/react/Decorator';
-
-@Cerebral({
-  foo: 'some.state'
-})
-```
 
 Okay, happy testing! :)
 
