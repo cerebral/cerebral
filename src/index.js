@@ -1,13 +1,12 @@
 var get = require('lodash/get')
 var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
-var Compute = require('./Compute.js')
 var EventEmitter = require('events').EventEmitter
+var Computed = require('./Computed')
 
 var Controller = function (Model) {
   var controller = new EventEmitter()
   var model = Model(controller)
-  var compute = Compute(model)
   var signals = {}
   var modules = {}
   var services = {}
@@ -50,12 +49,8 @@ var Controller = function (Model) {
   controller.getModel = function () {
     return model
   }
-  controller.get = function () {
-    if (typeof arguments[0] === 'function') {
-      return compute.has(arguments[0]) ? compute.getComputedValue(arguments[0]) : compute.register(arguments[0])
-    }
-    var path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0]
-    return model.accessors.get(path)
+  controller.get = function (path) {
+    return model.accessors.get(typeof path === 'string' ? path.split('.') : path)
   }
   controller.logModel = function () {
     return model.logModel()
@@ -105,10 +100,14 @@ var Controller = function (Model) {
     externalContextProviders[scope || '__cerebral_global__'].push(provider)
   }
 
+  controller.on('flush', Computed.updateCache)
+
   return controller
 }
 
-Controller.ServerController = function (state) {
+module.exports.Controller = Controller
+module.exports.Computed = Computed
+module.exports.ServerController = function (state) {
   var model = {
     accessors: {
       get: function (path) {
@@ -120,18 +119,11 @@ Controller.ServerController = function (state) {
       }
     }
   }
-  var compute = Compute(model)
 
   return {
     isServer: true,
     get: function (path) {
-      if (typeof arguments[0] === 'function') {
-        return compute.has(arguments[0]) ? compute.getComputedValue(arguments[0]) : compute.register(arguments[0])
-      }
-      path = !arguments.length ? [] : typeof arguments[0] === 'string' ? [].slice.call(arguments) : arguments[0]
       return model.accessors.get(path)
     }
   }
 }
-
-module.exports = Controller

@@ -1,14 +1,14 @@
-var Controller = require('./../src/index.js')
+var ServerController = require('./../src/index.js').ServerController
 var suite = {}
 
 suite['should get top level key'] = function (test) {
-  var ctrl = Controller.ServerController({foo: 'bar'})
+  var ctrl = ServerController({foo: 'bar'})
   test.equal(ctrl.get('foo'), 'bar')
   test.done()
 }
 
 suite['should get nested key'] = function (test) {
-  var ctrl = Controller.ServerController({foo: {some: 'bar'}})
+  var ctrl = ServerController({foo: {some: 'bar'}})
   test.equal(ctrl.get('foo.some'), 'bar')
   test.done()
 }
