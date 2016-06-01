@@ -42,6 +42,10 @@ module.exports = function (context, execution, controller) {
       return createStateObject(typeof path === 'string' ? path.split('.') : path)
     }
 
+    state.computed = function (computed) {
+      return computed.get(model.accessors.get([]))
+    }
+
     return state
   }
 
