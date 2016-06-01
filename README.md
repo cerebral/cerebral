@@ -19,6 +19,13 @@ Add `https://github.com/cerebral/cerebral.git#state-tree` as your cerebral depen
 
 Everything should actually just work with a couple of minor tweaks:
 
+### Instantiate
+```js
+import Controller from 'cerebral';
+
+const controller = Controller({}); // No model
+```
+
 ### Computed
 ```js
 //
