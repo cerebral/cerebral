@@ -33,7 +33,7 @@ module.exports = function (context, execution, controller) {
 
   context.state.select = function (path) {
     var cursor = originalSelect(path)
-    return wrapMutators(cursor, model.mutators, action, path)
+    return wrapMutators(cursor, model.mutators, action, typeof path === 'string' ? path.split('.') : path)
   }
 
   return context
