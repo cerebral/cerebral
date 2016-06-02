@@ -39,6 +39,6 @@
   },
   "dependencies": {
     "lodash": "^4.6.1",
-    "state-tree": "^0.1.18"
+    "state-tree": "^0.2.2"
   }
 }
