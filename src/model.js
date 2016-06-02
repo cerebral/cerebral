@@ -68,7 +68,7 @@ var Model = function (initialState, options) {
           },
           splice: function () {
             var args = [].slice.call(arguments);
-            tree.splice.call(tree, args.shift(), args);
+            tree.splice.apply(tree, [args.shift()].concat(args));
           },
           merge: function (path, value) {
             tree.merge(path, value);
