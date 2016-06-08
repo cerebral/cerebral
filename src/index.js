@@ -2,12 +2,10 @@ var get = require('lodash/get')
 var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var EventEmitter = require('events').EventEmitter
-var computed = require('state-tree').computed;
-var Model = require('./model')
 
-var Controller = function (initialState) {
+var Controller = function (Model) {
   var controller = new EventEmitter()
-  var model = Model(initialState)(controller)
+  var model = Model(controller)
   var signals = {}
   var modules = {}
   var services = {}
@@ -126,7 +124,5 @@ Controller.ServerController = function (state) {
     }
   }
 }
-
-Controller.computed = computed;
 
 module.exports = Controller
