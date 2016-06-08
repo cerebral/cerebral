@@ -691,7 +691,7 @@ suite['should be able to define action as async with paths'] = function (test) {
   ctrl.getSignals().test()
 }
 
-suite['should trigger change event on individual async action paths'] = function (test) {
+suite['should trigger change event on individual async action paths, but not on the last'] = function (test) {
   var ctrl = Controller(Model())
   var changeCount = 0
   var signal = [
@@ -700,7 +700,7 @@ suite['should trigger change event on individual async action paths'] = function
       function (args) { args.output.success() }, {success: []}
     ],
     function () {
-      test.equal(changeCount, 3)
+      test.equal(changeCount, 2)
       test.done()
     }
   ]
@@ -1467,6 +1467,67 @@ suite['should expose execution details to context callback'] = function (test) {
     foo: 'bar'
   })
   test.done()
+}
+
+suite['should fire change event when updating from running parallel async actions'] = function (test) {
+  test.expect(2)
+  var changeCount = 0
+  var ctrl = Controller(Model({
+    foo: false
+  }))
+  var ModuleA = function (module) {
+    module.addSignals({
+      'test': [
+        [
+          function actionA (context) {
+            setTimeout(function () {
+              if (context.state.get(['foo'])) {
+                context.output.success()
+              } else {
+                context.output.error()
+              }
+            }, 100)
+          }, {
+            success: [],
+            error: [
+              function actionASet (context) {
+                context.state.set(['bar'], true)
+              }
+            ]
+          },
+          function actionB (context) {
+            setTimeout(function () {
+              context.output.success()
+            }, 200)
+          }, {
+            success: [
+              function actionBSet (context) {
+                context.state.set(['foo'], true)
+              }
+            ],
+            error: []
+          }
+        ]
+      ]
+    })
+  }
+
+  ctrl.addModules({
+    moduleA: ModuleA
+  })
+  ctrl.on('signalEnd', function () {
+    test.equals(changeCount, 2)
+    test.done()
+  })
+  ctrl.on('change', function () {
+    changeCount++
+    if (changeCount === 2) {
+      test.ok(ctrl.get(['bar']))
+    }
+  })
+  ctrl.getSignals().moduleA.test({
+    foo: 'bar'
+  })
 }
 
 module.exports = { signals: suite }
