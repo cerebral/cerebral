@@ -113,6 +113,7 @@ module.exports = function (controller, externalContextProviders) {
 
               runBranch(branch, index + 1)
             } else {
+              var resolvedPromisesCount = 0
               var promises = currentBranch.map(function (action) {
                 var resolver = null
                 var promise = new Promise(function (resolve) {
@@ -161,16 +162,19 @@ module.exports = function (controller, externalContextProviders) {
                 }
 
                 return promise.then(function (resolvedAction) {
+                  resolvedPromisesCount++
                   action.hasExecuted = true
                   action.isExecuting = false
 
                   controller.emit('actionEnd', {action: action, signal: signal, options: options, payload: payload})
-                  controller.emit('change', {signal: signal, options: options, payload: payload})
 
                   var newPayload = utils.merge({}, payload, resolvedAction.payload)
                   if (resolvedAction.path) {
                     action.outputPath = resolvedAction.path
-                    return runBranch(action.outputs[resolvedAction.path], 0, Date.now(), newPayload) || newPayload
+                    newPayload = runBranch(action.outputs[resolvedAction.path], 0, Date.now(), newPayload) || newPayload
+                    if (!newPayload.then && resolvedPromisesCount !== currentBranch.length) {
+                      controller.emit('change', {signal: signal, options: options, payload: newPayload})
+                    }
                   }
                   return newPayload
                 })
