@@ -12,6 +12,10 @@ export default function detectFeatures (context) {
   Object.keys(uaFeatures)
   .filter(isEnabled)
   .reduce((result, featureName) => {
+    if (typeof uaFeatures[featureName] === 'function') {
+      return result
+    }
+
     result[featureName] = uaFeatures[featureName]
     return result
   }, featureMap)
