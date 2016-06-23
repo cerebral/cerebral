@@ -20,7 +20,7 @@
 - No more "use a key to optimize", works out of the box
 
 ### Devtools
-`npm install cerebral-model-devtools@next`
+`npm install cerebral-module-devtools@next`
 - Make sure you have latest debugger version, 0.46
 - Has a new "components" tab
 
