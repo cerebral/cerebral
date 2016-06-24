@@ -30,7 +30,7 @@ The module exposes a services with all HTTP methods: `get, post, put, delete, pa
 function postTodo({state, output, services}) {
   const todo = state.get(['newTodo'])
   services.http.post('/todos', todo)
-    .success(output.succes)
+    .then(output.succes)
     .catch(output.error)
 }
 
