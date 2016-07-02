@@ -3,7 +3,7 @@ A state controller with its own debugger
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
-[![Test coverage][coveralls-image]][coveralls-url]
+[![Test coverage][codecov-image]][codecov-url]
 [![bitHound Score][bithound-image]][bithound-url]
 [![Commitizen friendly][commitizen-image]][commitizen-url]
 [![Semantic Release][semantic-release-image]][semantic-release-url]
@@ -20,8 +20,8 @@ A state controller with its own debugger
 [npm-url]: https://npmjs.org/package/cerebral
 [travis-image]: https://img.shields.io/travis/cerebral/cerebral.svg?style=flat
 [travis-url]: https://travis-ci.org/cerebral/cerebral
-[coveralls-image]: https://img.shields.io/coveralls/cerebral/cerebral.svg?style=flat
-[coveralls-url]: https://coveralls.io/r/cerebral/cerebral?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/cerebral/cerebral/master.svg?maxAge=2592000?style=flat-square
+[codecov-url]: https://codecov.io/gh/cerebral/cerebral
 [bithound-image]: https://www.bithound.io/github/cerebral/cerebral/badges/score.svg
 [bithound-url]: https://www.bithound.io/github/cerebral/cerebral
 [commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg
