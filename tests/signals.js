@@ -1530,4 +1530,29 @@ suite['should fire change event when updating from running parallel async action
   })
 }
 
+suite['should raise exception when trying to output primitive'] = function (test) {
+  var ctrl = Controller(Model())
+  var payload = {foo: 'bar'}
+  ctrl.addSignals({
+    'test': [[
+      function action (context) {
+        context.output.success('not an object')
+      }, {
+        success: [
+          function success (context) {
+            test.done()
+          }
+        ]
+      }
+    ]]
+  })
+  test.throws(
+    function () { ctrl.getSignals().test(payload) },
+    function (err) {
+      return /test/.test(err) && /success/.test(err) && /not an object/.test(err)
+    }
+  )
+  test.done()
+}
+
 module.exports = { signals: suite }
