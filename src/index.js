@@ -112,13 +112,11 @@ Controller.ServerController = function (state) {
   var model = {
     accessors: {
       get: function (path) {
-        path = path.slice()
-        var key = path.pop()
-        var grabbedState = state
+        path = typeof path === 'string' ? path.split('.') : path
         while (path.length) {
-          grabbedState = grabbedState[path.shift()]
+          state = state[path.shift()]
         }
-        return grabbedState[key]
+        return state
       }
     }
   }
