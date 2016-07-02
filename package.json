@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "pretest": "standard",
-    "test": "nodeunit tests",
+    "test": "istanbul cover nodeunit -- tests",
     "test:watch": "nodeunit-watcher tests",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
@@ -20,6 +20,7 @@
     "conventional-changelog": "0.0.17",
     "cz-customizable": "^2.7.0",
     "ghooks": "^1.0.3",
+    "istanbul": "^0.4.4",
     "nodeunit": "^0.9.0",
     "nodeunit-watcher": "0.0.3",
     "semantic-release": "^4.3.5",
