@@ -1,5 +1,5 @@
-import toggleTodoCompleted from './../actions/toggleTodoCompleted.js';
+import toggleTodoCompleted from './../actions/toggleTodoCompleted.js'
 
 export default [
   toggleTodoCompleted
-];
+]

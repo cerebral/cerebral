@@ -1,5 +1,5 @@
-import removeTodo from './../actions/removeTodo.js';
+import removeTodo from './../actions/removeTodo.js'
 
 export default [
   removeTodo
-];
+]

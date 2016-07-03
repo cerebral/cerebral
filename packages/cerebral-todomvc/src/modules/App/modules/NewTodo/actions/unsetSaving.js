@@ -1,5 +1,5 @@
 function unsetSaving ({state}) {
-  state.set('app.new.isSaving', false);
-};
+  state.set('app.new.isSaving', false)
+}
 
-export default unsetSaving;
+export default unsetSaving

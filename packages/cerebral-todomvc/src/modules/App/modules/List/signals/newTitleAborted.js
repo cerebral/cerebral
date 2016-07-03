@@ -1,5 +1,5 @@
-import stopEditingTodo from './../actions/stopEditingTodo.js';
+import stopEditingTodo from './../actions/stopEditingTodo.js'
 
 export default [
   stopEditingTodo
-];
+]
