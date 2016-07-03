@@ -10,3 +10,4 @@ coverage:
       default:
         enabled: yes
         target: 0%
+  comment: off
