@@ -1,14 +1,14 @@
 import React from 'react'
 import Todo from '../Todo'
-import { Decorator as Cerebral } from 'cerebral-view-react'
+import { connect } from 'cerebral-view-react'
 
 import isAllChecked from '../../computed/isAllChecked.js'
 import visibleTodos from '../../computed/visibleTodos.js'
 
-export default Cerebral({
+export default connect({
   isAllChecked: isAllChecked,
   todoKeys: visibleTodos
-})(class List extends React.Component {
+}, class List extends React.Component {
   renderTodo (key) {
     return <Todo key={key} todoKey={key} />
   }

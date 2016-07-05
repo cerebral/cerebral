@@ -1,11 +1,11 @@
 import React from 'react'
-import {Decorator as Cerebral, Link} from 'cerebral-view-react'
+import { connect, Link } from 'cerebral-view-react'
 import counts from '../../computed/counts.js'
 
-export default Cerebral({
+export default connect({
   filter: 'app.footer.filter',
   counts: counts
-})(class TodosFooter extends React.Component {
+}, class TodosFooter extends React.Component {
   renderRemainingCount () {
     let count = this.props.counts.remainingCount
     if (count === 0 || count > 1) {

@@ -1,16 +1,16 @@
 import React from 'react'
-import { Decorator as Cerebral } from 'cerebral-view-react'
+import { connect } from 'cerebral-view-react'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 import visibleTodos from '../../computed/visibleTodos.js'
 
-export default Cerebral({
+export default connect({
   todos: 'app.list.todos',
   recorder: 'recorder',
   isSaving: 'app.new.isSaving',
   visibleTodos: visibleTodos
-})(function App (props) {
+}, function App (props) {
   return (
     <div id='todoapp-wrapper'>
       <section id='todoapp'>

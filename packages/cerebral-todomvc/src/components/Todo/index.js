@@ -1,10 +1,10 @@
 import React from 'react'
 import classNames from 'classnames'
-import {Decorator as Cerebral} from 'cerebral-view-react'
+import { connect } from 'cerebral-view-react'
 
-export default Cerebral(props => ({
+export default connect(props => ({
   todo: `app.list.todos.${props.todoKey}`
-}))(class Todo extends React.Component {
+}), class Todo extends React.Component {
   componentDidUpdate (prevProps) {
     if (!prevProps.todo.$isEditing && this.props.todo.$isEditing) {
       this.refs.edit.focus()

@@ -1,10 +1,10 @@
 import React from 'react'
-import {Decorator as Cerebral} from 'cerebral-view-react'
+import { connect } from 'cerebral-view-react'
 
-export default Cerebral({
+export default connect({
   isSaving: 'app.new.isSaving',
   title: 'app.new.title'
-})(class NewTodo extends React.Component {
+}, class NewTodo extends React.Component {
   onFormSubmit (event) {
     event.preventDefault()
     this.props.signals.app.new.submitted()
