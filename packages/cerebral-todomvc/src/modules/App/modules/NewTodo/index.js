@@ -1,5 +1,5 @@
-import submitted from './signals/submitted'
-import titleChanged from './signals/titleChanged'
+import submitTodo from './chains/submitTodo'
+import changeTitle from './chains/changeTitle'
 
 export default (options = {}) => {
   return (module) => {
@@ -9,7 +9,11 @@ export default (options = {}) => {
     })
 
     module.addSignals({
-      titleChanged,
-      submitted})
+      titleChanged: {
+        chain: changeTitle,
+        immediate: true
+      },
+      submitted: submitTodo
+    })
   }
 }

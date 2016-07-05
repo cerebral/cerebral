@@ -1,5 +1,5 @@
-import clearCompletedClicked from './signals/clearCompletedClicked'
-import filterClicked from './signals/filterClicked'
+import clearCompleted from './chains/clearCompleted'
+import setFilter from './chains/setFilter'
 
 export default (options = {}) => {
   return (module) => {
@@ -8,8 +8,8 @@ export default (options = {}) => {
     })
 
     module.addSignals({
-      clearCompletedClicked,
-      filterClicked
+      clearCompletedClicked: clearCompleted,
+      filterClicked: setFilter
     })
   }
 }

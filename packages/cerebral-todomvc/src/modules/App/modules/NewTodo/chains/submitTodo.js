@@ -1,5 +1,5 @@
-import add from './../actions/add.js'
-import save from './../actions/save.js'
+import add from './../actions/addTodo.js'
+import save from './../actions/saveTodo.js'
 import setSaving from './../actions/setSaving.js'
 import unsetSaving from './../actions/unsetSaving.js'
 import updateTodo from './../actions/updateTodo.js'
