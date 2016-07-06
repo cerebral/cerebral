@@ -38,6 +38,7 @@
     "analyzeCommits": "./sr-prerelease.js"
   },
   "dependencies": {
+    "cerebral-computed": "^0.1.1",
     "lodash": "^4.6.1",
     "state-tree": "^0.2.4"
   }

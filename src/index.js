@@ -2,6 +2,7 @@ var get = require('lodash/get')
 var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var EventEmitter = require('events').EventEmitter
+var Computed = require('cerebral-computed')
 
 var Controller = function (Model) {
   var controller = new EventEmitter()
@@ -102,7 +103,9 @@ var Controller = function (Model) {
   return controller
 }
 
-Controller.ServerController = function (state) {
+module.exports.Controller = Controller
+module.exports.Computed = Computed
+module.exports.ServerController = function (state) {
   var model = {
     accessors: {
       get: function (path) {
@@ -124,5 +127,3 @@ Controller.ServerController = function (state) {
     }
   }
 }
-
-module.exports = Controller
