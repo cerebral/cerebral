@@ -4,6 +4,12 @@
 `npm install cerebral@next`
 - computed removed from Cerebral and put into own package (see below)
 
+New signature:
+
+```javascript
+import {Controller, Computed, ServerController} from 'cerebral'
+```
+
 ### Models
 `npm install cerebral-model` (state-tree)
 - new mutable state tree which handles references
@@ -23,8 +29,3 @@
 `npm install cerebral-model-devtools@next`
 - Make sure you have latest debugger version, 0.46
 - Has a new "components" tab
-
-### Computed
-`npm install cerebral-computed`
-- Use this with your view packages
-- No computed inside actions anymore
