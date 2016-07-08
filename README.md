@@ -13,6 +13,45 @@ A state controller with its own debugger
 
 <img src="images/logo.png" width="300" align="center">
 
+## Testing new version
+
+Add
+
+- `https://github.com/cerebral/cerebral.git#state-tree`
+- `https://github.com/cerebral/cerebral-view-react.git#state-tree`
+
+in `package.json` and install deps.
+
+Everything should actually just work with a couple of minor tweaks:
+
+### Instantiate
+```js
+import Controller from 'cerebral';
+
+const controller = Controller({}); // No Model
+```
+
+### Computed
+```js
+//
+function (get) {
+  var someState = get('some.state')
+}
+
+// New
+import {computed} from 'cerebral';
+
+computed({
+  someState: 'some.state'
+}, state => {
+  state.someState
+})
+```
+
+Computed are more explicit and has the same signature as Decorators.
+
+Okay, happy testing! :)
+
 ## Please head over to our website
 [http://www.cerebraljs.com/](http://www.cerebraljs.com/). You will find all the information you need there.
 
