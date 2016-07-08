@@ -39,6 +39,7 @@
     "analyzeCommits": "./sr-prerelease.js"
   },
   "dependencies": {
+    "cerebral-operators": "^0.2.1",
     "lodash": "^4.6.1"
   }
 }
