@@ -2,7 +2,7 @@ var get = require('lodash/get')
 var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var EventEmitter = require('events').EventEmitter
-var Computed = require('cerebral-computed')
+var Computed = require('./Computed')
 
 var Controller = function (Model) {
   var controller = new EventEmitter()
@@ -99,6 +99,8 @@ var Controller = function (Model) {
     }
     externalContextProviders[scope || '__cerebral_global__'].push(provider)
   }
+
+  controller.on('flush', Computed.updateCache)
 
   return controller
 }
