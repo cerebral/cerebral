@@ -11,11 +11,15 @@ function getByPath (path, state) {
 }
 
 function Computed (paths, cb) {
-  return function () {
-    var deps = typeof paths === 'function' ? paths.apply(null, arguments) : paths
-    var cacheKey = JSON.stringify(deps)
+  return function (props) {
+    var deps = typeof paths === 'function' ? paths(props) : paths
+    var cacheKey = JSON.stringify(deps) + (props ? JSON.stringify(props) : '')
     Object.keys(deps).forEach(function (key) {
-      Computed.registry[deps[key]] = Computed.registry[deps[key]] ? Computed.registry[deps[key]].concat(cacheKey) : [cacheKey]
+      if (!Computed.registry[deps[key]]) {
+        Computed.registry[deps[key]] = [cacheKey]
+      } else if (Computed.registry[deps[key]].indexOf(cacheKey) === -1) {
+        Computed.registry[deps[key]] = Computed.registry[deps[key]].concat(cacheKey)
+      }
     })
     return {
       getDepsMap () {
@@ -26,7 +30,7 @@ function Computed (paths, cb) {
           return Computed.cache[cacheKey]
         }
 
-        var value = cb(Object.keys(deps).reduce((props, key) => {
+        var depsProps = Object.keys(deps).reduce(function (props, key) {
           if (typeof deps[key] === 'string' || Array.isArray(deps[key])) {
             var path = typeof deps[key] === 'string' ? deps[key].split('.') : deps[key].slice()
             props[key] = getByPath(path, passedState)
@@ -34,7 +38,13 @@ function Computed (paths, cb) {
             props[key] = deps[key].get(passedState)
           }
           return props
-        }, {}))
+        }, {})
+        var passedProps = props || {}
+        var allProps = Object.keys(passedProps).reduce(function (depsProps, key) {
+          depsProps[key] = passedProps[key]
+          return depsProps
+        }, depsProps)
+        var value = cb(allProps)
         Computed.cache[cacheKey] = value
         return value
       }
