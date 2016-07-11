@@ -3,6 +3,7 @@ var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var EventEmitter = require('events').EventEmitter
 var Computed = require('./Computed')
+var logDepricateArrayPath = require('./utils').logDepricateArrayPath
 
 var Controller = function (Model) {
   var controller = new EventEmitter()
@@ -50,7 +51,12 @@ var Controller = function (Model) {
     return model
   }
   controller.get = function (path) {
-    return model.accessors.get(typeof path === 'string' ? path.split('.') : path)
+    if (Array.isArray(path)) {
+      logDepricateArrayPath(path)
+    } else if (typeof path === 'string') {
+      path = path.split('.')
+    }
+    return model.accessors.get(path)
   }
   controller.logModel = function () {
     return model.logModel()
@@ -111,7 +117,13 @@ module.exports.ServerController = function (state) {
   var model = {
     accessors: {
       get: function (path) {
-        path = typeof path === 'string' ? path.split('.') : path
+        if (Array.isArray(path)) {
+          logDepricateArrayPath(path)
+        } else if (typeof path === 'string') {
+          path = path.split('.')
+        } else {
+          path = []
+        }
         while (path.length) {
           state = state[path.shift()]
         }

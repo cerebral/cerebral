@@ -1,3 +1,6 @@
+# Next Version
+- [Depricate using array notation for state paths.](https://github.com/cerebral/cerebral/issues/258)
+
 # 0.24.0
 - Updated the computed experiment. Read more in release notes
  
