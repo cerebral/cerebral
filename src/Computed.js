@@ -22,10 +22,10 @@ function Computed (paths, cb) {
       }
     })
     return {
-      getDepsMap () {
+      getDepsMap: function () {
         return deps
       },
-      get (passedState) {
+      get: function (passedState) {
         if (Computed.cache[cacheKey]) {
           return Computed.cache[cacheKey]
         }
