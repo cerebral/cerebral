@@ -1,297 +1,91 @@
-var Controller = require('./../src/index.js')
+var Computed = require('./../src/Computed.js')
 var suite = {}
 
-var Model = function (state) {
-  return function () {
-    return {
-      accessors: {
-        get: function (path) {
-          path = path ? path.slice() : []
-          var currentPath = state
-          while (path.length) {
-            currentPath = currentPath[path.shift()]
-          }
-          return currentPath
-        }
-      },
-      mutators: {
-        set: function (path, value) {
-          path = path ? path.slice() : []
-          var key = path.pop()
-          var currentPath = state
-          while (path.length) {
-            currentPath = currentPath[path.shift()]
-          }
-          currentPath[key] = value
-        },
-        merge: function (path, value) {
-          path = path ? path.slice() : []
-          var key = path.pop()
-          var currentPath = state
-          while (path.length) {
-            currentPath = currentPath[path.shift()]
-          }
-          currentPath[key] = Object.keys(value).reduce(function (path, key) {
-            path[key] = value[key]
-            return path
-          }, {})
-        }
-      }
-    }
-  }
+function reset () {
+  Computed.registry = {}
+  Computed.cache = {}
 }
 
-suite['should pass get function to grab state from state store'] = function (test) {
-  var model = Model({
+suite['should create computed'] = function (test) {
+  reset()
+  var computed = Computed({
+    foo: 'foo'
+  }, function (state) {
+    return state.foo
+  })
+  test.equals(computed().get({
+    foo: 'bar'
+  }), 'bar')
+  test.done()
+}
+
+suite['should add cached result to registry'] = function (test) {
+  reset()
+  var stateDeps = {
+    foo: 'foo'
+  }
+  var cacheKey = JSON.stringify(stateDeps)
+  var computed = Computed(stateDeps, function (state) {
+    return state.foo
+  })
+  computed().get({
     foo: 'bar'
   })
-  var foo = function (get) {
-    test.ok(typeof get === 'function')
-    test.equal(get(['foo']), 'bar')
-  }
-
-  var controller = Controller(model)
-  test.expect(2)
-  controller.get(foo)
+  test.equals(Computed.cache[cacheKey], 'bar')
   test.done()
 }
 
-suite['should pass get function to grab state'] = function (test) {
-  var model = Model({
-    foo: 'bar',
-    test: 'hest'
-  })
-  var foo = function (get, value) {
-    test.equal(get(['test']), 'hest')
+suite['should add cache key to path'] = function (test) {
+  reset()
+  var stateDeps = {
+    foo: 'foo'
   }
-  var controller = Controller(model)
-  test.expect(1)
-  controller.get(foo)
+  var cacheKey = JSON.stringify(stateDeps)
+  var computed = Computed(stateDeps, function (state) {
+    return state.foo
+  })
+  computed()
+  test.ok(Computed.registry['foo'].indexOf(cacheKey) >= 0)
   test.done()
 }
 
-suite['should be able to grab state with DOT notation'] = function (test) {
-  var model = Model({
-    foo: {
-      bar: 'test'
-    }
-  })
-  var foo = function (get, value) {
-    test.equal(get('foo.bar'), 'test')
+suite['should return cached result'] = function (test) {
+  reset()
+  var obj = {}
+  var state = {
+    foo: obj
   }
-  var controller = Controller(model)
-  test.expect(1)
-  controller.get(foo)
+  var stateDeps = {
+    foo: 'foo'
+  }
+  var computed = Computed(stateDeps, function (state) {
+    return state.foo
+  })
+  test.equals(computed().get(state), obj)
+  state.foo = {}
+  test.equals(computed().get(state), obj)
   test.done()
 }
 
-suite['should not rerun if no values change'] = function (test) {
-  var model = Model({
-    foo: 'bar',
-    test: 'hest'
-  })
-  var foo = function (get, value) {
-    test.equal(get(['test']), 'hest')
+suite['should return new result when cache is cleared'] = function (test) {
+  reset()
+  var obj = {}
+  var obj2 = {}
+  var state = {
+    foo: obj
   }
-  var controller = Controller(model)
-  test.expect(1)
-  controller.get(foo)
-  controller.get(foo)
-  test.done()
-}
-
-suite['should rerun if previously grabbed value changes'] = function (test) {
-  var model = Model({
-    foo: 'bar',
-    test: 'hest'
-  })
-  var run = 0
-  var foo = function (get) {
-    run++
-    if (run === 1) {
-      test.equal(get(['test']), 'hest')
-    } else {
-      test.equal(get(['test']), 'hest2')
-    }
+  var stateDeps = {
+    foo: 'foo'
   }
-  var controller = Controller(model)
-  test.expect(2)
-  controller.get(foo)
-  var signal = [
-    function (args) {
-      args.state.set('test', 'hest2')
-    }
-  ]
-
-  controller.addSignals({
-    'test': {
-      chain: signal,
-      immediate: true
-    }
+  var computed = Computed(stateDeps, function (state) {
+    return state.foo
   })
-  controller.once('signalEnd', function () {
-    controller.get(foo)
-    test.done()
+  test.equals(computed().get(state), obj)
+  state.foo = obj2
+  Computed.updateCache({
+    foo: true
   })
-  try {
-    controller.getSignals().test()
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-suite['should cache after previously grabbed value change'] = function (test) {
-  var model = Model({
-    foo: 'bar',
-    test: 'hest'
-  })
-  var run = 0
-  var foo = function (get) {
-    run++
-    if (run === 1) {
-      test.equal(get(['test']), 'hest')
-    } else {
-      test.equal(get(['test']), 'hest2')
-    }
-  }
-  var controller = Controller(model)
-  test.expect(2)
-  controller.get(foo)
-  var signal = [
-    function (args) {
-      args.state.set(['test'], 'hest2')
-    }
-  ]
-
-  controller.addSignals({
-    'test': signal
-  })
-  controller.once('signalEnd', function () {
-    controller.get(foo)
-    controller.get(foo)
-    test.done()
-  })
-  controller.getSignals().test({}, {immediate: true})
-}
-
-suite['should handle complex scenario'] = function (test) {
-  var model = Model({
-    data: {
-      messages: {}
-    },
-    lists: {
-      displayedMessagesIds: []
-    }
-  })
-
-  var computed = {
-    displayedMessages: function (get) {
-      return get(['lists', 'displayedMessagesIds']).map(function (id) { return get(['data', 'messages', id]) })
-    },
-    likedMessages: function (get) {
-      var messages = get(['data', 'messages'])
-      return Object.keys(messages).map(function (key) {
-        return messages[key]
-      }).filter(function (message) {
-        return message.liked
-      })
-    }
-  }
-  var controller = Controller(model)
-
-  test.deepEqual(controller.get(computed.displayedMessages), [])
-  test.deepEqual(controller.get(computed.likedMessages), [])
-
-  var signal = [
-    function (args) {
-      args.state.merge(['data', 'messages'], {
-        '123': {title: 'test', liked: true},
-        '456': {title: 'test2', liked: true},
-        '789': {title: 'test3', liked: false},
-        '091': {title: 'test4', liked: false}
-      })
-      args.state.set(['lists', 'displayedMessagesIds'], ['123'])
-    }
-  ]
-
-  controller.addSignals({
-    'test': signal
-  })
-
-  controller.once('signalEnd', function () {
-    test.deepEqual(controller.get(computed.displayedMessages), [{
-      title: 'test',
-      liked: true
-    }])
-    test.equal(controller.get(computed.likedMessages).length, 2)
-    test.done()
-  })
-
-  controller.getSignals().test()
-}
-
-suite['should allow use of other computed'] = function (test) {
-  var model = Model({
-    foo: 'bar'
-  })
-  var bar = function () {
-    return 'foo'
-  }
-  var foo = function (get) {
-    test.equal(get(bar), 'foo')
-  }
-
-  var controller = Controller(model)
-  test.expect(1)
-  controller.get(foo)
-
-  test.done()
-}
-
-suite['should allow use of computed inside actions'] = function (test) {
-  var model = Model({
-    foo: 'bar',
-    test: 'hest'
-  })
-  var foo = function () {
-    return 'bar'
-  }
-  var controller = Controller(model)
-  test.expect(1)
-  controller.get(foo)
-  var signal = [
-    function (args) {
-      test.equal(args.state.get(foo), 'bar')
-      test.done()
-    }
-  ]
-
-  controller.addSignals({
-    'test': signal
-  })
-  controller.getSignals().test({}, {immediate: true})
-}
-
-suite['should allow use of factories'] = function (test) {
-  var runCount = 0
-  var model = Model({
-    foo: 'bar'
-  })
-  var foo = function () {
-    var computed = function () {
-      runCount++
-      return 'foo'
-    }
-    computed.computedRef = JSON.stringify(arguments)
-    return computed
-  }
-  var controller = Controller(model)
-
-  test.expect(1)
-  controller.get(foo('foo'))
-  controller.get(foo('foo'))
-  controller.get(foo('foo2'))
-  test.equals(runCount, 2)
+  test.equals(computed().get(state), obj2)
   test.done()
 }
 

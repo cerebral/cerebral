@@ -1,4 +1,4 @@
-var Controller = require('./../src/index.js')
+var Controller = require('./../src/index.js').Controller
 var suite = {}
 
 suite['should give correct path and value to mutation methods'] = function (test) {

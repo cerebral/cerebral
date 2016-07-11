@@ -1,4 +1,4 @@
-var Controller = require('./../src/index.js')
+var Controller = require('./../src/index.js').Controller
 var suite = {}
 var async = function (cb) {
   setTimeout(cb, 0)
