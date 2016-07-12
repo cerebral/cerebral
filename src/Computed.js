@@ -81,4 +81,10 @@ Computed.updateCache = function (changes) {
   })
 }
 
-module.exports = Computed
+if (process.env.NODE_ENV === 'test') {
+  var testComputed = function Computed (paths, cb) { return cb }
+  testComputed.updateCache = Computed.updateCache
+  module.exports = testComputed
+} else {
+  module.exports = Computed
+}
