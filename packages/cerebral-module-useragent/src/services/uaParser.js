@@ -6,12 +6,13 @@ uaParser.setUA(navigator.userAgent)
 const uaParserMethods = {
   getBrowser: uaParser.getBrowser.bind(uaParser),
   getDevice: uaParser.getDevice.bind(uaParser),
-  getOs: uaParser.getOS.bind(uaParser)
+  getOs: uaParser.getOS.bind(uaParser),
+  parseUserAgent
 }
 
 export default uaParserMethods
 
-export function parseUserAgent (options) {
+function parseUserAgent (options) {
   const parse = options.parse
 
   return Object.keys(parse)

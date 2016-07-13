@@ -1,18 +1,16 @@
 import assign from '101/assign'
 import feature from './services/feature'
-import matchMedia from './services/matchMedia'
 import network from './services/network'
 import {onOfflineChange} from './services/network'
 import uaParser from './services/uaParser'
 import window from './services/window'
+import {getFeatures} from './services/feature'
+import {matchMedia, getMedia} from './services/media'
 
 import offlineChanged from './signals/offlineChanged'
 import windowChanged from './signals/windowChanged'
 
 import {MODULE, addContext} from './helper/module'
-import {getFeatures} from './services/feature'
-import {getMedia} from './services/matchMedia'
-import {parseUserAgent} from './services/uaParser'
 
 const defaultOptions = {
   feature: true,
@@ -34,6 +32,16 @@ const defaultOptions = {
   window: true
 }
 
+const services = {
+  feature,
+  getFeatures,
+  matchMedia,
+  getMedia,
+  network,
+  uaParser,
+  window
+}
+
 export default (userOptions = {}) => {
   const options = {}
   assign(options, defaultOptions, userOptions)
@@ -41,9 +49,9 @@ export default (userOptions = {}) => {
   return (module, controller) => {
     module.alias(MODULE)
 
-    const state = parseUserAgent(options)
-    state.media = getMedia(options)
-    state.feature = getFeatures(options)
+    const state = services.uaParser.parseUserAgent(options)
+    state.media = services.getMedia(options)
+    state.feature = services.getFeatures(options)
     state.window = window.getSpecs()
     state.network = {offline: false}
     module.addState(state)
@@ -53,13 +61,7 @@ export default (userOptions = {}) => {
       windowChanged
     })
 
-    module.addServices({
-      feature,
-      matchMedia,
-      network,
-      uaParser,
-      window
-    })
+    module.addServices(services)
 
     addContext(module, {
       options,

@@ -1,8 +1,6 @@
-import matchMediaPolyfill from 'match-media'
+require('match-media')
 
-matchMediaPolyfill
-
-export default function matchMedia (mediaQueryString) {
+export function matchMedia (mediaQueryString) {
   return window.matchMedia(mediaQueryString)
 }
 
@@ -19,4 +17,9 @@ export function getMedia (options) {
     }, {})
 
   return media
+}
+
+export default {
+  matchMedia,
+  getMedia
 }
