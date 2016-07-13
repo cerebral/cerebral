@@ -39,6 +39,8 @@
     "analyzeCommits": "./sr-prerelease.js"
   },
   "dependencies": {
+    "cerebral-model": "^0.1.1",
+    "cerebral-model-immutable": "^0.1.2",
     "cerebral-operators": "^0.2.1",
     "lodash": "^4.6.1"
   }
