@@ -84,7 +84,7 @@ module.exports = function (context, execution) {
     })
   }
 
-  if (!Boolean(resolve) && utils.isDeveloping()) {
+  if (!resolve && utils.isDeveloping()) {
     setTimeout(function () {
       next.hasRun = true
     }, 0)
