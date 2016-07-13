@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "Classic todomvc application powered with cerebral",
   "scripts": {
-    "start": "webpack-dev-server --progress --colors",
+    "start": "webpack-dev-server --port 3000 --progress --colors",
     "build": "webpack",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist/",
