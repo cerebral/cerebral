@@ -103,5 +103,10 @@ module.exports = {
     }
 
     return extractedProviders
+  },
+  logDepricateArrayPath: function (path) {
+    console.warn(
+      'Using arrays for state paths has been depricated. Use dot seperated string paths instead for ' + path.toString()
+    )
   }
 }

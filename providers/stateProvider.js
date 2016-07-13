@@ -1,3 +1,5 @@
+var logDepricateArrayPath = require('../src/utils').logDepricateArrayPath
+
 module.exports = function (context, execution, controller) {
   var action = execution.action
   var model = controller.getModel()
@@ -9,6 +11,7 @@ module.exports = function (context, execution, controller) {
         var args = [].slice.call(arguments)
         var path = []
         if (args[0] && Array.isArray(args[0])) {
+          logDepricateArrayPath(args[0])
           path = args.shift()
         } else if (args[0] && typeof args[0] === 'string') {
           path = args.shift().split('.')
@@ -28,6 +31,7 @@ module.exports = function (context, execution, controller) {
         var path = []
         var args = [].slice.call(arguments)
         if (Array.isArray(args[0])) {
+          logDepricateArrayPath(args[0])
           path = args.shift()
         } else if (typeof args[0] === 'string') {
           path = args.shift().split('.')
