@@ -3,16 +3,18 @@ import { connect } from 'cerebral-view-react'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
+import RecorderButton from '../RecorderButton'
 import visibleTodos from '../../computed/visibleTodos.js'
 
 export default connect({
   todos: 'app.list.todos',
   recorder: 'recorder',
   isSaving: 'app.new.isSaving',
-  visibleTodos: visibleTodos
+  visibleTodos: visibleTodos()
 }, function App (props) {
   return (
     <div id='todoapp-wrapper'>
+      <RecorderButton />
       <section id='todoapp'>
         <header id='header'>
           <h1>todos</h1>

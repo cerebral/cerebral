@@ -1,6 +1,6 @@
-import computed from 'cerebral-computed'
+import {Computed} from 'cerebral'
 
-export default computed({
+export default Computed({
   todos: 'app.list.todos',
   filter: 'app.footer.filter'
 }, state => {

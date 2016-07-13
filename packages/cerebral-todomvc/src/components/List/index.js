@@ -6,8 +6,8 @@ import isAllChecked from '../../computed/isAllChecked.js'
 import visibleTodos from '../../computed/visibleTodos.js'
 
 export default connect({
-  isAllChecked: isAllChecked,
-  todoKeys: visibleTodos
+  isAllChecked: isAllChecked(),
+  todoKeys: visibleTodos()
 }, class List extends React.Component {
   renderTodo (key) {
     return <Todo key={key} todoKey={key} />

@@ -5,10 +5,9 @@ import 'file?name=[name].[ext]!./index.html'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Controller from 'cerebral'
-import Model from 'cerebral-model-immutable'
-// import Model from 'cerebral-model'
-import { Container } from 'cerebral-view-react'
+import {Controller} from 'cerebral'
+import Model from 'cerebral/models/immutable'
+import {Container} from 'cerebral-view-react'
 
 import App from './components/App'
 import AppModule from './modules/App'

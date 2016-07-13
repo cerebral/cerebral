@@ -1,8 +1,8 @@
-import computed from 'cerebral-computed'
+import {Computed} from 'cerebral'
 import visibleTodos from './visibleTodos'
 
-export default computed({
-  todos: visibleTodos
+export default Computed({
+  todos: visibleTodos()
 }, state => {
   return state.todos.filter(function (todo) {
     return !todo.completed

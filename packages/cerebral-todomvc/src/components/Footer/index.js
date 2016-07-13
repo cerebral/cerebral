@@ -4,7 +4,7 @@ import counts from '../../computed/counts.js'
 
 export default connect({
   filter: 'app.footer.filter',
-  counts: counts
+  counts: counts()
 }, class TodosFooter extends React.Component {
   renderRemainingCount () {
     let count = this.props.counts.remainingCount
