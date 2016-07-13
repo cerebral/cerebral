@@ -6,11 +6,13 @@ import {onOfflineChange} from './services/network'
 import uaParser from './services/uaParser'
 import window from './services/window'
 
-import moduleRegistered from './signals/moduleRegistered'
 import offlineChanged from './signals/offlineChanged'
 import windowChanged from './signals/windowChanged'
 
 import {MODULE, addContext} from './helper/module'
+import {getFeatures} from './services/feature'
+import {getMedia} from './services/matchMedia'
+import {parseUserAgent} from './services/uaParser'
 
 const defaultOptions = {
   feature: true,
@@ -39,23 +41,14 @@ export default (userOptions = {}) => {
   return (module, controller) => {
     module.alias(MODULE)
 
-    module.addState({
-      browser: undefined,
-      device: undefined,
-      feature: {},
-      network: {
-        offline: false
-      },
-      os: undefined,
-      window: {
-        width: undefined,
-        height: undefined,
-        orientation: undefined
-      }
-    })
+    const state = parseUserAgent(options)
+    state.media = getMedia(options)
+    state.feature = getFeatures(options)
+    state.window = window.getSpecs()
+    state.network = {offline: false}
+    module.addState(state)
 
     module.addSignals({
-      moduleRegistered,
       offlineChanged,
       windowChanged
     })
@@ -86,8 +79,6 @@ export default (userOptions = {}) => {
           module.getSignals().windowChanged
         )
       }
-
-      module.getSignals().moduleRegistered()
     })
 
     return {
