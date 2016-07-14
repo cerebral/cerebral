@@ -1,6 +1,6 @@
-import NewTodo from './modules/NewTodo'
-import List from './modules/List'
-import Footer from './modules/Footer'
+import NewTodo from './modules/new'
+import List from './modules/list'
+import Footer from './modules/footer'
 
 export default (options = {}) => {
   return (module) => {

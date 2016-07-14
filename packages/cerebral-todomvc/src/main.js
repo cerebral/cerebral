@@ -10,9 +10,9 @@ import Model from 'cerebral/models/immutable'
 import {Container} from 'cerebral-view-react'
 
 import App from './components/App'
-import AppModule from './modules/App'
 
-import Refs from './modules/Refs'
+import AppModule from './modules/app'
+import Refs from './modules/refs'
 import Devtools from 'cerebral-module-devtools'
 import Recorder from 'cerebral-module-recorder'
 import Router from 'cerebral-module-router'
