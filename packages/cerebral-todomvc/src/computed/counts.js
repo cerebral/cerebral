@@ -22,7 +22,7 @@ export default Computed({
   if (counts.remainingCount === 0 || counts.remainingCount > 1) {
     counts.remainingCountPlural = 'items left'
   } else {
-    counts.remainingCountPlural = 'items left'
+    counts.remainingCountPlural = 'item left'
   }
 
   return counts
