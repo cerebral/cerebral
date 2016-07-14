@@ -1,10 +1,6 @@
 function stopEditingTodo ({input, state}) {
-  let todo = state.select(`app.list.todos.${input.ref}`)
-
-  todo.merge({
-    $isEditing: false
-  })
-  todo.unset('$newTitle')
+  state.set(`app.list.todos.${input.ref}.$isEditing`, false)
+  state.unset(`app.list.todos.${input.ref}.$newTitle`)
 }
 
 export default stopEditingTodo
