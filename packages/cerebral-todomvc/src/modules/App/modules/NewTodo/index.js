@@ -4,8 +4,7 @@ import changeTitle from './chains/changeTitle'
 export default (options = {}) => {
   return (module) => {
     module.addState({
-      title: '',
-      isSaving: false
+      title: ''
     })
 
     module.addSignals({

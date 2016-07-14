@@ -18,13 +18,6 @@ export default connect(props => ({
     this.props.signals.app.list.todoDoubleClicked({
       ref: this.props.todo.$ref
     })
-
-    // FOCUS fix
-    setTimeout(() => {
-      var input = this.refs.edit
-      input.focus()
-      input.value = input.value
-    }, 0)
   }
   onNewTitleChange (event) {
     this.props.signals.app.list.newTitleChanged({

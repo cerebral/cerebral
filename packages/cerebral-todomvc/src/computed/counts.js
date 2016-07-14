@@ -18,8 +18,12 @@ export default Computed({
     remainingCount: 0
   })
 
-  return {
-    remainingCount: counts.remainingCount,
-    completedCount: counts.completedCount
+
+  if (counts.remainingCount === 0 || counts.remainingCount > 1) {
+    counts.remainingCountPlural = 'items left'
+  } else {
+    counts.remainingCountPlural = 'items left'
   }
+
+  return counts
 })
