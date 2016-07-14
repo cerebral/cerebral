@@ -1,6 +1,7 @@
 module.exports = {
   copy: require('cerebral-operators/lib/copy').default,
   debounce: require('cerebral-operators/lib/debounce').default,
+  delay: require('cerebral-operators/lib/delay').default,
   filter: require('cerebral-operators/lib/filter').default,
   set: require('cerebral-operators/lib/set').default,
   throttle: require('cerebral-operators/lib/throttle').default,
