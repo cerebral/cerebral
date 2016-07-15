@@ -1,4 +1,4 @@
-function saveTodo ({input, state, output}) {
+function postTodo ({input, state, output}) {
   // let todo = state.get(`app.list.todos.${input.ref}`)
 
   // Simulating posting the todo.data and get an ID from
@@ -12,6 +12,6 @@ function saveTodo ({input, state, output}) {
   }, 2000)
 }
 
-saveTodo.async = true
+postTodo.async = true
 
-export default saveTodo
+export default postTodo

@@ -1,5 +1,5 @@
 import submitTodo from './chains/submitTodo'
-import changeTitle from './chains/changeTitle'
+import setTitle from './chains/setTitle'
 
 export default (options = {}) => {
   return (module) => {
@@ -9,7 +9,7 @@ export default (options = {}) => {
 
     module.addSignals({
       titleChanged: {
-        chain: changeTitle,
+        chain: setTitle,
         immediate: true
       },
       submitted: submitTodo

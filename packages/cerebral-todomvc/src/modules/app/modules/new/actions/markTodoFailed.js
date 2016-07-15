@@ -1,4 +1,4 @@
-function setError ({input, state}) {
+function markTodoFailed ({input, state}) {
   state.merge(`app.list.todos.${input.ref}`, {
     id: input.id,
     $isSaving: false,
@@ -6,4 +6,4 @@ function setError ({input, state}) {
   })
 }
 
-export default setError
+export default markTodoFailed
