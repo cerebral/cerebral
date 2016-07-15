@@ -13,7 +13,7 @@ function getByPath (path, state) {
 function Computed (paths, cb) {
   return function (props) {
     var deps = typeof paths === 'function' ? paths(props) : paths
-    var cacheKey = JSON.stringify(deps) + (props ? JSON.stringify(props) : '')
+    var cacheKey = JSON.stringify(deps) + (props ? JSON.stringify(props) : '') + cb.toString().replace(/\s/g, '')
     Object.keys(deps).forEach(function (key) {
       if (!Computed.registry[deps[key]]) {
         Computed.registry[deps[key]] = [cacheKey]
