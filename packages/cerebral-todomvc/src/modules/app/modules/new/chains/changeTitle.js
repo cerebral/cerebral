@@ -1,5 +1,5 @@
-import setTitle from './../actions/setTitle.js'
+import copy from 'cerebral/operators/copy'
 
 export default [
-  setTitle
+  copy('input:title', 'state:app.new.title')
 ]

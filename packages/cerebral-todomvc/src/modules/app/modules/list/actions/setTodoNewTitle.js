@@ -1,7 +1,5 @@
 function setTodoNewTitle ({input, state}) {
-  state.merge(`app.list.todos.${input.ref}`, {
-    $newTitle: input.title
-  })
+  state.set(`app.list.todos.${input.ref}.$newTitle`, input.title)
 }
 
 export default setTodoNewTitle
