@@ -12,6 +12,7 @@ function wrapMutators (target, mutators, action, rootPath) {
         var args = [].slice.call(arguments)
         var path = args.shift()
         action.mutations.push({
+          datetime: Date.now(),
           name: targetKey,
           path: typeof path === 'string' ? rootPath.concat(path.split('.')) : rootPath.concat(path),
           args: args
