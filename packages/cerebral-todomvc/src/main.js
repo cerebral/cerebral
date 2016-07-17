@@ -28,7 +28,7 @@ controller.addModules({
     '/': 'app.footer.filterClicked'
   }, {
     onlyHash: true,
-    mapper: { query: true }
+    query: true
   })
 })
 
