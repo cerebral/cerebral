@@ -3,7 +3,7 @@ import set from 'cerebral/operators/set'
 import getNextRef from '../actions/getNextRef'
 import createTodoRecord from '../actions/createTodoRecord.js'
 import postTodo from '../actions/postTodo.js'
-import markTodoSaved from '../actions/markTodoSaved.js'
+import updateTodo from '../actions/updateTodo.js'
 import markTodoFailed from '../actions/markTodoFailed.js'
 
 export default [
@@ -11,7 +11,7 @@ export default [
   createTodoRecord,
   set('app.new.title', ''),
   postTodo, {
-    success: [markTodoSaved],
+    success: [updateTodo],
     error: [markTodoFailed]
   }
 ]

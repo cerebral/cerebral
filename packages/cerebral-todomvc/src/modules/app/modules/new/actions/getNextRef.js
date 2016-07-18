@@ -1,4 +1,4 @@
-function getNextRef ({ output, state, services }) {
+function getNextRef ({ output, services }) {
   output({ ref: services.refs.next() })
 }
 
