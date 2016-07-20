@@ -11,7 +11,7 @@ modules.define('tabs', ['i-bem__dom', 'jquery'], function(provide, BEMDOM, $) {
               this.delMod(this.elem('tab'), 'active')
               this.setMod(active, 'active')
 
-              var image = this.findBlockInside(active, 'image').domElem
+              var image = active.children('.image')
 
               if (image && !image.attr('src')) {
                 image.attr('src', image.attr('data-src'))
