@@ -1,7 +1,0 @@
-({
-  shouldDeps: [
-    'hero',
-    'image',
-    'tabs'
-  ]
-})
