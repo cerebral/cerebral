@@ -1,0 +1,20 @@
+{
+  "name": "cerebral-website",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "mark serve",
+    "predeploy": "mark build",
+    "deploy": "gh-pages -d dist"
+  },
+  "author": "Alexey Gurianov <gurianov@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "bem-components": "^3.0.0",
+    "cssnano": "^3.7.3",
+    "gh-pages": "^0.11.0",
+    "mad-mark": "^2.2.4",
+    "sharps": "^3.0.2"
+  }
+}
