@@ -23,7 +23,7 @@ export default controller
 
 ###### Debugger
 
-![Debugger](http://www.cerebraljs.com/model.gif)
+![Debugger](../public/img/model.gif)
 
 ------
 
@@ -59,7 +59,7 @@ export default [
 
 ###### Debugger
 
-![Debugger](http://www.cerebraljs.com/controller.gif)
+![Debugger](../public/img/controller.gif)
 
 ------
 
@@ -137,6 +137,6 @@ export default connect({
 
 ###### Debugger
 
-![Debugger](http://www.cerebraljs.com/view.gif)
+![Debugger](../public/img/view.gif)
 
 ------

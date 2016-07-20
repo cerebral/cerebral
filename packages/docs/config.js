@@ -20,7 +20,8 @@ module.exports = {
   "posthtmlPlugins": [].concat(
     require('mad-mark').posthtmlPlugins,
     require('./plugins/posthtml-prism'),
-    require('./plugins/posthtml-md-tabs')
+    require('./plugins/posthtml-md-tabs'),
+    require('./plugins/posthtml-images')
   ),
   "postcssPlugins": [
     require('sharps').postcss({
