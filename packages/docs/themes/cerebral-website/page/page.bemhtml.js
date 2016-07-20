@@ -5,6 +5,9 @@ block('page')(
       'https://fonts.googleapis.com/css?family=Roboto+Mono'
     ].map(function (url) { return { elem: 'css', url: url } })
 
+    var base = this._layout === 'root' ? './' : '../'
+    this.ctx.favicon = base + 'favicon.ico'
+
     return applyNext();
   }),
   content()(function() {
