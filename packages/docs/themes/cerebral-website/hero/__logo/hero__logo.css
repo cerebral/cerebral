@@ -1,0 +1,11 @@
+.hero__logo {
+  height: 50%;
+  margin: 20px 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) { 
+  .hero__logo img {
+    height: 200px;
+  }
+}

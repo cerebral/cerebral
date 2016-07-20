@@ -1,0 +1,15 @@
+.hero__buttons {
+  padding: 20px;
+}
+
+.hero__buttons .button {
+  margin: 0 8px;
+}
+
+@media (max-width: 600px) { 
+  .hero__buttons .button {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

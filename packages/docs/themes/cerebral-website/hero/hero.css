@@ -1,0 +1,9 @@
+.hero {
+  display: flex;
+  height: 75vh;
+  min-height: 435px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  position: relative;
+}
