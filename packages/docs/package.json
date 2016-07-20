@@ -17,6 +17,7 @@
     "entities": "^1.1.1",
     "gh-pages": "^0.11.0",
     "mad-mark": "^2.2.4",
+    "postcss-url": "^5.1.2",
     "prismjs": "^1.5.1",
     "sharps": "^3.0.2"
   }

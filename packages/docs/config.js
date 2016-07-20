@@ -30,6 +30,7 @@ module.exports = {
       flex: 'flex'
     }),
     require('autoprefixer')(),
+    require('postcss-url')({ url: 'inline' }),
     require('cssnano')()
   ]
 }
