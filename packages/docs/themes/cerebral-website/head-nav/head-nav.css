@@ -1,0 +1,12 @@
+.head-nav {
+  height: 40px;
+}
+
+.head-nav__home {
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 500;
+  color: #92dff0;
+  margin-left: 20px;
+  text-decoration: none;
+}
