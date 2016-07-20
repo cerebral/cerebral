@@ -13,8 +13,10 @@
   "dependencies": {
     "bem-components": "^3.0.0",
     "cssnano": "^3.7.3",
+    "entities": "^1.1.1",
     "gh-pages": "^0.11.0",
     "mad-mark": "^2.2.4",
+    "prismjs": "^1.5.1",
     "sharps": "^3.0.2"
   }
 }
