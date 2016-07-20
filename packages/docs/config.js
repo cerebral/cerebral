@@ -54,6 +54,7 @@ module.exports = {
       gutter: '0',
       flex: 'flex'
     }),
+    require('autoprefixer')(),
     require('cssnano')()
   ]
 };
