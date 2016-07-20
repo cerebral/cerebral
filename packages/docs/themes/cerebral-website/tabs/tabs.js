@@ -6,9 +6,16 @@ modules.define('tabs', ['i-bem__dom', 'jquery'], function(provide, BEMDOM, $) {
         'js': {
           'inited': function() {
             this.findBlockInside('radio-group').on('change', function (e) {
-              var index = e.target.getVal()
+              var active = $(this.elem('tab')[e.target.getVal()])
+
               this.delMod(this.elem('tab'), 'active')
-              this.setMod($(this.elem('tab')[index]), 'active')
+              this.setMod(active, 'active')
+
+              var image = this.findBlockInside(active, 'image').domElem
+
+              if (image && !image.attr('src')) {
+                image.attr('src', image.attr('data-src'))
+              }
             }, this)
           }
         }
