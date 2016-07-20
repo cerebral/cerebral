@@ -1,11 +1,3 @@
-block('page').mod('layout', 'root').elem('header')(
-  content()({ block: 'hero' })
-)
-
-block('page').mod('layout', 'root').elem('footer')(
-  replace()({ block: 'footer', mix: { block: 'page', elem: 'footer' } })
-)
-
 block('page').mod('layout', 'root').elem('content')(
   content()(function() {
     var md = applyNext()

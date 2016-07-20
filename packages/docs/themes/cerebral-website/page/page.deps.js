@@ -4,6 +4,7 @@
     'heading',
     'code',
     'prism',
-    { elems: ['header', 'content', 'head'] }
+    'tabs',
+    { elems: ['header', 'content', 'footer', 'head'] }
   ]
 })
