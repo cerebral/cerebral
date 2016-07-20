@@ -4,3 +4,7 @@
   box-sizing: border-box;
   margin: 1em 0 1em;
 }
+
+.tabs__tab > img {
+  width: 100%
+}
