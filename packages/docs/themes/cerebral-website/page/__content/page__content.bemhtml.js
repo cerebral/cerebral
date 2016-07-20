@@ -1,4 +1,29 @@
-block('page').mod('layout', 'root').elem('content')(
+block('page').elem('content').match(function () {
+  return this.mods.layout !== 'root'
+})(
+  content()(function () {
+    return [
+      {
+        block: 'row',
+        content: [
+          { 
+            elem: 'col',
+            elemMods: { sw: 24, lw: 5 },
+            content: { block: 'side-nav' }
+          },
+          {
+            elem: 'col',
+            elemMods: { sw: 24, lw: 18, lo: 1 },
+            content: applyNext()
+          },
+
+        ]
+      }
+    ]
+  })
+)
+
+block('page').elem('content').mod('layout', 'root')(
   content()(function() {
     var md = applyNext()
     var lastRowIndex = -1

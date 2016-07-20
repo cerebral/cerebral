@@ -1,5 +1,6 @@
 ({
   shouldDeps: [
-    'hero'
+    'hero',
+    'head-nav'
   ]
 })

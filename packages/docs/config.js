@@ -25,7 +25,7 @@ module.exports = {
   "postcssPlugins": [
     require('sharps').postcss({
       columns: 24,
-      maxWidth: '960px',
+      maxWidth: '1100px',
       gutter: '0',
       flex: 'flex'
     }),
