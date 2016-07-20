@@ -1,5 +1,6 @@
 ({
   shouldDeps: [
-    'side-nav'
+    'side-nav',
+    { elem: 'edit' }
   ]
 })

@@ -14,7 +14,9 @@ block('page').elem('content').match(function () {
           {
             elem: 'col',
             elemMods: { sw: 24, lw: 18, lo: 1 },
-            content: applyNext()
+            content: [
+              { block: 'page', elem: 'edit' }
+            ].concat(applyNext())
           },
 
         ]
