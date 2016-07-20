@@ -6,10 +6,16 @@
   margin: 0 8px;
 }
 
-@media (max-width: 600px) { 
+@media (max-width: 600px) {
+  .hero__buttons {
+    width: 100%;
+    box-sizing: border-box;
+  } 
+
   .hero__buttons .button {
     display: block;
     width: 100%;
+    margin: 0;
     box-sizing: border-box;
   }
 }
