@@ -3,6 +3,6 @@
     'footer',
     'heading',
     'code',
-    { elems: ['header', 'head'] }
+    { elems: ['header', 'content', 'head'] }
   ]
 })
