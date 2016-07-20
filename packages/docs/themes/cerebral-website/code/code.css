@@ -9,4 +9,5 @@
   margin: 0;
   white-space: pre;
   display: block;
+  overflow-x: auto;
 }
