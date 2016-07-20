@@ -1,0 +1,12 @@
+.code {
+  padding: 4px 8px;
+  font-family: Roboto Mono,Monaco,Andale Mono,Ubuntu Mono,monospace;
+  font-size: 14px;
+  color: #fff;
+  line-height: 24px;
+  background: #223338;
+  border-radius: 4px;
+  margin: 0;
+  white-space: pre;
+  display: block;
+}

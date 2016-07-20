@@ -3,8 +3,9 @@ With Cerebral you define the state of your application as a single model: a sing
 
 All state changes are reflected live in the debugger, giving you a complete picture of how your application behaves. You can even edit the state tree directly and see the changes immediately in your application's UI.
 
+###### controller.js
+
 ```js
-// controller.js
 import Model from 'cerebral/models/immutable'
 import {Controller} from 'cerebral'
 
@@ -20,7 +21,11 @@ const controller = Controller(model)
 export default controller
 ```
 
+###### Debugger
+
 ![Debugger](http://www.cerebraljs.com/model.gif)
+
+------
 
 ## Controller
 
@@ -30,8 +35,9 @@ State changes are modeled using **signals**. Signals execute **chains** with **a
 
 The debugger knows when signals trigger and what data goes through them, giving you great insight into your application.
 
+###### submitNewItemTitle.js
+
 ```js
-// submitNewItemTitle.js
 import {set} from 'cerebral/operators'
 import addItem from '../actions/addItem'
 
@@ -50,7 +56,12 @@ export default [
   set('state:isSaving', false)
 ]
 ```
+
+###### Debugger
+
 ![Debugger](http://www.cerebraljs.com/controller.gif)
+
+------
 
 ## View
 
@@ -58,8 +69,9 @@ Components get data from one or more state paths. When a change occurs in the mo
 
 The debugger lets you know all the current active state paths and what components are rendered when these state paths change.
 
+###### React
+
 ```js
-// React
 import React from 'react'
 import {connect} from 'cerebral-view-react'
 
@@ -80,8 +92,9 @@ export default connect({
 )
 ```
 
+###### Snabbdom
+
 ```js
-// Snabbdom
 import {connect, h} from 'cerebral-view-snabbdom'
 
 export default connect({
@@ -99,8 +112,9 @@ export default connect({
 )
 ```
 
+###### Inferno
+
 ```js
-// Inferno
 import Inferno from 'inferno'
 import {connect} from 'cerebral-view-inferno'
 
@@ -121,4 +135,8 @@ export default connect({
 )
 ```
 
+###### Debugger
+
 ![Debugger](http://www.cerebraljs.com/view.gif)
+
+------
