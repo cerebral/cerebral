@@ -1,5 +1,6 @@
 .tabs__tab {
   display: none;
   width: 100%;
+  box-sizing: border-box;
   margin: 1em 0 1em;
 }
