@@ -1,5 +1,10 @@
 .head-nav {
+  position: fixed;
   height: 40px;
+  background-color: #00a1c9;
+  width: 100%;
+  z-index: 1;
+  box-shadow: 0 5px 20px 5px rgba(0,0,0,.15);
 }
 
 .head-nav__home {
