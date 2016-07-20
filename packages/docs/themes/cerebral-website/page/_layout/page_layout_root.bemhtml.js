@@ -14,7 +14,7 @@ block('page').mod('layout', 'root').elem('content')(
     var content = []
 
     md.forEach(function (node) {
-      if (node.tag === 'h2') {
+      if (node && node.tag === 'h2') {
         lastRowIndex++
         even = !!(lastRowIndex % 2)
         data = [node]
@@ -30,15 +30,12 @@ block('page').mod('layout', 'root').elem('content')(
             }, {
               elem: 'col',
               elemMods: { sw: 24, lw: 11, lo: even || 2, lof: even, xlof: even, xxlof: even },
-              content: {
-                block: 'tabs',
-                content: tabs
-              }
+              content: tabs
             }
           ]
         })
-      } else if (node.tag === 'pre' || node && node.content && node.content[0].tag === 'img') {
-        tabs.push(node.tag === 'pre' ? node : node.content[0])
+      } else if (node && node.block === 'tabs') {
+        tabs.push(node)
       } else {
         data.push(node)
       }

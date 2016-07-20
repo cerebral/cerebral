@@ -2,7 +2,7 @@
   shouldDeps: [
     'footer',
     'heading',
-    'pre',
+    'code',
     { elems: ['header', 'head'] }
   ]
 })
