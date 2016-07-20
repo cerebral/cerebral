@@ -11,6 +11,7 @@
   "author": "Alexey Gurianov <gurianov@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "autoprefixer": "^6.3.7",
     "bem-components": "^3.0.0",
     "cssnano": "^3.7.3",
     "entities": "^1.1.1",
