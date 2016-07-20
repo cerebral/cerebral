@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "mark serve",
-    "predeploy": "mark build",
+    "predeploy": "mark build && cp -R public/* dist/",
     "deploy": "gh-pages -d dist"
   },
   "author": "Alexey Gurianov <gurianov@gmail.com>",
