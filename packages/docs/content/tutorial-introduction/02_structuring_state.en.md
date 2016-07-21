@@ -1,3 +1,7 @@
+---
+title: Structuring state
+---
+
 ## Structuring state
 
 In a Cerebral application all the state of your application exists in the a model we call "the state tree". This concept helps you create a mental image of all the state in your application, it being a list of users or what page is currently active.
@@ -31,3 +35,5 @@ It can often be a good idea to start any implementation by defining state struct
 
 #### Challenge
 Try to add a new state called **title** with some text. Then try to display that in the component.
+
+[Next](./03_defining_signals.en.md)

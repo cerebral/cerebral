@@ -1,6 +1,7 @@
 ---
 title: Introduction
 ---
+
 ## Introduction
 
 Make sure you fulfill these requirements:
@@ -49,3 +50,5 @@ Have a look around in the debugger and play around with the demo application to 
 
 #### Best practices
 In this section we fired up the Cerebral demo. Normally you can use the **cerebral-cli** tool to set up a basic project with Webpack. You can choose to run a webpack development server or use a Node express server to serve your application. The CLI will also help you build and prepare your application for production. Using the **cerebral-cli** is considered a best practice to get a project going, but you are of course completely free to do whatever you want from that point. The rest of the tutorials are custom projects, to read more about CLI go to "Get Started" section.
+
+[Next](./02_structuring_state.en.md)
