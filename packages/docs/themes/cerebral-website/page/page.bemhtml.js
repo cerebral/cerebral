@@ -8,6 +8,20 @@ block('page')(
     var base = this._layout === 'root' ? './' : '../'
     this.ctx.favicon = base + 'favicon.ico'
 
+    var data = this._data || {}
+
+    // HACK: to simplify meta lookup by page name
+    this._layouts = Object.keys(data).reduce(function (layouts, layoutName) {
+      layouts[layoutName] = data[layoutName].reduce(function (pages, page) {
+        // TODO: fix overwrite when i18n enabled
+        pages[page.name] = page
+
+        return pages
+      }, {})
+
+      return layouts
+    }, {})
+
     return applyNext();
   }),
   content()(function() {

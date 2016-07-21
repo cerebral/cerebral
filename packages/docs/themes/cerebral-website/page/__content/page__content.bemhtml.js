@@ -2,6 +2,14 @@ block('page').elem('content').match(function () {
   return this.mods.layout !== 'root'
 })(
   content()(function () {
+    var content = [ { block: 'page', elem: 'edit' } ].concat(this.ctx.content.filter(function (node, index) {
+      return !(node && node.block === 'next')
+    }))
+
+    var next = this.ctx.content.filter(function (node, index) {
+      return node && node.block === 'next'
+    })
+
     return [
       {
         block: 'row',
@@ -14,21 +22,18 @@ block('page').elem('content').match(function () {
           {
             elem: 'col',
             elemMods: { sw: 24, lw: 18, lo: 1 },
-            content: [
-              { block: 'page', elem: 'edit' },
-              applyNext()
-            ]
+            content: content
           },
         ]
       },
-      {
+      next && {
         block: 'row',
         mods: { sar: true },
         content: [
           { 
             elem: 'col',
             elemMods: { sw: 8 },
-            content: { block: 'next' }
+            content: next
           }
         ]
       }

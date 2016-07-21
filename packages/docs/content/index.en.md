@@ -5,8 +5,8 @@ side-nav:
 ---
 
 * [Try the demo](http://cerebral.github.io/cerebral-todomvc/)
-* [Tutorial](./tutorial-introduction/introduction.en.md)
-* [Get Started](./get-started/get-started.en.md)
+* [Tutorial](./tutorial-introduction/)
+* [Get Started](./get-started/)
 
 ## Model
 With Cerebral you define the state of your application as a single model: a single state tree. This state tree manages *all* application state, whether from a server, like a list of users, or client side state, like the currently selected tab of a UI.
