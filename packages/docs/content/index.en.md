@@ -1,3 +1,9 @@
+---
+side-nav:
+  - tutorial-introduction
+  - get-started
+---
+
 * [Try the demo](http://cerebral.github.io/cerebral-todomvc/)
 * [Tutorial](./tutorial-introduction/introduction.en.md)
 * [Get Started](./get-started/get-started.en.md)

@@ -1,4 +1,10 @@
-Article in en
-=================
+---
+redirect: ./get-started
+title: 'Get started'
+pages:
+  - [get-started, 'Get started']
+---
 
-Any content in markdown goes here...
+## Get started
+
+* [Get started](./get-started.en.md)
