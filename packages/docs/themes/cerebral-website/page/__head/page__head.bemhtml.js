@@ -17,3 +17,13 @@ block('page').elem('head')(
     ]
   })
 )
+
+block('page').elem('head').match(function (){
+  return this._meta && this._meta.redirect
+})(
+  content()(function () {
+    return applyNext().concat([
+      { elem: 'meta', attrs: { 'http-equiv': 'refresh', content: '0; url="' + this._meta.redirect + '.html"' } }
+    ])
+  })
+)
