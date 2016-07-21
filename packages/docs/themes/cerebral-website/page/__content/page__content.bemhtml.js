@@ -15,10 +15,21 @@ block('page').elem('content').match(function () {
             elem: 'col',
             elemMods: { sw: 24, lw: 18, lo: 1 },
             content: [
-              { block: 'page', elem: 'edit' }
-            ].concat(applyNext())
+              { block: 'page', elem: 'edit' },
+              applyNext()
+            ]
           },
-
+        ]
+      },
+      {
+        block: 'row',
+        mods: { sar: true },
+        content: [
+          { 
+            elem: 'col',
+            elemMods: { sw: 8 },
+            content: { block: 'next' }
+          }
         ]
       }
     ]

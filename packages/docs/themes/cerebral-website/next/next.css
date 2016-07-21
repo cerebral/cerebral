@@ -1,0 +1,16 @@
+.next {
+  display: block;
+  background-color: #00a1c9;
+  border-radius: 4px;
+  padding: 8px 16px 8px 64px;
+}
+
+.next__label {
+  color: #92dff0;
+  text-decoration: none;
+}
+
+.next__title {
+  color: #fff;
+  text-decoration: none;
+}
