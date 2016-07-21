@@ -9,6 +9,7 @@
   font-weight: 400;
   color: #223338;
   min-height: 100vh;
+  overflow-y: scroll;
 }
 
 .page__content {
