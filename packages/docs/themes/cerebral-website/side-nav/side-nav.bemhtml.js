@@ -6,41 +6,31 @@ block('side-nav')(
       block: 'menu',
       mods: { theme: 'islands', size: 'xl', mode: 'radio' },
       val: [this._layout, this._name].join('/'),
-      content: Object.keys(data).map(function (layout) {
-        if (layout === 'root') return
-        if (data[layout].length === 1) {
-          var page = data[layout][0]
-
+      content: data.root[0].meta['side-nav']
+        .filter(function (layout) {
+          var index = data[layout].filter(function (page) { return page.name === 'index' })[0]
+          return index.meta.pages && index.meta.pages.length 
+        })
+        .map(function (layout) {
+          var index = data[layout].filter(function (page) { return page.name === 'index' })[0]
+          var pages = index.meta.pages
           return {
-            block: 'menu-item',
-            mods: { type: 'link' },
-            val: [page.layout, page.name].join('/'),
-            content: {
-                block: 'link',
-                url: '../' + page.layout + '/' + page.name + '.html',
-                content: layout
-            }
+              elem: 'group',
+              title: index.meta.title || layout,
+              content: pages.map(function (page) {
+                return {
+                  block: 'menu-item',
+                  mods: { type: 'link' },
+                  val: [layout, page[0]].join('/'),
+                  content: {
+                    block: 'link',
+                    url: '../' + layout + '/' + page[0] + '.html',
+                    content: page[1] || page[0]
+                  }
+                }
+              })
           }
-        }
-        return {
-          elem: 'group',
-          title: layout,
-          content: data[layout].map(function (page) {
-            if (page.name === 'index') return
-
-            return {
-              block: 'menu-item',
-              mods: { type: 'link' },
-              val: [page.layout, page.name].join('/'),
-              content: {
-                 block: 'link',
-                 url: '../' + page.layout + '/' + page.name + '.html',
-                 content: page.name
-              }
-            }
-          }).filter(function (i) { return !!i })
-        }
-      }).filter(function (i) { return !!i }) // fix menu.bemhtml issues
+        })
     }
   })
 )
