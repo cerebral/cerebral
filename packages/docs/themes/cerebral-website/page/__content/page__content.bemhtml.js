@@ -54,9 +54,9 @@ block('page').elem('content').mod('layout', 'root')(
           ]
         })
       } else if (node && node.block === 'tabs') {
-        tabs.push(node)
+        tabs && tabs.push(node)
       } else {
-        data.push(node)
+        data && data.push(node)
       }
     })
     return content
