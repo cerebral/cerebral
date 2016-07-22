@@ -1,5 +1,5 @@
 ---
-redirect: ./01_next_step.en.md
+redirect: ./01_next_step
 title: 'Tutorial: Next step'
 ---
 
