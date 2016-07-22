@@ -1,10 +1,11 @@
 import {Computed} from 'cerebral'
-import visibleTodos from './visibleTodos'
+import visibleTodosKeys from './visibleTodosKeys'
 
 export default Computed({
-  todos: visibleTodos()
+  visibleTodosKeys: visibleTodosKeys(),
+  todos: 'app.list.todos'
 }, state => {
-  return state.todos.filter(function (todo) {
-    return !todo.completed
-  }).length === 0 && state.todos.length !== 0
+  return state.visibleTodosKeys.filter(function (key) {
+    return !state.todos[key].completed
+  }).length === 0 && state.visibleTodosKeys.length !== 0
 })
