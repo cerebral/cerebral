@@ -92,4 +92,30 @@ suite['should return new result when cache is cleared'] = function (test) {
   test.done()
 }
 
+suite['should support nested computed'] = function (test) {
+  reset()
+  var state = {
+    foo: 'bar'
+  }
+  var computedA = Computed({
+    foo: 'foo'
+  }, function (state) {
+    return state.foo.toUpperCase()
+  })
+  var computedB = Computed({
+    foo: computedA()
+  }, function (state) {
+    return state.foo + 'woop'
+  })
+
+  test.equals(computedB().get(state), 'BARwoop')
+  state.foo = 'foo'
+  Computed.updateCache({
+    foo: true
+  })
+  test.equals(computedA().get(state), 'FOO')
+  test.equals(computedB().get(state), 'FOOwoop')
+  test.done()
+}
+
 module.exports = { computed: suite }
