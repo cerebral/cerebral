@@ -1,6 +1,6 @@
 ---
 redirect: ./01_introduction
-title: 'Tutorial: Inroduction'
+title: 'Tutorial: Introduction'
 ---
 
 ## Tutorial: Introduction
