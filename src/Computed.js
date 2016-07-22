@@ -10,17 +10,24 @@ function getByPath (path, state) {
   return currentPath
 }
 
+function traverseDepsMap (deps, cacheKey) {
+  Object.keys(deps).forEach(function (key) {
+    if (deps[key].getDepsMap) {
+      traverseDepsMap(deps[key].getDepsMap(), cacheKey)
+    } else if (!Computed.registry[deps[key]]) {
+      Computed.registry[deps[key]] = [cacheKey]
+    } else if (Computed.registry[deps[key]].indexOf(cacheKey) === -1) {
+      Computed.registry[deps[key]] = Computed.registry[deps[key]].concat(cacheKey)
+    }
+  })
+}
+
 function Computed (paths, cb) {
   return function (props) {
     var deps = typeof paths === 'function' ? paths(props) : paths
     var cacheKey = JSON.stringify(deps) + (props ? JSON.stringify(props) : '') + cb.toString().replace(/\s/g, '')
-    Object.keys(deps).forEach(function (key) {
-      if (!Computed.registry[deps[key]]) {
-        Computed.registry[deps[key]] = [cacheKey]
-      } else if (Computed.registry[deps[key]].indexOf(cacheKey) === -1) {
-        Computed.registry[deps[key]] = Computed.registry[deps[key]].concat(cacheKey)
-      }
-    })
+    traverseDepsMap(deps, cacheKey)
+
     return {
       getDepsMap: function () {
         return deps
