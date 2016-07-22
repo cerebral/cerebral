@@ -52,4 +52,4 @@ Make your components as dumb as possible. They should only define state dependen
 #### Challenge
 Create a new component called **Items** and move the UI description into that, also moving the state dependency path for the items. Make sure you import the component into App and make it a child.
 
-[Next](../get-started/get-started.en.md)
+[Next](../tutorial-next-step/01_next_step.en.md)

@@ -1,6 +1,7 @@
 ---
 side-nav:
   - tutorial-introduction
+  - tutorial-next-step
   - get-started
 ---
 
