@@ -2,10 +2,10 @@ import React from 'react'
 import { connect } from 'cerebral-view-react'
 
 export default connect({
-  title: 'app.new.title'
+  title: 'app.newTodoTitle'
 }, {
-  titleChanged: 'app.new.titleChanged',
-  submitted: 'app.new.submitted'
+  titleChanged: 'app.newTodoTitleChanged',
+  submitted: 'app.newTodoSubmitted'
 },
   function NewTodo ({ isSaving, title, titleChanged, submitted }) {
     return (

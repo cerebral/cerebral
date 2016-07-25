@@ -1,6 +1,4 @@
 function postTodo ({input, state, output}) {
-  // let todo = state.get(`app.list.todos.${input.ref}`)
-
   // Simulating posting the todo.data and get an ID from
   // the server. We resolve with the new id
   setTimeout(function () {
@@ -13,5 +11,6 @@ function postTodo ({input, state, output}) {
 }
 
 postTodo.async = true
+postTodo.outputs = ['success', 'error']
 
 export default postTodo

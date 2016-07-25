@@ -1,10 +1,10 @@
 import {Computed} from 'cerebral'
 
 export default Computed({
-  todos: 'app.list.todos'
+  todos: 'app.todos'
 }, state => {
-  let counts = Object.keys(state.todos).reduce(function (counts, key) {
-    let todo = state.todos[key]
+  return Object.keys(state.todos).reduce(function (counts, ref) {
+    let todo = state.todos[ref]
 
     if (todo.completed) {
       counts.completedCount++
@@ -17,13 +17,4 @@ export default Computed({
     completedCount: 0,
     remainingCount: 0
   })
-
-
-  if (counts.remainingCount === 0 || counts.remainingCount > 1) {
-    counts.remainingCountPlural = 'items left'
-  } else {
-    counts.remainingCountPlural = 'item left'
-  }
-
-  return counts
 })

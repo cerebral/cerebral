@@ -1,38 +1,65 @@
 import React from 'react'
-import { connect, Link } from 'cerebral-view-react'
+import {connect} from 'cerebral-view-react'
 import counts from '../../computed/counts.js'
 import cn from 'classnames'
 
-function CompletedButton({ completedCount, onClick }) {
-  return (
-    <button id='clear-completed' onClick={onClick}>
-      Clear completed ({completedCount})
-    </button>
-  )
-}
-
 export default connect({
-  filter: 'app.footer.filter',
+  filter: 'app.filter',
   counts: counts()
 }, {
-  clearCompletedClicked: 'app.footer.clearCompletedClicked'
+  filterClicked: 'app.filterClicked',
+  clearCompletedClicked: 'app.clearCompletedClicked'
 },
-  function Footer ({ filter, counts, clearCompletedClicked }) {
+  function Footer ({ filter, counts, filterClicked, clearCompletedClicked }) {
+
+    let countLabel = 'item left';
+    if (counts.remainingCount === 0 || counts.remainingCount > 1) {
+      countLabel = 'items left'
+    }
+
     return (
       <footer id='footer'>
-        <span id='todo-count'><strong>{counts.remainingCount} {counts.remainingCountPlural}</strong></span>
+        <span id='todo-count'><strong>{counts.remainingCount} {countLabel}</strong></span>
         <ul id='filters'>
           <li>
-            <Link className={cn({ selected: filter === 'all' })} signal='app.footer.filterClicked'>All</Link>
+            <a
+              onClick={() => filterClicked({
+                filter: 'all'
+              })}
+              className={cn({ selected: filter === 'all' })}
+            >
+              All
+            </a>
           </li>
           <li>
-            <Link className={cn({ selected: filter === 'active' })} signal='app.footer.filterClicked' params={{filter: 'active'}}>Active</Link>
+            <a
+              onClick={() => filterClicked({
+                filter: 'active'
+              })}
+              className={cn({ selected: filter === 'active' })}
+            >
+              Active
+            </a>
           </li>
           <li>
-            <Link className={cn({ selected: filter === 'completed' })} signal='app.footer.filterClicked' params={{filter: 'completed'}}>Completed</Link>
+            <a
+              onClick={() => filterClicked({
+                filter: 'completed'
+              })}
+              className={cn({ selected: filter === 'completed' })}
+            >
+              Completed
+            </a>
           </li>
         </ul>
-        {counts.completedCount ? <CompletedButton completedCount={counts.completedCount} onClick={() => clearCompletedClicked()} /> : null}
+        {
+          counts.completedCount ?
+            <button id='clear-completed' onClick={() => clearCompletedClicked()}>
+              Clear completed ({counts.completedCount})
+            </button>
+          :
+            null
+        }
       </footer>
     )
   }

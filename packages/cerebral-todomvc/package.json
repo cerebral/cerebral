@@ -28,7 +28,7 @@
     "cerebral-addons": "^0.6.0",
     "cerebral-module-devtools": "^0.7.0",
     "cerebral-module-recorder": "^0.6.0",
-    "cerebral-module-router": "^0.16.0",
+    "cerebral-module-router": "^0.16.1",
     "cerebral-view-react": "^0.12.4",
     "classnames": "^2.2.5",
     "css-loader": "^0.23.1",
@@ -38,6 +38,7 @@
     "style-loader": "^0.13.1",
     "todomvc-app-css": "^1.0.4",
     "todomvc-common": "^1.0.2",
+    "uuid": "^2.0.2",
     "webpack": "^1.13.1",
     "webpack-dev-server": "^1.14.1"
   },

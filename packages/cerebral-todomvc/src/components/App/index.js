@@ -4,13 +4,13 @@ import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 import RecorderButton from '../RecorderButton'
-import visibleTodosKeys from '../../computed/visibleTodosKeys.js'
+import visibleTodosRefs from '../../computed/visibleTodosRefs.js'
 
 export default connect({
-  todos: 'app.list.todos',
+  todos: 'app.todos',
   recorder: 'recorder',
-  isSaving: 'app.new.isSaving',
-  visibleTodosKeys: visibleTodosKeys()
+  isSaving: 'app.isSaving',
+  visibleTodosRefs: visibleTodosRefs()
 },
   function App (props) {
     return (
@@ -22,7 +22,7 @@ export default connect({
             <NewTodoForm />
           </header>
 
-          {props.visibleTodosKeys.length ? <TodosList /> : null}
+          {props.visibleTodosRefs.length ? <TodosList /> : null}
           {Object.keys(props.todos).length ? <TodosFooter /> : null}
         </section>
         <footer id='info'>

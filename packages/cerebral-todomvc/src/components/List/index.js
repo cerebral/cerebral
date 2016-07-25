@@ -3,15 +3,15 @@ import Todo from '../Todo'
 import { connect } from 'cerebral-view-react'
 
 import isAllChecked from '../../computed/isAllChecked.js'
-import visibleTodosKeys from '../../computed/visibleTodosKeys.js'
+import visibleTodosRefs from '../../computed/visibleTodosRefs.js'
 
 export default connect({
   isAllChecked: isAllChecked(),
-  todoKeys: visibleTodosKeys()
+  todoRefs: visibleTodosRefs()
 }, {
-  toggleAllChanged: 'app.list.toggleAllChanged'
+  toggleAllChanged: 'app.toggleAllChanged'
 },
-  function List({ isAllChecked, todoKeys, toggleAllChanged }) {
+  function List({ isAllChecked, todoRefs, toggleAllChanged }) {
     return (
       <section id='main'>
         <input
@@ -23,7 +23,7 @@ export default connect({
           Mark all as complete
         </label>
         <ul id='todo-list'>
-          {todoKeys.map(key => <Todo key={key} todoKey={key} />)}
+          {todoRefs.map(ref => <Todo key={ref} todoRef={ref} />)}
         </ul>
       </section>
     )
