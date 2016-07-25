@@ -112,10 +112,9 @@ module.exports.ServerController = function (state) {
     accessors: {
       get: function (path) {
         path = typeof path === 'string' ? path.split('.') : path
-        while (path.length) {
-          state = state[path.shift()]
-        }
-        return state
+        return path.reduce(function (currentState, key) {
+          return currentState[key]
+        }, state)
       }
     }
   }
