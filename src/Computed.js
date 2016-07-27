@@ -10,14 +10,23 @@ function getByPath (path, state) {
   return currentPath
 }
 
+function cleanPath (path) {
+  if (Array.isArray(path)) {
+    path = path.join('.')
+  }
+
+  return path.replace(/\.\*\*|\.\*/, '')
+}
+
 function traverseDepsMap (deps, cacheKey) {
   Object.keys(deps).forEach(function (key) {
-    if (deps[key].getDepsMap) {
-      traverseDepsMap(deps[key].getDepsMap(), cacheKey)
-    } else if (!Computed.registry[deps[key]]) {
-      Computed.registry[deps[key]] = [cacheKey]
-    } else if (Computed.registry[deps[key]].indexOf(cacheKey) === -1) {
-      Computed.registry[deps[key]] = Computed.registry[deps[key]].concat(cacheKey)
+    var depsKey = deps[key].getDepsMap ? deps[key] : cleanPath(deps[key])
+    if (depsKey.getDepsMap) {
+      traverseDepsMap(depsKey.getDepsMap(), cacheKey)
+    } else if (!Computed.registry[depsKey]) {
+      Computed.registry[depsKey] = [cacheKey]
+    } else if (Computed.registry[depsKey].indexOf(cacheKey) === -1) {
+      Computed.registry[depsKey] = Computed.registry[depsKey].concat(cacheKey)
     }
   })
 }
@@ -39,8 +48,8 @@ function Computed (paths, cb) {
 
         var depsProps = Object.keys(deps).reduce(function (props, key) {
           if (typeof deps[key] === 'string' || Array.isArray(deps[key])) {
-            var path = typeof deps[key] === 'string' ? deps[key].split('.') : deps[key].slice()
-            props[key] = getByPath(path, passedState)
+            var path = cleanPath(deps[key])
+            props[key] = getByPath(path.split('.'), passedState)
           } else {
             props[key] = deps[key].get(passedState)
           }
