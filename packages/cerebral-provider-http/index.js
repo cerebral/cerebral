@@ -9,13 +9,13 @@ var configIndex = {
   patch: 2
 };
 
-module.exports = function (options) {
+var modulePath = null;
+
+function HttpModule (options) {
   options = options || {};
   return function (module, controller) {
 
-    controller.addContextProvider({
-      'cerebral-module-http': module.path
-    });
+    modulePath = module.path
 
     // Convert response to {result: response.data}
     var convert = function (services, key) {
@@ -66,3 +66,23 @@ module.exports = function (options) {
 
   };
 };
+
+module.exports = HttpModule;
+
+module.exports.httpGet = function httpGet(url) {
+  function action(context) {
+    var services = context.services;
+    var service = modulePath.reduce(function (currentService, key) {
+      return currentService[key];
+    }, services);
+
+    service.get(url)
+      .then(context.output.success)
+      .catch(context.output.error);
+  }
+  action.displayName = 'httpGet (' + url + ')';
+  action.async = true;
+  action.outputs = ['success', 'error'];
+
+  return action;
+}

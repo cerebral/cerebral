@@ -1,79 +1,18 @@
 # cerebral-module-http
 HTTP module for Cerebral
 
-### Install
+### How to use
+Go to [http://www.cerebraljs.com/documentation/cerebral-module-http](http://www.cerebraljs.com/documentation/cerebral-module-http)
 
-`npm install cerebral-module-http`
+### Technical details
+This project is implemented using [Axios](https://github.com/mzabriskie/axios) as it exposes a promise based API. Any options passed into this module is passed directly to Axios.
 
-### Get started
+The only factory exposed is `httpGet` as it typically has no dynamic path.
 
-```js
-import Controller from 'cerebral'
-import Model from 'cerebral-model-baobab'
-import Http from 'cerebral-module-http'
+### Contribute
+1. Clone repo
+2. `npm link`
+3. Test using the tutorial projects or the CLI
+4. `npm link cerebral-module-http`
 
-const controller = Controller(Model())
-
-controller.addModules({
-
-  // Pass any axios options
-  http: Http({})
-})
-```
-
-Go to [axios repo](https://github.com/mzabriskie/axios) for options
-
-### The service
-The module exposes a services with all HTTP methods: `get, post, put, delete, patch`. You access these inside actions.
-
-```javascript
-function postTodo({state, output, services}) {
-  const todo = state.get(['newTodo'])
-  services.http.post('/todos', todo)
-    .then(output.success)
-    .catch(output.error)
-}
-
-export default postTodo;
-```
-
-The service returns a promise. Results of the http requests will be passed on an object: `{result, status}`. That means you can easily output to `success` or `error` and grab those values off the input on the next action.
-
-### The action factories
-This module also exposes some action factories to express request directly in a signal. You got `get, post, put, patch, delete` available to you.
-(Note that the inclusion of the `Http` module in the `addModules()` section is still required, even if you're only using action factories.)
-
-```js
-import httpGet from 'cerebral-module-http/get'
-import copy from 'cerebral-addons/copy'
-
-export default [
-  [
-    httpGet('/users'), {
-      success: [
-        copy('input:/result', 'state:/users')
-      ],
-      error: [
-        copy('input:/result.message', 'state:/errorMessage')
-      ]
-    }    
-  ]  
-]
-```
-
-It is also possible to use url-scheme on the action factories to build up the url.
-
-```js
-import httpPatch from 'cerebral-module-http/patch'
-import httpDelete from 'cerebral-module-http/delete'
-import copy from 'cerebral-addons/copy'
-
-export default [
-  [
-    // The array builds up the url, the last argument grabs
-    // the data to be passed on the patch request
-    httpPatch(['/users/', 'input:/id'], 'state:/updatedUser'),
-    httpDelete(['/todos/', 'input:/id'])
-  ]  
-]
-```
+There are no tests here as it is a very simple implementation.
