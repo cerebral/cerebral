@@ -4,10 +4,18 @@ HTTP module for Cerebral
 ### How to use
 Go to [http://www.cerebraljs.com/documentation/cerebral-module-http](http://www.cerebraljs.com/documentation/cerebral-module-http)
 
-### Technical details
-This project is implemented using [Axios](https://github.com/mzabriskie/axios) as it exposes a promise based API. Any options passed into this module is passed directly to Axios.
+### Service API
 
-The only factory exposed is `httpGet` as it typically has no dynamic path.
+#### request(options)
+#### get(url, options)
+#### post(url, data, options)
+#### put(url, data, options)
+#### patch(url, data, options)
+#### delete(url, options)
+
+### Options
+
+### Action factories
 
 ### Contribute
 1. Clone repo
