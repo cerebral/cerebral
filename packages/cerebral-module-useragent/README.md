@@ -2,120 +2,17 @@
 
 A Cerebral module for everything user agent.
 
-- UA parser: browser, device & OS detection
-- Window: size & orientation
-- Media queries
-- Feature detection
-- Internet connectivity
-
 [![NPM version][npm-image]][npm-url]
 [![Commitizen friendly][commitizen-image]][commitizen-url]
 [![Semantic Release][semantic-release-image]][semantic-release-url]
 [![js-standard-style][standard-image]][standard-url]
 [![Discord][discord-image]][discord-url]
 
-## Install
+# cerebral-view-react
+React view package for Cerebral
 
-```
-npm install --save cerebral-module-useragent
-```
-
-## Usage
-
-```javascript
-import controller from './controller'
-import Useragent from 'cerebral-module-useragent'
-
-const useragent = Useragent({
-  media: {
-    small: '(min-width: 600px)',
-    medium: '(min-width: 1024px)',
-    large: '(min-width: 1440px)',
-    portrait: '(orientation: portrait)'
-  }
-})
-
-controller.addModules({
-  useragent
-})
-```
-
-The module exposes all the user agent information in your state model.
-
-```json
-{
-  "useragent": {
-    "browser": {
-      "major": "48",
-      "name": "Chrome",
-      "version": "48.0.2564.97"
-    },
-    "device": {
-      "model": "",
-      "type": "",
-      "vendor": ""
-    },
-    "os": {
-      "name": "Mac OS X",
-      "version": "10.11.3"
-    },
-    "window": {
-      "width": 1920,
-      "height": 1080,
-      "orientation": "landscape"
-    },
-    "media": {
-      "small": true,
-      "medium": true,
-      "large": false,
-      "portrait": false
-    },
-    "network": {
-      "offline": false
-    },
-    "feature": {
-      "deviceMotion":true,
-      "contextMenu":false,
-      "serviceWorker":true,
-      "touch":false,
-      "geolocation":true
-    }
-  }
-}
-```
-
-## Options
-
-```javascript
-import controller from './controller'
-import Useragent from 'cerebral-module-useragent'
-
-const useragent = Useragent({
-  feature: true, // store all feature tests in state
-  parse: {
-    browser: true, // parse useragent.browser from ua string
-    device: true, // parse useragent.device from ua string
-    os: true  // parse useragent.os from ua string
-  },
-  offline: { // check the docs at: https://github.com/HubSpot/offline#advanced
-    checkOnLoad: false,
-    interceptRequests: true,
-    reconnect: {
-      initialDelay: 3,
-      delay: 1.5
-    },
-    requests: false
-  },
-  window: true // update window size on resize
-})
-
-controller.addModules({
-  useragent
-})
-```
-
-> Those are the defaults - you can selectively disable any of these features.<br>
-> By default there won't be any media queries. You have to define them from scratch.
+### How to use
+Go to [http://www.cerebraljs.com/documentation/cerebral-module-useragent](http://www.cerebraljs.com/documentation/cerebral-module-useragent)
 
 ## User agent parser
 
