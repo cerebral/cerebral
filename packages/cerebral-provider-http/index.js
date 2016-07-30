@@ -48,6 +48,7 @@ function HttpModule (moduleOptions) {
 
   return function (module, controller) {
     var requests = {}
+    modulePath = module.path
     function createAbortablePromise(url, cb) {
       return new Promise(function (resolve, reject) {
         requests[url] = {
