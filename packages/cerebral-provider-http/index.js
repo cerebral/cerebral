@@ -9,7 +9,11 @@ var DEFAULT_OPTIONS = {
     'Content-Type': 'application/json;charset=UTF-8'
   },
   onRequest: function (xhr, options) {
-    xhr.send(JSON.stringify(options.body))
+    if (options.headers['Content-Type'] == 'application/x-www-form-urlencoded')
+        options.body = urlEncode(options.body);
+    else
+        options.body = JSON.stringify(options.body);
+    xhr.send(options.body);
   },
   onResponse: function (response, resolve, reject) {
     if (response.status >= 200 && response.status < 300) {
@@ -24,6 +28,15 @@ var DEFAULT_OPTIONS = {
       })
     }
   }
+}
+
+urlEncode = function(obj) {
+  var str = [];
+  for(var p in obj)
+    if (obj.hasOwnProperty(p)) {
+      str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+    }
+  return str.join("&");
 }
 
 function mergeWith(optionsA, optionsB) {
