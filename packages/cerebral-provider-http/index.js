@@ -9,7 +9,7 @@ var DEFAULT_OPTIONS = {
     'Content-Type': 'application/json;charset=UTF-8'
   },
   onRequest: function (xhr, options) {
-    if (options.headers['Content-Type'] == 'application/x-www-form-urlencoded')
+    if (options.headers && options.headers['Content-Type'] == 'application/x-www-form-urlencoded')
         options.body = urlEncode(options.body);
     else
         options.body = JSON.stringify(options.body);
