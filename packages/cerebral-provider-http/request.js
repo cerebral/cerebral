@@ -4,7 +4,7 @@ module.exports = function request(options, cb) {
   xhr.addEventListener('load', cb);
   xhr.addEventListener('error', cb);
   xhr.addEventListener('abort', cb);
-  xhr.open(options.method, options.baseURL + options.url)
+  xhr.open(options.method, options.baseUrl + options.url)
   Object.keys(options.headers).forEach(function (key) {
     xhr.setRequestHeader(key, options.headers[key])
   })
