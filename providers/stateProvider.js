@@ -43,7 +43,7 @@ module.exports = function (context, execution, controller) {
     }
 
     state.computed = function (computed) {
-      return computed.get(model.accessors.get([]))
+      return computed.get(model.accessors.get([]), true)
     }
 
     return state
