@@ -1,19 +1,41 @@
 var fileUpload = require('./fileUpload')
 var request = require('./request')
-var modulePath = null;
+var utils = require('./utils')
+var allowedContentTypes = [
+  'application/x-www-form-urlencoded',
+  'multipart/form-data',
+  'text/plain'
+]
+var modulePath = null
 var DEFAULT_OPTIONS = {
   method: 'get',
   baseUrl: '',
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/json;charset=UTF-8'
+    'Content-Type': 'application/jsoncharset=UTF-8'
   },
   onRequest: function (xhr, options) {
+    if (options.withCredentials) {
+      xhr.withCredentials = true
+    }
+    if (
+      options.cors &&
+      options.headers['Content-Type'] &&
+      allowedContentTypes.indexOf(options.headers['Content-Type']) === -1
+    ) {
+      delete options.headers['Content-Type']
+    }
+
     if (options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
-      options.body = urlEncode(options.body)
+      options.body = utils.urlEncode(options.body)
     } else {
       options.body = JSON.stringify(options.body)
     }
+
+    Object.keys(options.headers).forEach(function (key) {
+      xhr.setRequestHeader(key, options.headers[key])
+    })
+
     xhr.send(options.body)
   },
   onResponse: function (response, resolve, reject) {
@@ -31,16 +53,6 @@ var DEFAULT_OPTIONS = {
   }
 }
 
- function urlEncode(obj) {
-  var str = [];
-  for (var p in obj) {
-    if (obj.hasOwnProperty(p)) {
-      str.push(encodeURIComponent(p) + '=' + encodeURIComponent(obj[p]));
-    }
-  }
-  return str.join('&');
-}
-
 function mergeWith(optionsA, optionsB) {
   return Object.keys(optionsB).reduce(function (newOptions, key) {
     if (!newOptions[key]) {
@@ -54,7 +66,7 @@ function mergeWith(optionsA, optionsB) {
 
 function HttpModule (moduleOptions) {
   if (typeof moduleOptions === 'function') {
-    var defaultOptions = mergeWith({}, DEFAULT_OPTIONS);
+    var defaultOptions = mergeWith({}, DEFAULT_OPTIONS)
     moduleOptions = moduleOptions(defaultOptions)
   } else {
     moduleOptions = mergeWith(moduleOptions || {}, DEFAULT_OPTIONS)
@@ -169,27 +181,27 @@ function HttpModule (moduleOptions) {
         })
       }
     })
-  };
-};
+  }
+}
 
-module.exports = HttpModule;
+module.exports = HttpModule
 
 module.exports.httpGet = function httpGet(url) {
   function action(context) {
-    var services = context.services;
+    var services = context.services
     var service = modulePath.reduce(function (currentService, key) {
-      return currentService[key];
-    }, services);
+      return currentService[key]
+    }, services)
 
     service.get(url)
       .then(context.output.success)
-      .catch(context.output.error);
+      .catch(context.output.error)
   }
-  action.displayName = 'httpGet (' + url + ')';
-  action.async = true;
-  action.outputs = ['success', 'error'];
+  action.displayName = 'httpGet (' + url + ')'
+  action.async = true
+  action.outputs = ['success', 'error']
 
-  return action;
+  return action
 }
 
 module.exports.fileUpload = fileUpload
