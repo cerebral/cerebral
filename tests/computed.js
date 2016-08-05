@@ -118,4 +118,29 @@ suite['should support nested computed'] = function (test) {
   test.done()
 }
 
+suite['should throw when passing props not an object'] = function (test) {
+  reset()
+  var computed = Computed({
+    foo: 'foo'
+  }, function (state) {
+    return state.foo
+  })
+  test.throws(function () {
+    computed([]).get({
+      foo: 'bar'
+    })
+  })
+  test.throws(function () {
+    computed('test').get({
+      foo: 'bar'
+    })
+  })
+  test.throws(function () {
+    computed(null).get({
+      foo: 'bar'
+    })
+  })
+  test.done()
+}
+
 module.exports = { computed: suite }
