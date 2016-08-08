@@ -138,34 +138,34 @@ function HttpModule (moduleOptions) {
       request: requestService,
       get: function (url, options) {
         options = options || {}
-        options.url = url
+        options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
         options.method = 'GET'
         return requestService(options)
       },
       post: function (url, body, options) {
         options = options || {}
-        options.url = url
+        options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
         options.method = 'POST'
         options.body = body
         return requestService(options)
       },
       put: function (url, body, options) {
         options = options || {}
-        options.url = url
+        options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
         options.method = 'PUT'
         options.body = body
         return requestService(options)
       },
       patch: function (url, body, options) {
         options = options || {}
-        options.url = url
+        options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
         options.method = 'PATCH'
         options.body = body
         return requestService(options)
       },
       delete: function (url, options) {
         options = options || {}
-        options.url = url
+        options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
         options.method = 'DELETE'
         return requestService(options)
       },
