@@ -12,7 +12,7 @@ var DEFAULT_OPTIONS = {
   baseUrl: '',
   headers: {
     'Accept': 'application/json',
-    'Content-Type': 'application/jsoncharset=UTF-8'
+    'Content-Type': 'application/json; charset=UTF-8'
   },
   onRequest: function (xhr, options) {
     if (options.withCredentials) {
