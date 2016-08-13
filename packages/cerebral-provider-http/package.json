@@ -1,6 +1,6 @@
 {
   "name": "cerebral-module-http",
-  "version": "0.4.4",
+  "version": "0.4.5",
   "description": "HTTP module for Cerebral",
   "main": "index.js",
   "scripts": {
