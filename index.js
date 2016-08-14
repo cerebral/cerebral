@@ -1,5 +1,5 @@
 module.exports = function(path) {
-  var targetMatch = path.match(/(^.*):/);
+  var targetMatch = path.match(/(^.*?):/);
   var valueMatch = path.match(/:(.*)/)
   var value = valueMatch ? valueMatch[1] : path;
   var inlineSchemes = value.match(/({{.+?}})/g);
