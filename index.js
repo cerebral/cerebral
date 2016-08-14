@@ -1,17 +1,21 @@
 module.exports = function(path) {
-  var value = path.match(/:(.*)/)[1];
+  var targetMatch = path.match(/(^.*):/);
+  var valueMatch = path.match(/:(.*)/)
+  var value = valueMatch ? valueMatch[1] : path;
   var inlineSchemes = value.match(/({{.+?}})/g);
   var schemes = (inlineSchemes || []).map(function(inlineScheme) {
     var inlineSchemeSanitizied = inlineScheme.replace(/[{}]/g, '');
-
+    var targetMatch = inlineSchemeSanitizied.match(/(^.*):/)
+    var valueMatch = inlineSchemeSanitizied.match(/:(.*)/)
     return {
-      target: inlineSchemeSanitizied.match(/(^.*):/)[1],
-      value: inlineSchemeSanitizied.match(/:(.*)/)[1]
+      target: targetMatch ? targetMatch[1] : null,
+      value: valueMatch ? valueMatch[1] : inlineScheme
     };
   });
 
+
   return {
-    target: path.match(/(^.*):/)[1],
+    target: targetMatch ? targetMatch[1] : null,
     value: value,
     schemes: schemes,
     getValue: function(cb) {
