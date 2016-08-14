@@ -26,6 +26,9 @@ module.exports = function (controller, externalContextProviders) {
       analyze(signalName, chain || [])
     }
 
+    var tree = staticTree(chain)
+    var actions = tree.actions
+
     var signalChain = function (signalPayload, passedOptions) {
       var defaultOptionsCopy = Object.keys(defaultOptions || {}).reduce(function (defaultOptionsCopy, key) {
         defaultOptionsCopy[key] = defaultOptions[key]
@@ -35,9 +38,6 @@ module.exports = function (controller, externalContextProviders) {
         defaultOptionsCopy[key] = passedOptions[key]
         return defaultOptionsCopy
       }, defaultOptionsCopy)
-
-      var tree = staticTree(signalChain.chain)
-      var actions = tree.actions
 
       var signal = {
         name: signalName,
@@ -296,17 +296,6 @@ module.exports = function (controller, externalContextProviders) {
       }
     }
     signalChain.signalName = signalName
-    Object.defineProperty(signalChain, 'chain', {
-      get: function () {
-        return chain
-      },
-      set: function (value) {
-        console.warn('Cerebral - signal chain property is DEPRECATED. Please describe your usage at https://github.com/cerebral/cerebral/issues/243')
-        chain = value
-      },
-      enumerable: true,
-      configurable: true
-    })
 
     return signalChain
   }
