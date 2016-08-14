@@ -38,10 +38,11 @@ suite['should use display name of action if available'] = function (test) {
 }
 
 suite['should bring along arrays and indicate async'] = function (test) {
+  function async1 () {}
+  async1.async = true
+
   var signal = [
-    [
-      function async1 () {}
-    ]
+    async1
   ]
   var tree = staticTree(signal).branches
   test.equals(tree.length, 1)
@@ -52,14 +53,15 @@ suite['should bring along arrays and indicate async'] = function (test) {
 }
 
 suite['should keep paths'] = function (test) {
+  function async1 () {}
+  async1.async = true
+
   var signal = [
-    [
-      function async1 () {}, {
-        success: [
-          function sync1 () {}
-        ]
-      }
-    ]
+    async1, {
+      success: [
+        function sync1 () {}
+      ]
+    }
   ]
   var tree = staticTree(signal).branches
   test.equals(tree[0].length, 1)
@@ -71,17 +73,18 @@ suite['should keep paths'] = function (test) {
 }
 
 suite['should handle deeply nested structures'] = function (test) {
+  function async1 () {}
+  async1.async = true
+  function async2 () {}
+  async2.async = true
+
   var signal = [
-    [
-      function async1 () {}, {
-        success: [
-          function sync1 () {},
-          [
-            function async2 () {}
-          ]
-        ]
-      }
-    ]
+    async1, {
+      success: [
+        function sync1 () {},
+        async2
+      ]
+    }
   ]
   var tree = staticTree(signal).branches
   test.equals(tree[0][0].outputs.success[1][0].name, 'async2')

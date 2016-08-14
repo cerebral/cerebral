@@ -24,12 +24,16 @@ var Model = function (state) {
 suite['should not affect initial payload'] = function (test) {
   var ctrl = Controller(Model())
   var payload = {foo: 'bar'}
+
+  function action (context) {
+    context.output({bar: 'foo'})
+  }
+  action.async = true
+
   ctrl.addSignals({
-    'test': [[
-      function action (context) {
-        context.output({bar: 'foo'})
-      }
-    ]]
+    'test': [
+      action
+    ]
   })
   ctrl.on('signalEnd', function (args) {
     test.deepEqual(args.payload, {foo: 'bar', bar: 'foo'})
@@ -41,25 +45,28 @@ suite['should not affect initial payload'] = function (test) {
 suite['should bring outputs down paths back up'] = function (test) {
   var ctrl = Controller(Model())
   var payload = {foo: 'bar'}
+
+  function action (context) {
+    context.output.success({bar: 'foo'})
+  }
+  action.async = true
+
   ctrl.addSignals({
-    'test': [[
-      function action (context) {
-        context.output.success({bar: 'foo'})
-      }, {
+    'test': [
+      action, {
         success: [
           function success (context) {
             context.output({mip: 'mop'})
           }
         ]
-      }
-    ], function afterAsync (context) {
-      test.deepEqual(context.input, {
-        foo: 'bar',
-        bar: 'foo',
-        mip: 'mop'
-      })
-      test.done()
-    }]
+      }, function afterAsync (context) {
+        test.deepEqual(context.input, {
+          foo: 'bar',
+          bar: 'foo',
+          mip: 'mop'
+        })
+        test.done()
+      }]
   })
   ctrl.getSignals().test(payload)
 }
@@ -617,16 +624,17 @@ suite['should expose a output method to set new args'] = function (test) {
 
 suite['should be able to resolve as an async action'] = function (test) {
   var ctrl = Controller(Model())
+  function action (args) {
+    async(function () {
+      args.output({
+        result: true
+      })
+    })
+  }
+  action.async = true
   var signal = [
-    [
-      function (args) {
-        async(function () {
-          args.output({
-            result: true
-          })
-        })
-      }
-    ], function (args) {
+    action,
+    function (args) {
       test.ok(args.input.result)
       test.done()
     }
@@ -694,10 +702,15 @@ suite['should be able to define action as async with paths'] = function (test) {
 suite['should trigger change event on individual async action paths, but not on the last'] = function (test) {
   var ctrl = Controller(Model())
   var changeCount = 0
+  function actionA (args) { args.output.success() }
+  actionA.async = true
+  function actionB (args) { args.output.success() }
+  actionB.async = true
+
   var signal = [
     [
-      function (args) { args.output.success() }, {success: []},
-      function (args) { args.output.success() }, {success: []}
+      actionA, {success: []},
+      actionB, {success: []}
     ],
     function () {
       test.equal(changeCount, 2)
@@ -765,17 +778,20 @@ suite['should be able to resolve to default path error'] = function (test) {
 
 suite['should be able to resolve to default as async action'] = function (test) {
   var ctrl = Controller(Model())
+  function action (args) {
+    args.output.success({result: true})
+  }
+  action.async = true
+
   var signal = [
-    [ function (args) {
-      args.output.success({result: true})
-    }, {
+    action, {
       'success': [
         function (args) {
           test.ok(args.input.result)
           test.done()
         }
       ]
-    }]
+    }
   ]
 
   ctrl.addSignals({
@@ -802,10 +818,15 @@ suite['should expose mutation and a get method, if passed'] = function (test) {
 
 suite['should handle arrays of actions to run in parallell'] = function (test) {
   var ctrl = Controller(Model())
+  function actionA (args) { args.output({ foo: true }) }
+  actionA.async = true
+  function actionB (args) { args.output({ bar: true }) }
+  actionB.async = true
+
   var signal = [
     [
-      function (args) { args.output({ foo: true }) },
-      function (args) { args.output({ bar: true }) }
+      actionA,
+      actionB
     ],
     function (args) {
       test.deepEqual(args.input, {foo: true, bar: true})
@@ -822,14 +843,20 @@ suite['should handle arrays of actions to run in parallell'] = function (test) {
 suite['should handle arrays of actions to resolve to multiple paths'] = function (test) {
   var ctrl = Controller(Model())
   var results = []
+
+  function actionA (args) { args.output.success({ foo: true }) }
+  actionA.async = true
+  function actionB (args) { args.output.error({ bar: true }) }
+  actionB.async = true
+
   var signal = [
     [
-      function (args) { args.output.success({ foo: true }) }, {
+      actionA, {
         'success': [
           function (args) { results.push(args.input) }
         ]
       },
-      function (args) { args.output.error({ bar: true }) }, {
+      actionB, {
         'error': [
           function (args) { results.push(args.input) }
         ]
@@ -860,16 +887,21 @@ suite['should handle arrays of actions to resolve to multiple paths'] = function
 suite['should trigger paths when individual async is done'] = function (test) {
   var ctrl = Controller(Model())
   var results = []
+  function actionA (args) {
+    async(function () { args.output.success({ value: 'foo' }) })
+  }
+  actionA.async = true
+  function actionB (args) { args.output.error({ value: 'bar' }) }
+  actionB.async = true
+
   var signal = [
     [
-      function (args) {
-        async(function () { args.output.success({ value: 'foo' }) })
-      }, {
+      actionA, {
         'success': [
           function (args) { results.push(args.input.value) }
         ]
       },
-      function (args) { args.output.error({ value: 'bar' }) }, {
+      actionB, {
         'error': [
           function (args) { results.push(args.input.value) }
         ]
@@ -891,25 +923,26 @@ suite['should trigger paths when individual async is done'] = function (test) {
 suite['should wait to resolve top level async array when nested async arrays are running'] = function (test) {
   var ctrl = Controller(Model())
   var results = []
+  function action (args) {
+    async(function () {
+      args.output.success({
+        value: 'foo'
+      })
+    })
+  }
+  action.async = true
+  function actionB (args) {
+    results.push(args.input.value)
+    args.output()
+  }
+  actionB.async = true
+
   var signal = [
-    [
-      function (args) {
-        async(function () {
-          args.output.success({
-            value: 'foo'
-          })
-        })
-      }, {
-        'success': [
-          [
-            function (args) {
-              results.push(args.input.value)
-              args.output()
-            }
-          ]
-        ]
-      }
-    ], function () {
+    action, {
+      'success': [
+        actionB
+      ]
+    }, function () {
       results.push('bar')
     }
   ]
@@ -926,13 +959,16 @@ suite['should wait to resolve top level async array when nested async arrays are
 
 suite['should throw error when trying to mutate with an async action'] = function (test) {
   var ctrl = Controller(Model())
+  function action (args) {
+    test.throws(function () {
+      args.state.set('foo', 'bar')
+    })
+    test.done()
+  }
+  action.async = true
+
   var signal = [
-    [ function (args) {
-      test.throws(function () {
-        args.state.set('foo', 'bar')
-      })
-      test.done()
-    }]
+    action
   ]
 
   ctrl.addSignals({
@@ -1059,10 +1095,10 @@ suite['should allow ASYNC actions to have default input'] = function (test) {
   action.defaultInput = {
     foo: 'bar'
   }
+  action.async = true
+
   var signal = [
-    [
-      action
-    ]
+    action
   ]
 
   ctrl.addSignals({
@@ -1098,13 +1134,20 @@ suite['should throw error when output path is not an array'] = function (test) {
 suite['should emit events in correct order'] = function (test) {
   var ctrl = Controller(Model())
   var i = 0
+  function actionA (args) { setTimeout(args.output, 30) }
+  actionA.async = true
+  function actionB (args) { setTimeout(args.output, 10) }
+  actionB.async = true
+  function actionC (args) { setTimeout(args.output, 10) }
+  actionC.async = true
+
   var signal = [
     function () {},
     [
-      function (args) { setTimeout(args.output, 30) },
-      function (args) { setTimeout(args.output, 10) }
+      actionA,
+      actionB
     ], [
-      function (args) { setTimeout(args.output, 10) }
+      actionC
     ],
     function (args) {
       args.output.foo()
@@ -1255,12 +1298,13 @@ suite['should handle multiple signals in same execution'] = function (test) {
 
     }
   ]
+  function actionAsync (args) {
+    args.output()
+  }
+  actionAsync.async = true
+
   var signalAsync = [
-    [
-      function (args) {
-        args.output()
-      }
-    ]
+    actionAsync
   ]
 
   ctrl.addSignals({
@@ -1286,13 +1330,17 @@ suite['should emit options passed to events'] = function (test) {
     test.equal(args.options.immediate, true)
     test.deepEqual(args.options.context, {})
   }
+
+  function action () {
+
+  }
+  action.async = true
+
   ctrl.addSignals({
     'test': {
-      chain: [[
-        function action () {
-
-        }
-      ]],
+      chain: [
+        action
+      ],
       immediate: true,
       context: {},
       foo: 'bar'
@@ -1475,19 +1523,28 @@ suite['should fire change event when updating from running parallel async action
   var ctrl = Controller(Model({
     foo: false
   }))
+  function actionA (context) {
+    setTimeout(function () {
+      if (context.state.get(['foo'])) {
+        context.output.success()
+      } else {
+        context.output.error()
+      }
+    }, 100)
+  }
+  actionA.async = true
+  function actionB (context) {
+    setTimeout(function () {
+      context.output.success()
+    }, 200)
+  }
+  actionB.async = true
+
   var ModuleA = function (module) {
     module.addSignals({
       'test': [
         [
-          function actionA (context) {
-            setTimeout(function () {
-              if (context.state.get(['foo'])) {
-                context.output.success()
-              } else {
-                context.output.error()
-              }
-            }, 100)
-          }, {
+          actionA, {
             success: [],
             error: [
               function actionASet (context) {
@@ -1495,11 +1552,7 @@ suite['should fire change event when updating from running parallel async action
               }
             ]
           },
-          function actionB (context) {
-            setTimeout(function () {
-              context.output.success()
-            }, 200)
-          }, {
+          actionB, {
             success: [
               function actionBSet (context) {
                 context.state.set(['foo'], true)
