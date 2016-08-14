@@ -16,7 +16,7 @@ const newString = parsed.getValue(function (scheme) {
   scheme.target // "input", then "state"
   scheme.value // "id", then "foo.bar"
 
-  if (target === 'input') {
+  if (scheme.target === 'input') {
     return 'woop'
   }
 
@@ -46,4 +46,27 @@ parsed.getValuePromise(function (scheme) {
   .then(function (value) {
     value // "foo.bar"
   })
+```
+
+### What about no match?
+You can parse normal strings as well.
+
+```js
+import schemeParser from 'cerebral-scheme-parser'
+
+const string = 'no target {{input:id}}'
+const parsed = schemeParser(string)
+
+parsed.target // null
+parsed.value = // no target {{input:id}}
+
+const newString = parsed.getValue(function (scheme) {
+  if (scheme.target === 'input') {
+    return 'woop'
+  }
+
+  return 'wuuut?'
+})
+
+newString // no target woop
 ```
