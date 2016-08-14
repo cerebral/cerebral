@@ -34,6 +34,12 @@ module.exports = function (controller, externalContextProviders) {
         defaultOptionsCopy[key] = defaultOptions[key]
         return defaultOptionsCopy
       }, {})
+
+      if (utils.isDeveloping()) {
+        tree = staticTree(chain)
+        actions = tree.actions
+      }
+
       var options = Object.keys(passedOptions || {}).reduce(function (defaultOptionsCopy, key) {
         defaultOptionsCopy[key] = passedOptions[key]
         return defaultOptionsCopy
