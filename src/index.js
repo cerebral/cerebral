@@ -1,4 +1,4 @@
-var get = require('lodash/get')
+var getByPath = require('./getByPath')
 var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var EventEmitter = require('events').EventEmitter
@@ -38,12 +38,12 @@ var Controller = function (Model) {
 
   controller.getSignals = function (path) {
     return path
-      ? get(signals, path)
+      ? getByPath(signals, path)
       : signals
   }
   controller.getServices = function (path) {
     return path
-      ? get(services, path)
+      ? getByPath(services, path)
       : services
   }
   controller.getModel = function () {
@@ -105,6 +105,7 @@ var Controller = function (Model) {
   return controller
 }
 
+module.exports.getByPath = getByPath
 module.exports.Controller = Controller
 module.exports.Computed = Computed
 module.exports.ServerController = function (state) {

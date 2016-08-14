@@ -41,7 +41,6 @@
   "dependencies": {
     "cerebral-model": "^0.1.1",
     "cerebral-model-immutable": "^0.1.4",
-    "cerebral-operators": "^0.2.1",
-    "lodash": "^4.6.1"
+    "cerebral-operators": "^0.2.1"
   }
 }
