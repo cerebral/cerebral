@@ -11,7 +11,6 @@ module.exports = function (context, execution) {
   context.input = utils.merge.apply(null, inputs)
 
   if (utils.isDeveloping() && action.options.input) {
-    utils.verifyInput(action.name, signal.name, action.options.input, context.input)
     try {
       JSON.stringify(context.input)
     } catch (e) {

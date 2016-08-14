@@ -454,69 +454,6 @@ suite['should throw error if outputs as array does not match paths'] = function 
   test.done()
 }
 
-suite['should throw error if outputs as object does not match paths'] = function (test) {
-  var ctrl = Controller(Model())
-  var action = function (args) {
-    args.output({foo: 'bar'})
-  }
-  action.outputs = {
-    foo: true,
-    bar: true
-  }
-  var signal = [
-    action, {
-      bar: []
-    }
-  ]
-  test.throws(function () {
-    ctrl.addSignals({
-      'test': signal
-    })
-  })
-  test.done()
-}
-
-suite['should throw error when output is missing'] = function (test) {
-  var ctrl = Controller(Model())
-  var action = function (args) {
-    args.output()
-  }
-  action.output = {
-    foo: String
-  }
-  var signal = [
-    action, function () {}
-  ]
-
-  ctrl.addSignals({
-    'test': signal
-  })
-  test.throws(function () {
-    ctrl.getSignals().test({}, {immediate: true})
-  })
-  test.done()
-}
-
-suite['should throw error when output type is wrong'] = function (test) {
-  var ctrl = Controller(Model())
-  var action = function (args) {
-    args.output({foo: false})
-  }
-  action.output = {
-    foo: String
-  }
-  var signal = [
-    action, function () {}
-  ]
-  ctrl.addSignals({
-    'test': signal
-  })
-  test.throws(function () {
-    ctrl.getSignals().test({}, {immediate: true})
-  })
-  test.done()
-}
-
 suite['should throw when calling next directly with no defaultOutput and outputs defined'] = function (test) {
   var ctrl = Controller(Model())
   var action = function (args) {
@@ -1032,27 +969,6 @@ suite['should trigger signal synchronously when defined as signalSync'] = functi
   })
   ctrl.getSignals().test()
   test.ok(hasRun)
-  test.done()
-}
-
-suite['should throw error when input is defined on action and value is missing or is wrong type'] = function (test) {
-  var ctrl = Controller(Model())
-  var action = function () {}
-  action.input = {
-    foo: String
-  }
-  var signal = [
-    function (args) {
-      args.output()
-    }, action
-  ]
-
-  ctrl.addSignals({
-    'test': signal
-  })
-  test.throws(function () {
-    ctrl.getSignals().test({}, {immediate: true})
-  })
   test.done()
 }
 

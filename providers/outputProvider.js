@@ -1,35 +1,4 @@
 var utils = require('../src/utils.js')
-var types = require('../src/types.js')
-
-var validateOutput = function (action, path, arg, signalName) {
-  if ((!action.options.output && !action.options.outputs) || Array.isArray(action.options.outputs)) {
-    return
-  }
-
-  var checkers = action.options.output || action.options.outputs[path || action.options.defaultOutput]
-
-  if (checkers === undefined) {
-    return
-  }
-
-  if (!arg) {
-    throw new Error([
-      'Cerebral: There is a wrong output of action "' +
-      utils.getFunctionName(action) + '" ' +
-      'in signal "' + signalName + '". You did not pass any values to the output'
-    ].join(''))
-  }
-
-  Object.keys(checkers).forEach(function (key) {
-    if (!types(checkers[key], arg[key])) {
-      throw new Error([
-        'Cerebral: There is a wrong output of action "' +
-        utils.getFunctionName(action) + '" ' +
-        'in signal "' + signalName + '". Check the following prop: "' + key + '"'
-      ].join(''))
-    }
-  })
-}
 
 var createNextFunction = function (action, signalName, resolver) {
   var next = function () {
@@ -57,10 +26,6 @@ var createNextFunction = function (action, signalName, resolver) {
         'in signal "' + signalName + '". Set defaultOutput or use one of outputs ' +
         JSON.stringify(Object.keys(action.output || action.outputs || {}))
       ].join(''))
-    }
-
-    if (utils.isDeveloping()) {
-      validateOutput(action, path, payload, signalName)
     }
 
     // This is where I verify path and types
