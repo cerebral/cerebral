@@ -35,9 +35,6 @@
       "commit-msg": "validate-commit-msg"
     }
   },
-  "release": {
-    "analyzeCommits": "./sr-prerelease.js"
-  },
   "dependencies": {
     "cerebral-model": "^0.1.1",
     "cerebral-model-immutable": "^0.1.4",
