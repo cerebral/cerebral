@@ -1,12 +1,4 @@
 module.exports = function(path) {
-  if (typeof path !== 'string') {
-    return null;
-  }
-
-  if (!path.match(/\:/)) {
-    return null;
-  }
-
   var value = path.match(/:(.*)/)[1];
   var inlineSchemes = value.match(/({{.+?}})/g);
   var schemes = (inlineSchemes || []).map(function(inlineScheme) {
