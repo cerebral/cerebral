@@ -8,8 +8,10 @@ import markTodoFailed from '../actions/markTodoFailed.js'
 export default [
   createTodo,
   set('app.newTodoTitle', ''),
+  set('app.isSaving', true),
   postTodo, {
     success: [updateTodo],
     error: [markTodoFailed]
-  }
+  },
+  set('app.isSaving', false)
 ]

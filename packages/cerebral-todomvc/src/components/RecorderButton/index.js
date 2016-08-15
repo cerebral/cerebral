@@ -2,7 +2,8 @@ import React from 'react'
 import { connect } from 'cerebral-view-react'
 
 export default connect({
-  recorder: 'recorder'
+  recorder: 'recorder',
+  isSaving: 'app.isSaving'
 }, {
   paused: 'recorder.paused',
   resumed: 'recorder.resumed',
@@ -10,47 +11,72 @@ export default connect({
   played: 'recorder.played',
   recorded: 'recorder.recorded'
 },
-  function ({ recorder, paused, resumed, stopped, played, recorded }) {
-    let style = {
+  function ({ recorder, paused, resumed, stopped, played, recorded, isSaving }) {
+    const style = {
       border: '1px solid black',
       borderRadius: '2px',
       height: '25px',
       backgroundColor: '#EAEAEA',
       padding: '5px',
       lineHeight: '15px',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
+      opacity: isSaving && !recorder.isPlaying && !recorder.isPaused ? '0.5' : 1
     }
+
     if (recorder.isPlaying) {
-      return React.createElement('button', {
-        style: style,
-        onClick: function () {
-          paused({}, {
-            isRecorded: true
-          })
-        }
-      }, 'Pause playback')
+      return (
+        <button
+          style={style}
+          onClick={() => paused({}, {isRecorded: true})}
+        >
+          Pause playback
+        </button>
+      )
     }
     if (recorder.isPaused) {
-      return React.createElement('button', {
-        style: style,
-        onClick: function () { resumed() }
-      }, 'Play')
+      return (
+        <button
+          style={style}
+          onClick={() => resumed()}
+        >
+          Play
+        </button>
+      )
     }
     if (recorder.isRecording) {
-      return React.createElement('button', {
-        style: style,
-        onClick: function () { stopped() }
-      }, 'Stop recording')
+      return (
+        <button
+          style={style}
+          disabled={isSaving}
+          onClick={() => stopped()}
+        >
+          Stop recording
+        </button>
+      )
     }
     if (recorder.hasRecorded) {
-      return React.createElement('button', {
-        style: style,
-        onClick: function () { played() }
-      }, 'Play')
+      return (
+        <button
+          style={style}
+          disabled={isSaving}
+          onClick={() => played()}
+        >
+          Play
+        </button>
+      )
     }
-    return React.createElement('button', {
-      style: style,
-      onClick: function () { recorded() }
-    }, 'Record')
+    return (
+      <button
+        style={style}
+        disabled={isSaving}
+        onClick={() => recorded({
+          paths: [
+            ['app']
+          ]
+        })}
+      >
+        Record
+      </button>
+    )
   }
 )

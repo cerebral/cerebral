@@ -2,9 +2,9 @@ import {Computed} from 'cerebral'
 
 export default Computed({
   todos: 'app.todos'
-}, state => {
-  return Object.keys(state.todos).reduce(function (counts, ref) {
-    let todo = state.todos[ref]
+}, props => {
+  return Object.keys(props.todos).reduce((counts, ref) => {
+    let todo = props.todos[ref]
 
     if (todo.completed) {
       counts.completedCount++

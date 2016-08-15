@@ -3,14 +3,14 @@ import {Computed} from 'cerebral'
 export default Computed({
   todos: 'app.todos',
   filter: 'app.filter'
-}, state => {
-  return Object.keys(state.todos).filter((ref) => {
-    const todo = state.todos[ref]
+}, props => {
+  return Object.keys(props.todos).filter((ref) => {
+    const todo = props.todos[ref]
 
     return (
-      state.filter === 'all' ||
-      (state.filter === 'completed' && todo.completed) ||
-      (state.filter === 'active' && !todo.completed)
+      props.filter === 'all' ||
+      (props.filter === 'completed' && todo.completed) ||
+      (props.filter === 'active' && !todo.completed)
     )
   })
 })
