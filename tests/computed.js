@@ -27,7 +27,7 @@ suite['should add cached result to registry'] = function (test) {
   var computedCb = function (state) {
     return state.foo
   }
-  var cacheKey = JSON.stringify(stateDeps) + computedCb.toString().replace(/\s/g, '')
+  var cacheKey = JSON.stringify(stateDeps) + '{}' + computedCb.toString().replace(/\s/g, '')
   var computed = Computed(stateDeps, computedCb)
   computed().get({
     foo: 'bar'
@@ -45,7 +45,7 @@ suite['should add cache key to path'] = function (test) {
     return state.foo
   }
 
-  var cacheKey = JSON.stringify(stateDeps) + computedCb.toString().replace(/\s/g, '')
+  var cacheKey = JSON.stringify(stateDeps) + '{}' + computedCb.toString().replace(/\s/g, '')
   var computed = Computed(stateDeps, computedCb)
   computed()
   test.ok(Computed.registry['foo'].indexOf(cacheKey) >= 0)
