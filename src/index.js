@@ -108,6 +108,12 @@ var Controller = function (Model) {
 module.exports.getByPath = getByPath
 module.exports.Controller = Controller
 module.exports.Computed = Computed
+module.exports.immediate = function (chain) {
+  return {
+    chain: chain,
+    immediate: true
+  }
+}
 module.exports.ServerController = function (state) {
   var model = {
     accessors: {
