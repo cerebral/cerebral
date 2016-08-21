@@ -3,6 +3,7 @@ var CreateSignalFactory = require('./CreateSignalFactory.js')
 var CreateRegisterModules = require('./CreateRegisterModules.js')
 var EventEmitter = require('events').EventEmitter
 var Computed = require('./Computed')
+var parseScheme = require('cerebral-scheme-parser')
 
 var Controller = function (Model) {
   var controller = new EventEmitter()
@@ -108,6 +109,7 @@ var Controller = function (Model) {
 module.exports.getByPath = getByPath
 module.exports.Controller = Controller
 module.exports.Computed = Computed
+module.exports.parseScheme = parseScheme
 module.exports.ServerController = function (state) {
   var model = {
     accessors: {
