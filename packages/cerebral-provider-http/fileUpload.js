@@ -17,11 +17,9 @@ var uploadController = function (files, options) {
     if (files && files instanceof FileList) {
       var formData = new FormData()
       formData.append('file', files[0])
-      if (options.query && Array.isArray(options.query)) {
-        options.query.forEach(function (param) {
-          if (param.key && param.value) {
-            formData.append(param.key, param.value)
-          }
+      if (options.data) {
+        Object.keys(options.data).forEach(function (paramKey) {
+          formData.append(paramKey, options.data[paramKey])
         })
       }
       var xhr = new XMLHttpRequest()
