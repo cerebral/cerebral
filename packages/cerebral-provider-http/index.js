@@ -64,7 +64,7 @@ function mergeWith(optionsA, optionsB) {
   }, optionsA)
 }
 
-function HttpModule (moduleOptions) {
+function HttpModule(moduleOptions) {
   if (typeof moduleOptions === 'function') {
     var defaultOptions = mergeWith({}, DEFAULT_OPTIONS)
     moduleOptions = moduleOptions(defaultOptions)
@@ -97,16 +97,15 @@ function HttpModule (moduleOptions) {
         switch (event.type) {
           case 'load':
             return options.onResponse(event.currentTarget, resolve, reject)
-            break
           case 'progress':
             if (options.onProgress && event.lengthComputable) {
               if (typeof options.onProgress === 'string') {
                 controller.getSignals(options.onProgress)({
-                  progress: (event.loaded / event.total).toFixed(0)
+                  progress: +(event.loaded / event.total).toFixed(0)
                 })
               } else if (options.onProgress) {
                 options.onProgress({
-                  progress: (event.loaded / event.total).toFixed(0)
+                  progress: +(event.loaded / event.total).toFixed(0)
                 })
               }
             }
@@ -126,7 +125,7 @@ function HttpModule (moduleOptions) {
       }
     }
 
-    function requestService (options) {
+    function requestService(options) {
       options = mergeWith(options, moduleOptions)
 
       return createAbortablePromise(options.url, function (resolve, reject) {
@@ -179,6 +178,12 @@ function HttpModule (moduleOptions) {
         matchingUrls.forEach(function (url) {
           requests[url].xhr.abort()
         })
+      },
+      fileUpload: function (files, options) {
+        options = options || {}
+        options.url = moduleOptions.baseUrl + options.url
+
+        return new fileUpload(files, options);
       }
     })
   }
@@ -204,4 +209,4 @@ module.exports.httpGet = function httpGet(url) {
   return action
 }
 
-module.exports.fileUpload = fileUpload
+module.exports.FileUpload = fileUpload
