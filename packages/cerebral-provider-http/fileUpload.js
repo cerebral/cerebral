@@ -1,20 +1,18 @@
-function parseResponse(fileUpload) {
-  if (fileUpload.xhr.response) {
-    try {
-      return {
-        response: JSON.parse(fileUpload.xhr.response),
-        xhr: fileUpload.xhr,
-        isAborted: fileUpload.isAborted || false
-      }
-    } catch (e) { }
-  }
-  return {
-    xhr: fileUpload.xhr,
-    isAborted: fileUpload.isAborted
+function parseResponse(xhr) {
+  try {
+    return {
+      status: xhr.status,
+      result: JSON.parse(xhr.responseText)
+    }
+  } catch (e) {
+    return {
+      status: xhr.status,
+      result: null
+    }
   }
 }
 
-var uploadController = function (files, options) {
+var uploadController = function (options) {
   if (!options.url) {
     console.warn('upload-controller: options must contain url')
     return
@@ -28,7 +26,7 @@ var uploadController = function (files, options) {
     this.xhr && this.xhr.abort()
   }
 
-  this.send = function () {
+  this.send = function (files) {
 
     var fileUpload = this;
     var xhr = this.xhr;
@@ -55,9 +53,12 @@ var uploadController = function (files, options) {
 
         xhr.onreadystatechange = function () {
           if (xhr.readyState === 4 && xhr.status >= 200 && xhr.status < 300) {
-            resolve(parseResponse(fileUpload))
+            resolve(parseResponse(xhr))
           } else if (xhr.readyState === 4) {
-            reject(parseResponse(fileUpload))
+            var response = parseResponse(xhr)
+
+            response.isAborted = fileUpload.isAborted
+            reject(response)
           }
         }
 

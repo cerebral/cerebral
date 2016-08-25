@@ -38,16 +38,21 @@ var DEFAULT_OPTIONS = {
 
     xhr.send(options.body)
   },
-  onResponse: function (response, resolve, reject) {
-    var result = JSON.parse(response.responseText || '""')
-    if (response.status >= 200 && response.status < 300) {
+  onResponse: function (xhr, resolve, reject) {
+    var result = xhr.responseText
+
+    if (xhr.getResponseHeader('content-type').indexOf('application/json') >= 0) {
+      result = JSON.parse(xhr.responseText)
+    }
+
+    if (xhr.status >= 200 && xhr.status < 300) {
       resolve({
-        status: response.status,
+        status: xhr.status,
         result: result
       })
     } else {
       reject({
-        status: response.status,
+        status: xhr.status,
         result: result
       })
     }
@@ -179,11 +184,11 @@ function HttpModule (moduleOptions) {
           requests[url].xhr.abort()
         })
       },
-      fileUpload: function (files, options) {
+      fileUpload: function (options) {
         options = options || {}
         options.url = moduleOptions.baseUrl + options.url
 
-        return new fileUpload(files, options)
+        return new fileUpload(options)
       }
     })
   }
