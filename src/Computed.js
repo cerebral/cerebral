@@ -86,15 +86,14 @@ Computed.updateCache = function (changes) {
     Object.keys(level).forEach(function (key) {
       currentPath.push(key)
       var stringPath = currentPath.join('.')
-      if (computedMap[stringPath]) {
-        computedToFlag = computedMap[stringPath].reduce(function (computedToFlag, computed) {
-          if (computedToFlag.indexOf(computed) === -1) {
-            return computedToFlag.concat(computed)
+      if (level[key] === true) {
+        computedToFlag = Object.keys(computedMap).reduce(function (computedToFlag, mapKey) {
+          if (stringPath.indexOf(mapKey) === 0 || mapKey.indexOf(stringPath) === 0) {
+            return computedToFlag.concat(computedMap[mapKey])
           }
           return computedToFlag
         }, computedToFlag)
-      }
-      if (level[key] !== true) {
+      } else {
         computedToFlag = traverse(level[key], currentPath, computedToFlag)
       }
       currentPath.pop()
