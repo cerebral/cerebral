@@ -39,21 +39,22 @@ var DEFAULT_OPTIONS = {
     xhr.send(options.body)
   },
   onResponse: function (response, resolve, reject) {
+    var result = JSON.parse(response.responseText || '""')
     if (response.status >= 200 && response.status < 300) {
       resolve({
         status: response.status,
-        result: JSON.parse(response.responseText || '""')
+        result: result
       })
     } else {
       reject({
         status: response.status,
-        result: response.responseText
+        result: result
       })
     }
   }
 }
 
-function mergeWith(optionsA, optionsB) {
+function mergeWith (optionsA, optionsB) {
   return Object.keys(optionsB).reduce(function (newOptions, key) {
     if (!newOptions[key]) {
       newOptions[key] = optionsB[key]
@@ -64,7 +65,7 @@ function mergeWith(optionsA, optionsB) {
   }, optionsA)
 }
 
-function HttpModule(moduleOptions) {
+function HttpModule (moduleOptions) {
   if (typeof moduleOptions === 'function') {
     var defaultOptions = mergeWith({}, DEFAULT_OPTIONS)
     moduleOptions = moduleOptions(defaultOptions)
@@ -72,11 +73,10 @@ function HttpModule(moduleOptions) {
     moduleOptions = mergeWith(moduleOptions || {}, DEFAULT_OPTIONS)
   }
 
-
   return function (module, controller) {
     var requests = {}
     modulePath = module.path
-    function createAbortablePromise(url, cb) {
+    function createAbortablePromise (url, cb) {
       return new Promise(function (resolve, reject) {
         requests[url] = {
           resolve: resolve,
@@ -92,7 +92,7 @@ function HttpModule(moduleOptions) {
       })
     }
 
-    function createResponse(options, resolve, reject) {
+    function createResponse (options, resolve, reject) {
       return function (event) {
         switch (event.type) {
           case 'load':
@@ -125,7 +125,7 @@ function HttpModule(moduleOptions) {
       }
     }
 
-    function requestService(options) {
+    function requestService (options) {
       options = mergeWith(options, moduleOptions)
 
       return createAbortablePromise(options.url, function (resolve, reject) {
@@ -183,7 +183,7 @@ function HttpModule(moduleOptions) {
         options = options || {}
         options.url = moduleOptions.baseUrl + options.url
 
-        return new fileUpload(files, options);
+        return new fileUpload(files, options)
       }
     })
   }
@@ -191,8 +191,8 @@ function HttpModule(moduleOptions) {
 
 module.exports = HttpModule
 
-module.exports.httpGet = function httpGet(url) {
-  function action(context) {
+module.exports.httpGet = function httpGet (url) {
+  function action (context) {
     var services = context.services
     var service = modulePath.reduce(function (currentService, key) {
       return currentService[key]
