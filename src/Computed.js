@@ -43,6 +43,7 @@ function Computed (paths, cb) {
     ) {
       throw new Error('Cerebral - A computed is passed props that is not an object')
     }
+    props = props || {}
     var deps = typeof paths === 'function' ? paths(props) : paths
     var cacheKey = JSON.stringify(deps) + (props ? JSON.stringify(props) : '') + cb.toString().replace(/\s/g, '')
     traverseDepsMap(deps, cacheKey)
