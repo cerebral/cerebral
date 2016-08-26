@@ -44,7 +44,7 @@ var traverse = function (item, parentItem, path, actions, isSync) {
       actionIndex: actions.indexOf(item) === -1 ? actions.push(item) - 1 : actions.indexOf(item)
     }
     if (utils.isDeveloping() && !item.async && !isSync) {
-      console.warn('Cerebral - The action "' + action.name + '" will be run ASYNC even though you have not stated it as such. Please be explicit about actions running async')
+      console.warn('Cerebral - The action "' + action.name + '" will be run ASYNC even though you have not stated it as such. This typically happens when you compose chains into chains. Remember to use spread operator when composing arrays.')
     }
     nextItem = parentItem[parentItem.indexOf(item) + 1]
     if (!Array.isArray(nextItem) && typeof nextItem === 'object') {
