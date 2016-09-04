@@ -435,6 +435,14 @@ const execute = new FunctionTree([
 ])
 ```
 
+When you execute trees you can name the execution:
+
+```js
+execute('thisHappened', someTree)
+```
+
+And that will be used in the debugger instead of execution id.
+
 #### NodeDebugger (optional provider)
 
 ```js
