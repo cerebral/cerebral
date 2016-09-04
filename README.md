@@ -5,7 +5,7 @@ When a function is not enough
 ### What is it?
 Readable and maintainable code is a never ending quest. With the increased complexity of modern web applications the execution of code from user interactions and other events in our applications has increased in complexity as well. But this is not only related to the frontend, also our backends has increased execution complexity as our applications are inherently more complex.
 
-Callback hell is a common term which says something about how asynchronous code execution affects readability and maintainability of our code bases. Even with promises we get into trouble when we have conditional execution flow. Callbacks and promises aside, the testability and reusability of code is also an important factor which is difficult to achieve in general just writing plain functions.
+Callback hell is a common term which says something about how asynchronous code execution affects readability and maintainability of our code bases. Even with promises we get into trouble when we have conditional execution flow. Callbacks and promises aside, the testability and reusability of code is also an important factor which is difficult to achieve in general.
 
 A function tree will help you execute synchronous and asynchronous functions in a declarative, composable and testable way. **Declarative** means that you can describe an execution without writing any implementation, increasing readability of the code. **Composable** means that some part of one execution can be reused in an other execution. And **testable** means that you will write your code in a way where the whole chain of execution and its individual parts can be tested.
 
@@ -26,7 +26,7 @@ function getData(url) {
 }
 ```
 
-A function tree can be used in many domains. It being frontend application events, handle routing on your web server, tasks from a queue or other processes. You will need to define what a function tree should have access, but before looking into that, lets look at how the previous function could be defined:
+A function tree can be used in many domains. It being frontend application events, handle routing on your web server, tasks from a queue or other processes. You will need to define what a function tree should have access to, but before looking into that, lets look at how the previous function could be defined:
 
 ```js
 [
@@ -207,7 +207,6 @@ When you want to test the whole function tree execution you can do:
 ```js
 const FunctionTree = require('function-tree')
 const ContextProvider = require('function-tree/providers/Context')
-const PromiseMockProvider = require('function-tree/providers/PromiseMock')
 const appMounted = require('../src/events/appMounted')
 
 const window = {app: {}}
@@ -314,7 +313,6 @@ const execute = new FunctionTree([
     functionDetails.function // A reference to the running function
 
     context._instance.name // Function tree id
-    context._instance.id // Function tree id
     context._instance.executionId // Current execution id
     context._instance.staticTree // The static representation of the tree
     context._instance.datetime // Time of execution
@@ -410,7 +408,7 @@ execute(tree, {foo: 'bar'})
 ```
 
 #### Debugger (optional provider)
-Download the [Chrome Extension]().
+Download the [Chrome Extension](https://chrome.google.com/webstore/detail/function-tree-debugger/ppfbmcnapdgakfiocieggdgbhmlalgjp).
 
 ```js
 import FunctionTree from 'function-tree'
