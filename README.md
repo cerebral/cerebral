@@ -5,11 +5,18 @@ When a function is not enough
 ### What is it?
 Readable and maintainable code is a never ending quest. With the increased complexity of modern web applications the execution of code from user interactions and other events in our applications has increased in complexity as well. But this is not only related to the frontend, also our backends has increased execution complexity as our applications are inherently more complex.
 
-Callback hell is a common term which says something about how asynchronous code execution affects readability and maintainability of our code bases. Even with promises we get into trouble when we have conditional execution flow. Callbacks and promises aside, the testability and reusability of code is also an important factor which is difficult to achieve in general.
+Callback hell is a common term which says something about how asynchronous code execution affects readability and maintainability of our code bases. Even with promises we can get readability issues with conditional execution flow. Callbacks and promises aside, the testability and reusability of code is also an important factor which is difficult to achieve in general.
 
 A function tree will help you execute synchronous and asynchronous functions in a declarative, composable and testable way. **Declarative** means that you can describe an execution without writing any implementation, increasing readability of the code. **Composable** means that some part of one execution can be reused in an other execution. And **testable** means that you will write your code in a way where the whole chain of execution and its individual parts can be tested.
 
 We often talk about pure functions as the holy grail for giving our code these attributes. But pure functions means "no side effects" which is contradictory to a lot of the code we write. Everything from manipulating the DOM, talking to the server, even changing the state of our apps is *side effects*. **function-tree** does not push side effects to the edge of your app. The execution runs exactly how you think about it, one step after the other, but keeps the important traits of pure functions. Writing **Declarative, composable and testable** code. You can conceptually think of a function tree as a decision tree, which is a great way to build mental images of complex scenarios and their possible outcomes.
+
+### Demo
+Install the [chrome extension debugger](https://chrome.google.com/webstore/detail/function-tree-debugger/ppfbmcnapdgakfiocieggdgbhmlalgjp). Clone this repo, install deps and run:
+
+`npm run demo:redux`
+
+More demos coming soon...
 
 ### A small example
 A typical function with side effects.
