@@ -1,0 +1,54 @@
+{
+  "name": "function-tree",
+  "version": "0.1.0",
+  "description": "When a function is not enough",
+  "main": "src/index.js",
+  "scripts": {
+    "clean": "rimraf lib && rimraf tests/*.js*",
+    "demo:redux": "node demos/server --demo redux",
+    "test": "nodeunit tests"
+  },
+  "devDependencies": {
+    "axios": "^0.14.0",
+    "babel-loader": "^6.2.5",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
+    "body-parser": "^1.15.2",
+    "css-loader": "^0.24.0",
+    "express": "^4.14.0",
+    "html-webpack-plugin": "^2.22.0",
+    "nodeunit": "^0.10.2",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2",
+    "style-loader": "^0.13.1",
+    "webpack": "^1.13.2",
+    "webpack-dev-middleware": "^1.6.1"
+  },
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "object-assign": "^4.1.0"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/function-tree.git"
+  },
+  "keywords": [
+    "javascript",
+    "function",
+    "flow",
+    "complex",
+    "state"
+  ],
+  "author": "Christian Alfoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/function-tree/issues"
+  },
+  "homepage": "https://github.com/cerebral/function-tree#readme"
+}
