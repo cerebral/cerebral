@@ -3,7 +3,7 @@
 const EventEmitter = require('events')
 const executeTree = require('./executeTree')
 const createStaticTree = require('./staticTree')
-const InstanceProvider = require('../providers/Instance')
+const ExecutionProvider = require('../providers/Execution')
 const InputProvider = require('../providers/Input')
 const ResultProvider = require('../providers/Result')
 const assign = require('object-assign')
@@ -81,7 +81,7 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
 
 FunctionTreeExecution.prototype.createContext = function(action, payload) {
   return [
-    InstanceProvider(this),
+    ExecutionProvider(this),
     InputProvider(),
     ResultProvider()
   ].concat(this.functionTree.contextProviders).reduce(function(currentContext, contextProvider) {
@@ -154,9 +154,5 @@ FunctionTree.prototype.runTree = function() {
     cb && cb()
   }.bind(this))
 };
-
-FunctionTree.prototype.nextExecutionId = function() {
-  return this.currentExecutionId++
-}
 
 module.exports = FunctionTree

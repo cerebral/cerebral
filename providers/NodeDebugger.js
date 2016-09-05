@@ -67,17 +67,7 @@ module.exports = function (options) {
   var registeredFunctionTrees = {}
 
   function send(debuggingData, context, functionDetails, payload) {
-    /*
-    name: context._instance.name,
-    functionTreeId: context._instance.id,
-    executionId: context._instance.executionId,
-    functionIndex: functionDetails.functionIndex,
-    staticTree: context._instance.staticTree,
-    payload: payload,
-    datetime: context._instance.datetime,
-    data: debuggingData
-    */
-    var id = context._instance.id + '_' + context._instance.executionId
+    var id = context.execution.id + '_' + context.execution.executionId
     if (registeredFunctionTrees[id] && registeredFunctionTrees[id].functions[functionDetails.functionIndex]) {
       registeredFunctionTrees[id].functions[functionDetails.functionIndex].data.push(debuggingData)
     } else if (registeredFunctionTrees[id]) {
@@ -87,7 +77,7 @@ module.exports = function (options) {
       }
     } else {
       registeredFunctionTrees[id] = {
-        staticTree: context._instance.staticTree,
+        staticTree: context.execution.staticTree,
         functions: [{
           payload: payload,
           data: []
@@ -99,7 +89,7 @@ module.exports = function (options) {
       registeredFunctionTrees[id].isBatching = true
       setTimeout(function () {
         console.log([
-          chalk.bgWhite.black.bold(padded(context._instance.name || context._instance.id)),
+          chalk.bgWhite.black.bold(padded(context.execution.name || context.execution.id)),
         ].concat(traverseFunctionTree(registeredFunctionTrees[id])).join('\n'));
         registeredFunctionTrees[id].isBatching = false
       })

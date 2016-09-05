@@ -19,12 +19,12 @@ module.exports = function (options) {
   function send(debuggingData, context, functionDetails, payload) {
     var type = 'execution'
     var data = {
-      name: context._instance.name,
-      executionId: context._instance.id,
+      name: context.execution.name,
+      executionId: context.execution.id,
       functionIndex: functionDetails.functionIndex,
-      staticTree: context._instance.staticTree,
+      staticTree: context.execution.staticTree,
       payload: payload,
-      datetime: context._instance.datetime,
+      datetime: context.execution.datetime,
       data: debuggingData
     };
 

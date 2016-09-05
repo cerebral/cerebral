@@ -302,6 +302,37 @@ execute(tree, {
 })
 ```
 
+#### Retry (recursive)
+You can also retry execution of the tree at any point. Even with async functions running. For example:
+
+```js
+import execute from './execute'
+
+function funcA(context) {
+  return new Promise(resolve => {
+    setTimeout(resolve, 500)
+  })
+}
+
+function funcB(context) {
+  if (context.input.retryCount < 3) {
+    return context.execution.retry({
+      retryCount: context.input.retryCount + 1
+    })
+  }
+}
+
+const tree = [
+  funcA,
+  funcB
+]
+
+execute(tree, {
+  retryCount: 0
+})
+```
+
+
 #### Providers
 A provider gives you access to the current context and other information about the execution. It is required that you return the context or a mutated version of it.
 
@@ -320,10 +351,11 @@ const execute = new FunctionTree([
     functionDetails.functionIndex // The index of the function in the tree, like an ID
     functionDetails.function // A reference to the running function
 
-    context._instance.name // Function tree id
-    context._instance.executionId // Current execution id
-    context._instance.staticTree // The static representation of the tree
-    context._instance.datetime // Time of execution
+    context.execution.name // Function tree id
+    context.execution.id // Current execution id
+    context.execution.staticTree // The static representation of the tree
+    context.execution.datetime // Time of execution
+    context.execution.functionTree // The function tree instance
 
     return context // Always return the changed context
   }
