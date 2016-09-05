@@ -94,8 +94,8 @@ All applications needs to define one or more definitions of how these function t
 
 ```javascript
 import FunctionTree from 'function-tree'
-import DebuggerProvider from 'function-tree/providers/DebuggerProvider'
-import ContextProvider from 'function-tree/providers/ContextProvider'
+import DebuggerProvider from 'function-tree/providers/Debugger'
+import ContextProvider from 'function-tree/providers/Context'
 import request from 'request'
 
 export default new FunctionTree([
@@ -233,8 +233,9 @@ const execute = new FunctionTree([
 execute(appMounted, () => {
   test.deepEquals(window, {app: {data: 'foo'}})
 })
-
 ```
+
+The really good thing about asynchronous testing with a `function-tree` is that any async side effect returns a promise, meaning that we do not care about the side effect itself. Any async side effect can be mocked with a simple promise, like you see on the **request.get** above. If you do care about the side effect though you can still insert it as normal on the context.
 
 ### API
 
