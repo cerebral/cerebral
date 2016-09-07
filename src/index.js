@@ -79,7 +79,9 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
       })
   } else if (isValidResult(result)) {
     functionTree.emit('functionEnd', funcDetails, payload)
-    next(result)
+    next({
+      payload: result
+    })
   } else {
     functionTree.emit('functionEnd', funcDetails, payload)
     throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
