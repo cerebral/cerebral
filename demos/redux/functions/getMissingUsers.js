@@ -1,4 +1,4 @@
-function getMissingUsers({axios, getState, result}) {
+function getMissingUsers({axios, getState, path}) {
   const users = getState().users;
   const assignments = getState().assignments;
   const missingUsersId = assignments.reduce((currentMissingUsersId, assignment) => {
@@ -18,9 +18,9 @@ function getMissingUsers({axios, getState, result}) {
     .then((responses) => {
       const missingUsers = responses.map(response => response.data);
 
-      return result.success({users: missingUsers});
+      return path.success({users: missingUsers});
     })
-    .catch((error) => result.error({
+    .catch((error) => path.error({
       status: error.response.status,
       data: error.response.data
     }));

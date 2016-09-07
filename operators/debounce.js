@@ -5,11 +5,11 @@ function createDebounce(time) {
   function debounce(context) {
     return new Promise(function (resolve) {
       if (timer) {
-        currentResolver(context.result.discarded())
+        currentResolver(context.path.discarded())
         currentResolver = resolve
       } else {
         timer = setTimeout(function () {
-          currentResolver(context.result.accepted())
+          currentResolver(context.path.accepted())
           timer = null
           currentResolver = null
         }, time)

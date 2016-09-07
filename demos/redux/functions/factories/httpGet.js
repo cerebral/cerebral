@@ -1,11 +1,11 @@
 function httpGetFactory(url) {
-  function httpGet({axios, result}) {
+  function httpGet({axios, path}) {
     return axios.get(url)
-      .then((response) => result.success({
+      .then((response) => path.success({
         status: response.status,
         data: response.data
       }))
-      .catch((error) => result.error({
+      .catch((error) => path.error({
         status: error.response.status,
         data: error.response.data
       }));

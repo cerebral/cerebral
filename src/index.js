@@ -77,6 +77,9 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
           })
         }
       })
+  } else if (result instanceof Path) {
+    functionTree.emit('functionEnd', funcDetails, payload)
+    next(result.toJS())
   } else if (isValidResult(result)) {
     functionTree.emit('functionEnd', funcDetails, payload)
     next({

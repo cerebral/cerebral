@@ -1,6 +1,6 @@
 import dispatch from '../functions/factories/dispatch';
 import debounce from 'function-tree/operators/debounce';
-import filterInput from 'function-tree/operators/filterInput';
+import filter from 'function-tree/operators/filter';
 import searchAssignee from '../functions/searchAssignee';
 
 import {
@@ -14,7 +14,7 @@ import {
 export default [
   dispatch(NEW_ASSIGNMENT_ASSIGNEE_CHANGED),
   debounce(500, [
-    filterInput(input => input.value), {
+    filter('input.value'), {
       accepted: [
         dispatch(ASSIGNEE_SEARCHING),
         searchAssignee, {
