@@ -20,50 +20,6 @@ module.exports = function (options) {
     return padding + text + padding
   }
 
-  function traverseBranch(branch, functions, level) {
-    return branch.reduce(function (logs, item) {
-      if (Array.isArray(item)) {
-        return logs.concat(traverseBranch(item, functions, level + 1))
-      }
-      return logs.concat(
-        padded(chalk.underline.white(item.name), level),
-        padded(
-          chalk.dim(
-            functions[item.functionIndex] ?
-              JSON.stringify(functions[item.functionIndex].payload || {})
-            :
-              JSON.stringify({})
-          ),
-          level
-        )
-      )
-      .concat(
-        functions[item.functionIndex] ?
-          functions[item.functionIndex].data.map(function (data) {
-            return [
-              padded(chalk[data.color || 'white'](data.method), level)
-            ]
-            .concat(
-              (data.args || []).map(function (arg) {
-                return JSON.stringify(arg)
-              })
-            ).join(' ')
-          })
-        :
-          []
-      )
-      .concat(Object.keys(item.outputs || {}).reduce(function (currentOutputs, outputKey) {
-        return currentOutputs.concat(
-          padded(chalk.dim.underline.white(outputKey), level)
-        ).concat(traverseBranch(item.outputs[outputKey], functions, level + 1))
-      }, []))
-    }, [])
-  }
-
-  function traverseFunctionTree(functionTree) {
-    return traverseBranch(functionTree.staticTree, functionTree.functions, 0)
-  }
-
   var registeredFunctionTrees = {}
 
   function send(debuggingData, context, functionDetails, payload) {
@@ -121,7 +77,16 @@ module.exports = function (options) {
 
       if (prevFunction && prevFunction.outputs) {
         var chosenOutput = Object.keys(prevFunction.outputs).filter(function (outputKey) {
-          if (prevFunction.outputs[outputKey].length && prevFunction.outputs[outputKey][0].functionIndex === functionDetails.functionIndex) {
+          if (
+            prevFunction.outputs[outputKey].length &&
+            (
+              ( // Might be an array which is the first element
+                Array.isArray(prevFunction.outputs[outputKey][0]) &&
+                prevFunction.outputs[outputKey][0][0].functionIndex === functionDetails.functionIndex
+              ) ||
+              prevFunction.outputs[outputKey][0].functionIndex === functionDetails.functionIndex
+            )
+          ) {
             return true
           }
 
