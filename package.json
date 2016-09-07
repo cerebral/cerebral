@@ -1,6 +1,6 @@
 {
   "name": "function-tree",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "When a function is not enough",
   "main": "src/index.js",
   "scripts": {

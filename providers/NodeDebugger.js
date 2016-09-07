@@ -54,7 +54,7 @@ module.exports = function (options) {
       )
       .concat(Object.keys(item.outputs || {}).reduce(function (currentOutputs, outputKey) {
         return currentOutputs.concat(
-          padded(chalk.dim.white(outputKey), level)
+          padded(chalk.dim.underline.white(outputKey), level)
         ).concat(traverseBranch(item.outputs[outputKey], functions, level + 1))
       }, []))
     }, [])
