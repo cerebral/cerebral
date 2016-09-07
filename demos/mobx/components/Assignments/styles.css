@@ -1,0 +1,34 @@
+.wrapper {}
+
+.assignment {
+  margin-bottom: 10px;
+}
+
+.assignmentTitle {
+  padding: 5px 10px;
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.assignmentAssignees {
+  display: flex;
+}
+
+.assignmentAssignee {
+  padding: 5px 10px;
+  background-color: #333;
+  color: #EAEAEA;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+}
+
+.assignmentAssigneeLoading {
+  composes: assignmentAssignee;
+  background-color: #EFEFEF;
+  color: #333;
+}

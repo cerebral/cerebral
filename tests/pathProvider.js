@@ -2,13 +2,29 @@
 
 const FunctionTree = require('../src')
 
-module.exports['should add output function'] = (test) => {
+module.exports['should add path function when paths can be taken'] = (test) => {
+  const execute = FunctionTree()
+
+  test.expect(2)
+  execute([
+    function action(context) {
+      test.ok(context.path.success)
+      test.ok(context.path.error)
+    }, {
+      success: [],
+      error: []
+    }
+  ])
+  test.done()
+}
+
+module.exports['should NOT add path function when paths can NOT be taken'] = (test) => {
   const execute = FunctionTree()
 
   test.expect(1)
   execute([
     function action(context) {
-      test.ok(context.result)
+      test.ok(!context.path)
     }
   ])
   test.done()
@@ -20,8 +36,8 @@ module.exports['should have possible outputs as methods'] = (test) => {
   test.expect(2)
   execute([
     function action(context) {
-      test.ok(context.result.foo)
-      test.ok(context.result.bar)
+      test.ok(context.path.foo)
+      test.ok(context.path.bar)
     }, {
       foo: [],
       bar: []
@@ -36,7 +52,7 @@ module.exports['should go down path based on method used'] = (test) => {
   test.expect(1)
   execute([
     function actionA(context) {
-      return context.result.foo()
+      return context.path.foo()
     }, {
       foo: [
         function actionB() {
@@ -49,13 +65,13 @@ module.exports['should go down path based on method used'] = (test) => {
   test.done()
 }
 
-module.exports['should pass payload down outputs'] = (test) => {
+module.exports['should pass payload down paths'] = (test) => {
   const execute = FunctionTree()
 
   test.expect(1)
   execute([
     function actionA(context) {
-      return context.result.foo({foo: 'bar'})
+      return context.path.foo({foo: 'bar'})
     }, {
       foo: [
         function actionB(context) {
@@ -72,7 +88,7 @@ module.exports['should pass payload async'] = (test) => {
   function actionA(context) {
     return new Promise((resolve) => {
       setTimeout(function () {
-        resolve(context.result.foo({foo: 'bar'}))
+        resolve(context.path.foo({foo: 'bar'}))
       })
     })
   }

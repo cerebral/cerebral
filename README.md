@@ -64,8 +64,8 @@ import execute from './execute'
 
 function getData(context) {
   return context.request('/data')
-    .then(context.result.success)
-    .catch(context.result.error)
+    .then(context.path.success)
+    .catch(context.path.error)
 }
 
 function setData(context) {
@@ -107,7 +107,7 @@ export default new FunctionTree([
 ])
 ```
 
-Creating the execute function lets us extend the default context. We extend it with *window* and *request*. We do this simply because we want to use them. The context is available to all the functions of the function tree. By default **input** and **result** is already defined. **Input** holds the current payload. **Result** is a function that builds an object you optionally return from the function. This returned object describes what payload to pass on to the next function and if any path should be executed. When the function returns a promise it will wait for the promise to resolve before moving on. You can also use ES7 async functions to do the same.
+Creating the execute function lets us extend the default context. We extend it with *window* and *request*. We do this simply because we want to use them. The context is available to all the functions of the function tree. By default **input** is defined. **Input** holds the current payload. **Path** is defined if the function can diverge the execution down a path. The path object will have methods representing the path to go down, optionally taking a payload to pass on. The method returns an object you need to return from the function. When the function returns a promise it will wait for the promise to resolve before moving on. You can also use ES7 async functions to do the same.
 
 ### How does this differ from rxjs and promises?
 Both Rxjs and Promises are about execution control, but neither of them have declarative conditional execution paths, you have to write an *IF* or *SWITCH* statement. The example above we were able to diverge our execution down the `success` or `error` path just as declaratively as our functions. This helps readability. Conditional execution can also be related to things like:
@@ -184,7 +184,7 @@ const loadApp = [
 ```
 
 ### What happens when a function tree executes?
-When you execute a function tree it will traverse the tree verifying its validity and analyzing the different execution paths. This gives a static representation of the tree which can be accessed by providers and can also be passed to debuggers to visualize it. The analysis is cached, so it only happens the first time. Then the tree will be traversed, creating a context for every function before executing it. When the function is done running it continues to the next function.
+When you execute a function tree it will traverse the tree verifying its validity and analyzing the different execution paths. This gives a static representation of the tree which can be accessed by providers and can also be passed to debuggers to visualize it. The analysis is cached, so it only happens the first time. Then the tree will actually execute, creating a context for every function before running it. When the function is done running it continues to the next function.
 
 The fact that a context is created for each function gives a lot of flexibility. You can configure your function trees to handle everything from Redux dispatchers, to firebase, mobx models, ember data, mongodb on the server etc. It does not matter, function tree is completely agnostic to this.
 
@@ -221,11 +221,7 @@ const execute = new FunctionTree([
   ContextProvider({
     window,
     request: {
-      get() {
-        return new Promise(resolve => (
-          resolve({status: 200, data: {foo: 'bar'}})
-        ))
-      }
+      get: Promise.resolve({status: 200, data: {foo: 'bar'}})
     }
   })
 ])
@@ -235,7 +231,7 @@ execute(appMounted, () => {
 })
 ```
 
-The really good thing about asynchronous testing with a `function-tree` is that any async side effect returns a promise, meaning that we do not care about the side effect itself. Any async side effect can be mocked with a simple promise, like you see on the **request.get** above. If you do care about the side effect though you can still insert it as normal on the context.
+The really good thing about asynchronous testing with a `function-tree` is that any async side effect returns a promise, meaning that we do not care about the side effect itself. Any async side effect can be mocked with a simple resolved or rejected promise, like you see on the **request.get** above. If you do care about the side effect though you can still insert it as normal on the context.
 
 ### API
 
@@ -300,6 +296,58 @@ import tree from './tree'
 execute(tree, {
   foo: 'bar'
 })
+```
+
+#### Returning a payload (input)
+To pass data to the other functions you need to return an object from the function synchronously or asynchronously. It needs to be an object as it will be merged with the existing input.
+
+```js
+import execute from './execute'
+
+function funcA() {
+  return {
+    foo: 'bar'
+  }
+}
+
+function funcB(context) {
+  context.input.foo // "bar"
+}
+
+const tree = [
+  funcA,
+  funcB
+]
+
+execute(tree)
+```
+
+#### Running a path
+The **path** is only available when there are paths to be executed.
+
+```js
+import execute from './execute'
+
+function funcA(context) {
+  return context.path.foo({
+    foo: 'bar'
+  })
+}
+
+function funcB(context) {
+  context.input.foo // "bar"
+}
+
+const tree = [
+  funcA, {
+    foo: [
+      funcB
+    ],
+    bar: []
+  }
+]
+
+execute(tree)
 ```
 
 #### Retry (recursive)
@@ -381,14 +429,15 @@ const tree = [
 execute(tree, {foo: 'bar'})
 ```
 
-#### Result (default provider)
+#### Path (default provider)
+The path is only available on the context when the function can diverge the execution down a path.
 
 ```js
 import FunctionTree from 'function-tree'
 
 function funcA(context) {
   context.input.foo // "bar"
-  return context.result.pathA({foo2: 'bar2'})
+  return context.path.pathA({foo2: 'bar2'})
 }
 
 function funcB(context) {
@@ -397,7 +446,7 @@ function funcB(context) {
 
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(context.result({foo3: 'bar3'}))
+      resolve({foo3: 'bar3'})
     }, 100)
   })
 }
