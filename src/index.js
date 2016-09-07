@@ -40,12 +40,16 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
 
   functionTree.emit('functionStart', funcDetails, payload)
   const result = funcDetails.function(context)
+
   if (result && result.then && result.catch && typeof result.then === 'function' && typeof result.catch === 'function') {
     result
       .then(function (result) {
         if (result instanceof Path) {
           functionTree.emit('functionEnd', funcDetails, payload)
           next(result.toJS())
+        } else if (funcDetails.outputs) {
+          functionTree.emit('functionEnd', funcDetails, payload)
+          throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
         } else if (isValidResult(result)) {
           functionTree.emit('functionEnd', funcDetails, payload)
           next({
@@ -65,6 +69,9 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
         } else if (result instanceof Path) {
           functionTree.emit('functionEnd', funcDetails, payload)
           next(result.toJS())
+        } else if (funcDetails.outputs) {
+          functionTree.emit('functionEnd', funcDetails, payload)
+          throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
         } else if (isValidResult(result)) {
           functionTree.emit('functionEnd', funcDetails, payload)
           next({
@@ -80,6 +87,9 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
   } else if (result instanceof Path) {
     functionTree.emit('functionEnd', funcDetails, payload)
     next(result.toJS())
+  } else if (funcDetails.outputs) {
+    functionTree.emit('functionEnd', funcDetails, payload)
+    throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
   } else if (isValidResult(result)) {
     functionTree.emit('functionEnd', funcDetails, payload)
     next({

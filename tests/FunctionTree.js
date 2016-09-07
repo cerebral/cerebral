@@ -115,19 +115,15 @@ module.exports['should pass action and payload on action events'] = (test) => {
   test.done()
 }
 
-module.exports['should be able to reuse existing chain to define signals'] = (test) => {
-  function actionA() {
+module.exports['should be able to reuse existing tree'] = (test) => {
+  function actionA(context) {
     test.ok(true)
-    return {
-      path: 'success'
-    }
+    return context.path.success()
   }
 
-  function actionB() {
+  function actionB(context) {
     test.ok(true)
-    return {
-      path: 'success'
-    }
+    return context.path.success()
   }
 
   function actionC() {
@@ -152,4 +148,24 @@ module.exports['should be able to reuse existing chain to define signals'] = (te
       test.done()
     })
   })
+}
+
+module.exports['should throw when path and no path returned'] = (test) => {
+  function actionA() {
+    return {
+      foo: 'bar'
+    }
+  }
+
+  const execute = FunctionTree([])
+  const tree = [
+    actionA, {
+      success: []
+    }
+  ]
+  test.expect(1)
+  test.throws(() => {
+    execute(tree)
+  })
+  test.done()
 }

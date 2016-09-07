@@ -10,6 +10,7 @@ module.exports['should add path function when paths can be taken'] = (test) => {
     function action(context) {
       test.ok(context.path.success)
       test.ok(context.path.error)
+      return context.path.success()
     }, {
       success: [],
       error: []
@@ -38,6 +39,7 @@ module.exports['should have possible outputs as methods'] = (test) => {
     function action(context) {
       test.ok(context.path.foo)
       test.ok(context.path.bar)
+      return context.path.foo()
     }, {
       foo: [],
       bar: []

@@ -68,31 +68,75 @@ module.exports = function (options) {
 
   function send(debuggingData, context, functionDetails, payload) {
     var id = context.execution.id + '_' + context.execution.executionId
+    var prevFunction = (
+      registeredFunctionTrees[id] &&
+      registeredFunctionTrees[id].functions[registeredFunctionTrees[id].functions.length - 1]
+    )
+
+    var isExistingFunction = Boolean(prevFunction && prevFunction.functionIndex === functionDetails.functionIndex)
+
     if (registeredFunctionTrees[id] && registeredFunctionTrees[id].functions[functionDetails.functionIndex]) {
       registeredFunctionTrees[id].functions[functionDetails.functionIndex].data.push(debuggingData)
+    } else if (isExistingFunction) {
+      prevFunction.data = prevFunction.data.concat(functionDetails.data)
     } else if (registeredFunctionTrees[id]) {
-      registeredFunctionTrees[id].functions[functionDetails.functionIndex] = {
+      registeredFunctionTrees[id].functions.push({
+        functionIndex: functionDetails.functionIndex,
+        outputs: functionDetails.outputs,
         payload: payload,
         data: []
-      }
+      })
     } else {
       registeredFunctionTrees[id] = {
+        logLevel: 0,
         staticTree: context.execution.staticTree,
         functions: [{
+          functionIndex: functionDetails.functionIndex,
+          outputs: functionDetails.outputs,
           payload: payload,
           data: []
         }]
       }
     }
 
-    if (!registeredFunctionTrees[id].isBatching) {
-      registeredFunctionTrees[id].isBatching = true
-      setTimeout(function () {
-        console.log([
-          chalk.bgWhite.black.bold(padded(context.execution.name || context.execution.id)),
-        ].concat(traverseFunctionTree(registeredFunctionTrees[id])).join('\n'));
-        registeredFunctionTrees[id].isBatching = false
-      })
+    if (isExistingFunction) {
+
+      var data = prevFunction.data[prevFunction.data.length - 1]
+      var args = data.args || []
+      console.log.apply(console,
+        [padded(chalk[data.color || 'white'](data.method), registeredFunctionTrees[id].logLevel)].concat(
+          args.map(function (arg) {
+            return padded(chalk.white(JSON.stringify(arg)), registeredFunctionTrees[id].logLevel)
+          })
+        )
+      )
+
+
+    } else {
+
+      if (registeredFunctionTrees[id].functions.length === 1) {
+        console.log(chalk.bgWhite.black.bold(padded(context.execution.name || context.execution.id)))
+      }
+
+
+      if (prevFunction && prevFunction.outputs) {
+        var chosenOutput = Object.keys(prevFunction.outputs).filter(function (outputKey) {
+          if (prevFunction.outputs[outputKey].length && prevFunction.outputs[outputKey][0].functionIndex === functionDetails.functionIndex) {
+            return true
+          }
+
+          return false
+        })[0]
+        console.log(padded(chalk.dim.underline.white(chosenOutput), registeredFunctionTrees[id].logLevel))
+        registeredFunctionTrees[id].logLevel++
+      }
+
+      console.log(padded(chalk.underline.white(functionDetails.name), registeredFunctionTrees[id].logLevel))
+      console.log(padded(
+        chalk.dim(JSON.stringify(payload || {})),
+        registeredFunctionTrees[id].logLevel
+      ))
+
     }
   }
 
