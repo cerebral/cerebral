@@ -1,12 +1,13 @@
 {
   "name": "function-tree",
-  "version": "0.3.8",
+  "version": "0.3.9",
   "description": "When a function is not enough",
   "main": "src/index.js",
   "scripts": {
     "clean": "rimraf lib && rimraf tests/*.js*",
     "demo:redux": "node demos/server --demo redux",
     "demo:mobx": "node demos/server --demo mobx",
+    "demo:node": "node demos/node/main.js",
     "test": "nodeunit tests"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "react-dom": "^15.3.1",
     "react-redux": "^4.4.5",
     "redux": "^3.5.2",
+    "request": "^2.74.0",
     "style-loader": "^0.13.1",
     "webpack": "^1.13.2",
     "webpack-dev-middleware": "^1.6.1"

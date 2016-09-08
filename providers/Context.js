@@ -11,7 +11,21 @@ module.exports = function (extendedContext) {
           proto = extendedContext[key].constructor.prototype
         }
 
-        context[key] = Object.create(extendedContext[key])
+        var existingContextfunction = extendedContext[key]
+
+        context[key] = (
+          typeof extendedContext[key] === 'function' ?
+            function () {
+              context.debugger.send({
+                method: key,
+                color: context.debugger.getColor(key),
+                args: [].slice.call(arguments)
+              })
+              extendedContext[key].apply(context, arguments)
+            }
+          :
+            Object.create(extendedContext[key])
+        )
         context[key] = Object.keys(extendedContext[key]).reduce(function (obj, objKey) {
           if (typeof extendedContext[key][objKey] === 'function') {
             var originalFunc = extendedContext[key][objKey]

@@ -96,9 +96,10 @@ module.exports = function (options) {
         registeredFunctionTrees[id].logLevel++
       }
 
+      var payloadString = JSON.stringify(payload || {})
       console.log(padded(chalk.underline.white(functionDetails.name), registeredFunctionTrees[id].logLevel))
       console.log(padded(
-        chalk.dim(JSON.stringify(payload || {})),
+        chalk.dim(payloadString.length > 300 ? payloadString.substr(0, 297) + '...' : payloadString),
         registeredFunctionTrees[id].logLevel
       ))
 
