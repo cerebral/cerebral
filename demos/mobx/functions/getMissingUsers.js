@@ -1,9 +1,10 @@
-function getMissingUsers({axios, data}) {
+function getMissingUsers({axios, data, path}) {
   const users = data.users;
   const assignments = data.assignments;
+
   const missingUsersId = assignments.reduce((currentMissingUsersId, assignment) => {
     return assignment.assignedTo.reduce((currentMissingAssigneeId, assigneeId) => {
-      if (!users[assigneeId] && currentMissingAssigneeId.indexOf(assigneeId) === -1) {
+      if (!users.has(String(assigneeId)) && currentMissingAssigneeId.indexOf(assigneeId) === -1) {
         return currentMissingAssigneeId.concat(assigneeId);
       }
 
@@ -18,9 +19,9 @@ function getMissingUsers({axios, data}) {
     .then((responses) => {
       const missingUsers = responses.map(response => response.data);
 
-      return result.success({users: missingUsers});
+      return path.success({users: missingUsers});
     })
-    .catch((error) => result.error({
+    .catch((error) => path.error({
       status: error.response.status,
       data: error.response.data
     }));

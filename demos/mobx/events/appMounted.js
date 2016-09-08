@@ -1,4 +1,5 @@
 import setView from '../factories/setView';
+import copyInputToData from '../factories/copyInputToData';
 import httpGet from '../factories/httpGet';
 import getMissingUsers from '../compositions/getMissingUsers';
 
@@ -7,6 +8,7 @@ export default [
   httpGet('/assignments'), {
     success: [
       setView('isLoadingAssignments', false),
+      copyInputToData('data', 'assignments'),
       ...getMissingUsers
     ],
     error: [

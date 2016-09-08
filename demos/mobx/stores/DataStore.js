@@ -1,21 +1,25 @@
-import {observable} from 'mobx';
+import {observable, map} from 'mobx';
 import Assignment from '../models/Assignment';
 
 class DataStore {
   @observable
   assignments = [];
 
-  users = {};
+  users = map({});
 
   addAssignment(title, assignedTo) {
-    const assignees = assignedTo.map(userId => this.users[userId]);
-
-    this.assignments.push(new Assignment(title, assignees));
+    this.assignments.unshift(new Assignment(title, assignedTo));
+  }
+  updateAssignmentId(id) {
+    this.assignments[0].id = id;
   }
   addUsers(users) {
     users.forEach(user => {
-      this.users[user.id] = user;
+      this.users.set(user.id, user);
     });
+  }
+  set(prop, value) {
+    this[prop] = value;
   }
 }
 

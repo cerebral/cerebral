@@ -26,7 +26,8 @@ const config = {
         ],
         plugins: [
           // Needed by mobx
-          require.resolve('babel-plugin-transform-decorators-legacy')
+          require.resolve('babel-plugin-transform-decorators-legacy'),
+          require.resolve('babel-plugin-transform-class-properties')
         ]
       }
     }, {

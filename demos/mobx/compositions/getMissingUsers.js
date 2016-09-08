@@ -1,7 +1,7 @@
 import getMissingUsers from '../functions/getMissingUsers';
 
 export function setMissingUsers({input, data}) {
-  data.addUsers(input.data);
+  data.addUsers(input.users);
 }
 
 export function setMissingUsersError({view}) {

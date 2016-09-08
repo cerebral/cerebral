@@ -16,6 +16,8 @@ Install the [chrome extension debugger](https://chrome.google.com/webstore/detai
 
 `npm run demo:redux`
 
+`npm run demo:mobx`
+
 More demos coming soon...
 
 ### A small example

@@ -28,7 +28,7 @@ class ViewStore {
   isPostingAssignment = false;
 
   addAssignee() {
-    this.newAssigmentAssignees.concat(this.assigneeSearchResult);
+    this.newAssigmentAssignees = this.newAssigmentAssignees.concat(this.assigneeSearchResult);
   }
   set(prop, value) {
     this[prop] = value;

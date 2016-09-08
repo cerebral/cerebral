@@ -1,7 +1,7 @@
 class Assignment {
   constructor(title, assignees) {
     this.title = title;
-    this.assignees = assignees;
+    this.assignedTo = assignees;
   }
 
   toJS() {

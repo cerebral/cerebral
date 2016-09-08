@@ -14,8 +14,8 @@ class App extends React.Component {
   render() {
     return (
       <div className={styles.wrapper}>
-        <AddAssignment />
-        <Assignments />
+        <AddAssignment store={this.props.store}/>
+        <Assignments store={this.props.store}/>
       </div>
     );
   }
