@@ -1,5 +1,5 @@
-import httpGet from '../functions/factories/httpGet';
-import dispatch from '../functions/factories/dispatch';
+import httpGet from '../factories/httpGet';
+import dispatch from '../factories/dispatch';
 import getMissingUsers from '../compositions/getMissingUsers';
 import {
   ASSIGNMENTS_LOADING,

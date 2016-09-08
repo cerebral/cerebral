@@ -1,4 +1,4 @@
-import dispatch from '../functions/factories/dispatch';
+import dispatch from '../factories/dispatch';
 import postAssignment from '../functions/postAssignment';
 import getMissingUsers from '../compositions/getMissingUsers';
 import {

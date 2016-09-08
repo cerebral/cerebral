@@ -1,4 +1,4 @@
-import dispatch from '../functions/factories/dispatch';
+import dispatch from '../factories/dispatch';
 import {
   NEW_ASSIGNMENT_TITLE_CHANGED
 } from '../constants';

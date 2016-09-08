@@ -1,4 +1,4 @@
-import dispatch from '../functions/factories/dispatch';
+import dispatch from '../factories/dispatch';
 import hasAssignee from '../functions/hasAssignee';
 import {
   NEW_ASSIGNMENT_ASSIGNEE_ADDED
