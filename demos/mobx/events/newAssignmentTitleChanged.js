@@ -1,5 +1,5 @@
-import copy from 'function-tree/operators/copy';
+import copyInputToView from '../functions/factories/copyInputToView';
 
 export default [
-  copy('input.value', 'view.newAssignmentTitle')
+  copyInputToView('value', 'newAssignmentTitle')
 ];

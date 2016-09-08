@@ -1,5 +1,5 @@
-function hasAssignee({view}) {
-  view.newAssigmentAssignees.concat(view.assigneeSearchResult)
+function addAssignee({view}) {
+  view.addAssignee(view.assigneeSearchResult)
 }
 
-export default hasAssignee;
+export default addAssignee;

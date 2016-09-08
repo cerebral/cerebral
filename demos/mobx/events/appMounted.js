@@ -1,16 +1,16 @@
-import set from 'function-tree/operators/set';
-import httpGet from '../functions/factories/httpGet';
+import setView from '../factories/setView';
+import httpGet from '../factories/httpGet';
 import getMissingUsers from '../compositions/getMissingUsers';
 
 export default [
-  set('view.isLoadingAssignments', true),
+  setView('isLoadingAssignments', true),
   httpGet('/assignments'), {
     success: [
-      set('view.isLoadingAssignments', false),
+      setView('isLoadingAssignments', false),
       ...getMissingUsers
     ],
     error: [
-      set('view.error', 'Could not load assignments')
+      setView('error', 'Could not load assignments')
     ]
   }
 ];

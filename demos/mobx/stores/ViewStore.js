@@ -26,6 +26,13 @@ class ViewStore {
 
   @observable
   isPostingAssignment = false;
+
+  addAssignee() {
+    this.newAssigmentAssignees.concat(this.assigneeSearchResult);
+  }
+  set(prop, value) {
+    this[prop] = value;
+  }
 }
 
 export default ViewStore;

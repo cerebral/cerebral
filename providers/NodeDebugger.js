@@ -34,7 +34,7 @@ module.exports = function (options) {
     if (registeredFunctionTrees[id] && registeredFunctionTrees[id].functions[functionDetails.functionIndex]) {
       registeredFunctionTrees[id].functions[functionDetails.functionIndex].data.push(debuggingData)
     } else if (isExistingFunction) {
-      prevFunction.data = prevFunction.data.concat(functionDetails.data)
+      prevFunction.data = prevFunction.data.concat(debuggingData)
     } else if (registeredFunctionTrees[id]) {
       registeredFunctionTrees[id].functions.push({
         functionIndex: functionDetails.functionIndex,
@@ -58,7 +58,7 @@ module.exports = function (options) {
     if (isExistingFunction) {
 
       var data = prevFunction.data[prevFunction.data.length - 1]
-      var args = data.args || []
+      var args = data ? data.args || [] : []
       console.log.apply(console,
         [padded(chalk[data.color || 'white'](data.method), registeredFunctionTrees[id].logLevel)].concat(
           args.map(function (arg) {

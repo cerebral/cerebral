@@ -1,16 +1,16 @@
-import set from 'function-tree/operators/set';
+import setView from '../factories/setView';
 import postAssignment from '../functions/postAssignment';
 import getMissingUsers from '../compositions/getMissingUsers';
 
 export default [
-  set('view.isPostingAssignment', true),
+  setView('isPostingAssignment', true),
   postAssignment, {
     success: [
-      set('view.isPostingAssignment', false),
+      setView('isPostingAssignment', false),
       ...getMissingUsers
     ],
     error: [
-      set('view.error', 'Could not post assignment')
+      setView('error', 'Could not post assignment')
     ]
   }
 ];
