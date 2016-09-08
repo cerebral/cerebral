@@ -381,6 +381,23 @@ execute(tree, {
 ```
 
 
+#### Catching errors
+```js
+// As an event (async)
+execute.on('error', function (err) {
+
+})
+
+execute(tree)
+
+// As callback (sync)
+execute(tree, (err) => {
+  if (err) {
+    // There is an error
+  }
+})
+```
+
 #### Providers
 A provider gives you access to the current context and other information about the execution. It is required that you return the context or a mutated version of it.
 

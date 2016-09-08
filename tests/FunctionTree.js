@@ -150,7 +150,7 @@ module.exports['should be able to reuse existing tree'] = (test) => {
   })
 }
 
-module.exports['should throw when path and no path returned'] = (test) => {
+module.exports['should give error when path and no path returned'] = (test) => {
   function actionA() {
     return {
       foo: 'bar'
@@ -164,8 +164,9 @@ module.exports['should throw when path and no path returned'] = (test) => {
     }
   ]
   test.expect(1)
-  test.throws(() => {
-    execute(tree)
+  execute.once('error', () => {
+    test.ok(true)
+    test.done()
   })
-  test.done()
+  execute(tree)
 }

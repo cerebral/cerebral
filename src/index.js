@@ -24,12 +24,13 @@ function isValidResult(result) {
   )
 }
 
-function FunctionTreeExecution(name, staticTree, functionTree) {
+function FunctionTreeExecution(name, staticTree, functionTree, errorCallback) {
   this.id = createUniqueId()
   this.name = name
   this.staticTree = staticTree
   this.functionTree = functionTree
   this.datetime = Date.now()
+  this.errorCallback = errorCallback
 
   this.runFunction = this.runFunction.bind(this)
 }
@@ -37,6 +38,7 @@ function FunctionTreeExecution(name, staticTree, functionTree) {
 FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, next) {
   const context = this.createContext(funcDetails, payload)
   const functionTree = this.functionTree
+  const errorCallback = this.errorCallback
 
   functionTree.emit('functionStart', funcDetails, payload)
   const result = funcDetails.function(context)
@@ -62,42 +64,40 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
       })
       .catch(function (result) {
         if (result instanceof Error) {
-          setTimeout(function () {
-            functionTree.emit('functionEnd', funcDetails, payload)
-            throw result
-          })
+          errorCallback(result)
         } else if (result instanceof Path) {
           functionTree.emit('functionEnd', funcDetails, payload)
           next(result.toJS())
         } else if (funcDetails.outputs) {
-          functionTree.emit('functionEnd', funcDetails, payload)
-          throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
+          var error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
+
+          errorCallback(result)
         } else if (isValidResult(result)) {
           functionTree.emit('functionEnd', funcDetails, payload)
           next({
             payload: result
           })
         } else {
-          setTimeout(function () {
-            functionTree.emit('functionEnd', funcDetails, payload)
-            throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
-          })
+          var error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
+
+          errorCallback(error)
         }
       })
   } else if (result instanceof Path) {
     functionTree.emit('functionEnd', funcDetails, payload)
     next(result.toJS())
   } else if (funcDetails.outputs) {
-    functionTree.emit('functionEnd', funcDetails, payload)
-    throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
+    var error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
+
+    errorCallback(error)
   } else if (isValidResult(result)) {
     functionTree.emit('functionEnd', funcDetails, payload)
     next({
       payload: result
     })
   } else {
-    functionTree.emit('functionEnd', funcDetails, payload)
-    throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
+    var error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
+    errorCallback(error)
   }
 }
 
@@ -168,7 +168,12 @@ FunctionTree.prototype.runTree = function() {
   } else {
     staticTree = this.cachedStaticTrees[this.cachedTrees.indexOf(tree)]
   }
-  var execution = new FunctionTreeExecution(name, staticTree, this)
+  var execution = new FunctionTreeExecution(name, staticTree, this, function(error) {
+    cb && cb(error)
+    setTimeout(function () {
+      this.emit('error', error)
+    }.bind(this))
+  }.bind(this))
 
   this.emit('start')
   executeTree(execution.staticTree, execution.runFunction, payload, function() {
