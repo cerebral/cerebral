@@ -2,7 +2,7 @@ import {
   USERS_LOADED_SUCCESS,
   USERS_LOADED_ERROR
 } from '../constants';
-import dispatch from '../functions/factories/dispatch';
+import dispatch from '../factories/dispatch';
 import getMissingUsers from '../functions/getMissingUsers';
 
 export default [
