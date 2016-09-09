@@ -27,6 +27,7 @@ module.exports['should wrap methods on added object'] = (test) => {
   const contextItem = {
     foo() {}
   };
+  const originalFunc = contextItem.foo
   const execute = FunctionTree([
     NodeDebuggerProvider(),
     ContextProvider({
@@ -34,10 +35,31 @@ module.exports['should wrap methods on added object'] = (test) => {
     })
   ])
 
-  test.expect(1)
+  test.expect(2)
   execute([
     function funcA(context) {
-      test.notEqual(context.contextItem.foo, contextItem.foo)
+      test.notEqual(originalFunc, contextItem.foo)
+      test.equal(contextItem.foo.__ft_originFunc, originalFunc)
+    }
+  ])
+  test.done()
+}
+
+module.exports['should wrap functions added to context'] = (test) => {
+  const contextItem = () => {};
+
+  const execute = FunctionTree([
+    NodeDebuggerProvider(),
+    ContextProvider({
+      contextItem
+    })
+  ])
+
+  test.expect(2)
+  execute([
+    function funcA(context) {
+      test.notEqual(contextItem, context.contextItem)
+      test.equal(context.contextItem.__ft_originFunc, contextItem)
     }
   ])
   test.done()
