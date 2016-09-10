@@ -575,6 +575,9 @@ const tree = [
   funcA
 ]
 
+// When an error is thrown, also catches promise errors
+execute.on('error', (error) => {})
+
 // When a function tree is executed
 execute.on('start', (execution, payload) => {})
 

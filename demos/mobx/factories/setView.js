@@ -1,6 +1,6 @@
 function setViewFactory(prop, value) {
   function setView({view}) {
-    view.set(prop, value);
+    view[prop] = value;
   }
 
   return setView;

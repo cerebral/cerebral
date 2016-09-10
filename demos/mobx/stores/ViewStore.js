@@ -30,9 +30,6 @@ class ViewStore {
   addAssignee() {
     this.newAssigmentAssignees = this.newAssigmentAssignees.concat(this.assigneeSearchResult);
   }
-  set(prop, value) {
-    this[prop] = value;
-  }
 }
 
 export default ViewStore;

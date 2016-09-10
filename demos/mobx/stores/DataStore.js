@@ -18,9 +18,6 @@ class DataStore {
       this.users.set(user.id, user);
     });
   }
-  set(prop, value) {
-    this[prop] = value;
-  }
 }
 
 export default DataStore;

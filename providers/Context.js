@@ -2,8 +2,9 @@ module.exports = function (extendedContext) {
   return function(context, funcDetails, payload) {
     return Object.keys(extendedContext).reduce(function (context, key) {
       if (context.debugger) {
+        context[key] = {}
 
-        // Grab the prototype to insert methods defined there into instance later.
+        // Grab the prototype to add methods to proxy.
         // We only grab actual added prototypes on first level, not nested and not
         // where prototype is base prototypes like Objects and Functions
         var proto = null
@@ -16,60 +17,55 @@ module.exports = function (extendedContext) {
         }
 
         // The value might be a function that is already wrapped, try grabbing the original
-        var existingContextValue = extendedContext[key].__ft_originFunc || extendedContext[key]
+        var contextValue = extendedContext[key]
 
         // If the context value is a function, wrap it
-        if (typeof existingContextValue === 'function') {
+        if (typeof contextValue === 'function') {
           context[key] = function () {
             context.debugger.send({
               method: key,
               color: context.debugger.getColor(key),
               args: [].slice.call(arguments)
             })
-            existingContextValue.apply(context, arguments)
+            return contextValue.apply(null, arguments)
           };
-          context[key].__ft_originFunc = existingContextValue
         }
 
-        // Go through keys original value and wrap any attached methods
-        context[key] = Object.keys(existingContextValue).reduce(function (obj, objKey) {
-          if (typeof existingContextValue[objKey] === 'function') {
-            var originalFunc = existingContextValue[objKey].__ft_originFunc || existingContextValue[objKey]
-
-            obj[objKey] = function () {
-              context.debugger.send({
-                method: key + '.' + objKey,
-                color: context.debugger.getColor(key),
-                args: [].slice.call(arguments)
-              })
-              return originalFunc.apply(obj, arguments)
-            }
-            existingContextValue[objKey].__ft_originFunc = originalFunc
-          }
-
-          return obj
-        }, context[key] || existingContextValue) // Depending it being a function that has been wrapped or the original object
-
-        // Grab methods of prototype and add it
-        if (proto) {
-          context[key] = Object.getOwnPropertyNames(proto).reduce(function (obj, objKey) {
-            if (typeof proto[objKey] === 'function' && objKey !== 'constructor') {
-              var originalFunc = proto[objKey].__ft_originFunc || proto[objKey]
-
+        function proxy(sourceKeys, source, target) {
+          return sourceKeys.reduce(function (obj, objKey) {
+            if (typeof contextValue[objKey] === 'function') {
               obj[objKey] = function () {
                 context.debugger.send({
                   method: key + '.' + objKey,
                   color: context.debugger.getColor(key),
                   args: [].slice.call(arguments)
                 })
-                return originalFunc.apply(existingContextValue, arguments)
+                return contextValue[objKey].apply(contextValue, arguments)
               }
-              obj[objKey].__ft_originFunc = originalFunc
+            } else if (!(objKey in obj)) {
+              Object.defineProperty(obj, objKey, {
+                get() {
+                  return contextValue[objKey]
+                },
+                set(value) {
+                  context.debugger.send({
+                    method: key + '.' + objKey + ' =',
+                    color: context.debugger.getColor(key),
+                    args: [value]
+                  })
+                  contextValue[objKey] = value
+                }
+              })
             }
 
             return obj
-          }, context[key])
+          }, target)
         }
+
+        // Go through keys original value and wrap any attached methods
+        context[key] = proxy(Object.keys(contextValue), contextValue, context[key])//Object.keys(contextValue).reduce(proxy, context[key])
+        // Go through proto
+        context[key] = proto ? proxy(Object.getOwnPropertyNames(proto), proto, context[key]) : context[key]
       } else {
         context[key] = extendedContext[key]
       }

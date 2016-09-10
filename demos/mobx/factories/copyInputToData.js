@@ -1,6 +1,6 @@
 function copyInputToDataFactory(inputProp, dataProp) {
   function copyInputToData({input, data}) {
-    data.set(dataProp, input[inputProp]);
+    data[dataProp] = input[inputProp];
   }
 
   return copyInputToData;

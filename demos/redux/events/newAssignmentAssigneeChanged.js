@@ -1,5 +1,5 @@
 import dispatch from '../factories/dispatch';
-import debounce from 'function-tree/operators/debounce';
+import debounce from 'function-tree/factories/debounce';
 import hasInputValue from '../factories/hasInputValue';
 import searchAssignee from '../functions/searchAssignee';
 

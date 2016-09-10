@@ -1,6 +1,6 @@
 import copyInputToView from '../factories/copyInputToView';
 import setView from '../factories/setView';
-import debounce from 'function-tree/operators/debounce';
+import debounce from 'function-tree/factories/debounce';
 import hasInputValue from '../factories/hasInputValue';
 import searchAssignee from '../functions/searchAssignee';
 

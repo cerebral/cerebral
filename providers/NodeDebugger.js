@@ -26,7 +26,10 @@ module.exports = function (options) {
     var id = context.execution.id + '_' + context.execution.executionId
     var prevFunction = (
       registeredFunctionTrees[id] &&
-      registeredFunctionTrees[id].functions[registeredFunctionTrees[id].functions.length - 1]
+      registeredFunctionTrees[id].functions[functionDetails.functionIndex] ?
+        registeredFunctionTrees[id].functions[functionDetails.functionIndex]
+      :
+        null
     )
 
     var isExistingFunction = Boolean(prevFunction && prevFunction.functionIndex === functionDetails.functionIndex)
@@ -36,22 +39,23 @@ module.exports = function (options) {
     } else if (isExistingFunction) {
       prevFunction.data = prevFunction.data.concat(debuggingData)
     } else if (registeredFunctionTrees[id]) {
-      registeredFunctionTrees[id].functions.push({
+      registeredFunctionTrees[id].functions[functionDetails.functionIndex] = {
         functionIndex: functionDetails.functionIndex,
         outputs: functionDetails.outputs,
         payload: payload,
         data: []
-      })
+      }
     } else {
       registeredFunctionTrees[id] = {
         logLevel: 0,
         staticTree: context.execution.staticTree,
-        functions: [{
-          functionIndex: functionDetails.functionIndex,
-          outputs: functionDetails.outputs,
-          payload: payload,
-          data: []
-        }]
+        functions: {}
+      }
+      registeredFunctionTrees[id].functions[functionDetails.functionIndex] = {
+        functionIndex: functionDetails.functionIndex,
+        outputs: functionDetails.outputs,
+        payload: payload,
+        data: []
       }
     }
 
@@ -59,9 +63,12 @@ module.exports = function (options) {
 
       var data = prevFunction.data[prevFunction.data.length - 1]
       var args = data ? data.args || [] : []
+
       console.log.apply(console,
         [padded(chalk[data.color || 'white'](data.method), registeredFunctionTrees[id].logLevel)].concat(
-          args.map(function (arg) {
+          args.filter(function (arg) {
+            return typeof arg !== 'function'
+          }).map(function (arg) {
             return padded(chalk.white(JSON.stringify(arg)), registeredFunctionTrees[id].logLevel)
           })
         )

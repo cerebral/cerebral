@@ -38,8 +38,8 @@ module.exports['should wrap methods on added object'] = (test) => {
   test.expect(2)
   execute([
     function funcA(context) {
-      test.notEqual(originalFunc, contextItem.foo)
-      test.equal(contextItem.foo.__ft_originFunc, originalFunc)
+      test.equal(originalFunc, contextItem.foo)
+      test.notEqual(context.foo, originalFunc)
     }
   ])
   test.done()
@@ -59,7 +59,6 @@ module.exports['should wrap functions added to context'] = (test) => {
   execute([
     function funcA(context) {
       test.notEqual(contextItem, context.contextItem)
-      test.equal(context.contextItem.__ft_originFunc, contextItem)
     }
   ])
   test.done()
