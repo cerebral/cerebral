@@ -2,6 +2,8 @@
 
 When a function is not enough
 
+`npm install function-tree`
+
 ### What is it?
 Readable and maintainable code is a never ending quest. With the increased complexity of modern web applications the execution of code from user interactions and other events in our applications has increased in complexity as well. But this is not only related to the frontend, also our backends has increased execution complexity as our applications are inherently more complex.
 
@@ -491,7 +493,7 @@ execute(tree, {foo: 'bar'})
 ```
 
 #### Context (optional provider)
-Will extend the context. If the debugger is active the methods on the attached object will be wrapped and debugger till notify about their uses.
+Will extend the context. If the debugger is active the methods on the attached object will be wrapped and debugger will notify about their uses.
 
 ```js
 import FunctionTree from 'function-tree'
