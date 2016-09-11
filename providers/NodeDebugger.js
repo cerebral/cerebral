@@ -1,5 +1,23 @@
 var chalk = require('chalk')
 
+function safeStringify(obj) {
+  var cache = []
+  var returnValue = JSON.stringify(obj || {}, function(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.indexOf(value) === -1) {
+        cache.push(value);
+
+        return value;
+      }
+      return '[CIRCULAR]'
+    }
+    return value;
+  });
+  cache = null;
+
+  return returnValue
+}
+
 module.exports = function (options) {
   options = options || {}
   var colors = options.colors || {}
@@ -103,7 +121,8 @@ module.exports = function (options) {
         registeredFunctionTrees[id].logLevel++
       }
 
-      var payloadString = JSON.stringify(payload || {})
+      var payloadString = safeStringify(payload)
+
       console.log(padded(chalk.underline.white(functionDetails.name), registeredFunctionTrees[id].logLevel))
       console.log(padded(
         chalk.dim(payloadString.length > 300 ? payloadString.substr(0, 297) + '...' : payloadString),

@@ -1,3 +1,21 @@
+function safeStringify(obj) {
+  var cache = []
+  var returnValue = JSON.stringify(obj || {}, function(key, value) {
+    if (typeof value === 'object' && value !== null) {
+      if (cache.indexOf(value) === -1) {
+        cache.push(value);
+
+        return value;
+      }
+      return '[CIRCULAR]'
+    }
+    return value;
+  });
+  cache = null;
+
+  return returnValue
+}
+
 module.exports = function (options) {
   options = options || {}
   var colors = options.colors || {}
@@ -40,14 +58,14 @@ module.exports = function (options) {
     }
 
     var event = new CustomEvent('function-tree.client.message', {
-      detail: JSON.stringify(detail)
+      detail: safeStringify(detail)
     })
     window.dispatchEvent(event)
   }
 
   function sendInitial(type) {
     var event = new CustomEvent('function-tree.client.message', {
-      detail: JSON.stringify({
+      detail: safeStringify({
         type: type,
         app: APP_ID,
         version: VERSION,
