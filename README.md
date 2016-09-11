@@ -20,7 +20,9 @@ Install the [chrome extension debugger](https://chrome.google.com/webstore/detai
 
 `npm run demo:mobx`
 
-More demos coming soon...
+`npm run demo:node`
+
+Please contribute with more demos, combining function tree with other projects.
 
 ### A small example
 A typical function with side effects.
@@ -292,6 +294,30 @@ import tree from './tree'
 execute(tree)
 ```
 
+#### Execute group of functions
+By default the function tree executes one function at a time, but you can group them, which basically means the functions will run in parallel.
+
+```js
+export default [
+  funcA,
+  [
+    funcB, // We run
+    funcC // in parallel
+  ],
+  funcD, {
+    success: [
+      funcE, // We run
+      funcF, // in order
+      [
+        funcG, // But we run in
+        funcH // parallel again
+      ]
+    ],
+    error: []
+  }
+]
+```
+
 #### Passing an initial payload (input)
 ```js
 import execute from './execute'
@@ -547,7 +573,6 @@ execute('thisHappened', someTree)
 And that will be used in the debugger instead of execution id.
 
 #### NodeDebugger (optional provider)
-
 ```js
 const FunctionTree = require('function-tree')
 const NodeDebuggerProvider = require('function-tree/providers/NodeDebugger')
@@ -565,6 +590,8 @@ const execute = new FunctionTree([
   })
 ])
 ```
+
+Colors supported are **red, green, yellow, blue, magenta, cyan, white, gray, bgBlack, bgRed, bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan and bgWhite**
 
 #### Events
 The execute function is also an event emitter.
