@@ -29,6 +29,8 @@ module.exports['should pass arguments to context creator and run it for each act
       test.ok(context)
       test.equal(functionDetails.functionIndex, 0)
       test.deepEqual(payload, {foo: 'bar'})
+
+      return context
     }
   ])
 
@@ -43,17 +45,17 @@ module.exports['should pass arguments to context creator and run it for each act
 
 module.exports['should pass returned context into functions'] = (test) => {
   const execute = FunctionTree([
-    function SomeProvider() {
-      return {
-        foo: 'bar'
-      }
+    function SomeProvider(context) {
+      context.foo = 'bar'
+
+      return context
     }
   ])
 
   test.expect(1)
   execute([
     function action(context) {
-      test.deepEqual(context, {foo: 'bar'})
+      test.equal(context.foo, 'bar')
     }
   ])
   test.done()

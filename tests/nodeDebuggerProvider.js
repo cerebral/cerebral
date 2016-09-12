@@ -55,7 +55,7 @@ module.exports['should wrap functions added to context'] = (test) => {
     })
   ])
 
-  test.expect(2)
+  test.expect(1)
   execute([
     function funcA(context) {
       test.notEqual(contextItem, context.contextItem)

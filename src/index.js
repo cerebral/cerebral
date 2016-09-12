@@ -107,12 +107,18 @@ FunctionTreeExecution.prototype.createContext = function(action, payload) {
     InputProvider(),
     PathProvider()
   ].concat(this.functionTree.contextProviders).reduce(function(currentContext, contextProvider) {
-    return (
+    var newContext =  (
       typeof contextProvider === 'function' ?
         contextProvider(currentContext, action, payload)
       :
         assign(currentContext, contextProvider)
     )
+
+    if (newContext !== currentContext) {
+      throw new Error('function-tree: You are not returning the context from a provider')
+    }
+
+    return newContext
   }, {})
 }
 
