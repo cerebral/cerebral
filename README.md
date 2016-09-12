@@ -5,13 +5,7 @@ When a function is not enough
 `npm install function-tree`
 
 ### What is it?
-Readable and maintainable code is a never ending quest. With the increased complexity of modern web applications the execution of code from user interactions and other events in our applications has increased in complexity as well. But this is not only related to the frontend, also our backends has increased execution complexity as our applications are inherently more complex.
-
-Callback hell is a common term which says something about how asynchronous code execution affects readability and maintainability of our code bases. Even with promises we can get readability issues with conditional execution flow. Callbacks and promises aside, the testability and reusability of code is also an important factor which is difficult to achieve in general.
-
-A function tree will help you execute synchronous and asynchronous functions in a declarative, composable and testable way. **Declarative** means that you can describe an execution without writing any implementation, increasing readability of the code. **Composable** means that some part of one execution can be reused in an other execution. And **testable** means that you will write your code in a way where the whole chain of execution and its individual parts can be tested.
-
-We often talk about pure functions as the holy grail for giving our code these attributes. But pure functions means "no side effects" which is contradictory to a lot of the code we write. Everything from manipulating the DOM, talking to the server, even changing the state of our apps is *side effects*. **function-tree** does not push side effects to the edge of your app. The execution runs exactly how you think about it, one step after the other, but keeps the important traits of pure functions. Writing **Declarative, composable and testable** code. You can conceptually think of a function tree as a decision tree, which is a great way to build mental images of complex scenarios and their possible outcomes.
+The article [The case for function-tree](http://www.christianalfoni.com/articles/2016_09_11_The-case-for-function-tree) will give you an explanation of why it was built and how it works. Please get your wet feet with that and/or have a look at the demos and API below.
 
 ### Demo
 Install the [chrome extension debugger](https://chrome.google.com/webstore/detail/function-tree-debugger/ppfbmcnapdgakfiocieggdgbhmlalgjp). Clone this repo, install deps and run:
@@ -24,170 +18,10 @@ Install the [chrome extension debugger](https://chrome.google.com/webstore/detai
 
 Please contribute with more demos, combining function tree with other projects.
 
-### A small example
-A typical function with side effects.
-
-```js
-function getData(url) {
-  axios.get(url)
-    .then((result) => {
-      window.app.data = result.data
-    })
-    .catch((err) => {
-      window.app.error = err;
-    })
-}
-```
-
-A function tree can be used in many domains. It being frontend application events, handle routing on your web server, tasks from a queue or other processes. You will need to define what a function tree should have access to, but before looking into that, lets look at how the previous function could be defined:
-
-```js
-[
-  getData, {
-    success: [
-      setData
-    ],
-    error: [
-      setError
-    ]
-  }
-]
-```
-
-As you can see the function tree has no implementation details. And this is what we mean by **declarative** approach. It is an abstraction that describes what should happen, not how. And this is an important distinction to uphold readability. There are no distractions in this code, you instantly understand what it does. It is also **composable** because any of the functions referenced in the function tree can be inserted into any other function tree. You could even compose in a whole tree into another using the spread operator:
-
-```js
-[
-  ...doThis,
-  ...doThat
-]
-```
-
-But what about testability? You would have a very hard time creating a test for the first function we wrote above. Let us explore how the functions in a function tree run.
-
-```js
-import execute from './execute'
-
-function getData(context) {
-  return context.request('/data')
-    .then(context.path.success)
-    .catch(context.path.error)
-}
-
-function setData(context) {
-  context.window.app.data = context.input.result
-}
-
-function setError(context) {
-  context.window.app.error = context.input.error
-}
-
-execute([
-  getData, {
-    success: [
-      setData
-    ],
-    error: [
-      setError
-    ]
-  }
-])
-```
-
-Our functions, in spite of them doing side effects, are now testable. They are testable because the functions only operates on the **context** argument, which means during a test you can mock it.
-
-All applications needs to define one or more definitions of how these function trees should run. In the example above we have a file called **execute**. We could have called it **run**, **trigger** or whatever else you would prefer. The point is that this function is what executes trees with a **context** you have defined. Let us look into our execute file:
-
-```javascript
-import FunctionTree from 'function-tree'
-import DebuggerProvider from 'function-tree/providers/Debugger'
-import ContextProvider from 'function-tree/providers/Context'
-import request from 'request'
-
-export default new FunctionTree([
-  DebuggerProvider(),
-  ContextProvider({
-    request,
-    window
-  })
-])
-```
-
-Creating the execute function lets us extend the default context. We extend it with *window* and *request*. We do this simply because we want to use them. The context is available to all the functions of the function tree. By default **input** is defined. **Input** holds the current payload. **Path** is defined if the function can diverge the execution down a path. The path object will have methods representing the path to go down, optionally taking a payload to pass on. The method returns an object you need to return from the function. When the function returns a promise it will wait for the promise to resolve before moving on. You can also use ES7 async functions to do the same.
-
 ### How does this differ from rxjs and promises?
-Both Rxjs and Promises are about execution control, but neither of them have declarative conditional execution paths, you have to write an *IF* or *SWITCH* statement. The example above we were able to diverge our execution down the `success` or `error` path just as declaratively as our functions. This helps readability. Conditional execution can also be related to things like:
-
-```js
-[
-  withUserRole, {
-    admin: [],
-    superuser: [],
-    user: []
-  }
-]
-```
-
-Here we create a function that will diverge execution based on the user role.
+Both Rxjs and Promises are about execution control, but neither of them have declarative conditional execution paths, you have to write an *IF* or *SWITCH* statement. With function tree you are able to diverge the execution down paths just as declaratively as functions. This helps readability.
 
 Rxjs and Promises are also based on value transformation. That means only the value returned from the previous function is available in the next. This works when you indeed want to transform values, but events in your application are rarely about value transformation, they are about running side effects and going through one of multiple execution paths. And that is where **function-tree** differs. It embraces the fact that most of what we do in application development is running side effects.
-
-### Factories and composing
-When you have a declarative approach the concept of factories and composition becomes very apparent. For example doing a request could be a factory using:
-
-```js
-[
-  httpGet('/users'), {
-    success: [],
-    error: []
-  }
-]
-```
-
-Or maybe you have a notification system:
-
-```js
-[
-  notify('Loading data'),
-  httpGet('/users'), {
-    success: [
-      notify('Data loaded')
-    ],
-    error: [
-      notify('Could not load data')
-    ]
-  }
-]
-```
-
-We are already composing in functions here, but you can also compose in other trees.
-
-```js
-const getUsers = [
-  httpGet('/users'), {
-    success: [],
-    error: []
-  }
-]
-
-const loadApp = [
-  ...getUsers,
-  ...getNotifications,
-  ...getConfig
-]
-```
-
-Or you could run these three trees in parallel using an array to group them together:
-
-```js
-const loadApp = [
-  [
-    ...getUsers,
-    ...getNotifications,
-    ...getConfig
-  ]
-]
-```
 
 ### What happens when a function tree executes?
 When you execute a function tree it will traverse the tree verifying its validity and analyzing the different execution paths. This gives a static representation of the tree which can be accessed by providers and can also be passed to debuggers to visualize it. The analysis is cached, so it only happens the first time. Then the tree will actually execute, creating a context for every function before running it. When the function is done running it continues to the next function.
