@@ -43,8 +43,8 @@ var traverse = function (item, parentItem, path, actions, isSync) {
       outputs: null,
       actionIndex: actions.indexOf(item) === -1 ? actions.push(item) - 1 : actions.indexOf(item)
     }
-    if (utils.isDeveloping() && !item.async && !isSync) {
-      console.warn('Cerebral - The action "' + action.name + '" will be run ASYNC even though you have not stated it as such. Please be explicit about actions running async')
+    if (utils.isDeveloping() && !item.async && !item.outputs && !isSync) {
+      console.warn('Cerebral - The action "' + action.name + '" will be run ASYNC even though no outputs are defined. This usually happens when composing chains into chains, which forces actions to run async')
     }
     nextItem = parentItem[parentItem.indexOf(item) + 1]
     if (!Array.isArray(nextItem) && typeof nextItem === 'object') {
