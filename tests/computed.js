@@ -1,3 +1,4 @@
+/*
 var Computed = require('./../src/Computed.js')
 var suite = {}
 
@@ -144,3 +145,4 @@ suite['should throw when passing props not an object'] = function (test) {
 }
 
 module.exports = { computed: suite }
+*/
