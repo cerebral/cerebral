@@ -1,5 +1,4 @@
 import Controller from '../src/Controller'
-import Module from '../src/Module'
 import assert from 'assert'
 
 describe('providers', () => {
@@ -13,21 +12,21 @@ describe('providers', () => {
       assert.throws(() => {
         const obj = {}
         obj.circular = obj
-        controller.getSignals('foo')(obj)
+        controller.getSignal('foo')(obj)
       })
     })
   })
-  describe('Model', () => {
+  describe('State', () => {
     it('should be able to GET state', () => {
       const controller = new Controller({
         state: {
           foo: 'bar'
         },
         signals: {
-          foo: [({model}) => assert.deepEqual(model.get(), {foo: 'bar'})]
+          foo: [({state}) => assert.deepEqual(state.get(), {foo: 'bar'})]
         }
       })
-      controller.getSignals('foo')()
+      controller.getSignal('foo')()
     })
     it('should be able to SET state', () => {
       const controller = new Controller({
@@ -35,10 +34,10 @@ describe('providers', () => {
           foo: 'bar'
         },
         signals: {
-          foo: [({model}) => model.set('foo', 'bar2')]
+          foo: [({state}) => state.set('foo', 'bar2')]
         }
       })
-      controller.getSignals('foo')()
+      controller.getSignal('foo')()
       assert.deepEqual(controller.getState(), {foo: 'bar2'})
     })
     it('should be able to PUSH state', () => {
@@ -47,10 +46,10 @@ describe('providers', () => {
           foo: ['foo']
         },
         signals: {
-          foo: [({model}) => model.push('foo', 'bar')]
+          foo: [({state}) => state.push('foo', 'bar')]
         }
       })
-      controller.getSignals('foo')()
+      controller.getSignal('foo')()
       assert.deepEqual(controller.getState(), {foo: ['foo', 'bar']})
     })
     it('should be able to PUSH state', () => {
@@ -59,10 +58,10 @@ describe('providers', () => {
           foo: ['foo']
         },
         signals: {
-          foo: [({model}) => model.push('foo', 'bar')]
+          foo: [({state}) => state.push('foo', 'bar')]
         }
       })
-      controller.getSignals('foo')()
+      controller.getSignal('foo')()
       assert.deepEqual(controller.getState(), {foo: ['foo', 'bar']})
     })
   })

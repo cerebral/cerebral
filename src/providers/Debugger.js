@@ -1,15 +1,15 @@
-function DebuggerProviderFactory(cerebralDebugger) {
+function DebuggerProviderFactory(devtools) {
   function DebuggerProvider(context, functionDetails, payload) {
     context.debugger = {
       send(debuggerData) {
-        cerebralDebugger.send(debuggerData, context, functionDetails, payload)
+        devtools.send(debuggerData, context, functionDetails, payload)
       },
       getColor() {
         return '#333';
       }
     }
 
-    cerebralDebugger.send(null, context, functionDetails, payload)
+    devtools.send(null, context, functionDetails, payload)
 
     return context
   }

@@ -1,4 +1,4 @@
 node_modules
-todomvc.js*
 coverage
 .DS_Store
+dist

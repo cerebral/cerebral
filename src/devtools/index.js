@@ -1,11 +1,45 @@
-class Debugger {
-  constructor() {
+class Devtools {
+  constructor(options = {}) {
     this.APP_ID = String(Date.now())
     this.VERSION = 'v1'
+    this.timeTravel = options.timeTravel || false
     this.backlog = []
+    this.mutations = []
+    this.initialModelString = ''
     this.isConnected = false
+    this.controller = null
   }
-  init(initialModel) {
+  remember(executionId) {
+    this.controller.model.state = JSON.parse(this.initialModelString)
+    let lastMutationIndex
+    for (lastMutationIndex = this.mutations.length - 1; lastMutationIndex >= 0; lastMutationIndex--) {
+      if (this.mutations[lastMutationIndex].executionId === executionId) {
+        break
+      }
+    }
+
+    for (let x = 0; x <= lastMutationIndex; x++) {
+      const mutation = JSON.parse(this.mutations[x].data)
+
+      this.controller.model[mutation.method](...mutation.args)
+    }
+
+    this.controller.emit('flush', {}, true)
+  }
+  init(controller) {
+    const initialModel = controller.model.get()
+    this.controller = controller
+
+    if (this.timeTravel) {
+      this.initialModelString = JSON.stringify(initialModel)
+    }
+
+    window.addEventListener('cerebral2.debugger.remember', (event) => {
+      if (!this.timeTravel) {
+        console.warn('Cerebral Devtools - You tried to time travel, but it has to be activated as an option')
+      }
+      this.remember(event.detail)
+    })
     window.addEventListener('cerebral2.debugger.pong', () => {
       // When debugger already active, send new init cause new messages
       // might have been prepared while it was waiting for pong
@@ -53,6 +87,12 @@ class Debugger {
       }]
     }
 
+    if (this.timeTravel && debuggingData && debuggingData.type === 'mutation') {
+      this.mutations.push({
+        executionId: context.execution.id,
+        data: JSON.stringify(debuggingData)
+      })
+    }
     if (!this.isConnected) {
       this.backlog.push(data)
       return
@@ -71,4 +111,6 @@ class Debugger {
   }
 }
 
-export default Debugger
+export default function(...args) {
+  return new Devtools(...args)
+}

@@ -15,6 +15,123 @@ A state controller with its own debugger
 ## Please head over to our website
 [http://www.cerebraljs.com/](http://www.cerebraljs.com/). You will find all the information you need there.
 
+## Verison 2 API
+
+### Controller
+```js
+import {Controller} from 'cerebral'
+
+const controller = Controller({
+  state: {},
+  signals: {},
+  modules: {}
+})
+```
+
+### Module
+```js
+import {Controller} from 'cerebral'
+
+const moduleA = module => ({
+  state: {},
+  signals: {},
+  modules: {}
+})
+
+const controller = Controller({
+  modules: {
+    moduleA: moduleA
+  }
+})
+```
+
+### Render
+```js
+import React from 'react'
+import {render} from 'react-dom'
+import {Container, connect} from 'cerebral/react'
+import {Controller} from 'cerebral'
+
+const controller = Controller({})
+const App = connect({
+  foo: 'foo'
+}, {
+  clicked: 'clicked'
+}, function App(props) {
+  ...
+})
+
+render((
+  <Container controller={controller}>
+    <App />
+  </Container>
+), document.querySelector('#app'))
+```
+
+### Devtools
+```js
+import {Controller} from 'cerebral'
+import Devtools from 'cerebral/devtools'
+
+const controller = Controller({
+  devtools: Devtools({
+    timeTravel: false // Activates time travel feature in debugger
+  })
+})
+```
+
+### Router
+```js
+import {Controller} from 'cerebral'
+import Router from 'cerebral/router'
+
+const controller = Controller({
+  router: Router({
+    query: false, // Add query support
+    onlyHash: false, // Only handle hash urls
+    baseUrl: '/' // Base url to handle routes on
+  })
+})
+```
+
+The router activates the possibility to define routes on controller and its modules.
+
+```js
+import {Controller} from 'cerebral'
+import Router from 'cerebral/router'
+
+const moduleA = module => ({
+  routes: {
+    '/': 'routed' // Will be /moduleA/
+  },
+  signals: {
+    routed: []
+  }
+})
+
+const controller = Controller({
+  router: Router(),
+  routes: {
+    '/' 'routed'
+  },
+  signals: {
+    routed: []
+  },
+  modules: {
+    moduleA: moduleA
+  }
+})
+```
+
+### Operators
+Operators are available on:
+
+```js
+import {set, copy} from 'cerebral/operators'
+```
+
+Look in folder for available operators
+
 [npm-image]: https://img.shields.io/npm/v/cerebral.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral
 [travis-image]: https://img.shields.io/travis/cerebral/cerebral.svg?style=flat

@@ -1,5 +1,5 @@
-import ContainerExport from './container'
+import containerExport from './container'
 import connectExport from './connect'
 
-export const Container = ContainerExport
+export const Container = containerExport
 export const connect = connectExport

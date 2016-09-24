@@ -17,7 +17,7 @@ describe('Controller', () => {
         foo: []
       }
     })
-    assert.ok(controller.getSignals('foo'))
+    assert.ok(controller.getSignal('foo'))
   })
   it('should instantiate providers defined', () => {
     const controller = new Controller({
@@ -36,7 +36,7 @@ describe('Controller', () => {
         }
       ]
     })
-    controller.getSignals('foo')()
+    controller.getSignal('foo')()
   })
   it('should instantiate modules defined as objects', () => {
     const controller = new Controller({
@@ -90,8 +90,8 @@ describe('Controller', () => {
         }
       }
     })
-    assert.ok(controller.getSignals('foo'))
-    assert.ok(controller.getSignals('moduleA.foo'))
+    assert.ok(controller.getSignal('foo'))
+    assert.ok(controller.getSignal('moduleA.foo'))
   })
   it('should expose method to get model', () => {
     const controller = new Controller({

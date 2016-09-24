@@ -1,5 +1,5 @@
 import parseScheme from 'cerebral-scheme-parser'
-import populateInputAndModelSchemes from './helpers/populateInputAndModelSchemes'
+import populateInputAndStateSchemes from './helpers/populateInputAndStateSchemes'
 
 export default function(passedPath, filterFunc) {
   const pathScheme = parseScheme(passedPath)
@@ -8,19 +8,19 @@ export default function(passedPath, filterFunc) {
     ? filterFunc
     : (value) => value === filterFunc
 
-  if (pathScheme.target !== 'model' && pathScheme.target !== 'input') {
+  if (pathScheme.target !== 'state' && pathScheme.target !== 'input') {
     throw new Error('Cerebral operator FILTER - The path: "' + passedPath + '" does not target "state" or "input"')
   }
 
   // define the action
-  const filter = function({input, model, path}) {
-    const pathValue = pathScheme.getValue(populateInputAndModelSchemes(input, model))
+  const filter = function({input, state, path}) {
+    const pathValue = pathScheme.getValue(populateInputAndStateSchemes(input, state))
     let value
 
     if (pathScheme.target === 'input') {
       value = input[pathValue]
     } else if (pathScheme.target === 'state') {
-      value = model.get(pathValue)
+      value = state.get(pathValue)
     }
 
     return filterValue(value) ? path.accepted() : path.discarded()

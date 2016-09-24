@@ -1,5 +1,4 @@
 import Controller from '../src/Controller'
-import Module from '../src/Module'
 import assert from 'assert'
 
 describe('Module', () => {
@@ -27,7 +26,7 @@ describe('Module', () => {
       }
     })
 
-    assert.ok(controller.getSignals('foo.bar'))
+    assert.ok(controller.getSignal('foo.bar'))
   })
   it('should run signals with providers', () => {
     const controller = new Controller({
@@ -36,36 +35,32 @@ describe('Module', () => {
           signals: {
             signalA: [(context) => {
               assert.equal(context.foo, 'foo')
-              assert.ok(!context.bar)
+              assert.equal(context.bar, 'bar')
             }]
           },
-          providers: [
-            (context) => {
-              context.foo = 'foo'
+          provider(context) {
+            context.foo = 'foo'
 
-              return context
-            }
-          ]
+            return context
+          }
         },
         bar: {
           signals: {
             signalB: [(context) => {
               assert.equal(context.bar, 'bar')
-              assert.ok(!context.foo)
+              assert.equal(context.foo, 'foo')
             }]
           },
-          providers: [
-            (context) => {
-              context.bar = 'bar'
+          provider(context) {
+            context.bar = 'bar'
 
-              return context
-            }
-          ]
+            return context
+          }
         }
       }
     })
 
-    controller.getSignals('foo.signalA')()
-    controller.getSignals('bar.signalB')()
+    controller.getSignal('foo.signalA')()
+    controller.getSignal('bar.signalB')()
   })
 })

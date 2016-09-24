@@ -1,7 +1,7 @@
-export default (input, model) => {
+export default (input, state) => {
   return (scheme) => {
-    if (scheme.target === 'model') {
-      return model.get(scheme.value)
+    if (scheme.target === 'state') {
+      return state.get(scheme.value)
     }
     if (scheme.target === 'input') {
       return input[scheme.value]

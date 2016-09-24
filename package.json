@@ -4,10 +4,13 @@
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
+    "build": "webpack",
+    "prepublich": "npm run build",
     "pretest": "eslint tests",
-    "test": "istanbul cover mocha -- --compilers js:babel-register tests",
-    "test:watch": "mocha --compilers js:babel-register --watch tests",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "test": "istanbul cover mocha -- --compilers js:babel-register 'tests/**/*.js'",
+    "test:watch": "mocha --compilers js:babel-register --watch 'tests/**/*.js'",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "demo": "webpack-dev-server --config demo/webpack.config.js"
   },
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
@@ -17,17 +20,24 @@
   },
   "devDependencies": {
     "babel-eslint": "^6.1.2",
+    "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",
+    "babel-preset-react": "^6.11.1",
     "babel-register": "^6.14.0",
     "commitizen": "^2.5.0",
     "conventional-changelog": "0.0.17",
     "cz-customizable": "^2.7.0",
     "ghooks": "^1.0.3",
+    "html-webpack-plugin": "^2.22.0",
     "istanbul": "^0.4.4",
     "mocha": "^3.0.2",
+    "mocha-jsdom": "^1.1.0",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
     "semantic-release": "^4.3.5",
     "validate-commit-msg": "^2.6.1",
-    "webpack": "^1.13.2"
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.16.1"
   },
   "config": {
     "commitizen": {
@@ -38,8 +48,12 @@
     }
   },
   "dependencies": {
+    "addressbar": "^1.0.2",
     "cerebral-model": "^0.1.1",
     "cerebral-model-immutable": "^0.1.4",
-    "cerebral-operators": "^0.2.1"
+    "cerebral-operators": "^0.2.1",
+    "cerebral-scheme-parser": "^0.1.3",
+    "function-tree": "^0.4.2",
+    "url-mapper": "^1.1.1"
   }
 }

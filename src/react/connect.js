@@ -10,8 +10,8 @@ export default function connect(paths, passedSignals, passedComponent) {
   }
 
   if (!component) {
-    return function(decoratorComponent) {
-      return process.env.NODE_ENV === 'test' ? decoratorComponent : HOC(paths, signals, decoratorComponent)
+    return function(decoratedComponent) {
+      return process.env.NODE_ENV === 'test' ? decoratedComponent : HOC(paths, signals, decoratedComponent)
     }
   }
 

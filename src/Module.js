@@ -1,6 +1,3 @@
-import FunctionTree from 'function-tree'
-import ContextProvider from 'function-tree/providers/Context'
-
 class Module {
   constructor(path, module, parentModule) {
     this.name = path.slice().pop()
@@ -16,29 +13,38 @@ class Module {
     }
 
     this.signals = moduleDescription.signals || {}
-
-    this.providers = (parentModule.providers).concat(
-      (moduleDescription.providers || [])
-        .map(provider => typeof provider === 'function' ? provider : ContextProvider(provider))
-    )
-
+    this.routes = moduleDescription.routes || {}
+    this.provider = moduleDescription.provider
     this.registerModules(moduleDescription.modules || {})
+  }
+  getRoutes() {
+    return Object.keys(this.modules).reduce((currentRoutes, moduleKey) => {
+      return Object.assign({}, currentRoutes, this.modules[moduleKey].getRoutes())
+    }, Object.keys(this.routes).reduce((currentInitialRoutes, routeKey) => {
+      if (typeof this.routes[routeKey] === 'string') {
+        currentInitialRoutes[(this.path.length ? `/${this.path.join('/') + routeKey}` : this.path.join('/') + routeKey)] = this.path.length ? `${this.path.join('.')}.${this.routes[routeKey]}` : this.routes[routeKey]
+      } else {
+        currentInitialRoutes[(this.path.length ? `/${this.path.join('/')}` : '') + routeKey] = Object.keys(this.routes[routeKey]).reduce((nestedRoutes, nestedKey) => {
+          nestedRoutes[nestedKey] = this.path.length ? `${this.path.join('.')}.${this.routes[routeKey][nestedKey]}` : this.routes[routeKey][nestedKey]
 
-    this.runTree = new FunctionTree(this.providers)
-    this.runTree.on('asyncFunction', () => {
-      this.controller.emit('flush', this.controller.model.flush())
-    })
-    this.runTree.on('end', () => {
-      this.controller.emit('flush', this.controller.model.flush())
-    })
+          return nestedRoutes
+        }, {})
+      }
+
+      return currentInitialRoutes
+    }, {}))
   }
   registerModules(modules) {
     Object.keys(modules).forEach(moduleKey => {
       this.modules[moduleKey] = new Module(this.path.concat(moduleKey), modules[moduleKey], this)
     })
   }
-  runSignal(name, signal, payload) {
-    this.runTree(name, signal, payload || {})
+  getProviders() {
+    return (this.provider ? [this.provider] : []).concat(Object.keys(this.modules)
+      .reduce((nestedProviders, moduleKey) => {
+        return nestedProviders.concat(this.modules[moduleKey].getProviders())
+      }, [])
+    )
   }
 }
 

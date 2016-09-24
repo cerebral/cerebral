@@ -1,3 +1,11 @@
+export function cleanPath(path) {
+  return path.replace(/\.\*\*|\.\*/, '')
+}
+
+export function isObject(obj) {
+  return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
+}
+
 export function ensurePath(path) {
   if (Array.isArray(path)) {
     return path

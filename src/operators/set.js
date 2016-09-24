@@ -1,17 +1,17 @@
 import parseScheme from 'cerebral-scheme-parser'
-import populateInputAndModelSchemes from './helpers/populateInputAndModelSchemes'
+import populateInputAndStateSchemes from './helpers/populateInputAndStateSchemes'
 
 export default function(path, value) {
   const pathScheme = parseScheme(path)
 
-  if (pathScheme.target !== 'model') {
-    throw new Error('Cerebral operator SET - The path: "' + path + '" does not target "model"')
+  if (pathScheme.target !== 'state') {
+    throw new Error('Cerebral operator SET - The path: "' + path + '" does not target "state"')
   }
 
-  const set = function set({input, model}) {
-    const pathValue = pathScheme.getValue(populateInputAndModelSchemes(input, model))
+  const set = function set({input, state}) {
+    const pathValue = pathScheme.getValue(populateInputAndStateSchemes(input, state))
 
-    model.set(pathValue, value)
+    state.set(pathValue, value)
   }
 
   set.displayName = 'operator SET'
