@@ -1,6 +1,6 @@
 const executeTree = require('../src/executeTree')
 
-function ExecutionProvider(execution) {
+function ExecutionProvider(execution, Abort) {
   return function(context) {
     context.execution = execution
     context.execution.retry = function (payload) {
@@ -9,6 +9,9 @@ function ExecutionProvider(execution) {
           resolve()
         })
       })
+    }
+    context.execution.abort = function () {
+      return new Abort()
     }
 
     return context

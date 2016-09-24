@@ -100,12 +100,14 @@ module.exports['should emit execution events in correct order'] = (test) => {
 module.exports['should pass action and payload on action events'] = (test) => {
   const execute = FunctionTree()
 
-  test.expect(4)
-  execute.once('functionStart', function(functionDetails, payload) {
+  test.expect(6)
+  execute.once('functionStart', function(execution, functionDetails, payload) {
+    test.ok(execution.id)
     test.equal(functionDetails.functionIndex, 0)
     test.deepEqual(payload, {foo: 'bar'})
   })
-  execute.once('functionEnd', function(functionDetails, payload) {
+  execute.once('functionEnd', function(execution, functionDetails, payload) {
+    test.ok(execution.id)
     test.equal(functionDetails.functionIndex, 0)
     test.deepEqual(payload, {foo: 'bar'})
   })

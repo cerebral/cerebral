@@ -46,3 +46,25 @@ module.exports['should be able to retry execution'] = (test) => {
     test.done()
   })
 }
+
+module.exports['should be able to abort execution'] = (test) => {
+  const execute = FunctionTree()
+  test.expect(1)
+  let count = 0
+  function funcA(context) {
+    return context.execution.abort()
+  }
+
+  function funcB() {
+    count++
+  }
+
+  execute.on('abort', () => {
+    test.equals(count, 0)
+    test.done()
+  })
+  execute([
+    funcA,
+    funcB
+  ])
+}

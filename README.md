@@ -243,7 +243,28 @@ execute(tree, {
   retryCount: 0
 })
 ```
+#### Abort
+You can abort the execution of a tree by returning an abort. The abort will also trigger an `abort` event.
 
+```js
+import execute from './execute'
+
+function funcA(context) {
+  return context.execution.abort()
+}
+
+function funcB(context) {
+  // Does not run
+}
+
+const tree = [
+  funcA,
+  funcB
+]
+
+execute.on('abort', (functionDetails, payload) => {})
+execute(tree)
+```
 
 #### Catching errors
 ```js
@@ -448,10 +469,13 @@ execute.on('start', (execution, payload) => {})
 execute.on('end', (execution, payload) => {})
 
 // When a function in a function tree starts executing
-execute.on('functionStart', (execution, payload, functionDetails) => {})
+execute.on('functionStart', (execution, functionDetails, payload) => {})
 
 // When a function in a function tree stops executing
-execute.on('functionEnd', (execution, payload, functionDetails) => {})
+execute.on('functionEnd', (execution, functionDetails, payload) => {})
+
+// Triggers when an async function has been run
+execute.on('asyncFunction', (execution, functionDetails, payload) => {})
 
 execute(tree)
 ```

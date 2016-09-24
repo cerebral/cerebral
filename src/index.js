@@ -8,9 +8,10 @@ const InputProvider = require('../providers/Input')
 const PathProvider = require('../providers/Path')
 const assign = require('object-assign')
 const Path = require('./Path')
+const Abort = require('./Abort')
 
 function createUniqueId() {
-  return Date.now() + '_' + Math.random()
+  return Date.now() + '_' + Math.floor(Math.random() * 10000)
 }
 
 function isValidResult(result) {
@@ -39,26 +40,32 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
   const context = this.createContext(funcDetails, payload)
   const functionTree = this.functionTree
   const errorCallback = this.errorCallback
+  const execution = this
 
-  functionTree.emit('functionStart', funcDetails, payload)
+  functionTree.emit('functionStart', execution, funcDetails, payload)
   const result = funcDetails.function(context)
 
+  if (result instanceof Abort) {
+    return functionTree.emit('abort', execution, funcDetails, payload)
+  }
+
   if (result && result.then && result.catch && typeof result.then === 'function' && typeof result.catch === 'function') {
+    functionTree.emit('asyncFunction', execution, funcDetails, payload)
     result
       .then(function (result) {
         if (result instanceof Path) {
-          functionTree.emit('functionEnd', funcDetails, payload)
+          functionTree.emit('functionEnd', execution, funcDetails, payload)
           next(result.toJS())
         } else if (funcDetails.outputs) {
-          functionTree.emit('functionEnd', funcDetails, payload)
+          functionTree.emit('functionEnd', execution, funcDetails, payload)
           throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
         } else if (isValidResult(result)) {
-          functionTree.emit('functionEnd', funcDetails, payload)
+          functionTree.emit('functionEnd', execution, funcDetails, payload)
           next({
             payload: result
           })
         } else {
-          functionTree.emit('functionEnd', funcDetails, payload)
+          functionTree.emit('functionEnd', execution, funcDetails, payload)
           throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
         }
       })
@@ -66,14 +73,14 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
         if (result instanceof Error) {
           errorCallback(result)
         } else if (result instanceof Path) {
-          functionTree.emit('functionEnd', funcDetails, payload)
+          functionTree.emit('functionEnd', execution, funcDetails, payload)
           next(result.toJS())
         } else if (funcDetails.outputs) {
           var error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
 
           errorCallback(result)
         } else if (isValidResult(result)) {
-          functionTree.emit('functionEnd', funcDetails, payload)
+          functionTree.emit('functionEnd', execution, funcDetails, payload)
           next({
             payload: result
           })
@@ -84,14 +91,14 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
         }
       })
   } else if (result instanceof Path) {
-    functionTree.emit('functionEnd', funcDetails, payload)
+    functionTree.emit('functionEnd', execution, funcDetails, payload)
     next(result.toJS())
   } else if (funcDetails.outputs) {
     var error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
 
     errorCallback(error)
   } else if (isValidResult(result)) {
-    functionTree.emit('functionEnd', funcDetails, payload)
+    functionTree.emit('functionEnd', execution, funcDetails, payload)
     next({
       payload: result
     })
@@ -103,7 +110,7 @@ FunctionTreeExecution.prototype.runFunction = function(funcDetails, payload, nex
 
 FunctionTreeExecution.prototype.createContext = function(action, payload) {
   return [
-    ExecutionProvider(this),
+    ExecutionProvider(this, Abort),
     InputProvider(),
     PathProvider()
   ].concat(this.functionTree.contextProviders).reduce(function(currentContext, contextProvider) {
@@ -181,10 +188,10 @@ FunctionTree.prototype.runTree = function() {
     }.bind(this))
   }.bind(this))
 
-  this.emit('start')
+  this.emit('start', execution, payload)
   executeTree(execution.staticTree, execution.runFunction, payload, function() {
-    this.emit('end')
-    cb && cb()
+    this.emit('end', execution, payload)
+    cb && cb(null)
   }.bind(this))
 };
 
