@@ -8,6 +8,10 @@ module.exports = {
     'devtools/index': path.resolve('src', 'devtools', 'index.js'),
     'react/index': path.resolve('src', 'react', 'index.js')
   },
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000
+  },
   output: {
     path: path.resolve('dist'),
     filename: '[name].js',

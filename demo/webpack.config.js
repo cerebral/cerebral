@@ -25,6 +25,10 @@ module.exports = {
     filename: '[name].js',
     publicPath: '/'
   },
+  devServer: {
+    host: '0.0.0.0',
+    port: 3000
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: path.resolve('demo', 'index.tpl.html'),
