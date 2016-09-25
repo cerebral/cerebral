@@ -17,6 +17,10 @@ class Module {
     this.provider = moduleDescription.provider
     this.registerModules(moduleDescription.modules || {})
   }
+  /*
+    Returns an object of routes and their appointed signals
+    based on the module path
+  */
   getRoutes() {
     return Object.keys(this.modules).reduce((currentRoutes, moduleKey) => {
       return Object.assign({}, currentRoutes, this.modules[moduleKey].getRoutes())
@@ -39,6 +43,9 @@ class Module {
       this.modules[moduleKey] = new Module(this.path.concat(moduleKey), modules[moduleKey], this)
     })
   }
+  /*
+    Used by controller to extract all the providers of all modules
+  */
   getProviders() {
     return (this.provider ? [this.provider] : []).concat(Object.keys(this.modules)
       .reduce((nestedProviders, moduleKey) => {

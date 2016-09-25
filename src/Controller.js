@@ -10,6 +10,12 @@ import ControllerProvider from './providers/Controller'
 import {EventEmitter} from 'events'
 import {dependencyStore as computedDependencyStore} from './Computed'
 
+/*
+  The controller is where everything is attached. The devtools
+  and router is attached directly. Also a top level module is created.
+  The controller creates the function tree that will run all signals,
+  based on top level providers and providers defined in modules
+*/
 class Controller extends EventEmitter {
   constructor({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools}) {
     super()
@@ -58,24 +64,44 @@ class Controller extends EventEmitter {
 
     if (this.router) this.router.init()
   }
+  /*
+    Whenever the the view needs to be updated this method is called.
+    It will first flag any computed for changes and then emit the flush
+    event which the view layer listens to
+  */
   flush() {
     const changes = this.model.flush()
-    const dirtyComputeds = computedDependencyStore.getUniqueEntities(changes)
+    const computedsAboutToBecomeDirty = computedDependencyStore.getUniqueEntities(changes)
 
-    dirtyComputeds.forEach((computed) => {
+    computedsAboutToBecomeDirty.forEach((computed) => {
       computed.flag()
     })
     this.emit('flush', changes)
   }
+  /*
+    Conveniance method for grabbing the model
+  */
   getModel() {
     return this.model
   }
+  /*
+    Method called by view to grab state
+  */
   getState(path) {
     return this.model.get(ensurePath(path))
   }
+  /*
+    Uses function tree to run the array and optional
+    payload passed in
+  */
   runSignal(name, signal, payload) {
     this.runTree(name, signal, payload || {})
   }
+  /*
+    Returns a function which binds the name/path of signal,
+    and the array. This allows view layer to just call it with
+    an optional payload and it will run
+  */
   getSignal(path) {
     const pathArray = ensurePath(path)
     const signalKey = pathArray.pop()

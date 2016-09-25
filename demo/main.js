@@ -1,9 +1,9 @@
-import React from 'react'
-import {render} from 'react-dom'
+import Inferno from 'inferno'
+import {render} from 'inferno-dom'
 import Demo from './components/Demo'
 
 import {Controller} from 'cerebral'
-import {Container} from 'cerebral/react'
+import {Container} from 'cerebral/inferno'
 import Devtools from 'cerebral/devtools'
 import Router from 'cerebral/router'
 import {set} from 'cerebral/operators'

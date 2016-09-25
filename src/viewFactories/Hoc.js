@@ -107,8 +107,11 @@ export default (View) => {
       }
     }
     CerebralComponent.displayName = `CerebralWrapping_${Component.displayName || Component.name}`
-    CerebralComponent.contextTypes = {
-      cerebral: View.PropTypes.object
+
+    if (View.PropTypes) {
+      CerebralComponent.contextTypes = {
+        cerebral: View.PropTypes.object
+      }
     }
 
     return CerebralComponent

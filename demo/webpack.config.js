@@ -12,7 +12,7 @@ var loaders = [
         "es2015",
         "react"
       ],
-      "plugins": []
+      "plugins": ["inferno"]
     }
   }
 ];

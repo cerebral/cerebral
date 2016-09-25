@@ -22,6 +22,10 @@ export default (View) => {
         }
       }
     }
+    /*
+      The container will listen to "flush" events from the controller
+      and send an event to debugger about initial registered components
+    */
     componentDidMount() {
       this.props.controller.on('flush', this.onCerebralUpdate)
 
@@ -40,9 +44,17 @@ export default (View) => {
         window.dispatchEvent(event)
       }
     }
+    /*
+      The container will listen to "flush" events from the controller
+      and send an event to debugger about initial registered components
+    */
     extractComponentName(component) {
       return component.constructor.displayName.replace('CerebralWrapping_', '')
     }
+    /*
+      On "flush" event use changes to extract affected components
+      from dependency store and render them
+    */
     onCerebralUpdate(changes, force) {
       const componentsToRender = force ? this.dependencyStore.getAllUniqueEntities() : this.dependencyStore.getUniqueEntities(changes)
       const start = Date.now()
@@ -92,6 +104,10 @@ export default (View) => {
       }
       component._update()
     }
+    /*
+      Updates the map the represents what active state paths and
+      components are in your app. Used by the debugger
+    */
     updateDebuggerComponentsMap(component, nextDeps, prevDeps) {
       const componentDetails = {
         name: this.extractComponentName(component),
@@ -123,12 +139,14 @@ export default (View) => {
     }
   }
 
-  Container.propTypes = {
-    controller: View.PropTypes.object.isRequired,
-    children: View.PropTypes.node.isRequired
-  }
-  Container.childContextTypes = {
-    cerebral: View.PropTypes.object.isRequired
+  if (View.PropTypes) {
+    Container.propTypes = {
+      controller: View.PropTypes.object.isRequired,
+      children: View.PropTypes.node.isRequired
+    }
+    Container.childContextTypes = {
+      cerebral: View.PropTypes.object.isRequired
+    }
   }
 
   return Container

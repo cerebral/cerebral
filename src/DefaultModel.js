@@ -3,8 +3,12 @@ class Model {
     this.state = initialState || {}
     this.changedPaths = []
   }
+  /*
+    Converts an array of paths changed to a change object that
+    will be traversed by the dependency store
+  */
   flush() {
-    const changes = this.changedPaths.reduce((changes, path) => {
+    const changes = this.changedPaths.reduce((allChanges, path) => {
       path.reduce((currentChanges, key, index) => {
         if (index === path.length - 1 && !currentChanges[key]) {
           currentChanges[key] = true
@@ -15,15 +19,19 @@ class Model {
         }
 
         return currentChanges[key]
-      }, changes)
+      }, allChanges)
 
-      return changes
+      return allChanges
     }, {})
 
     this.changedPaths = []
 
     return changes
   }
+  /*
+    A generic method for making a change to a path, used
+    by multiple mutation methods
+  */
   updateIn(path, cb) {
     if (!path.length) {
       this.state = cb(this.state)
@@ -55,7 +63,7 @@ class Model {
   }
   merge(path, value) {
     // We want to show changes to added keys, as this is pretty
-    // much like setting multiple keys in behaviour
+    // much like setting multiple keys. More predictable
     Object.keys(value).forEach((key) => {
       this.changedPaths.push(path.concat(key))
     })

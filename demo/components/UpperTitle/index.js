@@ -1,5 +1,5 @@
-import React from 'react'
-import {connect} from 'cerebral/react'
+import Inferno from 'inferno'
+import {connect} from 'cerebral/inferno'
 import upperCaseTitleComputed from '../../upperCaseTitle'
 
 export default connect({
