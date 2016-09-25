@@ -33,7 +33,7 @@ module.exports = function executeTree (tree, resolveFunctionResult, initialPaylo
       currentItem.reduce((payloads, action) => {
         resolveFunctionResult(action, payload, processFunctionOutput(action, (payload) => {
           payloads.push(payload)
-          if (payloads.length === itemLength) runNextItem(assign({}, ...payloads))
+          if (payloads.length === itemLength) runNextItem(assign.apply(null, [{}].concat(payloads)))
         }))
         return payloads;
       }, [])
