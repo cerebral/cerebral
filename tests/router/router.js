@@ -4,7 +4,7 @@ const triggerUrlChange = require('./mocking').triggerUrlChange
 // Have to require due to mocks (load correct order)
 const Controller = require('../../src/Controller').default
 const addressbar = require('addressbar')
-const Router = require('../../src/Router').default
+const Router = require('../../src/router').default
 const assert = require('assert')
 
 /*
