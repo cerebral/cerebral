@@ -79,7 +79,7 @@ export default (View) => {
       }
     }
     unregisterComponent(component, depsMap) {
-      this.dependencyStore.removeEntitu(component, depsMap)
+      this.dependencyStore.removeEntity(component, depsMap)
       if (this.props.controller.devtools) {
         this.updateDebuggerComponentsMap(component, depsMap)
       }

@@ -1,14 +1,27 @@
+/*
+  Connects to the Cerebral debugger
+  - Triggers events with information from function tree execution
+  - Stores data related to time travel, if activated
+*/
 class Devtools {
   constructor(options = {}) {
-    this.APP_ID = String(Date.now())
     this.VERSION = 'v1'
-    this.timeTravel = options.timeTravel || false
+    this.storeMutations = options.storeMutations === undefined ? true : options.storeMutations
     this.backlog = []
     this.mutations = []
-    this.initialModelString = ''
+    this.initialModelString = null
     this.isConnected = false
     this.controller = null
   }
+  /*
+    To remember state Cerebral stores the initial model as stringified
+    object. Since the model is mutable this is necessary. The debugger
+    passes the execution id of the signal that was double clicked. This
+    execution id is searched backwards in the array of mutations done.
+    This is necessary as multiple mutations can be done on the same execution.
+    Then all mutations are replayed to the model and all the components
+    will be rerendered using the "flush" event and "force" flag.
+  */
   remember(executionId) {
     this.controller.model.state = JSON.parse(this.initialModelString)
     let lastMutationIndex
@@ -26,54 +39,86 @@ class Devtools {
 
     this.controller.emit('flush', {}, true)
   }
+  /*
+    The debugger might be ready or it might not. The initial communication
+    with the debugger requires a "ping" -> "pong" to identify that it
+    is ready to receive messages.
+    1. Debugger is open when app loads
+      - Devtools sends "ping"
+      - Debugger sends "pong"
+      - Devtools sends "init"
+    2. Debugger is opened after app load
+      - Debugger sends "ping"
+      - Devtools sends "init"
+  */
   init(controller) {
     const initialModel = controller.model.get()
     this.controller = controller
 
-    if (this.timeTravel) {
+    if (this.storeMutations) {
       this.initialModelString = JSON.stringify(initialModel)
     }
 
     window.addEventListener('cerebral2.debugger.remember', (event) => {
-      if (!this.timeTravel) {
-        console.warn('Cerebral Devtools - You tried to time travel, but it has to be activated as an option')
+      if (!this.storeMutations) {
+        console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
       }
       this.remember(event.detail)
     })
     window.addEventListener('cerebral2.debugger.pong', () => {
-      // When debugger already active, send new init cause new messages
-      // might have been prepared while it was waiting for pong
+      // When debugger responds to a ping
       this.isConnected = true
-      this.sendInitial('reinit', initialModel)
+      this.sendInitial(initialModel)
     })
     window.addEventListener('cerebral2.debugger.ping', () => {
       // When debugger activates
       this.isConnected = true
-      this.sendInitial('init', initialModel)
+      this.sendInitial(initialModel)
     })
 
-    this.sendInitial('init', initialModel)
-  }
-  sendInitial(type, initialModel) {
-    const allExecutions = this.backlog.reduce((currentExecutions, log) => {
-      return currentExecutions.concat(log.executions)
-    }, [])
     const event = new window.CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify({
-        type: type,
-        app: this.APP_ID,
-        version: this.VERSION,
-        data: {
-          initialModel: initialModel,
-          executions: allExecutions
-        }
-      })
+      detail: JSON.stringify({type: 'ping'})
     })
-
     window.dispatchEvent(event)
   }
-  send(debuggingData, context, functionDetails, payload) {
+  /*
+    Send initial model. If model has already been stringified we reuse it. Any
+    backlogged executions will also be triggered
+  */
+  sendInitial(type, initialModel) {
+    const initEvent = new window.CustomEvent('cerebral2.client.message', {
+      detail: JSON.stringify({
+        type: 'init',
+        version: this.VERSION,
+        data: {
+          initialModel: this.initialModelString ? '$$INITIAL_MODEL$$' : initialModel,
+          executions: []
+        }
+      }).replace('\"$$INITIAL_MODEL$$\"', this.initialModelString)
+    })
+    window.dispatchEvent(initEvent)
+
+    this.backlog.forEach((detail) => {
+      const event = new window.CustomEvent('cerebral2.client.message', {
+        detail
+      })
+      window.dispatchEvent(event)
+    })
+    this.backlog = []
+  }
+  /*
+    Create the stringified event detail for the debugger. As we need to
+    store mutations with the default true "storeMutations" option used
+    by time travel and jumping between Cerebral apps, we are careful
+    not doing unnecessary stringifying.
+  */
+  createEventDetail(debuggingData, context, functionDetails, payload) {
     const type = 'execution'
+    let mutationString = '';
+
+    if (this.storeMutations && debuggingData && debuggingData.type === 'mutation') {
+      mutationString = JSON.stringify(debuggingData)
+    }
 
     const data = {
       executions: [{
@@ -83,31 +128,40 @@ class Devtools {
         staticTree: functionDetails.functionIndex === 0 && !debuggingData ? context.execution.staticTree : null,
         payload: payload,
         datetime: context.execution.datetime,
-        data: debuggingData
+        data: mutationString ? '$$DEBUGGING_DATA$$' : debuggingData
       }]
     }
 
-    if (this.timeTravel && debuggingData && debuggingData.type === 'mutation') {
+    if (mutationString) {
       this.mutations.push({
         executionId: context.execution.id,
-        data: JSON.stringify(debuggingData)
+        data: mutationString
       })
     }
-    if (!this.isConnected) {
-      this.backlog.push(data)
-      return
-    }
-    const detail = {
+
+    return JSON.stringify({
       type: type,
-      app: this.APP_ID,
       version: this.VERSION,
       data: data
-    }
+    }).replace('\"$$DEBUGGING_DATA$$\"', mutationString)
+  }
+  /*
+    Sends execution data to the debugger. Whenever a signal starts
+    it will send a message to the debugger, but any functions in the
+    function tree might also use this to send debugging data. Like when
+    mutations are done or any wrapped methods run.
+  */
+  send(debuggingData = null, context, functionDetails, payload) {
+    const detail = this.createEventDetail(debuggingData, context, functionDetails, payload)
 
-    const event = new window.CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify(detail)
-    })
-    window.dispatchEvent(event)
+    if (this.isConnected) {
+      const event = new window.CustomEvent('cerebral2.client.message', {
+        detail
+      })
+      window.dispatchEvent(event)
+    } else {
+      this.backlog.push(detail)
+    }
   }
 }
 

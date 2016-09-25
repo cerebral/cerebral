@@ -1,3 +1,22 @@
+export function propsDiffer(propsA, propsB) {
+  const propsAKeys = Object.keys(propsA)
+  const propsBKeys = Object.keys(propsB)
+  let isDifferent = false
+
+  if (propsAKeys.length !== propsBKeys.length) {
+    isDifferent = true
+  } else {
+    for (let i = 0; i < propsB.length; i++) {
+      if (propsA[propsB[i]] !== propsB[propsB[i]]) {
+        isDifferent = true
+        break
+      }
+    }
+  }
+
+  return isDifferent
+}
+
 export function cleanPath(path) {
   return path.replace(/\.\*\*|\.\*/, '')
 }

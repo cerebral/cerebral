@@ -7,7 +7,7 @@ const Router = require('../../src/Router').default
 const addressbar = require('addressbar')
 const assert = require('assert')
 
-describe('matching', () => {
+describe('Router - matching', () => {
   beforeEach(() => {
     console.warn.warnings = []
     addressbar.value = addressbar.origin + '/'

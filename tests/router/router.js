@@ -140,7 +140,7 @@ describe('Router', () => {
     })
     controller.getSignal('test')({param: 'param'})
   })
-  it('should expose `getSignalUrl` method on router provider', () => {
+  it('should expose `getSignalUrl` method on router', () => {
     addressbar.value = addressbar.origin + '/test'
     const controller = Controller({
       router: Router({
@@ -153,17 +153,13 @@ describe('Router', () => {
         '/': 'test'
       },
       signals: {
-        test: [
-          function action({router}) {
-            assert.equal(router.getSignalUrl('test'), '/test/#/')
-            assert.equal(router.getSignalUrl('test', { param: 'test' }), '/test/#/?param=test')
-          }
-        ]
+        test: []
       }
     })
-    controller.getSignal('test')({param: 'param'})
+    assert.equal(controller.router.getSignalUrl('test'), '/test/#/')
+    assert.equal(controller.router.getSignalUrl('test', { param: 'test' }), '/test/#/?param=test')
   })
-  it('should `getSignalUrl` service method return null for unbound signal', () => {
+  it('should return null for unbound signal on `getSignalUrl`', () => {
     addressbar.value = addressbar.origin + '/test'
     const controller = Controller({
       router: Router({
@@ -175,14 +171,10 @@ describe('Router', () => {
         '/': 'test'
       },
       signals: {
-        test: [
-          function action({router}) {
-            assert.equal(router.getSignalUrl('unbound'), null)
-          }
-        ]
+        test: []
       }
     })
-    controller.getSignal('test')()
+    assert.equal(controller.router.getSignalUrl('unbound'), null)
   })
   it('should update addressbar for routable signal call', () => {
     const controller = Controller({

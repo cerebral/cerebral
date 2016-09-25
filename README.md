@@ -68,6 +68,26 @@ render((
 ), document.querySelector('#app'))
 ```
 
+### Computed
+```js
+import {Computed} from 'cerebral'
+
+export default Computed({
+  foo: 'app.foo'
+}, props => {
+  return props.foo
+})
+```
+
+In component:
+```js
+import someComputed from './someComputed'
+
+export default connect({
+  myComputed: someComputed()
+})
+```
+
 ### Devtools
 ```js
 import {Controller} from 'cerebral'
@@ -75,7 +95,7 @@ import Devtools from 'cerebral/devtools'
 
 const controller = Controller({
   devtools: Devtools({
-    timeTravel: false // Activates time travel feature in debugger
+    storeMutations: true // Activates time travel and multiple apps
   })
 })
 ```

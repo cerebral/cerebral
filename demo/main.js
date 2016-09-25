@@ -4,21 +4,33 @@ import Demo from './components/Demo'
 
 import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
-import {set, copy} from 'cerebral/operators'
 import Devtools from 'cerebral/devtools'
+import Router from 'cerebral/router'
+import {set} from 'cerebral/operators'
+
+const AdminModule = {
+  routes: {
+    '/': 'routed'
+  },
+  signals: {
+    routed: [set('state:title', 'Admin')]
+  }
+}
 
 const controller = Controller({
-  devtools: Devtools({timeTravel: true}),
+  devtools: Devtools(),
+  router: Router(),
   routes: {
     '/': 'routed'
   },
   state: {
-    title: 'bar'
+    title: 'Hello world!'
   },
   signals: {
-    routed: [
-      set('state:title', 'Page1')
-    ]
+    routed: [set('state:title', 'Front page')]
+  },
+  modules: {
+    admin: AdminModule
   }
 })
 

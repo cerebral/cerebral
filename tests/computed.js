@@ -13,6 +13,27 @@ describe('Computed', () => {
         Computed('foo', null)
       })
     })
+    it('should cache computed', () => {
+      const computedFactory = Computed({}, () => {})
+      computedFactory()
+      assert.equal(computedFactory.cache.length, 1)
+      computedFactory()
+      assert.equal(computedFactory.cache.length, 1)
+    })
+    it('should not use cache when props differ', () => {
+      const computedFactory = Computed({}, () => {})
+      computedFactory()
+      assert.equal(computedFactory.cache.length, 1)
+      computedFactory({foo: 'bar'})
+      assert.equal(computedFactory.cache.length, 2)
+    })
+    it('should remove from cache when computed is removed', () => {
+      const computedFactory = Computed({}, () => {})
+      const computed = computedFactory()
+      assert.equal(computedFactory.cache.length, 1)
+      computed.remove()
+      assert.equal(computedFactory.cache.length, 0)
+    })
   })
   describe('instance', () => {
     it('should create a computed', () => {

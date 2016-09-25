@@ -1,37 +1,37 @@
 import {Computed} from './../Computed'
-import {cleanPath} from './../utils'
+import {cleanPath, propsDiffer} from './../utils'
 
 export default (View) => {
   return function HOC(paths, signals, Component) {
     class CerebralComponent extends View.Component {
       constructor(props) {
         super(props)
-        this.paths = paths
+        this.paths = this.getStatePaths(props)
         this.signals = signals
         this.Component = Component
-        this.depsMap = this.getDepsMap(props)
+        this.depsMap = this.getDepsMap()
       }
       componentWillMount() {
         if (!this.context.cerebral.controller) {
           throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
         }
 
-        const statePaths = this.getStatePaths(this.props)
-
-        if (!statePaths) {
+        if (!this.paths) {
           return
         }
 
-        this.context.cerebral.registerComponent(this, this.getDepsMap(this.props))
+        this.context.cerebral.registerComponent(this, this.depsMap)
       }
       componentWillReceiveProps(nextProps) {
-        const hasChange = this.propsDiffer(this.props, nextProps)
+        const hasChange = propsDiffer(this.props, nextProps)
 
         // If dynamic paths, we need to update them
         if (typeof this.paths === 'function') {
-          const nextDepsMap = this.getDepsMap(nextProps)
+          this.paths = this.getStatePaths(nextProps)
 
-          if (this.propsDiffer(this.depsMap, nextDepsMap)) {
+          const nextDepsMap = this.getDepsMap()
+
+          if (propsDiffer(this.depsMap, nextDepsMap)) {
             this.context.cerebral.updateComponent(this, this.depsMap, nextDepsMap)
             this.depsMap = nextDepsMap
           }
@@ -53,36 +53,22 @@ export default (View) => {
           }
         })
       }
-      propsDiffer(previousProps, nextProps) {
-        const oldPropKeys = Object.keys(previousProps)
-        const newPropKeys = Object.keys(nextProps)
-        let hasChange = false
-
-        if (oldPropKeys.length !== newPropKeys.length) {
-          hasChange = true
-        } else {
-          for (let i = 0; i < newPropKeys.length; i++) {
-            if (previousProps[newPropKeys[i]] !== nextProps[newPropKeys[i]]) {
-              hasChange = true
-              break
-            }
+      getDepsMap() {
+        return Object.keys(this.paths).reduce((currentDepsMap, pathKey) => {
+          if (this.paths[pathKey] instanceof Computed) {
+            return Object.assign(currentDepsMap, this.paths[pathKey].depsMap)
           }
-        }
 
-        return hasChange
-      }
-      getDepsMap(props) {
-        if (!this.paths) {
-          return {}
-        }
+          currentDepsMap[pathKey] = this.paths[pathKey]
 
-        return typeof this.paths === 'function' ? paths(props) : this.paths
+          return currentDepsMap
+        }, {})
       }
       getStatePaths(props) {
-        if (!this.paths) {
-          return null
+        if (!paths) {
+          return {}
         }
-        return typeof this.paths === 'function' ? paths(props) : this.paths
+        return typeof this.paths === 'function' ? paths(props) : paths
       }
       getProps() {
         const controller = this.context.cerebral.controller
