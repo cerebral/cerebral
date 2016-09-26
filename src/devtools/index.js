@@ -56,6 +56,15 @@ class Devtools {
     this.controller.emit('flush', {}, true)
   }
   /*
+
+  */
+  reset() {
+    this.controller.model.state = JSON.parse(this.initialModelString)
+    this.backlog = []
+    this.mutations = []
+    this.controller.emit('flush', {}, true)
+  }
+  /*
     The debugger might be ready or it might not. The initial communication
     with the debugger requires a "ping" -> "pong" to identify that it
     is ready to receive messages.
@@ -81,6 +90,9 @@ class Devtools {
         console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
       }
       this.remember(event.detail)
+    })
+    window.addEventListener('cerebral2.debugger.reset', (event) => {
+      this.reset()
     })
     window.addEventListener('cerebral2.debugger.pong', () => {
       // When debugger responds to a ping
