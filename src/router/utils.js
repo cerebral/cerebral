@@ -1,8 +1,4 @@
-export function isObject(value) {
-  const type = typeof value
-
-  return Boolean(value) && (type === 'object' || type === 'function')
-}
+import {isObject} from '../utils'
 
 export function flattenConfig(config, prev = '') {
   return Object.keys(config).reduce((flattened, key) => {

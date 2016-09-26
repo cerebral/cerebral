@@ -1,6 +1,6 @@
 import FunctionTree from 'function-tree'
 import Module from './Module'
-import DefaultModel from './DefaultModel'
+import Model from './Model'
 import {ensurePath, isDeveloping, throwError} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import ContextProvider from 'function-tree/providers/Context'
@@ -21,13 +21,13 @@ class Controller extends EventEmitter {
     super()
     this.flush = this.flush.bind(this)
     this.devtools = devtools
-    this.model = new DefaultModel({})
-    this.module = new Module([], () => ({
+    this.model = new Model({})
+    this.module = new Module([], {
       state,
       routes,
       signals,
       modules
-    }), {controller: this})
+    }, this)
     this.router = router ? router(this.module.getRoutes(), this) : null
 
     const allProviders = (
@@ -56,16 +56,14 @@ class Controller extends EventEmitter {
 
     if (this.devtools) {
       this.devtools.init(this)
-      window.addEventListener('cerebral2.debugger.changeModel', (event) => {
-        this.model.set(event.detail.path, event.detail.value)
-        this.flush()
-      })
     }
 
     if (this.router) this.router.init()
+
+    this.emit('initialized')
   }
   /*
-    Whenever the the view needs to be updated this method is called.
+    Whenever the view needs to be updated this method is called.
     It will first flag any computed for changes and then emit the flush
     event which the view layer listens to
   */

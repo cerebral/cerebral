@@ -1,7 +1,7 @@
-import Model from '../src/DefaultModel'
+import Model from '../src/Model'
 import assert from 'assert'
 
-describe('DefaultModel', () => {
+describe('Model', () => {
   it('should instantiate with initial state', () => {
     const model = new Model({
       foo: 'bar'

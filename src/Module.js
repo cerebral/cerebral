@@ -1,8 +1,8 @@
 class Module {
-  constructor(path, module, parentModule) {
+  constructor(path, module, controller) {
     this.name = path.slice().pop()
     this.path = path
-    this.controller = parentModule.controller
+    this.controller = controller
     this.modules = {}
 
     const moduleDescription = typeof module === 'function' ? module(this) : module
@@ -18,8 +18,8 @@ class Module {
     this.registerModules(moduleDescription.modules || {})
   }
   /*
-    Returns an object of routes and their appointed signals
-    based on the module path
+    Returns the routes defined on this module, but relative to
+    the module path. So "/foo" becomes "/moduleName/foo"
   */
   getRoutes() {
     return Object.keys(this.modules).reduce((currentRoutes, moduleKey) => {
@@ -40,7 +40,7 @@ class Module {
   }
   registerModules(modules) {
     Object.keys(modules).forEach(moduleKey => {
-      this.modules[moduleKey] = new Module(this.path.concat(moduleKey), modules[moduleKey], this)
+      this.modules[moduleKey] = new Module(this.path.concat(moduleKey), modules[moduleKey], this.controller)
     })
   }
   /*
