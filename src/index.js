@@ -182,16 +182,16 @@ FunctionTree.prototype.runTree = function() {
     staticTree = this.cachedStaticTrees[this.cachedTrees.indexOf(tree)]
   }
   var execution = new FunctionTreeExecution(name, staticTree, this, function(error) {
-    cb && cb(error)
+    cb && cb(error, execution, payload)
     setTimeout(function () {
-      this.emit('error', error)
+      this.emit('error', error, execution, payload)
     }.bind(this))
   }.bind(this))
 
   this.emit('start', execution, payload)
   executeTree(execution.staticTree, execution.runFunction, payload, function() {
     this.emit('end', execution, payload)
-    cb && cb(null)
+    cb && cb(null, execution, payload)
   }.bind(this))
 };
 

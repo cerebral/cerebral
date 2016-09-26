@@ -269,15 +269,15 @@ execute(tree)
 #### Catching errors
 ```js
 // As an event (async)
-execute.on('error', function (err) {
+execute.on('error', function (error, execution, payload) {
 
 })
 
 execute(tree)
 
 // As callback (sync)
-execute(tree, (err) => {
-  if (err) {
+execute(tree, (error, execution, payload) => {
+  if (error) {
     // There is an error
   }
 })
@@ -460,7 +460,7 @@ const tree = [
 ]
 
 // When an error is thrown, also catches promise errors
-execute.on('error', (error) => {})
+execute.on('error', (error, execution, payload) => {})
 
 // When a function tree is executed
 execute.on('start', (execution, payload) => {})
