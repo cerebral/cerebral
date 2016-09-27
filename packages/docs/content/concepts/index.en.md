@@ -1,7 +1,4 @@
 ---
-redirect: ./01_the-problem
+redirect: ./01_the-architecture
 title: 'Concepts'
 ---
-
-* [The problem](./01_the-problem.en.md)
-* [Signals](./02_signals.en.md)

@@ -2,6 +2,8 @@
 side-nav:
   - get-started
   - concepts
+  - getting-real
+  - api
 ---
 
 * [Try the demo](http://cerebral.github.io/cerebral-todomvc/)
