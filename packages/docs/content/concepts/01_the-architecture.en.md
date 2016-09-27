@@ -7,7 +7,9 @@ title: The architecture
 Cerebral is based on a simple concept that there are three things your application needs to function.
 
 1. Store state
+
 2. Render state
+
 3. Update state
 
 ### Store state
