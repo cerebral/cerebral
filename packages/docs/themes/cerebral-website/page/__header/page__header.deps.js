@@ -1,6 +1,3 @@
 ({
-  shouldDeps: [
-    'hero',
-    'head-nav'
-  ]
+  shouldDeps: 'head-nav'
 })

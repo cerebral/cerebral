@@ -2,14 +2,6 @@ block('page').elem('content').match(function () {
   return this.mods.layout !== 'root'
 })(
   content()(function () {
-    var content = [ { block: 'page', elem: 'edit' } ].concat(this.ctx.content.filter(function (node, index) {
-      return !(node && node.block === 'next')
-    }))
-
-    var next = this.ctx.content.filter(function (node, index) {
-      return node && node.block === 'next'
-    })
-
     return [
       {
         block: 'row',
@@ -22,19 +14,11 @@ block('page').elem('content').match(function () {
           {
             elem: 'col',
             elemMods: { sw: 24, lw: 18, lo: 1 },
-            content: content
+            content: [
+              { block: 'page', elem: 'edit' },
+              this.ctx.content
+            ]
           },
-        ]
-      },
-      next && {
-        block: 'row',
-        mods: { sar: true },
-        content: [
-          { 
-            elem: 'col',
-            elemMods: { sw: 8 },
-            content: next
-          }
         ]
       }
     ]
@@ -42,39 +26,30 @@ block('page').elem('content').match(function () {
 )
 
 block('page').elem('content').mod('layout', 'root')(
-  content()(function() {
-    var md = applyNext()
-    var lastRowIndex = -1
-    var even, data, tabs
-    var content = []
-
-    md.forEach(function (node) {
-      if (node && node.tag === 'h2') {
-        lastRowIndex++
-        even = !!(lastRowIndex % 2)
-        data = [node]
-        tabs = []
-
-        content.push({
-          block: 'row',
-          content: [
-            {
-              elem: 'col',
-              elemMods: { sw: 24, lw: 11, lo: even && 2 },
-              content: data
-            }, {
-              elem: 'col',
-              elemMods: { sw: 24, lw: 11, lo: even || 2, lof: even, xlof: even, xxlof: even },
-              content: tabs
-            }
-          ]
+  def()(function() {
+    var links = this.ctx.content.shift().content
+        .filter(function (i) { return i && i.tag})
+        .map(function (li) {
+          var link = li.content[0] 
+          return {
+            block: 'button',
+            mods: { theme: 'islands', size: 'xl', type: 'link' },
+            url: link.attrs.href,
+            text: link.content
+          }
         })
-      } else if (node && node.block === 'tabs') {
-        tabs && tabs.push(node)
-      } else {
-        data && data.push(node)
-      }
-    })
-    return content
+    return [
+      applyCtx({ block: 'hero', content: links }),
+      applyCtx({
+        block: 'row',
+        content: [
+          { 
+            elem: 'col',
+            elemMods: { sw: 24 },
+            content: applyNext()
+          }
+        ]
+      })
+    ]
   })
 )
