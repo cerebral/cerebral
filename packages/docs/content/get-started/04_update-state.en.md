@@ -11,7 +11,7 @@ import React from 'react'
 import {render} from 'react-dom'
 import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
-import {copy} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
 
 const controller = Controller({
   state: {
@@ -19,7 +19,7 @@ const controller = Controller({
   },
   signals: {
     inputChanged: [
-      copy('input:value', 'state:title')
+      set('state:title', 'input:title')
     ]
   }
 })
@@ -31,7 +31,7 @@ render((
 ), document.querySelector('#app'))
 ```
 
-We now defined a signal named **inputChanged**. The signal tells us "what happened to make this signal run". A signal is defined using a chain, which is basically an array of functions. What we want to happen when this signal triggers is to update the **title** in our model with the value of the input. That is why we **copy** it using a Cerebral operator. Calling copy will create an action for us that will copy the value of the input to the model. We will learn more about these operators, actions, chains and signals later.
+We now defined a signal named **inputChanged**. The signal tells us "what happened to make this signal run". A signal is defined using a chain, which is basically an array of functions. What we want to happen when this signal triggers is to update the **title** in our model with the value of the input. That is why we **set** it using a Cerebral operator. Calling set will create an action for us that will copy the value of the input to the model. We will learn more about these operators, actions, chains and signals later.
 
 Now let us create the input.
 
