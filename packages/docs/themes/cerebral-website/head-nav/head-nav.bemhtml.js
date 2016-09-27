@@ -5,7 +5,7 @@ block('head-nav')(
         block: 'link',
         mix: { block: 'head-nav', elem: 'home' },
         url: '../',
-        content: 'Cerebral'
+        content: ''
       }
     ]
   })
