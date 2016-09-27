@@ -4,9 +4,13 @@ title: Get started
 
 ## Get started
 
-If you want to get your hands dirty right away you can follow this "get started" tutorial, or you can move on to learn more about the concepts of Cerebral in the next section.
+If you want to install Cerebral into an existing project please...
 
-Make sure you fulfill these requirements:
+`npm install cerebral`
+
+...and then move on to the other docs.
+
+If you want an introduction you can keep reading and go through a small demo project. Just make sure you fulfill these requirements:
 
 * You have installed [Node](https://nodejs.org/en/) version 4 or later
 * You are okay with learning Cerebral using React and JSX. You can choose something else for your own project later though

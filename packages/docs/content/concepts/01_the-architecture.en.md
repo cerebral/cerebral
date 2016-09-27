@@ -13,12 +13,12 @@ Cerebral is based on a simple concept that there are three things your applicati
 3. Update state
 
 ### Store state
-Where to store the state of your application is a highly debated subject. Should you allow your view to store state? Should you have multiple models? Stores? Reducers? There are many concepts to handle this. In Cerebral we encourage you to store all the state of your application in a single state tree.
+Where to store the state of your application is a highly debated subject. Should you allow your view to store state? Should you have multiple models? Stores? Reducers? Services? There are many concepts to handle this. In Cerebral we encourage you to store all the state of your application in a single state tree.
 
 With this approach we get some benefits not possible with the other approaches.
 
 #### A simple and consistent API for updating state
-Typically a state update is changing out value, push an item to a list or merging an object into an other. With a single state tree we can create an API that does exactly that.
+Typically a state update is changing out a value, push an item to a list or merging an object into an other. With a single state tree we can create an API that does exactly that.
 
 ```js
 state.set('foo', 'bar')
