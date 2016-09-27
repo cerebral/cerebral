@@ -6,7 +6,7 @@
   "scripts": {
     "start": "mark serve",
     "predeploy": "NODE_ENV=build mark build && cp -R public/* dist/",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages-with-token -d dist"
   },
   "author": "Alexey Gurianov <gurianov@gmail.com>",
   "license": "ISC",
@@ -15,7 +15,7 @@
     "bem-components": "^3.0.0",
     "cssnano": "^3.7.3",
     "entities": "^1.1.1",
-    "gh-pages": "^0.11.0",
+    "gh-pages-with-token": "^1.0.0",
     "mad-mark": "^2.2.4",
     "postcss-url": "^5.1.2",
     "prismjs": "^1.5.1",
