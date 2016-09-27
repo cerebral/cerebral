@@ -21,9 +21,7 @@ module.exports = {
     require('mad-mark').posthtmlPlugins,
     process.env.NODE_ENV === 'build' ? require('./plugins/posthtml-images') : () => {},
     require('./plugins/posthtml-links'),
-    require('./plugins/posthtml-next'),
-    require('./plugins/posthtml-prism'),
-    require('./plugins/posthtml-md-tabs')
+    require('./plugins/posthtml-prism')
   ),
   "postcssPlugins": [
     require('sharps').postcss({

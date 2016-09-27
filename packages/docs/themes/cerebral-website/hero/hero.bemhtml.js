@@ -1,7 +1,9 @@
 block('hero')(
-  content()([
-    { elem: 'logo' },
-    { elem: 'heading' },
-    { elem: 'buttons' }
-  ])
+  content()(function () {
+    return [
+      { elem: 'logo' },
+      { elem: 'heading' },
+      { elem: 'buttons', content: this.ctx.content }
+    ]
+  })
 )
