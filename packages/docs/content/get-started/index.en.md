@@ -1,10 +1,9 @@
 ---
-redirect: ./get-started
+redirect: ./01_get-started
 title: 'Get started'
-pages:
-  - [get-started, 'Get started']
 ---
 
-## Get started
-
-* [Get started](./get-started.en.md)
+* [Get started](./01_get-started.en.md)
+* [Defining state](./02_defining-state.en.md)
+* [Render state](./03_render-state.en.md)
+* [Update state](./04_update-state.en.md)

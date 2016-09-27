@@ -15,3 +15,8 @@
 .page__content {
   flex: 1
 }
+
+a {
+  color: #00a1c9;
+  text-decoration: none;
+}

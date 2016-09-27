@@ -6,7 +6,8 @@
   "scripts": {
     "start": "mark serve",
     "predeploy": "NODE_ENV=build mark build && cp -R public/* dist/",
-    "deploy": "gh-pages -d dist"
+    "deploy": "gh-pages -d dist",
+    "serve": "mark serve"
   },
   "author": "Alexey Gurianov <gurianov@gmail.com>",
   "license": "ISC",
