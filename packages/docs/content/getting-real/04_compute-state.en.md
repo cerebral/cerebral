@@ -12,8 +12,8 @@ import {Computed} from 'cerebral'
 export default Computed({
   limit: 'items.limit',
   items: 'items.list'
-}, (props) => {
-  return items.filter((item, index) => index < props.limit)
+}, ({limit, items}) => {
+  return items.filter((item, index) => index < limit)
 })
 ```
 
@@ -41,7 +41,7 @@ import {Computed} from 'cerebral'
 export default Computed({
   items: 'items.list'
 }, (props) => {
-  return items.filter((item, index) => index < props.limit)
+  return props.items.filter((item, index) => index < props.limit)
 })
 ```
 
