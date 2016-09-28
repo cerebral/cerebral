@@ -38,18 +38,21 @@ block('page').elem('content').mod('layout', 'root')(
             text: link.content
           }
         })
-    return [
-      applyCtx({ block: 'hero', content: links }),
-      applyCtx({
-        block: 'row',
-        content: [
-          { 
-            elem: 'col',
-            elemMods: { sw: 24 },
-            content: applyNext()
-          }
-        ]
-      })
-    ]
+    return applyCtx([
+      { block: 'hero', content: links },
+      applyNext()
+    ])
+  }),
+  content()(function () {
+    return {
+      block: 'row',
+      content: [
+        {
+          elem: 'col',
+          elemMods: { sw: 24 },
+          content: this.ctx
+        }
+      ]
+    }
   })
 )

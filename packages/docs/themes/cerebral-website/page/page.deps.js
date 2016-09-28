@@ -4,7 +4,7 @@
     'heading',
     'code',
     'prism',
-    'tabs',
+    'youtube',
     { elems: ['header', 'content', 'footer', 'head'] }
   ]
 })
