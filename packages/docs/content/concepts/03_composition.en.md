@@ -95,14 +95,3 @@ Since both **fetchThis** and **fetchThat** are chains (arrays) they can be merge
   }
 ]
 ```
-
-If you wanted the two to run in parallel you would just group them.
-
-```js
-[
-  [
-    ...fetchThis,
-    ...fetchThat  
-  ]
-]
-```
