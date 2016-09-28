@@ -4,7 +4,12 @@ title: Exposing state
 
 ## Exposing state
 
-In Cerebral you always connect state where you need it. This will automatically optimize the component and Cerebral will know what components depends on what state, giving you a better insight into your app through the debugger.
+In Cerebral you always connect state where you need it. This give some benefits:
+
+1. Cerebral will optimize the component
+2. The debugger will know about this component and understand its state dependencies
+3. Increased readability as every component explicitly tells you what state it needs and where it gets it from
+4. You can safely move the component wherever you want without breaking some chain of props passing
 
 Generally you do not have to give this much thought, but there are conventions that will help you handle certain scenarios.
 
