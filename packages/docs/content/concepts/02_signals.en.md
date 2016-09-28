@@ -162,5 +162,27 @@ The point is that execution paths are important. Running a flow is not about one
 ]
 ```
 
+### Parallel execution
+
+A signal can group actions to run in parallel. This is expressed with an array inside an array. You can mix async and sync actions.
+
+```js
+[
+  firstDoThis,
+  [
+    doThis, // Sync action, called first (at once)
+    fetchThat, { // Async action, called second (at once)
+      success: [setThis], // Sync action, runs when fetchThat is done
+      error: [errorThat]
+    },
+    fetchSomethingElse, { // Async action, called third (at once)
+      success: [setSomething], // Sync action, runs when fetchSomethingElse is done
+      error: [errorSomething]
+    }
+  ],
+  afterParallelDoThis // After everything in group is done
+]
+```
+
 ### Summary
 Signals is an abstraction that allows you to completely decouple your functions, but still compose them together as one coherent flow. That means we make your functions pure, even though they run side effects. This gives you testability out of the box. On top of this the debugger will understand everything that is happening inside your application building the mental image of how a signal actually ran. This is a great tool to bring new people into the code and debug where things go wrong.
