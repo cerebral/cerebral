@@ -113,4 +113,13 @@ describe('Model', () => {
       assert.deepEqual(model.get(), {})
     })
   })
+  describe('CONCAT', () => {
+    it('should be able to concat array', () => {
+      const model = new Model({
+        foo: ['foo']
+      })
+      model.concat(['foo'], ['bar'])
+      assert.deepEqual(model.get(), {foo: ['foo', 'bar']})
+    })
+  })
 })

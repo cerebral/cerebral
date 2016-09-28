@@ -108,6 +108,11 @@ class Model {
       return obj
     })
   }
+  concat(path, value) {
+    this.updateIn(path, (array) => {
+      return array.concat(value)
+    })
+  }
 }
 
 export default Model
