@@ -35,7 +35,7 @@ const controller = Controller({
 })
 
 render((
-  <Container controller={controller}>
+  <Container state={{title: 'hohoho'}}>
     <Demo />
   </Container>
 ), document.querySelector('#app'))

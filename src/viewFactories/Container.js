@@ -1,4 +1,5 @@
 import DependencyStore from '../DependencyStore'
+import {ensurePath} from '../utils'
 
 export default (View) => {
   class Container extends View.Component {
@@ -13,23 +14,30 @@ export default (View) => {
       this.onCerebralUpdate = this.onCerebralUpdate.bind(this)
     }
     getChildContext() {
+      const controller = (
+        this.props.controller ||
+        this.createDummyController(this.props.state)
+      )
       return {
         cerebral: {
-          controller: this.props.controller,
+          controller: controller,
           registerComponent: this.registerComponent,
           unregisterComponent: this.unregisterComponent,
           updateComponent: this.updateComponent
         }
       }
     }
+    hasDevtools() {
+      return Boolean(this.props.controller && this.hasDevtools())
+    }
     /*
       The container will listen to "flush" events from the controller
       and send an event to debugger about initial registered components
     */
     componentDidMount() {
-      this.props.controller.on('flush', this.onCerebralUpdate)
+      this.props.controller && this.props.controller.on('flush', this.onCerebralUpdate)
 
-      if (this.props.controller.debugger) {
+      if (this.hasDevtools()) {
         const event = new CustomEvent('cerebral2.client.message', {
           detail: JSON.stringify({
             type: 'components',
@@ -42,6 +50,25 @@ export default (View) => {
           })
         })
         window.dispatchEvent(event)
+      }
+    }
+    /*
+      When testing and running on the server there is no need to
+      initialize all of Cerebral. So by not passing a controller
+      to this Container it will create a dummy version which inserts
+      state and mocks any signals when connecting the component.
+    */
+    createDummyController(state = {}) {
+      return {
+        on() {},
+        getState(path) {
+          return ensurePath(path).reduce((currentState, pathKey) => {
+            return currentState[pathKey]
+          }, state)
+        },
+        getSignal() {
+          return () => {}
+        }
       }
     }
     /*
@@ -59,14 +86,14 @@ export default (View) => {
       const componentsToRender = force ? this.dependencyStore.getAllUniqueEntities() : this.dependencyStore.getUniqueEntities(changes)
       const start = Date.now()
       componentsToRender.forEach((component) => {
-        if (this.props.controller.debugger) {
+        if (this.hasDevtools()) {
           component.renderCount = 'renderCount' in component ? component.renderCount + 1 : 1
         }
         component._update()
       })
       const end = Date.now()
 
-      if (this.props.controller.devtools) {
+      if (this.hasDevtools()) {
         const event = new CustomEvent('cerebral2.client.message', {
           detail: JSON.stringify({
             type: 'components',
@@ -86,20 +113,20 @@ export default (View) => {
     }
     registerComponent(component, depsMap) {
       this.dependencyStore.addEntity(component, depsMap)
-      if (this.props.controller.devtools) {
+      if (this.hasDevtools()) {
         this.updateDebuggerComponentsMap(component, depsMap)
       }
     }
     unregisterComponent(component, depsMap) {
       this.dependencyStore.removeEntity(component, depsMap)
-      if (this.props.controller.devtools) {
+      if (this.hasDevtools()) {
         this.updateDebuggerComponentsMap(component, depsMap)
       }
     }
     updateComponent(component, prevDepsMap, depsMap) {
       this.dependencyStore.removeEntity(component, prevDepsMap)
       this.dependencyStore.addEntity(component, depsMap)
-      if (this.props.controller.devtools) {
+      if (this.hasDevtools()) {
         this.updateDebuggerComponentsMap(component, depsMap, prevDepsMap)
       }
       component._update()

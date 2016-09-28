@@ -25,7 +25,7 @@ export function isObject(obj) {
   return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 }
 
-export function ensurePath(path) {
+export function ensurePath(path = []) {
   if (Array.isArray(path)) {
     return path
   } else if (typeof path === 'string') {
