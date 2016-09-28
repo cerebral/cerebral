@@ -113,15 +113,6 @@ export default function Router(options = {}) {
         context.router = contextProvider
 
         return context
-      },
-      getSignalUrl(signalName, input) {
-        if (signals[signalName]) {
-          const route = signals[signalName].route
-
-          return options.baseUrl + options.mapper.stringify(route, input || {})
-        }
-
-        return null
       }
     }
   }

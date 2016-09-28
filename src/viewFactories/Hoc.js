@@ -85,9 +85,6 @@ export default (View) => {
 
           propsToPass = Object.keys(extractedSignals).reduce((currentProps, key) => {
             currentProps[key] = controller.getSignal(extractedSignals[key])
-            if (controller.router) {
-              currentProps[key].toUrl = controller.router.getSignalUrl.bind(controller.router, extractedSignals[key])
-            }
 
             return currentProps
           }, propsToPass)
