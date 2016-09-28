@@ -7,6 +7,7 @@ module.exports = tree => {
         height: 315,
         frameborder: 0,
         allowfullscreen: true,
+        style: { 'max-width': '100%' },
         src: node.attrs.href.replace('watch?v=', 'embed/')
       }
     }
