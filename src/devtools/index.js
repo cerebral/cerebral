@@ -1,17 +1,25 @@
+const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
+const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
+const VERSION = 'v1'
 /*
   Connects to the Cerebral debugger
   - Triggers events with information from function tree execution
   - Stores data related to time travel, if activated
 */
 class Devtools {
-  constructor(options = {}) {
-    this.VERSION = 'v1'
-    this.storeMutations = options.storeMutations === undefined ? true : options.storeMutations
+  constructor(options = {storeMutations: true}) {
+    this.VERSION = VERSION
+    this.storeMutations = options.storeMutations
     this.backlog = []
     this.mutations = []
+    this.latestExecutionId = null
+    this.executionCount = 0
     this.initialModelString = null
     this.isConnected = false
     this.controller = null
+    this.originalRunTreeFunction = null
+
+    this.sendInitial = this.sendInitial.bind(this)
   }
   /*
     To remember state Cerebral stores the initial model as stringified
@@ -21,13 +29,26 @@ class Devtools {
     This is necessary as multiple mutations can be done on the same execution.
     Then all mutations are replayed to the model and all the components
     will be rerendered using the "flush" event and "force" flag.
+
+    It will also replace the "runTree" method of the controller to
+    prevent any new signals firing off when in "remember state"
   */
   remember(executionId) {
     this.controller.model.state = JSON.parse(this.initialModelString)
     let lastMutationIndex
-    for (lastMutationIndex = this.mutations.length - 1; lastMutationIndex >= 0; lastMutationIndex--) {
-      if (this.mutations[lastMutationIndex].executionId === executionId) {
-        break
+
+    if (executionId === this.latestExecutionId) {
+      this.controller.runTree = this.originalRunTreeFunction
+      lastMutationIndex = this.mutations.length - 1
+    } else {
+      for (lastMutationIndex = this.mutations.length - 1; lastMutationIndex >= 0; lastMutationIndex--) {
+        if (this.mutations[lastMutationIndex].executionId === executionId) {
+          break
+        }
+      }
+
+      this.controller.runTree = (name) => {
+        console.warn(`The signal "${name}" fired while debugger is remembering state, it was ignored`)
       }
     }
 
@@ -37,6 +58,15 @@ class Devtools {
       this.controller.model[mutation.method](...mutation.args)
     }
 
+    this.controller.emit('flush', {}, true)
+  }
+  /*
+
+  */
+  reset() {
+    this.controller.model.state = JSON.parse(this.initialModelString)
+    this.backlog = []
+    this.mutations = []
     this.controller.emit('flush', {}, true)
   }
   /*
@@ -52,49 +82,82 @@ class Devtools {
       - Devtools sends "init"
   */
   init(controller) {
-    const initialModel = controller.model.get()
     this.controller = controller
+    this.originalRunTreeFunction = controller.runTree
 
     if (this.storeMutations) {
-      this.initialModelString = JSON.stringify(initialModel)
+      this.initialModelString = JSON.stringify(controller.model.get())
     }
 
+    window.addEventListener('cerebral2.debugger.changeModel', (event) => {
+      controller.model.set(event.detail.path, event.detail.value)
+      controller.flush()
+    })
     window.addEventListener('cerebral2.debugger.remember', (event) => {
       if (!this.storeMutations) {
         console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
       }
       this.remember(event.detail)
     })
-    window.addEventListener('cerebral2.debugger.pong', () => {
-      // When debugger responds to a ping
-      this.isConnected = true
-      this.sendInitial(initialModel)
+    window.addEventListener('cerebral2.debugger.reset', (event) => {
+      this.reset()
     })
-    window.addEventListener('cerebral2.debugger.ping', () => {
-      // When debugger activates
-      this.isConnected = true
-      this.sendInitial(initialModel)
-    })
+    // When debugger responds a client ping
+    window.addEventListener('cerebral2.debugger.pong', this.sendInitial)
+    // When debugger pings the client
+    window.addEventListener('cerebral2.debugger.ping', this.sendInitial)
 
     const event = new window.CustomEvent('cerebral2.client.message', {
       detail: JSON.stringify({type: 'ping'})
     })
     window.dispatchEvent(event)
+
+    this.watchExecution()
+  }
+  /*
+    Watches function tree for execution of signals. This is passed to
+    debugger to prevent time travelling when executing. It also tracks
+    latest executed signal for "remember" to know when signals can be
+    called again
+  */
+  watchExecution() {
+    this.controller.runTree.on('start', () => {
+      if (this.executionCount === 0) {
+        const event = new window.CustomEvent('cerebral2.client.message', {
+          detail: JSON.stringify({type: 'executionChange', data: {isExecuting: true}})
+        })
+        window.dispatchEvent(event)
+      }
+      this.executionCount++
+    })
+    this.controller.runTree.on('end', (execution) => {
+      this.latestExecutionId = execution.id
+      this.executionCount--
+      if (this.executionCount === 0) {
+        const event = new window.CustomEvent('cerebral2.client.message', {
+          detail: JSON.stringify({type: 'executionChange', data: {isExecuting: false}})
+        })
+        window.dispatchEvent(event)
+      }
+    })
   }
   /*
     Send initial model. If model has already been stringified we reuse it. Any
     backlogged executions will also be triggered
   */
-  sendInitial(type, initialModel) {
+  sendInitial() {
+    const initialModel = this.controller.model.get()
+
+    this.isConnected = true
     const initEvent = new window.CustomEvent('cerebral2.client.message', {
       detail: JSON.stringify({
         type: 'init',
         version: this.VERSION,
         data: {
-          initialModel: this.initialModelString ? '$$INITIAL_MODEL$$' : initialModel,
+          initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel,
           executions: []
         }
-      }).replace('\"$$INITIAL_MODEL$$\"', this.initialModelString)
+      }).replace(`"${PLACEHOLDER_INITIAL_MODEL}"`, this.initialModelString)
     })
     window.dispatchEvent(initEvent)
 
@@ -128,7 +191,7 @@ class Devtools {
         staticTree: functionDetails.functionIndex === 0 && !debuggingData ? context.execution.staticTree : null,
         payload: payload,
         datetime: context.execution.datetime,
-        data: mutationString ? '$$DEBUGGING_DATA$$' : debuggingData
+        data: mutationString ? PLACEHOLDER_DEBUGGING_DATA : debuggingData
       }]
     }
 
@@ -143,7 +206,7 @@ class Devtools {
       type: type,
       version: this.VERSION,
       data: data
-    }).replace('\"$$DEBUGGING_DATA$$\"', mutationString)
+    }).replace(`"${PLACEHOLDER_DEBUGGING_DATA}"`, mutationString)
   }
   /*
     Sends execution data to the debugger. Whenever a signal starts

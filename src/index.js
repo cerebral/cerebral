@@ -1,5 +1,3 @@
-import ControllerExport from './Controller'
-import ComputedExport from './Computed'
-
-export const Controller = ControllerExport
-export const Computed = ComputedExport
+export {default as Controller} from './Controller'
+export {default as Computed} from './Computed'
+export {default as parseScheme} from 'cerebral-scheme-parser'

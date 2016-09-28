@@ -1,7 +1,7 @@
-import Model from '../src/DefaultModel'
+import Model from '../src/Model'
 import assert from 'assert'
 
-describe('DefaultModel', () => {
+describe('Model', () => {
   it('should instantiate with initial state', () => {
     const model = new Model({
       foo: 'bar'
@@ -111,6 +111,15 @@ describe('DefaultModel', () => {
       })
       model.unset(['foo'])
       assert.deepEqual(model.get(), {})
+    })
+  })
+  describe('CONCAT', () => {
+    it('should be able to concat array', () => {
+      const model = new Model({
+        foo: ['foo']
+      })
+      model.concat(['foo'], ['bar'])
+      assert.deepEqual(model.get(), {foo: ['foo', 'bar']})
     })
   })
 })
