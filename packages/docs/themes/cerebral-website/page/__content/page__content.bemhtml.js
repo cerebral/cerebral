@@ -8,7 +8,7 @@ block('page').elem('content').match(function () {
         content: [
           { 
             elem: 'col',
-            elemMods: { sw: 24, lw: 5, mol: true },
+            elemMods: { sw: 24, lw: 5, sol: true, mol: true },
             content: { block: 'side-nav' }
           },
           {
