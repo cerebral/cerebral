@@ -10,7 +10,8 @@ function StateProviderFactory(model) {
     'shift',
     'unshift',
     'splice',
-    'unset'
+    'unset',
+    'concat'
   ]
   const stateContext = methods.reduce((currentStateContext, methodKey) => {
     if (typeof model[methodKey] === 'function') {

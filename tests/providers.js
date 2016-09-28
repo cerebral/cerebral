@@ -124,5 +124,17 @@ describe('providers', () => {
       controller.getSignal('foo')()
       assert.deepEqual(controller.getState(), {})
     })
+    it('should be able to CONCAT state', () => {
+      const controller = new Controller({
+        state: {
+          foo: ['foo']
+        },
+        signals: {
+          foo: [({state}) => state.concat('foo', ['bar'])]
+        }
+      })
+      controller.getSignal('foo')()
+      assert.deepEqual(controller.getState(), {foo: ['foo', 'bar']})
+    })
   })
 })
