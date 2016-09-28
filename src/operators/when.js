@@ -1,7 +1,7 @@
 import parseScheme from 'cerebral-scheme-parser'
 import populateInputAndStateSchemes from './helpers/populateInputAndStateSchemes'
 
-function whenFactory(passedPath, continueChain) {
+function whenFactory(passedPath) {
   const pathScheme = parseScheme(passedPath)
 
   if (pathScheme.target !== 'state' && pathScheme.target !== 'input') {
@@ -19,17 +19,12 @@ function whenFactory(passedPath, continueChain) {
       value = state.get(pathValue)
     }
 
-    return Boolean(value) ? path.accepted() : path.discarded()
+    return Boolean(value) ? path.true() : path.false()
   }
 
   when.displayName = `operator WHEN (${passedPath})`
 
-  return [
-    when, {
-      accepted: continueChain,
-      discarded: []
-    }
-  ]
+  return when
 }
 
 export default whenFactory

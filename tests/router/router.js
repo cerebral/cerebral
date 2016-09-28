@@ -140,42 +140,6 @@ describe('Router', () => {
     })
     controller.getSignal('test')({param: 'param'})
   })
-  it('should expose `getSignalUrl` method on router', () => {
-    addressbar.value = addressbar.origin + '/test'
-    const controller = Controller({
-      router: Router({
-        baseUrl: '/test',
-        onlyHash: true,
-        query: true,
-        preventAutostart: true
-      }),
-      routes: {
-        '/': 'test'
-      },
-      signals: {
-        test: []
-      }
-    })
-    assert.equal(controller.router.getSignalUrl('test'), '/test/#/')
-    assert.equal(controller.router.getSignalUrl('test', { param: 'test' }), '/test/#/?param=test')
-  })
-  it('should return null for unbound signal on `getSignalUrl`', () => {
-    addressbar.value = addressbar.origin + '/test'
-    const controller = Controller({
-      router: Router({
-        baseUrl: '/test',
-        onlyHash: true,
-        preventAutostart: true
-      }),
-      routes: {
-        '/': 'test'
-      },
-      signals: {
-        test: []
-      }
-    })
-    assert.equal(controller.router.getSignalUrl('unbound'), null)
-  })
   it('should update addressbar for routable signal call', () => {
     const controller = Controller({
       router: Router({
