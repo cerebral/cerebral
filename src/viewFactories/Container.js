@@ -28,7 +28,7 @@ export default (View) => {
       }
     }
     hasDevtools() {
-      return Boolean(this.props.controller && this.hasDevtools())
+      return Boolean(this.props.controller && this.props.controller.devtools)
     }
     /*
       The container will listen to "flush" events from the controller
