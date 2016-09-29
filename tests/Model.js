@@ -122,4 +122,59 @@ describe('Model', () => {
       assert.deepEqual(model.get(), {foo: ['foo', 'bar']})
     })
   })
+  describe('Prevent mutations', () => {
+    it('should freeze initial state if passed freeze option', () => {
+      const model = new Model({
+        foo: 'bar',
+        list: {
+          items: []
+        }
+      }, true)
+      assert.throws(() => {
+        model.state.foo = 'bar2'
+      })
+      assert.throws(() => {
+        model.state.list = 'bar2'
+      })
+      assert.throws(() => {
+        model.state.list.items[0] = 'bar2'
+      })
+    })
+    it('should update non object values', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, true)
+      model.set(['foo'], 'bar2')
+      assert.equal(model.state.foo, 'bar2')
+      assert.throws(() => {
+        model.state.foo = 'bar3'
+      })
+    })
+    it('should update object values', () => {
+      const model = new Model({
+        foo: {}
+      }, true)
+      assert.throws(() => {
+        model.state.foo.bar = 'bar3'
+      })
+      model.merge(['foo'], {key1: 'value1'})
+      assert.deepEqual(model.state.foo, {key1: 'value1'})
+      assert.throws(() => {
+        model.state.foo.key2 = 'bar3'
+      })
+    })
+    it('should update array values', () => {
+      const model = new Model({
+        foo: []
+      }, true)
+      assert.throws(() => {
+        model.state.foo[0] = 'bar3'
+      })
+      model.push(['foo'], 'bar')
+      assert.deepEqual(model.state.foo, ['bar'])
+      assert.throws(() => {
+        model.state.foo[1] = 'bar3'
+      })
+    })
+  })
 })

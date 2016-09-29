@@ -21,7 +21,7 @@ class Controller extends EventEmitter {
     super()
     this.flush = this.flush.bind(this)
     this.devtools = devtools
-    this.model = new Model({})
+    this.model = new Model({}, Boolean(this.devtools && this.devtools.preventExternalMutations))
     this.module = new Module([], {
       state,
       routes,

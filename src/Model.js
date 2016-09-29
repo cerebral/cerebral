@@ -1,7 +1,49 @@
+import {isObject} from './utils'
+
 class Model {
-  constructor(initialState) {
-    this.state = initialState || {}
+  constructor(initialState = {}, freezeObjects) {
+    this.freezeObjects = freezeObjects
+    this.state = (
+      this.freezeObjects ?
+        this.freezeObject(initialState)
+      :
+        initialState
+    )
     this.changedPaths = []
+  }
+  /*
+    Does an unfreeze and update of value, before freezing again
+  */
+  unfreezeObject(value) {
+    if (Array.isArray(value)) {
+      return value.slice()
+    } else if (isObject(value)) {
+      return Object.assign({}, value)
+    }
+
+    return value
+  }
+  /*
+    Freezes objects and arrays recursively to avoid unwanted mutation
+  */
+  freezeObject(object) {
+    if (
+      (
+        !Array.isArray(object) &&
+        !isObject(object)
+      ) |
+      Object.isFrozen(object)
+    ) {
+      return object
+    }
+
+    for (const key in object) {
+      object[key] = this.freezeObject(object[key])
+    }
+
+    Object.freeze(object)
+
+    return object
   }
   /*
     Converts an array of paths changed to a change object that
@@ -33,6 +75,12 @@ class Model {
     by multiple mutation methods
   */
   updateIn(path, cb) {
+    if (this.freezeObjects) {
+      this.updateInFrozen(path, cb)
+
+      return
+    }
+
     if (!path.length) {
       this.state = cb(this.state)
     }
@@ -45,6 +93,26 @@ class Model {
 
       return currentState[key]
     }, this.state)
+  }
+  /*
+    Unfreezes on the way down, and freezes on the way back up
+  */
+  updateInFrozen(path, cb) {
+    if (!path.length) {
+      this.state = this.freezeObject(cb(this.unfreezeObject(this.state)))
+    }
+
+    this.changedPaths.push(path)
+    this.state = this.unfreezeObject(this.state)
+    path.reduce((currentState, key, index) => {
+      if (index === path.length - 1) {
+        currentState[key] = cb(this.unfreezeObject(currentState[key]))
+      }
+
+      return this.unfreezeObject(currentState[key])
+    }, this.state)
+
+    this.freezeObject(this.state)
   }
   get(path = []) {
     return path.reduce((currentState, key) => {
