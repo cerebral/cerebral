@@ -7,10 +7,11 @@ const VERSION = 'v1'
   - Stores data related to time travel, if activated
 */
 class Devtools {
-  constructor(options = {storeMutations: true, preventExternalMutations: true}) {
+  constructor(options = {storeMutations: true, preventExternalMutations: true, enforceSerializable: true}) {
     this.VERSION = VERSION
     this.storeMutations = options.storeMutations
     this.preventExternalMutations = options.preventExternalMutations
+    this.enforceSerializable = options.enforceSerializable
     this.backlog = []
     this.mutations = []
     this.latestExecutionId = null

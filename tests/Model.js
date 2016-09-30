@@ -129,7 +129,7 @@ describe('Model', () => {
         list: {
           items: []
         }
-      }, true)
+      }, {preventExternalMutations: true})
       assert.throws(() => {
         model.state.foo = 'bar2'
       })
@@ -143,7 +143,7 @@ describe('Model', () => {
     it('should update non object values', () => {
       const model = new Model({
         foo: 'bar'
-      }, true)
+      }, {preventExternalMutations: true})
       model.set(['foo'], 'bar2')
       assert.equal(model.state.foo, 'bar2')
       assert.throws(() => {
@@ -153,7 +153,7 @@ describe('Model', () => {
     it('should update object values', () => {
       const model = new Model({
         foo: {}
-      }, true)
+      }, {preventExternalMutations: true})
       assert.throws(() => {
         model.state.foo.bar = 'bar3'
       })
@@ -166,7 +166,7 @@ describe('Model', () => {
     it('should update array values', () => {
       const model = new Model({
         foo: []
-      }, true)
+      }, {preventExternalMutations: true})
       assert.throws(() => {
         model.state.foo[0] = 'bar3'
       })
@@ -174,6 +174,24 @@ describe('Model', () => {
       assert.deepEqual(model.state.foo, ['bar'])
       assert.throws(() => {
         model.state.foo[1] = 'bar3'
+      })
+    })
+  })
+  describe('Enforce serializable', () => {
+    it('should throw error if value inserted is not serializable', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, {enforceSerializable: true})
+      assert.throws(() => {
+        model.set(['foo'], new Date())
+      })
+    })
+    it('should throw error if value inserted is not serializable', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, {enforceSerializable: true})
+      assert.doesNotThrow(() => {
+        model.set(['foo'], [])
       })
     })
   })

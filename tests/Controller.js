@@ -108,4 +108,28 @@ describe('Controller', () => {
     })
     assert.equal(controller.getModel(), controller.model)
   })
+  it('should throw when passing in unserializable payload property to signal', () => {
+    const controller = new Controller({
+      devtools: {enforceSerializable: true, init() {}},
+      signals: {
+        foo: []
+      }
+    })
+    assert.throws(() => {
+      controller.getSignal('foo')({
+        date: new Date()
+      })
+    })
+  })
+  it('should throw when passing in unserializable payload to signal', () => {
+    const controller = new Controller({
+      devtools: {enforceSerializable: true, init() {}},
+      signals: {
+        foo: []
+      }
+    })
+    assert.throws(() => {
+      controller.getSignal('foo')(new Date())
+    })
+  })
 })

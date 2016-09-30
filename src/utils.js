@@ -25,6 +25,23 @@ export function isObject(obj) {
   return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 }
 
+export function isSerializable(value) {
+  if (
+    (
+      isObject(value) &&
+      Object.prototype.toString.call(value) === '[object Object]' &&
+      value.constructor === Object
+    ) ||
+    typeof value === 'number' ||
+    typeof value === 'string' ||
+    typeof value === 'boolean' ||
+    Array.isArray(value)
+  ) {
+    return true
+  }
+  return false
+}
+
 export function ensurePath(path = []) {
   if (Array.isArray(path)) {
     return path

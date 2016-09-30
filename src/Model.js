@@ -1,10 +1,11 @@
-import {isObject} from './utils'
+import {isObject, isSerializable, throwError} from './utils'
 
 class Model {
-  constructor(initialState = {}, freezeObjects) {
-    this.freezeObjects = freezeObjects
+  constructor(initialState = {}, devtools = {}) {
+    this.preventExternalMutations = devtools.preventExternalMutations
+    this.enforceSerializable = Boolean(devtools.enforceSerializable)
     this.state = (
-      this.freezeObjects ?
+      this.preventExternalMutations ?
         this.freezeObject(initialState)
       :
         initialState
@@ -75,7 +76,7 @@ class Model {
     by multiple mutation methods
   */
   updateIn(path, cb) {
-    if (this.freezeObjects) {
+    if (this.preventExternalMutations) {
       this.updateInFrozen(path, cb)
 
       return
@@ -95,7 +96,8 @@ class Model {
     }, this.state)
   }
   /*
-    Unfreezes on the way down, and freezes on the way back up
+    Unfreezes on the way down. When done freezes state. It is optimized
+    to not go down already frozen paths
   */
   updateInFrozen(path, cb) {
     if (!path.length) {
@@ -114,22 +116,41 @@ class Model {
 
     this.freezeObject(this.state)
   }
+  /*
+    Checks if value is serializable, if turned on
+  */
+  checkValue(value, path) {
+    if (this.enforceSerializable && !isSerializable(value)) {
+      throwError(`You are passing a non serializable value on ${path.join('.')}`)
+    }
+  }
+  checkValues(values, path) {
+    if (this.enforceSerializable) {
+      values.forEach((value) => {
+        this.checkValue(value, path)
+      })
+    }
+  }
   get(path = []) {
     return path.reduce((currentState, key) => {
       return currentState[key]
     }, this.state)
   }
   set(path, value) {
+    this.checkValue(value, path)
     this.updateIn(path, () => {
       return value
     })
   }
   push(path, value) {
+    this.checkValue(value, path)
     this.updateIn(path, (array) => {
       return array.concat(value)
     })
   }
   merge(path, value) {
+    this.checkValue(value, path)
+
     // We want to show changes to added keys, as this is pretty
     // much like setting multiple keys. More predictable
     Object.keys(value).forEach((key) => {
@@ -154,6 +175,7 @@ class Model {
     })
   }
   unshift(path, value) {
+    this.checkValue(value, path)
     this.updateIn(path, (array) => {
       array.unshift(value)
 
@@ -161,6 +183,7 @@ class Model {
     })
   }
   splice(path, ...args) {
+    this.checkValues(args, path)
     this.updateIn(path, (array) => {
       array.splice(...args)
 
@@ -177,6 +200,7 @@ class Model {
     })
   }
   concat(path, value) {
+    this.checkValue(value, path)
     this.updateIn(path, (array) => {
       return array.concat(value)
     })

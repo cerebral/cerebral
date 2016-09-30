@@ -1,7 +1,7 @@
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import ContextProvider from 'function-tree/providers/Context'
 import StateProvider from './providers/State'
@@ -21,7 +21,7 @@ class Controller extends EventEmitter {
     super()
     this.flush = this.flush.bind(this)
     this.devtools = devtools
-    this.model = new Model({}, Boolean(this.devtools && this.devtools.preventExternalMutations))
+    this.model = new Model({}, this.devtools)
     this.module = new Module([], {
       state,
       routes,
@@ -89,10 +89,29 @@ class Controller extends EventEmitter {
     return this.model.get(ensurePath(path))
   }
   /*
-    Uses function tree to run the array and optional
-    payload passed in
+    Checks if payload is serializable
   */
-  runSignal(name, signal, payload) {
+  isSerializablePayload(payload) {
+    if (!this.isSerializablePayload(payload)) {
+      return false
+    }
+
+    return Object.keys(payload).reduce((isSerializablePayload, key) => {
+      if (!isSerializable(payload[key])) {
+        return false
+      }
+
+      return isSerializablePayload
+    }, true)
+  }
+  /*
+    Uses function tree to run the array and optional
+    payload passed in. The payload will be checkd
+  */
+  runSignal(name, signal, payload = {}) {
+    if (this.devtools && this.devtools.enforceSerializable && !this.isSerializablePayload(payload)) {
+      throwError(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal`)
+    }
     this.runTree(name, signal, payload || {})
   }
   /*
