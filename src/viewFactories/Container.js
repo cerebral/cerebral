@@ -168,7 +168,7 @@ export default (View) => {
 
   if (View.PropTypes) {
     Container.propTypes = {
-      controller: View.PropTypes.object.isRequired,
+      controller: View.PropTypes.object,
       children: View.PropTypes.node.isRequired
     }
     Container.childContextTypes = {
