@@ -12,27 +12,13 @@ export const ADMIN = 'admin'
 export const FEED = 'home.feed'
 ```
 
-You can expose these constants with the **ContextProvider**:
-
-```js
-import {Controller} from 'cerebral'
-import ContextProvider from 'cerebral/providers/context'
-import * as paths from './pathConstants'
-
-const controller = Controller({
-  providers: [
-    ContextProvider({
-      paths
-    })
-  ]
-})
-```
-
 Inside your actions your can now do:
 
 ```js
+import {ADMIN} from '../../pathConstants'
+
 function someAction({paths, state}) {
-  state.set(`${paths.ADMIN}.isLoading`, true)
+  state.set(`${ADMIN}.isLoading`, true)
 }
 ```
 
