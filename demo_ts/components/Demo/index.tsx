@@ -1,8 +1,14 @@
-import React from 'react'
+import * as React from 'react'
 import {connect} from 'cerebral/react'
 import UpperTitle from '../UpperTitle'
 
-export default connect({
+interface Props {
+  title?: string,
+  frontRouted?: any,
+  adminRouted?: any
+}
+
+export default connect<Props>({
   title: 'title'
 }, {
   frontRouted: 'routed',

@@ -10,7 +10,8 @@
     "test": "istanbul cover mocha -- --compilers js:babel-register 'tests/**/*.js'",
     "test:watch": "mocha --compilers js:babel-register --watch 'tests/**/*.js'",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "demo": "webpack-dev-server --config demo/webpack.config.js"
+    "demo": "webpack-dev-server --config demo/webpack.config.js",
+    "demo_ts": "webpack-dev-server --config demo_ts/webpack.config.js"
   },
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
@@ -35,6 +36,7 @@
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
     "semantic-release": "^4.3.5",
+    "ts-loader": "^0.8.2",
     "validate-commit-msg": "^2.6.1",
     "webpack": "^1.13.2",
     "webpack-dev-server": "^1.16.1"

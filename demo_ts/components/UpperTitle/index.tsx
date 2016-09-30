@@ -1,8 +1,12 @@
-import React from 'react'
+import * as React from 'react'
 import {connect} from 'cerebral/react'
 import upperCaseTitleComputed from '../../upperCaseTitle'
 
-export default connect({
+interface Props {
+  title?: string
+}
+
+export default connect<Props>({
   title: upperCaseTitleComputed()
 },
   function UpperTitle(props) {

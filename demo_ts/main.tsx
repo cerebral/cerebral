@@ -1,4 +1,4 @@
-import React from 'react'
+import * as React from 'react'
 import {render} from 'react-dom'
 import Demo from './components/Demo'
 
@@ -35,7 +35,7 @@ const controller = Controller({
 })
 
 render((
-  <Container controller={controller} >
+  <Container controller={controller}>
     <Demo />
   </Container>
 ), document.querySelector('#app'))

@@ -12,13 +12,19 @@ var loaders = [
         "es2015",
         "react"
       ]
+      //"plugins": ["inferno"]
     }
+  },
+  {
+    test: /\.tsx?$/,
+    loaders: ['babel-loader?presets[]=react,presets[]=es2015', 'ts-loader?silent=true'],
+    exclude: /node_modules/
   }
 ];
 
 module.exports = {
   devtool: '#inline-source-map',
-  entry: path.resolve('demo', 'main.js'),
+  entry: path.resolve('demo_ts', 'main.tsx'),
   output: {
     path: path.resolve('build'),
     filename: '[name].js',
@@ -26,12 +32,13 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve('demo', 'index.tpl.html'),
+      template: path.resolve('demo_ts', 'index.tpl.html'),
       inject: 'body',
       filename: 'index.html'
     })
   ],
   resolve: {
+    extensions: ["", ".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
     alias: {
       'cerebral': path.resolve('src')
     }
