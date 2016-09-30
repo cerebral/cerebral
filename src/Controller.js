@@ -92,7 +92,7 @@ class Controller extends EventEmitter {
     Checks if payload is serializable
   */
   isSerializablePayload(payload) {
-    if (!this.isSerializablePayload(payload)) {
+    if (!isSerializable(payload)) {
       return false
     }
 
