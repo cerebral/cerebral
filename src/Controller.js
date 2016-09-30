@@ -3,7 +3,6 @@ import Module from './Module'
 import Model from './Model'
 import {ensurePath, isDeveloping, throwError, isSerializable} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
-import ContextProvider from 'function-tree/providers/Context'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
@@ -47,7 +46,6 @@ class Controller extends EventEmitter {
       StateProvider(this.model)
     ).concat(
       providers.concat(this.module.getProviders())
-        .map(provider => typeof provider === 'function' ? provider : ContextProvider(provider))
     )
 
     this.runTree = new FunctionTree(allProviders)
