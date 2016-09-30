@@ -1,5 +1,5 @@
-import Inferno from 'inferno'
-import {connect} from 'cerebral/inferno'
+import React from 'react'
+import {connect} from 'cerebral/react'
 import UpperTitle from '../UpperTitle'
 
 export default connect({
@@ -9,12 +9,21 @@ export default connect({
   adminRouted: 'admin.routed'
 },
   function Demo(props) {
+
+    const onAdminClicked = () => {
+      props.adminRouted();
+    }
+
+    const onFrontClicked = () => {
+      props.frontRouted();
+    }
+
     return (
       <div>
         <h1>{props.title}</h1>
         <UpperTitle />
-        <a href={props.frontRouted.toUrl()}>Front</a>
-        <a href={props.adminRouted.toUrl()}>Admin</a>
+        <a href="javascript:;" onClick={onFrontClicked}>Front</a>
+        <a href="javascript:;" onClick={onAdminClicked}>Admin</a>
       </div>
     )
   }

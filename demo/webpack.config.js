@@ -11,14 +11,13 @@ var loaders = [
       "presets": [
         "es2015",
         "react"
-      ],
-      "plugins": ["inferno"]
+      ]
     }
   }
 ];
 
 module.exports = {
-  devtool: 'eval-source-map',
+  devtool: '#inline-source-map',
   entry: path.resolve('demo', 'main.js'),
   output: {
     path: path.resolve('build'),

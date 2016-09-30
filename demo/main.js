@@ -1,9 +1,9 @@
-import Inferno from 'inferno'
-import {render} from 'inferno-dom'
+import React from 'react'
+import {render} from 'react-dom'
 import Demo from './components/Demo'
 
 import {Controller} from 'cerebral'
-import {Container} from 'cerebral/inferno'
+import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import Router from 'cerebral/router'
 import {set} from 'cerebral/operators'
@@ -35,7 +35,7 @@ const controller = Controller({
 })
 
 render((
-  <Container state={{title: 'hohoho'}}>
+  <Container controller={controller} >
     <Demo />
   </Container>
 ), document.querySelector('#app'))
