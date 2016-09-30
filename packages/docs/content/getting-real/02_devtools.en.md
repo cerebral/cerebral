@@ -23,7 +23,7 @@ const controller = Controller({
 
 You do not want to run the devtools in production as it requires a bit of processing and memory to send data from your application.
 
-By default you will have time travel capabilities, but as also that requires extra processing and especially memory footprint you can turn it off with:
+You can pass some options to the devtools to balance the processing and memory footprint:
 
 ```js
 import {Controller} from 'cerebral'
@@ -31,7 +31,12 @@ import Devtools from 'cerebral/devtools'
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools({
-    storeMutations: false
+    // No time travel
+    storeMutations: false,
+    // No warnings on mutating outside "state" API
+    preventExternalMutations: false,
+    // No warnings when passing in non-serializable data to signals and model
+    enforceSerializable: false
   })
 })
 ```
