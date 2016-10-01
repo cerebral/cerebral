@@ -6,8 +6,8 @@ export function propsDiffer(propsA, propsB) {
   if (propsAKeys.length !== propsBKeys.length) {
     isDifferent = true
   } else {
-    for (let i = 0; i < propsB.length; i++) {
-      if (propsA[propsB[i]] !== propsB[propsB[i]]) {
+    for (let i = 0; i < propsBKeys.length; i++) {
+      if (propsA[propsBKeys[i]] !== propsB[propsBKeys[i]]) {
         isDifferent = true
         break
       }

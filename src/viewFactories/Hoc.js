@@ -6,7 +6,7 @@ export default (View) => {
     class CerebralComponent extends View.Component {
       constructor(props) {
         super(props)
-        this.paths = this.getStatePaths(props)
+        this.evaluatedPaths = this.getStatePaths(props)
         this.signals = signals
         this.Component = Component
         this.depsMap = this.getDepsMap()
@@ -16,7 +16,7 @@ export default (View) => {
           throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
         }
 
-        if (!this.paths) {
+        if (!this.evaluatedPaths) {
           return
         }
 
@@ -26,8 +26,8 @@ export default (View) => {
         const hasChange = propsDiffer(this.props, nextProps)
 
         // If dynamic paths, we need to update them
-        if (typeof this.paths === 'function') {
-          this.paths = this.getStatePaths(nextProps)
+        if (typeof paths === 'function') {
+          this.evaluatedPaths = this.getStatePaths(nextProps)
 
           const nextDepsMap = this.getDepsMap()
 
@@ -54,12 +54,12 @@ export default (View) => {
         })
       }
       getDepsMap() {
-        return Object.keys(this.paths).reduce((currentDepsMap, pathKey) => {
-          if (this.paths[pathKey] instanceof Computed) {
-            return Object.assign(currentDepsMap, this.paths[pathKey].depsMap)
+        return Object.keys(this.evaluatedPaths).reduce((currentDepsMap, pathKey) => {
+          if (this.evaluatedPaths[pathKey] instanceof Computed) {
+            return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].depsMap)
           }
 
-          currentDepsMap[pathKey] = this.paths[pathKey]
+          currentDepsMap[pathKey] = this.evaluatedPaths[pathKey]
 
           return currentDepsMap
         }, {})
@@ -68,7 +68,7 @@ export default (View) => {
         if (!paths) {
           return {}
         }
-        return typeof this.paths === 'function' ? paths(props) : paths
+        return typeof paths === 'function' ? paths(props) : paths
       }
       getProps() {
         const controller = this.context.cerebral.controller

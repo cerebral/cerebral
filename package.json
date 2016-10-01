@@ -7,9 +7,9 @@
     "build": "webpack",
     "prepublich": "npm run build",
     "pretest": "eslint tests",
-    "test": "npm run test:cerebral && npm run test:react",
+    "test": "npm run test:cerebral && npm run test:view",
     "test:cerebral": "istanbul cover mocha -- --compilers js:babel-register 'tests/**/*.js'",
-    "test:react": "istanbul cover mocha -- --compilers js:babel-register 'viewTests/**/*.js'",
+    "test:view": "istanbul cover mocha -- --compilers js:babel-register 'viewTests/**/*.js'",
     "test:watch": "mocha --compilers js:babel-register --watch 'tests/**/*.js'",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "demo": "webpack-dev-server --config demo/webpack.config.js"
