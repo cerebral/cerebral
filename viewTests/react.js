@@ -1,4 +1,6 @@
 /* eslint-env mocha */
+'use strict'
+
 const jsdom = require('jsdom')
 
 global.document = jsdom.jsdom('<!doctype html><html><body></body></html>')
