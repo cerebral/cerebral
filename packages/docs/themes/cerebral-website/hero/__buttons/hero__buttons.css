@@ -2,6 +2,15 @@
   padding: 20px;
 }
 
+.hero__buttons .button_theme_islands:before,
+.hero__buttons .button_theme_islands.button_pressed:before {
+  background-color: #007299;
+}
+
+.hero__buttons .button_theme_islands .button__text {
+  color: #FFF;
+}
+
 .hero .hero__buttons > * {
   margin: 0 8px;
 }
@@ -10,7 +19,7 @@
   .hero__buttons {
     width: 100%;
     box-sizing: border-box;
-  } 
+  }
 
   .hero  .hero__buttons > * {
     display: block;
