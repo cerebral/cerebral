@@ -4,20 +4,23 @@ title: Signals
 
 ## Signals
 
-Typically you will define the actions used in its own folder.
-
-*src/actions/getData.js*
 ```js
-function getData({axios, path}) {
-  return axios.get('/data')
-    .then(response => path.success({result: response.data}))
-    .catch(error => path.error({error: error.response.data}))
-}
+import {Controller} from 'cerebral'
+import updateData from './chains/updateData'
 
-export default getData
+const controller = Controller({
+  state: {
+    data: null,
+    isLoading: false,
+    error: null
+  },
+  signals: {
+    mounted: updateData
+  }
+})
 ```
 
-You will also define the chains used in their own folders.
+A convention is to attach chains to signals. These chains typically have their own folder:
 
 *src/chains/updateData.js*
 ```js
@@ -38,20 +41,15 @@ export default [
 ]
 ```
 
-Then you define the signal and attach the chain:
+The actions will also have their own folder.
 
+*src/actions/getData.js*
 ```js
-import {Controller} from 'cerebral'
-import updateData from './chains/updateData'
+function getData({axios, path}) {
+  return axios.get('/data')
+    .then(response => path.success({result: response.data}))
+    .catch(error => path.error({error: error.response.data}))
+}
 
-const controller = Controller({
-  state: {
-    data: null,
-    isLoading: false,
-    error: null
-  },
-  signals: {
-    mounted: updateData
-  }
-})
+export default getData
 ```

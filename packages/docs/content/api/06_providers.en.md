@@ -4,25 +4,7 @@ title: Providers
 
 ## Providers
 
-Providers are functions that runs before any action in any signal. Their purpose is to define and sometimes manipulate the context passed into every action. The providers are run for before every action, meaning that each action has a unique context object. An example of a provider is the built in **InputProvider** of function-tree.
-
-It looks something like this:
-
-```js
-function InputProvider(context, functionDetails, payload) {
-  context.input = payload
-
-  return context
-}
-```
-
-The providers are called by **function-tree** with some arguments.
-
-- **context** is the current context object that will be passed into the function (action)
-- **functionDetails** gives information about the function (action) that will run
-- **payload** the current payload of the execution (signal)
-
-You can also define and use providers to enhance Cerebral. One example of this is the context provider.
+Providers are functions that runs before any action in any signal. Their purpose is to define and sometimes manipulate the context passed into every action. The providers are run for before every action, meaning that each action has a unique context object.
 
 ### Context provider
 The context provider allows you to attach any third party library to the context of all actions. Typically:
@@ -47,6 +29,25 @@ Now axios will be available on the context of any action. The context provider a
 Look at the [community tools]() for other providers that can be used, or create your own.
 
 ### Creating a provider
+
+An example of a provider is the built in **InputProvider** of function-tree.
+
+It looks something like this:
+
+```js
+function InputProvider(context, functionDetails, payload) {
+  context.input = payload
+
+  return context
+}
+```
+
+The providers are called by **function-tree** with some arguments.
+
+- **context** is the current context object that will be passed into the function (action)
+- **functionDetails** gives information about the function (action) that will run
+- **payload** the current payload of the execution (signal)
+
 You can create a standalone provider simply by defining a function like the **InputProvider** in the first example. But you can also define a provider on a module. This allows you to combine providers with signal execution.
 
 ```js
