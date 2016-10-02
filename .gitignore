@@ -4,3 +4,5 @@ coverage
 .nyc_output
 .DS_Store
 dist
+lib/*
+!/lib/package.json

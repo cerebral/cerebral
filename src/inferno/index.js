@@ -1,5 +1,2 @@
-import containerExport from './container'
-import connectExport from './connect'
-
-export const Container = containerExport
-export const connect = connectExport
+export {default as Container} from './container'
+export {default as connect} from './connect'
