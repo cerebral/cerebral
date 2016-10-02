@@ -5,7 +5,7 @@ import upperCaseTitleComputed from '../../upperCaseTitle'
 export default connect({
   title: upperCaseTitleComputed()
 },
-  function UpperTitle(props) {
+  function UpperTitle (props) {
     return (
       <h4>{props.title}</h4>
     )

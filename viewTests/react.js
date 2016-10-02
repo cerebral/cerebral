@@ -1,8 +1,9 @@
-const jsdom = require('jsdom');
+/* eslint-env mocha */
+const jsdom = require('jsdom')
 
-global.document = jsdom.jsdom('<!doctype html><html><body></body></html>');
-global.window = document.defaultView;
-global.navigator = {userAgent: 'node.js'};
+global.document = jsdom.jsdom('<!doctype html><html><body></body></html>')
+global.window = document.defaultView
+global.navigator = {userAgent: 'node.js'}
 
 const React = require('react')
 const TestUtils = require('react-addons-test-utils')
@@ -15,9 +16,9 @@ describe('React', () => {
   describe('container', () => {
     it('should be able to wrap app with container', () => {
       class TestComponent extends React.Component {
-        render() {
+        render () {
           return (
-            <div></div>
+            <div />
           )
         }
       }
@@ -127,10 +128,10 @@ describe('React', () => {
         }
       })
       class TestComponentClass extends React.Component {
-        callSignal() {
+        callSignal () {
           this.props.methodCalled()
         }
-        render() {
+        render () {
           return (
             <div>{this.props.foo}</div>
           )
@@ -161,19 +162,19 @@ describe('React', () => {
         }
       })
       class TestComponentClass2 extends React.Component {
-        render() {
+        render () {
           renderCount++
           return (
-            <div></div>
+            <div />
           )
         }
       }
       const TestComponent2 = connect({}, TestComponentClass2)
       class TestComponentClass extends React.Component {
-        callSignal() {
+        callSignal () {
           this.props.methodCalled()
         }
-        render() {
+        render () {
           renderCount++
           return (
             <div><TestComponent2 /></div>
@@ -202,7 +203,7 @@ describe('React', () => {
         }
       })
       class TestComponentClass2 extends React.Component {
-        render() {
+        render () {
           return (
             <div>{this.props.foo}</div>
           )
@@ -214,18 +215,18 @@ describe('React', () => {
         }
       }, TestComponentClass2)
       class TestComponentClass extends React.Component {
-        constructor(props) {
+        constructor (props) {
           super(props)
           this.state = {path: 'foo'}
         }
-        changePath() {
+        changePath () {
           this.setState({
             path: 'foo2'
           })
         }
-        render() {
+        render () {
           return (
-            <span><TestComponent2 path={this.state.path}/></span>
+            <span><TestComponent2 path={this.state.path} /></span>
           )
         }
       }
@@ -255,10 +256,10 @@ describe('React', () => {
         }
       })
       class TestComponentClass extends React.Component {
-        callSignal() {
+        callSignal () {
           this.props.methodCalled()
         }
-        render() {
+        render () {
           renderCount++
           return (
             <div>{this.props.foo}</div>
@@ -293,10 +294,10 @@ describe('React', () => {
         }
       })
       class TestComponentClass extends React.Component {
-        callSignal() {
+        callSignal () {
           this.props.methodCalled()
         }
-        render() {
+        render () {
           renderCount++
           return (
             <div>{this.props.foo.bar}</div>
@@ -331,10 +332,10 @@ describe('React', () => {
         }
       })
       class TestComponentClass extends React.Component {
-        callSignal() {
+        callSignal () {
           this.props.methodCalled()
         }
-        render() {
+        render () {
           renderCount++
           return (
             <div>{this.props.foo.bar}</div>
@@ -371,10 +372,10 @@ describe('React', () => {
         }
       })
       class TestComponentClass extends React.Component {
-        callSignal() {
+        callSignal () {
           this.props.methodCalled()
         }
-        render() {
+        render () {
           renderCount++
           return (
             <div>{this.props.foo.bar.baz}</div>

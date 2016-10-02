@@ -1,6 +1,6 @@
 import {throwError} from '../utils'
 
-function VerifyInputProvider(context, functionDetails) {
+function VerifyInputProvider (context, functionDetails) {
   try {
     JSON.stringify(context.input)
   } catch (e) {

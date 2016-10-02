@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import Controller from '../src/Controller'
 import assert from 'assert'
 

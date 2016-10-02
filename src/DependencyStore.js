@@ -1,11 +1,11 @@
 class DependencyStore {
-  constructor() {
+  constructor () {
     this.map = {}
   }
   /*
     Adds the entity to all the depending paths
   */
-  addEntity(entity, depsMap) {
+  addEntity (entity, depsMap) {
     for (const depsMapKey in depsMap) {
       const key = depsMap[depsMapKey]
       this.map[key] = this.map[key] ? this.map[key].concat(entity) : [entity]
@@ -14,7 +14,7 @@ class DependencyStore {
   /*
     Removes the entity from all depending paths
   */
-  removeEntity(entity, depsMap) {
+  removeEntity (entity, depsMap) {
     for (const depsMapKey in depsMap) {
       this.map[depsMapKey].splice(this.map[depsMapKey].indexOf(entity), 1)
     }
@@ -23,7 +23,7 @@ class DependencyStore {
     As same entity can appear in multiple paths, this method returns
     all unique entities. Used by view to render all components
   */
-  getAllUniqueEntities() {
+  getAllUniqueEntities () {
     const entities = []
 
     for (const mapKey in this.map) {
@@ -41,10 +41,10 @@ class DependencyStore {
     Returns entities based on a change map returned from the
     model flush method
   */
-  getUniqueEntities(changesMap, currentKey = '') {
+  getUniqueEntities (changesMap, currentKey = '') {
     let currentEntities = []
     for (const key in changesMap) {
-      const pathKey = currentKey ?  currentKey + '.' + key : key
+      const pathKey = currentKey ? currentKey + '.' + key : key
 
       let entities = []
       if (changesMap[key] === true) {

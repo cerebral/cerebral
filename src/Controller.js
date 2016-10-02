@@ -16,7 +16,7 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   based on top level providers and providers defined in modules
 */
 class Controller extends EventEmitter {
-  constructor({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools}) {
+  constructor ({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools}) {
     super()
     this.flush = this.flush.bind(this)
     this.devtools = devtools
@@ -65,7 +65,7 @@ class Controller extends EventEmitter {
     It will first flag any computed for changes and then emit the flush
     event which the view layer listens to
   */
-  flush() {
+  flush () {
     const changes = this.model.flush()
     const computedsAboutToBecomeDirty = computedDependencyStore.getUniqueEntities(changes)
 
@@ -77,19 +77,19 @@ class Controller extends EventEmitter {
   /*
     Conveniance method for grabbing the model
   */
-  getModel() {
+  getModel () {
     return this.model
   }
   /*
     Method called by view to grab state
   */
-  getState(path) {
+  getState (path) {
     return this.model.get(ensurePath(path))
   }
   /*
     Checks if payload is serializable
   */
-  isSerializablePayload(payload) {
+  isSerializablePayload (payload) {
     if (!isSerializable(payload)) {
       return false
     }
@@ -106,7 +106,7 @@ class Controller extends EventEmitter {
     Uses function tree to run the array and optional
     payload passed in. The payload will be checkd
   */
-  runSignal(name, signal, payload = {}) {
+  runSignal (name, signal, payload = {}) {
     if (this.devtools && this.devtools.enforceSerializable && !this.isSerializablePayload(payload)) {
       throwError(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal`)
     }
@@ -117,7 +117,7 @@ class Controller extends EventEmitter {
     and the array. This allows view layer to just call it with
     an optional payload and it will run
   */
-  getSignal(path) {
+  getSignal (path) {
     const pathArray = ensurePath(path)
     const signalKey = pathArray.pop()
     const module = pathArray.reduce((currentModule, key) => {
@@ -133,6 +133,6 @@ class Controller extends EventEmitter {
   }
 }
 
-export default function(...args) {
+export default function (...args) {
   return new Controller(...args)
 }

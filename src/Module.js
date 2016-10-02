@@ -1,5 +1,5 @@
 class Module {
-  constructor(path, module, controller) {
+  constructor (path, module, controller) {
     this.name = path.slice().pop()
     this.path = path
     this.controller = controller
@@ -21,7 +21,7 @@ class Module {
     Returns the routes defined on this module, but relative to
     the module path. So "/foo" becomes "/moduleName/foo"
   */
-  getRoutes() {
+  getRoutes () {
     return Object.keys(this.modules).reduce((currentRoutes, moduleKey) => {
       return Object.assign({}, currentRoutes, this.modules[moduleKey].getRoutes())
     }, Object.keys(this.routes).reduce((currentInitialRoutes, routeKey) => {
@@ -38,7 +38,7 @@ class Module {
       return currentInitialRoutes
     }, {}))
   }
-  registerModules(modules) {
+  registerModules (modules) {
     Object.keys(modules).forEach(moduleKey => {
       this.modules[moduleKey] = new Module(this.path.concat(moduleKey), modules[moduleKey], this.controller)
     })
@@ -46,7 +46,7 @@ class Module {
   /*
     Used by controller to extract all the providers of all modules
   */
-  getProviders() {
+  getProviders () {
     return (this.provider ? [this.provider] : []).concat(Object.keys(this.modules)
       .reduce((nestedProviders, moduleKey) => {
         return nestedProviders.concat(this.modules[moduleKey].getProviders())

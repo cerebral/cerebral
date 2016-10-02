@@ -1,18 +1,14 @@
 {
   "name": "cerebral",
-  "version": "0.0.0-semantically-released",
   "description": "A state controller with its own debugger",
   "main": "src/index.js",
   "scripts": {
-    "build": "webpack",
-    "prepublich": "npm run build",
-    "pretest": "eslint tests",
+    "pretest": "standard",
     "test": "npm run test:cerebral && npm run test:view",
-    "test:cerebral": "istanbul cover mocha -- --compilers js:babel-register 'tests/**/*.js'",
-    "test:view": "istanbul cover mocha -- --compilers js:babel-register 'viewTests/**/*.js'",
-    "test:watch": "mocha --compilers js:babel-register --watch 'tests/**/*.js'",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
-    "demo": "webpack-dev-server --config demo/webpack.config.js"
+    "test:cerebral": "mocha --compilers js:babel-register 'tests/**/*.js'",
+    "test:view": "mocha -- --compilers js:babel-register 'viewTests/**/*.js'",
+    "test:watch": "npm run test -- --watch",
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test"
   },
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
@@ -20,44 +16,50 @@
     "type": "git",
     "url": "https://github.com/cerebral/cerebral.git"
   },
+  "dependencies": {
+    "addressbar": "^1.0.2",
+    "cerebral-scheme-parser": "^0.1.3",
+    "function-tree": "^0.4.6",
+    "url-mapper": "^1.1.1"
+  },
   "devDependencies": {
-    "babel-eslint": "^6.1.2",
-    "babel-loader": "^6.2.5",
+    "babel-eslint": "^7.0.0",
     "babel-preset-es2015": "^6.14.0",
     "babel-preset-react": "^6.16.0",
     "babel-register": "^6.14.0",
     "commitizen": "^2.5.0",
-    "conventional-changelog": "0.0.17",
-    "cz-customizable": "^2.7.0",
+    "cz-customizable": "^4.0.0",
+    "cz-customizable-ghooks": "^1.3.0",
     "ghooks": "^1.0.3",
-    "html-webpack-plugin": "^2.22.0",
-    "istanbul": "^0.4.4",
+    "mocha": "^3.1.0",
     "jsdom": "^9.5.0",
-    "mocha": "^3.0.2",
     "mocha-jsdom": "^1.1.0",
+    "nyc": "^8.3.0",
     "react": "^15.3.2",
     "react-addons-test-utils": "^15.3.2",
     "react-dom": "^15.3.2",
-    "semantic-release": "^4.3.5",
-    "validate-commit-msg": "^2.6.1",
-    "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.16.1"
+    "standard": "^8.2.0"
   },
   "config": {
     "commitizen": {
-      "path": "node_modules/cz-customizable"
+      "path": "cz-customizable"
+    },
+    "cz-customizable": {
+      "config": ".cz-config.js"
     },
     "ghooks": {
-      "commit-msg": "validate-commit-msg"
+      "commit-msg": "./node_modules/cz-customizable-ghooks/lib/index.js $2"
     }
   },
-  "dependencies": {
-    "addressbar": "^1.0.2",
-    "cerebral-model": "^0.1.1",
-    "cerebral-model-immutable": "^0.1.4",
-    "cerebral-operators": "^0.2.1",
-    "cerebral-scheme-parser": "^0.1.3",
-    "function-tree": "^0.4.2",
-    "url-mapper": "^1.1.1"
-  }
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": "demo"
+  },
+  "nyc": {
+    "exclude": [
+      "node_modules",
+      "tests"
+    ]
+  },
+  "private": true
 }

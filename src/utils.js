@@ -1,4 +1,4 @@
-export function propsDiffer(propsA, propsB) {
+export function propsDiffer (propsA, propsB) {
   const propsAKeys = Object.keys(propsA)
   const propsBKeys = Object.keys(propsB)
   let isDifferent = false
@@ -17,15 +17,15 @@ export function propsDiffer(propsA, propsB) {
   return isDifferent
 }
 
-export function cleanPath(path) {
+export function cleanPath (path) {
   return path.replace(/\.\*\*|\.\*/, '')
 }
 
-export function isObject(obj) {
+export function isObject (obj) {
   return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 }
 
-export function isSerializable(value) {
+export function isSerializable (value) {
   if (
     (
       isObject(value) &&
@@ -42,7 +42,7 @@ export function isSerializable(value) {
   return false
 }
 
-export function ensurePath(path = []) {
+export function ensurePath (path = []) {
   if (Array.isArray(path)) {
     return path
   } else if (typeof path === 'string') {
@@ -52,15 +52,15 @@ export function ensurePath(path = []) {
   return []
 }
 
-export function throwError(message) {
+export function throwError (message) {
   throw new Error(`Cerebral - ${message}`)
 }
 
-export function isDeveloping() {
+export function isDeveloping () {
   return process.env.NODE_ENV !== 'production'
 }
 
-export function isDebuggerEnv() {
+export function isDebuggerEnv () {
   return !(
     (
       typeof window === 'undefined'
@@ -69,5 +69,5 @@ export function isDebuggerEnv() {
       typeof window.chrome === 'undefined' &&
       !process && !process.versions && !process.versions.electron
     )
-  );
+  )
 }

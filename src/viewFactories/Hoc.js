@@ -2,16 +2,16 @@ import {Computed} from './../Computed'
 import {cleanPath, propsDiffer} from './../utils'
 
 export default (View) => {
-  return function HOC(paths, signals, Component) {
+  return function HOC (paths, signals, Component) {
     class CerebralComponent extends View.Component {
-      constructor(props) {
+      constructor (props) {
         super(props)
         this.evaluatedPaths = this.getStatePaths(props)
         this.signals = signals
         this.Component = Component
         this.depsMap = this.getDepsMap()
       }
-      componentWillMount() {
+      componentWillMount () {
         if (!this.context.cerebral.controller) {
           throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
         }
@@ -22,7 +22,7 @@ export default (View) => {
 
         this.context.cerebral.registerComponent(this, this.depsMap)
       }
-      componentWillReceiveProps(nextProps) {
+      componentWillReceiveProps (nextProps) {
         const hasChange = propsDiffer(this.props, nextProps)
 
         // If dynamic paths, we need to update them
@@ -39,12 +39,12 @@ export default (View) => {
           this._update()
         }
       }
-      shouldComponentUpdate() {
+      shouldComponentUpdate () {
         // We only allow forced render by change of props passed
         // or Container tells it to render
         return false
       }
-      componentWillUnmount() {
+      componentWillUnmount () {
         this._isUmounting = true
         this.context.cerebral.unregisterComponent(this, this.depsMap)
         Object.keys(this.depsMap).forEach((depsMapKey) => {
@@ -53,7 +53,7 @@ export default (View) => {
           }
         })
       }
-      getDepsMap() {
+      getDepsMap () {
         return Object.keys(this.evaluatedPaths).reduce((currentDepsMap, pathKey) => {
           if (this.evaluatedPaths[pathKey] instanceof Computed) {
             return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].depsMap)
@@ -64,13 +64,13 @@ export default (View) => {
           return currentDepsMap
         }, {})
       }
-      getStatePaths(props) {
+      getStatePaths (props) {
         if (!paths) {
           return {}
         }
         return typeof paths === 'function' ? paths(props) : paths
       }
-      getProps() {
+      getProps () {
         const controller = this.context.cerebral.controller
         const props = this.props || {}
         const statePaths = this.getStatePaths(this.props)
@@ -92,14 +92,14 @@ export default (View) => {
 
         return propsToPass
       }
-      _update() {
+      _update () {
         if (this._isUmounting) {
           return
         }
 
         this.forceUpdate()
       }
-      render() {
+      render () {
         return View.createElement(this.Component, this.getProps())
       }
     }

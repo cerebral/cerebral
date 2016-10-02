@@ -7,7 +7,7 @@ const VERSION = 'v1'
   - Stores data related to time travel, if activated
 */
 class Devtools {
-  constructor(options = {storeMutations: true, preventExternalMutations: true, enforceSerializable: true}) {
+  constructor (options = {storeMutations: true, preventExternalMutations: true, enforceSerializable: true}) {
     this.VERSION = VERSION
     this.storeMutations = options.storeMutations
     this.preventExternalMutations = options.preventExternalMutations
@@ -35,7 +35,7 @@ class Devtools {
     It will also replace the "runTree" method of the controller to
     prevent any new signals firing off when in "remember state"
   */
-  remember(executionId) {
+  remember (executionId) {
     this.controller.model.state = JSON.parse(this.initialModelString)
     let lastMutationIndex
 
@@ -65,7 +65,7 @@ class Devtools {
   /*
 
   */
-  reset() {
+  reset () {
     this.controller.model.state = JSON.parse(this.initialModelString)
     this.backlog = []
     this.mutations = []
@@ -83,7 +83,7 @@ class Devtools {
       - Debugger sends "ping"
       - Devtools sends "init"
   */
-  init(controller) {
+  init (controller) {
     this.controller = controller
     this.originalRunTreeFunction = controller.runTree
 
@@ -122,7 +122,7 @@ class Devtools {
     latest executed signal for "remember" to know when signals can be
     called again
   */
-  watchExecution() {
+  watchExecution () {
     this.controller.runTree.on('start', () => {
       if (this.executionCount === 0) {
         const event = new window.CustomEvent('cerebral2.client.message', {
@@ -147,7 +147,7 @@ class Devtools {
     Send initial model. If model has already been stringified we reuse it. Any
     backlogged executions will also be triggered
   */
-  sendInitial() {
+  sendInitial () {
     const initialModel = this.controller.model.get()
 
     this.isConnected = true
@@ -177,9 +177,9 @@ class Devtools {
     by time travel and jumping between Cerebral apps, we are careful
     not doing unnecessary stringifying.
   */
-  createEventDetail(debuggingData, context, functionDetails, payload) {
+  createEventDetail (debuggingData, context, functionDetails, payload) {
     const type = 'execution'
-    let mutationString = '';
+    let mutationString = ''
 
     if (this.storeMutations && debuggingData && debuggingData.type === 'mutation') {
       mutationString = JSON.stringify(debuggingData)
@@ -216,7 +216,7 @@ class Devtools {
     function tree might also use this to send debugging data. Like when
     mutations are done or any wrapped methods run.
   */
-  send(debuggingData = null, context, functionDetails, payload) {
+  send (debuggingData = null, context, functionDetails, payload) {
     const detail = this.createEventDetail(debuggingData, context, functionDetails, payload)
 
     if (this.isConnected) {
@@ -230,6 +230,6 @@ class Devtools {
   }
 }
 
-export default function(...args) {
+export default function (...args) {
   return new Devtools(...args)
 }

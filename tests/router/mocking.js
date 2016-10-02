@@ -1,4 +1,5 @@
 // MOCKING
+/* eslint-env mocha */
 /* eslint-disable no-console */
 global.window = {
   location: {
@@ -8,11 +9,11 @@ global.window = {
   history: {}
 }
 global.history = {
-  pushState(_, __, value) {
+  pushState (_, __, value) {
     window.location.href = window.location.origin + value
     window.location.lastChangedWith = 'pushState'
   },
-  replaceState(_, __, value) {
+  replaceState (_, __, value) {
     window.location.href = window.location.origin + value
     window.location.lastChangedWith = 'replaceState'
   }
@@ -21,7 +22,7 @@ global.addEventListener = global.window.addEventListener = () => {}
 global.window.CustomEvent = () => {}
 global.window.dispatchEvent = () => {}
 global.document = {}
-console.warn = function(message) {
+console.warn = function (message) {
   console.warn.warnings.push(message)
 }
 console.warn.warnings = []
@@ -29,11 +30,11 @@ console.warn.warnings = []
 const addressbar = require('addressbar')
 
 module.exports = {
-  triggerUrlChange(url) {
+  triggerUrlChange (url) {
     let defaultPrevented = false
 
     addressbar.emit('change', {
-      preventDefault() {
+      preventDefault () {
         defaultPrevented = true
       },
       target: {value: addressbar.origin + url}

@@ -9,12 +9,12 @@ try {
     pathname: '/',
     value: '',
     origin: '',
-    on() {},
-    removeListener() {}
+    on () {},
+    removeListener () {}
   }
 }
 
-export default function Router(options = {}) {
+export default function Router (options = {}) {
   options.mapper = urlMapper({query: options.query})
 
   return (passedRoutesConfig, controller) => {
@@ -35,7 +35,7 @@ export default function Router(options = {}) {
 
     const signals = getRoutableSignals(routesConfig, controller)
 
-    function onUrlChange(event) {
+    function onUrlChange (event) {
       let url = event ? event.target.value : addressbar.value
       url = url.replace(addressbar.origin, '')
 
@@ -62,7 +62,7 @@ export default function Router(options = {}) {
       }
     }
 
-    function onSignalStart(execution, payload) {
+    function onSignalStart (execution, payload) {
       const signal = signals[execution.name]
       if (signal) {
         const route = signal.route
@@ -72,7 +72,7 @@ export default function Router(options = {}) {
       }
     }
 
-    function init() {
+    function init () {
       addressbar.on('change', onUrlChange)
       controller.runTree.on('start', onSignalStart)
       if (!options.preventAutostart) {
@@ -81,14 +81,14 @@ export default function Router(options = {}) {
     }
 
     const contextProvider = {
-      getUrl() {
+      getUrl () {
         return addressbar.value.replace(addressbar.origin + options.baseUrl, '')
       },
-      goTo(url) {
+      goTo (url) {
         addressbar.value = url
         onUrlChange()
       },
-      redirect(url) {
+      redirect (url) {
         addressbar.value = {
           value: options.baseUrl + url,
           replace: true
@@ -96,7 +96,7 @@ export default function Router(options = {}) {
 
         onUrlChange()
       },
-      redirectToSignal(signalName, payload) {
+      redirectToSignal (signalName, payload) {
         const signal = signals[signalName]
 
         if (signal) {
@@ -109,7 +109,7 @@ export default function Router(options = {}) {
 
     return {
       init,
-      provider(context) {
+      provider (context) {
         context.router = contextProvider
 
         return context

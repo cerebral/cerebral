@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import Controller from '../src/Controller'
 import Module from '../src/Module'
 import assert from 'assert'
@@ -23,13 +24,13 @@ describe('Controller', () => {
     const controller = new Controller({
       signals: {
         foo: [
-          function testAction(context) {
+          function testAction (context) {
             assert.equal(context.foo, 'bar')
           }
         ]
       },
       providers: [
-        function TestProvider(context) {
+        function TestProvider (context) {
           context.foo = 'bar'
 
           return context
@@ -110,7 +111,7 @@ describe('Controller', () => {
   })
   it('should throw when passing in unserializable payload property to signal', () => {
     const controller = new Controller({
-      devtools: {enforceSerializable: true, init() {}},
+      devtools: {enforceSerializable: true, init () {}},
       signals: {
         foo: []
       }
@@ -123,7 +124,7 @@ describe('Controller', () => {
   })
   it('should throw when passing in unserializable payload to signal', () => {
     const controller = new Controller({
-      devtools: {enforceSerializable: true, init() {}},
+      devtools: {enforceSerializable: true, init () {}},
       signals: {
         foo: []
       }

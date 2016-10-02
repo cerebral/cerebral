@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 /* eslint-disable no-console */
 const triggerUrlChange = require('./mocking').triggerUrlChange
 
@@ -24,7 +25,7 @@ describe('Router', () => {
         '/': 'test'
       },
       signals: {
-        test: [() => {count++}]
+        test: [() => { count++ }]
       }
     })
     assert.equal(count, 1)
@@ -37,7 +38,7 @@ describe('Router', () => {
         '/': 'test'
       },
       signals: {
-        test: [() => {count++}]
+        test: [() => { count++ }]
       }
     })
     assert.equal(count, 0)
@@ -56,9 +57,9 @@ describe('Router', () => {
         }
       },
       signals: {
-        foo: [() => {count++}],
-        bar: [() => {count++}],
-        baz: [() => {count++}]
+        foo: [() => { count++ }],
+        bar: [() => { count++ }],
+        baz: [() => { count++ }]
       }
     })
     triggerUrlChange('/bar')
@@ -73,7 +74,7 @@ describe('Router', () => {
         '/': 'foo'
       },
       signals: {
-        foo: [() => {count++}]
+        foo: [() => { count++ }]
       },
       modules: {
         bar: {
@@ -84,8 +85,8 @@ describe('Router', () => {
             }
           },
           signals: {
-            bar: [() => {count++}],
-            baz: [() => {count++}]
+            bar: [() => { count++ }],
+            baz: [() => { count++ }]
           }
         }
       }
@@ -131,7 +132,7 @@ describe('Router', () => {
       },
       signals: {
         test: [
-          function action({router}) {
+          function action ({router}) {
             assert.equal(addressbar.value, 'http://localhost:3000/test/#/')
             assert.equal(router.getUrl(), '/')
           }
@@ -190,7 +191,7 @@ describe('Router', () => {
       },
       signals: {
         test: [],
-        foo: [() => {count++}]
+        foo: [() => { count++ }]
       }
     })
     controller.getSignal('foo')()
@@ -268,13 +269,13 @@ describe('Router', () => {
       signals: {
         'home': [],
         'createClicked': [
-          function createEntity({router}) {
+          function createEntity ({router}) {
             const entityId = 42
             router.redirectToSignal('detail', { id: entityId })
           }
         ],
         'detail': [
-          function checkAction({input}) {
+          function checkAction ({input}) {
             assert.equal(input.id, 42)
             assert.equal(addressbar.pathname, '/foo/%3A42')
             done()
@@ -296,7 +297,7 @@ describe('Router', () => {
       signals: {
         'home': [],
         'createClicked': [
-          function createEntity({router}) {
+          function createEntity ({router}) {
             const entityId = 42
             router.redirectToSignal('detail', { id: entityId })
           }

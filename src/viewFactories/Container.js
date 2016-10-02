@@ -1,9 +1,10 @@
+/* global CustomEvent */
 import DependencyStore from '../DependencyStore'
 import {ensurePath} from '../utils'
 
 export default (View) => {
   class Container extends View.Component {
-    constructor(props) {
+    constructor (props) {
       super(props)
       this.dependencyStore = new DependencyStore()
       this.debuggerComponentsMap = {}
@@ -13,7 +14,7 @@ export default (View) => {
       this.updateComponent = this.updateComponent.bind(this)
       this.onCerebralUpdate = this.onCerebralUpdate.bind(this)
     }
-    getChildContext() {
+    getChildContext () {
       const controller = (
         this.props.controller ||
         this.createDummyController(this.props.state)
@@ -27,14 +28,14 @@ export default (View) => {
         }
       }
     }
-    hasDevtools() {
+    hasDevtools () {
       return Boolean(this.props.controller && this.props.controller.devtools)
     }
     /*
       The container will listen to "flush" events from the controller
       and send an event to debugger about initial registered components
     */
-    componentDidMount() {
+    componentDidMount () {
       this.props.controller && this.props.controller.on('flush', this.onCerebralUpdate)
 
       if (this.hasDevtools()) {
@@ -58,15 +59,15 @@ export default (View) => {
       to this Container it will create a dummy version which inserts
       state and mocks any signals when connecting the component.
     */
-    createDummyController(state = {}) {
+    createDummyController (state = {}) {
       return {
-        on() {},
-        getState(path) {
+        on () {},
+        getState (path) {
           return ensurePath(path).reduce((currentState, pathKey) => {
             return currentState[pathKey]
           }, state)
         },
-        getSignal() {
+        getSignal () {
           return () => {}
         }
       }
@@ -75,14 +76,14 @@ export default (View) => {
       The container will listen to "flush" events from the controller
       and send an event to debugger about initial registered components
     */
-    extractComponentName(component) {
+    extractComponentName (component) {
       return component.constructor.displayName.replace('CerebralWrapping_', '')
     }
     /*
       On "flush" event use changes to extract affected components
       from dependency store and render them
     */
-    onCerebralUpdate(changes, force) {
+    onCerebralUpdate (changes, force) {
       const componentsToRender = force ? this.dependencyStore.getAllUniqueEntities() : this.dependencyStore.getUniqueEntities(changes)
       const start = Date.now()
       componentsToRender.forEach((component) => {
@@ -111,19 +112,19 @@ export default (View) => {
         window.dispatchEvent(event)
       }
     }
-    registerComponent(component, depsMap) {
+    registerComponent (component, depsMap) {
       this.dependencyStore.addEntity(component, depsMap)
       if (this.hasDevtools()) {
         this.updateDebuggerComponentsMap(component, depsMap)
       }
     }
-    unregisterComponent(component, depsMap) {
+    unregisterComponent (component, depsMap) {
       this.dependencyStore.removeEntity(component, depsMap)
       if (this.hasDevtools()) {
         this.updateDebuggerComponentsMap(component, depsMap)
       }
     }
-    updateComponent(component, prevDepsMap, depsMap) {
+    updateComponent (component, prevDepsMap, depsMap) {
       this.dependencyStore.removeEntity(component, prevDepsMap)
       this.dependencyStore.addEntity(component, depsMap)
       if (this.hasDevtools()) {
@@ -135,7 +136,7 @@ export default (View) => {
       Updates the map the represents what active state paths and
       components are in your app. Used by the debugger
     */
-    updateDebuggerComponentsMap(component, nextDeps, prevDeps) {
+    updateDebuggerComponentsMap (component, nextDeps, prevDeps) {
       const componentDetails = {
         name: this.extractComponentName(component),
         renderCount: component.renderCount || 1,
@@ -155,13 +156,13 @@ export default (View) => {
 
       for (const depsKey in nextDeps) {
         this.debuggerComponentsMap[depsKey] = (
-          this.debuggerComponentsMap[depsKey] ?
-            this.debuggerComponentsMap[depsKey].concat(componentDetails) :
-            [componentDetails]
+          this.debuggerComponentsMap[depsKey]
+            ? this.debuggerComponentsMap[depsKey].concat(componentDetails)
+            : [componentDetails]
         )
       }
     }
-    render() {
+    render () {
       return this.props.children
     }
   }

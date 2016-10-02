@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import Model from '../src/Model'
 import assert from 'assert'
 

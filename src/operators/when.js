@@ -1,7 +1,7 @@
 import parseScheme from 'cerebral-scheme-parser'
 import populateInputAndStateSchemes from './helpers/populateInputAndStateSchemes'
 
-function whenFactory(passedPath) {
+function whenFactory (passedPath) {
   const pathScheme = parseScheme(passedPath)
 
   if (pathScheme.target !== 'state' && pathScheme.target !== 'input') {
@@ -9,7 +9,7 @@ function whenFactory(passedPath) {
   }
 
   // define the action
-  const when = function({input, state, path}) {
+  const when = function ({input, state, path}) {
     const pathValue = pathScheme.getValue(populateInputAndStateSchemes(input, state))
     let value
 
@@ -19,7 +19,7 @@ function whenFactory(passedPath) {
       value = state.get(pathValue)
     }
 
-    return Boolean(value) ? path.true() : path.false()
+    return value ? path.true() : path.false()
   }
 
   when.displayName = `operator WHEN (${passedPath})`

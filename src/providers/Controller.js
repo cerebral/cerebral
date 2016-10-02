@@ -1,5 +1,5 @@
-function ControllerProviderFactory(controller) {
-  function ControllerProvider(context) {
+function ControllerProviderFactory (controller) {
+  function ControllerProvider (context) {
     context.controller = controller
 
     return context

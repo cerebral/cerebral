@@ -1,21 +1,20 @@
 import {isObject, isSerializable, throwError} from './utils'
 
 class Model {
-  constructor(initialState = {}, devtools = {}) {
+  constructor (initialState = {}, devtools = {}) {
     this.preventExternalMutations = devtools.preventExternalMutations
     this.enforceSerializable = Boolean(devtools.enforceSerializable)
     this.state = (
-      this.preventExternalMutations ?
-        this.freezeObject(initialState)
-      :
-        initialState
+      this.preventExternalMutations
+        ? this.freezeObject(initialState)
+        : initialState
     )
     this.changedPaths = []
   }
   /*
     Does an unfreeze and update of value, before freezing again
   */
-  unfreezeObject(value) {
+  unfreezeObject (value) {
     if (Array.isArray(value)) {
       return value.slice()
     } else if (isObject(value)) {
@@ -27,7 +26,7 @@ class Model {
   /*
     Freezes objects and arrays recursively to avoid unwanted mutation
   */
-  freezeObject(object) {
+  freezeObject (object) {
     if (
       (
         !Array.isArray(object) &&
@@ -50,7 +49,7 @@ class Model {
     Converts an array of paths changed to a change object that
     will be traversed by the dependency store
   */
-  flush() {
+  flush () {
     const changes = this.changedPaths.reduce((allChanges, path) => {
       path.reduce((currentChanges, key, index) => {
         if (index === path.length - 1 && !currentChanges[key]) {
@@ -75,7 +74,7 @@ class Model {
     A generic method for making a change to a path, used
     by multiple mutation methods
   */
-  updateIn(path, cb) {
+  updateIn (path, cb) {
     if (this.preventExternalMutations) {
       this.updateInFrozen(path, cb)
 
@@ -99,7 +98,7 @@ class Model {
     Unfreezes on the way down. When done freezes state. It is optimized
     to not go down already frozen paths
   */
-  updateInFrozen(path, cb) {
+  updateInFrozen (path, cb) {
     if (!path.length) {
       this.state = this.freezeObject(cb(this.unfreezeObject(this.state)))
     }
@@ -119,36 +118,36 @@ class Model {
   /*
     Checks if value is serializable, if turned on
   */
-  checkValue(value, path) {
+  checkValue (value, path) {
     if (this.enforceSerializable && !isSerializable(value)) {
       throwError(`You are passing a non serializable value on ${path.join('.')}`)
     }
   }
-  checkValues(values, path) {
+  checkValues (values, path) {
     if (this.enforceSerializable) {
       values.forEach((value) => {
         this.checkValue(value, path)
       })
     }
   }
-  get(path = []) {
+  get (path = []) {
     return path.reduce((currentState, key) => {
       return currentState[key]
     }, this.state)
   }
-  set(path, value) {
+  set (path, value) {
     this.checkValue(value, path)
     this.updateIn(path, () => {
       return value
     })
   }
-  push(path, value) {
+  push (path, value) {
     this.checkValue(value, path)
     this.updateIn(path, (array) => {
       return array.concat(value)
     })
   }
-  merge(path, value) {
+  merge (path, value) {
     this.checkValue(value, path)
 
     // We want to show changes to added keys, as this is pretty
@@ -160,21 +159,21 @@ class Model {
       return Object.assign(obj, value)
     })
   }
-  pop(path) {
+  pop (path) {
     this.updateIn(path, (array) => {
       array.pop()
 
       return array
     })
   }
-  shift(path) {
+  shift (path) {
     this.updateIn(path, (array) => {
       array.shift()
 
       return array
     })
   }
-  unshift(path, value) {
+  unshift (path, value) {
     this.checkValue(value, path)
     this.updateIn(path, (array) => {
       array.unshift(value)
@@ -182,7 +181,7 @@ class Model {
       return array
     })
   }
-  splice(path, ...args) {
+  splice (path, ...args) {
     this.checkValues(args, path)
     this.updateIn(path, (array) => {
       array.splice(...args)
@@ -190,7 +189,7 @@ class Model {
       return array
     })
   }
-  unset(path) {
+  unset (path) {
     const key = path.pop()
 
     this.updateIn(path, (obj) => {
@@ -199,7 +198,7 @@ class Model {
       return obj
     })
   }
-  concat(path, value) {
+  concat (path, value) {
     this.checkValue(value, path)
     this.updateIn(path, (array) => {
       return array.concat(value)

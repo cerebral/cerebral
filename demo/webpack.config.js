@@ -1,6 +1,6 @@
-var path = require('path');
-var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var path = require('path')
+var webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 var loaders = [
   {
@@ -14,7 +14,7 @@ var loaders = [
       ]
     }
   }
-];
+]
 
 module.exports = {
   devtool: '#inline-source-map',
@@ -39,4 +39,4 @@ module.exports = {
   module: {
     loaders: loaders
   }
-};
+}

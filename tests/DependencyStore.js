@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import DependencyStore from '../src/DependencyStore'
 import assert from 'assert'
 

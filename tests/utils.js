@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import * as utils from '../src/utils'
 import assert from 'assert'
 

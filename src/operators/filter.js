@@ -1,7 +1,7 @@
 import parseScheme from 'cerebral-scheme-parser'
 import populateInputAndStateSchemes from './helpers/populateInputAndStateSchemes'
 
-export default function(passedPath, filterFunc) {
+export default function (passedPath, filterFunc) {
   const pathScheme = parseScheme(passedPath)
 
   const filterValue = typeof filterFunc === 'function'
@@ -13,7 +13,7 @@ export default function(passedPath, filterFunc) {
   }
 
   // define the action
-  const filter = function({input, state, path}) {
+  const filter = function ({input, state, path}) {
     const pathValue = pathScheme.getValue(populateInputAndStateSchemes(input, state))
     let value
 

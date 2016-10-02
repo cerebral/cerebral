@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import Controller from '../src/Controller'
 import assert from 'assert'
 
@@ -15,7 +16,7 @@ describe('Operators', () => {
                 done()
               }
             ]),
-            () => {discardedCount++}
+            () => { discardedCount++ }
           ]
         }
       })
@@ -35,10 +36,10 @@ describe('Operators', () => {
           test: [
             filter('input:value', (value) => Boolean(value.length)), {
               accepted: [
-                () => {accepted++}
+                () => { accepted++ }
               ],
               discarded: [
-                () => {discarded++}
+                () => { discarded++ }
               ]
             }
           ]
@@ -60,10 +61,10 @@ describe('Operators', () => {
           test: [
             filter('state:foo', (value) => value === 'bar'), {
               accepted: [
-                ({state}) => {state.set('foo', 'bar2')}
+                ({state}) => { state.set('foo', 'bar2') }
               ],
               discarded: [
-                () => {discarded++}
+                () => { discarded++ }
               ]
             }
           ]
@@ -99,7 +100,7 @@ describe('Operators', () => {
         signals: {
           test: [
             when('input:foo'), {
-              true: [() => {count++}],
+              true: [() => { count++ }],
               false: []
             }
           ]
@@ -119,7 +120,7 @@ describe('Operators', () => {
           test: [
             when('state:foo'), {
               true: [],
-              false: [() => {count++}]
+              false: [() => { count++ }]
             }
           ]
         }

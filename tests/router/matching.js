@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 /* eslint-disable no-console */
 const triggerUrlChange = require('./mocking').triggerUrlChange
 
@@ -24,7 +25,7 @@ describe('Router - matching', () => {
           '/': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -59,7 +60,7 @@ describe('Router - matching', () => {
           '/foo': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -94,7 +95,7 @@ describe('Router - matching', () => {
           '/foo/bar/baz/42': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -130,7 +131,7 @@ describe('Router - matching', () => {
           '/foo/:param': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -165,7 +166,7 @@ describe('Router - matching', () => {
           '/foo/:param/:param2': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -207,7 +208,7 @@ describe('Router - matching', () => {
           '/foo/:param([\\w+-?]+)-test/:param2(%3A\\d+)': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -251,7 +252,7 @@ describe('Router - matching', () => {
           '/*': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
       triggerUrlChange('/')
@@ -282,7 +283,7 @@ describe('Router - matching', () => {
           '/': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -320,7 +321,7 @@ describe('Router - matching', () => {
           '/': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -360,7 +361,7 @@ describe('Router - matching', () => {
           '/': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 
@@ -400,7 +401,7 @@ describe('Router - matching', () => {
           '/': 'home'
         },
         signals: {
-          'home': [() => {count++}]
+          'home': [() => { count++ }]
         }
       })
 

@@ -15,7 +15,7 @@ export const dependencyStore = new DependencyStore()
   inside components.
 */
 export class Computed {
-  constructor(props, paths, func, depsMap, factory) {
+  constructor (props, paths, func, depsMap, factory) {
     if (!isObject(props)) {
       throwError('You are not passing valid props to a computed')
     }
@@ -34,24 +34,23 @@ export class Computed {
     This method is called by the controller when a flush happens and
     the dependency store returns affected computeds
   */
-  flag() {
+  flag () {
     this.isDirty = true
   }
   /*
     Produces a new value if the computed is dirty or returns existing
     value
   */
-  getValue(controller) {
+  getValue (controller) {
     if (this.isDirty) {
       const computedProps = Object.assign(
         {},
         this.props,
         Object.keys(this.paths).reduce((currentProps, depsMapKey) => {
           currentProps[depsMapKey] = (
-            this.paths[depsMapKey] instanceof Computed ?
-              this.paths[depsMapKey].getValue(controller)
-            :
-              controller.getState(cleanPath(this.paths[depsMapKey]))
+            this.paths[depsMapKey] instanceof Computed
+              ? this.paths[depsMapKey].getValue(controller)
+              : controller.getState(cleanPath(this.paths[depsMapKey]))
           )
 
           return currentProps
@@ -68,7 +67,7 @@ export class Computed {
     attached computeds. It removes any attached computeds
     to the computed and also from the factory cache
   */
-  remove() {
+  remove () {
     dependencyStore.removeEntity(this, this.depsMap)
     Object.keys(this.paths).forEach((pathKey) => {
       if (this.paths[pathKey] instanceof Computed) {
@@ -85,7 +84,7 @@ export class Computed {
   is what is created when you actually create a computed.
 */
 class ComputedFactory {
-  constructor(paths, func) {
+  constructor (paths, func) {
     if (
       !paths ||
       (
@@ -110,7 +109,7 @@ class ComputedFactory {
     This is what runs when you create an instance of a computed, passing
     any optional props. It checks the cache or creates a new computed
   */
-  create(props = {}) {
+  create (props = {}) {
     const paths = typeof this.paths === 'function' ? this.paths(props) : this.paths
     const depsMap = this.getDepsMap(paths)
 
@@ -129,7 +128,7 @@ class ComputedFactory {
     Produces the dependency map to register the compute in the
     dependency store with.
   */
-  getDepsMap(paths) {
+  getDepsMap (paths) {
     return Object.keys(paths).reduce((currentDepsMap, depsMapKey) => {
       if (paths[depsMapKey] instanceof Computed) {
         return Object.assign(currentDepsMap, paths[depsMapKey].depsMap)
@@ -142,11 +141,11 @@ class ComputedFactory {
   /*
     Called by each computed when removed to clean up cache
   */
-  removeFromCache(computedInstance) {
+  removeFromCache (computedInstance) {
     this.cache.splice(this.cache.indexOf(computedInstance), 1)
   }
 }
 
-export default function computed(paths, func) {
+export default function computed (paths, func) {
   return new ComputedFactory(paths, func)
 }

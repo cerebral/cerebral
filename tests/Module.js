@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import Controller from '../src/Controller'
 import assert from 'assert'
 
@@ -38,7 +39,7 @@ describe('Module', () => {
               assert.equal(context.bar, 'bar')
             }]
           },
-          provider(context) {
+          provider (context) {
             context.foo = 'foo'
 
             return context
@@ -51,7 +52,7 @@ describe('Module', () => {
               assert.equal(context.foo, 'foo')
             }]
           },
-          provider(context) {
+          provider (context) {
             context.bar = 'bar'
 
             return context

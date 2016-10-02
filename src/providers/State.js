@@ -1,6 +1,6 @@
 import {ensurePath} from '../utils'
 
-function StateProviderFactory(model) {
+function StateProviderFactory (model) {
   const methods = [
     'get',
     'set',
@@ -25,7 +25,7 @@ function StateProviderFactory(model) {
     return currentStateContext
   }, {})
 
-  function StateProvider(context) {
+  function StateProvider (context) {
     context.state = stateContext
 
     if (context.debugger) {

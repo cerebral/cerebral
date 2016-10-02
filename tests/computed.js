@@ -1,3 +1,4 @@
+/* eslint-env mocha */
 import Controller from '../src/Controller'
 import Computed from '../src/Computed'
 import assert from 'assert'

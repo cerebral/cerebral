@@ -1,6 +1,6 @@
 import HOC from './hoc'
 
-export default function connect(paths, passedSignals, passedComponent) {
+export default function connect (paths, passedSignals, passedComponent) {
   let component = passedComponent
   let signals = passedSignals
 
@@ -10,7 +10,7 @@ export default function connect(paths, passedSignals, passedComponent) {
   }
 
   if (!component) {
-    return function(decoratedComponent) {
+    return function (decoratedComponent) {
       return process.env.NODE_ENV === 'test' ? decoratedComponent : HOC(paths, signals, decoratedComponent)
     }
   }
