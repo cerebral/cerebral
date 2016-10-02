@@ -18,23 +18,31 @@ var loaders = [
 
 module.exports = {
   devtool: '#inline-source-map',
-  entry: path.resolve('demo', 'main.js'),
+  entry: path.join(__dirname, 'main.js'),
   output: {
-    path: path.resolve('build'),
+    path: path.join(__dirname, 'build'),
     filename: '[name].js',
     publicPath: '/'
   },
+  devServer: {
+     host: '0.0.0.0',
+     port: process.env.PORT || 3000
+  },
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve('demo', 'index.tpl.html'),
+      template: path.join(__dirname, 'index.tpl.html'),
       inject: 'body',
       filename: 'index.html'
     })
   ],
   resolve: {
     alias: {
-      'cerebral': path.resolve('src')
-    }
+      'cerebral': path.join(__dirname, '../lib')
+    },
+    fallback: path.join(__dirname, 'node_modules')
+  },
+  resolveLoader: {
+    root: path.join(__dirname, 'node_modules')
   },
   module: {
     loaders: loaders
