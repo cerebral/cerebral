@@ -1,5 +1,5 @@
 import configureField from './utils/configureField.js'
 
-export default function Field (formData, fieldData) {
+export default function field (formData, fieldData) {
   return configureField(formData, fieldData)
 }

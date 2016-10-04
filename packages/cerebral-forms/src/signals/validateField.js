@@ -11,6 +11,7 @@ function runValidation (fieldPath, field, form) {
 
   return {
     isValid,
+    isPristine: false,
     hasValue: checkHasValue(form, field.value, field.isValueRules),
     errorMessage: result.isValid ? null : field.errorMessages[result.failedRuleIndex]
   }

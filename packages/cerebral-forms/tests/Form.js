@@ -1,13 +1,13 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {Form} from '../src'
+import {form} from '../src'
 import assert from 'assert'
 
-describe('Form', () => {
+describe('form', () => {
   it('should create fields with default state', () => {
     const controller = Controller({
       state: {
-        form: Form({
+        form: form({
           name: {
             value: 'Ben'
           }
@@ -34,7 +34,7 @@ describe('Form', () => {
   it('should validate initial form state', () => {
     const controller = Controller({
       state: {
-        form: Form({
+        form: form({
           name: {
             value: 'Ben',
             validationRules: ['minLength:4'],

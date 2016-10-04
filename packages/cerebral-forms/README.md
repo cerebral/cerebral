@@ -3,15 +3,15 @@ Signals, actions and state factories to create forms
 
 ## API
 
-### Form
+### form
 A state factory for creating form state. Used when defining initial state or dynamically with an action. You can put forms inside forms.
 
 ```js
-import {Form} from 'cerebral-form'
+import {form} from 'cerebral-form'
 
 export default {
   state: {
-    form: Form({
+    form: form({
       firstName: {
         value: ''
       },
@@ -24,10 +24,10 @@ export default {
 ```
 
 ```js
-import {Form} from 'cerebral-form'
+import {form} from 'cerebral-form'
 
 export default function MyAction({state}) {
-  state.set('some.new.form', Form({
+  state.set('some.new.form', form({
     name: {
       value: ''
     },
@@ -38,14 +38,14 @@ export default function MyAction({state}) {
 }
 ```
 
-### Field
+### field
 A Field factory for creating a field. Used when adding new fields dynamically to an existing form.
 
 ```js
-import {Field} from 'cerebral-form'
+import {field} from 'cerebral-form'
 
 export default function MyAction({state}) {
-  state.set('path.to.form.address2', Field({
+  state.set('path.to.form.address2', field({
     value: ''
   }))
 }
