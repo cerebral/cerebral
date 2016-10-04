@@ -9,8 +9,13 @@ export default function (path, value) {
     throw new Error('Cerebral operator SET - The path: "' + path + '" does not target "state"')
   }
 
-  if (valueScheme && valueScheme.target && valueScheme.target !== 'input') {
-    throw new Error('Cerebral operator SET - The value: "' + path + '" does not target "input"')
+  if (
+    valueScheme &&
+    valueScheme.target &&
+    valueScheme.target !== 'input' &&
+    valueScheme.target !== 'state'
+  ) {
+    throw new Error('Cerebral operator SET - The value: "' + path + '" does not target "input" or "state"')
   }
 
   const set = function set ({input, state}) {
