@@ -132,7 +132,7 @@ class Model {
   }
   get (path = []) {
     return path.reduce((currentState, key) => {
-      return currentState[key]
+      return currentState ? currentState[key] : undefined
     }, this.state)
   }
   set (path, value) {
