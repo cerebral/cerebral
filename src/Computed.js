@@ -110,14 +110,14 @@ class ComputedFactory {
     any optional props. It checks the cache or creates a new computed
   */
   create (props = {}) {
-    const paths = typeof this.paths === 'function' ? this.paths(props) : this.paths
-    const depsMap = this.getDepsMap(paths)
-
     for (let x = 0; x < this.cache.length; x++) {
       if (!propsDiffer(props, this.cache[x].props)) {
         return this.cache[x]
       }
     }
+
+    const paths = typeof this.paths === 'function' ? this.paths(props) : this.paths
+    const depsMap = this.getDepsMap(paths)
 
     const computedInstance = new Computed(props, paths, this.func, depsMap, this)
     this.cache.push(computedInstance)
