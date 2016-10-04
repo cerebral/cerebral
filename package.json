@@ -4,6 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "pretest": "standard",
+    "commit": "git-cz",
     "test": "npm run test:cerebral",
     "test:cerebral": "mocha --compilers js:babel-register 'tests/**/*.js'",
     "test:view": "mocha -- --compilers js:babel-register 'viewTests/**/*.js'",
