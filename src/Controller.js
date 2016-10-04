@@ -121,9 +121,9 @@ class Controller extends EventEmitter {
     const pathArray = ensurePath(path)
     const signalKey = pathArray.pop()
     const module = pathArray.reduce((currentModule, key) => {
-      return currentModule.modules[key]
+      return currentModule ? currentModule.modules[key] : undefined
     }, this.module)
-    const signal = module.signals[signalKey]
+    const signal = module && module.signals[signalKey]
 
     if (!signal) {
       throwError(`There is no signal at path "${path}"`)
