@@ -1,0 +1,40 @@
+{
+  "name": "cerebral-forms",
+  "version": "0.1.0",
+  "description": "Signals, actions and state factories to create forms",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-register 'tests/**/*.js'",
+    "test:watch": "npm run test -- --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral-forms.git"
+  },
+  "keywords": [
+    "cerebral",
+    "forms"
+  ],
+  "author": "Christian Alfoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral-forms/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral-forms#readme",
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-register": "^6.16.3",
+    "cerebral": "^2.0.0-alpha.1",
+    "mocha": "^3.1.0",
+    "standard": "^8.3.0"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "ignore": "demo"
+  }
+}
