@@ -86,12 +86,10 @@ export class Computed {
 class ComputedFactory {
   constructor (paths, func) {
     if (
-      !paths ||
-      (
-        !isObject(paths) &&
-        typeof paths !== 'function'
+      !(
+        isObject(paths) ||
+        typeof paths === 'function'
       ) ||
-      !func ||
       typeof func !== 'function'
     ) {
       throwError('You are not passing the correct arguments to the computed factory')
