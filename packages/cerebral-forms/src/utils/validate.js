@@ -1,4 +1,4 @@
-var rules = require('./rules.js')
+import rules from '../rules.js'
 
 export default function validate (form, value, validations) {
   const initialValidation = {

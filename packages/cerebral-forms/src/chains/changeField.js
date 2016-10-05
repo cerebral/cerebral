@@ -1,4 +1,4 @@
-import validateField from './validateField'
+import validateField from '../factories/validateField'
 
 export default [
   function updateValue ({input, state}) {

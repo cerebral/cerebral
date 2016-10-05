@@ -259,3 +259,17 @@ export default connect({
 - **equalsField:Field** - Checks equality of field in same form
 - **maxLength:Number** - Checks value length does not pass passed number
 - **minLength:Number** - Checks value length does pass passed number
+
+### Custom rules
+You can attach new rules to the rules object.
+
+```js
+import {rules} from 'cerebral-forms';
+
+// You get passed the value of the field,
+// the form it is attached to and whatever
+// arg you pass after : (minLength:3)
+rules.isFirstUpperCase = (value, form, arg) => {
+  return typeof value === 'string' && value[0] === value[0].toUpperCase()
+}
+```
