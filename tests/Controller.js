@@ -133,4 +133,14 @@ describe('Controller', () => {
       controller.getSignal('foo')(new Date())
     })
   })
+  it('should throw when pointing to a non existing signal', () => {
+    const controller = new Controller({})
+    assert.throws(() => {
+      controller.getSignal('foo.bar')()
+    })
+  })
+  it('should return undefined when grabbing non existing state', () => {
+    const controller = new Controller({})
+    assert.equal(controller.getState('foo.bar'), undefined)
+  })
 })
