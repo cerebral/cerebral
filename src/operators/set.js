@@ -21,7 +21,7 @@ export default function (path, value) {
   const set = function set ({input, state}) {
     const pathSchemeValue = pathScheme.getValue(populateInputAndStateSchemes(input, state))
     const valueSchemeValue = (
-      valueScheme.target
+      valueScheme && valueScheme.target
         ? input[valueScheme.getValue(populateInputAndStateSchemes(input, state))]
         : value
     )
