@@ -35,6 +35,7 @@ export function isSerializable (value) {
     typeof value === 'number' ||
     typeof value === 'string' ||
     typeof value === 'boolean' ||
+    value === null ||
     Array.isArray(value)
   ) {
     return true
