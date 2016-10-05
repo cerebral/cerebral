@@ -189,6 +189,14 @@ describe('Model', () => {
         model.state.foo.bar = 'baz3'
       })
     })
+    it('should throw when updating invalid path', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, {preventExternalMutations: true})
+      assert.throws(() => {
+        model.set(['foo', 'bar'], 'baz2')
+      })
+    })
   })
   describe('Enforce serializable', () => {
     it('should throw error if value inserted is not serializable', () => {
