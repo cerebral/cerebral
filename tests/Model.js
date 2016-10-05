@@ -177,6 +177,18 @@ describe('Model', () => {
         model.state.foo[1] = 'bar3'
       })
     })
+    it('should update nested values', () => {
+      const model = new Model({
+        foo: {
+          bar: 'baz'
+        }
+      }, {preventExternalMutations: true})
+      model.set(['foo', 'bar'], 'baz2')
+      assert.equal(model.state.foo.bar, 'baz2')
+      assert.throws(() => {
+        model.state.foo.bar = 'baz3'
+      })
+    })
   })
   describe('Enforce serializable', () => {
     it('should throw error if value inserted is not serializable', () => {

@@ -108,9 +108,11 @@ class Model {
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
         currentState[key] = cb(this.unfreezeObject(currentState[key]))
+      } else {
+        currentState[key] = this.unfreezeObject(currentState[key])
       }
 
-      return this.unfreezeObject(currentState[key])
+      return currentState[key]
     }, this.state)
 
     this.freezeObject(this.state)
