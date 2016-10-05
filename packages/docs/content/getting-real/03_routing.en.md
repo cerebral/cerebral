@@ -4,15 +4,11 @@ title: Routing
 
 ## Routing
 
-Typically applications uses a router. Since Cerebral can be used in native applications the router is decoupled, meaning that you need to install it.
-
-`npm install cerebral-router`
-
-To instantiate the router you:
+Typically applications uses a router. To instantiate the router you:
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral-router'
+import Router from 'cerebral/router'
 
 const controller = Controller({
   router: Router({
@@ -30,8 +26,7 @@ Let us create a small app:
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral-router'
-import {set} from 'cerebral/operators'
+import Router from 'cerebral/router'
 import HomeModule from './modules/Home'
 import PostsModule from './modules/Posts'
 
