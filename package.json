@@ -5,9 +5,9 @@
   "scripts": {
     "pretest": "standard",
     "commit": "git-cz",
-    "test": "npm run test:cerebral",
+    "test": "npm run test:cerebral && npm run test:view",
     "test:cerebral": "mocha --compilers js:babel-register 'tests/**/*.js'",
-    "test:view": "mocha -- --compilers js:babel-register 'viewTests/**/*.js'",
+    "test:view": "mocha --compilers js:babel-register 'viewTests/**/*.js'",
     "test:watch": "npm run test -- --watch",
     "coverage": "nyc --reporter=lcov --reporter=text npm run test",
     "build": "babel src/ --out-dir=lib/ -s"
