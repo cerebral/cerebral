@@ -88,13 +88,13 @@ export default (View) => {
       const start = Date.now()
       componentsToRender.forEach((component) => {
         if (this.hasDevtools()) {
-          component.renderCount = 'renderCount' in component ? component.renderCount + 1 : 1
+          this.updateDebuggerComponentsMap(component)
         }
         component._update()
       })
       const end = Date.now()
 
-      if (this.hasDevtools()) {
+      if (this.hasDevtools() && componentsToRender.length) {
         const event = new CustomEvent('cerebral2.client.message', {
           detail: JSON.stringify({
             type: 'components',
@@ -121,7 +121,7 @@ export default (View) => {
     unregisterComponent (component, depsMap) {
       this.dependencyStore.removeEntity(component, depsMap)
       if (this.hasDevtools()) {
-        this.updateDebuggerComponentsMap(component, depsMap)
+        this.updateDebuggerComponentsMap(component, null, depsMap)
       }
     }
     updateComponent (component, prevDepsMap, depsMap) {
@@ -139,28 +139,36 @@ export default (View) => {
     updateDebuggerComponentsMap (component, nextDeps, prevDeps) {
       const componentDetails = {
         name: this.extractComponentName(component),
-        renderCount: component.renderCount || 1,
-        componentDetailsId: component.detailsId || this.componentDetailsId++
+        renderCount: component.renderCount ? component.renderCount + 1 : 1,
+        id: component.componentDetailsId || this.debuggerComponentDetailsId++
       }
+      component.componentDetailsId = componentDetails.id
+      component.renderCount = componentDetails.renderCount
 
       if (prevDeps) {
         for (const depsKey in prevDeps) {
           const debuggerComponents = this.debuggerComponentsMap[prevDeps[depsKey]]
+
           for (let x = 0; x < debuggerComponents.length; x++) {
-            if (debuggerComponents[x].componentDetailsId === component.componentDetailsId) {
-              this.debuggerComponentsMap.splice(x, 1)
+            if (debuggerComponents[x].id === component.componentDetailsId) {
+              debuggerComponents.splice(x, 1)
+              if (debuggerComponents.length === 0) {
+                delete this.debuggerComponentsMap[prevDeps[depsKey]]
+              }
               break
             }
           }
         }
       }
 
-      for (const depsKey in nextDeps) {
-        this.debuggerComponentsMap[nextDeps[depsKey]] = (
-          this.debuggerComponentsMap[nextDeps[depsKey]]
-            ? this.debuggerComponentsMap[nextDeps[depsKey]].concat(componentDetails)
-            : [componentDetails]
-        )
+      if (nextDeps) {
+        for (const depsKey in nextDeps) {
+          this.debuggerComponentsMap[nextDeps[depsKey]] = (
+            this.debuggerComponentsMap[nextDeps[depsKey]]
+              ? this.debuggerComponentsMap[nextDeps[depsKey]].concat(componentDetails)
+              : [componentDetails]
+          )
+        }
       }
     }
     render () {
