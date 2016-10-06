@@ -29,7 +29,7 @@ import {set, copy} from 'cerebral/operators'
 
 export default [
   set('state:isLoading', true),
-  loadData, {
+  getData, {
     success: [
       copy('input:result', 'state:data')
     ],
