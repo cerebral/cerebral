@@ -1,0 +1,41 @@
+{
+  "name": "cerebral-provider-firebase",
+  "version": "0.1.0",
+  "description": "Firebase provider for Cerebral",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral-provider-firebase.git"
+  },
+  "keywords": [
+    "cerebral",
+    "firebase"
+  ],
+  "author": "Christian Alfoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral-provider-firebase/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral-provider-firebase#readme",
+  "devDependencies": {
+    "assert": "^1.4.1",
+    "babel-cli": "^6.16.0",
+    "babel-core": "^6.17.0",
+    "babel-eslint": "^7.0.0",
+    "babel-preset-es2015": "^6.16.0",
+    "babel-preset-react": "^6.16.0",
+    "babel-register": "^6.16.3",
+    "cerebral": "^2.0.0-alpha.1",
+    "mocha": "^3.1.0",
+    "standard": "^8.3.0"
+  },
+  "standard": {
+    "parser": "babel-eslint"
+  },
+  "dependencies": {
+    "firebase": "^3.4.1"
+  }
+}
