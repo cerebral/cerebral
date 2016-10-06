@@ -34,7 +34,6 @@
     "standard": "^8.3.0"
   },
   "standard": {
-    "parser": "babel-eslint",
-    "ignore": "demo"
+    "parser": "babel-eslint"
   }
 }
