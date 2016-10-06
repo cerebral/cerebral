@@ -3,16 +3,7 @@ import UaParser from 'ua-parser-js'
 const uaParser = new UaParser()
 uaParser.setUA(navigator.userAgent)
 
-const uaParserMethods = {
-  getBrowser: uaParser.getBrowser.bind(uaParser),
-  getDevice: uaParser.getDevice.bind(uaParser),
-  getOs: uaParser.getOS.bind(uaParser),
-  parseUserAgent
-}
-
-export default uaParserMethods
-
-function parseUserAgent (options) {
+export default function parseUserAgent(options) {
   const parse = options.parse
 
   return Object.keys(parse)
@@ -35,7 +26,7 @@ function parseUserAgent (options) {
 
 function getParseFunction (prop, uaParser) {
   const parseFunctionName = getParseFunctionName(prop)
-  return uaParserMethods[parseFunctionName]
+  return uaParser[parseFunctionName]
 }
 
 function getParseFunctionName (prop) {

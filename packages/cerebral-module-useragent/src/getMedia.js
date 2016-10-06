@@ -1,10 +1,10 @@
 require('match-media')
 
-export function matchMedia (mediaQueryString) {
+function matchMedia(mediaQueryString) {
   return window.matchMedia(mediaQueryString)
 }
 
-export function getMedia (options) {
+export default function getMedia(options) {
   const queries = options.media
 
   const media = Object.keys(queries)
@@ -17,9 +17,4 @@ export function getMedia (options) {
     }, {})
 
   return media
-}
-
-export default {
-  matchMedia,
-  getMedia
 }

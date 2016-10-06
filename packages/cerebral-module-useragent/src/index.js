@@ -1,16 +1,12 @@
-import assign from '101/assign'
-import feature from './services/feature'
-import network from './services/network'
-import {onOfflineChange} from './services/network'
-import uaParser from './services/uaParser'
-import window from './services/window'
-import {getFeatures} from './services/feature'
-import {matchMedia, getMedia} from './services/media'
+import raf from 'raf'
+import getFeatures from './getFeatures'
+import network from './network'
+import parseUserAgent from './parseUserAgent'
+import getMedia from './getMedia'
+import getWindowSpec from './getWindowSpec'
 
-import offlineChanged from './signals/offlineChanged'
-import windowChanged from './signals/windowChanged'
-
-import {MODULE, addContext} from './helper/module'
+import createOfflineChanged from './signalFactories/offlineChanged'
+import createWindowChanged from './signalFactories/windowChanged'
 
 const defaultOptions = {
   feature: true,
@@ -25,66 +21,53 @@ const defaultOptions = {
   },
   parse: {
     browser: true,
-    device: true,
-    os: true
+    device: true
   },
   media: {},
   window: true
 }
 
-const services = {
-  feature,
-  getFeatures,
-  matchMedia,
-  getMedia,
-  network,
-  uaParser,
-  window
-}
-
 export default (userOptions = {}) => {
-  const options = {}
-  assign(options, defaultOptions, userOptions)
+  const options = Object.assign({}, defaultOptions, userOptions)
+  const state = parseUserAgent(options)
 
-  return (module, controller) => {
-    module.alias(MODULE)
+  state.media = getMedia(options)
+  state.feature = getFeatures(options)
+  state.window = getWindowSpec()
+  state.network = {offline: false}
 
-    const state = services.uaParser.parseUserAgent(options)
-    state.media = services.getMedia(options)
-    state.feature = services.getFeatures(options)
-    state.window = window.getSpecs()
-    state.network = {offline: false}
-    module.addState(state)
+  return ({controller, path}) => {
+    controller.on('initialized', () => {
+      const offlineChanged = controller.getSignal(`${path.join('.')}.offlineChanged`)
+      const windowChanged = controller.getSignal(`${path.join('.')}.windowChanged`)
 
-    module.addSignals({
-      offlineChanged,
-      windowChanged
-    })
-
-    module.addServices(services)
-
-    addContext(module, {
-      options,
-      path: module.path
-    })
-
-    controller.once('modulesLoaded', (event) => {
       if (options.offline !== false) {
-        onOfflineChange(
-          module.getSignals().offlineChanged
-        )
-        network.offline.options = options.offline
+        network.on('confirmed-up', () => { offlineChanged({offline: false}) })
+        network.on('confirmed-down', () => { offlineChanged({offline: true}) })
       }
 
       if (options.window !== false) {
-        window.onChange(
-          module.getSignals().windowChanged
-        )
+        let updatingSpecs = false
+        window.addEventListener('resize', (event) => {
+          if (updatingSpecs) return
+          updatingSpecs = true
+          raf(() => {
+            windowChanged({
+              windowSpec: getWindowSpec(),
+              media: getMedia(options)
+            })
+            updatingSpecs = false
+          })
+        })
       }
     })
 
     return {
-      options
+      state,
+      signals: {
+        offlineChanged: createOfflineChanged(path),
+        windowChanged: createWindowChanged(path)
+      }
     }
   }
 }

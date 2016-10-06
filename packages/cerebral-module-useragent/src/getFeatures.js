@@ -1,8 +1,6 @@
-import featureJs from 'feature.js'
+require('feature.js')
 
-featureJs
-
-export function getFeatures (options) {
+export default function getFeatures(options) {
   const feature = options.feature
   const uaFeatures = window.feature
 
@@ -43,5 +41,3 @@ export function getFeatures (options) {
 
   return featureMap
 }
-
-export default window.feature
