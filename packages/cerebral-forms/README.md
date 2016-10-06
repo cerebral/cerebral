@@ -2,6 +2,7 @@
 Signals, actions and state factories to create forms
 
 ## API
+Cerebral forms is basically a function that creates state needed to handle validation and an action factory for validating fields. It is simple in nature, but handles
 
 ### form
 A state factory for creating form state. Used when defining initial state or dynamically with an action. You can put forms inside forms.
@@ -13,10 +14,48 @@ export default {
   state: {
     form: form({
       firstName: {
-        value: ''
+        // The initial value
+        value: '',
+        // Validation rules with name and arguments passed in
+        // with colon separation
+        validationRules: ['minLength:3'],
+        // Error messages mapped to same index as validation rule
+        errorMessages: ['Must be at least 3 characters long'],
+        // Will only be valid if this other field is also valid.
+        // Point to a field in the model
+        dependsOn: 'app.myForm.repeatPassword'
+
+        // Some properties are default and rarely changed, but you
+        // are free to change them
+
+        // Set the rules for identifying a value being present. Used
+        // in combination with "isRequired" when field is validating
+        isValueRules: ['isValue'],
+        // Value will be copied, but you can change it. Will be set
+        // when using form reset
+        defaultValue: '',
+
+        // Some properties are created for you, set when validation runs
+        // and you can use them in components. You can also set these
+        // properties manually, though usually the validate action factory
+        // is used to handle this
+
+        // Toggled when field is validated
+        hasValue: false,
+        // If field has been validated or not. Toggled when validated
+        isPristine: true,
+        // Toggled when field is validated
+        isValid: true,
+        // Current error message, set when field is validated
+        errorMessage: null,
       },
       lastName: {
-        value: ''
+        value: '',
+        // Combine rules using an object
+        errorMessages: [{
+          minLength: 3,
+          isAlpha: true
+        }]
       }
     })
   }
