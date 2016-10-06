@@ -145,9 +145,10 @@ export default (View) => {
 
       if (prevDeps) {
         for (const depsKey in prevDeps) {
-          for (let x = 0; x < prevDeps[depsKey].length; x++) {
-            if (prevDeps[depsKey][x].componentDetailsId === component.componentDetailsId) {
-              prevDeps[depsKey].splice(x, 1)
+          const debuggerComponents = this.debuggerComponentsMap[prevDeps[depsKey]]
+          for (let x = 0; x < debuggerComponents.length; x++) {
+            if (debuggerComponents[x].componentDetailsId === component.componentDetailsId) {
+              this.debuggerComponentsMap.splice(x, 1)
               break
             }
           }
@@ -155,9 +156,9 @@ export default (View) => {
       }
 
       for (const depsKey in nextDeps) {
-        this.debuggerComponentsMap[depsKey] = (
-          this.debuggerComponentsMap[depsKey]
-            ? this.debuggerComponentsMap[depsKey].concat(componentDetails)
+        this.debuggerComponentsMap[nextDeps[depsKey]] = (
+          this.debuggerComponentsMap[nextDeps[depsKey]]
+            ? this.debuggerComponentsMap[nextDeps[depsKey]].concat(componentDetails)
             : [componentDetails]
         )
       }
