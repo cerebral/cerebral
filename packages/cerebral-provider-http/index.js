@@ -104,7 +104,7 @@ export default function HttpProviderFactory(moduleOptions) {
           case 'progress':
             if (options.onProgress && event.lengthComputable) {
               if (typeof options.onProgress === 'string') {
-                controller.getSignal(options.onProgress)({
+                context.controller.getSignal(options.onProgress)({
                   progress: +(event.loaded / event.total).toFixed(0)
                 })
               } else if (options.onProgress) {
@@ -194,6 +194,7 @@ export default function HttpProviderFactory(moduleOptions) {
         }
       }
     }
+    return context
   }
   return HttpProvider
 }
