@@ -16,7 +16,8 @@ class DependencyStore {
   */
   removeEntity (entity, depsMap) {
     for (const depsMapKey in depsMap) {
-      this.map[depsMapKey].splice(this.map[depsMapKey].indexOf(entity), 1)
+      const key = depsMap[depsMapKey]
+      this.map[key].splice(this.map[key].indexOf(entity), 1)
     }
   }
   /*
