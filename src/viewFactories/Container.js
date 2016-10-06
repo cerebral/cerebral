@@ -81,7 +81,9 @@ export default (View) => {
     }
     /*
       On "flush" event use changes to extract affected components
-      from dependency store and render them
+      from dependency store and render them. If debugger is attached
+      the current components map is passed with a timeout due to waiting
+      for all components to update
     */
     onCerebralUpdate (changes, force) {
       const componentsToRender = force ? this.dependencyStore.getAllUniqueEntities() : this.dependencyStore.getUniqueEntities(changes)
@@ -95,21 +97,23 @@ export default (View) => {
       const end = Date.now()
 
       if (this.hasDevtools() && componentsToRender.length) {
-        const event = new CustomEvent('cerebral2.client.message', {
-          detail: JSON.stringify({
-            type: 'components',
-            data: {
-              map: this.debuggerComponentsMap,
-              render: {
-                start: start,
-                duration: end - start,
-                changes: changes,
-                components: componentsToRender.map(this.extractComponentName)
+        setTimeout(() => {
+          const event = new CustomEvent('cerebral2.client.message', {
+            detail: JSON.stringify({
+              type: 'components',
+              data: {
+                map: this.debuggerComponentsMap,
+                render: {
+                  start: start,
+                  duration: end - start,
+                  changes: changes,
+                  components: componentsToRender.map(this.extractComponentName)
+                }
               }
-            }
+            })
           })
-        })
-        window.dispatchEvent(event)
+          window.dispatchEvent(event)
+        }, 50)
       }
     }
     registerComponent (component, depsMap) {
