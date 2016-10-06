@@ -8,56 +8,73 @@ A Cerebral module for everything user agent.
 [![js-standard-style][standard-image]][standard-url]
 [![Discord][discord-image]][discord-url]
 
-# cerebral-view-react
-React view package for Cerebral
+## Concept
+The useragent module puts information about the browser into your model, and it also updates this information when the size of the browser changes etc.
 
-### How to use
-Go to [http://www.cerebraljs.com/documentation/cerebral-module-useragent](http://www.cerebraljs.com/documentation/cerebral-module-useragent)
+- UA parser: browser and device
+- Window: size & orientation
+- Media queries
+- Feature detection
+- Internet connectivity
 
-## User agent parser
+### Install
+`npm install cerebral-module-useragent --save`
 
-I am using the [ua-parser-js](https://www.npmjs.com/package/ua-parser-js) package to parse `navigator.userAgent`. Currently only the browser, device and OS parts are stored in the model, because I didn't see any use for cpu and engine.
+### Setup
+```js
+import {Controller} from 'cerebral'
+import Useragent from 'cerebral-module-useragent'
 
-## Window
+const controller = Controller({
+  modules: {
+    useragent: Useragent({
+      // Use CSS media queries to determine
+      // custom sizes available in your model.
+      // They will be toggle between true/false in your
+      // model
+      media: {
+        small: '(min-width: 600px)',
+        medium: '(min-width: 1024px)',
+        large: '(min-width: 1440px)',
+        portrait: '(orientation: portrait)'
+      },
 
-The window resize event is just slightly throttled using `requestAnimationFrame()`. I might make this configurable to use a stronger throttle timeout if it proofs to be too resource hungry.
+      // store all feature tests in model
+      feature: true,
 
-## Media queries
+      parse: {
+        // parse useragent.browser from ua string
+        browser: true,
+        // parse useragent.device from ua string
+        device: true
+      },
 
-The media queries are tested with `matchMedia()` so you should be able to use any valid CSS media query.
+      // check the docs at: https://github.com/HubSpot/offline#advanced
+      offline: {
+        checkOnLoad: false,
+        interceptRequests: true,
+        reconnect: {
+          initialDelay: 3,
+          delay: 1.5
+        },
+        requests: false
+      },
 
-## Feature detection
-
-I am using the [feature.js](https://www.npmjs.com/package/feature.js) package to detect browser features. Please checkout the website to see a list of all supported feature tests.
-
-You can also only store certain test results in the model or define your own tests.
-
-```javascript
-const useragent = Useragent({
-  feature: {
-    touch: true,
-    serviceWorker: true,
-    getUserMedia: () => !!navigator.getUserMedia
+      // update window size on resize
+      window: true
+    })
   }
 })
 ```
-> All tests from `feature.js` are executed even if you set the feature option to false. This is a limitation of the library.
 
-## Network detection
+### Grabbing details from useragent
+The useragent module will populate your model on the given namespace. All you need to do in your view layer is to grab whatever data you need from it, for example media:
 
-I am using the [offline-js](https://www.npmjs.com/package/offline-js) package to detect internet connectivity. The application is initially assumed to be online.
-
-## Contribute
-
-Fork repo
-
-- `npm install`
-- `cd demo` and `npm install`
-- `npm start` runs the demo which is currently used for testing
-- `npm lint` lint with [JavaScript Standard Style](http://standardjs.com)
-- `npm run build` compiles es6 to es5
-
-No tests yet. Feel free to issue a pull request if you want this.
+```javascript
+export default connect({
+  media: 'useragent.media.*'
+}, ...)
+```
 
 [npm-image]: https://img.shields.io/npm/v/cerebral-module-useragent.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral-module-useragent
