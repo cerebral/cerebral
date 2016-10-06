@@ -14,6 +14,22 @@ try {
   }
 }
 
+export function redirect (url) {
+  function redirect ({router}) {
+    router.redirect(url)
+  }
+
+  return redirect
+}
+
+export function goTo (url) {
+  function goTo ({router}) {
+    router.goTo(url)
+  }
+
+  return goTo
+}
+
 export default function Router (options = {}) {
   options.mapper = urlMapper({query: options.query})
 
@@ -85,7 +101,7 @@ export default function Router (options = {}) {
         return addressbar.value.replace(addressbar.origin + options.baseUrl, '')
       },
       goTo (url) {
-        addressbar.value = url
+        addressbar.value = options.baseUrl + url
         onUrlChange()
       },
       redirect (url) {
