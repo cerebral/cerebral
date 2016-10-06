@@ -15,3 +15,7 @@
 .page__content {
   flex: 1
 }
+
+.heading.heading_lvl_4 {
+  margin-bottom: 0;
+}

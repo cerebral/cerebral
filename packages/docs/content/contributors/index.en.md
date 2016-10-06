@@ -1,3 +1,3 @@
 # Contributors
 
-![christian](../public/img/christian.jpeg)
+![christian](../../public/img/christian.jpeg)
