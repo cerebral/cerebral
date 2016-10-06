@@ -5,7 +5,7 @@ block('side-nav')(
 
     return {
       block: 'menu',
-      mods: { theme: 'islands', size: 'xl', mode: 'radio' },
+      mods: { theme: 'islands', size: 'xl', mode: 'radio-check' },
       val: [this._layout, this._name].join('/'),
       content: data.root[0].meta['side-nav']
         .map(function (layout) {
