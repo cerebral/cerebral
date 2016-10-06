@@ -195,5 +195,21 @@ describe('Operators', () => {
       })
       assert.deepEqual(controller.getState(), {foo: 'bar2'})
     })
+    it('should set value to model from model', () => {
+      const set = require('../src/operators/set').default
+      const controller = new Controller({
+        state: {
+          foo: 'bar',
+          grabValue: 'bar2'
+        },
+        signals: {
+          test: [
+            set('state:foo', 'state:grabValue')
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.equal(controller.getState().foo, 'bar2')
+    })
   })
 })

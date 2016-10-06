@@ -17,14 +17,15 @@ export default function (path, value) {
   ) {
     throw new Error('Cerebral operator SET - The value: "' + path + '" does not target "input" or "state"')
   }
-
   const set = function set ({input, state}) {
     const pathSchemeValue = pathScheme.getValue(populateInputAndStateSchemes(input, state))
-    const valueSchemeValue = (
-      valueScheme && valueScheme.target
-        ? input[valueScheme.getValue(populateInputAndStateSchemes(input, state))]
-        : value
-    )
+    let valueSchemeValue = value
+
+    if (valueScheme && valueScheme.target && valueScheme.target === 'input') {
+      valueSchemeValue = input[valueScheme.getValue(populateInputAndStateSchemes(input, state))]
+    } else if (valueScheme && valueScheme.target && valueScheme.target === 'state') {
+      valueSchemeValue = state.get(valueScheme.getValue(populateInputAndStateSchemes(input, state)))
+    }
 
     state.set(pathSchemeValue, valueSchemeValue)
   }
