@@ -38,7 +38,11 @@ class Model {
     }
 
     for (const key in object) {
-      object[key] = this.freezeObject(object[key])
+      // Properties might not be writable, but then there
+      // is not reason to freeze its value either
+      try {
+        object[key] = this.freezeObject(object[key])
+      } catch (e) {}
     }
 
     Object.freeze(object)

@@ -197,6 +197,20 @@ describe('Model', () => {
         model.set(['foo', 'bar'], 'baz2')
       })
     })
+    it('should ignore non writeable props when freezing', () => {
+      const object = {}
+      Object.defineProperty(object, 'prop', {
+        value: 'value',
+        writeable: false,
+        enumerable: true
+      })
+      const model = new Model({
+        foo: {}
+      }, {preventExternalMutations: true})
+      assert.doesNotThrow(() => {
+        model.set(['foo'], object)
+      })
+    })
   })
   describe('Enforce serializable', () => {
     it('should throw error if value inserted is not serializable', () => {
