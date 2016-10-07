@@ -8,7 +8,7 @@ Cerebral forms is basically a function that creates state needed to handle valid
 A state factory for creating form state. Used when defining initial state or dynamically with an action. You can put forms inside forms.
 
 ```js
-import {form} from 'cerebral-form'
+import {form} from 'cerebral-forms'
 
 export default {
   state: {
@@ -66,7 +66,7 @@ export default {
 ```
 
 ```js
-import {form} from 'cerebral-form'
+import {form} from 'cerebral-forms'
 
 export default function MyAction({state}) {
   state.set('some.new.form', form({
@@ -84,7 +84,7 @@ export default function MyAction({state}) {
 A Field factory for creating a field. Used when adding new fields dynamically to an existing form.
 
 ```js
-import {field} from 'cerebral-form'
+import {field} from 'cerebral-forms'
 
 export default function MyAction({state}) {
   state.set('path.to.form.address2', field({
@@ -97,11 +97,11 @@ export default function MyAction({state}) {
 A **chain** you can use to easily change a field in some form. It will automatically validate the form. Can also be composed into any other chain.
 
 ```js
-import {changeField} from 'cerebral-form'
+import {changeField} from 'cerebral-forms'
 
 export default {
   state: {
-    form: Form({
+    form: form({
       firstName: {
         value: ''
       }
@@ -145,7 +145,7 @@ export default connect({
 An **action** factory you can use to validate any field in any chain.
 
 ```js
-import {validateField} from 'cerebral-form'
+import {validateField} from 'cerebral-forms'
 
 export default [
   doThis,
@@ -186,7 +186,7 @@ export default connect({
 An **action** factory you can use to reset any form from any chain. It will replace current value with the initial or default value defined. And revalidate.
 
 ```js
-import {resetForm} from 'cerebral-form'
+import {resetForm} from 'cerebral-forms'
 
 export default [
   doThis,
@@ -199,7 +199,7 @@ export default [
 A function that takes a form and returns the same structure with only values. Can be used wherever, though typically in actions. Often used to pass a form to server.
 
 ```js
-import {formToJSON} from 'cerebral-form'
+import {formToJSON} from 'cerebral-forms'
 
 export default function MyAction({state, axios}) {
   const formData = formToJSON(state.get('some.form'))
