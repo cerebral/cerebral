@@ -1,13 +1,43 @@
-# cerebral-module-http
-HTTP module for Cerebral
+# cerebral-http
+HTTP Provider for Cerebral2
+Based on prior art from cerebral-module-http
 
 ### How to use
-Go to [http://www.cerebraljs.com/documentation/cerebral-module-http](http://www.cerebraljs.com/documentation/cerebral-module-http)
+```js
+import { Controller } from 'cerebral';
+import { Container } from 'cerebral/react';
+import { HttpProvider } from 'cerebral-http';
 
-### Contribute
-1. Clone repo
-2. `npm link`
-3. Test using the tutorial projects or the CLI
-4. `npm link cerebral-module-http`
+const controller = Controller({
+  state: {
+    libName: 'Cerebral',
+    githubUser: ''
+  },
+  providers: [
+    HttpProvider({
+      baseUrl: 'https://api.github.com'
+    })
+  ],
+  signals: {
+    getUser: [getGithubUser, setData]
+  }
+})
 
-There are no tests here as it is a very simple implementation.
+controller.getSignal("getUser")()
+
+function getGithubUser({state, http}) {
+  return http.get("/users/fopsdev")
+    .then(response => ({
+      result: response.result
+    }))
+    .catch(error => ({
+      error: error.response.data
+    }))
+}
+
+function setData({input, state}) {
+  state.set('githubUser', input.result)
+  console.log(state.get('githubUser'))
+}
+```
+

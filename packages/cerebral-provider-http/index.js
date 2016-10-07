@@ -69,7 +69,7 @@ function mergeWith(optionsA, optionsB) {
   }, optionsA)
 }
 
-export default function HttpProviderFactory(moduleOptions) {
+function HttpProviderFactory(moduleOptions) {
   if (typeof moduleOptions === 'function') {
     var defaultOptions = mergeWith({}, DEFAULT_OPTIONS)
     moduleOptions = moduleOptions(defaultOptions)
@@ -198,4 +198,5 @@ export default function HttpProviderFactory(moduleOptions) {
   }
   return HttpProvider
 }
+module.exports.HttpProvider = HttpProviderFactory
 module.exports.FileUpload = fileUpload
