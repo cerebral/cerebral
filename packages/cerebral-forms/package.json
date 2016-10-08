@@ -1,11 +1,11 @@
 {
   "name": "cerebral-forms",
-  "version": "0.1.0",
   "description": "Signals, actions and state factories to create forms",
-  "main": "index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register 'tests/**/*.js'",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "prebuild": "npm run test",
+    "build": "babel src/ --out-dir=lib/ -s"
   },
   "repository": {
     "type": "git",
@@ -29,11 +29,12 @@
     "babel-preset-es2015": "^6.16.0",
     "babel-preset-react": "^6.16.0",
     "babel-register": "^6.16.3",
-    "cerebral": "^2.0.0-alpha.1",
+    "cerebral": "^2.0.0-alpha.2",
     "mocha": "^3.1.0",
     "standard": "^8.3.0"
   },
   "standard": {
     "parser": "babel-eslint"
-  }
+  },
+  "private": true
 }
