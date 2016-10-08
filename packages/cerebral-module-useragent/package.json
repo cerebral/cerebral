@@ -1,6 +1,6 @@
 {
   "name": "cerebral-module-useragent",
-  "version": "0.0.0-semantically-released",
+  "version": "0.11.0-alpha.cerebral2",
   "description": "Adds useragent specs to your cerebral state model",
   "main": "lib/index.js",
   "scripts": {
@@ -36,10 +36,8 @@
   "devDependencies": {
     "babel-cli": "^6.7.5",
     "babel-loader": "^6.2.4",
-    "babel-plugin-react-transform": "^2.0.2",
     "babel-preset-es2015": "^6.6.0",
-    "babel-preset-react": "^6.3.13",
-    "cerebral": ">= 0.33.21",
+    "cerebral": "^2.0.0-alpha.2",
     "conventional-changelog": "0.0.17",
     "cz-customizable": "^3.1.0",
     "ghooks": "^1.2.1",
@@ -47,11 +45,10 @@
     "semantic-release": "^4.3.5",
     "snazzy": "^3.0.1",
     "standard": "^6.0.8",
-    "validate-commit-msg": "^2.6.1",
-    "webpack": "^1.13.0"
+    "validate-commit-msg": "^2.6.1"
   },
   "peerDependencies": {
-    "cerebral": "^0.33.31 || ^0.34.0-0 || ^0.35.0-0 || ^1.0.0"
+    "cerebral": "^2.0.0-alpha.2"
   },
   "config": {
     "commitizen": {
