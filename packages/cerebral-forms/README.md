@@ -21,6 +21,9 @@ export default {
         validationRules: ['minLength:3'],
         // Error messages mapped to same index as validation rule
         errorMessages: ['Must be at least 3 characters long'],
+        // When setting isRequired to true the field will be invalid if there
+        // is no value. To determine if there is not value, check "isValueRules" below
+        isRequired: false,
         // Will only be valid if this other field is also valid.
         // Point to a field in the model
         dependsOn: 'app.myForm.repeatPassword'
