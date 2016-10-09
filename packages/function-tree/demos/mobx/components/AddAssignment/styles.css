@@ -1,0 +1,71 @@
+.wrapper {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.assignmentTitle {
+  padding: 5px 10px;
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+  width: 300px;
+}
+
+.assignmentNewAssignee {
+  padding: 5px 10px;
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+  width: 130px;
+}
+
+.assigneeSearchWrapper {
+  position: relative;
+  display: flex;
+}
+
+.assigneeSearchResult {
+  position: absolute;
+  bottom: 100%;
+  padding: 5px 10px;
+  background-color: #333;
+  color: #EAEAEA;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+}
+
+.assignmentAssignee {
+  padding: 5px 10px;
+  background-color: #333;
+  border-radius: 3px;
+  color: #EAEAEA;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+}
+
+.add {
+  padding: 5px 10px;
+  background-color: #7ea732;
+  border-radius: 3px;
+  color: #FFF;
+  border: 1px solid #EFEFEF;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+  cursor: pointer;
+}
+
+.add[disabled] {
+  opacity: 0.5;
+}
