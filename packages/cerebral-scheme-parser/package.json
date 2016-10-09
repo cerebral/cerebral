@@ -1,0 +1,25 @@
+{
+  "name": "cerebral-scheme-parser",
+  "version": "0.1.3",
+  "description": "Scheme parser for Cerebral",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodeunit tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral-scheme-parser.git"
+  },
+  "keywords": [
+    "cerebral"
+  ],
+  "author": "Christian Alfoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral-scheme-parser/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral-scheme-parser#readme",
+  "devDependencies": {
+    "nodeunit": "^0.9.1"
+  }
+}
