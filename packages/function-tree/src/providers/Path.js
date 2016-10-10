@@ -1,4 +1,4 @@
-const Path = require('../src/Path')
+const Path = require('../Path')
 
 const createNext = function createNext(next, path) {
   return function (payload) {

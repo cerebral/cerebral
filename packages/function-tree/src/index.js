@@ -3,9 +3,9 @@
 const EventEmitter = require('events')
 const executeTree = require('./executeTree')
 const createStaticTree = require('./staticTree')
-const ExecutionProvider = require('../providers/Execution')
-const InputProvider = require('../providers/Input')
-const PathProvider = require('../providers/Path')
+const ExecutionProvider = require('./providers/Execution')
+const InputProvider = require('./providers/Input')
+const PathProvider = require('./providers/Path')
 const assign = require('object-assign')
 const Path = require('./Path')
 const Abort = require('./Abort')
@@ -121,7 +121,7 @@ FunctionTreeExecution.prototype.createContext = function(action, payload) {
         assign(currentContext, contextProvider)
     )
 
-    if (newContext !== currentContext) {
+    if (newContext !== currentContext) {
       throw new Error('function-tree: You are not returning the context from a provider')
     }
 

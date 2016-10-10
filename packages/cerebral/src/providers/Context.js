@@ -1,1 +1,1 @@
-export {default as ContextProvider} from 'function-tree/providers/Context'
+export {default as ContextProvider} from 'function-tree/lib/providers/Context'

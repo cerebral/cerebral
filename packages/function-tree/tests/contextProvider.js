@@ -1,6 +1,6 @@
 'use strict'
 const FunctionTree = require('../src')
-const ContextProvider = require('../providers/Context')
+const ContextProvider = require('../src/providers/Context')
 
 module.exports['should add whatever is passed into the context'] = (test) => {
   const execute = FunctionTree([

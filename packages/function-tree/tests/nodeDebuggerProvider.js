@@ -1,7 +1,7 @@
 'use strict'
 const FunctionTree = require('../src')
-const ContextProvider = require('../providers/Context')
-const NodeDebuggerProvider = require('../providers/NodeDebugger')
+const ContextProvider = require('../src/providers/Context')
+const NodeDebuggerProvider = require('../src/providers/NodeDebugger')
 
 module.exports['should expose debugger on context'] = (test) => {
   const someLib = {

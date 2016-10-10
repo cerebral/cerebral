@@ -1,14 +1,14 @@
 {
   "name": "function-tree",
-  "version": "0.4.7",
+  "version": "0.5.0-alpha.1",
   "description": "When a function is not enough",
   "main": "src/index.js",
   "scripts": {
-    "clean": "rimraf lib && rimraf tests/*.js*",
     "demo:redux": "node demos/server --demo redux",
     "demo:mobx": "node demos/server --demo mobx",
     "demo:node": "node demos/node/main.js",
     "test": "nodeunit tests",
+    "build": "../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
     "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test"
   },
   "devDependencies": {

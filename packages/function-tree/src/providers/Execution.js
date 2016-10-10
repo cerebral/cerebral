@@ -1,4 +1,4 @@
-const executeTree = require('../src/executeTree')
+const executeTree = require('../executeTree')
 
 module.exports = function ExecutionProvider(execution, Abort) {
   return function(context) {
