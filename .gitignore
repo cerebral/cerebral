@@ -1,8 +1,8 @@
 node_modules
 npm-debug.log
+lerna-debug.log
 coverage
 .nyc_output
 .DS_Store
 dist
-lib/*
-!/lib/package.json
+lib

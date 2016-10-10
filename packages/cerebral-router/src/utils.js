@@ -1,4 +1,4 @@
-import {isObject} from '../utils'
+import {isObject} from 'cerebral/lib/utils'
 
 export function flattenConfig (config, prev = '') {
   return Object.keys(config).reduce((flattened, key) => {

@@ -1,0 +1,37 @@
+{
+  "name": "cerebral-router",
+  "version": "1.0.0-alpha.1",
+  "description": "An opinionated URL change handler for Cerebral",
+  "main": "index.js",
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "contributors": [
+    "Aleksey Guryanov <gurianov@gmail.com>"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cerebral/cerebral.git"
+  },
+  "dependencies": {
+    "addressbar": "^1.0.2",
+    "url-mapper": "^1.1.1"
+  },
+  "peerDependencies": {
+    "cerebral": "^2.0.0-alpha.2"
+  },
+  "devDependencies": {
+    "cerebral": "^2.0.0-alpha.2"
+  },
+  "scripts": {
+    "test": "../../node_modules/.bin/mocha --compilers js:../../node_modules/babel-register 'tests/**/*.js'",
+    "build": "../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
+    "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test"
+  },
+  "nyc": {
+    "exclude": [
+      "node_modules",
+      "lib",
+      "tests"
+    ]
+  }
+}

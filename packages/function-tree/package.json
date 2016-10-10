@@ -8,7 +8,8 @@
     "demo:redux": "node demos/server --demo redux",
     "demo:mobx": "node demos/server --demo mobx",
     "demo:node": "node demos/node/main.js",
-    "test": "nodeunit tests"
+    "test": "nodeunit tests",
+    "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test"
   },
   "devDependencies": {
     "axios": "^0.14.0",
@@ -57,5 +58,12 @@
   "bugs": {
     "url": "https://github.com/cerebral/function-tree/issues"
   },
-  "homepage": "https://github.com/cerebral/function-tree#readme"
+  "homepage": "https://github.com/cerebral/function-tree#readme",
+  "nyc": {
+    "exclude": [
+      "node_modules",
+      "lib",
+      "tests"
+    ]
+  }
 }

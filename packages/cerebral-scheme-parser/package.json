@@ -4,7 +4,8 @@
   "description": "Scheme parser for Cerebral",
   "main": "index.js",
   "scripts": {
-    "test": "nodeunit tests"
+    "test": "nodeunit tests",
+    "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test"
   },
   "repository": {
     "type": "git",
@@ -21,5 +22,12 @@
   "homepage": "https://github.com/cerebral/cerebral-scheme-parser#readme",
   "devDependencies": {
     "nodeunit": "^0.9.1"
+  },
+  "nyc": {
+    "exclude": [
+      "node_modules",
+      "lib",
+      "tests"
+    ]
   }
 }
