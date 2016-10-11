@@ -1,9 +1,14 @@
 import {isObject, isSerializable, throwError} from './utils'
 
 class Model {
-  constructor (initialState = {}, devtools = {}) {
-    this.preventExternalMutations = devtools.preventExternalMutations
-    this.enforceSerializable = Boolean(devtools.enforceSerializable)
+  constructor (initialState = {}, devtools = null) {
+    if (devtools) {
+      this.preventExternalMutations = devtools.preventExternalMutations
+      this.enforceSerializable = Boolean(devtools.enforceSerializable)
+    } else {
+      this.preventExternalMutations = false
+      this.enforceSerializable = false
+    }
     this.state = (
       this.preventExternalMutations
         ? this.freezeObject(initialState)

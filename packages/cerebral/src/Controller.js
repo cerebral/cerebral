@@ -16,7 +16,7 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   based on top level providers and providers defined in modules
 */
 class Controller extends EventEmitter {
-  constructor ({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools}) {
+  constructor ({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools = null}) {
     super()
     this.flush = this.flush.bind(this)
     this.devtools = devtools
