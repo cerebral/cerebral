@@ -80,7 +80,7 @@ class DependencyStore {
       }
 
       if (changesMap[key] !== true) {
-        currentEntities = currentEntities.concat(this.getUniqueEntities(changesMap[key], key))
+        currentEntities = currentEntities.concat(this.getUniqueEntities(changesMap[key], pathKey))
       }
     }
 
