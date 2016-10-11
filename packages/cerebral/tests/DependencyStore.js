@@ -66,6 +66,20 @@ describe('DependencyStore', () => {
       foo: {bar: {mip: true}}
     }), [component])
   })
+  it('should return components matching deep deps', () => {
+    const depsStore = new DependencyStore()
+    const component = {}
+    depsStore.addEntity(component, {'foo': 'foo.bar.baz'})
+    assert.deepEqual(depsStore.getUniqueEntities({
+      foo: true
+    }), [])
+    assert.deepEqual(depsStore.getUniqueEntities({
+      foo: {bar: true}
+    }), [])
+    assert.deepEqual(depsStore.getUniqueEntities({
+      foo: {bar: {baz: true}}
+    }), [component])
+  })
   it('should return unique components', () => {
     const depsStore = new DependencyStore()
     const component = {}
