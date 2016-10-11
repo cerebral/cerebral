@@ -1,15 +1,16 @@
 {
   "name": "function-tree",
-  "version": "0.5.0-alpha.1",
+  "version": "0.5.0-alpha.2",
   "description": "When a function is not enough",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
     "demo:redux": "node demos/server --demo redux",
     "demo:mobx": "node demos/server --demo mobx",
     "demo:node": "node demos/node/main.js",
     "test": "nodeunit tests",
     "build": "../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
-    "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test"
+    "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test",
+    "prepublish": "npm run build"
   },
   "devDependencies": {
     "axios": "^0.14.0",
