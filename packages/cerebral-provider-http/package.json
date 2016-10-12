@@ -1,8 +1,8 @@
 {
   "name": "cerebral-provider-http",
-  "version": "0.1.0",
-  "description": "Http provider for Cerebral",
-  "main": "src/index.js",
+  "version": "0.5.0",
+  "description": "HTTP provider for Cerebral 2",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
