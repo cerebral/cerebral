@@ -58,6 +58,8 @@ class Controller extends EventEmitter {
 
     if (this.router) this.router.init()
 
+    this.signalsClass = new Signals(this)
+
     this.emit('initialized')
   }
   /*
@@ -130,6 +132,41 @@ class Controller extends EventEmitter {
     }
 
     return this.runSignal.bind(this, path, signal)
+  } 
+
+  getSignals() {
+    return this.signalsClass.getSignals()
+  }
+}
+
+class Signals {
+  constructor(controller) {
+    this.controller = controller;
+  }
+  getSignals() {
+    if (!this.signals)
+      this.signals = this.getModuleSignals('', this.controller.module)
+    return this.signals
+  }   
+  extractSignal(path, signals) {
+    return Object.keys(signals).reduce((sigs, key) => {
+      sigs[key] = this.controller.runSignal.bind(this.controller, `${path}.${key}`, signals[key])
+      return sigs
+    }, {});
+  }
+  getModuleSignals(path, module) {
+    const data = {}
+    if (module.signals) {
+      Object.assign(data, this.extractSignal(path, module.signals))
+    }
+    for (const subModule in module.modules) {
+      const newPath = path === '' ? subModule : `${path}.${subModule}`
+      const signals = this.getModuleSignals(newPath, module.modules[subModule])
+      if (signals) {
+        data[subModule] = Object.assign(data[subModule] || {}, signals)
+      }
+    }
+    return data
   }
 }
 

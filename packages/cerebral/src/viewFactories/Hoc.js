@@ -88,6 +88,8 @@ export default (View) => {
 
             return currentProps
           }, propsToPass)
+        } else {
+          propsToPass.signals = controller.getSignals()
         }
 
         return propsToPass
