@@ -5,7 +5,7 @@ import Demo from './components/Demo'
 import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import Router from 'cerebral/router'
+import Router from 'cerebral-router'
 import {set} from 'cerebral/operators'
 
 const AdminModule = {
@@ -38,4 +38,4 @@ render((
   <Container controller={controller} >
     <Demo />
   </Container>
-), document.querySelector('#app'))
+), document.querySelector('#root'))

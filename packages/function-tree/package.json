@@ -54,7 +54,10 @@
     "complex",
     "state"
   ],
-  "author": "Christian Alfoni",
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "contributors": [
+    "Aleksey Guryanov <gurianov@gmail.com>"
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cerebral/function-tree/issues"

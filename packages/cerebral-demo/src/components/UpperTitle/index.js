@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import upperCaseTitleComputed from '../../upperCaseTitle'
+import upperCaseTitleComputed from '../../computeds/upperCaseTitle'
 
 export default connect({
   title: upperCaseTitleComputed()
