@@ -9,7 +9,7 @@ import { HttpProvider } from 'cerebral-http'
 
 const controller = Controller({
   state: {
-    githubUser: ''
+    githubUser: {}
   },
   providers: [
     HttpProvider({
