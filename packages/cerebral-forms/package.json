@@ -5,7 +5,8 @@
     "test": "mocha --compilers js:babel-register 'tests/**/*.js'",
     "test:watch": "npm run test -- --watch",
     "prebuild": "npm run test",
-    "build": "babel src/ --out-dir=lib/ -s"
+    "build": "babel src/ --out-dir=lib/ -s",
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test"
   },
   "repository": {
     "type": "git",
@@ -31,6 +32,7 @@
     "babel-register": "^6.16.3",
     "cerebral": "^2.0.0-alpha.3",
     "mocha": "^3.1.0",
+    "nyc": "^8.3.1",
     "standard": "^8.3.0"
   },
   "standard": {
