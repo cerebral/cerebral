@@ -4,7 +4,7 @@ title: Providers
 
 ## Providers
 
-Providers are functions that runs before any action in any signal. Their purpose is to define and sometimes manipulate the context passed into every action. The providers are run for before every action, meaning that each action has a unique context object.
+Providers are functions that runs before any action in any signal. Their purpose is to define and sometimes manipulate the context passed into every action. The providers run before every action, meaning that each action has a unique context object.
 
 ### Context provider
 The context provider allows you to attach any third party library to the context of all actions. Typically:
@@ -78,7 +78,7 @@ function someAction({toggleFoo}) {
 }
 ```
 
-You should be think twice considering a provider though. Always favor signal composition and actions as those will always end up more readable and better visualized in the debugger. Providers are typically used for general enhancements, not application specific.
+You should think twice when considering a provider though. Always favor signal composition and actions as those will always end up more readable and better visualized in the debugger. Providers are typically used for general enhancements, not application specific.
 
 ### Already on the context
 There are some things already available on the context.

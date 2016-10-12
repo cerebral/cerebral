@@ -18,7 +18,7 @@ Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) pro
 
 The first action in the chain above is defined inline. When the signal is called the function will be run and a **context** will be passed to it. This context holds everything the action wants to do, it being state updates, talking to the server or whatever else. What is available on the context is defined when you configure your Cerebral application.
 
-This means defining a signal in Cerebral does not use any APIs. You only define plain functions, arrays and later you will see objects. That means everything related state updates and other side effects will be provided when the signal runs. This decoupling makes it very easy to test actions and also the whole signal.
+This means defining a signal in Cerebral does not use any APIs. You only define plain functions, arrays and later you will see objects. That means everything related to state updates and other side effects will be provided when the signal runs. This decoupling makes it very easy to test actions and also the whole signal.
 
 ### Factories
 Factories is a general concept that is heavily used in Cerebral. Let us say that you wanted a generic **set**.
@@ -33,13 +33,15 @@ function setFactory(path, value) {
 }
 
 export default [
-  set('foo', 'bar')
+  setFactory('foo', 'bar')
 ]
 ```
 
 With this factory in place you could change the path and the value to set without defining new functions. This is such a useful concept that Cerebral has a concept of **operators** built in:
 
 ```js
+import { set } from 'cerebral/operators'
+
 export default [
   set('state:foo', 'bar')
 ]

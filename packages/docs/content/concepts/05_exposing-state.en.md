@@ -7,7 +7,7 @@ title: Exposing state
 In Cerebral you always connect state where you need it. This give some benefits:
 
 1. Cerebral will optimize the component
-2. The debugger will know about this component and understand its state dependencies
+2. The debugger will know about this component and understand it's state dependencies
 3. Increased readability as every component explicitly tells you what state it needs and where it gets it from
 4. You can safely move the component wherever you want without breaking some chain of props passing
 
