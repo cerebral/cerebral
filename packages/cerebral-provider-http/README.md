@@ -1,6 +1,6 @@
 # cerebral-http
 HTTP Provider for Cerebral2
-Based on prior art from cerebral-module-http
+Based on prior art from [cerebral-module-http](https://github.com/cerebral/cerebral-module-http)
 
 ### How to use
 ```js
