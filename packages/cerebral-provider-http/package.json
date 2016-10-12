@@ -1,23 +1,19 @@
 {
-  "name": "cerebral-module-http",
-  "version": "0.5.0",
-  "description": "HTTP module for Cerebral",
-  "main": "index.js",
+  "name": "cerebral-provider-http",
+  "version": "0.1.0",
+  "description": "Http provider for Cerebral",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cerebral/cerebral-module-http.git"
+    "url": "git+https://github.com/cerebral/cerebral-provider-http.git"
   },
-  "keywords": [
-    "http",
-    "cerebral"
-  ],
   "author": "Christian Alfoni",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cerebral/cerebral-module-http/issues"
+    "url": "https://github.com/cerebral/cerebral-provider-http/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral-module-http#readme"
+  "homepage": "https://github.com/cerebral/cerebral-provider-http#readme"
 }
