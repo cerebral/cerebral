@@ -5,12 +5,10 @@ Based on prior art from cerebral-module-http
 ### How to use
 ```js
 import { Controller } from 'cerebral';
-import { Container } from 'cerebral/react';
 import { HttpProvider } from 'cerebral-http';
 
 const controller = Controller({
   state: {
-    libName: 'Cerebral',
     githubUser: ''
   },
   providers: [
