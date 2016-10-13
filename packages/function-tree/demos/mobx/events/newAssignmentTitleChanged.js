@@ -1,5 +1,5 @@
-import copyInputToView from '../factories/copyInputToView';
+import copyInputToView from '../factories/copyInputToView'
 
 export default [
   copyInputToView('value', 'newAssignmentTitle')
-];
+]

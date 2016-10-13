@@ -11,7 +11,7 @@ module.exports['should add whatever is passed into the context'] = (test) => {
 
   test.expect(1)
   execute([
-    function func(context) {
+    function func (context) {
       test.equal(context.foo, 'bar')
     }
   ])

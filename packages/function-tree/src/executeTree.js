@@ -35,7 +35,7 @@ module.exports = function executeTree (tree, resolveFunctionResult, initialPaylo
           payloads.push(payload)
           if (payloads.length === itemLength) runNextItem(assign.apply(null, [{}].concat(payloads)))
         }))
-        return payloads;
+        return payloads
       }, [])
     } else {
       resolveFunctionResult(currentItem, payload, processFunctionOutput(currentItem, runNextItem))

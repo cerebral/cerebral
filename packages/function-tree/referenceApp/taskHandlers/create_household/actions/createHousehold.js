@@ -1,5 +1,5 @@
-function createHousehold(context) {
-  const data = context.input.data;
+function createHousehold (context) {
+  const data = context.input.data
 
   return ({
     household: {
@@ -15,7 +15,7 @@ function createHousehold(context) {
         [data.profileKey]: true
       }
     }
-  });
+  })
 }
 
-module.exports = createHousehold;
+module.exports = createHousehold

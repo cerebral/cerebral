@@ -1,26 +1,25 @@
 var chalk = require('chalk')
 
-function safeStringify(obj) {
+function safeStringify (obj) {
   var cache = []
-  var returnValue = JSON.stringify(obj || {}, function(key, value) {
+  var returnValue = JSON.stringify(obj || {}, function (key, value) {
     if (typeof value === 'object' && value !== null) {
       if (cache.indexOf(value) === -1) {
-        cache.push(value);
+        cache.push(value)
 
-        return value;
+        return value
       }
       return '[CIRCULAR]'
     }
-    return value;
-  });
-  cache = null;
+    return value
+  })
+  cache = null
 
   return returnValue
 }
 
 module.exports = function (options) {
   options = options || {}
-  var colors = options.colors || {}
 
   if (
       typeof window !== 'undefined' &&
@@ -32,7 +31,7 @@ module.exports = function (options) {
     throw new Error('function-tree: You are running the Node debugger, but the Chrome debugger is supported')
   }
 
-  function padded(text, size) {
+  function padded (text, size) {
     size = size || 0
     var padding = new Array(size + 1).join(' ')
     return padding + text + padding
@@ -40,14 +39,13 @@ module.exports = function (options) {
 
   var registeredFunctionTrees = {}
 
-  function send(debuggingData, context, functionDetails, payload) {
+  function send (debuggingData, context, functionDetails, payload) {
     var id = context.execution.id + '_' + context.execution.executionId
     var prevFunction = (
       registeredFunctionTrees[id] &&
-      registeredFunctionTrees[id].functions[functionDetails.functionIndex] ?
-        registeredFunctionTrees[id].functions[functionDetails.functionIndex]
-      :
-        null
+      registeredFunctionTrees[id].functions[functionDetails.functionIndex]
+        ? registeredFunctionTrees[id].functions[functionDetails.functionIndex]
+        : null
     )
 
     var isExistingFunction = Boolean(prevFunction && prevFunction.functionIndex === functionDetails.functionIndex)
@@ -78,7 +76,6 @@ module.exports = function (options) {
     }
 
     if (isExistingFunction) {
-
       var data = prevFunction.data[prevFunction.data.length - 1]
       var args = data ? data.args || [] : []
 
@@ -91,14 +88,10 @@ module.exports = function (options) {
           })
         )
       )
-
-
     } else {
-
       if (registeredFunctionTrees[id].functions.length === 1) {
         console.log(chalk.bgWhite.black.bold(padded(context.execution.name || context.execution.id)))
       }
-
 
       if (prevFunction && prevFunction.outputs) {
         var chosenOutput = Object.keys(prevFunction.outputs).filter(function (outputKey) {
@@ -128,21 +121,20 @@ module.exports = function (options) {
         chalk.dim(payloadString.length > 300 ? payloadString.substr(0, 297) + '...' : payloadString),
         registeredFunctionTrees[id].logLevel
       ))
-
     }
   }
 
-  return function(context, functionDetails, payload) {
+  return function (context, functionDetails, payload) {
     context.debugger = {
       send: function (data) {
         send(data, context, functionDetails, payload)
       },
       getColor: function (key) {
-        return options.colors[key] || 'white';
+        return options.colors[key] || 'white'
       }
     }
 
     send(null, context, functionDetails, payload)
 
     return context
-  }}
+  } }

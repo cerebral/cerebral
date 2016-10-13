@@ -1,5 +1,5 @@
-function httpGetFactory(url) {
-  function httpGet({axios, path}) {
+function httpGetFactory (url) {
+  function httpGet ({axios, path}) {
     return axios.get(url)
       .then((response) => path.success({
         status: response.status,
@@ -8,10 +8,10 @@ function httpGetFactory(url) {
       .catch((error) => path.error({
         status: error.response.status,
         data: error.response.data
-      }));
+      }))
   }
 
-  return httpGet;
+  return httpGet
 }
 
-export default httpGetFactory;
+export default httpGetFactory

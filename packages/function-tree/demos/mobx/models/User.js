@@ -1,14 +1,14 @@
 class User {
-  constructor(data) {
-    this.id = data.id;
-    this.name = data.name;
+  constructor (data) {
+    this.id = data.id
+    this.name = data.name
   }
-  toJS() {
+  toJS () {
     return {
       id: this.id,
       name: this.name
-    };
+    }
   }
 }
 
-export default User;
+export default User

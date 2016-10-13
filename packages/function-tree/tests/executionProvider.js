@@ -7,7 +7,7 @@ module.exports['should expose the instance on the context'] = (test) => {
 
   test.expect(4)
   execute('something', [
-    function action(context) {
+    function action (context) {
       test.equal(context.execution.name, 'something')
       test.ok(context.execution.id)
       test.ok(context.execution.datetime)
@@ -21,13 +21,13 @@ module.exports['should be able to retry execution'] = (test) => {
   const execute = FunctionTree()
   test.expect(1)
   let count = 0
-  function funcA() {
+  function funcA () {
     return new Promise(resolve => {
       resolve()
     })
   }
 
-  function funcB(context) {
+  function funcB (context) {
     if (context.input.retryCount < 3) {
       count++
       return context.execution.retry({
@@ -51,11 +51,11 @@ module.exports['should be able to abort execution'] = (test) => {
   const execute = FunctionTree()
   test.expect(1)
   let count = 0
-  function funcA(context) {
+  function funcA (context) {
     return context.execution.abort()
   }
 
-  function funcB() {
+  function funcB () {
     count++
   }
 

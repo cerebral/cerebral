@@ -7,7 +7,7 @@ module.exports['should add path function when paths can be taken'] = (test) => {
 
   test.expect(2)
   execute([
-    function action(context) {
+    function action (context) {
       test.ok(context.path.success)
       test.ok(context.path.error)
       return context.path.success()
@@ -24,7 +24,7 @@ module.exports['should NOT add path function when paths can NOT be taken'] = (te
 
   test.expect(1)
   execute([
-    function action(context) {
+    function action (context) {
       test.ok(!context.path)
     }
   ])
@@ -36,7 +36,7 @@ module.exports['should have possible outputs as methods'] = (test) => {
 
   test.expect(2)
   execute([
-    function action(context) {
+    function action (context) {
       test.ok(context.path.foo)
       test.ok(context.path.bar)
       return context.path.foo()
@@ -53,11 +53,11 @@ module.exports['should go down path based on method used'] = (test) => {
 
   test.expect(1)
   execute([
-    function actionA(context) {
+    function actionA (context) {
       return context.path.foo()
     }, {
       foo: [
-        function actionB() {
+        function actionB () {
           test.ok(true)
         }
       ],
@@ -72,11 +72,11 @@ module.exports['should pass payload down paths'] = (test) => {
 
   test.expect(1)
   execute([
-    function actionA(context) {
+    function actionA (context) {
       return context.path.foo({foo: 'bar'})
     }, {
       foo: [
-        function actionB(context) {
+        function actionB (context) {
           test.deepEqual(context.input, {foo: 'bar'})
         }
       ],
@@ -87,7 +87,7 @@ module.exports['should pass payload down paths'] = (test) => {
 }
 
 module.exports['should pass payload async'] = (test) => {
-  function actionA(context) {
+  function actionA (context) {
     return new Promise((resolve) => {
       setTimeout(function () {
         resolve(context.path.foo({foo: 'bar'}))
@@ -95,7 +95,7 @@ module.exports['should pass payload async'] = (test) => {
     })
   }
 
-  function actionB(context) {
+  function actionB (context) {
     test.deepEqual(context.input, {foo: 'bar'})
   }
 

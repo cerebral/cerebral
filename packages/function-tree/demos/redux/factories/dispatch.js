@@ -1,13 +1,13 @@
-function dispatchFactory(type) {
-  function func({input, dispatch}) {
+function dispatchFactory (type) {
+  function func ({input, dispatch}) {
     dispatch({
       type,
       payload: input
-    });
+    })
   }
-  func.displayName = `dispatch - ${type}`;
+  func.displayName = `dispatch - ${type}`
 
-  return func;
+  return func
 }
 
-module.exports = dispatchFactory;
+module.exports = dispatchFactory

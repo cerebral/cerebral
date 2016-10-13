@@ -1,11 +1,11 @@
-const activityKeysToObject = require('./activityKeysToObject');
+const activityKeysToObject = require('./activityKeysToObject')
 
-function removeActivity(loggedActivities, activityKeyToRemove) {
+function removeActivity (loggedActivities, activityKeyToRemove) {
   return Object.keys(loggedActivities)
       .filter((loggedActivityKey) => {
-        return loggedActivityKey !== activityKeyToRemove;
+        return loggedActivityKey !== activityKeyToRemove
       })
-      .reduce(activityKeysToObject, {});
+      .reduce(activityKeysToObject, {})
 }
 
-module.exports = removeActivity;
+module.exports = removeActivity

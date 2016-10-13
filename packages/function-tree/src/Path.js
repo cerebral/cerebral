@@ -1,4 +1,4 @@
-function Path(path, payload) {
+function Path (path, payload) {
   this.path = path
   this.payload = payload
 }

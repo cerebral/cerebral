@@ -1,7 +1,7 @@
-import dispatch from '../factories/dispatch';
-import debounce from 'function-tree/factories/debounce';
-import hasInputValue from '../factories/hasInputValue';
-import searchAssignee from '../functions/searchAssignee';
+import dispatch from '../factories/dispatch'
+import debounce from 'function-tree/factories/debounce'
+import hasInputValue from '../factories/hasInputValue'
+import searchAssignee from '../functions/searchAssignee'
 
 import {
   NEW_ASSIGNMENT_ASSIGNEE_CHANGED,
@@ -9,7 +9,7 @@ import {
   ASSIGNEE_SEARCHED_SUCCESS,
   ASSIGNEE_SEARCHED_ERROR,
   ASSIGNEE_SEARCH_RESET
-} from '../constants';
+} from '../constants'
 
 export default [
   dispatch(NEW_ASSIGNMENT_ASSIGNEE_CHANGED),
@@ -31,4 +31,4 @@ export default [
       ]
     }
   ])
-];
+]

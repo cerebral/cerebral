@@ -1,8 +1,8 @@
-import React from 'react';
-import styles from './styles.css';
-import {connect} from 'react-redux';
+import React from 'react'
+import styles from './styles.css'
+import {connect} from 'react-redux'
 
-function Assignments(props) {
+function Assignments (props) {
   if (props.isLoading) {
     return (
       <div className={styles.wrapper}>
@@ -17,7 +17,7 @@ function Assignments(props) {
           <div className={styles.assignmentTitle}>{assignment.title}</div>
           <div className={styles.assignmentAssignees}>
             {assignment.assignedTo.map((userId, index) => {
-              const user = props.users[userId];
+              const user = props.users[userId]
               return (
                 <div
                   key={index}
@@ -31,11 +31,11 @@ function Assignments(props) {
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 export default connect(state => ({
   isLoading: state.isLoadingAssignments,
   assignments: state.assignments,
   users: state.users
-}))(Assignments);
+}))(Assignments)

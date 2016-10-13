@@ -1,7 +1,7 @@
-function pushPost(context) {
+function pushPost (context) {
   return context.firebase.push('posts', context.input.post)
     .then(context.path.success)
-    .catch(context.path.error);
+    .catch(context.path.error)
 }
 
-module.exports = pushPost;
+module.exports = pushPost

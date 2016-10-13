@@ -1,10 +1,10 @@
-const resolveTask = require('../common/actions/resolveTask');
-const rejectTask = require('../common/actions/rejectTask');
-const hasInput = require('../common/factories/hasInput');
-const getProfile = require('../common/actions/getProfile');
-const getNotification = require('./actions/getNotification');
-const updateHouseholdMembersAndCompanies = require('./actions/updateHouseholdMembersAndCompanies');
-const updateProfileHousehold = require('./actions/updateProfileHousehold');
+const resolveTask = require('../common/actions/resolveTask')
+const rejectTask = require('../common/actions/rejectTask')
+const hasInput = require('../common/factories/hasInput')
+const getProfile = require('../common/actions/getProfile')
+const getNotification = require('./actions/getNotification')
+const updateHouseholdMembersAndCompanies = require('./actions/updateHouseholdMembersAndCompanies')
+const updateProfileHousehold = require('./actions/updateProfileHousehold')
 
 module.exports = [
   getProfile, {
@@ -27,4 +27,4 @@ module.exports = [
       }
     ]
   }
-];
+]

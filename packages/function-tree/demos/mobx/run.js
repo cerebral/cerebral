@@ -1,8 +1,8 @@
-import FunctionTree from 'function-tree/src';
-import DebuggerProvider from 'function-tree/providers/Debugger';
-import ContextProvider from 'function-tree/providers/Context';
-import axios from 'axios';
-import store from './store';
+import FunctionTree from 'function-tree/src'
+import DebuggerProvider from 'function-tree/providers/Debugger'
+import ContextProvider from 'function-tree/providers/Context'
+import axios from 'axios'
+import store from './store'
 
 export default FunctionTree([
   DebuggerProvider({
@@ -15,4 +15,4 @@ export default FunctionTree([
     data: store.data,
     view: store.view
   })
-]);
+])

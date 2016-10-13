@@ -1,5 +1,5 @@
-function rejectTask(context) {
-  context.input.task.reject();
+function rejectTask (context) {
+  context.input.task.reject()
 }
 
-module.exports = rejectTask;
+module.exports = rejectTask

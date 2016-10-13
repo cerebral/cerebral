@@ -7,7 +7,7 @@ module.exports['should have "input" on context'] = (test) => {
 
   test.expect(1)
   execute([
-    function action(context) {
+    function action (context) {
       test.ok(context.input)
     }
   ])
@@ -19,7 +19,7 @@ module.exports['should have initial payload on input'] = (test) => {
 
   test.expect(1)
   execute([
-    function action(context) {
+    function action (context) {
       test.deepEqual(context.input, {
         foo: 'bar'
       })

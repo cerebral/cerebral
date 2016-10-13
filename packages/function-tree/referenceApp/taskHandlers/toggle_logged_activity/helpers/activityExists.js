@@ -1,5 +1,5 @@
-function activityExists(loggedActivities, activityKey) {
-  return Boolean(loggedActivities && activityKey in loggedActivities);
+function activityExists (loggedActivities, activityKey) {
+  return Boolean(loggedActivities && activityKey in loggedActivities)
 }
 
-module.exports = activityExists;
+module.exports = activityExists

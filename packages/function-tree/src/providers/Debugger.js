@@ -1,24 +1,24 @@
-function safeStringify(obj) {
+/* global CustomEvent */
+function safeStringify (obj) {
   var cache = []
-  var returnValue = JSON.stringify(obj || {}, function(key, value) {
+  var returnValue = JSON.stringify(obj || {}, function (key, value) {
     if (typeof value === 'object' && value !== null) {
       if (cache.indexOf(value) === -1) {
-        cache.push(value);
+        cache.push(value)
 
-        return value;
+        return value
       }
       return '[CIRCULAR]'
     }
-    return value;
-  });
-  cache = null;
+    return value
+  })
+  cache = null
 
   return returnValue
 }
 
 module.exports = function (options) {
   options = options || {}
-  var colors = options.colors || {}
 
   if (typeof window === 'undefined' ||
       (
@@ -26,7 +26,7 @@ module.exports = function (options) {
         !process && !process.versions && !process.versions.electron
       )
     ) {
-    throw new Error('The debugger does not work in this environment, load up the Node debugger instead');
+    throw new Error('The debugger does not work in this environment, load up the Node debugger instead')
   }
 
   var isConnected = false
@@ -34,7 +34,7 @@ module.exports = function (options) {
   var VERSION = 'v1'
   var backlog = []
 
-  function send(debuggingData, context, functionDetails, payload) {
+  function send (debuggingData, context, functionDetails, payload) {
     var type = 'execution'
     var data = {
       name: context.execution.name,
@@ -44,7 +44,7 @@ module.exports = function (options) {
       payload: payload,
       datetime: context.execution.datetime,
       data: debuggingData
-    };
+    }
 
     if (!isConnected) {
       backlog.push(data)
@@ -63,7 +63,7 @@ module.exports = function (options) {
     window.dispatchEvent(event)
   }
 
-  function sendInitial(type) {
+  function sendInitial (type) {
     var event = new CustomEvent('function-tree.client.message', {
       detail: safeStringify({
         type: type,
@@ -80,8 +80,8 @@ module.exports = function (options) {
   window.addEventListener('function-tree.debugger.pong', function () {
     // When debugger already active, send new init cause new messages
     // might have been prepared while it was waiting for pong
-    isConnected = true;
-    sendInitial('reinit');
+    isConnected = true
+    sendInitial('reinit')
   })
   window.addEventListener('function-tree.debugger.ping', function () {
     // When debugger activates
@@ -91,13 +91,13 @@ module.exports = function (options) {
 
   sendInitial('init')
 
-  return function(context, functionDetails, payload) {
+  return function (context, functionDetails, payload) {
     context.debugger = {
       send: function (data) {
         send(data, context, functionDetails, payload)
       },
       getColor: function (key) {
-        return options.colors[key] || '#333';
+        return options.colors[key] || '#333'
       }
     }
 

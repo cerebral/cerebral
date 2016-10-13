@@ -1,7 +1,7 @@
-const utils = require('../../../../utils/common');
+const utils = require('../../../../utils/common')
 
-function createProfile(context) {
-  const data = context.input.data;
+function createProfile (context) {
+  const data = context.input.data
 
   return {
     profile: {
@@ -17,7 +17,7 @@ function createProfile(context) {
       showFavouriteTip: true,
       avatarImage: data.avatarImage || null
     }
-  };
+  }
 }
 
-module.exports = createProfile;
+module.exports = createProfile

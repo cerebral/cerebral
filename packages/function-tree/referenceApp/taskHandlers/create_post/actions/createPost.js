@@ -1,11 +1,11 @@
-function createPost(context) {
-  const data = context.input.data;
-  const DEFAULT_POINTS = 5;
-  const DEFAULT_POINTS_WITH_IMAGE = 10;
+function createPost (context) {
+  const data = context.input.data
+  const DEFAULT_POINTS = 5
+  const DEFAULT_POINTS_WITH_IMAGE = 10
   const post = {
     profileUid: data.profileUid,
     datetime: Date.now(),
-    points: Boolean(data.imageUrl) ? DEFAULT_POINTS_WITH_IMAGE : DEFAULT_POINTS,
+    points: data.imageUrl ? DEFAULT_POINTS_WITH_IMAGE : DEFAULT_POINTS,
     category: data.category || null,
     text: data.text || '',
     link: data.link || null,
@@ -18,9 +18,9 @@ function createPost(context) {
     commentsCount: 0,
     bookmarksCount: 0,
     sharesCount: 0
-  };
+  }
 
-  return {post};
+  return {post}
 }
 
-module.exports = createPost;
+module.exports = createPost

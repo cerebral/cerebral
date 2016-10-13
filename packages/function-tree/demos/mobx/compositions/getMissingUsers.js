@@ -1,11 +1,11 @@
-import getMissingUsers from '../functions/getMissingUsers';
+import getMissingUsers from '../functions/getMissingUsers'
 
-export function setMissingUsers({input, data}) {
-  data.addUsers(input.users);
+export function setMissingUsers ({input, data}) {
+  data.addUsers(input.users)
 }
 
-export function setMissingUsersError({view}) {
-  view.setError('Could not load missing users');
+export function setMissingUsersError ({view}) {
+  view.setError('Could not load missing users')
 }
 
 export default [
@@ -17,4 +17,4 @@ export default [
       setMissingUsersError
     ]
   }
-];
+]

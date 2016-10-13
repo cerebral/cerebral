@@ -5,7 +5,7 @@ const NodeDebuggerProvider = require('../src/providers/NodeDebugger')
 
 module.exports['should expose debugger on context'] = (test) => {
   const someLib = {
-    foo() {}
+    foo () {}
   }
   const execute = FunctionTree([
     NodeDebuggerProvider(),
@@ -16,7 +16,7 @@ module.exports['should expose debugger on context'] = (test) => {
 
   test.expect(1)
   execute([
-    function funcA(context) {
+    function funcA (context) {
       test.ok(context.debugger)
     }
   ])
@@ -25,8 +25,8 @@ module.exports['should expose debugger on context'] = (test) => {
 
 module.exports['should wrap methods on added object'] = (test) => {
   const contextItem = {
-    foo() {}
-  };
+    foo () {}
+  }
   const originalFunc = contextItem.foo
   const execute = FunctionTree([
     NodeDebuggerProvider(),
@@ -37,7 +37,7 @@ module.exports['should wrap methods on added object'] = (test) => {
 
   test.expect(2)
   execute([
-    function funcA(context) {
+    function funcA (context) {
       test.equal(originalFunc, contextItem.foo)
       test.notEqual(context.foo, originalFunc)
     }
@@ -46,7 +46,7 @@ module.exports['should wrap methods on added object'] = (test) => {
 }
 
 module.exports['should wrap functions added to context'] = (test) => {
-  const contextItem = () => {};
+  const contextItem = () => {}
 
   const execute = FunctionTree([
     NodeDebuggerProvider(),
@@ -57,7 +57,7 @@ module.exports['should wrap functions added to context'] = (test) => {
 
   test.expect(1)
   execute([
-    function funcA(context) {
+    function funcA (context) {
       test.notEqual(contextItem, context.contextItem)
     }
   ])

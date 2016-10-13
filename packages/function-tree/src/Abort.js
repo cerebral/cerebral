@@ -1,3 +1,3 @@
-function Abort() {}
+function Abort () {}
 
 module.exports = Abort

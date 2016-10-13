@@ -9,22 +9,21 @@ export default connect({
   frontRouted: 'routed',
   adminRouted: 'admin.routed'
 },
-  function Demo(props) {
-
+  function Demo (props) {
     const onAdminClicked = () => {
-      props.adminRouted();
+      props.adminRouted()
     }
 
     const onFrontClicked = () => {
-      props.frontRouted();
+      props.frontRouted()
     }
 
     return (
       <div>
         <h1>{props.title}</h1>
         <UpperTitle />
-        <a href="javascript:;" onClick={onFrontClicked}>Front</a>
-        <a href="javascript:;" onClick={onAdminClicked}>Admin</a>
+        <a href='javascript:;' onClick={onFrontClicked}>Front</a>
+        <a href='javascript:;' onClick={onAdminClicked}>Admin</a>
       </div>
     )
   }

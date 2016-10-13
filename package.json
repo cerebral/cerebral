@@ -1,22 +1,15 @@
 {
   "name": "cerebral-monorepo",
-  "description": "A state controller with its own debugger",
-  "main": "src/index.js",
   "scripts": {
     "commit": "git-cz",
-    "lint": "standard packages/**/*.js",
+    "lint": "standard",
     "pretest": "npm run lint && lerna bootstrap && npm run build",
     "test": "lerna run test",
     "coverage": "lerna run coverage && istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
     "build": "lerna run build"
   },
-  "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/cerebral/cerebral.git"
-  },
   "devDependencies": {
     "babel-cli": "^6.16.0",
     "babel-core": "^6.17.0",
@@ -54,8 +47,8 @@
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
-      "node_modules",
-      "demo"
+      "**/node_modules/",
+      "**/build/"
     ]
   },
   "private": true

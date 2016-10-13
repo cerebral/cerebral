@@ -1,19 +1,19 @@
-const dashboard = require('../dashboard');
+const dashboard = require('../dashboard')
 
-function DashboardProvider() {
+function DashboardProvider () {
   return (context) => {
     context.dashboard = {
-      log(taskId, message, error) {
+      log (taskId, message, error) {
         dashboard.log({
           taskId,
           message,
           error
-        });
+        })
       }
-    };
+    }
 
-    return context;
-  };
+    return context
+  }
 }
 
-module.exports = DashboardProvider;
+module.exports = DashboardProvider

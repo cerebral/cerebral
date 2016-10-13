@@ -50,7 +50,7 @@ function traverse (functions, item, isChain) {
   }
 }
 
-module.exports = function(tree) {
+module.exports = function (tree) {
   const functions = []
 
   return traverse(functions, tree, true)

@@ -1,7 +1,7 @@
-import setView from '../factories/setView';
-import copyInputToData from '../factories/copyInputToData';
-import httpGet from '../factories/httpGet';
-import getMissingUsers from '../compositions/getMissingUsers';
+import setView from '../factories/setView'
+import copyInputToData from '../factories/copyInputToData'
+import httpGet from '../factories/httpGet'
+import getMissingUsers from '../compositions/getMissingUsers'
 
 export default [
   setView('isLoadingAssignments', true),
@@ -15,4 +15,4 @@ export default [
       setView('error', 'Could not load assignments')
     ]
   }
-];
+]

@@ -1,11 +1,11 @@
-import dispatch from '../factories/dispatch';
-import postAssignment from '../functions/postAssignment';
-import getMissingUsers from '../compositions/getMissingUsers';
+import dispatch from '../factories/dispatch'
+import postAssignment from '../functions/postAssignment'
+import getMissingUsers from '../compositions/getMissingUsers'
 import {
   POSTING_ASSIGNMENT,
   POSTED_ASSIGNMENT_SUCCESS,
   POSTED_ASSIGNMENT_ERROR
-} from '../constants';
+} from '../constants'
 
 export default [
   dispatch(POSTING_ASSIGNMENT),
@@ -18,4 +18,4 @@ export default [
       dispatch(POSTED_ASSIGNMENT_ERROR)
     ]
   }
-];
+]

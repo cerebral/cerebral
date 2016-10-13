@@ -1,4 +1,4 @@
-function getCerebralMembers(context) {
+function getCerebralMembers (context) {
   return new Promise((resolve, reject) => {
     context.request({
       url: 'https://api.github.com/orgs/cerebral/members',

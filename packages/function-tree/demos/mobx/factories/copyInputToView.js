@@ -1,9 +1,9 @@
-function copyInputToViewFactory(inputProp, viewProp) {
-  function copyInputToView({input, view}) {
-    view[viewProp] = input[inputProp];
+function copyInputToViewFactory (inputProp, viewProp) {
+  function copyInputToView ({input, view}) {
+    view[viewProp] = input[inputProp]
   }
 
-  return copyInputToView;
+  return copyInputToView
 }
 
-export default copyInputToViewFactory;
+export default copyInputToViewFactory

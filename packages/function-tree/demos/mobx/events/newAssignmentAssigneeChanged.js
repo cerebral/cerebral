@@ -1,8 +1,8 @@
-import copyInputToView from '../factories/copyInputToView';
-import setView from '../factories/setView';
-import debounce from 'function-tree/factories/debounce';
-import hasInputValue from '../factories/hasInputValue';
-import searchAssignee from '../functions/searchAssignee';
+import copyInputToView from '../factories/copyInputToView'
+import setView from '../factories/setView'
+import debounce from 'function-tree/factories/debounce'
+import hasInputValue from '../factories/hasInputValue'
+import searchAssignee from '../functions/searchAssignee'
 
 export default [
   copyInputToView('value', 'newAssignmentAssignee'),
@@ -25,4 +25,4 @@ export default [
       ]
     }
   ])
-];
+]

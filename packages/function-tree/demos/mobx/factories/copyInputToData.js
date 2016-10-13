@@ -1,9 +1,9 @@
-function copyInputToDataFactory(inputProp, dataProp) {
-  function copyInputToData({input, data}) {
-    data[dataProp] = input[inputProp];
+function copyInputToDataFactory (inputProp, dataProp) {
+  function copyInputToData ({input, data}) {
+    data[dataProp] = input[inputProp]
   }
 
-  return copyInputToData;
+  return copyInputToData
 }
 
-export default copyInputToDataFactory;
+export default copyInputToDataFactory

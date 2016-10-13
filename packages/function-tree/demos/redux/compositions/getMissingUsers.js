@@ -1,9 +1,9 @@
 import {
   USERS_LOADED_SUCCESS,
   USERS_LOADED_ERROR
-} from '../constants';
-import dispatch from '../factories/dispatch';
-import getMissingUsers from '../functions/getMissingUsers';
+} from '../constants'
+import dispatch from '../factories/dispatch'
+import getMissingUsers from '../functions/getMissingUsers'
 
 export default [
   getMissingUsers, {
@@ -14,4 +14,4 @@ export default [
       dispatch(USERS_LOADED_ERROR)
     ]
   }
-];
+]

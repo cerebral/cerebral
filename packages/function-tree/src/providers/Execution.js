@@ -1,11 +1,11 @@
 const executeTree = require('../executeTree')
 
-module.exports = function ExecutionProvider(execution, Abort) {
-  return function(context) {
+module.exports = function ExecutionProvider (execution, Abort) {
+  return function (context) {
     context.execution = execution
     context.execution.retry = function (payload) {
       return new Promise(function (resolve) {
-        executeTree(execution.staticTree, execution.runFunction, payload, function() {
+        executeTree(execution.staticTree, execution.runFunction, payload, function () {
           resolve()
         })
       })

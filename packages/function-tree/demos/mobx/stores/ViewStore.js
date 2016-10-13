@@ -1,4 +1,4 @@
-import {observable} from 'mobx';
+import {observable} from 'mobx'
 
 class ViewStore {
   title = 'Assignments';
@@ -27,9 +27,9 @@ class ViewStore {
   @observable
   isPostingAssignment = false;
 
-  addAssignee() {
-    this.newAssigmentAssignees = this.newAssigmentAssignees.concat(this.assigneeSearchResult);
+  addAssignee () {
+    this.newAssigmentAssignees = this.newAssigmentAssignees.concat(this.assigneeSearchResult)
   }
 }
 
-export default ViewStore;
+export default ViewStore

@@ -1,5 +1,5 @@
-function updateAssignment({input, data}) {
-  data.updateAssignmentId(input.data.id);
+function updateAssignment ({input, data}) {
+  data.updateAssignmentId(input.data.id)
 }
 
-export default updateAssignment;
+export default updateAssignment

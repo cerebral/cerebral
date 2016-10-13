@@ -1,13 +1,13 @@
-function hasInputValueFactory(prop) {
-  function hasInputValue({input, path}) {
-    if (Boolean(input[prop])) {
-      return path.true();
+function hasInputValueFactory (prop) {
+  function hasInputValue ({input, path}) {
+    if (input[prop]) {
+      return path.true()
     }
 
-    return path.false();
+    return path.false()
   }
 
-  return hasInputValue;
+  return hasInputValue
 }
 
-export default hasInputValueFactory;
+export default hasInputValueFactory

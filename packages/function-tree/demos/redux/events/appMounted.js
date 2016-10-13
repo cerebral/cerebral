@@ -1,11 +1,11 @@
-import httpGet from '../factories/httpGet';
-import dispatch from '../factories/dispatch';
-import getMissingUsers from '../compositions/getMissingUsers';
+import httpGet from '../factories/httpGet'
+import dispatch from '../factories/dispatch'
+import getMissingUsers from '../compositions/getMissingUsers'
 import {
   ASSIGNMENTS_LOADING,
   ASSIGNMENTS_LOADED_SUCCESS,
   ASSIGNMENTS_LOADED_ERROR
-} from '../constants';
+} from '../constants'
 
 export default [
   dispatch(ASSIGNMENTS_LOADING),
@@ -18,4 +18,4 @@ export default [
       dispatch(ASSIGNMENTS_LOADED_ERROR)
     ]
   }
-];
+]

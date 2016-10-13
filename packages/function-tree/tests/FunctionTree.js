@@ -16,7 +16,7 @@ module.exports['should run functions'] = (test) => {
 
   test.expect(1)
   execute([
-    function action() {
+    function action () {
       test.ok(true)
     }
   ])
@@ -25,7 +25,7 @@ module.exports['should run functions'] = (test) => {
 
 module.exports['should pass arguments to context creator and run it for each action'] = (test) => {
   const execute = FunctionTree([
-    function SomeProvider(context, functionDetails, payload) {
+    function SomeProvider (context, functionDetails, payload) {
       test.ok(context)
       test.equal(functionDetails.functionIndex, 0)
       test.deepEqual(payload, {foo: 'bar'})
@@ -36,7 +36,7 @@ module.exports['should pass arguments to context creator and run it for each act
 
   test.expect(3)
   execute([
-    function action() {}
+    function action () {}
   ], {
     foo: 'bar'
   })
@@ -45,7 +45,7 @@ module.exports['should pass arguments to context creator and run it for each act
 
 module.exports['should pass returned context into functions'] = (test) => {
   const execute = FunctionTree([
-    function SomeProvider(context) {
+    function SomeProvider (context) {
       context.foo = 'bar'
 
       return context
@@ -54,7 +54,7 @@ module.exports['should pass returned context into functions'] = (test) => {
 
   test.expect(1)
   execute([
-    function action(context) {
+    function action (context) {
       test.equal(context.foo, 'bar')
     }
   ])
@@ -66,34 +66,34 @@ module.exports['should emit execution events in correct order'] = (test) => {
   const execute = FunctionTree()
 
   test.expect(6)
-  execute.once('start', function() {
+  execute.once('start', function () {
     eventsCount++
     test.equal(eventsCount, 1)
   })
-  execute.once('functionStart', function() {
+  execute.once('functionStart', function () {
     eventsCount++
     test.equal(eventsCount, 2)
-    execute.once('functionStart', function() {
+    execute.once('functionStart', function () {
       eventsCount++
       test.equal(eventsCount, 4)
     })
   })
-  execute.once('functionEnd', function() {
+  execute.once('functionEnd', function () {
     eventsCount++
     test.equal(eventsCount, 3)
-    execute.once('functionEnd', function() {
+    execute.once('functionEnd', function () {
       eventsCount++
       test.equal(eventsCount, 5)
     })
   })
-  execute.on('end', function() {
+  execute.on('end', function () {
     eventsCount++
     test.equal(eventsCount, 6)
     test.done()
   })
   execute([
-    function actionA() {},
-    function actionB() {}
+    function actionA () {},
+    function actionB () {}
   ])
 }
 
@@ -101,18 +101,18 @@ module.exports['should pass action and payload on action events'] = (test) => {
   const execute = FunctionTree()
 
   test.expect(6)
-  execute.once('functionStart', function(execution, functionDetails, payload) {
+  execute.once('functionStart', function (execution, functionDetails, payload) {
     test.ok(execution.id)
     test.equal(functionDetails.functionIndex, 0)
     test.deepEqual(payload, {foo: 'bar'})
   })
-  execute.once('functionEnd', function(execution, functionDetails, payload) {
+  execute.once('functionEnd', function (execution, functionDetails, payload) {
     test.ok(execution.id)
     test.equal(functionDetails.functionIndex, 0)
     test.deepEqual(payload, {foo: 'bar'})
   })
   execute([
-    function action() {}
+    function action () {}
   ], {
     foo: 'bar'
   })
@@ -120,17 +120,17 @@ module.exports['should pass action and payload on action events'] = (test) => {
 }
 
 module.exports['should be able to reuse existing tree'] = (test) => {
-  function actionA(context) {
+  function actionA (context) {
     test.ok(true)
     return context.path.success()
   }
 
-  function actionB(context) {
+  function actionB (context) {
     test.ok(true)
     return context.path.success()
   }
 
-  function actionC() {
+  function actionC () {
     test.ok(true)
   }
 
@@ -155,7 +155,7 @@ module.exports['should be able to reuse existing tree'] = (test) => {
 }
 
 module.exports['should give error when path and no path returned'] = (test) => {
-  function actionA() {
+  function actionA () {
     return {
       foo: 'bar'
     }

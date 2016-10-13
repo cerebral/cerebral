@@ -1,9 +1,9 @@
-function hasAssignee({getState, path}) {
+function hasAssignee ({getState, path}) {
   if (getState().assigneeSearchResult) {
-    return path.true();
+    return path.true()
   }
 
-  return path.false();
+  return path.false()
 }
 
-export default hasAssignee;
+export default hasAssignee

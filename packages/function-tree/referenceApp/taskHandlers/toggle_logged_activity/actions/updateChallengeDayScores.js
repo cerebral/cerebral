@@ -1,25 +1,24 @@
-'use strict';
+'use strict'
 
-const log = require('../../common/factories/log');
-const utils = require('../../../../utils/common');
+const utils = require('../../../../utils/common')
 
-function updateChallengeDayScores(context) {
-  const data = context.input.data;
-  const firebase = context.firebase;
-  const scoreModifier = context.input.scoreModifier;
-  const transactionPath = `challenges/scores/${data.challengeKey}/${data.departmentKey}/days/${data.datetime}/`;
+function updateChallengeDayScores (context) {
+  const data = context.input.data
+  const firebase = context.firebase
+  const scoreModifier = context.input.scoreModifier
+  const transactionPath = `challenges/scores/${data.challengeKey}/${data.departmentKey}/days/${data.datetime}/`
 
   return firebase.transaction(transactionPath, (currentChallengePoints) => {
     if (!currentChallengePoints) {
       const newCurrentChallengePoints = {
         points: {energy: 0, consumption: 0, food: 0, transport: 0, social: 0},
         co2: {energy: 0, consumption: 0, food: 0, transport: 0, social: 0}
-      };
+      }
 
-      newCurrentChallengePoints.points[data.categoryKey] = scoreModifier.points;
-      newCurrentChallengePoints.co2[data.categoryKey] = scoreModifier.co2;
+      newCurrentChallengePoints.points[data.categoryKey] = scoreModifier.points
+      newCurrentChallengePoints.co2[data.categoryKey] = scoreModifier.co2
 
-      return newCurrentChallengePoints;
+      return newCurrentChallengePoints
     }
 
     return {
@@ -35,11 +34,10 @@ function updateChallengeDayScores(context) {
           Number(scoreModifier.co2)
         )
       })
-    };
-
+    }
   })
   .then(() => null)
-  .catch((error) => ({error: error.message}));
+  .catch((error) => ({error: error.message}))
 }
 
-module.exports = updateChallengeDayScores;
+module.exports = updateChallengeDayScores

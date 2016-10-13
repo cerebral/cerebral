@@ -1,11 +1,11 @@
-const path = require('path');
-const express = require('express');
-const app = express();
-const webpackDevMiddleware = require('webpack-dev-middleware');
-const webpack = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const bodyParser = require('body-parser');
-const argv = require('minimist')(process.argv.slice(2));
+const path = require('path')
+const express = require('express')
+const app = express()
+const webpackDevMiddleware = require('webpack-dev-middleware')
+const webpack = require('webpack')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const bodyParser = require('body-parser')
+const argv = require('minimist')(process.argv.slice(2))
 
 const config = {
   entry: path.resolve('demos', argv.demo, 'main.js'),
@@ -47,11 +47,11 @@ const config = {
       inject: true
     })
   ]
-};
-const compiler = webpack(config);
+}
+const compiler = webpack(config)
 
-app.use(webpackDevMiddleware(compiler));
-app.use(bodyParser.json());
+app.use(webpackDevMiddleware(compiler))
+app.use(bodyParser.json())
 
 const users = [{
   id: 1,
@@ -66,46 +66,46 @@ const users = [{
 }, {
   id: 4,
   name: 'Garth Williams'
-}];
+}]
 
 const assignments = [{
   id: 1,
   title: 'Check out function tree demos',
   assignedTo: [1]
-}];
+}]
 
 app.get('/assignments', (req, res) => {
   setTimeout(() => {
-    res.send(assignments);
-  }, 500);
-});
+    res.send(assignments)
+  }, 500)
+})
 
 app.post('/assignments', (req, res) => {
-  const assignment = req.body;
+  const assignment = req.body
 
   setTimeout(() => {
-    assignment.id = assignments.length + 1;
-    assignments.unshift(assignment);
+    assignment.id = assignments.length + 1
+    assignments.unshift(assignment)
     res.send({
       id: assignment.id
-    });
-  }, 500);
-});
+    })
+  }, 500)
+})
 
 app.get('/users', (req, res) => {
   setTimeout(() => {
     res.send(users.filter(user => (
       user.name.toLowerCase().indexOf(req.query.name.toLowerCase()) === 0
-    ))[0] || null);
-  }, 200);
-});
+    ))[0] || null)
+  }, 200)
+})
 
 app.get('/users/:id', (req, res) => {
   setTimeout(() => {
-    res.send(users.filter(user => user.id === Number(req.params.id))[0]);
-  }, 500);
-});
+    res.send(users.filter(user => user.id === Number(req.params.id))[0])
+  }, 500)
+})
 
 app.listen(3000, () => {
-  console.log('Running demo: ' + argv.demo + ', on localhost:3000');
-});
+  console.log('Running demo: ' + argv.demo + ', on localhost:3000')
+})

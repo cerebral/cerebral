@@ -1,8 +1,8 @@
-function createDebounce(time) {
+function createDebounce (time) {
   var timer
   var currentResolver
 
-  function debounce(context) {
+  function debounce (context) {
     return new Promise(function (resolve) {
       if (timer) {
         currentResolver(context.path.discarded())
@@ -19,16 +19,16 @@ function createDebounce(time) {
   }
   debounce.displayName = 'debounce - ' + time + 'ms'
 
-  return debounce;
+  return debounce
 }
 
-function debounceFactory(time, continueBranch) {
+function debounceFactory (time, continueBranch) {
   return [
     createDebounce(time), {
       accepted: continueBranch,
       discarded: []
     }
-  ];
+  ]
 }
 
 module.exports = debounceFactory

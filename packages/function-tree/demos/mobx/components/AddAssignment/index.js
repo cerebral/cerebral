@@ -1,16 +1,16 @@
-import React from 'react';
-import styles from './styles.css';
-import {observer} from 'mobx-react';
-import run from '../../run';
+import React from 'react'
+import styles from './styles.css'
+import {observer} from 'mobx-react'
+import run from '../../run'
 
-import newAssignmentTitleChanged from '../../events/newAssignmentTitleChanged';
-import newAssignmentAssigneeChanged from '../../events/newAssignmentAssigneeChanged';
-import newAssigmentAssigneAdded from '../../events/newAssigmentAssigneAdded';
-import addAssignmentClicked from '../../events/addAssignmentClicked';
+import newAssignmentTitleChanged from '../../events/newAssignmentTitleChanged'
+import newAssignmentAssigneeChanged from '../../events/newAssignmentAssigneeChanged'
+import newAssigmentAssigneAdded from '../../events/newAssigmentAssigneAdded'
+import addAssignmentClicked from '../../events/addAssignmentClicked'
 
 @observer
 class AddAssignment extends React.Component {
-  render() {
+  render () {
     const {
       newAssignmentTitle,
       newAssigmentAssignees,
@@ -18,7 +18,7 @@ class AddAssignment extends React.Component {
       assigneeSearchResult,
       newAssignmentAssignee,
       isPostingAssignment
-    } = this.props.store.view;
+    } = this.props.store.view
 
     return (
       <div className={styles.wrapper}>
@@ -26,37 +26,31 @@ class AddAssignment extends React.Component {
           <input
             autoFocus
             className={styles.assignmentTitle}
-            placeholder="New assignment..."
+            placeholder='New assignment...'
             value={newAssignmentTitle}
             onChange={(event) => run('newAssignmentTitleChanged', newAssignmentTitleChanged, {value: event.target.value})}
           />
         </div>
         <div className={styles.assigneeSearchWrapper}>
           {newAssigmentAssignees.map((assignee, index) => (
-            <div key={index} className={styles.assignmentAssignee}>
+            <div key={index} className={styles.assignmentAssignee}>
               {assignee.name}
             </div>
           ))}
           <div className={styles.assigneeSearchWrapper}>
             {
-              isSearching ?
-                <div className={styles.assigneeSearchResult}>
-                  Searching...
-                </div>
-              :
-                null
+              isSearching
+                ? <div className={styles.assigneeSearchResult}>Searching...</div>
+                : null
             }
             {
-              !isSearching && assigneeSearchResult ?
-                <div className={styles.assigneeSearchResult}>
-                  {assigneeSearchResult.name}
-                </div>
-              :
-                null
+              !isSearching && assigneeSearchResult
+                ? <div className={styles.assigneeSearchResult}>{assigneeSearchResult.name}</div>
+                : null
             }
             <input
               className={styles.assignmentNewAssignee}
-              placeholder="Add assignee..."
+              placeholder='Add assignee...'
               value={newAssignmentAssignee}
               onKeyDown={(event) => event.keyCode === 13 && run('newAssigmentAssigneAdded', newAssigmentAssigneAdded)}
               onChange={(event) => run('newAssignmentAssigneeChanged', newAssignmentAssigneeChanged, {value: event.target.value})}
@@ -77,8 +71,8 @@ class AddAssignment extends React.Component {
           </div>
         </div>
       </div>
-    );
+    )
   }
 }
 
-export default AddAssignment;
+export default AddAssignment

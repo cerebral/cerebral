@@ -1,16 +1,16 @@
-function updateProfileHousehold(context) {
-  const profileKey = context.input.data.profileKey;
-  const notification = context.input.notification;
+function updateProfileHousehold (context) {
+  const profileKey = context.input.data.profileKey
+  const notification = context.input.notification
 
   return context.firebase.transaction(`profiles/list/${profileKey}`, (profile) => {
     if (!profile) {
-      return null;
+      return null
     }
 
-    profile.householdKey = notification.householdKey;
+    profile.householdKey = notification.householdKey
 
-    return profile;
-  });
+    return profile
+  })
 }
 
-module.exports = updateProfileHousehold;
+module.exports = updateProfileHousehold

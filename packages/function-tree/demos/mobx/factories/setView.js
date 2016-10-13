@@ -1,9 +1,9 @@
-function setViewFactory(prop, value) {
-  function setView({view}) {
-    view[prop] = value;
+function setViewFactory (prop, value) {
+  function setView ({view}) {
+    view[prop] = value
   }
 
-  return setView;
+  return setView
 }
 
-export default setViewFactory;
+export default setViewFactory
