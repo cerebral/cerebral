@@ -1,4 +1,4 @@
-module.exports = function request(options, cb) {
+export default function request(options, cb) {
   var xhr = new XMLHttpRequest()
   xhr.addEventListener('progress', cb);
   xhr.addEventListener('load', cb);

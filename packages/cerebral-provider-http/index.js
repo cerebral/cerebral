@@ -1,6 +1,7 @@
-var fileUpload = require('./fileUpload')
-var request = require('./request')
-var utils = require('./utils')
+import FileUpload from './fileUpload'
+export { default as FileUpload } from './fileUpload'
+import request from './request'
+import { urlEncode } from './utils'
 var allowedContentTypes = [
   'application/x-www-form-urlencoded',
   'multipart/form-data',
@@ -17,14 +18,6 @@ var DEFAULT_OPTIONS = {
     if (options.withCredentials) {
       xhr.withCredentials = true
     }
-    if (
-      options.cors &&
-      options.headers['Content-Type'] &&
-      allowedContentTypes.indexOf(options.headers['Content-Type']) === -1
-    ) {
-      delete options.headers['Content-Type']
-    }
-
     if (options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
       options.body = utils.urlEncode(options.body)
     } else {
@@ -69,7 +62,7 @@ function mergeWith(optionsA, optionsB) {
   }, optionsA)
 }
 
-function HttpProviderFactory(moduleOptions) {
+export default function HttpProviderFactory(moduleOptions) {
   if (typeof moduleOptions === 'function') {
     var defaultOptions = mergeWith({}, DEFAULT_OPTIONS)
     moduleOptions = moduleOptions(defaultOptions)
@@ -144,34 +137,34 @@ function HttpProviderFactory(moduleOptions) {
         request: requestService,
         get: function(url, options) {
           options = options || {}
-          options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
+          options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'GET'
           return requestService(options)
         },
         post: function(url, body, options) {
           options = options || {}
-          options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
+          options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'POST'
           options.body = body
           return requestService(options)
         },
         put: function(url, body, options) {
           options = options || {}
-          options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
+          options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'PUT'
           options.body = body
           return requestService(options)
         },
         patch: function(url, body, options) {
           options = options || {}
-          options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
+          options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'PATCH'
           options.body = body
           return requestService(options)
         },
         delete: function(url, options) {
           options = options || {}
-          options.url = options.query ? url + '?' + utils.urlEncode(options.query) : url
+          options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'DELETE'
           return requestService(options)
         },
@@ -198,5 +191,3 @@ function HttpProviderFactory(moduleOptions) {
   }
   return HttpProvider
 }
-module.exports.HttpProvider = HttpProviderFactory
-module.exports.FileUpload = fileUpload
