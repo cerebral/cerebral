@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral-provider-http/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral-provider-http#readme"
+  "homepage": "https://github.com/cerebral/cerebral-module-http#readme",
+  "devDependencies": {
+    "babel-preset-es2015": "^6.16.0"
+  }
 }
