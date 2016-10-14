@@ -2,6 +2,10 @@
 HTTP Provider for Cerebral2
 Based on prior art from [cerebral-module-http](https://github.com/cerebral/cerebral-module-http)
 
+### Todos
+Create npm install
+Test FileUpload
+
 ### How to use
 ```js
 import { Controller } from 'cerebral'
