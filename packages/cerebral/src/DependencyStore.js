@@ -39,10 +39,54 @@ class DependencyStore {
     return entities
   }
   /*
-    Returns entities based on a change map returned from the
-    model flush method
+    Converts the changes map from "flush" to an array of paths
   */
-  getUniqueEntities (changesMap, currentKey = '') {
+  convertChangeMap (currentLevel, details = {currentPath: [], allPaths: []}) {
+    Object.keys(currentLevel).forEach((key) => {
+      details.currentPath.push(key)
+      if (currentLevel[key] === true) {
+        details.allPaths.push(details.currentPath.join('.'))
+      } else {
+        this.convertChangeMap(currentLevel[key], details)
+      }
+      details.currentPath.pop()
+    })
+
+    return details.allPaths
+  }
+  /*
+    Returns entities based on a change map returned from
+    the model flush method. It does this by checking if
+    the changed path is part of any dependency path, or
+    the opposite. "foo.bar.baz" will cause change on dependency
+    "foo.bar" (dependency part of change path), and "foo.bar" will
+    cause change on dependency "foo.bar.baz" (change path part of dependency path)
+  */
+  getUniqueEntities (changesMap) {
+    let entities = []
+    const paths = this.convertChangeMap(changesMap)
+
+    for (const mapKey in this.map) {
+      for (const pathKey in paths) {
+        const path = paths[pathKey]
+
+        if (mapKey.indexOf(path) === 0 || path.indexOf(mapKey) === 0) {
+          for (const componentIndex in this.map[mapKey]) {
+            if (entities.indexOf(this.map[mapKey][componentIndex]) === -1) {
+              entities.push(this.map[mapKey][componentIndex])
+            }
+          }
+        }
+      }
+    }
+
+    return entities
+  }
+  /*
+    Returns entities using strict path definition based on a
+    change map returned from the model flush method
+  */
+  getStrictUniqueEntities (changesMap, currentKey = '') {
     let currentEntities = []
     for (const key in changesMap) {
       const pathKey = currentKey ? currentKey + '.' + key : key
@@ -80,7 +124,7 @@ class DependencyStore {
       }
 
       if (changesMap[key] !== true) {
-        currentEntities = currentEntities.concat(this.getUniqueEntities(changesMap[key], pathKey))
+        currentEntities = currentEntities.concat(this.getStrictUniqueEntities(changesMap[key], pathKey))
       }
     }
 

@@ -16,8 +16,9 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   based on top level providers and providers defined in modules
 */
 class Controller extends EventEmitter {
-  constructor ({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools = null}) {
+  constructor ({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools = null, strictRender = false}) {
     super()
+    this.strictRender = strictRender
     this.flush = this.flush.bind(this)
     this.devtools = devtools
     this.model = new Model({}, this.devtools)
@@ -67,7 +68,7 @@ class Controller extends EventEmitter {
   */
   flush () {
     const changes = this.model.flush()
-    const computedsAboutToBecomeDirty = computedDependencyStore.getUniqueEntities(changes)
+    const computedsAboutToBecomeDirty = this.strictRender ? computedDependencyStore.getStrictUniqueEntities(changes) : computedDependencyStore.getUniqueEntities(changes)
 
     computedsAboutToBecomeDirty.forEach((computed) => {
       computed.flag()

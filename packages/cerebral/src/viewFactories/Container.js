@@ -86,7 +86,16 @@ export default (View) => {
       for all components to update
     */
     onCerebralUpdate (changes, force) {
-      const componentsToRender = force ? this.dependencyStore.getAllUniqueEntities() : this.dependencyStore.getUniqueEntities(changes)
+      let componentsToRender = []
+
+      if (force) {
+        componentsToRender = this.dependencyStore.getAllUniqueEntities()
+      } else if (this.props.controller.strictRender) {
+        componentsToRender = this.dependencyStore.getStrictUniqueEntities(changes)
+      } else {
+        componentsToRender = this.dependencyStore.getUniqueEntities(changes)
+      }
+
       const start = Date.now()
       componentsToRender.forEach((component) => {
         if (this.hasDevtools()) {
