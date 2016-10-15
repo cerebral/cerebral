@@ -1,10 +1,10 @@
 export {default as form} from './form'
-export {default as field} from './field'
 export {default as rules} from './rules'
 
 export {default as changeField} from './chains/changeField'
 
 export {default as validateField} from './factories/validateField'
+export {default as validateForm} from './factories/validateForm'
 export {default as resetForm} from './factories/resetForm'
 
 export {default as formToJSON} from './helpers/formToJSON'

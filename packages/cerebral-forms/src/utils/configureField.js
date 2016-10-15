@@ -19,7 +19,10 @@ export default function configureField (formData, field) {
   field.value = value
   field.defaultValue = defaultValue
   field.validationRules = validationRules
-  field.isValid = ((isRequired && hasValue && validationResult.isValid) || (!isRequired && validationResult.isValid))
+  // Field is valid only when there is a value and the validation rule
+  // says it is valid. If "isRequired" it will only be valid if it actually
+  // has a value
+  field.isValid = ((isRequired && hasValue && validationResult.isValid) || (!isRequired && hasValue && validationResult.isValid) || (!isRequired && !hasValue))
   field.errorMessages = errorMessages
   field.errorMessage = validationResult.isValid ? null : errorMessages[validationResult.failedRuleIndex]
   field.isValueRules = isValueRules

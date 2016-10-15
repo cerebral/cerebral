@@ -81,14 +81,16 @@ export default function MyAction({state}) {
 ```
 
 ### field
-A Field factory for creating a field. Used when adding new fields dynamically to an existing form.
+To add a new field you simply merge a new form into the existing one.
 
 ```js
-import {field} from 'cerebral-forms'
+import {form} from 'cerebral-forms'
 
 export default function MyAction({state}) {
-  state.set('path.to.form.address2', field({
-    value: ''
+  state.merge('path.to.form', form({
+    address2: {
+      value: ''
+    }
   }))
 }
 ```
@@ -131,7 +133,7 @@ export default connect({
         <input
           value={form.firstName.value}
           onChange={(event) => fieldChanged({
-            path: 'someModule.firstName',
+            field: 'someModule.firstName',
             value: event.target.value
           })}
           />
@@ -154,32 +156,23 @@ export default [
 ]
 ```
 
-In your view code you call the signal with path to the field and the updated value:
+### validateForm
+An **action** factory you can use to validate a whole form.
 
 ```js
-import React from 'react'
-import {connect} from 'cerebral/react'
+import {validateForm} from 'cerebral-forms'
 
-export default connect({
-  form: 'someModule.form'
-}, {
-  fieldChanged: 'someModule.fieldChanged'
-},
-  function MyForm({form, fieldChanged}) {
-    return (
-      <div>
-        <h4>First name</h4>
-        <input
-          value={form.firstName.value}
-          onChange={(event) => fieldChanged({
-            path: 'someModule.firstName',
-            value: event.target.value
-          })}
-          />
-      </div>
-    )
+export default [
+  validateForm('path.to.form'),
+  isFormValid, {
+    true: [
+      passInForm
+    ],
+    false: [
+      setSomeErrorMessages
+    ]
   }
-)
+]
 ```
 
 ### resetForm

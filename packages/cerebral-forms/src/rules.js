@@ -52,19 +52,19 @@ const rules = {
     return rules.matchRegexp(value, null, /^[A-Z\s\u00C0-\u017F]+$/i)
   },
   isLength (value, form, length) {
-    return !rules.isExisty(value) || rules.isEmpty(value) || value.length === length
+    return value.length === length
   },
   equals (value, form, eql) {
-    return !rules.isExisty(value) || rules.isEmpty(value) || value === eql
+    return value === eql
   },
   equalsField (value, form, field) {
     return value === form[field].value
   },
   maxLength (value, form, length) {
-    return !rules.isExisty(value) || value.length <= length
+    return value.length <= length
   },
   minLength (value, form, length) {
-    return !rules.isExisty(value) || rules.isEmpty(value) || value.length >= length
+    return value.length >= length
   }
 }
 
