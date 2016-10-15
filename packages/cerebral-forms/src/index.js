@@ -1,3 +1,6 @@
+import isValidFormHelper from './helpers/isValidForm'
+import isValidFormFactory from './helpers/isValidFormFactory'
+
 export {default as form} from './form'
 export {default as rules} from './rules'
 
@@ -10,4 +13,11 @@ export {default as resetForm} from './factories/resetForm'
 export {default as formToJSON} from './helpers/formToJSON'
 export {default as getFormFields} from './helpers/getFormFields'
 export {default as getInvalidFormFields} from './helpers/getInvalidFormFields'
-export {default as isValidForm} from './helpers/isValidForm'
+
+export function isValidForm (form) {
+  if (typeof form === 'string') {
+    return isValidFormFactory(form)
+  }
+
+  return isValidFormHelper(form)
+}

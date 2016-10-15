@@ -271,6 +271,19 @@ export default connect({
 )
 ```
 
+You can also use this function inside a chain:
+
+```js
+import {isValidForm} from 'cerebral-forms'
+
+export default [
+  isValidForm('path.to.form'), {
+    true: [],
+    false: []
+  }
+]
+```
+
 ### Rules
 
 - **isValue** - Checks if there is a truthy value, including array length
