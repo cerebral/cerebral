@@ -16,7 +16,7 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   based on top level providers and providers defined in modules
 */
 class Controller extends EventEmitter {
-  constructor ({state = {}, routes = {}, signals = {}, providers = [], modules = {}, router, devtools = null, strictRender = false}) {
+  constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, strictRender = false}) {
     super()
     this.strictRender = strictRender
     this.flush = this.flush.bind(this)
@@ -24,11 +24,10 @@ class Controller extends EventEmitter {
     this.model = new Model({}, this.devtools)
     this.module = new Module([], {
       state,
-      routes,
       signals,
       modules
     }, this)
-    this.router = router ? router(this.module.getRoutes(), this) : null
+    this.router = router ? router(this) : null
 
     const allProviders = (
       this.router ? [

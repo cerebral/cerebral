@@ -1,4 +1,6 @@
-import {isObject} from 'cerebral/lib/utils'
+function isObject (obj) {
+  return typeof obj === 'object' && !Array.isArray(obj) && obj !== null
+}
 
 export function flattenConfig (config, prev = '') {
   return Object.keys(config).reduce((flattened, key) => {

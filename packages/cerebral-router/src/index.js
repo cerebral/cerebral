@@ -33,12 +33,12 @@ export function goTo (url) {
 export default function Router (options = {}) {
   options.mapper = urlMapper({query: options.query})
 
-  return (passedRoutesConfig, controller) => {
+  return (controller) => {
     if (!options.mapper || typeof options.mapper.map !== 'function') {
       throw new Error('Cerebral router - mapper option must be provided.')
     }
 
-    const routesConfig = flattenConfig(passedRoutesConfig)
+    const routesConfig = flattenConfig(options.routes)
 
     if (!options.baseUrl && options.onlyHash) {
       // autodetect baseUrl

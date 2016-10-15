@@ -19,11 +19,11 @@ describe('Router - matching', () => {
       let count = 0
       const controller = Controller({
         router: Router({
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/': 'home'
+          }
         }),
-        routes: {
-          '/': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -54,11 +54,11 @@ describe('Router - matching', () => {
       let count = 0
       const controller = Controller({
         router: Router({
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/foo': 'home'
+          }
         }),
-        routes: {
-          '/foo': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -89,11 +89,11 @@ describe('Router - matching', () => {
       let count = 0
       const controller = Controller({
         router: Router({
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/foo/bar/baz/42': 'home'
+          }
         }),
-        routes: {
-          '/foo/bar/baz/42': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -125,11 +125,11 @@ describe('Router - matching', () => {
       let count = 0
       const controller = Controller({
         router: Router({
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/foo/:param': 'home'
+          }
         }),
-        routes: {
-          '/foo/:param': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -160,11 +160,11 @@ describe('Router - matching', () => {
       let count = 0
       const controller = Controller({
         router: Router({
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/foo/:param/:param2': 'home'
+          }
         }),
-        routes: {
-          '/foo/:param/:param2': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -202,11 +202,11 @@ describe('Router - matching', () => {
       let count = 0
       const controller = Controller({
         router: Router({
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/foo/:param([\\w+-?]+)-test/:param2(%3A\\d+)': 'home'
+          }
         }),
-        routes: {
-          '/foo/:param([\\w+-?]+)-test/:param2(%3A\\d+)': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -246,11 +246,11 @@ describe('Router - matching', () => {
       let count = 0
       const controller = Controller({
         router: Router({
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/*': 'home'
+          }
         }),
-        routes: {
-          '/*': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -277,11 +277,11 @@ describe('Router - matching', () => {
       const controller = Controller({
         router: Router({
           baseUrl: '/base',
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/': 'home'
+          }
         }),
-        routes: {
-          '/': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -315,11 +315,11 @@ describe('Router - matching', () => {
       const controller = Controller({
         router: Router({
           onlyHash: true,
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/': 'home'
+          }
         }),
-        routes: {
-          '/': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -355,11 +355,11 @@ describe('Router - matching', () => {
         router: Router({
           onlyHash: true,
           baseUrl: '/base',
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/': 'home'
+          }
         }),
-        routes: {
-          '/': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }
@@ -395,11 +395,11 @@ describe('Router - matching', () => {
       const controller = Controller({
         router: Router({
           onlyHash: true,
-          preventAutostart: true
+          preventAutostart: true,
+          routes: {
+            '/': 'home'
+          }
         }),
-        routes: {
-          '/': 'home'
-        },
         signals: {
           'home': [() => { count++ }]
         }

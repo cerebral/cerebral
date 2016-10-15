@@ -17,26 +17,45 @@ describe('Router', () => {
     addressbar.value = '/'
     addressbar.removeAllListeners('change')
   })
-  it('should expose base router and accept custom mapper', () => {
+  it('should be able to define routes as config', () => {
     let count = 0
     Controller({
-      router: Router(),
-      routes: {
-        '/': 'test'
-      },
+      router: Router({
+        routes: {
+          '/': 'test'
+        }
+      }),
       signals: {
         test: [() => { count++ }]
       }
     })
     assert.equal(count, 1)
   })
+  /*
+  it('should expose base router and accept custom mapper', () => {
+    let count = 0
+    Controller({
+      router: Router({
+        routes: {
+          '/': 'test'
+        }
+      }),
+      signals: {
+        test: [() => { count++ }]
+      }
+    })
+    assert.equal(count, 1)
+  })
+  */
   it('should not trigger if preventAutostart option was provided', () => {
     let count = 0
     Controller({
-      router: Router({preventAutostart: true}),
-      routes: {
-        '/': 'test'
-      },
+      router: Router({
+        preventAutostart: true,
+        routes: {
+          '/': 'test'
+        }
+      }),
       signals: {
         test: [() => { count++ }]
       }
@@ -46,16 +65,17 @@ describe('Router', () => {
   it('should support nested route definitions', () => {
     let count = 0
     Controller({
-      router: Router(),
-      routes: {
-        '/': 'foo',
-        '/bar': {
-          '/': 'bar',
-          '/baz': {
-            '/': 'baz'
+      router: Router({
+        routes: {
+          '/': 'foo',
+          '/bar': {
+            '/': 'bar',
+            '/baz': {
+              '/': 'baz'
+            }
           }
         }
-      },
+      }),
       signals: {
         foo: [() => { count++ }],
         bar: [() => { count++ }],
@@ -66,53 +86,26 @@ describe('Router', () => {
     triggerUrlChange('/bar/baz')
     assert.equal(count, 3)
   })
-  it('should support module routes', () => {
-    let count = 0
-    Controller({
-      router: Router(),
-      routes: {
-        '/': 'foo'
-      },
-      signals: {
-        foo: [() => { count++ }]
-      },
-      modules: {
-        bar: {
-          routes: {
-            '/': 'bar',
-            '/baz': {
-              '/': 'baz'
-            }
-          },
-          signals: {
-            bar: [() => { count++ }],
-            baz: [() => { count++ }]
-          }
-        }
-      }
-    })
-    triggerUrlChange('/bar')
-    triggerUrlChange('/bar/baz')
-    assert.equal(count, 3)
-  })
   it('should throw on missing signal', () => {
     assert.throws(() => {
       Controller({
-        router: Router(),
-        routes: {
-          '/': 'test'
-        }
+        router: Router({
+          routes: {
+            '/': 'test'
+          }
+        })
       })
     })
   })
   it('should throw on duplicate signal', () => {
     assert.throws(() => {
       Controller({
-        router: Router(),
-        routes: {
-          '/': 'test',
-          '/foo': 'test'
-        },
+        router: Router({
+          routes: {
+            '/': 'test',
+            '/foo': 'test'
+          }
+        }),
         signals: {
           test: []
         }
@@ -125,11 +118,11 @@ describe('Router', () => {
       router: Router({
         baseUrl: '/test',
         onlyHash: true,
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/': 'test'
+        }
       }),
-      routes: {
-        '/': 'test'
-      },
       signals: {
         test: [
           function action ({router}) {
@@ -144,12 +137,12 @@ describe('Router', () => {
   it('should update addressbar for routable signal call', () => {
     const controller = Controller({
       router: Router({
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/': 'home',
+          '/test': 'test'
+        }
       }),
-      routes: {
-        '/': 'home',
-        '/test': 'test'
-      },
       signals: {
         home: [],
         test: []
@@ -185,10 +178,11 @@ describe('Router', () => {
     addressbar.value = addressbar.origin + '/test'
     let count = 0
     const controller = Controller({
-      router: Router(),
-      routes: {
-        '/test': 'test'
-      },
+      router: Router({
+        routes: {
+          '/test': 'test'
+        }
+      }),
       signals: {
         test: [],
         foo: [() => { count++ }]
@@ -200,11 +194,12 @@ describe('Router', () => {
   })
   it('should allow redirect to url and trigger corresponded signal', (done) => {
     Controller({
-      router: Router(),
-      routes: {
-        '/': 'doRedirect',
-        '/existing/:string/:bool/:num': 'existing'
-      },
+      router: Router({
+        routes: {
+          '/': 'doRedirect',
+          '/existing/:string/:bool/:num': 'existing'
+        }
+      }),
       signals: {
         doRedirect: [({router}) => router.redirect('/existing/foo/%3Atrue/%3A42')],
         existing: [({input}) => {
@@ -220,12 +215,12 @@ describe('Router', () => {
   it('should replaceState on redirect by default', () => {
     Controller({
       router: Router({
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/foo': 'doRedirect',
+          '/existing': 'existing'
+        }
       }),
-      routes: {
-        '/foo': 'doRedirect',
-        '/existing': 'existing'
-      },
       signals: {
         doRedirect: [({router}) => router.redirect('/existing')],
         existing: [({input}) => {
@@ -240,12 +235,12 @@ describe('Router', () => {
   it('should expose goTo on context provider', (done) => {
     Controller({
       router: Router({
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/foo': 'doRedirect',
+          '/existing': 'existing'
+        }
       }),
-      routes: {
-        '/foo': 'doRedirect',
-        '/existing': 'existing'
-      },
       signals: {
         doRedirect: [({router}) => router.goTo('/existing')],
         existing: [() => {
@@ -260,12 +255,12 @@ describe('Router', () => {
   it('should allow redirect to signal', (done) => {
     const controller = Controller({
       router: Router({
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/': 'home',
+          '/foo/:id': 'detail'
+        }
       }),
-      routes: {
-        '/': 'home',
-        '/foo/:id': 'detail'
-      },
       signals: {
         'home': [],
         'createClicked': [
@@ -289,11 +284,11 @@ describe('Router', () => {
   it('should warn if trying redirect to signal not bound to route', () => {
     const controller = Controller({
       router: Router({
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/': 'home'
+        }
       }),
-      routes: {
-        '/': 'home'
-      },
       signals: {
         'home': [],
         'createClicked': [
@@ -313,11 +308,11 @@ describe('Router', () => {
     Controller({
       router: Router({
         baseUrl: '/base',
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/': 'home'
+        }
       }),
-      routes: {
-        '/': 'home'
-      },
       signals: {
         'home': []
       }
@@ -334,11 +329,11 @@ describe('Router', () => {
       router: Router({
         baseUrl: '/base',
         allowEscape: true,
-        preventAutostart: true
+        preventAutostart: true,
+        routes: {
+          '/': 'home'
+        }
       }),
-      routes: {
-        '/': 'home'
-      },
       signals: {
         'home': []
       }
