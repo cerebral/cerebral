@@ -245,159 +245,245 @@ describe('React', () => {
       component.changePath()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
     })
-    it('should not update when parent path changes', () => {
-      let renderCount = 0
-      const controller = Controller({
-        state: {
-          foo: {
-            bar: 'baz'
-          }
-        },
-        signals: {
-          methodCalled: [({state}) => state.set('foo', 'bar2')]
-        }
-      })
-      class TestComponentClass extends React.Component {
-        callSignal () {
-          this.props.methodCalled()
-        }
-        render () {
-          renderCount++
-          return (
-            <div>{this.props.foo}</div>
-          )
-        }
-      }
-      const TestComponent = connect({
-        foo: 'foo.bar'
-      }, {
-        methodCalled: 'methodCalled'
-      }, TestComponentClass)
-      const tree = TestUtils.renderIntoDocument((
-        <Container controller={controller}>
-          <TestComponent />
-        </Container>
-      ))
-      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
-      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
-      component.callSignal()
-      assert.equal(renderCount, 1)
-    })
-    it('should not update when child path changes', () => {
-      let renderCount = 0
-      const controller = Controller({
-        state: {
-          foo: {
-            bar: 'baz'
-          }
-        },
-        signals: {
-          methodCalled: [({state}) => state.set('foo.bar', 'baz2')]
-        }
-      })
-      class TestComponentClass extends React.Component {
-        callSignal () {
-          this.props.methodCalled()
-        }
-        render () {
-          renderCount++
-          return (
-            <div>{this.props.foo.bar}</div>
-          )
-        }
-      }
-      const TestComponent = connect({
-        foo: 'foo'
-      }, {
-        methodCalled: 'methodCalled'
-      }, TestComponentClass)
-      const tree = TestUtils.renderIntoDocument((
-        <Container controller={controller}>
-          <TestComponent />
-        </Container>
-      ))
-      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
-      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
-      component.callSignal()
-      assert.equal(renderCount, 1)
-    })
-    it('should update when immediate child interest defined', () => {
-      let renderCount = 0
-      const controller = Controller({
-        state: {
-          foo: {
-            bar: 'baz'
-          }
-        },
-        signals: {
-          methodCalled: [({state}) => state.set('foo.bar', 'baz2')]
-        }
-      })
-      class TestComponentClass extends React.Component {
-        callSignal () {
-          this.props.methodCalled()
-        }
-        render () {
-          renderCount++
-          return (
-            <div>{this.props.foo.bar}</div>
-          )
-        }
-      }
-      const TestComponent = connect({
-        foo: 'foo.*'
-      }, {
-        methodCalled: 'methodCalled'
-      }, TestComponentClass)
-      const tree = TestUtils.renderIntoDocument((
-        <Container controller={controller}>
-          <TestComponent />
-        </Container>
-      ))
-      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
-      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
-      component.callSignal()
-      assert.equal(renderCount, 2)
-    })
-    it('should update when nested children interest defined', () => {
-      let renderCount = 0
-      const controller = Controller({
-        state: {
-          foo: {
-            bar: {
-              baz: 'value'
+    describe('STRICT render update', () => {
+      it('should not update when parent path changes', () => {
+        let renderCount = 0
+        const controller = Controller({
+          strictRender: true,
+          state: {
+            foo: {
+              bar: 'baz'
             }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo', 'bar2')]
           }
-        },
-        signals: {
-          methodCalled: [({state}) => state.set('foo.bar.baz', 'value2')]
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo}</div>
+            )
+          }
         }
+        const TestComponent = connect({
+          foo: 'foo.bar'
+        }, {
+          methodCalled: 'methodCalled'
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(renderCount, 1)
       })
-      class TestComponentClass extends React.Component {
-        callSignal () {
-          this.props.methodCalled()
+      it('should not update when child path changes', () => {
+        let renderCount = 0
+        const controller = Controller({
+          strictRender: true,
+          state: {
+            foo: {
+              bar: 'baz'
+            }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo.bar', 'baz2')]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo.bar}</div>
+            )
+          }
         }
-        render () {
-          renderCount++
-          return (
-            <div>{this.props.foo.bar.baz}</div>
-          )
+        const TestComponent = connect({
+          foo: 'foo'
+        }, {
+          methodCalled: 'methodCalled'
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(renderCount, 1)
+      })
+      it('should update when immediate child interest defined', () => {
+        let renderCount = 0
+        const controller = Controller({
+          strictRender: true,
+          state: {
+            foo: {
+              bar: 'baz'
+            }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo.bar', 'baz2')]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo.bar}</div>
+            )
+          }
         }
-      }
-      const TestComponent = connect({
-        foo: 'foo.**'
-      }, {
-        methodCalled: 'methodCalled'
-      }, TestComponentClass)
-      const tree = TestUtils.renderIntoDocument((
-        <Container controller={controller}>
-          <TestComponent />
-        </Container>
-      ))
-      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'value')
-      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
-      component.callSignal()
-      assert.equal(renderCount, 2)
+        const TestComponent = connect({
+          foo: 'foo.*'
+        }, {
+          methodCalled: 'methodCalled'
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(renderCount, 2)
+      })
+      it('should update when nested children interest defined', () => {
+        let renderCount = 0
+        const controller = Controller({
+          strictRender: true,
+          state: {
+            foo: {
+              bar: {
+                baz: 'value'
+              }
+            }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo.bar.baz', 'value2')]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo.bar.baz}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: 'foo.**'
+        }, {
+          methodCalled: 'methodCalled'
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'value')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(renderCount, 2)
+      })
+    })
+    describe('DEFAULT render update', () => {
+      it('should update when parent path changes', () => {
+        let renderCount = 0
+        const controller = Controller({
+          state: {
+            foo: {
+              bar: 'baz'
+            }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo', {bar: 'baz2'})]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: 'foo.bar'
+        }, {
+          methodCalled: 'methodCalled'
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz2')
+        assert.equal(renderCount, 2)
+      })
+      it('should update when child path changes', () => {
+        let renderCount = 0
+        const controller = Controller({
+          state: {
+            foo: {
+              bar: 'baz'
+            }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo.bar', 'baz2')]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo.bar}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: 'foo'
+        }, {
+          methodCalled: 'methodCalled'
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz2')
+        assert.equal(renderCount, 2)
+      })
     })
   })
 })
