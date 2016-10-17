@@ -18,6 +18,34 @@ A state controller with its own debugger
 ## Cerebral v2 is still a work in progress. Please head over to our cerebral v2 WIP website for more information:
 [https://cerebral.github.io/cerebral-website/](http://cerebral.github.io/cerebral-website).
 
+## Contribute
+The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
+
+1. Clone the monorepo
+2. In root: `npm install`
+3. Run `npm run setup` which will build code and bootstrap it together
+
+The packages are located under `packages` folder and there is **no need** to run `npm install` for each package.
+
+### Running demos
+Go to the respective `packages/some-demo-folder` and run `npm start`
+
+### Testing
+You can run all tests in all packages from root:
+
+`npm test`
+
+Or you can run tests for specific packages by going to package root and do the same:
+
+`npm test`
+
+### Changing the code
+When you make a code change you should create a branch first. When the code is changed and backed up by a test you can commit it from **the root** using:
+
+`git run commit`
+
+This will give you a guide to creating a commit message. Then you just push and create a pull request as normal on Github.
+
 [npm-image]: https://img.shields.io/npm/v/cerebral.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral
 [travis-image]: https://img.shields.io/travis/cerebral/cerebral.svg?style=flat
