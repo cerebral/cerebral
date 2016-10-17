@@ -143,4 +143,14 @@ describe('Controller', () => {
     const controller = new Controller({})
     assert.equal(controller.getState('foo.bar'), undefined)
   })
+  it('should be able to extend itself', () => {
+    const controller = new Controller({
+      extend: {
+        controller: [{
+          foo: 'bar'
+        }]
+      }
+    })
+    assert.deepEqual(controller.foo, 'bar')
+  })
 })

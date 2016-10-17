@@ -1,7 +1,7 @@
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable, addExtensions} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -16,8 +16,9 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   based on top level providers and providers defined in modules
 */
 class Controller extends EventEmitter {
-  constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, strictRender = false}) {
+  constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, strictRender = false, extend = {}}) {
     super()
+    this.extend = extend
     this.strictRender = strictRender
     this.flush = this.flush.bind(this)
     this.devtools = devtools
@@ -134,5 +135,9 @@ class Controller extends EventEmitter {
 }
 
 export default function (...args) {
-  return new Controller(...args)
+  const controller = new Controller(...args)
+  if (controller.extend.controller) {
+    addExtensions(controller, controller.extend.controller)
+  }
+  return controller
 }
