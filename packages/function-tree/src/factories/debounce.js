@@ -1,15 +1,15 @@
 function createDebounce (time) {
-  var timer
-  var currentResolver
+  let timer
+  let currentResolver
 
-  function debounce (context) {
+  function debounce ({path}) {
     return new Promise(function (resolve) {
       if (timer) {
-        currentResolver(context.path.discarded())
+        currentResolver(path.discarded())
         currentResolver = resolve
       } else {
         timer = setTimeout(function () {
-          currentResolver(context.path.accepted())
+          currentResolver(path.accepted())
           timer = null
           currentResolver = null
         }, time)
@@ -22,7 +22,7 @@ function createDebounce (time) {
   return debounce
 }
 
-function debounceFactory (time, continueBranch) {
+export default function debounceFactory (time, continueBranch) {
   return [
     createDebounce(time), {
       accepted: continueBranch,
@@ -30,5 +30,3 @@ function debounceFactory (time, continueBranch) {
     }
   ]
 }
-
-module.exports = debounceFactory

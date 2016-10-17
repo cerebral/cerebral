@@ -1,31 +1,28 @@
-'use strict'
+/* eslint-env mocha */
+import FunctionTree from '../src'
+import assert from 'assert'
 
-const FunctionTree = require('../src')
+describe('InputProvider', () => {
+  it('should have "input" on context', () => {
+    const execute = FunctionTree()
 
-module.exports['should have "input" on context'] = (test) => {
-  const execute = FunctionTree()
-
-  test.expect(1)
-  execute([
-    function action (context) {
-      test.ok(context.input)
-    }
-  ])
-  test.done()
-}
-
-module.exports['should have initial payload on input'] = (test) => {
-  const execute = FunctionTree()
-
-  test.expect(1)
-  execute([
-    function action (context) {
-      test.deepEqual(context.input, {
-        foo: 'bar'
-      })
-    }
-  ], {
-    foo: 'bar'
+    execute([
+      ({input}) => {
+        assert.ok(input)
+      }
+    ])
   })
-  test.done()
-}
+  it('should have initial payload on input', () => {
+    const execute = FunctionTree()
+
+    execute([
+      ({input}) => {
+        assert.deepEqual(input, {
+          foo: 'bar'
+        })
+      }
+    ], {
+      foo: 'bar'
+    })
+  })
+})

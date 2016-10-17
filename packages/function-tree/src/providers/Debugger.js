@@ -1,7 +1,7 @@
 /* global CustomEvent */
 function safeStringify (obj) {
-  var cache = []
-  var returnValue = JSON.stringify(obj || {}, function (key, value) {
+  let cache = []
+  const returnValue = JSON.stringify(obj || {}, function (key, value) {
     if (typeof value === 'object' && value !== null) {
       if (cache.indexOf(value) === -1) {
         cache.push(value)
@@ -12,14 +12,13 @@ function safeStringify (obj) {
     }
     return value
   })
+
   cache = null
 
   return returnValue
 }
 
-module.exports = function (options) {
-  options = options || {}
-
+export default function DebuggerProvider (options = {}) {
   if (typeof window === 'undefined' ||
       (
         typeof window.chrome === 'undefined' &&
@@ -29,14 +28,14 @@ module.exports = function (options) {
     throw new Error('The debugger does not work in this environment, load up the Node debugger instead')
   }
 
-  var isConnected = false
-  var APP_ID = String(Date.now())
-  var VERSION = 'v1'
-  var backlog = []
+  let isConnected = false
+  const APP_ID = String(Date.now())
+  const VERSION = 'v1'
+  const backlog = []
 
   function send (debuggingData, context, functionDetails, payload) {
-    var type = 'execution'
-    var data = {
+    const type = 'execution'
+    const data = {
       name: context.execution.name,
       executionId: context.execution.id,
       functionIndex: functionDetails.functionIndex,
@@ -50,25 +49,25 @@ module.exports = function (options) {
       backlog.push(data)
       return
     }
-    var detail = {
-      type: type,
+    const detail = {
       app: APP_ID,
       version: VERSION,
-      data: data
+      type,
+      data
     }
 
-    var event = new CustomEvent('function-tree.client.message', {
+    const event = new CustomEvent('function-tree.client.message', {
       detail: safeStringify(detail)
     })
     window.dispatchEvent(event)
   }
 
   function sendInitial (type) {
-    var event = new CustomEvent('function-tree.client.message', {
+    const event = new CustomEvent('function-tree.client.message', {
       detail: safeStringify({
-        type: type,
         app: APP_ID,
         version: VERSION,
+        type,
         data: {
           functionTrees: backlog
         }
@@ -91,12 +90,12 @@ module.exports = function (options) {
 
   sendInitial('init')
 
-  return function (context, functionDetails, payload) {
+  return (context, functionDetails, payload) => {
     context.debugger = {
-      send: function (data) {
+      send (data) {
         send(data, context, functionDetails, payload)
       },
-      getColor: function (key) {
+      getColor (key) {
         return options.colors[key] || '#333'
       }
     }

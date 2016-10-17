@@ -1,6 +1,6 @@
-function ReduxProvider (store) {
+export default function ReduxProvider (store) {
   return (context) => {
-    context.dispatch = function (action) {
+    context.dispatch = (action) => {
       context.debugger && context.debugger.send({
         method: 'redux.dispatch',
         color: '#6333b1',
@@ -8,12 +8,10 @@ function ReduxProvider (store) {
       })
       store.dispatch(action)
     }
-    context.getState = function () {
+    context.getState = () => {
       return store.getState()
     }
 
     return context
   }
 }
-
-module.exports = ReduxProvider

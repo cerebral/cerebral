@@ -1,8 +1,8 @@
-'use strict'
-
-const assign = require('object-assign')
-
-module.exports = function executeTree (tree, resolveFunctionResult, initialPayload, end) {
+/*
+  Runs through the tree providing a "next" callback to process next step
+  of execution
+*/
+export default function executeTree (tree, resolveFunctionResult, initialPayload, end) {
   function runBranch (branch, index, payload, nextBranch) {
     function runNextItem (result) {
       runBranch(branch, index + 1, result, nextBranch)
@@ -10,10 +10,11 @@ module.exports = function executeTree (tree, resolveFunctionResult, initialPaylo
 
     function processFunctionOutput (funcDetails, outputResult) {
       return function (result) {
-        let newPayload = assign({}, payload, result ? result.payload : {})
+        const newPayload = Object.assign({}, payload, result ? result.payload : {})
 
         if (result && funcDetails.outputs) {
-          let outputs = Object.keys(funcDetails.outputs)
+          const outputs = Object.keys(funcDetails.outputs)
+
           if (~outputs.indexOf(result.path)) {
             runBranch(funcDetails.outputs[result.path], 0, newPayload, outputResult)
           } else {
@@ -25,7 +26,8 @@ module.exports = function executeTree (tree, resolveFunctionResult, initialPaylo
       }
     }
 
-    let currentItem = branch[index]
+    const currentItem = branch[index]
+
     if (!currentItem) {
       nextBranch ? nextBranch(payload) : end(payload)
     } else if (Array.isArray(currentItem)) {
@@ -33,7 +35,7 @@ module.exports = function executeTree (tree, resolveFunctionResult, initialPaylo
       currentItem.reduce((payloads, action) => {
         resolveFunctionResult(action, payload, processFunctionOutput(action, (payload) => {
           payloads.push(payload)
-          if (payloads.length === itemLength) runNextItem(assign.apply(null, [{}].concat(payloads)))
+          if (payloads.length === itemLength) runNextItem(Object.assign.apply(Object, [{}].concat(payloads)))
         }))
         return payloads
       }, [])

@@ -1,19 +1,20 @@
-'use strict'
-const FunctionTree = require('../src')
-const ContextProvider = require('../src/providers/Context')
+/* eslint-env mocha */
+import FunctionTree from '../src'
+import ContextProvider from '../src/providers/Context'
+import assert from 'assert'
 
-module.exports['should add whatever is passed into the context'] = (test) => {
-  const execute = FunctionTree([
-    ContextProvider({
-      foo: 'bar'
-    })
-  ])
+describe('ContextProvider', () => {
+  it('should add whatever is passed on to the context', () => {
+    const execute = FunctionTree([
+      ContextProvider({
+        foo: 'bar'
+      })
+    ])
 
-  test.expect(1)
-  execute([
-    function func (context) {
-      test.equal(context.foo, 'bar')
-    }
-  ])
-  test.done()
-}
+    execute([
+      ({foo}) => {
+        assert.equal(foo, 'bar')
+      }
+    ])
+  })
+})

@@ -1,113 +1,101 @@
-'use strict'
+/* eslint-env mocha */
+import FunctionTree from '../src'
+import assert from 'assert'
 
-const FunctionTree = require('../src')
+describe('PathProvider', () => {
+  it('should add path function when paths can be taken', () => {
+    const execute = FunctionTree()
 
-module.exports['should add path function when paths can be taken'] = (test) => {
-  const execute = FunctionTree()
+    execute([
+      ({path}) => {
+        assert.ok(path.success)
+        assert.ok(path.error)
+        return path.success()
+      }, {
+        success: [],
+        error: []
+      }
+    ])
+  })
+  it('should NOT add path function when paths can NOT be taken', () => {
+    const execute = FunctionTree()
 
-  test.expect(2)
-  execute([
-    function action (context) {
-      test.ok(context.path.success)
-      test.ok(context.path.error)
-      return context.path.success()
-    }, {
-      success: [],
-      error: []
-    }
-  ])
-  test.done()
-}
+    execute([
+      ({path}) => {
+        assert.ok(!path)
+      }
+    ])
+  })
+  it('should have possible outputs as methods', () => {
+    const execute = FunctionTree()
 
-module.exports['should NOT add path function when paths can NOT be taken'] = (test) => {
-  const execute = FunctionTree()
+    execute([
+      ({path}) => {
+        assert.ok(path.foo)
+        assert.ok(path.bar)
+        return path.foo()
+      }, {
+        foo: [],
+        bar: []
+      }
+    ])
+  })
+  it('should go down path based on method used', (done) => {
+    const execute = FunctionTree()
 
-  test.expect(1)
-  execute([
-    function action (context) {
-      test.ok(!context.path)
-    }
-  ])
-  test.done()
-}
+    execute([
+      ({path}) => {
+        return path.foo()
+      }, {
+        foo: [
+          () => {
+            assert.ok(true)
+            done()
+          }
+        ],
+        bar: []
+      }
+    ])
+  })
+  it('should pass payload down paths', (done) => {
+    const execute = FunctionTree()
 
-module.exports['should have possible outputs as methods'] = (test) => {
-  const execute = FunctionTree()
-
-  test.expect(2)
-  execute([
-    function action (context) {
-      test.ok(context.path.foo)
-      test.ok(context.path.bar)
-      return context.path.foo()
-    }, {
-      foo: [],
-      bar: []
-    }
-  ])
-  test.done()
-}
-
-module.exports['should go down path based on method used'] = (test) => {
-  const execute = FunctionTree()
-
-  test.expect(1)
-  execute([
-    function actionA (context) {
-      return context.path.foo()
-    }, {
-      foo: [
-        function actionB () {
-          test.ok(true)
-        }
-      ],
-      bar: []
-    }
-  ])
-  test.done()
-}
-
-module.exports['should pass payload down paths'] = (test) => {
-  const execute = FunctionTree()
-
-  test.expect(1)
-  execute([
-    function actionA (context) {
-      return context.path.foo({foo: 'bar'})
-    }, {
-      foo: [
-        function actionB (context) {
-          test.deepEqual(context.input, {foo: 'bar'})
-        }
-      ],
-      bar: []
-    }
-  ])
-  test.done()
-}
-
-module.exports['should pass payload async'] = (test) => {
-  function actionA (context) {
-    return new Promise((resolve) => {
-      setTimeout(function () {
-        resolve(context.path.foo({foo: 'bar'}))
+    execute([
+      ({path}) => {
+        return path.foo({foo: 'bar'})
+      }, {
+        foo: [
+          ({input}) => {
+            assert.deepEqual(input, {foo: 'bar'})
+            done()
+          }
+        ],
+        bar: []
+      }
+    ])
+  })
+  it('should pass payload async', (done) => {
+    function actionA ({path}) {
+      return new Promise((resolve) => {
+        setTimeout(function () {
+          resolve(path.foo({foo: 'bar'}))
+        })
       })
-    })
-  }
-
-  function actionB (context) {
-    test.deepEqual(context.input, {foo: 'bar'})
-  }
-
-  const execute = FunctionTree()
-
-  test.expect(1)
-  execute([
-    actionA, {
-      foo: [
-        actionB
-      ],
-      bar: []
     }
-  ], test.done)
-}
+
+    function actionB ({input}) {
+      assert.deepEqual(input, {foo: 'bar'})
+    }
+
+    const execute = FunctionTree()
+
+    execute([
+      actionA, {
+        foo: [
+          actionB
+        ],
+        bar: []
+      }
+    ], done)
+  })
+})

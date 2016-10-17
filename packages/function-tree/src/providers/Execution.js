@@ -1,16 +1,14 @@
-const executeTree = require('../executeTree')
+import executeTree from '../executeTree'
 
-module.exports = function ExecutionProvider (execution, Abort) {
-  return function (context) {
+export default function ExecutionProvider (execution, Abort) {
+  return (context) => {
     context.execution = execution
-    context.execution.retry = function (payload) {
-      return new Promise(function (resolve) {
-        executeTree(execution.staticTree, execution.runFunction, payload, function () {
-          resolve()
-        })
+    context.execution.retry = (payload) => {
+      return new Promise((resolve) => {
+        executeTree(execution.staticTree, execution.runFunction, payload, resolve)
       })
     }
-    context.execution.abort = function () {
+    context.execution.abort = () => {
       return new Abort()
     }
 

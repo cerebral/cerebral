@@ -1,8 +1,8 @@
-var chalk = require('chalk')
+import chalk from 'chalk'
 
 function safeStringify (obj) {
-  var cache = []
-  var returnValue = JSON.stringify(obj || {}, function (key, value) {
+  let cache = []
+  const returnValue = JSON.stringify(obj || {}, function (key, value) {
     if (typeof value === 'object' && value !== null) {
       if (cache.indexOf(value) === -1) {
         cache.push(value)
@@ -13,14 +13,13 @@ function safeStringify (obj) {
     }
     return value
   })
+
   cache = null
 
   return returnValue
 }
 
-module.exports = function (options) {
-  options = options || {}
-
+export default function NodeDebuggerProvider (options = {}) {
   if (
       typeof window !== 'undefined' &&
       (
@@ -31,24 +30,23 @@ module.exports = function (options) {
     throw new Error('function-tree: You are running the Node debugger, but the Chrome debugger is supported')
   }
 
-  function padded (text, size) {
-    size = size || 0
-    var padding = new Array(size + 1).join(' ')
+  function padded (text, size = 0) {
+    const padding = new Array(size + 1).join(' ')
+
     return padding + text + padding
   }
 
-  var registeredFunctionTrees = {}
+  const registeredFunctionTrees = {}
 
   function send (debuggingData, context, functionDetails, payload) {
-    var id = context.execution.id + '_' + context.execution.executionId
-    var prevFunction = (
+    const id = context.execution.id + '_' + context.execution.executionId
+    const prevFunction = (
       registeredFunctionTrees[id] &&
       registeredFunctionTrees[id].functions[functionDetails.functionIndex]
         ? registeredFunctionTrees[id].functions[functionDetails.functionIndex]
         : null
     )
-
-    var isExistingFunction = Boolean(prevFunction && prevFunction.functionIndex === functionDetails.functionIndex)
+    const isExistingFunction = Boolean(prevFunction && prevFunction.functionIndex === functionDetails.functionIndex)
 
     if (registeredFunctionTrees[id] && registeredFunctionTrees[id].functions[functionDetails.functionIndex]) {
       registeredFunctionTrees[id].functions[functionDetails.functionIndex].data.push(debuggingData)
@@ -58,7 +56,7 @@ module.exports = function (options) {
       registeredFunctionTrees[id].functions[functionDetails.functionIndex] = {
         functionIndex: functionDetails.functionIndex,
         outputs: functionDetails.outputs,
-        payload: payload,
+        payload,
         data: []
       }
     } else {
@@ -70,14 +68,14 @@ module.exports = function (options) {
       registeredFunctionTrees[id].functions[functionDetails.functionIndex] = {
         functionIndex: functionDetails.functionIndex,
         outputs: functionDetails.outputs,
-        payload: payload,
+        payload,
         data: []
       }
     }
 
     if (isExistingFunction) {
-      var data = prevFunction.data[prevFunction.data.length - 1]
-      var args = data ? data.args || [] : []
+      const data = prevFunction.data[prevFunction.data.length - 1]
+      const args = data ? data.args || [] : []
 
       console.log.apply(console,
         [padded(chalk[data.color || 'white'](data.method), registeredFunctionTrees[id].logLevel)].concat(
@@ -94,7 +92,7 @@ module.exports = function (options) {
       }
 
       if (prevFunction && prevFunction.outputs) {
-        var chosenOutput = Object.keys(prevFunction.outputs).filter(function (outputKey) {
+        const chosenOutput = Object.keys(prevFunction.outputs).filter(function (outputKey) {
           if (
             prevFunction.outputs[outputKey].length &&
             (
@@ -114,7 +112,7 @@ module.exports = function (options) {
         registeredFunctionTrees[id].logLevel++
       }
 
-      var payloadString = safeStringify(payload)
+      const payloadString = safeStringify(payload)
 
       console.log(padded(chalk.underline.white(functionDetails.name), registeredFunctionTrees[id].logLevel))
       console.log(padded(
@@ -124,12 +122,12 @@ module.exports = function (options) {
     }
   }
 
-  return function (context, functionDetails, payload) {
+  return (context, functionDetails, payload) => {
     context.debugger = {
-      send: function (data) {
+      send (data) {
         send(data, context, functionDetails, payload)
       },
-      getColor: function (key) {
+      getColor (key) {
         return options.colors[key] || 'white'
       }
     }
@@ -137,4 +135,5 @@ module.exports = function (options) {
     send(null, context, functionDetails, payload)
 
     return context
-  } }
+  }
+}

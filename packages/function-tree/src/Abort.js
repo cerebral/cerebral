@@ -1,3 +1,1 @@
-function Abort () {}
-
-module.exports = Abort
+export default class Abort {}

@@ -1,176 +1,157 @@
-'use strict'
+/* eslint-env mocha */
+import FunctionTree from '../src'
+import assert from 'assert'
 
-const FunctionTree = require('../src')
+describe('FunctionTree', () => {
+  it('should create a function tree extending event emitter', () => {
+    const execute = FunctionTree([])
 
-module.exports['should create a function tree extending event emitter'] = (test) => {
-  const execute = FunctionTree([])
-
-  test.equal(typeof execute.on, 'function')
-  test.equal(typeof execute.once, 'function')
-  test.equal(typeof execute.off, 'function')
-  test.done()
-}
-
-module.exports['should run functions'] = (test) => {
-  const execute = FunctionTree()
-
-  test.expect(1)
-  execute([
-    function action () {
-      test.ok(true)
-    }
-  ])
-  test.done()
-}
-
-module.exports['should pass arguments to context creator and run it for each action'] = (test) => {
-  const execute = FunctionTree([
-    function SomeProvider (context, functionDetails, payload) {
-      test.ok(context)
-      test.equal(functionDetails.functionIndex, 0)
-      test.deepEqual(payload, {foo: 'bar'})
-
-      return context
-    }
-  ])
-
-  test.expect(3)
-  execute([
-    function action () {}
-  ], {
-    foo: 'bar'
+    assert.equal(typeof execute.on, 'function')
+    assert.equal(typeof execute.once, 'function')
+    assert.equal(typeof execute.off, 'function')
   })
-  test.done()
-}
+  it('should run functions', () => {
+    const execute = FunctionTree()
 
-module.exports['should pass returned context into functions'] = (test) => {
-  const execute = FunctionTree([
-    function SomeProvider (context) {
-      context.foo = 'bar'
-
-      return context
-    }
-  ])
-
-  test.expect(1)
-  execute([
-    function action (context) {
-      test.equal(context.foo, 'bar')
-    }
-  ])
-  test.done()
-}
-
-module.exports['should emit execution events in correct order'] = (test) => {
-  let eventsCount = 0
-  const execute = FunctionTree()
-
-  test.expect(6)
-  execute.once('start', function () {
-    eventsCount++
-    test.equal(eventsCount, 1)
+    execute([
+      () => {
+        assert.ok(true)
+      }
+    ])
   })
-  execute.once('functionStart', function () {
-    eventsCount++
-    test.equal(eventsCount, 2)
+  it('should pass arguments to context creator and run it for each action', () => {
+    const execute = FunctionTree([
+      function SomeProvider (context, functionDetails, payload) {
+        assert.ok(context)
+        assert.equal(functionDetails.functionIndex, 0)
+        assert.deepEqual(payload, {foo: 'bar'})
+
+        return context
+      }
+    ])
+
+    execute([
+      () => {}
+    ], {
+      foo: 'bar'
+    })
+  })
+  it('should pass returned context into functions', () => {
+    const execute = FunctionTree([
+      function SomeProvider (context) {
+        context.foo = 'bar'
+
+        return context
+      }
+    ])
+
+    execute([
+      ({foo}) => {
+        assert.equal(foo, 'bar')
+      }
+    ])
+  })
+  it('should emit execution events in correct order', () => {
+    let eventsCount = 0
+    const execute = FunctionTree()
+
+    execute.once('start', function () {
+      eventsCount++
+      assert.equal(eventsCount, 1)
+    })
     execute.once('functionStart', function () {
       eventsCount++
-      test.equal(eventsCount, 4)
+      assert.equal(eventsCount, 2)
+      execute.once('functionStart', function () {
+        eventsCount++
+        assert.equal(eventsCount, 4)
+      })
     })
-  })
-  execute.once('functionEnd', function () {
-    eventsCount++
-    test.equal(eventsCount, 3)
     execute.once('functionEnd', function () {
       eventsCount++
-      test.equal(eventsCount, 5)
+      assert.equal(eventsCount, 3)
+      execute.once('functionEnd', function () {
+        eventsCount++
+        assert.equal(eventsCount, 5)
+      })
     })
-  })
-  execute.on('end', function () {
-    eventsCount++
-    test.equal(eventsCount, 6)
-    test.done()
-  })
-  execute([
-    function actionA () {},
-    function actionB () {}
-  ])
-}
-
-module.exports['should pass action and payload on action events'] = (test) => {
-  const execute = FunctionTree()
-
-  test.expect(6)
-  execute.once('functionStart', function (execution, functionDetails, payload) {
-    test.ok(execution.id)
-    test.equal(functionDetails.functionIndex, 0)
-    test.deepEqual(payload, {foo: 'bar'})
-  })
-  execute.once('functionEnd', function (execution, functionDetails, payload) {
-    test.ok(execution.id)
-    test.equal(functionDetails.functionIndex, 0)
-    test.deepEqual(payload, {foo: 'bar'})
-  })
-  execute([
-    function action () {}
-  ], {
-    foo: 'bar'
-  })
-  test.done()
-}
-
-module.exports['should be able to reuse existing tree'] = (test) => {
-  function actionA (context) {
-    test.ok(true)
-    return context.path.success()
-  }
-
-  function actionB (context) {
-    test.ok(true)
-    return context.path.success()
-  }
-
-  function actionC () {
-    test.ok(true)
-  }
-
-  const execute = FunctionTree([])
-  const tree = [
-    actionA, {
-      success: [
-        actionB, {
-          success: [
-            actionC
-          ]
-        }
-      ]
-    }
-  ]
-  test.expect(6)
-  execute(tree, () => {
-    execute(tree, () => {
-      test.done()
+    execute.on('end', function () {
+      eventsCount++
+      assert.equal(eventsCount, 6)
     })
+    execute([
+      function actionA () {},
+      function actionB () {}
+    ])
   })
-}
+  it('should pass action and payload on action events', () => {
+    const execute = FunctionTree()
 
-module.exports['should give error when path and no path returned'] = (test) => {
-  function actionA () {
-    return {
+    execute.once('functionStart', function (execution, functionDetails, payload) {
+      assert.ok(execution.id)
+      assert.equal(functionDetails.functionIndex, 0)
+      assert.deepEqual(payload, {foo: 'bar'})
+    })
+    execute.once('functionEnd', function (execution, functionDetails, payload) {
+      assert.ok(execution.id)
+      assert.equal(functionDetails.functionIndex, 0)
+      assert.deepEqual(payload, {foo: 'bar'})
+    })
+    execute([
+      () => {}
+    ], {
       foo: 'bar'
-    }
-  }
-
-  const execute = FunctionTree([])
-  const tree = [
-    actionA, {
-      success: []
-    }
-  ]
-  test.expect(1)
-  execute.once('error', () => {
-    test.ok(true)
-    test.done()
+    })
   })
-  execute(tree)
-}
+  it('should be able to reuse existing tree', (done) => {
+    function actionA ({path}) {
+      assert.ok(true)
+      return path.success()
+    }
+
+    function actionB ({path}) {
+      assert.ok(true)
+      return path.success()
+    }
+
+    function actionC () {
+      assert.ok(true)
+    }
+
+    const execute = FunctionTree([])
+    const tree = [
+      actionA, {
+        success: [
+          actionB, {
+            success: [
+              actionC
+            ]
+          }
+        ]
+      }
+    ]
+    execute(tree, () => {
+      execute(tree, () => {
+        done()
+      })
+    })
+  })
+  it('should give error when path and no path returned', () => {
+    function actionA () {
+      return {
+        foo: 'bar'
+      }
+    }
+
+    const execute = FunctionTree([])
+    const tree = [
+      actionA, {
+        success: []
+      }
+    ]
+    execute.once('error', () => {
+      assert.ok(true)
+    })
+    execute(tree)
+  })
+})
