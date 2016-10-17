@@ -1,5 +1,5 @@
 import isValidFormHelper from './helpers/isValidForm'
-import isValidFormFactory from './helpers/isValidFormFactory'
+import isValidFormFactory from './factories/isValidForm'
 
 export {default as form} from './form'
 export {default as rules} from './rules'

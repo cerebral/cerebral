@@ -6,7 +6,8 @@
     "test:watch": "npm run test -- --watch",
     "prebuild": "npm run test",
     "build": "babel src/ --out-dir=lib/ -s",
-    "coverage": "nyc --reporter=lcov --reporter=text npm run test"
+    "coverage": "nyc --reporter=lcov --reporter=text npm run test",
+    "lint": "standard"
   },
   "repository": {
     "type": "git",
