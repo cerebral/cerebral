@@ -26,7 +26,6 @@ module.exports = {
     {name: 'Devtools'},
     {name: 'Providers'},
     {name: 'cerebral-router'},
-    {name: 'cerebral-scheme-parser'},
     {name: 'function-tree'}
   ],
 

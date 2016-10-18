@@ -1,36 +1,20 @@
-import parseScheme from 'cerebral-scheme-parser'
-import populateInputAndStateSchemes from './helpers/populateInputAndStateSchemes'
-
-export default function (path, value) {
-  const pathScheme = parseScheme(path)
-  const valueScheme = typeof value === 'string' ? parseScheme(value) : value
-
-  if (pathScheme.target !== 'state') {
-    throw new Error('Cerebral operator SET - The path: "' + path + '" does not target "state"')
+export default function (fromTemplate, valueTemplate) {
+  if (typeof fromTemplate !== 'function') {
+    throw new Error('Cerebral operator.set: You have to use a state template tag as first argument')
   }
 
-  if (
-    valueScheme &&
-    valueScheme.target &&
-    valueScheme.target !== 'input' &&
-    valueScheme.target !== 'state'
-  ) {
-    throw new Error('Cerebral operator SET - The value: "' + path + '" does not target "input" or "state"')
-  }
-  const set = function set ({input, state}) {
-    const pathSchemeValue = pathScheme.getValue(populateInputAndStateSchemes(input, state))
-    let valueSchemeValue = value
+  function set (context) {
+    const from = fromTemplate(context)
+    const value = typeof valueTemplate === 'function' ? valueTemplate(context).toValue() : valueTemplate
 
-    if (valueScheme && valueScheme.target && valueScheme.target === 'input') {
-      valueSchemeValue = input[valueScheme.getValue(populateInputAndStateSchemes(input, state))]
-    } else if (valueScheme && valueScheme.target && valueScheme.target === 'state') {
-      valueSchemeValue = state.get(valueScheme.getValue(populateInputAndStateSchemes(input, state)))
+    if (from.target !== 'state') {
+      throw new Error('Cerebral operator.set: You have to use a state template tag as first argument')
     }
 
-    state.set(pathSchemeValue, valueSchemeValue)
+    context.state.set(from.path, value)
   }
 
-  set.displayName = 'operator SET'
+  set.displayName = 'operator.set'
 
   return set
 }

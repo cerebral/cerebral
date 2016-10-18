@@ -3,6 +3,26 @@ import Controller from '../src/Controller'
 import assert from 'assert'
 
 describe('Operators', () => {
+  it('should be able to nest template tags', () => {
+    const set = require('../src/operators/set').default
+    const state = require('../src/operators/state').default
+    const input = require('../src/operators/input').default
+    const controller = new Controller({
+      state: {
+        foo: 'bar',
+        grabValue: {
+          bar: 'baz'
+        }
+      },
+      signals: {
+        test: [
+          set(state`foo`, state`grabValue.${input`foo`}`)
+        ]
+      }
+    })
+    controller.getSignal('test')({foo: 'bar'})
+    assert.equal(controller.getState().foo, 'baz')
+  })
   describe('debounce', () => {
     it('should debounce execution', (done) => {
       const debounce = require('../src/operators/debounce').default
@@ -29,12 +49,13 @@ describe('Operators', () => {
   describe('filter', () => {
     it('should filter input', () => {
       const filter = require('../src/operators/filter').default
+      const input = require('../src/operators/input').default
       let accepted = 0
       let discarded = 0
       const controller = new Controller({
         signals: {
           test: [
-            filter('input:value', (value) => Boolean(value.length)), {
+            filter(input`value`, (value) => Boolean(value.length)), {
               accepted: [
                 () => { accepted++ }
               ],
@@ -52,6 +73,7 @@ describe('Operators', () => {
     })
     it('should filter state', () => {
       const filter = require('../src/operators/filter').default
+      const state = require('../src/operators/state').default
       let discarded = 0
       const controller = new Controller({
         state: {
@@ -59,7 +81,7 @@ describe('Operators', () => {
         },
         signals: {
           test: [
-            filter('state:foo', (value) => value === 'bar'), {
+            filter(state`foo`, (value) => value === 'bar'), {
               accepted: [
                 ({state}) => { state.set('foo', 'bar2') }
               ],
@@ -78,13 +100,14 @@ describe('Operators', () => {
   describe('toggle', () => {
     it('should toggle state', () => {
       const toggle = require('../src/operators/toggle').default
+      const state = require('../src/operators/state').default
       const controller = new Controller({
         state: {
           foo: true
         },
         signals: {
           test: [
-            toggle('state:foo')
+            toggle(state`foo`)
           ]
         }
       })
@@ -95,11 +118,12 @@ describe('Operators', () => {
   describe('when', () => {
     it('should check truthy value of input', () => {
       const when = require('../src/operators/when').default
+      const input = require('../src/operators/input').default
       let count = 0
       const controller = new Controller({
         signals: {
           test: [
-            when('input:foo'), {
+            when(input`foo`), {
               true: [() => { count++ }],
               false: []
             }
@@ -111,6 +135,7 @@ describe('Operators', () => {
     })
     it('should check truthy value of state', () => {
       const when = require('../src/operators/when').default
+      const state = require('../src/operators/state').default
       let count = 0
       const controller = new Controller({
         state: {
@@ -118,7 +143,7 @@ describe('Operators', () => {
         },
         signals: {
           test: [
-            when('state:foo'), {
+            when(state`foo`), {
               true: [],
               false: [() => { count++ }]
             }
@@ -150,13 +175,14 @@ describe('Operators', () => {
   describe('set', () => {
     it('should set value to model', () => {
       const set = require('../src/operators/set').default
+      const state = require('../src/operators/state').default
       const controller = new Controller({
         state: {
           foo: 'bar'
         },
         signals: {
           test: [
-            set('state:foo', 'bar2')
+            set(state`foo`, 'bar2')
           ]
         }
       })
@@ -165,13 +191,14 @@ describe('Operators', () => {
     })
     it('should set non string value to model', () => {
       const set = require('../src/operators/set').default
+      const state = require('../src/operators/state').default
       const controller = new Controller({
         state: {
           foo: 'bar'
         },
         signals: {
           test: [
-            set('state:foo', {bar: 'baz'})
+            set(state`foo`, {bar: 'baz'})
           ]
         }
       })
@@ -180,13 +207,15 @@ describe('Operators', () => {
     })
     it('should set value to model from input', () => {
       const set = require('../src/operators/set').default
+      const state = require('../src/operators/state').default
+      const input = require('../src/operators/input').default
       const controller = new Controller({
         state: {
           foo: 'bar'
         },
         signals: {
           test: [
-            set('state:foo', 'input:value')
+            set(state`foo`, input`value`)
           ]
         }
       })
@@ -197,6 +226,7 @@ describe('Operators', () => {
     })
     it('should set value to model from model', () => {
       const set = require('../src/operators/set').default
+      const state = require('../src/operators/state').default
       const controller = new Controller({
         state: {
           foo: 'bar',
@@ -204,7 +234,7 @@ describe('Operators', () => {
         },
         signals: {
           test: [
-            set('state:foo', 'state:grabValue')
+            set(state`foo`, state`grabValue`)
           ]
         }
       })
