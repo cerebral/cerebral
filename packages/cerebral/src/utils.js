@@ -1,6 +1,8 @@
-export function addExtensions(target, extensions) {
+export function addExtensions (target, extensions) {
   return extensions.reduce((currentTarget, extension) => {
-    return Object.assign(currentTarget, extension)
+    const extensionObj = typeof extension === 'function' ? extension(currentTarget) : extension
+
+    return Object.assign(currentTarget, extensionObj)
   }, target)
 }
 

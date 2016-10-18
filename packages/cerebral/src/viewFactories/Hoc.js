@@ -1,11 +1,14 @@
 import {Computed} from './../Computed'
-import {cleanPath, propsDiffer} from './../utils'
+import {cleanPath, propsDiffer, addExtensions} from './../utils'
 
 export default (View) => {
   return function HOC (paths, signals, Component) {
     class CerebralComponent extends View.Component {
-      constructor (props) {
+      constructor (props, context) {
         super(props)
+        if (context.cerebral.controller.extend.hoc) {
+          addExtensions(this, context.cerebral.controller.extend.hoc)
+        }
         this.evaluatedPaths = this.getStatePaths(props)
         this.signals = signals
         this.Component = Component
