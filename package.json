@@ -1,13 +1,14 @@
 {
   "name": "cerebral-monorepo",
+  "version": "0.0.0",
   "scripts": {
-    "commit": "git-cz",
+    "setup": "lerna bootstrap",
     "lint": "standard",
-    "pretest": "npm run lint && lerna bootstrap && npm run build",
+    "pretest": "npm run lint && lerna bootstrap",
     "test": "lerna run test",
     "coverage": "lerna run coverage && istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "build": "lerna run build"
+    "commit": "git-cz"
   },
   "license": "MIT",
   "devDependencies": {
