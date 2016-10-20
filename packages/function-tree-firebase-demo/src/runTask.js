@@ -1,5 +1,5 @@
-const FunctionTree = require('function-tree')
-const NodeDebuggerProvider = require('function-tree/providers/NodeDebugger')
+const FunctionTree = require('function-tree').default
+const NodeDebuggerProvider = require('function-tree/lib/providers/NodeDebugger')
 const FirebaseProvider = require('./providers/Firebase')
 const DashboardProvider = require('./providers/Dashboard')
 

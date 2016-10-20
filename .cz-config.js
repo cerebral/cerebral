@@ -26,7 +26,8 @@ module.exports = {
     {name: 'Devtools'},
     {name: 'Providers'},
     {name: 'cerebral-router'},
-    {name: 'function-tree'}
+    {name: 'function-tree'},
+    {name: 'demos'}
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
