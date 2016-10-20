@@ -143,4 +143,30 @@ describe('Controller', () => {
     const controller = new Controller({})
     assert.equal(controller.getState('foo.bar'), undefined)
   })
+  it('should expose method to get all signals', () => {
+    const controller = new Controller({
+      signals: {
+        foo: []
+      },
+      modules: {
+        moduleA: {
+          signals: {
+            fooNested: []
+          },
+          modules: {
+            moduleB: {
+              signals: {
+                fooNestedNested: []
+              }
+            }
+          }
+        }
+      }
+    })
+    assert.doesNotThrow(() => {
+      controller.getSignals().foo()
+      controller.getSignals().moduleA.fooNested()
+      controller.getSignals().moduleA.moduleB.fooNestedNested()
+    })
+  })
 })
