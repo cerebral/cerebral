@@ -245,6 +245,87 @@ describe('React', () => {
       component.changePath()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
     })
+    it('should be able to extend HOC', () => {
+      const controller = Controller({
+        extend: {
+          hoc: [(hoc) => {
+            const originalGetProps = hoc.getProps
+
+            return {
+              getProps (...args) {
+                const props = originalGetProps.apply(hoc, args)
+                props.foo = 'bar'
+
+                return props
+              }
+            }
+          }]
+        }
+      })
+      class TestComponentClass extends React.Component {
+        render () {
+          return (
+            <div>{this.props.foo}</div>
+          )
+        }
+      }
+      const TestComponent = connect({}, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
+    it('should be able to extend Container', () => {
+      const controller = Controller({
+        extend: {
+          container: [{
+            getChildContext () {
+              const controller = (
+                this.props.controller ||
+                this.createDummyController(this.props.state)
+              )
+              return {
+                cerebral: {
+                  controller: controller,
+                  registerComponent: this.registerComponent,
+                  unregisterComponent: this.unregisterComponent,
+                  updateComponent: this.updateComponent,
+                  foo: 'bar'
+                }
+              }
+            }
+          }],
+          hoc: [(hoc) => {
+            const originalGetProps = hoc.getProps
+
+            return {
+              getProps (...args) {
+                const props = originalGetProps.apply(hoc, args)
+                props.foo = this.context.cerebral.foo
+
+                return props
+              }
+            }
+          }]
+        }
+      })
+      class TestComponentClass extends React.Component {
+        render () {
+          return (
+            <div>{this.props.foo}</div>
+          )
+        }
+      }
+      const TestComponent = connect({}, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
     describe('STRICT render update', () => {
       it('should not update when parent path changes', () => {
         let renderCount = 0

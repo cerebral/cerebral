@@ -1,3 +1,11 @@
+export function addExtensions (target, extensions) {
+  return extensions.reduce((currentTarget, extension) => {
+    const extensionObj = typeof extension === 'function' ? extension(currentTarget) : extension
+
+    return Object.assign(currentTarget, extensionObj)
+  }, target)
+}
+
 export function propsDiffer (propsA, propsB) {
   const propsAKeys = Object.keys(propsA)
   const propsBKeys = Object.keys(propsB)

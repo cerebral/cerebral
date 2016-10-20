@@ -1,11 +1,14 @@
 /* global CustomEvent */
 import DependencyStore from '../DependencyStore'
-import {ensurePath} from '../utils'
+import {ensurePath, addExtensions} from '../utils'
 
 export default (View) => {
   class Container extends View.Component {
     constructor (props) {
       super(props)
+      if (this.props.controller && this.props.controller.extend.container) {
+        addExtensions(this, this.props.controller.extend.container)
+      }
       this.dependencyStore = new DependencyStore()
       this.debuggerComponentsMap = {}
       this.debuggerComponentDetailsId = 1
@@ -61,6 +64,7 @@ export default (View) => {
     */
     createDummyController (state = {}) {
       return {
+        extend: {},
         on () {},
         getState (path) {
           return ensurePath(path).reduce((currentState, pathKey) => {
