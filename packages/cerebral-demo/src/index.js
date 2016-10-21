@@ -6,28 +6,29 @@ import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import Router from 'cerebral-router'
-import {set} from 'cerebral/operators'
+import {set, state} from 'cerebral/operators'
 
 const AdminModule = {
   routes: {
     '/': 'routed'
   },
   signals: {
-    routed: [set('state:title', 'Admin')]
+    routed: [set(state`title`, 'Admin')]
   }
 }
 
 const controller = Controller({
   devtools: Devtools(),
-  router: Router(),
-  routes: {
-    '/': 'routed'
-  },
+  router: Router({
+    routes: {
+      '/': 'routed'
+    }
+  }),
   state: {
     title: 'Hello world!'
   },
   signals: {
-    routed: [set('state:title', 'Front page')]
+    routed: [set(state`title`, 'Front page')]
   },
   modules: {
     admin: AdminModule

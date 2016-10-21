@@ -22,8 +22,8 @@ export default connect({
       <div>
         <h1>{props.title}</h1>
         <UpperTitle />
-        <a href='javascript:;' onClick={onFrontClicked}>Front</a>
-        <a href='javascript:;' onClick={onAdminClicked}>Admin</a>
+        <li><a href='javascript:;' onClick={onFrontClicked}>Front</a></li>
+        <li><a href='javascript:;' onClick={onAdminClicked}>Admin</a></li>
       </div>
     )
   }
