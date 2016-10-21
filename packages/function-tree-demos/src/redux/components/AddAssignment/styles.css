@@ -1,0 +1,71 @@
+.AddAssignment {
+  margin-bottom: 10px;
+  display: flex;
+}
+
+.AddAssignment__title {
+  padding: 5px 10px;
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+  width: 300px;
+}
+
+.AddAssignment__newAssignee {
+  padding: 5px 10px;
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+  width: 130px;
+}
+
+.AddAssignment__searchWrapper {
+  position: relative;
+  display: flex;
+}
+
+.AddAssignment__searchResult {
+  position: absolute;
+  bottom: 100%;
+  padding: 5px 10px;
+  background-color: #333;
+  color: #EAEAEA;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+}
+
+.AddAssignment__assignee {
+  padding: 5px 10px;
+  background-color: #333;
+  border-radius: 3px;
+  color: #EAEAEA;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+}
+
+.AddAssignment__button {
+  padding: 5px 10px;
+  background-color: #7ea732;
+  border-radius: 3px;
+  color: #FFF;
+  border: 1px solid #EFEFEF;
+  line-height: 30px;
+  font-size: 18px;
+  outline: none;
+  cursor: pointer;
+}
+
+.AddAssignment__button[disabled] {
+  opacity: 0.5;
+}

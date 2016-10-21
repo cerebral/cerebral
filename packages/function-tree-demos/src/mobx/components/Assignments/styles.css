@@ -1,0 +1,34 @@
+.Assignments__assignment {
+  margin-bottom: 10px;
+}
+
+.Assignments__title {
+  padding: 5px 10px;
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  height: 30px;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.Assignments__assignees {
+  display: flex;
+}
+
+.Assignments__assignee {
+  padding: 5px 10px;
+  background-color: #333;
+  color: #EAEAEA;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+}
+
+.Assignments__assigneeLoading {
+  padding: 5px 10px;
+  border-radius: 3px;
+  border: 1px solid #EFEFEF;
+  background-color: #EFEFEF;
+  color: #333;
+}
