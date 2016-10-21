@@ -1,6 +1,6 @@
 /* eslint-env mocha */
-import Controller from '../src/Controller'
-import Computed from '../src/Computed'
+import Controller from './Controller'
+import Computed from './Computed'
 import assert from 'assert'
 
 describe('Computed', () => {

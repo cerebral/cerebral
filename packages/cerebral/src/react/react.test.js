@@ -10,9 +10,9 @@ global.navigator = {userAgent: 'node.js'}
 const React = require('react')
 const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
-const Controller = require('../src/Controller').default
-const Container = require('../src/react/container').default
-const connect = require('../src/react/connect').default
+const Controller = require('../Controller').default
+const Container = require('./container').default
+const connect = require('./connect').default
 
 describe('React', () => {
   describe('container', () => {

@@ -1,10 +1,10 @@
 /* eslint-env mocha */
 /* eslint-disable no-console */
-const triggerUrlChange = require('./mocking').triggerUrlChange
+const triggerUrlChange = require('./testHelper').triggerUrlChange
 
 // Have to require due to mocks (load correct order)
 const Controller = require('../../cerebral/src/Controller').default
-const Router = require('../src').default
+const Router = require('../').default
 const addressbar = require('addressbar')
 const assert = require('assert')
 

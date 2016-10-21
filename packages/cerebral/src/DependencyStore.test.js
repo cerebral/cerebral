@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import DependencyStore from '../src/DependencyStore'
+import DependencyStore from './DependencyStore'
 import assert from 'assert'
 
 describe('DependencyStore', () => {

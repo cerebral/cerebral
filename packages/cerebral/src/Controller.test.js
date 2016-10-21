@@ -1,6 +1,6 @@
 /* eslint-env mocha */
-import Controller from '../src/Controller'
-import Module from '../src/Module'
+import Controller from './Controller'
+import Module from './Module'
 import assert from 'assert'
 
 describe('Controller', () => {

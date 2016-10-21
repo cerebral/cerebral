@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import FunctionTree from '../src'
+import FunctionTree from '../'
 import assert from 'assert'
 
 describe('InputProvider', () => {

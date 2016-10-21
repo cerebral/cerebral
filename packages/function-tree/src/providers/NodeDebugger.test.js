@@ -1,8 +1,8 @@
 /* eslint-env mocha */
-import FunctionTree from '../src'
+import FunctionTree from '../'
 import assert from 'assert'
-import ContextProvider from '../src/providers/Context'
-import NodeDebuggerProvider from '../src/providers/NodeDebugger'
+import ContextProvider from './Context'
+import NodeDebuggerProvider from './NodeDebugger'
 
 describe('NodeDebuggerProvider', () => {
   it('should expose debugger on context', () => {
