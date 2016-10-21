@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import * as utils from '../src/utils'
+import * as utils from './utils'
 import assert from 'assert'
 
 describe('utils', () => {

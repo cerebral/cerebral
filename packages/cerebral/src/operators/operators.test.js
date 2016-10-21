@@ -1,12 +1,12 @@
 /* eslint-env mocha */
-import Controller from '../src/Controller'
+import Controller from '../Controller'
 import assert from 'assert'
 
 describe('Operators', () => {
   it('should be able to nest template tags', () => {
-    const set = require('../src/operators/set').default
-    const state = require('../src/operators/state').default
-    const input = require('../src/operators/input').default
+    const set = require('./set').default
+    const state = require('./state').default
+    const input = require('./input').default
     const controller = new Controller({
       state: {
         foo: 'bar',
@@ -25,7 +25,7 @@ describe('Operators', () => {
   })
   describe('debounce', () => {
     it('should debounce execution', (done) => {
-      const debounce = require('../src/operators/debounce').default
+      const debounce = require('./debounce').default
       let discardedCount = 0
       const controller = new Controller({
         signals: {
@@ -48,8 +48,8 @@ describe('Operators', () => {
   })
   describe('filter', () => {
     it('should filter input', () => {
-      const filter = require('../src/operators/filter').default
-      const input = require('../src/operators/input').default
+      const filter = require('./filter').default
+      const input = require('./input').default
       let accepted = 0
       let discarded = 0
       const controller = new Controller({
@@ -72,8 +72,8 @@ describe('Operators', () => {
       assert.equal(discarded, 1)
     })
     it('should filter state', () => {
-      const filter = require('../src/operators/filter').default
-      const state = require('../src/operators/state').default
+      const filter = require('./filter').default
+      const state = require('./state').default
       let discarded = 0
       const controller = new Controller({
         state: {
@@ -99,8 +99,8 @@ describe('Operators', () => {
   })
   describe('toggle', () => {
     it('should toggle state', () => {
-      const toggle = require('../src/operators/toggle').default
-      const state = require('../src/operators/state').default
+      const toggle = require('./toggle').default
+      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: true
@@ -117,8 +117,8 @@ describe('Operators', () => {
   })
   describe('when', () => {
     it('should check truthy value of input', () => {
-      const when = require('../src/operators/when').default
-      const input = require('../src/operators/input').default
+      const when = require('./when').default
+      const input = require('./input').default
       let count = 0
       const controller = new Controller({
         signals: {
@@ -134,8 +134,8 @@ describe('Operators', () => {
       assert.equal(count, 1)
     })
     it('should check truthy value of state', () => {
-      const when = require('../src/operators/when').default
-      const state = require('../src/operators/state').default
+      const when = require('./when').default
+      const state = require('./state').default
       let count = 0
       const controller = new Controller({
         state: {
@@ -156,7 +156,7 @@ describe('Operators', () => {
   })
   describe('wait', () => {
     it('should hold execution for set time', (done) => {
-      const wait = require('../src/operators/wait').default
+      const wait = require('./wait').default
       const start = Date.now()
       const controller = new Controller({
         signals: {
@@ -174,8 +174,8 @@ describe('Operators', () => {
   })
   describe('set', () => {
     it('should set value to model', () => {
-      const set = require('../src/operators/set').default
-      const state = require('../src/operators/state').default
+      const set = require('./set').default
+      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: 'bar'
@@ -190,8 +190,8 @@ describe('Operators', () => {
       assert.deepEqual(controller.getState(), {foo: 'bar2'})
     })
     it('should set non string value to model', () => {
-      const set = require('../src/operators/set').default
-      const state = require('../src/operators/state').default
+      const set = require('./set').default
+      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: 'bar'
@@ -206,9 +206,9 @@ describe('Operators', () => {
       assert.deepEqual(controller.getState(), {foo: {bar: 'baz'}})
     })
     it('should set value to model from input', () => {
-      const set = require('../src/operators/set').default
-      const state = require('../src/operators/state').default
-      const input = require('../src/operators/input').default
+      const set = require('./set').default
+      const state = require('./state').default
+      const input = require('./input').default
       const controller = new Controller({
         state: {
           foo: 'bar'
@@ -225,8 +225,8 @@ describe('Operators', () => {
       assert.deepEqual(controller.getState(), {foo: 'bar2'})
     })
     it('should set value to model from model', () => {
-      const set = require('../src/operators/set').default
-      const state = require('../src/operators/state').default
+      const set = require('./set').default
+      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: 'bar',

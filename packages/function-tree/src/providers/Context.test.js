@@ -1,6 +1,6 @@
 /* eslint-env mocha */
-import FunctionTree from '../src'
-import ContextProvider from '../src/providers/Context'
+import FunctionTree from '../'
+import ContextProvider from './Context'
 import assert from 'assert'
 
 describe('ContextProvider', () => {

@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import Model from '../src/Model'
+import Model from './Model'
 import assert from 'assert'
 
 describe('Model', () => {
