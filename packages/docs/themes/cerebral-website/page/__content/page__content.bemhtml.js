@@ -56,3 +56,12 @@ block('page').elem('content').mod('layout', 'root')(
     }
   })
 )
+
+block('page').elem('content')(
+  content()(function () {
+    return [
+      {block: 'wip'},
+      applyNext()
+    ]
+  })
+)

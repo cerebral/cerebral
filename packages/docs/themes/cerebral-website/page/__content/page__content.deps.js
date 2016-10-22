@@ -2,7 +2,7 @@
   shouldDeps: [
     'hero',
     'side-nav',
-    'next',
+    'wip',
     { elem: 'edit' },
     { block: 'button', mods: { theme: 'islands', type: 'link' } }
   ]
