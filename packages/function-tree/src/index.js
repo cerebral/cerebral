@@ -23,9 +23,8 @@ function isValidResult (result) {
   return (
     !result ||
     (
-      result &&
-      !Array.isArray(result) &&
-      typeof result === 'object'
+      typeof result === 'object' &&
+      !Array.isArray(result)
     )
   )
 }
@@ -34,7 +33,7 @@ function isValidResult (result) {
   If it walks like a duck and quacks like a duck...
 */
 function isPromise (result) {
-  return result && result.then && result.catch && typeof result.then === 'function' && typeof result.catch === 'function'
+  return result && typeof result.then === 'function' && typeof result.catch === 'function'
 }
 
 class FunctionTreeExecution extends EventEmitter {
@@ -49,6 +48,7 @@ class FunctionTreeExecution extends EventEmitter {
 
     this.runFunction = this.runFunction.bind(this)
   }
+
   /*
     Creates the context for the current function to be run,
     emits events and handles its returned value. Also handles
@@ -129,6 +129,7 @@ class FunctionTreeExecution extends EventEmitter {
       errorCallback(error)
     }
   }
+
   /*
     Creates the context for the next running function
   */
@@ -166,6 +167,7 @@ class FunctionTree extends EventEmitter {
 
     return this.runTree
   }
+
   /*
     Analyses the tree to identify paths and its validity. This analysis
     is cached. Then the method creates an execution for the tree to run.
@@ -177,10 +179,9 @@ class FunctionTree extends EventEmitter {
     let cb
     let staticTree
     const args = [].slice.call(arguments)
-    args.forEach(function (arg) {
+    args.forEach((arg) => {
       if (typeof arg === 'string') {
         name = arg
-        return
       } else if (Array.isArray(arg)) {
         tree = arg
       } else if (typeof arg === 'function') {
@@ -194,12 +195,13 @@ class FunctionTree extends EventEmitter {
       throw new Error('function-tree - You did not pass in a function tree')
     }
 
-    if (this.cachedTrees.indexOf(tree) === -1) {
+    const treeIdx = this.cachedTrees.indexOf(tree)
+    if (treeIdx === -1) {
       staticTree = createStaticTree(tree)
       this.cachedTrees.push(tree)
       this.cachedStaticTrees.push(staticTree)
     } else {
-      staticTree = this.cachedStaticTrees[this.cachedTrees.indexOf(tree)]
+      staticTree = this.cachedStaticTrees[treeIdx]
     }
     const execution = new FunctionTreeExecution(name, staticTree, this, (error) => {
       cb && cb(error, execution, payload)
