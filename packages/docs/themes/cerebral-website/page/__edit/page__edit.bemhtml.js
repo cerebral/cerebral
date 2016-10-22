@@ -1,6 +1,6 @@
 block('page').elem('edit')(
   content()(function () {
-    var url = 'https://github.com/cerebral/cerebral-website/edit/v3/content/'
+    var url = 'https://github.com/cerebral/cerebral-website/blob/v3/content/'
 
     if (this._layout !== 'root') {
       url += this._layout + '/'
