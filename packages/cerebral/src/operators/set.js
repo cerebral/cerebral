@@ -1,17 +1,17 @@
-export default function (fromTemplate, valueTemplate) {
-  if (typeof fromTemplate !== 'function') {
+export default function (targetTemplate, valueTemplate) {
+  if (typeof targetTemplate !== 'function') {
     throw new Error('Cerebral operator.set: You have to use a state template tag as first argument')
   }
 
   function set (context) {
-    const from = fromTemplate(context)
+    const target = targetTemplate(context)
     const value = typeof valueTemplate === 'function' ? valueTemplate(context).toValue() : valueTemplate
 
-    if (from.target !== 'state') {
+    if (target.target !== 'state') {
       throw new Error('Cerebral operator.set: You have to use a state template tag as first argument')
     }
 
-    context.state.set(from.path, value)
+    context.state.set(target.path, value)
   }
 
   set.displayName = 'operator.set'
