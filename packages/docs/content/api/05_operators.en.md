@@ -7,6 +7,11 @@ Operators are function factories that returns an action. These allows you to do 
 
 ```js
 import {
+  // template tags to target state and input
+  state,
+  input,
+
+  // operators
   set,
   toggle,
   when,
@@ -17,15 +22,15 @@ import {
 
 export default [
   // Set some state
-  set('state:foo.bar', true),
+  set(state`state:foo.bar`, true),
   // Set value from input
-  set('state:foo.bar', 'input:value')
+  set(state`foo.bar`, input`value`)
 
   // Toggle a boolean value in your state
-  toggle('state:foo'),
+  toggle(state`foo`),
 
-  // Conditional truthy check
-  when('state:foo.isAwesome'), {
+  // Conditional truthy check of state or input
+  when(state`foo.isAwesome`), {
     true: [],
     false: []
   },
@@ -43,14 +48,14 @@ export default [
 
   // Go down "accepted" when value matches filter
   // or "discarded" when it does not match
-  filter('input:foo', function minLength3(value) {
+  filter(input`foo`, function minLength3(value) {
     return value.length >= 3
   }), {
     accepted: [],
     discarded: []
   },
   // Short version, only accepted chain
-  ...filter('input:foo', function minLength3(value) {
+  ...filter(state`foo`, function minLength3(value) {
     return value.length >= 3
   }, []),
 
@@ -59,39 +64,38 @@ export default [
 ]
 ```
 
-#### Inline scheme
-The special **state:some.path** is what we call a **scheme**. The first part, **state**, is the target. It is possible to add more targets. For example if you want to update a user name based on the id passed into the signal.
+#### Inline template tag
+You can also use the template tags within a template.
 
 ```js
-set('state:users.{{input:userId}}.name', 'input:name')
+set(state`users.${input`userId`}.name`, input`name`)
 ```
 
 ### Custom operators
-You can use the Cerebral scheme parser when you create your own action factories.
+You can easily create your own operators and use the template tags.
 
 ```js
-import {parseScheme} from 'cerebral'
+function mergeFactory(fromPathTemplate, valueTemplate) {
+  function merge(context) {
+    // We get details about the template by passing it the context
+    const fromPath = fromPathTemplate(context)
 
-const string = 'state:foo.{{input:id}}.{{state:foo.bar}}'
-const parsed = parseScheme(string)
+    // Since we allow both using a template tag or a hardcoded value
+    // we check if it is a function, which means a template. When
+    // passing the context we call the "toValue" method which will
+    // grab whatever value the template tag + path is pointing to
+    const value = typeof valueTemplate === 'function' ? toPathTemplate(context).toValue() : toPathTemplate
 
-parsed.target // "state"
-parsed.value = // foo.{{input:id}}.{{state:foo.bar}}
+    // We do not want to extract the value on "fromPath", but
+    // rather ensure we are indeed targeting state and use
+    // the produced path to set some state
+    if (fromPath.target !== 'state') {
+      throw new Error('You have to target state when merging')
+    }
 
-// getValue iterates the inline schemes so this callback
-// will be called twice
-const newString = parsed.getValue(function (scheme) {
-  scheme.target // "input", then "state"
-  scheme.value // "id", then "foo.bar"
-
-  if (scheme.target === 'input') {
-    return 'woop'
+    context.state(fromPath.path, value)
   }
 
-  return 'wuuut?'
-})
-
-newString // foo.woop.wuuut?
+  return merge
+}
 ```
-
-Read more at [cerebral-scheme-parser](https://github.com/cerebral/cerebral-scheme-parser)

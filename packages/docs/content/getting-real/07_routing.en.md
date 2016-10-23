@@ -12,6 +12,7 @@ import Router from 'cerebral/router'
 
 const controller = Controller({
   router: Router({
+    routes: {}, // Route definitions
     query: false, // Query support
     onlyHash: false, // Use hash urls
     baseUrl: '/' // Only handle url changes on nested path
@@ -20,7 +21,7 @@ const controller = Controller({
 ```
 
 ### Defining routes
-When the router is activated on the controller all your modules, and the controller itself is able to define routes. These routes are not related to the view though. Routes in Cerebral trigger signals. The signals puts your application in a specific state and then your view decides what to render based on that state. So the router is completely decoupled from your view. This is a very good thing because a route can now translate to any kind of state changes and side effects.
+Routes in Cerebral does not relate to the view (components), they trigger signals. The signals puts your application in a specific state and then your view decides what to render based on that state. So the router is completely decoupled from your view. This is a very good thing because a route can now translate to any kind of state changes and side effects.
 
 Let us create a small app:
 
@@ -31,10 +32,12 @@ import HomeModule from './modules/Home'
 import PostsModule from './modules/Posts'
 
 const controller = Controller({
-  router: Router(),
-  routes: {
-    '/': 'home.routed'
-  },
+  router: Router({
+    routes: {
+      '/': 'home.routed',
+      '/posts': 'posts.routed'
+    }
+  }),
   state: {
     currentPage: 'home'
   },
@@ -49,36 +52,31 @@ As we can see, when the root route is hit we want to trigger a signal that says 
 
 *modules/Home/index.js*
 ```js
-import {set} from 'cerebral/operators'
+import {set, state} from 'cerebral/operators'
 
 export default {
   signals: {
     routed: [
-      set('state:currentPage', 'home')
+      set(state`currentPage`, 'home')
     ]
   }
 }
 ```
 
-We could also define our */posts* route at the top level, but we rather want to take advantage of the nested routing of modules. We define it on the module instead:
+The **/posts** route points to a different module and signal.
 
 *modules/Posts/index.js*
 ```js
-import {set} from 'cerebral/operators'
+import {set, state} from 'cerebral/operators'
 
 export default {
-  routes: {
-    '/': 'routed'
-  },
   signals: {
     routed: [
-      set('state:currentPage', 'posts')
+      set(state`currentPage`, 'posts')
     ]
   }
 }
 ```
-
-Since the route is defined within the namespace **posts**, also the route will have that as a baseUrl (/posts).
 
 ### Render based on state
 So we do not render anything based on the route. We render based on state, like we do with everything else. A route never affects the view layer, it only affects your state.
