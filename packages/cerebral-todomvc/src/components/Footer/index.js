@@ -52,12 +52,11 @@ export default connect({
           </li>
         </ul>
         {
-          counts.completedCount ?
-            <button className='clear-completed' onClick={() => clearCompletedClicked()}>
+          counts.completedCount
+            ? <button className='clear-completed' onClick={() => clearCompletedClicked()}>
               Clear completed ({counts.completedCount})
             </button>
-          :
-            null
+          : null
         }
       </footer>
     )

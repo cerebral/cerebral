@@ -62,16 +62,16 @@ export default connect(props => ({
 
       return (
         <li className={className}>
-          <div className="view">
+          <div className='view'>
             {
               this.props.todo.$isSaving
               ? null
-              : <input
-                className="toggle"
-                type="checkbox"
-                disabled={this.props.todo.$isSaving}
-                onChange={() => this.onCompletedToggle()}
-                checked={this.props.todo.completed} />
+                : <input
+                  className='toggle'
+                  type='checkbox'
+                  disabled={this.props.todo.$isSaving}
+                  onChange={() => this.onCompletedToggle()}
+                  checked={this.props.todo.completed} />
             }
             <label onDoubleClick={() => this.edit()}>
               {this.props.todo.title} {this.props.todo.$isSaving
@@ -82,15 +82,15 @@ export default connect(props => ({
             {
               this.props.todo.$isSaving
               ? null
-              : <button
-                className="destroy"
-                onClick={() => this.onRemoveClick()} />
+                : <button
+                  className='destroy'
+                  onClick={() => this.onRemoveClick()} />
             }
           </div>
           <form onSubmit={(e) => this.onNewTitleSubmit(e)}>
             <input
-              ref="edit"
-              className="edit"
+              ref='edit'
+              className='edit'
               value={this.props.todo.$newTitle || this.props.todo.title}
               onBlur={() => this.onNewTitleBlur()}
               onChange={(e) => this.onNewTitleChange(e)}

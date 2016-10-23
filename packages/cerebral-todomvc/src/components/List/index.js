@@ -11,7 +11,7 @@ export default connect({
 }, {
   toggleAllChanged: 'app.toggleAllChanged'
 },
-  function List({ isAllChecked, todoRefs, toggleAllChanged }) {
+  function List ({ isAllChecked, todoRefs, toggleAllChanged }) {
     return (
       <section className='main'>
         <input
