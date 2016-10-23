@@ -1,24 +1,21 @@
 import {Controller} from 'cerebral'
-import Model from 'cerebral/models/immutable'
+import Devtools from 'cerebral/devtools'
+import Router from 'cerebral-router'
 
 import App from './modules/app'
-import Devtools from 'cerebral-module-devtools'
-import Recorder from 'cerebral-module-recorder'
-import Router from 'cerebral-module-router'
 
-const controller = Controller(Model({}))
-
-controller.addModules({
-  app: App,
-
-  recorder: Recorder(),
+const controller = Controller({
   devtools: Devtools(),
   router: Router({
-    '/': 'app.rootRouted',
-    '/:filter': 'app.filterClicked'
-  }, {
-    onlyHash: true
-  })
+    onlyHash: true,
+    routes: {
+      '/': 'app.rootRouted',
+      '/:filter': 'app.filterClicked'
+    }
+  }),
+  modules: {
+    app: App
+  }
 })
 
 export default controller

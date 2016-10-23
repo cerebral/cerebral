@@ -1,4 +1,4 @@
-import toggleAllChecked from './../actions/toggleAllChecked.js'
+import toggleAllChecked from '../actions/toggleAllChecked'
 
 export default [
   toggleAllChecked

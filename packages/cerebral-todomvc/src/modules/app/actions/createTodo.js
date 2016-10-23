@@ -1,6 +1,6 @@
 import uuid from 'uuid'
 
-function createTodo ({input, state, output}) {
+function createTodo ({input, state}) {
   const ref = uuid.v4()
   const todo = {
     $isSaving: true,
@@ -9,7 +9,7 @@ function createTodo ({input, state, output}) {
   }
 
   state.set(`app.todos.${ref}`, todo)
-  output({ref})
+  return {ref}
 }
 
 export default createTodo

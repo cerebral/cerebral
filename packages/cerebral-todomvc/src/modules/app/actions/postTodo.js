@@ -1,16 +1,14 @@
-function postTodo ({input, state, output}) {
+function postTodo ({path}) {
   // Simulating posting the todo.data and get an ID from
   // the server. We resolve with the new id
-  setTimeout(function () {
-    output.success({
-      id: Date.now() + parseInt(Math.random() * 1000)
-    })
-
-    // Or error
-  }, 2000)
+  return new Promise(resolve => {
+    setTimeout(
+      resolve(path.success({
+        id: Date.now() + parseInt(Math.random() * 1000, 10)
+      }))
+    , 2000)
+      // Or error
+  })
 }
-
-postTodo.async = true
-postTodo.outputs = ['success', 'error']
 
 export default postTodo

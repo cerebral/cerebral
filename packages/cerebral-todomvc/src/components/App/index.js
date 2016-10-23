@@ -1,23 +1,20 @@
 import React from 'react'
-import { connect } from 'cerebral-view-react'
+import { connect } from 'cerebral/react'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
-import RecorderButton from '../RecorderButton'
-import visibleTodosRefs from '../../computed/visibleTodosRefs.js'
+import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
   todos: 'app.todos',
-  recorder: 'recorder',
   isSaving: 'app.isSaving',
   visibleTodosRefs: visibleTodosRefs()
 },
   function App (props) {
     return (
       <div id='todoapp-wrapper'>
-        <RecorderButton />
-        <section id='todoapp'>
-          <header id='header'>
+        <section className='todoapp'>
+          <header className='header'>
             <h1>todos</h1>
             <NewTodoForm />
           </header>
@@ -25,7 +22,7 @@ export default connect({
           {props.visibleTodosRefs.length ? <TodosList /> : null}
           {Object.keys(props.todos).length ? <TodosFooter /> : null}
         </section>
-        <footer id='info'>
+        <footer className='info'>
           <p>
             Double-click to edit a todo
           </p>

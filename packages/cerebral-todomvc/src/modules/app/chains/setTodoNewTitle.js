@@ -1,4 +1,4 @@
-import setTodoNewTitle from './../actions/setTodoNewTitle.js'
+import setTodoNewTitle from '../actions/setTodoNewTitle'
 
 export default [
   setTodoNewTitle

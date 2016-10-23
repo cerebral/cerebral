@@ -1,4 +1,4 @@
-import editTodo from './../actions/editTodo.js'
+import editTodo from '../actions/editTodo'
 
 export default [
   editTodo

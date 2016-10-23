@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'cerebral-view-react'
+import { connect } from 'cerebral/react'
 
 export default connect({
   title: 'app.newTodoTitle'
@@ -14,7 +14,7 @@ export default connect({
         submitted()
       }}>
         <input
-          id='new-todo'
+          className='new-todo'
           autoComplete='off'
           placeholder='What needs to be done?'
           value={title}

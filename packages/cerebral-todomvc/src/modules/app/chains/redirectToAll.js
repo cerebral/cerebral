@@ -1,4 +1,4 @@
-import redirect from 'cerebral-module-router/redirect'
+import {redirect} from 'cerebral-router'
 
 export default [
   redirect('/all')

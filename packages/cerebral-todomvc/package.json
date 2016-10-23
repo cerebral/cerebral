@@ -1,52 +1,28 @@
 {
   "name": "cerebral-todomvc",
-  "version": "0.1.0",
-  "description": "Classic todomvc application powered with cerebral",
-  "scripts": {
-    "start": "webpack-dev-server --port 3000 --progress --colors",
-    "build": "webpack",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist/",
-    "test": "standard"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/cerebral/cerebral-todomvc.git"
-  },
+  "version": "0.2.0",
+  "private": true,
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/cerebral/cerebral-todomvc/issues"
-  },
-  "homepage": "https://github.com/cerebral/cerebral-todomvc#readme",
-  "dependencies": {
-    "babel-core": "^6.10.4",
-    "babel-loader": "^6.2.4",
-    "babel-preset-es2015": "^6.9.0",
-    "babel-preset-react": "^6.11.1",
-    "cerebral": "^1.0.0",
-    "cerebral-module-devtools": "^0.7.0",
-    "cerebral-module-recorder": "^0.6.0",
-    "cerebral-module-router": "^0.16.1",
-    "cerebral-view-react": "^0.12.4",
-    "classnames": "^2.2.5",
-    "css-loader": "^0.23.1",
-    "file-loader": "^0.9.0",
-    "react": "^15.2.0",
-    "react-dom": "^15.2.0",
-    "style-loader": "^0.13.1",
-    "todomvc-app-css": "^1.0.4",
-    "todomvc-common": "^1.0.2",
-    "uuid": "^2.0.2",
-    "webpack": "^1.13.1",
-    "webpack-dev-server": "^1.14.1"
-  },
+  "contributors": [
+    "Henri Hulski <henri.hulski@gazeta.pl>"
+  ],
   "devDependencies": {
-    "babel-eslint": "^6.1.0",
-    "gh-pages": "^0.11.0",
-    "standard": "^7.1.2"
+    "react-scripts": "0.7.0"
   },
-  "standard": {
-    "parser": "babel-eslint"
+  "dependencies": {
+    "cerebral": "^2.0.0-0",
+    "cerebral-router": "^1.0.0-0",
+    "classnames": "^2.2.5",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "todomvc-app-css": "^2.0.6",
+    "todomvc-common": "^1.0.2",
+    "uuid": "^2.0.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }

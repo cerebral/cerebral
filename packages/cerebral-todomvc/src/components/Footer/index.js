@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral-view-react'
-import counts from '../../computed/counts.js'
+import {connect} from 'cerebral/react'
+import counts from '../../computed/counts'
 import cn from 'classnames'
 
 export default connect({
@@ -11,16 +11,15 @@ export default connect({
   clearCompletedClicked: 'app.clearCompletedClicked'
 },
   function Footer ({ filter, counts, filterClicked, clearCompletedClicked }) {
-
-    let countLabel = 'item left';
+    let countLabel = 'item left'
     if (counts.remainingCount === 0 || counts.remainingCount > 1) {
       countLabel = 'items left'
     }
 
     return (
-      <footer id='footer'>
-        <span id='todo-count'><strong>{counts.remainingCount} {countLabel}</strong></span>
-        <ul id='filters'>
+      <footer className='footer'>
+        <span className='todo-count'><strong>{counts.remainingCount} {countLabel}</strong></span>
+        <ul className='filters'>
           <li>
             <a
               onClick={() => filterClicked({
@@ -54,7 +53,7 @@ export default connect({
         </ul>
         {
           counts.completedCount ?
-            <button id='clear-completed' onClick={() => clearCompletedClicked()}>
+            <button className='clear-completed' onClick={() => clearCompletedClicked()}>
               Clear completed ({counts.completedCount})
             </button>
           :

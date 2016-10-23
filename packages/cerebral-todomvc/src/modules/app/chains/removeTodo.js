@@ -1,4 +1,4 @@
-import removeTodo from './../actions/removeTodo.js'
+import removeTodo from '../actions/removeTodo'
 
 export default [
   removeTodo

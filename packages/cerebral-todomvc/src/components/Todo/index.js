@@ -1,6 +1,6 @@
 import React from 'react'
 import classNames from 'classnames'
-import { connect } from 'cerebral-view-react'
+import { connect } from 'cerebral/react'
 
 export default connect(props => ({
   todo: `app.todos.${props.todoRef}`
@@ -100,4 +100,4 @@ export default connect(props => ({
       )
     }
   }
-);
+)

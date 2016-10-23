@@ -1,5 +1,5 @@
-import overwriteTodoTitle from './../actions/overwriteTodoTitle.js'
-import stopEditingTodo from './stopEditingTodo.js'
+import overwriteTodoTitle from '../actions/overwriteTodoTitle'
+import stopEditingTodo from './stopEditingTodo'
 
 export default [
   overwriteTodoTitle,

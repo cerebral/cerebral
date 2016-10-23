@@ -11,24 +11,18 @@ import stopEditingTodo from './chains/stopEditingTodo'
 import clearCompletedTodos from './chains/clearCompletedTodos'
 import setFilter from './chains/setFilter'
 
-export default (module) => {
-  module.addState({
+export default {
+  state: {
     newTodoTitle: '',
     todos: {},
     filter: 'all',
     isSaving: false
-  })
-  module.addSignals({
+  },
+  signals: {
     rootRouted: redirectToAll,
-    newTodoTitleChanged: {
-      chain: setTitle,
-      immediate: true
-    },
+    newTodoTitleChanged: setTitle,
     newTodoSubmitted: submitTodo,
-    todoNewTitleChanged: {
-      chain: setTodoNewTitle,
-      immediate: true
-    },
+    todoNewTitleChanged: setTodoNewTitle,
     todoNewTitleSubmitted: overwriteTodoTitle,
     removeTodoClicked: removeTodo,
     todoDoubleClicked: editTodo,
@@ -37,5 +31,5 @@ export default (module) => {
     todoNewTitleAborted: stopEditingTodo,
     clearCompletedClicked: clearCompletedTodos,
     filterClicked: setFilter
-  })
+  }
 }

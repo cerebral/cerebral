@@ -1,9 +1,9 @@
 import React from 'react'
 import Todo from '../Todo'
-import { connect } from 'cerebral-view-react'
+import { connect } from 'cerebral/react'
 
-import isAllChecked from '../../computed/isAllChecked.js'
-import visibleTodosRefs from '../../computed/visibleTodosRefs.js'
+import isAllChecked from '../../computed/isAllChecked'
+import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
   isAllChecked: isAllChecked(),
@@ -13,16 +13,16 @@ export default connect({
 },
   function List({ isAllChecked, todoRefs, toggleAllChanged }) {
     return (
-      <section id='main'>
+      <section className='main'>
         <input
-          id='toggle-all'
+          className='toggle-all'
           type='checkbox'
           checked={isAllChecked}
           onChange={() => toggleAllChanged()} />
         <label htmlFor='toggle-all'>
           Mark all as complete
         </label>
-        <ul id='todo-list'>
+        <ul className='todo-list'>
           {todoRefs.map(ref => <Todo key={ref} todoRef={ref} />)}
         </ul>
       </section>

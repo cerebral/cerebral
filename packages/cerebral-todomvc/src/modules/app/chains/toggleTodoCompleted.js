@@ -1,4 +1,4 @@
-import toggleTodoCompleted from './../actions/toggleTodoCompleted.js'
+import toggleTodoCompleted from '../actions/toggleTodoCompleted'
 
 export default [
   toggleTodoCompleted
