@@ -25,7 +25,7 @@ const controller = Controller({
 })
 
 render((
-  <Container controller={ controller }>
-    <App/>
+  <Container controller={controller}>
+    <App />
   </Container>
   ), document.querySelector('#root'))

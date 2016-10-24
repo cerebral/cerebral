@@ -35,21 +35,21 @@ const controller = Controller({
   }
 })
 
-function myAction1({input}) {
+function myAction1 ({input}) {
   input.value += ' extended by myAction1'
 }
 
-function myAction2({input, state}) {
+function myAction2 ({input, state}) {
   input.value += ' and also by myAction2'
 }
 
-function myAction3({input, state}) {
+function myAction3 ({input, state}) {
   input.value = input.value.toUpperCase()
   state.set('extendedValue', input.value)
 }
 
 render((
-  <Container controller={ controller }>
-    <App/>
+  <Container controller={controller}>
+    <App />
   </Container>
   ), document.querySelector('#root'))

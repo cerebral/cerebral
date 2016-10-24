@@ -4,23 +4,23 @@ export default connect({
   value: 'originalValue'
 }, {
   saveButtonClicked: 'saveButtonClicked'
-}, function Input(props) {
+}, function Input (props) {
   return (
-    <div className="c-input-group">
-      <div className="o-field">
+    <div className='c-input-group'>
+      <div className='o-field'>
         <div
-             id="value"
-             className="c-field"
-             contentEditable
-             suppressContentEditableWarning>
+          id='value'
+          className='c-field'
+          contentEditable
+          suppressContentEditableWarning>
           { props.value }
         </div>
       </div>
       <button
-              onClick={ (event) => props.saveButtonClicked({
-                          value: document.getElementById("value").innerText
-                        }) }
-              className="c-button c-button--brand">
+        onClick={(event) => props.saveButtonClicked({
+          value: document.getElementById('value').innerText
+        })}
+        className='c-button c-button--brand'>
         Save
       </button>
     </div>

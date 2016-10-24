@@ -4,7 +4,7 @@ import { Controller } from 'cerebral'
 import App from './components/App'
 import { Container } from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import { set, wait } from 'cerebral/operators'
+import { set } from 'cerebral/operators'
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
@@ -33,40 +33,42 @@ const controller = Controller({
   }
 })
 
-function myAction1({input}) {
+function myAction1 ({input}) {
   input.value += ' extended by myAction1'
 }
 
-function myAction2({input, state}) {
+function myAction2 ({input, state}) {
   input.value += ' and also by myAction2'
 }
 
-function myAction3({input, state}) {
+function myAction3 ({input, state}) {
   input.value = input.value.toUpperCase()
   input.message = input.value
   state.set('extendedValue', input.value)
 }
 
-function showToast(message, milliseconds) {
-  function action({input, state, path}) {
+function showToast (message, milliseconds) {
+  function action ({input, state, path}) {
     let msg = message
     let ms = milliseconds
-    if (!msg && input)
+    if (!msg && input) {
       msg = input.message
-    if (!ms)
+    }
+    if (!ms) {
       ms = 8000
+    }
     state.set('toast.message', msg)
-    return new Promise(function(resolve, reject) {
-      window.setTimeout(function() {
+    return new Promise(function (resolve, reject) {
+      window.setTimeout(function () {
         resolve({})
       }, ms)
     })
   }
-  action.displayName = "showToast"
+  action.displayName = 'showToast'
   return action
 }
 render((
-  <Container controller={ controller }>
-    <App/>
+  <Container controller={controller}>
+    <App />
   </Container>
   ), document.querySelector('#root'))

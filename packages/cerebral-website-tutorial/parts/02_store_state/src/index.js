@@ -13,7 +13,7 @@ const controller = Controller({
 })
 
 render((
-  <Container controller={ controller }>
-    <HeaderButton/>
+  <Container controller={controller}>
+    <HeaderButton />
   </Container>
   ), document.querySelector('#root'))
