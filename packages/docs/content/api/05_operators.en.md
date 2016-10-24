@@ -22,7 +22,7 @@ import {
 
 export default [
   // Set some state
-  set(state`state:foo.bar`, true),
+  set(state`foo.bar`, true),
   // Set value from input
   set(state`foo.bar`, input`value`)
 
@@ -75,25 +75,25 @@ set(state`users.${input`userId`}.name`, input`name`)
 You can easily create your own operators and use the template tags.
 
 ```js
-function mergeFactory(fromPathTemplate, valueTemplate) {
+function mergeFactory(targetPathTemplate, valueTemplate) {
   function merge(context) {
     // We get details about the template by passing it the context
-    const fromPath = fromPathTemplate(context)
+    const targetPath = targetPathTemplate(context)
 
     // Since we allow both using a template tag or a hardcoded value
     // we check if it is a function, which means a template. When
     // passing the context we call the "toValue" method which will
     // grab whatever value the template tag + path is pointing to
-    const value = typeof valueTemplate === 'function' ? toPathTemplate(context).toValue() : toPathTemplate
+    const value = typeof valueTemplate === 'function' ? valueTemplate(context).toValue() : valueTemplate
 
-    // We do not want to extract the value on "fromPath", but
+    // We do not want to extract the value on "targetPath", but
     // rather ensure we are indeed targeting state and use
     // the produced path to set some state
-    if (fromPath.target !== 'state') {
+    if (targetPath.target !== 'state') {
       throw new Error('You have to target state when merging')
     }
 
-    context.state(fromPath.path, value)
+    context.state.set(targetPath.path, value)
   }
 
   return merge
