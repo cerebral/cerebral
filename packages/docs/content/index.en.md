@@ -3,6 +3,7 @@ side-nav:
   - get-started
   - concepts
   - getting-real
+  - migration
   - api
 ---
 
