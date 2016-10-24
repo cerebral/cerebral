@@ -3,7 +3,7 @@ import classNames from 'classnames'
 import { connect } from 'cerebral/react'
 
 export default connect(props => ({
-  todo: `app.todos.${props.todoRef}`
+  todo: `app.todos.${props.todoRef}.*`
 }), {
   todoDoubleClicked: 'app.todoDoubleClicked',
   newTitleChanged: 'app.todoNewTitleChanged',

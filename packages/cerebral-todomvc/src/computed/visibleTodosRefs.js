@@ -1,7 +1,7 @@
 import {Computed} from 'cerebral'
 
 export default Computed({
-  todos: 'app.todos',
+  todos: 'app.todos.**',
   filter: 'app.filter'
 }, props => {
   return Object.keys(props.todos).filter((ref) => {

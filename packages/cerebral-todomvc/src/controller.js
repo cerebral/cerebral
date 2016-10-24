@@ -5,6 +5,7 @@ import Router from 'cerebral-router'
 import App from './modules/app'
 
 const controller = Controller({
+  strictRender: true,
   devtools: Devtools(),
   router: Router({
     onlyHash: true,
