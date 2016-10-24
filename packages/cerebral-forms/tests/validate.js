@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {set} from 'cerebral/operators'
+import {set, state, input} from 'cerebral/operators'
 import {form, validateField, validateForm} from '../src'
 import assert from 'assert'
 
@@ -95,7 +95,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set('state:form.name.value', 'input:value'),
+            set(state`form.name.value`, input`value`),
             validateField('form.name')
           ]
         }
@@ -120,7 +120,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set('state:form.firstName.value', 'input:value'),
+            set(state`form.firstName.value`, input`value`),
             validateField('form.firstName')
           ]
         }
@@ -143,7 +143,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set('state:form.name.value', 'input:value')
+            set(state`form.name.value`, input`value`)
           ],
           formSubmitted: [
             validateForm('form')

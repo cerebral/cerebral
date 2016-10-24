@@ -1,8 +1,0 @@
-node_modules
-npm-debug.log
-coverage
-.nyc_output
-.DS_Store
-dist
-lib/*
-!/lib/package.json
