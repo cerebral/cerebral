@@ -1,6 +1,5 @@
 import FunctionTree from 'function-tree'
-import DebuggerProvider from 'function-tree/lib/providers/Debugger'
-import ContextProvider from 'function-tree/lib/providers/Context'
+import {ContextProvider, DebuggerProvider} from 'function-tree/providers'
 import axios from 'axios'
 import store from './store'
 

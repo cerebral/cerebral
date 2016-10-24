@@ -1,8 +1,8 @@
 'use strict'
 
 const FunctionTree = require('function-tree')
-const NodeDebuggerProvider = require('function-tree/lib/providers/NodeDebugger')
-const ContextProvider = require('function-tree/lib/providers/Context')
+const NodeDebuggerProvider = require('function-tree/providers').NodeDebuggerProvider
+const ContextProvider = require('function-tree/providers').ContextProvider
 const request = require('request')
 const fs = require('fs')
 

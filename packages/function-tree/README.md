@@ -53,7 +53,7 @@ When you want to test the whole function tree execution you can do:
 
 ```js
 const FunctionTree = require('function-tree')
-const ContextProvider = require('function-tree/providers/Context')
+const ContextProvider = require('function-tree/providers').ContextProvider
 const appMounted = require('../src/events/appMounted')
 
 const window = {app: {}}
@@ -91,7 +91,7 @@ export default execute;
 
 ```js
 import FunctionTree from 'function-tree'
-import ContextProvider from 'function-tree/providers/Context'
+import {ContextProvider} from 'function-tree/providers'
 import request from 'request'
 
 const execute = new FunctionTree([
@@ -378,7 +378,7 @@ Will extend the context. If the debugger is active the methods on the attached o
 
 ```js
 import FunctionTree from 'function-tree'
-import ContextProvider from 'function-tree/providers/Context'
+import {ContextProvider} from 'function-tree/providers'
 import request from 'request'
 
 function funcA(context) {
@@ -403,8 +403,7 @@ Download the [Chrome Extension](https://chrome.google.com/webstore/detail/functi
 
 ```js
 import FunctionTree from 'function-tree'
-import DebuggerProvider from 'function-tree/providers/Debugger'
-import ContextProvider from 'function-tree/providers/Context'
+import {ContextProvider, DebuggerProvider} from 'function-tree/providers'
 import request from 'request'
 
 const execute = new FunctionTree([
