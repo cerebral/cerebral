@@ -9,19 +9,43 @@ describe('Operators', () => {
     const input = require('./input').default
     const controller = new Controller({
       state: {
-        foo: 'bar',
-        grabValue: {
-          bar: 'baz'
+        tip: '',
+        userNames: {
+          joe: 'Joe'
         }
       },
       signals: {
         test: [
-          set(state`foo`, state`grabValue.${input`foo`}`)
+          set(state`tip`, state`userNames.${input`userId`}`)
         ]
       }
     })
-    controller.getSignal('test')({foo: 'bar'})
-    assert.equal(controller.getState().foo, 'baz')
+    controller.getSignal('test')({userId: 'joe'})
+    assert.equal(controller.getState().tip, 'Joe')
+  })
+  it('should be able to nest multiple template tags', () => {
+    const set = require('./set').default
+    const state = require('./state').default
+    const input = require('./input').default
+    const controller = new Controller({
+      state: {
+        tip: '',
+        users: {
+          admin: {
+            joe: {
+              name: 'Joe'
+            }
+          }
+        }
+      },
+      signals: {
+        test: [
+          set(state`tip`, state`users.${input`type`}.${input`userId`}.${input`field`}`)
+        ]
+      }
+    })
+    controller.getSignal('test')({type: 'admin', userId: 'joe', field: 'name'})
+    assert.equal(controller.getState().tip, 'Joe')
   })
   describe('debounce', () => {
     it('should debounce execution', (done) => {
