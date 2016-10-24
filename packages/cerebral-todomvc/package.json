@@ -3,10 +3,12 @@
   "version": "0.2.0",
   "private": true,
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "homepage": "http://cerebral.github.io/cerebral-todomvc/",
   "contributors": [
     "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
   "devDependencies": {
+    "gh-pages": "^0.11.0",
     "gh-pages-with-token": "^1.0.0",
     "react-scripts": "0.7.0"
   },
@@ -25,6 +27,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "prepublish": "npm run build",
-    "ci": "gh-pages-with-token -d build -o todomvc"
+    "ci": "gh-pages -d build -r https://cerebraljs:$GH_TOKEN@github.com/cerebral/cerebral-todomvc.git"
   }
 }
