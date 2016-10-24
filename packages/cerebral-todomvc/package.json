@@ -7,6 +7,7 @@
     "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
   "devDependencies": {
+    "gh-pages-with-token": "^1.0.0",
     "react-scripts": "0.7.0"
   },
   "dependencies": {
@@ -23,6 +24,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "prepublish": "npm run build",
+    "ci": "gh-pages-with-token -d build -r https://github.com/cerebral/cerebral-todomvc.git"
   }
 }

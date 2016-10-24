@@ -8,6 +8,7 @@
     "test": "lerna run test",
     "coverage": "lerna run coverage && istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
+    "ci": "lerna run ci",
     "commit": "git-cz"
   },
   "license": "MIT",
