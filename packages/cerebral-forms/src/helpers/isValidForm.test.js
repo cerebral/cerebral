@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {isValidForm, form, rules, getInvalidFormFields} from '../src'
+import {isValidForm, form, rules, getInvalidFormFields} from '..'
 import assert from 'assert'
 
 describe('isValidFrom', () => {

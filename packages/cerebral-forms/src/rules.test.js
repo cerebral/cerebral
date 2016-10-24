@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import {rules} from '../src'
+import {rules} from '.'
 import assert from 'assert'
 
 describe('rules', () => {

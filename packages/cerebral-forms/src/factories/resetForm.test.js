@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {form, resetForm, changeField} from '../src'
+import {form, resetForm, changeField} from '..'
 import assert from 'assert'
 
 describe('resetForm', () => {

@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {form} from '../src'
+import {form} from '.'
 import assert from 'assert'
 
 describe('form', () => {

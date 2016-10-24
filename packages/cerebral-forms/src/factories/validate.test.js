@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
 import {set, state, input} from 'cerebral/operators'
-import {form, validateField, validateForm} from '../src'
+import {form, validateField, validateForm} from '..'
 import assert from 'assert'
 
 describe('validate', () => {
