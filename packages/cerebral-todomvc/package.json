@@ -25,6 +25,6 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "prepublish": "npm run build",
-    "ci": "gh-pages-with-token -d build -r https://github.com/cerebral/cerebral-todomvc.git"
+    "ci": "gh-pages-with-token -d build -o todomvc"
   }
 }

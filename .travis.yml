@@ -20,6 +20,7 @@ after_success:
     if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_NODE_VERSION == '6' ]]; then
       git config --global user.email "cerebraljs@gmail.com" ;
       git config --global user.name "Cerebral JS" ;
+      git remote add todomvc git@github.com:cerebral/cerebral-todomvc.git;
       npm run ci;
     fi
 branches:
