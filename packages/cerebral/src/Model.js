@@ -219,6 +219,12 @@ class Model {
       return array.concat(value)
     })
   }
+  compute (computed, forceRecompute = false) {
+    if (forceRecompute) {
+      computed.flag()
+    }
+    return computed.getValue(this)
+  }
 }
 
 export default Model

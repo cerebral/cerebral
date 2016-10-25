@@ -1,5 +1,5 @@
 import DependencyStore from './DependencyStore'
-import {cleanPath, isObject, throwError, propsDiffer} from './utils'
+import {cleanPath, ensurePath, isObject, throwError, propsDiffer} from './utils'
 
 /*
   The dependency store used to store and extract what computeds
@@ -41,7 +41,7 @@ export class Computed {
     Produces a new value if the computed is dirty or returns existing
     value
   */
-  getValue (controller) {
+  getValue (model) {
     if (this.isDirty) {
       const computedProps = Object.assign(
         {},
@@ -49,8 +49,8 @@ export class Computed {
         Object.keys(this.paths).reduce((currentProps, depsMapKey) => {
           currentProps[depsMapKey] = (
             this.paths[depsMapKey] instanceof Computed
-              ? this.paths[depsMapKey].getValue(controller)
-              : controller.getState(cleanPath(this.paths[depsMapKey]))
+              ? this.paths[depsMapKey].getValue(model)
+              : model.get(ensurePath(cleanPath(this.paths[depsMapKey])))
           )
 
           return currentProps

@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
+import Computed from '../Computed'
 
 describe('providers', () => {
   describe('VerifyInput', () => {
@@ -136,6 +137,84 @@ describe('providers', () => {
       })
       controller.getSignal('foo')()
       assert.deepEqual(controller.getState(), {foo: ['foo', 'bar']})
+    })
+    it('should be able to COMPUTE state', () => {
+      const fullNameFactory = Computed({
+        firstName: 'user.firstName',
+        lastName: 'user.lastName'
+      }, ({firstName, lastName}) => {
+        return `${firstName} ${lastName}`
+      })
+      const fullName = fullNameFactory()
+      const controller = new Controller({
+        state: {
+          user: {
+            firstName: 'John',
+            lastName: 'Difool'
+          }
+        },
+        signals: {
+          test: [({state}) => assert.deepEqual(state.compute(fullName), 'John Difool')]
+        }
+      })
+      controller.getSignal('test')()
+    })
+    it('should clear COMPUTE cache on signal flush', () => {
+      const fullNameFactory = Computed({
+        firstName: 'user.firstName',
+        lastName: 'user.lastName'
+      }, ({firstName, lastName}) => {
+        return `${firstName} ${lastName}`
+      })
+      const fullName = fullNameFactory()
+      const controller = new Controller({
+        state: {
+          user: {
+            firstName: 'John',
+            lastName: 'Difool'
+          }
+        },
+        signals: {
+          warmup: [({state}) => {
+            assert.deepEqual(state.compute(fullName), 'John Difool')
+            state.set('user.firstName', 'Animah')
+          }],
+          test: [({state}) => {
+            assert.deepEqual(state.compute(fullName), 'Animah Difool')
+          }]
+        }
+      })
+      controller.getSignal('warmup')()
+      controller.getSignal('test')()
+    })
+    it('should allow forcing recompute on COMPUTE state', () => {
+      const fullNameFactory = Computed({
+        firstName: 'user.firstName',
+        lastName: 'user.lastName'
+      }, ({firstName, lastName}) => {
+        return `${firstName} ${lastName}`
+      })
+      const fullName = fullNameFactory()
+      const controller = new Controller({
+        state: {
+          user: {
+            firstName: 'John',
+            lastName: 'Difool'
+          }
+        },
+        signals: {
+          test: [({state}) => {
+            // Set cache
+            assert.deepEqual(state.compute(fullName), 'John Difool')
+            state.set('user.firstName', 'Animah')
+            // Cache used
+            assert.deepEqual(state.compute(fullName), 'John Difool')
+            // Force recompute
+            assert.deepEqual(state.compute(fullName, true), 'Animah Difool')
+          }]
+        }
+      })
+      controller.getSignal('test')()
     })
   })
 })
