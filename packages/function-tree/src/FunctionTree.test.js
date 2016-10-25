@@ -103,6 +103,19 @@ describe('FunctionTree', () => {
       foo: 'bar'
     })
   })
+
+  it('should pass final payload on end event', () => {
+    const execute = FunctionTree()
+    execute.once('end', (execution, payload) => {
+      assert.deepEqual(payload, {foo: 'bar', bar: 'foo'})
+    })
+    execute([
+      () => {
+        return {bar: 'foo'}
+      }
+    ], {foo: 'bar'})
+  })
+
   it('should be able to reuse existing tree', (done) => {
     function actionA ({path}) {
       assert.ok(true)
