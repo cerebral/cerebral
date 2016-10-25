@@ -1,12 +1,9 @@
-import FileUpload from './fileUpload'
-export { default as FileUpload } from './fileUpload'
 import request from './request'
 import { urlEncode } from './utils'
-var allowedContentTypes = [
-  'application/x-www-form-urlencoded',
-  'multipart/form-data',
-  'text/plain'
-]
+import FileUpload from './fileUpload'
+
+export { default as FileUpload } from './fileUpload'
+
 var DEFAULT_OPTIONS = {
   method: 'get',
   baseUrl: '',
@@ -14,23 +11,23 @@ var DEFAULT_OPTIONS = {
     'Accept': 'application/json',
     'Content-Type': 'application/json; charset=UTF-8'
   },
-  onRequest: function(xhr, options) {
+  onRequest: function (xhr, options) {
     if (options.withCredentials) {
       xhr.withCredentials = true
     }
     if (options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
-      options.body = utils.urlEncode(options.body)
+      options.body = urlEncode(options.body)
     } else {
       options.body = JSON.stringify(options.body)
     }
 
-    Object.keys(options.headers).forEach(function(key) {
+    Object.keys(options.headers).forEach(function (key) {
       xhr.setRequestHeader(key, options.headers[key])
     })
 
     xhr.send(options.body)
   },
-  onResponse: function(xhr, resolve, reject) {
+  onResponse: function (xhr, resolve, reject) {
     var result = xhr.responseText
 
     if (xhr.getResponseHeader('content-type').indexOf('application/json') >= 0) {
@@ -51,8 +48,8 @@ var DEFAULT_OPTIONS = {
   }
 }
 
-function mergeWith(optionsA, optionsB) {
-  return Object.keys(optionsB).reduce(function(newOptions, key) {
+function mergeWith (optionsA, optionsB) {
+  return Object.keys(optionsB).reduce(function (newOptions, key) {
     if (!newOptions[key]) {
       newOptions[key] = optionsB[key]
     } else if (key === 'headers') {
@@ -62,7 +59,7 @@ function mergeWith(optionsA, optionsB) {
   }, optionsA)
 }
 
-export default function HttpProviderFactory(moduleOptions) {
+export default function HttpProviderFactory (moduleOptions) {
   if (typeof moduleOptions === 'function') {
     var defaultOptions = mergeWith({}, DEFAULT_OPTIONS)
     moduleOptions = moduleOptions(defaultOptions)
@@ -71,17 +68,17 @@ export default function HttpProviderFactory(moduleOptions) {
   }
 
   let cachedProvider = null
-  function HttpProvider(context) {
+  function HttpProvider (context) {
     var requests = {}
-    function createAbortablePromise(url, cb) {
-      return new Promise(function(resolve, reject) {
+    function createAbortablePromise (url, cb) {
+      return new Promise(function (resolve, reject) {
         requests[url] = {
           resolve: resolve,
           reject: reject,
-          xhr: cb(function(payload) {
+          xhr: cb(function (payload) {
             delete requests[url]
             resolve(payload)
-          }, function(error) {
+          }, function (error) {
             delete requests[url]
             reject(error)
           })
@@ -89,8 +86,8 @@ export default function HttpProviderFactory(moduleOptions) {
       })
     }
 
-    function createResponse(options, resolve, reject) {
-      return function(event) {
+    function createResponse (options, resolve, reject) {
+      return function (event) {
         switch (event.type) {
           case 'load':
             return options.onResponse(event.currentTarget, resolve, reject)
@@ -122,10 +119,10 @@ export default function HttpProviderFactory(moduleOptions) {
       }
     }
 
-    function requestService(options) {
+    function requestService (options) {
       options = mergeWith(options, moduleOptions)
 
-      return createAbortablePromise(options.url, function(resolve, reject) {
+      return createAbortablePromise(options.url, function (resolve, reject) {
         return request(options, createResponse(options, resolve, reject))
       })
     }
@@ -135,55 +132,55 @@ export default function HttpProviderFactory(moduleOptions) {
     } else {
       context.http = cachedProvider = {
         request: requestService,
-        get: function(url, options) {
+        get: function (url, options) {
           options = options || {}
           options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'GET'
           return requestService(options)
         },
-        post: function(url, body, options) {
+        post: function (url, body, options) {
           options = options || {}
           options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'POST'
           options.body = body
           return requestService(options)
         },
-        put: function(url, body, options) {
+        put: function (url, body, options) {
           options = options || {}
           options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'PUT'
           options.body = body
           return requestService(options)
         },
-        patch: function(url, body, options) {
+        patch: function (url, body, options) {
           options = options || {}
           options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'PATCH'
           options.body = body
           return requestService(options)
         },
-        delete: function(url, options) {
+        delete: function (url, options) {
           options = options || {}
           options.url = options.query ? url + '?' + urlEncode(options.query) : url
           options.method = 'DELETE'
           return requestService(options)
         },
-        updateOptions: function(newOptions) {
+        updateOptions: function (newOptions) {
           moduleOptions = mergeWith(newOptions, moduleOptions)
         },
-        abort: function(regexp) {
-          var matchingUrls = Object.keys(requests).filter(function(url) {
+        abort: function (regexp) {
+          var matchingUrls = Object.keys(requests).filter(function (url) {
             return Boolean(url.match(new RegExp(regexp)))
           })
-          matchingUrls.forEach(function(url) {
+          matchingUrls.forEach(function (url) {
             requests[url].xhr.abort()
           })
         },
-        fileUpload: function(options) {
+        fileUpload: function (options) {
           options = options || {}
           options.url = moduleOptions.baseUrl + options.url
 
-          return new fileUpload(options)
+          return new FileUpload(options)
         }
       }
     }

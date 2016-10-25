@@ -29,7 +29,8 @@ module.exports = {
     {name: 'function-tree'},
     {name: 'demos'},
     {name: 'todomvc'},
-    {name: 'forms'}
+    {name: 'forms'},
+    {name: 'http'}
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
