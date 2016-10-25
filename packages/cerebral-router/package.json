@@ -33,7 +33,8 @@
       "node_modules",
       "lib",
       "tests",
-      "**/*.test.js"
+      "**/*.test.js",
+      "**/testHelper.js"
     ]
   }
 }
