@@ -72,11 +72,12 @@ export default (View) => {
       }
       getProps () {
         const controller = this.context.cerebral.controller
+        const model = controller.model
         const props = this.props || {}
         const statePaths = this.getStatePaths(this.props)
 
         let propsToPass = Object.assign({}, props, Object.keys(statePaths || {}).reduce((currentProps, key) => {
-          currentProps[key] = statePaths[key] instanceof Computed ? statePaths[key].getValue(controller) : controller.getState(cleanPath(statePaths[key]))
+          currentProps[key] = statePaths[key] instanceof Computed ? statePaths[key].getValue(model) : controller.getState(cleanPath(statePaths[key]))
           return currentProps
         }, {}))
 

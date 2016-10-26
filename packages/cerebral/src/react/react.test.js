@@ -13,6 +13,7 @@ const assert = require('assert')
 const Controller = require('../Controller').default
 const Container = require('./container').default
 const connect = require('./connect').default
+const Computed = require('../Computed').default
 
 describe('React', () => {
   describe('container', () => {
@@ -244,6 +245,44 @@ describe('React', () => {
       const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
       component.changePath()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+    })
+    it('should compute Computed on state update', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        },
+        signals: {
+          methodCalled: [({state}) => state.set('foo', 'bar2')]
+        }
+      })
+      const computedFactory = Computed({
+        foo: 'foo'
+      }, ({foo}) => {
+        return `${foo} computed`
+      })
+      class TestComponentClass extends React.Component {
+        callSignal () {
+          this.props.methodCalled()
+        }
+        render () {
+          return (
+            <div>{this.props.foo}</div>
+          )
+        }
+      }
+      const TestComponent = connect({
+        foo: computedFactory()
+      }, {
+        methodCalled: 'methodCalled'
+      }, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+      component.callSignal()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2 computed')
     })
     describe('STRICT render update', () => {
       it('should not update when parent path changes', () => {
