@@ -216,5 +216,31 @@ describe('providers', () => {
       })
       controller.getSignal('test')()
     })
+    it('should be able to COMPUTE state with debugger', () => {
+      const MockDevtools = {
+        init () {},
+        send () {}
+      }
+      const fullNameFactory = Computed({
+        firstName: 'user.firstName',
+        lastName: 'user.lastName'
+      }, ({firstName, lastName}) => {
+        return `${firstName} ${lastName}`
+      })
+      const fullName = fullNameFactory()
+      const controller = new Controller({
+        state: {
+          user: {
+            firstName: 'John',
+            lastName: 'Difool'
+          }
+        },
+        devtools: MockDevtools,
+        signals: {
+          test: [({state}) => assert.deepEqual(state.compute(fullName), 'John Difool')]
+        }
+      })
+      controller.getSignal('test')()
+    })
   })
 })
