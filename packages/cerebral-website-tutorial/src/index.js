@@ -4,7 +4,8 @@ import { Controller } from 'cerebral'
 import App from './components/App'
 import { Container } from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import { set } from 'cerebral/operators'
+import { state, set, input } from 'cerebral/operators'
+import HttpProvider from 'cerebral-provider-http'
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
@@ -19,16 +20,14 @@ const controller = Controller({
   },
   signals: {
     buttonClicked: [
-      showToast('Button clicked!', 1000),
-      set('state:toast.message', '')
+      ...showToast('Button clicked!', 1000)
     ],
     saveButtonClicked: [
-      set('state:originalValue', 'input:value'),
+      set(state`originalValue`, input`value`),
       myAction1,
       myAction2,
       myAction3,
-      showToast(),
-      set('state:toast.message', '')
+      ...showToast()
     ]
   }
 })
@@ -39,6 +38,9 @@ function myAction1 ({input}) {
 
 function myAction2 ({input, state}) {
   input.value += ' and also by myAction2'
+  return ({
+    aKeyAddedByMyAction2: 'testvalue'
+  })
 }
 
 function myAction3 ({input, state}) {
@@ -65,7 +67,9 @@ function showToast (message, milliseconds) {
     })
   }
   action.displayName = 'showToast'
-  return action
+  return [action,
+    set(state`toast.message`, '')
+  ]
 }
 render((
   <Container controller={controller}>

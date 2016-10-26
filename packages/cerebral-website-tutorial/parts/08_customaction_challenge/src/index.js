@@ -4,7 +4,7 @@ import { Controller } from 'cerebral'
 import App from './components/App'
 import { Container } from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import { set, wait } from 'cerebral/operators'
+import { set, state, input, wait } from 'cerebral/operators'
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
@@ -19,18 +19,18 @@ const controller = Controller({
   },
   signals: {
     buttonClicked: [
-      set('state:toast.message', 'Button Clicked!'),
+      set(state`toast.message`, 'Button Clicked!'),
       wait(4000),
-      set('state:toast.message', '')
+      set(state`toast.message`, '')
     ],
     saveButtonClicked: [
-      set('state:originalValue', 'input:value'),
+      set(state`originalValue`, input`value`),
       myAction1,
       myAction2,
       myAction3,
-      set('state:toast.message', 'state:extendedValue'),
+      set(state`toast.message`, state`extendedValue`),
       wait(8000),
-      set('state:toast.message', '')
+      set(state`toast.message`, '')
     ]
   }
 })
@@ -41,6 +41,9 @@ function myAction1 ({input}) {
 
 function myAction2 ({input, state}) {
   input.value += ' and also by myAction2'
+  return ({
+    aKeyAddedByMyAction2: 'testvalue'
+  })
 }
 
 function myAction3 ({input, state}) {
