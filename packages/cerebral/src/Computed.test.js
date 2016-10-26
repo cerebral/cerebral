@@ -49,33 +49,33 @@ describe('Computed', () => {
       })
     })
     it('should return value', () => {
-      const controller = Controller({})
+      const model = Controller({}).model
       const computedFactory = Computed({}, () => {
         return 'foo'
       })
       const computed = computedFactory()
-      assert.equal(computed.getValue(controller), 'foo')
+      assert.equal(computed.getValue(model), 'foo')
     })
     it('should extract state', () => {
-      const controller = Controller({
+      const model = Controller({
         state: {
           foo: 'bar'
         }
-      })
+      }).model
       const computedFactory = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return foo
       })
       const computed = computedFactory()
-      assert.equal(computed.getValue(controller), 'bar')
+      assert.equal(computed.getValue(model), 'bar')
     })
     it('should cache values', () => {
-      const controller = Controller({
+      const model = Controller({
         state: {
           foo: 'bar'
         }
-      })
+      }).model
       const computedFactory = Computed({
         foo: 'foo'
       }, ({foo}) => {
@@ -84,9 +84,9 @@ describe('Computed', () => {
         }
       })
       const computed = computedFactory()
-      const value = computed.getValue(controller)
+      const value = computed.getValue(model)
       assert.deepEqual(value, {foo: 'bar'})
-      assert.equal(computed.getValue(controller), value)
+      assert.equal(computed.getValue(model), value)
     })
     it('should bust cache when path updates', () => {
       const controller = Controller({
@@ -94,6 +94,7 @@ describe('Computed', () => {
           foo: 'bar'
         }
       })
+      const model = controller.model
       const computedFactory = Computed({
         foo: 'foo'
       }, ({foo}) => {
@@ -102,18 +103,18 @@ describe('Computed', () => {
         }
       })
       const computed = computedFactory()
-      assert.deepEqual(computed.getValue(controller), {foo: 'bar'})
-      assert.deepEqual(computed.getValue(controller), {foo: 'bar'})
-      controller.model.set(['foo'], 'bar2')
+      assert.deepEqual(computed.getValue(model), {foo: 'bar'})
+      assert.deepEqual(computed.getValue(model), {foo: 'bar'})
+      model.set(['foo'], 'bar2')
       controller.flush()
-      assert.deepEqual(computed.getValue(controller), {foo: 'bar2'})
+      assert.deepEqual(computed.getValue(model), {foo: 'bar2'})
     })
     it('should handle computed in computed', () => {
-      const controller = Controller({
+      const model = Controller({
         state: {
           foo: 'bar'
         }
-      })
+      }).model
       const computedFactoryA = Computed({
         foo: 'foo'
       }, ({foo}) => {
@@ -126,7 +127,7 @@ describe('Computed', () => {
         return foo + foo2
       })
       const computed = computedFactoryB()
-      assert.equal(computed.getValue(controller), 'barbar')
+      assert.equal(computed.getValue(model), 'barbar')
     })
     it('should bust cache when nested computed updates', () => {
       const controller = Controller({
@@ -135,6 +136,7 @@ describe('Computed', () => {
           bar: 'foo'
         }
       })
+      const model = controller.model
       const computedFactoryA = Computed({
         foo: 'foo'
       }, ({foo}) => {
@@ -147,10 +149,10 @@ describe('Computed', () => {
         return foo + bar
       })
       const computed = computedFactoryB()
-      assert.equal(computed.getValue(controller), 'barfoo')
-      controller.model.set(['foo'], 'bar2')
+      assert.equal(computed.getValue(model), 'barfoo')
+      model.set(['foo'], 'bar2')
       controller.flush()
-      assert.equal(computed.getValue(controller), 'bar2foo')
+      assert.equal(computed.getValue(model), 'bar2foo')
     })
     it('should handle strict path updates', () => {
       const controller = Controller({
@@ -161,6 +163,7 @@ describe('Computed', () => {
           }
         }
       })
+      const model = controller.model
       const computedFactoryA = Computed({
         foo: 'foo'
       }, ({foo}) => {
@@ -173,12 +176,12 @@ describe('Computed', () => {
       })
       const computedA = computedFactoryA()
       const computedB = computedFactoryB()
-      assert.equal(computedA.getValue(controller), 'woop')
-      assert.equal(computedB.getValue(controller), 'woop')
-      controller.model.set(['foo', 'bar'], 'woop2')
+      assert.equal(computedA.getValue(model), 'woop')
+      assert.equal(computedB.getValue(model), 'woop')
+      model.set(['foo', 'bar'], 'woop2')
       controller.flush()
-      assert.equal(computedA.getValue(controller), 'woop')
-      assert.equal(computedB.getValue(controller), 'woop2')
+      assert.equal(computedA.getValue(model), 'woop')
+      assert.equal(computedB.getValue(model), 'woop2')
     })
     it('should remove computed from dependency store', () => {
       const controller = Controller({
@@ -186,20 +189,21 @@ describe('Computed', () => {
           foo: 'bar'
         }
       })
+      const model = controller.model
       const computedFactory = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return foo
       })
       const computed = computedFactory()
-      assert.equal(computed.getValue(controller), 'bar')
-      controller.model.set(['foo'], 'bar2')
+      assert.equal(computed.getValue(model), 'bar')
+      model.set(['foo'], 'bar2')
       controller.flush()
-      assert.equal(computed.getValue(controller), 'bar2')
+      assert.equal(computed.getValue(model), 'bar2')
       computed.remove()
-      controller.model.set(['foo'], 'bar3')
+      model.set(['foo'], 'bar3')
       controller.flush()
-      assert.equal(computed.getValue(controller), 'bar2')
+      assert.equal(computed.getValue(model), 'bar2')
     })
   })
 })

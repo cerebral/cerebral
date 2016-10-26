@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 import Model from './Model'
+import Computed from './Computed'
 import assert from 'assert'
 
 describe('Model', () => {
@@ -121,6 +122,43 @@ describe('Model', () => {
       })
       model.concat(['foo'], ['bar'])
       assert.deepEqual(model.get(), {foo: ['foo', 'bar']})
+    })
+  })
+  describe('COMPUTE', () => {
+    it('should compute value from Computed', () => {
+      const fullNameFactory = Computed({
+        firstName: 'user.firstName',
+        lastName: 'user.lastName'
+      }, ({firstName, lastName}) => {
+        return `${firstName} ${lastName}`
+      })
+      const fullName = fullNameFactory()
+      const model = new Model({
+        user: {
+          firstName: 'John',
+          lastName: 'Difool'
+        }
+      })
+      assert.deepEqual(model.compute(fullName), 'John Difool')
+    })
+    it('should force recompute value from Computed', () => {
+      const fullNameFactory = Computed({
+        firstName: 'user.firstName',
+        lastName: 'user.lastName'
+      }, ({firstName, lastName}) => {
+        return `${firstName} ${lastName}`
+      })
+      const fullName = fullNameFactory()
+      const model = new Model({
+        user: {
+          firstName: 'John',
+          lastName: 'Difool'
+        }
+      })
+      model.compute(fullName)
+      model.set(['user', 'firstName'], 'Animah')
+      assert.deepEqual(model.compute(fullName), 'John Difool')
+      assert.deepEqual(model.compute(fullName, true), 'Animah Difool')
     })
   })
   describe('Prevent mutations', () => {

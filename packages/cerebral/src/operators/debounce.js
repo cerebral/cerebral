@@ -1,3 +1,1 @@
-import debounce from 'function-tree/lib/factories/debounce'
-
-export default debounce
+export {debounce as default} from 'function-tree/factories'

@@ -65,7 +65,9 @@
     "exclude": [
       "node_modules",
       "lib",
-      "tests"
+      "tests",
+      "**/*.test.js",
+      "**/testHelper.js"
     ]
   }
 }
