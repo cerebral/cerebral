@@ -10,9 +10,6 @@ A state controller with its own debugger
 [![js-standard-style][standard-image]][standard-url]
 [![Discord][discord-image]][discord-url]
 
-## Build prerequisites
-npm install babel-preset-es2015 cross-env -g
-
 <img src="images/logo.png" width="300" align="center">
 
 ## Please head over to our WIP website for cerebral v2
