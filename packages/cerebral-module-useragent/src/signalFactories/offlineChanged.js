@@ -1,7 +1,7 @@
+import {set, state, input} from 'cerebral/operators'
+
 export default (path) => {
   return [
-    function setOfflineStatus ({state, input}) {
-      state.set(`${path.join('.')}.network.offline`, input.offline)
-    }
+    set(state`${path.join('.')}.network.offline`, input`offline`)
   ]
 }

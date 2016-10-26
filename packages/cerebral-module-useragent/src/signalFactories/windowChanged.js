@@ -1,8 +1,8 @@
+import {set, state, input} from 'cerebral/operators'
+
 export default (path) => {
   return [
-    function setMediaAndWindowSpec ({state, input}) {
-      state.set(`${path.join('.')}.media`, input.media)
-      state.set(`${path.join('.')}.window`, input.windowSpec)
-    }
+    set(state`${path.join('.')}.media`, input`media`),
+    set(state`${path.join('.')}.window`, input`windowSpec`)
   ]
 }
