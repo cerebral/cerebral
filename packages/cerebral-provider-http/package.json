@@ -1,0 +1,22 @@
+{
+  "name": "cerebral-provider-http",
+  "version": "1.0.0-alpha.1",
+  "description": "HTTP provider for Cerebral 2",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral.git"
+  },
+  "keywords": [
+    "cerebral",
+    "http"
+  ],
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "license": "MIT",
+  "homepage":
+    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-http#readme"
+}

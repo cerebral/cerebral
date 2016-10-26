@@ -6,7 +6,7 @@ function createNext (next, path) {
   }
 }
 
-export default () => {
+export default function PathProvider () {
   return (context, functionDetails, payload, next) => {
     if (functionDetails.outputs) {
       context.path = Object.keys(functionDetails.outputs).reduce((output, outputPath) => {

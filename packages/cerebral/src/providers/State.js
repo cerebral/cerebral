@@ -11,10 +11,13 @@ function StateProviderFactory (model) {
     'unshift',
     'splice',
     'unset',
-    'concat'
+    'concat',
+    'compute'
   ]
   const stateContext = methods.reduce((currentStateContext, methodKey) => {
-    if (typeof model[methodKey] === 'function') {
+    if (methodKey === 'compute') {
+      currentStateContext.compute = (...args) => model.compute(...args)
+    } else if (typeof model[methodKey] === 'function') {
       currentStateContext[methodKey] = (...args) => {
         const path = ensurePath(args.shift())
 
@@ -30,7 +33,7 @@ function StateProviderFactory (model) {
 
     if (context.debugger) {
       context.state = methods.reduce((currentState, methodKey) => {
-        if (methodKey === 'get') {
+        if (methodKey === 'get' || methodKey === 'compute') {
           currentState[methodKey] = stateContext[methodKey]
         } else {
           const originFunc = stateContext[methodKey]
