@@ -1,6 +1,6 @@
 require('feature.js')
 
-export default function getFeatures(options) {
+export default function getFeatures (options) {
   const feature = options.feature
   const uaFeatures = window.feature
 

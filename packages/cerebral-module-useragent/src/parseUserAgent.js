@@ -3,7 +3,7 @@ import UaParser from 'ua-parser-js'
 const uaParser = new UaParser()
 uaParser.setUA(navigator.userAgent)
 
-export default function parseUserAgent(options) {
+export default function parseUserAgent (options) {
   const parse = options.parse
 
   return Object.keys(parse)
