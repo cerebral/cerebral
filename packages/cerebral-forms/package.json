@@ -23,10 +23,10 @@
   "license": "MIT",
   "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms#readme",
   "peerDependencies": {
-    "cerebral": "^2.0.0-alpha.4"
+    "cerebral": "^2.0.0-0"
   },
   "devDependencies": {
-    "cerebral": "^2.0.0-alpha.4"
+    "cerebral": "^2.0.0-0"
   },
   "nyc": {
     "exclude": [
