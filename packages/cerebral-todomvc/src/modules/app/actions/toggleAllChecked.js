@@ -1,9 +1,9 @@
 import isAllChecked from '../../../computed/isAllChecked'
 import visibleTodosRefs from '../../../computed/visibleTodosRefs'
 
-function toggleAllChecked ({controller, state}) {
-  const isCompleted = !isAllChecked().getValue(controller)
-  const currentTodosKeys = visibleTodosRefs().getValue(controller)
+function toggleAllChecked ({state}) {
+  const isCompleted = !state.compute(isAllChecked())
+  const currentTodosKeys = state.compute(visibleTodosRefs())
 
   currentTodosKeys.forEach((ref) => {
     state.set(`app.todos.${ref}.completed`, isCompleted)
