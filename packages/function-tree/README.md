@@ -57,7 +57,7 @@ const ContextProvider = require('function-tree/providers').ContextProvider
 const appMounted = require('../src/events/appMounted')
 
 const window = {app: {}}
-const execute = new FunctionTree([
+const execute = FunctionTree([
   ContextProvider({
     window,
     request: {
@@ -80,7 +80,7 @@ The really good thing about asynchronous testing with a `function-tree` is that 
 ```js
 import FunctionTree from 'function-tree'
 
-const execute = new FunctionTree([
+const execute = FunctionTree([
   // Providers
 ])
 
@@ -94,7 +94,7 @@ import FunctionTree from 'function-tree'
 import {ContextProvider} from 'function-tree/providers'
 import request from 'request'
 
-const execute = new FunctionTree([
+const execute = FunctionTree([
   ContextProvider({
     request
   })
@@ -289,7 +289,7 @@ A provider gives you access to the current context and other information about t
 ```js
 import FunctionTree from 'function-tree'
 
-const execute = new FunctionTree([
+const execute = FunctionTree([
   function MyProvider(context, functionDetails, payload) {
     context // Current context
     context.input // Input created by the InputProvider (default)
@@ -323,7 +323,7 @@ function funcA(context) {
   context.input.foo // "bar"
 }
 
-const execute = new FunctionTree()
+const execute = FunctionTree()
 const tree = [
   funcA
 ]
@@ -359,7 +359,7 @@ function funcC(context) {
   context.input.foo3 // "bar3"
 }
 
-const execute = new FunctionTree([])
+const execute = FunctionTree([])
 const tree = [
   funcA, {
     pathA: [
@@ -386,7 +386,7 @@ function funcA(context) {
   context.request.get('/whatever') // Debugger will know about this
 }
 
-const execute = new FunctionTree([
+const execute = FunctionTree([
   ContextProvider({
     request
   })
@@ -406,7 +406,7 @@ import FunctionTree from 'function-tree'
 import {ContextProvider, DebuggerProvider} from 'function-tree/providers'
 import request from 'request'
 
-const execute = new FunctionTree([
+const execute = FunctionTree([
   DebuggerProvider({
     colors: {
       request: 'red' // Set color of usage in debugger
@@ -433,7 +433,7 @@ const NodeDebuggerProvider = require('function-tree/providers/NodeDebugger')
 const ContextProvider = require('function-tree/providers/Context')
 const request = require('request')
 
-const execute = new FunctionTree([
+const execute = FunctionTree([
   NodeDebuggerProvider({
     colors: {
       request: 'red' // Set color of usage in debugger
@@ -453,7 +453,7 @@ The execute function is also an event emitter.
 ```js
 import FunctionTree from 'function-tree'
 
-const execute = new FunctionTree([])
+const execute = FunctionTree([])
 const tree = [
   funcA
 ]
