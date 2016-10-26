@@ -3,7 +3,7 @@ import {connect} from 'cerebral/react'
 import upperCaseTitleComputed from '../../computeds/upperCaseTitle'
 
 export default connect({
-  title: upperCaseTitleComputed()
+  title: upperCaseTitleComputed
 },
   function UpperTitle (props) {
     return (

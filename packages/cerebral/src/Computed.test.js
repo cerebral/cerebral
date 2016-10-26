@@ -6,7 +6,7 @@ import assert from 'assert'
 describe('Computed', () => {
   describe('factory', () => {
     it('should create a computed factory', () => {
-      const computedFactory = Computed({}, () => {})
+      const computedFactory = Computed({}, () => {}).factory.create
       assert.ok(typeof computedFactory === 'function')
     })
     it('should throw when not passing correct arguments', () => {
@@ -15,45 +15,40 @@ describe('Computed', () => {
       })
     })
     it('should cache computed', () => {
-      const computedFactory = Computed({}, () => {})
-      computedFactory()
-      assert.equal(computedFactory.cache.length, 1)
-      computedFactory()
-      assert.equal(computedFactory.cache.length, 1)
+      const computed = Computed({}, () => {})
+      assert.equal(computed.factory.cache.length, 1)
+      computed.props()
+      assert.equal(computed.factory.cache.length, 1)
     })
     it('should not use cache when props differ', () => {
-      const computedFactory = Computed({}, () => {})
-      computedFactory()
-      assert.equal(computedFactory.cache.length, 1)
-      computedFactory({foo: 'bar'})
-      assert.equal(computedFactory.cache.length, 2)
+      const computed = Computed({}, () => {})
+      assert.equal(computed.factory.cache.length, 1)
+      computed.props({foo: 'bar'})
+      assert.equal(computed.factory.cache.length, 2)
     })
     it('should remove from cache when computed is removed', () => {
-      const computedFactory = Computed({}, () => {})
-      const computed = computedFactory()
-      assert.equal(computedFactory.cache.length, 1)
+      const computed = Computed({}, () => {})
+      assert.equal(computed.factory.cache.length, 1)
       computed.remove()
-      assert.equal(computedFactory.cache.length, 0)
+      assert.equal(computed.factory.cache.length, 0)
     })
   })
   describe('instance', () => {
     it('should create a computed', () => {
-      const computedFactory = Computed({}, () => {})
-      const computed = computedFactory()
+      const computed = Computed({}, () => {})
       assert.ok(typeof computed.getValue === 'function')
     })
     it('should throw when passing wrong argument', () => {
-      const computedFactory = Computed({}, () => {})
+      const computed = Computed({}, () => {})
       assert.throws(() => {
-        computedFactory([])
+        computed.props([])
       })
     })
     it('should return value', () => {
       const model = Controller({}).model
-      const computedFactory = Computed({}, () => {
+      const computed = Computed({}, () => {
         return 'foo'
       })
-      const computed = computedFactory()
       assert.equal(computed.getValue(model), 'foo')
     })
     it('should extract state', () => {
@@ -62,12 +57,11 @@ describe('Computed', () => {
           foo: 'bar'
         }
       }).model
-      const computedFactory = Computed({
+      const computed = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return foo
       })
-      const computed = computedFactory()
       assert.equal(computed.getValue(model), 'bar')
     })
     it('should cache values', () => {
@@ -76,14 +70,13 @@ describe('Computed', () => {
           foo: 'bar'
         }
       }).model
-      const computedFactory = Computed({
+      const computed = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return {
           foo
         }
       })
-      const computed = computedFactory()
       const value = computed.getValue(model)
       assert.deepEqual(value, {foo: 'bar'})
       assert.equal(computed.getValue(model), value)
@@ -95,14 +88,13 @@ describe('Computed', () => {
         }
       })
       const model = controller.model
-      const computedFactory = Computed({
+      const computed = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return {
           foo
         }
       })
-      const computed = computedFactory()
       assert.deepEqual(computed.getValue(model), {foo: 'bar'})
       assert.deepEqual(computed.getValue(model), {foo: 'bar'})
       model.set(['foo'], 'bar2')
@@ -115,19 +107,18 @@ describe('Computed', () => {
           foo: 'bar'
         }
       }).model
-      const computedFactoryA = Computed({
+      const computedA = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return foo
       })
-      const computedFactoryB = Computed({
+      const computedB = Computed({
         foo: 'foo',
-        foo2: computedFactoryA()
+        foo2: computedA
       }, ({foo, foo2}) => {
         return foo + foo2
       })
-      const computed = computedFactoryB()
-      assert.equal(computed.getValue(model), 'barbar')
+      assert.equal(computedB.getValue(model), 'barbar')
     })
     it('should bust cache when nested computed updates', () => {
       const controller = Controller({
@@ -137,22 +128,21 @@ describe('Computed', () => {
         }
       })
       const model = controller.model
-      const computedFactoryA = Computed({
+      const computedA = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return foo
       })
-      const computedFactoryB = Computed({
-        foo: computedFactoryA(),
+      const computedB = Computed({
+        foo: computedA,
         bar: 'bar'
       }, ({foo, bar}) => {
         return foo + bar
       })
-      const computed = computedFactoryB()
-      assert.equal(computed.getValue(model), 'barfoo')
+      assert.equal(computedB.getValue(model), 'barfoo')
       model.set(['foo'], 'bar2')
       controller.flush()
-      assert.equal(computed.getValue(model), 'bar2foo')
+      assert.equal(computedB.getValue(model), 'bar2foo')
     })
     it('should handle strict path updates', () => {
       const controller = Controller({
@@ -164,18 +154,16 @@ describe('Computed', () => {
         }
       })
       const model = controller.model
-      const computedFactoryA = Computed({
+      const computedA = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return foo.bar
       })
-      const computedFactoryB = Computed({
+      const computedB = Computed({
         foo: 'foo.*'
       }, ({foo}) => {
         return foo.bar
       })
-      const computedA = computedFactoryA()
-      const computedB = computedFactoryB()
       assert.equal(computedA.getValue(model), 'woop')
       assert.equal(computedB.getValue(model), 'woop')
       model.set(['foo', 'bar'], 'woop2')
@@ -190,12 +178,11 @@ describe('Computed', () => {
         }
       })
       const model = controller.model
-      const computedFactory = Computed({
+      const computed = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return foo
       })
-      const computed = computedFactory()
       assert.equal(computed.getValue(model), 'bar')
       model.set(['foo'], 'bar2')
       controller.flush()

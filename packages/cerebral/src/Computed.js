@@ -16,10 +16,7 @@ export const dependencyStore = new DependencyStore()
 */
 export class Computed {
   constructor (props, paths, func, depsMap, factory) {
-    if (!isObject(props)) {
-      throwError('You are not passing valid props to a computed')
-    }
-    this.props = props
+    this.setProps = props
     this.func = func
     this.value = null
     this.paths = paths
@@ -29,6 +26,13 @@ export class Computed {
     this.isDirty = true
 
     dependencyStore.addEntity(this, this.depsMap)
+  }
+  /*
+    Uses the factory to return a computed for the given props. This returns
+    the same computed given the same props (cache in factory).
+  */
+  props (...args) {
+    return this.factory.create(...args)
   }
   /*
     This method is called by the controller when a flush happens and
@@ -45,7 +49,7 @@ export class Computed {
     if (this.isDirty) {
       const computedProps = Object.assign(
         {},
-        this.props,
+        this.setProps,
         Object.keys(this.paths).reduce((currentProps, depsMapKey) => {
           currentProps[depsMapKey] = (
             this.paths[depsMapKey] instanceof Computed
@@ -98,16 +102,16 @@ class ComputedFactory {
     this.func = func
     this.cache = []
 
-    const create = this.create.bind(this)
-    create.cache = this.cache
-
-    return create
+    return this.create()
   }
   /*
     This is what runs when you create an instance of a computed, passing
     any optional props. It checks the cache or creates a new computed
   */
   create (props = {}) {
+    if (!isObject(props)) {
+      throwError('You are not passing valid props to a computed')
+    }
     for (let x = 0; x < this.cache.length; x++) {
       if (!propsDiffer(props, this.cache[x].props)) {
         return this.cache[x]

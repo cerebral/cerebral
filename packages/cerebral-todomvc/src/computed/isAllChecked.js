@@ -2,7 +2,7 @@ import {Computed} from 'cerebral'
 import visibleTodosRefs from './visibleTodosRefs'
 
 export default Computed({
-  visibleTodosRefs: visibleTodosRefs(),
+  visibleTodosRefs: visibleTodosRefs,
   todos: 'app.todos.**'
 }, props => {
   return props.visibleTodosRefs.filter((ref) => {

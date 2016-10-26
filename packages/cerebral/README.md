@@ -81,7 +81,7 @@ In component:
 import someComputed from './someComputed'
 
 export default connect({
-  myComputed: someComputed()
+  myComputed: someComputed
 })
 ```
 
