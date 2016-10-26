@@ -4,7 +4,7 @@
   "description": "HTTP provider for Cerebral 2",
   "main": "lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
+    "build": "cross-env BABEL_ENV=production ../../node_modules/.bin/babel  src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
   "repository": {
