@@ -13,10 +13,11 @@ const controller = Controller({
     title: 'Hello from Cerebral!',
     appTitle: 'Cerebral Tutorial App',
     toast: {
-      message: 'no message yet'
+      messages: []
     },
     originalValue: '',
     extendedValue: '',
+    repoName: 'cerebral',
     data: {}
   },
   signals: {
@@ -30,11 +31,12 @@ const controller = Controller({
       myAction3,
       ...showToast()
     ],
-    loadDataClicked: [
-      ...showToast('Loading Data...', 1000),
+    getRepoInfoClicked: [
+      set(state`repoName`, input`value`),
+      ...showToast('Loading Data for repo: @{repoName}', 2000),
       GetData,
       set(state`data`, input`result`),
-      ...showToast('How cool is that. @{data.name} has @{data.stargazers_count} stars!', 5000)
+      ...showToast('How cool is that. @{repoName} has @{data.subscribers_count} subscribers and @{data.stargazers_count} stars!', 5000)
     ]
 
   },
@@ -42,37 +44,39 @@ const controller = Controller({
     HttpProvider({
       baseUrl: 'https://api.github.com'
     })
-  ],
+  ]
 })
 
-function myAction1({input}) {
+function myAction1 ({input}) {
   input.value += ' extended by myAction1'
 }
 
-function myAction2({input, state}) {
+function myAction2 ({input, state}) {
   input.value += ' and also by myAction2'
   return ({
     aKeyAddedByMyAction2: 'testvalue'
   })
 }
 
-function myAction3({input, state}) {
+function myAction3 ({input, state}) {
   input.value = input.value.toUpperCase()
   input.message = input.value
   state.set('extendedValue', input.value)
 }
 
-
-function GetData({input, state, http}) {
-  return http.get("/repos/cerebral/cerebral")
+function GetData ({input, state, http}) {
+  return http.get('/repos/cerebral/' + input.value)
     .then(response => ({
       result: response.result
     }))
 }
 
+function popMessage ({state}) {
+  state.pop('toast.messages')
+}
 
-function showToast(message, milliseconds) {
-  function action({input, state, path}) {
+function showToast (message, milliseconds) {
+  function action ({input, state, path}) {
     let msg = message
     let ms = milliseconds
     if (!msg && input) {
@@ -84,28 +88,29 @@ function showToast(message, milliseconds) {
     var matches = msg.match(reg)
     if (matches) {
       matches.forEach(m => {
-        let cleanedPath = m.replace("@{", "").replace("}", "")
+        let cleanedPath = m.replace('@{', '').replace('}', '')
         msg = msg.replace(m, state.get(cleanedPath))
       })
     }
-
     if (!ms) {
       ms = 8000
     }
-    state.set('toast.message', msg)
-    return new Promise(function(resolve, reject) {
-      window.setTimeout(function() {
+    state.unshift('toast.messages', msg)
+    return new Promise(function (resolve, reject) {
+      window.setTimeout(function () {
         resolve({})
       }, ms)
     })
   }
   action.displayName = 'showToast'
-  return [action,
-    set(state`toast.message`, '')
+
+  return [
+    action,
+    popMessage
   ]
 }
 render((
-  <Container controller={ controller }>
+  <Container controller={controller}>
     <App />
   </Container>
   ), document.querySelector('#root'))
