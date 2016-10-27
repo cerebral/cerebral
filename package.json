@@ -54,5 +54,5 @@
       "**/build/"
     ]
   },
-  "private": true,
+  "private": true
 }

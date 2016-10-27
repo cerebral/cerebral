@@ -4,7 +4,7 @@
   "description": "Adds useragent specs to your cerebral state model",
   "main": "lib/index.js",
   "scripts": {
-    "build": "cross-env BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
+    "build": "node ../../node_modules/cross-env/bin/cross-env.js BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s --presets es2015",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -30,8 +30,6 @@
     "cerebral": "^2.0.0-0"
   },
   "devDependencies": {
-    "cerebral": "^2.0.0-0",
-    "babel-preset-es2015": "^6.16.0",
-    "cross-env": "^3.1.3"
+    "cerebral": "^2.0.0-0"
   }
 }
