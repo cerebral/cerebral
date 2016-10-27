@@ -17,6 +17,9 @@
   ],
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
   "homepage":
     "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-http#readme"
 }

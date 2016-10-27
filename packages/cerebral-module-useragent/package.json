@@ -18,7 +18,11 @@
   ],
   "author": "Max Frigge <maxfrigge@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-module-useragent#readme",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "homepage":
+    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-module-useragent#readme",
   "dependencies": {
     "feature.js": "^1.0.0",
     "match-media": "^0.2.0",
