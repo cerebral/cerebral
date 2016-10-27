@@ -10,8 +10,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cerebral/cerebral.git"
+    "url": "git+https://github.com/cerebral/cerebral.git"
   },
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "homepage": "http://cerebral.github.io/cerebral-website",
   "dependencies": {
     "function-tree": "^0.5.0-alpha.1"
   },

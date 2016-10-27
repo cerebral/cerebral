@@ -4,6 +4,13 @@
   "private": true,
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "homepage": "http://cerebral.github.io/cerebral-todomvc/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
   "contributors": [
     "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
