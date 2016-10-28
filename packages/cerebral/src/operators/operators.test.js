@@ -1,12 +1,10 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
+import {concat, debounce, filter, input, merge, pop, push, set, shift, splice, state, toggle, unset, unshift, wait, when} from './'
 
 describe('Operators', () => {
   it('should be able to nest template tags', () => {
-    const set = require('./set').default
-    const state = require('./state').default
-    const input = require('./input').default
     const controller = new Controller({
       state: {
         tip: '',
@@ -24,9 +22,6 @@ describe('Operators', () => {
     assert.equal(controller.getState().tip, 'Joe')
   })
   it('should be able to nest multiple template tags', () => {
-    const set = require('./set').default
-    const state = require('./state').default
-    const input = require('./input').default
     const controller = new Controller({
       state: {
         tip: '',
@@ -49,7 +44,6 @@ describe('Operators', () => {
   })
   describe('debounce', () => {
     it('should debounce execution', (done) => {
-      const debounce = require('./debounce').default
       let discardedCount = 0
       const controller = new Controller({
         signals: {
@@ -72,8 +66,6 @@ describe('Operators', () => {
   })
   describe('filter', () => {
     it('should filter input', () => {
-      const filter = require('./filter').default
-      const input = require('./input').default
       let accepted = 0
       let discarded = 0
       const controller = new Controller({
@@ -96,8 +88,6 @@ describe('Operators', () => {
       assert.equal(discarded, 1)
     })
     it('should filter state', () => {
-      const filter = require('./filter').default
-      const state = require('./state').default
       let discarded = 0
       const controller = new Controller({
         state: {
@@ -123,8 +113,6 @@ describe('Operators', () => {
   })
   describe('toggle', () => {
     it('should toggle state', () => {
-      const toggle = require('./toggle').default
-      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: true
@@ -138,11 +126,26 @@ describe('Operators', () => {
       controller.getSignal('test')()
       assert.deepEqual(controller.getState(), {foo: false})
     })
+    it('should toggle state with input', () => {
+      const controller = new Controller({
+        state: {
+          todos: {
+            one: true,
+            two: false
+          }
+        },
+        signals: {
+          test: [
+            toggle(state`todos.${input`ref`}`)
+          ]
+        }
+      })
+      controller.getSignal('test')({ref: 'one'})
+      assert.deepEqual(controller.getState(), {todos: {one: false, two: false}})
+    })
   })
   describe('when', () => {
     it('should check truthy value of input', () => {
-      const when = require('./when').default
-      const input = require('./input').default
       let count = 0
       const controller = new Controller({
         signals: {
@@ -158,8 +161,6 @@ describe('Operators', () => {
       assert.equal(count, 1)
     })
     it('should check truthy value of state', () => {
-      const when = require('./when').default
-      const state = require('./state').default
       let count = 0
       const controller = new Controller({
         state: {
@@ -180,7 +181,6 @@ describe('Operators', () => {
   })
   describe('wait', () => {
     it('should hold execution for set time', (done) => {
-      const wait = require('./wait').default
       const start = Date.now()
       const controller = new Controller({
         signals: {
@@ -198,8 +198,6 @@ describe('Operators', () => {
   })
   describe('set', () => {
     it('should set value to model', () => {
-      const set = require('./set').default
-      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: 'bar'
@@ -214,8 +212,6 @@ describe('Operators', () => {
       assert.deepEqual(controller.getState(), {foo: 'bar2'})
     })
     it('should set non string value to model', () => {
-      const set = require('./set').default
-      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: 'bar'
@@ -230,9 +226,6 @@ describe('Operators', () => {
       assert.deepEqual(controller.getState(), {foo: {bar: 'baz'}})
     })
     it('should set value to model from input', () => {
-      const set = require('./set').default
-      const state = require('./state').default
-      const input = require('./input').default
       const controller = new Controller({
         state: {
           foo: 'bar'
@@ -249,8 +242,6 @@ describe('Operators', () => {
       assert.deepEqual(controller.getState(), {foo: 'bar2'})
     })
     it('should set value to model from model', () => {
-      const set = require('./set').default
-      const state = require('./state').default
       const controller = new Controller({
         state: {
           foo: 'bar',
@@ -264,6 +255,216 @@ describe('Operators', () => {
       })
       controller.getSignal('test')()
       assert.equal(controller.getState().foo, 'bar2')
+    })
+  })
+  describe('concat', () => {
+    it('should concat literal array in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['one']
+        },
+        signals: {
+          test: [
+            concat(state`list`, ['two'])
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {list: ['one', 'two']})
+    })
+    it('should concat state array in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['one'],
+          list2: ['two', 'three']
+        },
+        signals: {
+          test: [
+            concat(state`list`, state`list2`)
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {list: ['one', 'two', 'three'], list2: ['two', 'three']})
+    })
+  })
+  describe('merge', () => {
+    it('should merge value in model', () => {
+      const controller = new Controller({
+        state: {
+          users: {
+            john: 'John Difool'
+          }
+        },
+        signals: {
+          test: [
+            merge(state`users`, {largo: 'Largo Winch'})
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {users: {
+        john: 'John Difool',
+        largo: 'Largo Winch'
+      }})
+    })
+    it('should merge value from input in model', () => {
+      const controller = new Controller({
+        state: {
+          users: {
+            john: 'John Difool'
+          }
+        },
+        signals: {
+          test: [
+            merge(state`users`, input`value`)
+          ]
+        }
+      })
+      controller.getSignal('test')({value: {largo: 'Largo Winch'}})
+      assert.deepEqual(controller.getState(), {users: {
+        john: 'John Difool',
+        largo: 'Largo Winch'
+      }})
+    })
+  })
+  describe('pop', () => {
+    it('should pop value from model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b', 'c']
+        },
+        signals: {
+          test: [
+            pop(state`list`)
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {list: ['a', 'b']})
+    })
+  })
+  describe('push', () => {
+    it('should push value in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b']
+        },
+        signals: {
+          test: [
+            push(state`list`, 'c')
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
+    })
+    it('should push value from input in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b']
+        },
+        signals: {
+          test: [
+            push(state`list`, input`value`)
+          ]
+        }
+      })
+      controller.getSignal('test')({value: 'c'})
+      assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
+    })
+  })
+  describe('shift', () => {
+    it('should shift value in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b', 'c']
+        },
+        signals: {
+          test: [
+            shift(state`list`)
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {list: ['b', 'c']})
+    })
+  })
+  describe('splice', () => {
+    it('should splice value in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b', 'c', 'd']
+        },
+        signals: {
+          test: [
+            splice(state`list`, 1, 2, 'x', 'y')
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {list: ['a', 'x', 'y', 'd']})
+    })
+    it('should splice value from input in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b', 'c', 'd']
+        },
+        signals: {
+          test: [
+            splice(state`list`, input`idx`, 1, input`x`, input`y`)
+          ]
+        }
+      })
+      controller.getSignal('test')({idx: 2, x: 'one', y: 'two'})
+      assert.deepEqual(controller.getState(), {list: ['a', 'b', 'one', 'two', 'd']})
+    })
+  })
+  describe('unset', () => {
+    it('should unset value in model', () => {
+      const controller = new Controller({
+        state: {
+          foo: 'bar',
+          bar: 'baz'
+        },
+        signals: {
+          test: [
+            unset(state`foo`)
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {bar: 'baz'})
+    })
+  })
+  describe('unshift', () => {
+    it('should unshift value in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b']
+        },
+        signals: {
+          test: [
+            unshift(state`list`, 'x')
+          ]
+        }
+      })
+      controller.getSignal('test')()
+      assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
+    })
+    it('should unshift value from input in model', () => {
+      const controller = new Controller({
+        state: {
+          list: ['a', 'b']
+        },
+        signals: {
+          test: [
+            unshift(state`list`, input`value`)
+          ]
+        }
+      })
+      controller.getSignal('test')({value: 'x'})
+      assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
     })
   })
 })
