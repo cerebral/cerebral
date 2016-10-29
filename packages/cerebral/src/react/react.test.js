@@ -255,7 +255,7 @@ describe('React', () => {
           methodCalled: [({state}) => state.set('foo', 'bar2')]
         }
       })
-      const computedFactory = Computed({
+      const computed = Computed({
         foo: 'foo'
       }, ({foo}) => {
         return `${foo} computed`
@@ -271,7 +271,7 @@ describe('React', () => {
         }
       }
       const TestComponent = connect({
-        foo: computedFactory()
+        foo: computed
       }, {
         methodCalled: 'methodCalled'
       }, TestComponentClass)

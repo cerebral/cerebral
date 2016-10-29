@@ -8,7 +8,7 @@ import visibleTodosRefs from '../../computed/visibleTodosRefs'
 export default connect({
   todos: 'app.todos',
   isSaving: 'app.isSaving',
-  visibleTodosRefs: visibleTodosRefs()
+  visibleTodosRefs: visibleTodosRefs
 },
   function App (props) {
     return (

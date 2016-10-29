@@ -21,7 +21,11 @@
   ],
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
-  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms#readme",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "homepage":
+    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms#readme",
   "peerDependencies": {
     "cerebral": "^2.0.0-0"
   },

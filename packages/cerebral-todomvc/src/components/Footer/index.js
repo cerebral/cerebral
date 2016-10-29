@@ -5,7 +5,7 @@ import cn from 'classnames'
 
 export default connect({
   filter: 'app.filter',
-  counts: counts()
+  counts: counts
 }, {
   filterClicked: 'app.filterClicked',
   clearCompletedClicked: 'app.clearCompletedClicked'

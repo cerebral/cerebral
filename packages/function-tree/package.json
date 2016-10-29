@@ -19,7 +19,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cerebral/function-tree.git"
+    "url": "git+https://github.com/cerebral/cerebral.git"
   },
   "keywords": [
     "javascript",
@@ -34,9 +34,9 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cerebral/function-tree/issues"
+    "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage": "https://github.com/cerebral/function-tree#readme",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/function-tree#readme",
   "nyc": {
     "exclude": [
       "node_modules",

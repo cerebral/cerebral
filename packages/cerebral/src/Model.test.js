@@ -126,13 +126,12 @@ describe('Model', () => {
   })
   describe('COMPUTE', () => {
     it('should compute value from Computed', () => {
-      const fullNameFactory = Computed({
+      const fullName = Computed({
         firstName: 'user.firstName',
         lastName: 'user.lastName'
       }, ({firstName, lastName}) => {
         return `${firstName} ${lastName}`
       })
-      const fullName = fullNameFactory()
       const model = new Model({
         user: {
           firstName: 'John',
@@ -142,13 +141,12 @@ describe('Model', () => {
       assert.deepEqual(model.compute(fullName), 'John Difool')
     })
     it('should force recompute value from Computed', () => {
-      const fullNameFactory = Computed({
+      const fullName = Computed({
         firstName: 'user.firstName',
         lastName: 'user.lastName'
       }, ({firstName, lastName}) => {
         return `${firstName} ${lastName}`
       })
-      const fullName = fullNameFactory()
       const model = new Model({
         user: {
           firstName: 'John',

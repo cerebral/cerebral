@@ -139,13 +139,12 @@ describe('providers', () => {
       assert.deepEqual(controller.getState(), {foo: ['foo', 'bar']})
     })
     it('should be able to COMPUTE state', () => {
-      const fullNameFactory = Computed({
+      const fullName = Computed({
         firstName: 'user.firstName',
         lastName: 'user.lastName'
       }, ({firstName, lastName}) => {
         return `${firstName} ${lastName}`
       })
-      const fullName = fullNameFactory()
       const controller = new Controller({
         state: {
           user: {
@@ -160,13 +159,12 @@ describe('providers', () => {
       controller.getSignal('test')()
     })
     it('should clear COMPUTE cache on signal flush', () => {
-      const fullNameFactory = Computed({
+      const fullName = Computed({
         firstName: 'user.firstName',
         lastName: 'user.lastName'
       }, ({firstName, lastName}) => {
         return `${firstName} ${lastName}`
       })
-      const fullName = fullNameFactory()
       const controller = new Controller({
         state: {
           user: {
@@ -188,13 +186,12 @@ describe('providers', () => {
       controller.getSignal('test')()
     })
     it('should allow forcing recompute on COMPUTE state', () => {
-      const fullNameFactory = Computed({
+      const fullName = Computed({
         firstName: 'user.firstName',
         lastName: 'user.lastName'
       }, ({firstName, lastName}) => {
         return `${firstName} ${lastName}`
       })
-      const fullName = fullNameFactory()
       const controller = new Controller({
         state: {
           user: {
@@ -221,13 +218,12 @@ describe('providers', () => {
         init () {},
         send () {}
       }
-      const fullNameFactory = Computed({
+      const fullName = Computed({
         firstName: 'user.firstName',
         lastName: 'user.lastName'
       }, ({firstName, lastName}) => {
         return `${firstName} ${lastName}`
       })
-      const fullName = fullNameFactory()
       const controller = new Controller({
         state: {
           user: {

@@ -6,8 +6,8 @@ import isAllChecked from '../../computed/isAllChecked'
 import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
-  isAllChecked: isAllChecked(),
-  todoRefs: visibleTodosRefs()
+  isAllChecked: isAllChecked,
+  todoRefs: visibleTodosRefs
 }, {
   toggleAllChanged: 'app.toggleAllChanged'
 },
