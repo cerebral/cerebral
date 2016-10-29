@@ -11,9 +11,19 @@ import {
   state,
   input,
 
-  // operators
+  // operators related to state
+  concat,
+  merge,
+  pop,
+  push,
   set,
+  shift,
+  splice,
   toggle,
+  unset,
+  unshift,
+  
+  // operators related to execution
   when,
   debounce,
   filter,
