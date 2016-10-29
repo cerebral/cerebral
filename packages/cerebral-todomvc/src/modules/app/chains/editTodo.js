@@ -1,5 +1,5 @@
-import editTodo from '../actions/editTodo'
+import {input, set, state} from 'cerebral/operators'
 
 export default [
-  editTodo
+  set(state`app.todos.${input`ref`}.$isEditing`, true)
 ]

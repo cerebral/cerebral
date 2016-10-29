@@ -1,17 +1,25 @@
-import {set, state} from 'cerebral/operators'
+import {input, merge, set, state} from 'cerebral/operators'
 
 import createTodo from '../actions/createTodo'
 import postTodo from '../actions/postTodo'
-import updateTodo from '../actions/updateTodo'
-import markTodoFailed from '../actions/markTodoFailed'
 
 export default [
   createTodo,
   set(state`app.newTodoTitle`, ''),
   set(state`app.isSaving`, true),
   postTodo, {
-    success: [updateTodo],
-    error: [markTodoFailed]
+    success: [
+      merge(state`app.todos.${input`ref`}`, {
+        id: input`id`,
+        $isSaving: false
+      })
+    ],
+    error: [
+      merge(state`app.todos.${input`ref`}`, {
+        $isSaving: false,
+        $error: input`error`
+      })
+    ]
   },
   set(state`app.isSaving`, false)
 ]

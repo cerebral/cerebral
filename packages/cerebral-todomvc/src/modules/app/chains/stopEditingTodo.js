@@ -1,5 +1,6 @@
-import stopEditingTodo from '../actions/stopEditingTodo'
+import {input, state, set, unset} from 'cerebral/operators'
 
 export default [
-  stopEditingTodo
+  set(state`app.todos.${input`ref`}.$isEditing`, false),
+  unset(state`app.todos.${input`ref`}.$newTitle`)
 ]
