@@ -1,7 +1,9 @@
-import overwriteTodoTitle from '../actions/overwriteTodoTitle'
+import {input, set, state} from 'cerebral/operators'
 import stopEditingTodo from './stopEditingTodo'
 
 export default [
-  overwriteTodoTitle,
+  set(state`app.todos.${input`ref`}.title`,
+    state`app.todos.${input`ref`}.$newTitle`
+  ),
   ...stopEditingTodo
 ]

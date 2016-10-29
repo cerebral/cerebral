@@ -1,5 +1,5 @@
-import removeTodo from '../actions/removeTodo'
+import {input, state, unset} from 'cerebral/operators'
 
 export default [
-  removeTodo
+  unset(state`app.todos.${input`ref`}`)
 ]

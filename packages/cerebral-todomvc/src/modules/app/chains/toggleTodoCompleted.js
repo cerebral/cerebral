@@ -1,5 +1,5 @@
-import toggleTodoCompleted from '../actions/toggleTodoCompleted'
+import {input, state, toggle} from 'cerebral/operators'
 
 export default [
-  toggleTodoCompleted
+  toggle(state`app.todos.${input`ref`}.completed`)
 ]
