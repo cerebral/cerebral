@@ -100,6 +100,8 @@ const controller = Controller({
 })
 ```
 
+One note when using signals is that the **immediate** option is gone. This keeps the api cleaner.
+
 ### Actions
 Since cerebral 2.x is using **function-tree** under the hood we have other, more powerful options then before. The input, state is the same but output is gone. You can just return an object from the action that will be available in the input for the next action. You can also return a **path** that is a new concept in Cerebral 2.x and outdates output. **path** is used to determine the execution path for your chain. You do no longer have services as an argument in the context put rather providers instead.
 
@@ -163,7 +165,46 @@ myAction.async = true
 
 ```
 
-In Cerebral 2 you can leave that out and just resolve or reject a promise
+In Cerebral 2 you can leave that out and just resolve or reject a promise.
+
+In 1.x you could set a path that wasn't defined yet in the state tree. Let's say your state looked like this.
+
+```js
+{
+  app: {
+    nodes: {}
+  }
+}
+```
+
+You could do this in an action.
+
+```js
+function myAction({state}) {
+  state.set('app.nodes.some.state.more', {updated: true})
+}
+```
+
+With 2.x this is no longer possible. It's easy to mistype paths and therefore this option is no longer available. Your paths need to be in place before setting values to them.
+
+When using computed data in an action you could call **state.computed(myComputed())** in the action. This has changed in 2.x in favor of
+**state.compute(myComputed)**. You can also pass props to the compute function.
+
+```js
+function myAction({state}) {
+  state.compute(someComputed)
+  state.compute(someComputed.props({foo: 'bar'})
+}
+```
+
+This works the same in context for 2.x
+
+```js
+connect({
+  foo: someComputed,
+  foo2: someComputed.props({foo: 'bar'})
+})
+```
 
 ### Providers (outdates services)
 
