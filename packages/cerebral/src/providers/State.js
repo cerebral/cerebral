@@ -1,6 +1,6 @@
 import {ensurePath} from '../utils'
 
-function StateProviderFactory (model) {
+function StateProviderFactory () {
   const methods = [
     'get',
     'set',
@@ -14,29 +14,35 @@ function StateProviderFactory (model) {
     'concat',
     'compute'
   ]
-  const stateContext = methods.reduce((currentStateContext, methodKey) => {
-    if (methodKey === 'compute') {
-      currentStateContext.compute = (...args) => model.compute(...args)
-    } else if (typeof model[methodKey] === 'function') {
-      currentStateContext[methodKey] = (...args) => {
-        const path = ensurePath(args.shift())
+  let provider = null
 
-        return model[methodKey].apply(model, [path].concat(args))
+  function createProvider (context) {
+    const model = context.controller.model
+
+    return methods.reduce((currentStateContext, methodKey) => {
+      if (methodKey === 'compute') {
+        currentStateContext.compute = (...args) => model.compute(...args)
+      } else if (typeof model[methodKey] === 'function') {
+        currentStateContext[methodKey] = (...args) => {
+          const path = ensurePath(args.shift())
+
+          return model[methodKey].apply(model, [path].concat(args))
+        }
       }
-    }
 
-    return currentStateContext
-  }, {})
+      return currentStateContext
+    }, {})
+  }
 
   function StateProvider (context) {
-    context.state = stateContext
+    context.state = provider = provider || createProvider(context)
 
     if (context.debugger) {
       context.state = methods.reduce((currentState, methodKey) => {
         if (methodKey === 'get' || methodKey === 'compute') {
-          currentState[methodKey] = stateContext[methodKey]
+          currentState[methodKey] = provider[methodKey]
         } else {
-          const originFunc = stateContext[methodKey]
+          const originFunc = provider[methodKey]
 
           currentState[methodKey] = (...args) => {
             const argsCopy = args.slice()
@@ -49,7 +55,7 @@ function StateProviderFactory (model) {
               args: [path, ...argsCopy]
             })
 
-            return originFunc.apply(model, args)
+            return originFunc.apply(context.controller.model, args)
           }
         }
 
