@@ -3,6 +3,7 @@ import { connect } from 'cerebral/react'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
+import Recorder from '../Recorder'
 import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
@@ -13,6 +14,7 @@ export default connect({
   function App (props) {
     return (
       <div id='todoapp-wrapper'>
+        <Recorder />
         <section className='todoapp'>
           <header className='header'>
             <h1>todos</h1>

@@ -101,7 +101,7 @@ export default (View) => {
         if (this.hasDevtools()) {
           this.updateDebuggerComponentsMap(component)
         }
-        component._update()
+        component._update(force)
       })
       const end = Date.now()
 

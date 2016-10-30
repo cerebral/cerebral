@@ -60,20 +60,23 @@ export default function RecorderProvider (options = {}) {
     function runNextEvent () {
       const event = currentRecording.events[currentEventIndex]
 
-      if (!event) {
-        controller.runSignal = originalRunSignal
-        return
-      }
-
       nextEventTimeout = timeout(() => {
         if (event.type === 'mutation') {
           mutate(event)
         } else if (event.type === 'flush') {
-          controller.emit('flush', controller.model.flush())
+          controller.flush(currentEventIndex === 0)
         }
 
         lastEventTimestamp = event.timestamp
         currentEventIndex++
+
+        if (!currentRecording.events[currentEventIndex]) {
+          controller.runSignal = originalRunSignal
+          isPlaying = false
+          currentEventIndex = 0
+
+          return
+        }
 
         runNextEvent()
       }, event.timestamp - lastEventTimestamp)
@@ -84,7 +87,9 @@ export default function RecorderProvider (options = {}) {
         controller.model.set(state.path, JSON.parse(state.value))
       })
       for (let x = 0; x < currentEventIndex; x++) {
-        mutate(currentRecording.events[x])
+        if (currentRecording.events[x].type === 'mutation') {
+          mutate(currentRecording.events[x])
+        }
       }
     }
 
@@ -113,6 +118,7 @@ export default function RecorderProvider (options = {}) {
         isPlaying = true
         started = Date.now()
         lastEventTimestamp = currentRecording.start
+
         controller.runSignal = (...args) => {
           if (allowedSignals.indexOf(args[0]) >= 0) {
             originalRunSignal.apply(controller, args)
@@ -157,6 +163,10 @@ export default function RecorderProvider (options = {}) {
 
         currentRecording.end = Date.now()
         currentEventIndex = 0
+        currentRecording.events.push({
+          type: 'flush',
+          timestamp: Date.now()
+        })
       },
       pause () {
         ended = Date.now()

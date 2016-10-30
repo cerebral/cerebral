@@ -50,8 +50,8 @@ class Controller extends EventEmitter {
     )
 
     this.runTree = new FunctionTree(allProviders)
-    this.runTree.on('asyncFunction', this.flush)
-    this.runTree.on('end', this.flush)
+    this.runTree.on('asyncFunction', () => this.flush())
+    this.runTree.on('end', () => this.flush())
 
     if (this.devtools) {
       this.devtools.init(this)
@@ -66,14 +66,14 @@ class Controller extends EventEmitter {
     It will first flag any computed for changes and then emit the flush
     event which the view layer listens to
   */
-  flush () {
+  flush (force) {
     const changes = this.model.flush()
     const computedsAboutToBecomeDirty = this.strictRender ? computedDependencyStore.getStrictUniqueEntities(changes) : computedDependencyStore.getUniqueEntities(changes)
 
     computedsAboutToBecomeDirty.forEach((computed) => {
       computed.flag()
     })
-    this.emit('flush', changes)
+    this.emit('flush', changes, Boolean(force))
   }
   /*
     Conveniance method for grabbing the model
@@ -111,6 +111,7 @@ class Controller extends EventEmitter {
     if (this.devtools && this.devtools.enforceSerializable && !this.isSerializablePayload(payload)) {
       throwError(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal`)
     }
+
     this.runTree(name, signal, payload || {})
   }
   /*
@@ -130,7 +131,9 @@ class Controller extends EventEmitter {
       throwError(`There is no signal at path "${path}"`)
     }
 
-    return this.runSignal.bind(this, path, signal)
+    return function (payload) {
+      this.runSignal(path, signal, payload)
+    }.bind(this)
   }
 }
 
