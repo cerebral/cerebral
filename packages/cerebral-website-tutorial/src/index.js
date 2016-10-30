@@ -33,7 +33,7 @@ const controller = Controller({
     ],
     getRepoInfoClicked: [
       set(state`repoName`, input`value`),
-      ...showToast('Loading Data for repo: @{repoName}', 2000),
+      ...showToast('Loading Data for repo: @{repoName}', 20000),
       GetData,
       {
         success: [
@@ -88,12 +88,9 @@ function GetData({input, state, http, path}) {
 
 function showToast(message, milliseconds, type) {
   function action({input, state, path}) {
-    let msg = message
-    let ms = milliseconds
-    if (!msg && input) {
-      msg = input.message
-    }
 
+    let ms = milliseconds
+    let msg = message || input.message
     // replace the @{...} matches with current state value
     let reg = new RegExp(/@{.*?}/g)
     var matches = msg.match(reg)
@@ -113,16 +110,19 @@ function showToast(message, milliseconds, type) {
     })
     return new Promise(function(resolve, reject) {
       window.setTimeout(function() {
-        resolve({})
+        resolve(path.timeout({}))
       }, ms)
     })
   }
   action.displayName = 'showToast'
 
-  return [
-    action,
-    pop(state`toast.messages`)
-  ]
+  return [action, {
+    timeout: [
+      pop(state`toast.messages`)
+    ]
+  }]
+
+
 }
 render((
   <Container controller={ controller }>

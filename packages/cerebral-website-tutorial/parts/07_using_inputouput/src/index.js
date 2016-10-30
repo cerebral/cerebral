@@ -27,27 +27,29 @@ const controller = Controller({
       set(state`originalValue`, input`value`),
       myAction1,
       myAction2,
-      set(state`toast.message`, state`extendedValue`),
+      set(state`extendedValue`, input`value`),
+      set(state`toast.message`, input`value`),
       wait(8000),
       set(state`toast.message`, '')
     ]
   }
 })
 
-function myAction1 ({input}) {
-  input.value += ' extended by myAction1'
+function myAction1({input}) {
+  return {
+    value: ' extended by myAction1'
+  }
 }
 
-function myAction2 ({input, state}) {
-  input.value += ' and also by myAction2'
-  state.set('extendedValue', input.value)
+function myAction2({input, state}) {
   return ({
+    value: ' and also by myAction2',
     aKeyAddedByMyAction2: 'testvalue'
   })
 }
 
 render((
-  <Container controller={controller}>
+  <Container controller={ controller }>
     <App />
   </Container>
   ), document.querySelector('#root'))

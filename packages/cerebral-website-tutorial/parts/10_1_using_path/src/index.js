@@ -29,6 +29,7 @@ const controller = Controller({
       myAction1,
       myAction2,
       myAction3,
+      set(state`extendedValue`, input`value`),
       ...showToast()
     ],
     getRepoInfoClicked: [
@@ -48,20 +49,22 @@ const controller = Controller({
 })
 
 function myAction1({input}) {
-  input.value += ' extended by myAction1'
+  return {
+    value: input.value + ' extended by myAction1'
+  }
 }
 
-function myAction2({input, state}) {
-  input.value += ' and also by myAction2'
+function myAction2({input}) {
   return ({
+    value: input.value + ' and also by myAction2',
     aKeyAddedByMyAction2: 'testvalue'
   })
 }
-
 function myAction3({input, state}) {
-  input.value = input.value.toUpperCase()
-  input.message = input.value
-  state.set('extendedValue', input.value)
+  return ( {
+    value: input.value.toUpperCase(),
+    message: input.value.toUpperCase()
+  })
 }
 
 
