@@ -39,7 +39,7 @@ describe('Recorder', () => {
           assert.equal(recording.initialState[0].value, JSON.stringify({
             foo: 'bar'
           }))
-          assert.equal(recording.events.length, 3)
+          assert.equal(recording.events.length, 4)
         }]
       },
       providers: [RecorderProvider({
@@ -88,6 +88,9 @@ describe('Recorder', () => {
       })]
     })
     controller.getSignal('play')()
+    assert.deepEqual(controller.getState(), {
+      foo: 'bar2'
+    })
     timeout.tick()
     assert.deepEqual(controller.getState(), {
       foo: 'bar3'
@@ -155,7 +158,7 @@ describe('Recorder', () => {
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
     controller.getSignal('stop')()
   })
-  it('should emit flush event when playing back, and on subsequente changes', (done) => {
+  it('should emit flush event when playing back, on subsequente changes and as last event', (done) => {
     const timeout = timeoutMock()
     const RecorderProvider = require('./Recorder').default
     const controller = new Controller({
@@ -190,6 +193,10 @@ describe('Recorder', () => {
       assert.deepEqual(changes, {
         foo: true
       })
+    })
+    timeout.tick()
+    controller.once('flush', (changes) => {
+      assert.deepEqual(changes, {})
       controller.getSignal('stop')()
       done()
     })
