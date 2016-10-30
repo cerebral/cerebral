@@ -29,21 +29,22 @@ class Controller extends EventEmitter {
     }, this)
     this.router = router ? router(this) : null
 
-    const allProviders = (
+    const allProviders = [
+      ControllerProvider(this)
+    ].concat(
       this.router ? [
         this.router.provider
       ] : []
     ).concat((
       this.devtools ? [
-        DebuggerProvider(this.devtools)
+        DebuggerProvider()
       ] : []
     )).concat((
       isDeveloping() ? [
         VerifyInputProvider
       ] : []
     )).concat(
-      ControllerProvider(this),
-      StateProvider(this.model)
+      StateProvider()
     ).concat(
       providers.concat(this.module.getProviders())
     )
