@@ -167,4 +167,26 @@ describe('FunctionTree', () => {
     })
     execute(tree)
   })
+  it('should provide unique index to functions, even though the same', () => {
+    function actionA () {}
+    let count = 0
+    const execute = FunctionTree([
+      function (context, functionDetails) {
+        if (count === 0) {
+          assert.equal(functionDetails.functionIndex, 0)
+        } else {
+          assert.equal(functionDetails.functionIndex, 1)
+        }
+
+        count++
+
+        return context
+      }
+    ])
+    const tree = [
+      actionA,
+      actionA
+    ]
+    execute(tree)
+  })
 })

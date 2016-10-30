@@ -30,7 +30,7 @@ function traverse (functions, item, isChain) {
     const outputs = isChain
     const funcDetails = {
       name: func.displayName || getFunctionName(func),
-      functionIndex: functions.indexOf(func) === -1 ? (functions.push(func) - 1) : functions.indexOf(func),
+      functionIndex: functions.push(func) - 1,
       function: func
     }
     if (outputs) {
