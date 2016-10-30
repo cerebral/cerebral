@@ -34,20 +34,17 @@ const controller = Controller({
     getRepoInfoClicked: [
       set(state`repoName`, input`value`),
       ...showToast('Loading Data for repo: @{repoName}', 2000),
-      [
-        GetData,
-        {
-          success: [
-            set(state`data`, input`result`),
-            ...showToast('How cool is that. @{repoName} has @{data.subscribers_count} subscribers and @{data.stargazers_count} stars!', 5000, "success")
-          ],
-          error: [
-            set(state`data`, input`result`),
-            ...showToast('Ooops something went wrong: @{data.message}', 5000, "error")
-          ]
-        }
-      ],
-      showToast('GetData finished', 2000)
+      GetData,
+      {
+        success: [
+          set(state`data`, input`result`),
+          ...showToast('How cool is that. @{repoName} has @{data.subscribers_count} subscribers and @{data.stargazers_count} stars!', 5000, "success")
+        ],
+        error: [
+          set(state`data`, input`result`),
+          ...showToast('Ooops something went wrong: @{data.message}', 5000, "error")
+        ]
+      }
     ]
   },
   providers: [
