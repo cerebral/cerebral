@@ -12,8 +12,11 @@ A state controller with its own debugger
 
 <img src="images/logo.png" width="300" align="center">
 
-## Please head over to our WIP website for cerebral v2
-[http://www.cerebraljs.com/](http://cerebral.github.io/cerebral-website). You will find all the information you need there.
+## Cerebral v1 is the current official release. Documentation is available at:
+[https://www.cerebraljs.com/](http://www.cerebraljs.com/).
+
+## Cerebral v2 is still a work in progress. Please head over to our cerebral v2 WIP website for more information:
+[https://cerebral.github.io/cerebral-website/](http://cerebral.github.io/cerebral-website).
 
 [npm-image]: https://img.shields.io/npm/v/cerebral.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral
