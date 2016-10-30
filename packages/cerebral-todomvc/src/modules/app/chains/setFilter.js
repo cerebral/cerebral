@@ -1,5 +1,5 @@
-import setFilter from '../actions/setFilter'
+import {set, input, state} from 'cerebral/operators'
 
 export default [
-  setFilter
+  set(state`app.filter`, input`filter`)
 ]
