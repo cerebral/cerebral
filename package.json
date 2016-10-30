@@ -43,7 +43,7 @@
       "config": ".cz-config.js"
     },
     "ghooks": {
-      "commit-msg": "./node_modules/cz-customizable-ghooks/lib/index.js $2"
+      "commit-msg": "node ./node_modules/cz-customizable-ghooks/lib/index.js $2"
     }
   },
   "standard": {
