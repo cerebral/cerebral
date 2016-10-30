@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+		}
+		#app {
+			height: 100%;
+		}
+		.ObjectInspector{
+		  font-family: Menlo, monospace;
+		  font-size: 11px;
+		  line-height: 14px;
+		  cursor: default;
+			display: inline-block;
+			padding-top: 2px;
+			margin-left: 5px;
+			vertical-align: top;
+		}
+
+		.ObjectInspector-unselectable{
+		  -webkit-touch-callout: none;
+		  -webkit-user-select: none;
+		  -khtml-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  -o-user-select: none;
+		  user-select: none;
+		}
+
+		.ObjectInspector-expand-control {
+		  color: #6e6e6e;
+		  font-size: 10px;
+		  margin-right: 3px;
+		  white-space: pre;
+		}
+
+		.ObjectInspector-property{
+		  padding-top: 2px;
+		}
+
+		.ObjectInspector-object-name {
+		  color: rgb(136, 19, 145);
+		}
+
+		.ObjectInspector-object-value-null, .ObjectInspector-object-value-undefined{
+		  color: rgb(128, 128, 128);
+		}
+
+		.ObjectInspector-object-value-string{
+		  color: rgb(196, 26, 22);
+		}
+
+		.ObjectInspector-object-value-symbol{
+		  color: rgb(196, 26, 22);
+		}
+
+		.ObjectInspector-object-value-number, .ObjectInspector-object-value-boolean {
+		  color: rgb(28, 0, 207);
+		}
+
+		.ObjectInspector-object-value-function-keyword{
+		  color: rgb(170, 13, 145);
+		  font-style: italic;
+		}
+
+		.ObjectInspector-object-value-function-name{
+		  font-style: italic;
+		}
+
+		.ObjectInspector-object-preview{
+		  font-style: italic;
+		}
+
+		.ObjectInspector-property-nodes-container{
+		  padding-left: 12px
+		}
+
+		.pulse1 {
+			-webkit-animation: pulse1 1s linear infinite;
+			-moz-animation: pulse1 1s linear infinite;
+			-ms-animation: pulse1 1s linear infinite;
+			animation: pulse1 1s linear infinite;
+		}
+
+		@keyframes pulse1 {
+		 0% {
+		    opacity: 1;
+		 }
+		 70% {
+		    opacity: 0.4;
+		 }
+		 100% {
+		    opacity: 1;
+		 }
+		}
+
+		 @-webkit-keyframes pulse1 {
+			 0% {
+			    opacity: 1;
+			 }
+			 70% {
+			    opacity: 0.4;
+			 }
+			 100% {
+			    opacity: 1;
+			 }
+		 }
+	</style>
+</head>
+<body>
+	<div id="app"></div>
+	<script src="react.min.js"></script>
+	<script src="debugger/merge.js"></script>
+	<script src="debugger/mutation.js"></script>
+	<script src="debugger/outputPath.js"></script>
+	<script src="debugger/action.js"></script>
+	<script src="debugger/signal.js"></script>
+	<script src="debugger/range.js"></script>
+	<script src="debugger/slider.js"></script>
+	<script src="debugger/toolbar.js"></script>
+	<script src="debugger/signals.js"></script>
+	<script src="debugger/createSignalsStructure.js"></script>
+	<script src="debugger.js"></script>
+	<script src="TreeView.js"></script>
+	<script src="messaging.js"></script>
+</body>
+</html>

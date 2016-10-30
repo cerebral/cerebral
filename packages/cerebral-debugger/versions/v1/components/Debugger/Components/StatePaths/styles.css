@@ -1,0 +1,60 @@
+.wrapper {
+  flex: 1;
+}
+
+.componentsWrapper {
+  background-color: #FFF;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #DDD;
+  width: 100%;
+  list-style-type: none;
+  height: calc(100vh - 60px);
+  overflow-y: scroll;
+}
+
+.item {
+  position: relative;
+  padding: 0 15px;
+  line-height: 30px;
+  border-bottom: 1px solid #DDD;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemHeader {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  padding: 0 15px;
+  height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #DDD;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #FAFAFA;
+}
+
+.itemHeader div {
+  font-weight: normal;
+  opacity: 0.5;
+}
+
+.pathName {
+  font-weight: bold;
+}
+
+.item:hover {
+  background-color: #FAFAFA;
+}
+
+.components {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+
+.componentName {
+
+}

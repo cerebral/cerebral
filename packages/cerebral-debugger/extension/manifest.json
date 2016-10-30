@@ -1,0 +1,26 @@
+{
+    "name": "Cerebral2 Debugger",
+    "version": "0.4",
+    "description": "A debugger for Cerebral 2",
+    "devtools_page": "devtools.html",
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["inserted-script.js"],
+            "all_frames": false,
+            "run_at": "document_start"
+        }
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ],
+        "persistent": true
+    },
+    "permissions": [
+        "tabs",
+        "http://*/*",
+        "https://*/*"
+    ],
+    "manifest_version": 2
+}

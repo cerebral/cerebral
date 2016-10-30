@@ -1,0 +1,82 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  background-color: #EAEAEA;
+  width: 100%;
+  border-bottom: 1px solid #DDD;
+}
+
+.item {
+  flex: 1;
+}
+
+.tabs {
+  height: 40px;
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tab {
+  float: left;
+  cursor: pointer;
+  font-size: 12px;
+  height: 39px;
+  color: #999;
+  line-height: 40px;
+  background-color: #EEE;
+  min-width: 150px;
+  text-align: center;
+  border-right: 1px solid #DDD;
+}
+
+.tab:hover {
+  background-color: #FAFAFA;
+  color: #333;
+}
+
+.activeTab {
+  composes: tab;
+  height: 40px;
+  color: #333;
+  font-weight: bold;
+  background-color: #FAFAFA;
+}
+
+.rightItem {
+  float: right;
+  height: 39px;
+  line-height: 40px;
+  margin-right: 10px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.led {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #333;
+  border-radius: 2px;
+  margin-left: 10px;
+}
+
+.idle {
+  composes: led;
+  background-color: #78db27;
+}
+
+.executing {
+  composes: led;
+  background-color: #dbb427;
+}
+
+@media (min-width: 1270px) {
+    .tabOnSmall {
+        display: none;
+    }
+}

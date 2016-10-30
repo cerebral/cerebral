@@ -1,0 +1,58 @@
+{
+  "name": "cerebral-boilerplate",
+  "version": "0.1.0",
+  "description": "A boilerplate for Cerebral",
+  "main": "server.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cerebral/cerebral-boilerplate.git"
+  },
+  "keywords": [
+    "express",
+    "webpack",
+    "node",
+    "cerebral"
+  ],
+  "author": "Christian Alfoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral-boilerplate/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral-boilerplate",
+  "scripts": {
+    "start": "node server",
+    "build": "rimraf extension/build && NODE_ENV=production webpack --config ./webpack.production.config.js --progress --colors"
+  },
+  "dependencies": {
+    "cerebral": "^1.0.1",
+    "cerebral-module-devtools": "^0.7.2",
+    "cerebral-module-useragent": "^0.10.20",
+    "cerebral-view-react": "^0.12.12",
+    "classnames": "^2.2.3",
+    "file-loader": "^0.8.5",
+    "react": "^15.2.0",
+    "react-dom": "^15.2.0",
+    "react-object-inspector": "^0.2.1",
+    "url-loader": "^0.5.7"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.0.3",
+    "babel": "^5.8.23",
+    "babel-loader": "^5.3.2",
+    "babel-plugin-react-transform": "^1.0.5",
+    "css-loader": "^0.19.0",
+    "express": "^4.13.3",
+    "extract-text-webpack-plugin": "^0.8.2",
+    "html-webpack-plugin": "^1.6.1",
+    "json-loader": "^0.5.3",
+    "postcss-loader": "^0.6.0",
+    "react-addons-test-utils": "^0.14.3",
+    "react-transform-hmr": "^1.0.0",
+    "rimraf": "^2.4.3",
+    "stats-webpack-plugin": "^0.2.1",
+    "style-loader": "^0.12.4",
+    "webpack": "^1.12.2",
+    "webpack-dev-middleware": "^1.2.0",
+    "webpack-hot-middleware": "^2.2.0"
+  }
+}

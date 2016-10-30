@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'icomoon';
+    src: url('./icomoon.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  position: relative;
+  font-family: 'icomoon' !important;
+  font-size: 2em;
+  top: 5px;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.empty {
+  composes: icon;
+}
+.empty:before {
+  content: " "
+}
+
+.mutation {
+  composes: icon;
+}
+.mutation:before {
+    content: "\e161";
+}
+
+.service {
+  composes: icon;
+}
+.service:before {
+    content: "\e8b8";
+}
+
+.icon-radio_button_unchecked:before {
+    content: "\e836";
+}
+.icon-history:before {
+    content: "\e889";
+}
+
+.model {
+  composes: icon;
+}
+.model:before {
+  content: "\e1db";
+}
+
+.parallel {
+  composes: icon;
+}
+.parallel:before {
+  content: "\e53b";
+}
+
+.action {
+  composes: icon;
+}
+.action:before {
+  content: "\e86c";
+}
+
+.asyncAction {
+  composes: icon;
+}
+.asyncAction:before {
+  content: "\e889";
+}
+
+.skippedOutput {
+  composes: icon;
+}
+.skippedOutput:before {
+    content: "\e5cd";
+}
+
+.signals {
+  composes: icon;
+}
+.signals:before {
+    content: "\e565";
+}
+
+.right {
+  composes: icon;
+}
+.right:before {
+    content: "\e5cc";
+}
+
+.runningAction {
+  composes: icon;
+}
+.runningAction:before {
+  content: "\e5d5";
+}
+
+.down {
+  composes: icon;
+}
+.down:before {
+    content: "\e5cf";
+}
+
+.warning {
+  composes: icon;
+}
+.warning:before {
+    content: "\e002";
+}
+
+.components {
+  composes: icon;
+}
+.components:before {
+    content: "\e871";
+}
