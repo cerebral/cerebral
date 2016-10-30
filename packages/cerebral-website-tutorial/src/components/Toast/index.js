@@ -28,7 +28,7 @@ export default connect({
 
   let toast = null
   if (props.messages.length > 0) {
-    toast = <div className='c-alerts c-alerts--bottomright'>
+      toast = <div className='c-alerts c-alerts--bottomright'>
               { props.messages.slice(0, 6).map((toast) => {
                   return ToastItem(
                     toast

@@ -4,13 +4,13 @@ import { Controller } from 'cerebral'
 import App from './components/App'
 import { Container } from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import { state, set, input } from 'cerebral/operators'
+import { state, set, input, pop } from 'cerebral/operators'
 import HttpProvider from 'cerebral-provider-http'
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
   state: {
-    title: 'Hello from Cerebral!',
+    title: 'Hello from Cerebral2!',
     appTitle: 'Cerebral Tutorial App',
     toast: {
       messages: []
@@ -34,11 +34,21 @@ const controller = Controller({
     getRepoInfoClicked: [
       set(state`repoName`, input`value`),
       ...showToast('Loading Data for repo: @{repoName}', 2000),
-      GetData,
-      set(state`data`, input`result`),
-      ...showToast('How cool is that. @{repoName} has @{data.subscribers_count} subscribers and @{data.stargazers_count} stars!', 5000, "success")
+      [
+        GetData,
+        {
+          success: [
+            set(state`data`, input`result`),
+            ...showToast('How cool is that. @{repoName} has @{data.subscribers_count} subscribers and @{data.stargazers_count} stars!', 5000, "success")
+          ],
+          error: [
+            set(state`data`, input`result`),
+            ...showToast('Ooops something went wrong: @{data.message}', 5000, "error")
+          ]
+        }
+      ],
+      showToast('GetData finished', 2000)
     ]
-
   },
   providers: [
     HttpProvider({
@@ -65,21 +75,19 @@ function myAction3({input, state}) {
 }
 
 
-function GetData({input, state, http}) {
+function GetData({input, state, http, path}) {
   return http.get("/repos/cerebral/" + input.value)
-    .then(response => ({
-      result: response.result
-    }))
+    .then(response => {
+      return path.success({
+        result: response.result
+      })
+    })
+    .catch(error => {
+      return path.error({
+        result: error.result
+      })
+    })
 }
-
-
-function popMessage({state}) {
-  state.pop('toast.messages')
-}
-
-
-
-
 
 function showToast(message, milliseconds, type) {
   function action({input, state, path}) {
@@ -116,7 +124,7 @@ function showToast(message, milliseconds, type) {
 
   return [
     action,
-    popMessage
+    pop(state`toast.messages`)
   ]
 }
 render((
