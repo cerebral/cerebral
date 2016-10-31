@@ -5,12 +5,14 @@ import runMutations from '../actions/runMutations';
 import updateComponentsMap from '../actions/updateComponentsMap';
 import updateRenders from '../actions/updateRenders';
 import setExecutionState from '../actions/setExecutionState';
+import runRecordedMutation from '../actions/runRecordedMutation';
 
 export default [
   switchType, {
     init: [setInitialPayload, updateSignals, runMutations],
     execution: [updateSignals, runMutations],
     components: [updateComponentsMap, updateRenders],
-    executionChange: [setExecutionState]
+    executionChange: [setExecutionState],
+    recorderMutation: [runRecordedMutation]
   }
 ];
