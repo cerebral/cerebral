@@ -1,7 +1,3 @@
-/*
-  - Wrap mutation methods and track their usage
-  -
-*/
 export default function RecorderProvider (options = {}) {
   const timeout = options.setTimeout || setTimeout
 
@@ -48,11 +44,28 @@ export default function RecorderProvider (options = {}) {
       }
     })
 
+    function updateDebugger (method, path, args) {
+      if (context.debugger) {
+        const event = new window.CustomEvent('cerebral2.client.message', {
+          detail: JSON.stringify({
+            type: 'recorderMutation',
+            data: {
+              method,
+              path,
+              args
+            }
+          })
+        })
+        window.dispatchEvent(event)
+      }
+    }
+
     function mutate (mutation) {
       const args = JSON.parse(mutation.args)
       const path = args.shift().split('.')
 
       controller.model[mutation.method].apply(controller.model, [path].concat(args))
+      updateDebugger(mutation.method, path, args)
     }
 
     // During playback we run events as they were recorded, one after
@@ -84,7 +97,10 @@ export default function RecorderProvider (options = {}) {
 
     function resetState () {
       currentRecording.initialState.forEach((state) => {
-        controller.model.set(state.path, JSON.parse(state.value))
+        const value = JSON.parse(state.value)
+
+        controller.model.set(state.path, value)
+        updateDebugger('set', state.path, [value])
       })
       for (let x = 0; x < currentEventIndex; x++) {
         if (currentRecording.events[x].type === 'mutation') {
