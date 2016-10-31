@@ -4,7 +4,7 @@ import { Controller } from 'cerebral'
 import App from './components/App'
 import { Container } from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import { state, set, input, pop, wait } from 'cerebral/operators'
+import { state, set, input, pop } from 'cerebral/operators'
 import HttpProvider from 'cerebral-provider-http'
 
 const controller = Controller({
@@ -36,7 +36,6 @@ const controller = Controller({
       set(state`repoName`, input`value`),
       [
         ...showToast('Loading Data for repo: @{repoName}', 2000),
-        wait(50),
         GetData,
         {
           success: [
@@ -119,14 +118,17 @@ function showToast(message, milliseconds, type) {
     state.unshift('toast.messages', newMsg)
     return new Promise(function(resolve, reject) {
       window.setTimeout(function() {
-        return resolve({
-        })
+        resolve(path.timeout({
+        }))
       }, ms)
     })
   }
   action.displayName = 'showToast'
-  return [action,
-    pop(state`toast.messages`)
+  return [action, {
+    timeout: [
+      pop(state`toast.messages`)]
+
+  }
   ]
 
 }
