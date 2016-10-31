@@ -52,7 +52,6 @@ function myAction3({input, state}) {
   return ( {
     value: input.value.toUpperCase()
   })
-
 }
 
 render((

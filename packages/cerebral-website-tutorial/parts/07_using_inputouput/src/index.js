@@ -37,13 +37,13 @@ const controller = Controller({
 
 function myAction1({input}) {
   return {
-    value: ' extended by myAction1'
+    value: input.value + ' extended by myAction1'
   }
 }
 
-function myAction2({input, state}) {
+function myAction2({input}) {
   return ({
-    value: ' and also by myAction2',
+    value: input.value + ' and also by myAction2',
     aKeyAddedByMyAction2: 'testvalue'
   })
 }
