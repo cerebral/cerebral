@@ -205,6 +205,7 @@ class Model {
     })
   }
   unset (path) {
+    this.changedPaths.push(path.slice())
     const key = path.pop()
 
     this.updateIn(path, (obj) => {
