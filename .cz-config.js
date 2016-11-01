@@ -31,7 +31,8 @@ module.exports = {
     {name: 'todomvc'},
     {name: 'forms'},
     {name: 'http'},
-    {name: 'useragent'}
+    {name: 'useragent'},
+    {name: 'firebase'}
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
