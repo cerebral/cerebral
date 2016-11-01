@@ -68,11 +68,20 @@ class Controller extends EventEmitter {
   */
   flush (force) {
     const changes = this.model.flush()
-    const computedsAboutToBecomeDirty = this.strictRender ? computedDependencyStore.getStrictUniqueEntities(changes) : computedDependencyStore.getUniqueEntities(changes)
+    let computedsAboutToBecomeDirty
+
+    if (force) {
+      computedsAboutToBecomeDirty = computedDependencyStore.getAllUniqueEntities()
+    } else if (this.strictRender) {
+      computedsAboutToBecomeDirty = computedDependencyStore.getStrictUniqueEntities(changes)
+    } else {
+      computedsAboutToBecomeDirty = computedDependencyStore.getUniqueEntities(changes)
+    }
 
     computedsAboutToBecomeDirty.forEach((computed) => {
       computed.flag()
     })
+
     this.emit('flush', changes, Boolean(force))
   }
   /*
