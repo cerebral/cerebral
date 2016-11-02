@@ -211,10 +211,21 @@ class FunctionTree extends EventEmitter {
     })
 
     this.emit('start', execution, payload)
-    executeTree(execution.staticTree, execution.runFunction, payload, (finalPayload) => {
-      this.emit('end', execution, finalPayload)
-      cb && cb(null, execution, finalPayload)
-    })
+    executeTree(
+      execution.staticTree,
+      execution.runFunction,
+      payload,
+      (currentPayload) => {
+        this.emit('pathStart', execution, currentPayload)
+      },
+      (currentPayload) => {
+        this.emit('pathEnd', execution, currentPayload)
+      },
+      (finalPayload) => {
+        this.emit('end', execution, finalPayload)
+        cb && cb(null, execution, finalPayload)
+      }
+    )
   }
 }
 

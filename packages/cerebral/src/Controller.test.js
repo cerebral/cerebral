@@ -143,4 +143,24 @@ describe('Controller', () => {
     const controller = new Controller({})
     assert.equal(controller.getState('foo.bar'), undefined)
   })
+  it('should flush at async action, path end and end of signal', (done) => {
+    let flushCount = 0
+    const controller = new Controller({
+      signals: {
+        test: [
+          () => {},
+          () => Promise.resolve(),
+          ({path}) => path.foo(), {
+            foo: [() => {}]
+          }
+        ]
+      }
+    })
+    controller.on('flush', () => flushCount++)
+    controller.runTree.once('end', () => {
+      assert.equal(flushCount, 3)
+      done()
+    })
+    controller.getSignal('test')()
+  })
 })

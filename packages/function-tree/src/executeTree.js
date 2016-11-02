@@ -2,7 +2,7 @@
   Runs through the tree providing a "next" callback to process next step
   of execution
 */
-export default function executeTree (tree, resolveFunctionResult, initialPayload, end) {
+export default function executeTree (tree, resolveFunctionResult, initialPayload, branchStart, branchEnd, end) {
   function runBranch (branch, index, payload, nextBranch) {
     function runNextItem (result) {
       runBranch(branch, index + 1, result, nextBranch)
@@ -16,6 +16,7 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
           const outputs = Object.keys(funcDetails.outputs)
 
           if (~outputs.indexOf(result.path)) {
+            branchStart(newPayload)
             runBranch(funcDetails.outputs[result.path], 0, newPayload, outputResult)
           } else {
             throw new Error(`function-tree - function ${funcDetails.name} must use one of its possible outputs: ${outputs.join(', ')}.`)
@@ -29,7 +30,10 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
     const currentItem = branch[index]
 
     if (!currentItem) {
-      nextBranch ? nextBranch(payload) : end(payload)
+      if (branch !== tree) {
+        branchEnd(payload)
+      }
+      nextBranch(payload)
     } else if (Array.isArray(currentItem)) {
       const itemLength = currentItem.length
       currentItem.reduce((payloads, action) => {
