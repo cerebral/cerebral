@@ -2,12 +2,13 @@ import {Computed} from './../Computed'
 import {cleanPath, propsDiffer} from './../utils'
 
 export default (View) => {
-  return function HOC (paths, signals, Component) {
+  return function HOC (paths, signals, injectedProps, Component) {
     class CerebralComponent extends View.Component {
       constructor (props) {
         super(props)
         this.evaluatedPaths = this.getStatePaths(props)
         this.signals = signals
+        this.injectedProps = injectedProps
         this.Component = Component
         this.depsMap = this.getDepsMap()
       }
@@ -86,6 +87,14 @@ export default (View) => {
 
           propsToPass = Object.keys(extractedSignals).reduce((currentProps, key) => {
             currentProps[key] = controller.getSignal(extractedSignals[key])
+
+            return currentProps
+          }, propsToPass)
+        }
+
+        if (this.injectedProps) {
+          propsToPass = Object.keys(this.injectedProps).reduce((currentProps, key) => {
+            currentProps[key] = this.injectedProps[key]
 
             return currentProps
           }, propsToPass)

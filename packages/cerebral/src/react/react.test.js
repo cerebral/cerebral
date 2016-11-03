@@ -284,6 +284,23 @@ describe('React', () => {
       component.callSignal()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2 computed')
     })
+    it('should be able to inject props', () => {
+      const controller = Controller({})
+      const TestComponent = connect({}, {}, {
+        foo: 'bar'
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
     describe('STRICT render update', () => {
       it('should not update when parent path changes', () => {
         let renderCount = 0
