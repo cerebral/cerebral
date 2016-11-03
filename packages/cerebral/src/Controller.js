@@ -51,6 +51,7 @@ class Controller extends EventEmitter {
 
     this.runTree = new FunctionTree(allProviders)
     this.runTree.on('asyncFunction', () => this.flush())
+    this.runTree.on('pathEnd', () => this.flush())
     this.runTree.on('end', () => this.flush())
 
     if (this.devtools) {

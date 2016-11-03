@@ -464,8 +464,11 @@ execute.on('error', (error, execution, payload) => {})
 // When a function tree is executed
 execute.on('start', (execution, payload) => {})
 
-// When a function tree ends its execution
-execute.on('end', (execution, payload) => {})
+// When a function tree goes down a path
+execute.on('pathStart', (execution, payload) => {})
+
+// When a function tree ends execution of a path
+execute.on('pathEnd', (execution, payload) => {})
 
 // When a function in a function tree starts executing
 execute.on('functionStart', (execution, functionDetails, payload) => {})

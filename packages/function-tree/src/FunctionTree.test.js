@@ -189,4 +189,32 @@ describe('FunctionTree', () => {
     ]
     execute(tree)
   })
+  it('should emit branchStart and branchEnd events', () => {
+    let branchStartCount = 0
+    let branchEndCount = 0
+    function actionA ({path}) {
+      return path.test()
+    }
+    function actionB () {}
+    function actionC () {}
+    const execute = FunctionTree([])
+    const tree = [
+      actionA, {
+        test: [actionB]
+      },
+      actionA, {
+        test: [actionB]
+      },
+      actionC
+    ]
+    execute.on('pathStart', () => {
+      branchStartCount++
+    })
+    execute.on('pathEnd', () => {
+      branchEndCount++
+    })
+    execute(tree)
+    assert(branchStartCount, 2)
+    assert(branchEndCount, 2)
+  })
 })
