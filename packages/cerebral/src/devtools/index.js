@@ -60,7 +60,7 @@ class Devtools {
       this.controller.model[mutation.method](...mutation.args)
     }
 
-    this.controller.emit('flush', {}, true)
+    this.controller.flush(true)
   }
   /*
 
@@ -69,7 +69,7 @@ class Devtools {
     this.controller.model.state = JSON.parse(this.initialModelString)
     this.backlog = []
     this.mutations = []
-    this.controller.emit('flush', {}, true)
+    this.controller.flush(true)
   }
   /*
     The debugger might be ready or it might not. The initial communication

@@ -10,7 +10,6 @@ export default (View) => {
         this.signals = signals
         this.Component = Component
         this.depsMap = this.getDepsMap()
-        this.forceUpdateComputed = false
       }
       componentWillMount () {
         if (!this.context.cerebral.controller) {
@@ -78,9 +77,6 @@ export default (View) => {
         const statePaths = this.getStatePaths(this.props)
 
         let propsToPass = Object.assign({}, props, Object.keys(statePaths || {}).reduce((currentProps, key) => {
-          if (this.forceUpdateComputed && statePaths[key] instanceof Computed) {
-            statePaths[key].flag()
-          }
           currentProps[key] = statePaths[key] instanceof Computed ? statePaths[key].getValue(model) : controller.getState(cleanPath(statePaths[key]))
           return currentProps
         }, {}))
@@ -97,12 +93,10 @@ export default (View) => {
 
         return propsToPass
       }
-      _update (force) {
+      _update () {
         if (this._isUmounting) {
           return
         }
-
-        this.forceUpdateComputed = Boolean(force)
 
         this.forceUpdate()
       }

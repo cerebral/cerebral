@@ -114,6 +114,15 @@ describe('Model', () => {
       model.unset(['foo'])
       assert.deepEqual(model.get(), {})
     })
+    it('should flush unset paths', () => {
+      const model = new Model({
+        foo: {
+          bar: 'value'
+        }
+      })
+      model.unset(['foo', 'bar'])
+      assert.deepEqual(model.flush(), {foo: {bar: true}})
+    })
   })
   describe('CONCAT', () => {
     it('should be able to concat array', () => {
