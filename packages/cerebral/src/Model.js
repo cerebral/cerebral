@@ -165,14 +165,10 @@ class Model {
   merge (path, value) {
     this.checkValue(value, path)
 
-    // We want to show changes to added keys, as this is pretty
-    // much like setting multiple keys. More predictable
-    Object.keys(value).forEach((key) => {
-      this.changedPaths.push(path.concat(key))
-    })
-    this.updateIn(path, (obj) => {
-      return Object.assign(obj, value)
-    })
+    // We want this to behave like setting multiple keys
+    for (let prop in value) {
+      this.set(path.concat(prop), value[prop])
+    }
   }
   pop (path) {
     this.updateIn(path, (array) => {

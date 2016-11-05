@@ -72,3 +72,21 @@ export function isDebuggerEnv () {
     )
   )
 }
+
+export function verifyStrictRender (changes, dependencyMap) {
+  let currentPathKey = []
+  for (let path in dependencyMap) {
+    const pathArray = cleanPath(path).split('.')
+    let currentChangeKey = pathArray.shift()
+    let currentChangePath = changes
+    currentPathKey.push(currentChangeKey)
+    while (currentChangePath) {
+      if (currentChangePath[currentChangeKey] === true && pathArray.length !== 0) {
+        throwError(`You are in strict mode and path "${path}" is being replaced by "${currentPathKey.join('.')}". Change "${path}" to "${currentPathKey.join('.')}" or do not replace the path`)
+      }
+      currentPathKey.push(currentChangeKey)
+      currentChangePath = currentChangePath[pathArray.shift()]
+    }
+    currentPathKey.length = 0
+  }
+}

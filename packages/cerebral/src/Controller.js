@@ -1,7 +1,7 @@
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -75,6 +75,9 @@ class Controller extends EventEmitter {
       computedsAboutToBecomeDirty = computedDependencyStore.getAllUniqueEntities()
     } else if (this.strictRender) {
       computedsAboutToBecomeDirty = computedDependencyStore.getStrictUniqueEntities(changes)
+      if (Boolean(this.devtools) && this.devtools.verifyStrictRender) {
+        verifyStrictRender(changes, computedDependencyStore.map)
+      }
     } else {
       computedsAboutToBecomeDirty = computedDependencyStore.getUniqueEntities(changes)
     }
