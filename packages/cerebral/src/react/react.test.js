@@ -6,6 +6,8 @@ const jsdom = require('jsdom')
 global.document = jsdom.jsdom('<!doctype html><html><body></body></html>')
 global.window = document.defaultView
 global.navigator = {userAgent: 'node.js'}
+global.CustomEvent = global.window.CustomEvent = () => {}
+global.window.dispatchEvent = () => {}
 
 const React = require('react')
 const TestUtils = require('react-addons-test-utils')
@@ -459,6 +461,45 @@ describe('React', () => {
         const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
         component.callSignal()
         assert.equal(renderCount, 2)
+      })
+      it('should throw error with devtools when replacing path, causing render not to happen', () => {
+        const controller = Controller({
+          strictRender: true,
+          devtools: {init () {}, send () {}},
+          state: {
+            foo: {
+              bar: 'baz'
+            }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo', 'bar')]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            return (
+              <div>{this.props.foo}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: 'foo.bar'
+        }, {
+          methodCalled: 'methodCalled'
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        assert.throws(() => {
+          component.callSignal()
+        })
       })
     })
     describe('DEFAULT render update', () => {

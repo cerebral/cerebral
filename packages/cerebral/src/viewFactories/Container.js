@@ -1,6 +1,6 @@
 /* global CustomEvent */
 import DependencyStore from '../DependencyStore'
-import {ensurePath} from '../utils'
+import {ensurePath, verifyStrictRender} from '../utils'
 
 export default (View) => {
   class Container extends View.Component {
@@ -38,7 +38,7 @@ export default (View) => {
     componentDidMount () {
       this.props.controller && this.props.controller.on('flush', this.onCerebralUpdate)
 
-      if (this.hasDevtools()) {
+      if (this.hasDevtools() && this.props.controller.devtools.verifyStrictRender) {
         const event = new CustomEvent('cerebral2.client.message', {
           detail: JSON.stringify({
             type: 'components',
@@ -92,6 +92,9 @@ export default (View) => {
         componentsToRender = this.dependencyStore.getAllUniqueEntities()
       } else if (this.props.controller.strictRender) {
         componentsToRender = this.dependencyStore.getStrictUniqueEntities(changes)
+        if (this.hasDevtools()) {
+          verifyStrictRender(changes, this.dependencyStore.map)
+        }
       } else {
         componentsToRender = this.dependencyStore.getUniqueEntities(changes)
       }
