@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "scripts": {
     "setup": "lerna bootstrap",
+    "commit": "git-cz",
     "lint": "standard",
     "pretest": "npm run lint && lerna bootstrap",
     "test": "lerna run test",
     "coverage": "lerna run coverage && istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "ci": "lerna run ci",
-    "commit": "git-cz"
+    "ci": "lerna run ci"
   },
   "license": "MIT",
   "devDependencies": {
