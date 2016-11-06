@@ -1,0 +1,12 @@
+.fadein {
+    -webkit-animation: fadein 0.5s;
+    animation: fadein 0.5s;
+}
+@-webkit-keyframes fadein {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+}
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
