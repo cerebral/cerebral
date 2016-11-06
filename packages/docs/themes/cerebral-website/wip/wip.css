@@ -4,5 +4,11 @@
   padding: 13px 40px;
   border-left: 3px solid #f82f38;
   border-radius: 3px;
-  box-shadow: 0 10px 62px rgba(19,77,127,0.17);
+  box-shadow: 0 10px 10px rgba(19,77,127,0.17);
+}
+
+@media (max-width: 600px) {
+  .wip {
+    margin: 0 0px 30px;
+  }  
 }
