@@ -45,6 +45,7 @@ export default (View) => {
     */
     createDummyController (state = {}) {
       return {
+        options: {},
         on () {},
         getState (path) {
           return ensurePath(path).reduce((currentState, pathKey) => {

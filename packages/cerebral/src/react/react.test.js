@@ -123,6 +123,38 @@ describe('React', () => {
         </Container>
       ))
     })
+    it('should expose signals prop with an option', () => {
+      const controller = Controller({
+        options: {signalsProp: true},
+        state: {
+          foo: 'bar'
+        },
+        signals: {
+          someSignal: []
+        },
+        modules: {
+          moduleA: {
+            signals: {
+              someOtherSignal: []
+            }
+          }
+        }
+      })
+      const TestComponent = connect({
+        foo: 'foo'
+      }, (props) => {
+        assert.ok(props.signals.someSignal)
+        assert.ok(props.signals.moduleA.someOtherSignal)
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+    })
     it('should rerender on state update', () => {
       const controller = Controller({
         state: {

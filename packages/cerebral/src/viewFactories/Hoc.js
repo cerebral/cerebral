@@ -10,6 +10,7 @@ export default (View) => {
         this.signals = signals
         this.injectedProps = injectedProps
         this.Component = Component
+        this.cachedSignals = null
         this.depsMap = this.getDepsMap()
       }
       componentWillMount () {
@@ -100,7 +101,22 @@ export default (View) => {
           }, propsToPass)
         }
 
+        if (this.context.cerebral.controller.options.signalsProp) {
+          propsToPass.signals = this.cachedSignals = this.cachedSignals || this.extractModuleSignals(this.context.cerebral.controller.module, '')
+        }
+
         return propsToPass
+      }
+      extractModuleSignals (module, parentPath) {
+        return Object.keys(module.signals || {}).reduce((signals, signalKey) => {
+          signals[signalKey] = this.context.cerebral.controller.getSignal(parentPath ? `${parentPath}.${signalKey}` : `${signalKey}`)
+
+          return signals
+        }, Object.keys(module.modules || {}).reduce((modules, moduleKey) => {
+          modules[moduleKey] = this.extractModuleSignals(module.modules[moduleKey], parentPath ? `${parentPath}.${moduleKey}` : `${moduleKey}`)
+
+          return modules
+        }, {}))
       }
       _update () {
         if (this._isUmounting) {
