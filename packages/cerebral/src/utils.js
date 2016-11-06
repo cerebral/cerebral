@@ -90,3 +90,18 @@ export function verifyStrictRender (changes, dependencyMap) {
     currentPathKey.length = 0
   }
 }
+
+export function debounce (func, wait) {
+  let timeout
+
+  return function (...args) {
+    const context = this
+    const later = () => {
+      timeout = null
+      func.apply(context, args)
+    }
+
+    clearTimeout(timeout)
+    timeout = setTimeout(later, wait)
+  }
+}
