@@ -1,6 +1,9 @@
+/* global CustomEvent */
+import {debounce} from '../utils'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
 const VERSION = 'v1'
+
 /*
   Connects to the Cerebral debugger
   - Triggers events with information from function tree execution
@@ -9,6 +12,8 @@ const VERSION = 'v1'
 class Devtools {
   constructor (options = {storeMutations: true, preventExternalMutations: true, enforceSerializable: true, verifyStrictRender: true}) {
     this.VERSION = VERSION
+    this.debuggerComponentsMap = {}
+    this.debuggerComponentDetailsId = 1
     this.storeMutations = options.storeMutations
     this.preventExternalMutations = options.preventExternalMutations
     this.enforceSerializable = options.enforceSerializable
@@ -23,6 +28,7 @@ class Devtools {
     this.originalRunTreeFunction = null
 
     this.sendInitial = this.sendInitial.bind(this)
+    this.sendComponentsMap = debounce(this.sendComponentsMap, 50)
   }
   /*
     To remember state Cerebral stores the initial model as stringified
@@ -171,6 +177,19 @@ class Devtools {
       window.dispatchEvent(event)
     })
     this.backlog = []
+
+    const event = new CustomEvent('cerebral2.client.message', {
+      detail: JSON.stringify({
+        type: 'components',
+        data: {
+          map: this.debuggerComponentsMap,
+          render: {
+            components: []
+          }
+        }
+      })
+    })
+    window.dispatchEvent(event)
   }
   /*
     Create the stringified event detail for the debugger. As we need to
@@ -228,6 +247,75 @@ class Devtools {
     } else {
       this.backlog.push(detail)
     }
+  }
+  /*
+    The container will listen to "flush" events from the controller
+    and send an event to debugger about initial registered components
+  */
+  extractComponentName (component) {
+    return component.constructor.displayName.replace('CerebralWrapping_', '')
+  }
+  /*
+    Updates the map the represents what active state paths and
+    components are in your app. Used by the debugger
+  */
+  updateComponentsMap (component, nextDeps, prevDeps) {
+    const componentDetails = {
+      name: this.extractComponentName(component),
+      renderCount: component.renderCount ? component.renderCount + 1 : 1,
+      id: component.componentDetailsId || this.debuggerComponentDetailsId++
+    }
+    component.componentDetailsId = componentDetails.id
+    component.renderCount = componentDetails.renderCount
+
+    if (prevDeps) {
+      for (const depsKey in prevDeps) {
+        const debuggerComponents = this.debuggerComponentsMap[prevDeps[depsKey]]
+
+        for (let x = 0; x < debuggerComponents.length; x++) {
+          if (debuggerComponents[x].id === component.componentDetailsId) {
+            debuggerComponents.splice(x, 1)
+            if (debuggerComponents.length === 0) {
+              delete this.debuggerComponentsMap[prevDeps[depsKey]]
+            }
+            break
+          }
+        }
+      }
+    }
+
+    if (nextDeps) {
+      for (const depsKey in nextDeps) {
+        this.debuggerComponentsMap[nextDeps[depsKey]] = (
+          this.debuggerComponentsMap[nextDeps[depsKey]]
+            ? this.debuggerComponentsMap[nextDeps[depsKey]].concat(componentDetails)
+            : [componentDetails]
+        )
+      }
+    }
+  }
+  /*
+    Sends components map to debugger. It is debounced (check constructor).
+    It needs to wait because React updates async. Instead of tracking
+    callbacks we just wait 50ms as it is not that important when
+    debugger updates
+  */
+  sendComponentsMap (componentsToRender, changes, start, end) {
+    const event = new CustomEvent('cerebral2.client.message', {
+      detail: JSON.stringify({
+        type: 'components',
+        data: {
+          map: this.debuggerComponentsMap,
+          render: {
+            start: start,
+            duration: end - start,
+            changes: changes,
+            components: componentsToRender.map(this.extractComponentName)
+          }
+        }
+      })
+    })
+    window.dispatchEvent(event)
   }
 }
 

@@ -307,7 +307,7 @@ describe('React', () => {
       it('should not update when parent path changes', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: 'baz'
@@ -346,7 +346,7 @@ describe('React', () => {
       it('should not update when child path changes', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: 'baz'
@@ -385,7 +385,7 @@ describe('React', () => {
       it('should update when immediate child interest defined', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: 'baz'
@@ -424,7 +424,7 @@ describe('React', () => {
       it('should update when nested children interest defined', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: {
@@ -464,8 +464,8 @@ describe('React', () => {
       })
       it('should throw error with devtools when replacing path, causing render not to happen', () => {
         const controller = Controller({
-          strictRender: true,
-          devtools: {init () {}, send () {}},
+          options: {strictRender: true},
+          devtools: {init () {}, send () {}, updateComponentsMap () {}},
           state: {
             foo: {
               bar: 'baz'
