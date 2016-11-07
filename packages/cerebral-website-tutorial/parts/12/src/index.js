@@ -6,8 +6,7 @@ import { Container } from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import { state, set, input } from 'cerebral/operators'
 import HttpProvider from 'cerebral-provider-http'
-import  * as computeds  from './computeds/getStars'
-
+import * as computeds from './computeds/getStars'
 
 const controller = Controller(
   {
@@ -26,7 +25,7 @@ const controller = Controller(
       cerebralDebuggerStarsCount: 0,
       totalStarsCount: 0
     },
-      signals: {
+    signals: {
       buttonClicked: [
         ...showToast('Button clicked!', 1000)
       ],
@@ -89,7 +88,6 @@ const controller = Controller(
       })
     ]
   })
-
 
 function myAction1 ({input}) {
   return {
