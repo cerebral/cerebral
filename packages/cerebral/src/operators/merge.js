@@ -11,7 +11,11 @@ export default function (targetTemplate, valueTemplate) {
       throw new Error('Cerebral operator.merge: You have to use a state template tag as first argument')
     }
 
-    context.state.merge(target.path, value)
+    context.state.merge(target.path, Object.keys(value).reduce((currentValue, key) => {
+      currentValue[key] = typeof value[key] === 'function' ? value[key](context).toValue() : value[key]
+
+      return currentValue
+    }, {}))
   }
 
   merge.displayName = 'operator.merge'

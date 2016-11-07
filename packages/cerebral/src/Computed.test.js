@@ -146,7 +146,7 @@ describe('Computed', () => {
     })
     it('should handle strict path updates', () => {
       const controller = Controller({
-        strictRender: true,
+        options: {strictRender: true},
         state: {
           foo: {
             bar: 'woop'

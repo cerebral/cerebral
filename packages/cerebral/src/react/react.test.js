@@ -123,6 +123,38 @@ describe('React', () => {
         </Container>
       ))
     })
+    it('should expose signals prop with an option', () => {
+      const controller = Controller({
+        options: {signalsProp: true},
+        state: {
+          foo: 'bar'
+        },
+        signals: {
+          someSignal: []
+        },
+        modules: {
+          moduleA: {
+            signals: {
+              someOtherSignal: []
+            }
+          }
+        }
+      })
+      const TestComponent = connect({
+        foo: 'foo'
+      }, (props) => {
+        assert.ok(props.signals.someSignal)
+        assert.ok(props.signals.moduleA.someOtherSignal)
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+    })
     it('should rerender on state update', () => {
       const controller = Controller({
         state: {
@@ -307,7 +339,7 @@ describe('React', () => {
       it('should not update when parent path changes', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: 'baz'
@@ -346,7 +378,7 @@ describe('React', () => {
       it('should not update when child path changes', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: 'baz'
@@ -385,7 +417,7 @@ describe('React', () => {
       it('should update when immediate child interest defined', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: 'baz'
@@ -424,7 +456,7 @@ describe('React', () => {
       it('should update when nested children interest defined', () => {
         let renderCount = 0
         const controller = Controller({
-          strictRender: true,
+          options: {strictRender: true},
           state: {
             foo: {
               bar: {
@@ -464,8 +496,8 @@ describe('React', () => {
       })
       it('should throw error with devtools when replacing path, causing render not to happen', () => {
         const controller = Controller({
-          strictRender: true,
-          devtools: {init () {}, send () {}},
+          options: {strictRender: true},
+          devtools: {init () {}, send () {}, updateComponentsMap () {}},
           state: {
             foo: {
               bar: 'baz'
