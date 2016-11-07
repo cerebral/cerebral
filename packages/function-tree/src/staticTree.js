@@ -37,7 +37,7 @@ function traverse (functions, item, isChain) {
       funcDetails.outputs = {}
       Object.keys(outputs).forEach((key) => {
         if (func.outputs && !~func.outputs.indexOf(key)) {
-          throw new Error(`function-tree - Outputs object doesn\'t match list of possible outputs defined for function.`)
+          throw new Error(`function-tree - Outputs object doesn't match list of possible outputs defined for function.`)
         }
         funcDetails.outputs[key] = traverse(functions, outputs[key], true)
       })

@@ -118,7 +118,7 @@ export default function Router (options = {}) {
         if (signal) {
           signal.signal(payload)
         } else {
-          console.warn(`Cerebral router - signal ${signalName} is not bound to route. Redirect wouldn\'t happen.`) // eslint-disable-line no-console
+          console.warn(`Cerebral router - signal ${signalName} is not bound to route. Redirect wouldn't happen.`) // eslint-disable-line no-console
         }
       }
     }
