@@ -10,7 +10,7 @@ An example of this is axios to do http requests and uuid to create client side i
 
 ```js
 import {Controller} from 'cerebral'
-import ContextProvider from 'cerebral/providers/context'
+import {ContextProvider} from 'cerebral/providers'
 import axios from 'axios'
 import uuid from 'uuid'
 
@@ -34,11 +34,10 @@ function someAction({axios, uuid}) {
 }
 ```
 
-Some providers are also custom made for Cerebral. For example the [cerebral-provider-firebase]().
+Some providers are also custom made for Cerebral. For example the [cerebral-provider-firebase](https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-firebase).
 
 ```js
 import {Controller} from 'cerebral'
-import ContextProvider from 'cerebral/providers/context'
 import FirebaseProvider from 'cerebral-provider-firebase'
 
 const controller = Controller({
@@ -50,4 +49,4 @@ const controller = Controller({
 })
 ```
 
-You can also create your own [custom providers]().
+You can also create your own custom providers.

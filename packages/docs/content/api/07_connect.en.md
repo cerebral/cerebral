@@ -4,7 +4,7 @@ title: Connect
 
 ## Connect
 
-### Choosing a view
+### Choosing a view type
 Cerebral theoretically can use any view layer. Currently it officially supports [React](https://facebook.github.io/react/) and [Inferno](http://infernojs.org/). From a Cerebral perspective they have the exact same API, you just have to choose to import from **cerebral/react** or **cerebral/inferno**. For specific API differences please check their documentation.
 
 Choose React if you want a huge ecosystem of shared components and documentation. Inferno is faster than React and is recommended to be used when you do not depend heavily on 3rd party components.
@@ -99,7 +99,7 @@ import {Container} from 'cerebral/react'
 import App from './components/App'
 
 const controller = Controller({
-  strictRender: true
+  options: {strictRender: true}
 })
 
 render((
@@ -126,7 +126,7 @@ export default connect({
 
 This component will only render when exactly **app.isLoading** changes. It will not change if there is a change to path: **app** or **app.isLoading.foo**.
 
-When in **strict mode** you can specify child path interest. So for example a component showing a list can rerender when some nested path has a change:
+When in **strict mode** you can specify child path interest. So for example a component showing a list can render when some nested path has a change:
 
 ```js
 import React from 'react'
@@ -156,6 +156,6 @@ export default connect({
 )
 ```
 
-This render mode has a great performance improvement on your app. It is recommended to use it from the start if you are building a large application. The onlgy **gotcha** with this approach is where you change parent paths.
+This render mode has a great performance improvement on your app. It is recommended to use it from the start if you are building a large application. The only **gotcha** with this approach is where you change parent paths.
 
-Lets say you point to path **app.isLoading** in a component. If you change out **app** path, the component will not render. Though if you did a *merge* it would work. This is rarely an issue, but good to know.
+Lets say you point to path **app.isLoading** in a component. If you change out **app** path, the component will not render. This throws an error and tell you to not replace the **app** path or change the component dependency to be **app** instead.

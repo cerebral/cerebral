@@ -57,4 +57,4 @@ export default connect((props) => ({
 )
 ```
 
-When Cerebral connects to a component it will take control of its rendering. When one of its state dependencies updates, or some parent component passes in some new props, it will rerender.
+When Cerebral connects to a component it will take control of its rendering. When one of its state dependencies updates, or some parent component passes in some new props, it will render again.

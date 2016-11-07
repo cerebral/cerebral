@@ -7,9 +7,9 @@ title: Exposing state
 In Cerebral you always connect state where you need it. This give some benefits:
 
 1. Cerebral will optimize the component
-2. The debugger will know about this component and understand it's state dependencies
+2. The debugger will know about this component and visualize its state dependencies and when it renders
 3. Increased readability as every component explicitly tells you what state it needs and where it gets it from
-4. You can safely move the component wherever you want without breaking some chain of props passing
+4. You can safely move the component wherever you want without breaking chain of props passing
 
 Generally you do not have to give this much thought, but there are conventions that will help you handle certain scenarios.
 
@@ -35,7 +35,7 @@ export default connect({
 )
 ```
 
-This is perfectly okay if you do not care about updates to each item in the list. But when working with Cerebral and the items in your lists are actual entities (objects with ids) and individual items can update, you should favor storing them as a map instead. That means:
+This is perfectly okay if the list is not very large or the list is not related to entities (objects with ids). But when working with Cerebral and entities you should favor storing them as a map instead. That means:
 
 ```js
 {
@@ -49,7 +49,7 @@ This is perfectly okay if you do not care about updates to each item in the list
 
 This gives you three benefits:
 
-1. If you give each item a client side id, for example using [uuid](https://www.npmjs.com/package/uuid), you can very easily optimistically add new items without worrying about their place. They will get a client side id and can always be referenced by that
+1. If you give each item a client side id, for example using [uuid](https://www.npmjs.com/package/uuid), you can very easily optimistically add new items without worrying about their place in some list. They will get a client side id and can always be referenced by that
 
 2. It will be faster and less code to look up entities when you have an id to reference them with. You just point to **items.id2** and you have the item. No array search
 

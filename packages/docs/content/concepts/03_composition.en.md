@@ -4,26 +4,18 @@ title: Composition
 
 ## Composition
 
-Composition is a general term. With code it has two practical meanings.
-
-1. Creating functions that can be composed
-
-2. Composing functions
-
 Typically we think of composition in functional programming. Like when you:
 
 ```js
- const namesUpperDashSeparated = (
-   somePeople
-    .map(take('name'))
-    .map(toUpperCase)
-    .reduce(dashSeparated, '')
- )
+ const namesUpperDashSeparated = somePeople
+  .map(take('name'))
+  .map(toUpperCase)
+  .reduce(dashSeparated, '')
 ```
 
-Here we define functions that can be composed in many different scenarios. We compose using the array chaining of methods. So the functions defined are compatible with this type of composition.
+Here we define functions that can be composed in many different scenarios. We compose by chaining array methods. So the functions defined are compatible with their respective usage.
 
-Cerebral signals are also composable, but not with chaining like an array.
+Cerebral signals are also composable, but not with chaining like the example above.
 
 ### Create a signal compatible function (action)
 Like the **toUpperCase** function above requires the input to be a string, so does signal functions have requirements. There are basically three rules.
@@ -61,7 +53,7 @@ async function someAction() {
 ```
 
 ### Compose
-You have already seen examples of composition. Defining a signal is composition by default.
+You have already seen examples of composition. Defining a signal is really composing actions.
 
 ```js
 [
