@@ -22,7 +22,7 @@ import {
   toggle,
   unset,
   unshift,
-  
+
   // operators related to execution
   when,
   debounce,
@@ -38,6 +38,12 @@ export default [
 
   // Toggle a boolean value in your state
   toggle(state`foo`),
+
+  // Merge. Supports using template tags on merged values
+  merge(state`foo`, {
+    bar: input`bar`,
+    baz: state`baz`
+  }),
 
   // Conditional truthy check of state or input
   when(state`foo.isAwesome`), {

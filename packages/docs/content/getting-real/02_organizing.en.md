@@ -17,7 +17,7 @@ Typically the file structure for modules looks like this:
 main.js
 ```
 
-In the **main.js** file, the module is added to the main controller:
+In the **main.js** file, the module is added to the controller:
 
 ```js
 import {Controller} from 'cerebral'
@@ -30,7 +30,7 @@ const controller = Controller({
 })
 ```
 
-Any signal and state defined inside the *Home* module will live on the namespace chosen during controller instanciation. In the example above, this is: **home**.
+Any signal and state defined inside the *Home* module will live on the namespace chosen during controller instantiation. In the example above, this is: **home**.
 
 The *modules/Home/index.js* typically looks like this:
 
@@ -61,9 +61,9 @@ And this is how an application scales: by defining modules and submodules. Actio
 main.js
 ```
 
-### View
+### Components
 
-A very important point in Cerebral is that your components (view) do not affect the structure of the application state. Modules are defined in terms of what makes sense for state and signals. Sometimes this is similar to how views are structured, but often it is not. This is why components usually live in their own **components** folder, separated from the modules:
+A very important point in Cerebral is that your components do not affect the structure of the application state. Modules are defined in terms of what makes sense for state and signals. Sometimes this is similar to how components are structured, but more often it is not. This is why components usually live in their own **components** folder, separated from the modules:
 
 ```js
 /components

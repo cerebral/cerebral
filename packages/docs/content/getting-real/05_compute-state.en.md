@@ -4,7 +4,7 @@ title: Compute state
 
 ## Compute state
 
-Very often the view needs to produce state based on a combination of other state. A very typical example is to show items of a list based on a dynamic limit. The whole list is stored in your model, but you only want to show for example the 10 latest. Instead of defining this in the view itself, you can use a **computed**. The signature is very much like connecting state to a component, but instead of returning a user interface description, it returns a value.
+Very often the components needs to produce state based on a combination of other state. A very typical example is to show items of a list based on a dynamic limit. The whole list is stored in your state tree, but you only want to show for example the 10 latest. Instead of defining this in the component itself, you can use a **computed**. The signature is very much like connecting state to a component, but instead of returning a user interface description, it returns a value.
 
 ```js
 import {Computed} from 'cerebral'
@@ -25,10 +25,10 @@ import {connect} from 'cerebral/react'
 import limitedList from '../../computed/limitedList'
 
 export default connect({
-  limitedList: limitedList()
+  limitedList: limitedList
 },
   function List(props) {
-    ...
+    props.limitedList
   }
 )
 ```
@@ -51,10 +51,10 @@ import {connect} from 'cerebral/react'
 import limitedList from '../../computed/limitedList'
 
 export default connect({
-  limitedList: limitedList({limit: 10})
+  limitedList: limitedList.props({limit: 10})
 },
   function List(props) {
-    ...
+    props.limitedList
   }
 )
 ```

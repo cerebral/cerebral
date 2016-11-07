@@ -14,14 +14,14 @@ export default [
 ]
 ```
 
-Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the arrays in a function-tree **chains**. These chains contains functions, we call them **actions**. So to sum up, signals are chains of actions.
+Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the arrays in a function-tree **chains**. These chains contains functions, we call them **actions**. So to sum up: *"signals are chains of actions"*.
 
-The first action in the chain above is defined inline. When the signal is called the function will be run and a **context** will be passed to it. This context holds everything the action wants to do, it being state updates, talking to the server or whatever else. What is available on the context is defined when you configure your Cerebral application.
+The first action in the chain above is defined inline, normally you define these actions in separate files. When the signal is called the action will be run and a **context** will be passed to it. This context holds everything the action wants to do, it being state updates, talking to the server or whatever else. What is available on the context is defined when you configure your Cerebral application.
 
-This means defining a signal in Cerebral does not use any APIs. You only define plain functions, arrays and later you will see objects. That means everything related to state updates and other side effects will be provided when the signal runs. This decoupling makes it very easy to test actions and also the whole signal.
+This means defining a signal in Cerebral does not require an API. You only define plain functions, arrays and later you will see objects. That means everything related to state updates and other side effects will be provided when the signal runs. This decoupling makes it very easy to test actions and also the whole signal.
 
 ### Factories
-Factories is a general concept that is heavily used in Cerebral. Let us say that you wanted a generic **set**.
+Factories is a general concept in programming languages that is heavily used in Cerebral. Let us say that you wanted a generic way to **set** state directly in the signal.
 
 ```js
 function setFactory(path, value) {
@@ -40,14 +40,14 @@ export default [
 With this factory in place you could change the path and the value to set without defining new functions. This is such a useful concept that Cerebral has a concept of **operators** built in:
 
 ```js
-import { set } from 'cerebral/operators'
+import { set, state } from 'cerebral/operators'
 
 export default [
-  set('state:foo', 'bar')
+  set(state`foo`, 'bar')
 ]
 ```
 
-As you can see you set a "state" target. This hints to operators being a bit more powerful than plain factories. You can read more about them in the API section.
+Cerebral uses [template tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals) to target things like state and input. This is a powerful concepts that allows you to be very explicit about what is happening directly in the signal.
 
 ### Async
 Updates to state often requires other side effects to be run and very often these side effects are async. Typically you need to get some data from the server.
@@ -55,8 +55,12 @@ Updates to state often requires other side effects to be run and very often thes
 ```js
 function getData({axios}) {
   return axios.get('/data')
-    .then(response => ({result: response.data}))
-    .catch(error => ({error: error.response.data}))
+    .then(response => {
+      return {result: response.data}
+    })
+    .catch(error => {
+      return {error: error.response.data}
+    })
 }
 
 export default [
@@ -86,12 +90,16 @@ With the example above, where we returned an object from **getData**, the next a
 ```js
 function getData({axios}) {
   return axios.get('/data')
-    .then(response => ({result: response.data}))
-    .catch(error => ({error: error.response.data}))
+    .then(response => {
+      return {result: response.data}
+    })
+    .catch(error => {
+      return {error: error.response.data}
+    })
 }
 
 function setData({input, state}) {
-  state.set('data', input.result)
+  state.set('data', input.result) // "result" set by getData
 }
 
 export default [
@@ -100,7 +108,7 @@ export default [
 ]
 ```
 
-You can return an object from whatever action you want, it being async or not. But **getData** might return either a result or an error. How would we handle the error? This is where we introduce paths, which is part of function-tree.
+You can return an object from whatever action you want, it being async or not.
 
 ### Paths
 The **getData** action above caught an error and we would like to diverge the execution of the signal down a different path than if it succeeds. Let us change the code a bit:
@@ -108,17 +116,21 @@ The **getData** action above caught an error and we would like to diverge the ex
 ```js
 function getData({axios, path}) {
   return axios.get('/data')
-    .then(response => path.success({result: response.data}))
-    .catch(error => path.error({error: error.response.data}))
+    .then(response => {
+      return path.success({result: response.data}
+    })
+    .catch(error => {
+      return path.error({error: error.response.data})
+    })
 }
 
 export default [
   getData, {
     success: [
-      copy('input:data', 'state:data')
+      set(state`data`, input`data`)
     ],
     error: [
-      copy('input:error', 'state:error')
+      set(state`error`, input`error`)
     ]
   }
 ]
@@ -132,12 +144,12 @@ The paths could also be:
 export default [
   getData, {
     success: [
-      copy('input:data', 'state:data')
+      set(state`data`, input`data`)
     ],
     notFound: [],
     notAuthenticated: [],
     error: [
-      copy('input:error', 'state:error')
+      set(state`error`, input`error`)
     ]
   }
 ]

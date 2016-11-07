@@ -25,19 +25,19 @@ A convention is to attach chains to signals. These chains typically have their o
 *src/chains/updateData.js*
 ```js
 import getData from '../actions/getData'
-import {set, copy} from 'cerebral/operators'
+import {set, state, input} from 'cerebral/operators'
 
 export default [
-  set('state:isLoading', true),
+  set(state`isLoading`, true),
   getData, {
     success: [
-      copy('input:result', 'state:data')
+      set(state`data`, input`result`)
     ],
     error: [
-      copy('input:error', 'state:error')
+      set(state`error`, input`error`)
     ]
   },
-  set('state:isLoading', false)
+  set(state`isLoading`, false)
 ]
 ```
 

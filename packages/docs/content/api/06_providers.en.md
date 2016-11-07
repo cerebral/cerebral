@@ -12,7 +12,7 @@ The context provider allows you to attach any third party library to the context
 
 ```js
 import {Controller} from 'cerebral'
-import ContextProvider from 'cerebral/providers/Context'
+import {ContextProvider} from 'cerebral/providers'
 import axios from 'axios'
 
 const controller = Controller({
@@ -26,7 +26,7 @@ const controller = Controller({
 
 Now axios will be available on the context of any action. The context provider also wraps any methods and sends information to the debugger about their use.
 
-Look at the [community tools]() for other providers that can be used, or create your own.
+Look at the **community tools** for other providers that can be used, or create your own.
 
 ### Creating a provider
 
@@ -48,21 +48,29 @@ The providers are called by **function-tree** with some arguments.
 - **functionDetails** gives information about the function (action) that will run
 - **payload** the current payload of the execution (signal)
 
-You can create a standalone provider simply by defining a function like the **InputProvider** in the first example. But you can also define a provider on a module. This allows you to combine providers with signal execution.
+You can create a standalone provider simply by defining a function like the **InputProvider** in the first example. But you can also define a provider on a module. This allows you to combine providers and signals.
 
 ```js
 export default (module) => {
+  const MODULE_PATH = module.path.join('.')
+
   return {
     state: {
-      foo: 'bar'
+      foo: true
     },
     signals: {
-      providerTriggered: [
-        toggle(`state:${module.path.join('.')}.foo`)
+      somethingHappened: [
+        toggle(state`${MODULE_PATH}.foo`)
       ]
     },
     provider(context) {
-      context.toggleFoo = module.getSignal('providerTriggered')()
+      context.myProvider = {
+        doSomeSideEffect() {
+          someSideEffect().then(() => {
+            module.controller.getSignal(`${MODULE_PATH}.somethingHappened`)()
+          })
+        }
+      }
 
       return context
     }
@@ -73,8 +81,8 @@ export default (module) => {
 Now any action can:
 
 ```js
-function someAction({toggleFoo}) {
-  toggleFoo()
+function someAction({myProvider}) {
+  myProvider.doSomeSideEffect()
 }
 ```
 

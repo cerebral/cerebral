@@ -3,7 +3,7 @@ title: State
 ---
 
 ## State
-State can be defined at the top level in the controller or in each module. State is defined as plain JavaScript value types. Arrays, objects, strings, numbers and booleans. This means that the state is serializable. There are not classes or other abstractions around state. This makes it easier to reason about how state is translated into user interface, it can be stored on server/local storage and the debugger can now visualize all the state of the application.
+State can be defined at the top level in the controller and/or in each module. State is defined as plain JavaScript value types. Arrays, objects, strings, numbers and booleans. This means that the state is serializable. There are no classes or other abstractions around state. This makes it easier to reason about how state is translated into user interface, it can be stored on server/local storage and the debugger can now visualize all the state of the application.
 
 ```js
 import {Controller} from 'cerebral'

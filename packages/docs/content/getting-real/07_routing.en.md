@@ -4,11 +4,11 @@ title: Routing
 
 ## Routing
 
-Typically applications uses a router. To instantiate the router you:
+Typically applications uses a router. To instantiate the Cerebral router you:
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral/router'
+import Router from 'cerebral-router'
 
 const controller = Controller({
   router: Router({
@@ -21,13 +21,13 @@ const controller = Controller({
 ```
 
 ### Defining routes
-Routes in Cerebral does not relate to the view (components), they trigger signals. The signals puts your application in a specific state and then your view decides what to render based on that state. So the router is completely decoupled from your view. This is a very good thing because a route can now translate to any kind of state changes and side effects.
+Routes in Cerebral does not affect the components, they affect signals. The signals puts your application in a specific state and then your components decides what to render based on that state. So the router is completely decoupled from your components. This is a very good thing because a route can now translate to any kind of state changes and side effects.
 
 Let us create a small app:
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral/router'
+import Router from 'cerebral-router'
 import HomeModule from './modules/Home'
 import PostsModule from './modules/Posts'
 
@@ -79,7 +79,7 @@ export default {
 ```
 
 ### Render based on state
-So we do not render anything based on the route. We render based on state, like we do with everything else. A route never affects the view layer, it only affects your state.
+So we do not render anything based on the route. We render based on state, like we do with everything else. A route never affects the components, it only affects your state.
 
 *components/App/index.js*
 ```js
@@ -104,4 +104,4 @@ export default Connect({
 )
 ```
 
-So this was simple page handling routing, but you can imagine that a route does not have to be a page change. It can open a modal, highlight some item or whatever. You are completely free to structure this. If some data fetching was needed before changing the page you would just put this in the signal.
+So this was simple page handling routing, but you can imagine that a route does not have to be a page change. It can opening a modal, highlight some item or whatever. You are completely free to structure this. If some data fetching was needed before changing the page you would just put this in the signal.

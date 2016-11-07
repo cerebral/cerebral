@@ -8,8 +8,12 @@ title: Controller
 import {Controller} from 'cerebral'
 
 const controller = Controller({
-  // Use strict rendering (default is false)
-  strictRender: true,
+  options: {
+    // Use strict rendering
+    strictRender: false,
+    // Expose props.signals with all signals in components
+    signalsProp: false
+  },
   // Defines the top level state
   state: {},
   // Defines the top level signals
