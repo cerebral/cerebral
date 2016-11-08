@@ -497,7 +497,7 @@ describe('React', () => {
       it('should throw error with devtools when replacing path, causing render not to happen', () => {
         const controller = Controller({
           options: {strictRender: true},
-          devtools: {init () {}, send () {}, updateComponentsMap () {}},
+          devtools: {verifyStrictRender: true, init () {}, send () {}, updateComponentsMap () {}},
           state: {
             foo: {
               bar: 'baz'
