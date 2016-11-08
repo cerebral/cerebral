@@ -8,7 +8,7 @@ import Phone from '../Phone'
 export default connect(
   ({clientRef}) => ({
     client: `clients.all.${clientRef}`,
-    selectedClient: 'clients.$draft'
+    selectedClient: 'clients.$draft.**'
   }),
   {
     penClick: 'clients.penClicked'
