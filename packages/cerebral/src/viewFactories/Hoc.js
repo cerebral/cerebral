@@ -4,9 +4,15 @@ import {cleanPath, propsDiffer} from './../utils'
 export default (View) => {
   return function HOC (paths, signals, injectedProps, Component) {
     class CerebralComponent extends View.Component {
+      static getStatePaths (props) {
+        if (!paths) {
+          return {}
+        }
+        return typeof paths === 'function' ? paths(props) : paths
+      }
       constructor (props) {
         super(props)
-        this.evaluatedPaths = this.getStatePaths(props)
+        this.evaluatedPaths = CerebralComponent.getStatePaths(props)
         this.signals = signals
         this.injectedProps = injectedProps
         this.Component = Component
@@ -29,7 +35,7 @@ export default (View) => {
 
         // If dynamic paths, we need to update them
         if (typeof paths === 'function') {
-          this.evaluatedPaths = this.getStatePaths(nextProps)
+          this.evaluatedPaths = CerebralComponent.getStatePaths(nextProps)
 
           const nextDepsMap = this.getDepsMap()
 
@@ -47,7 +53,7 @@ export default (View) => {
         return false
       }
       componentWillUnmount () {
-        this._isUmounting = true
+        this._isUnmounting = true
         this.context.cerebral.unregisterComponent(this, this.depsMap)
         Object.keys(this.depsMap).forEach((depsMapKey) => {
           if (this.depsMap[depsMapKey] instanceof Computed) {
@@ -66,17 +72,11 @@ export default (View) => {
           return currentDepsMap
         }, {})
       }
-      getStatePaths (props) {
-        if (!paths) {
-          return {}
-        }
-        return typeof paths === 'function' ? paths(props) : paths
-      }
       getProps () {
         const controller = this.context.cerebral.controller
         const model = controller.model
         const props = this.props || {}
-        const statePaths = this.getStatePaths(this.props)
+        const statePaths = CerebralComponent.getStatePaths(this.props)
 
         let propsToPass = Object.assign({}, props, Object.keys(statePaths || {}).reduce((currentProps, key) => {
           currentProps[key] = statePaths[key] instanceof Computed ? statePaths[key].getValue(model) : controller.getState(cleanPath(statePaths[key]))
@@ -119,11 +119,9 @@ export default (View) => {
         }, {}))
       }
       _update () {
-        if (this._isUmounting) {
-          return
+        if (!this._isUnmounting) {
+          this.forceUpdate()
         }
-
-        this.forceUpdate()
       }
       render () {
         return View.createElement(this.Component, this.getProps())

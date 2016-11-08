@@ -1,24 +1,15 @@
-import {ensurePath} from '../utils'
+import {ensurePath, noop} from '../utils'
 
 export default (View) => {
   class Container extends View.Component {
     constructor (props) {
       super(props)
-      this.registerComponent = (
-        props.controller
-        ? this.registerComponent.bind(this)
-        : () => {}
-      )
-      this.unregisterComponent = (
-        props.controller
-        ? this.unregisterComponent.bind(this)
-        : () => {}
-      )
-      this.updateComponent = (
-        props.controller
-        ? this.updateComponent.bind(this)
-        : () => {}
-      )
+      const controller = props.controller
+      this.hasDevtools = Boolean(controller && controller.devtools)
+
+      this.registerComponent = controller ? this.registerComponent.bind(this) : noop
+      this.unregisterComponent = controller ? this.unregisterComponent.bind(this) : noop
+      this.updateComponent = controller ? this.updateComponent.bind(this) : noop
     }
     getChildContext () {
       const controller = (
@@ -33,9 +24,6 @@ export default (View) => {
           updateComponent: this.updateComponent
         }
       }
-    }
-    hasDevtools () {
-      return Boolean(this.props.controller && this.props.controller.devtools)
     }
     /*
       When testing and running on the server there is no need to
@@ -59,20 +47,20 @@ export default (View) => {
     }
     registerComponent (component, depsMap) {
       this.props.controller.componentDependencyStore.addEntity(component, depsMap)
-      if (this.hasDevtools()) {
+      if (this.hasDevtools) {
         this.props.controller.devtools.updateComponentsMap(component, depsMap)
       }
     }
     unregisterComponent (component, depsMap) {
       this.props.controller.componentDependencyStore.removeEntity(component, depsMap)
-      if (this.hasDevtools()) {
+      if (this.hasDevtools) {
         this.props.controller.devtools.updateComponentsMap(component, null, depsMap)
       }
     }
     updateComponent (component, prevDepsMap, depsMap) {
       this.props.controller.componentDependencyStore.removeEntity(component, prevDepsMap)
       this.props.controller.componentDependencyStore.addEntity(component, depsMap)
-      if (this.hasDevtools()) {
+      if (this.hasDevtools) {
         this.props.controller.devtools.updateComponentsMap(component, depsMap, prevDepsMap)
       }
       component._update()
