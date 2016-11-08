@@ -1,6 +1,4 @@
-import HOC from './hoc'
-
-export default function connect (paths, passedSignals, injectedProps, passedComponent) {
+export default HOC => function connect (paths, passedSignals, injectedProps, passedComponent) {
   let component = passedComponent
   let signals = passedSignals
   let props = injectedProps
