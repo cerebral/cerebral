@@ -1,69 +1,21 @@
-import {ensurePath, noop} from '../utils'
+import {throwError, noop} from '../utils'
 
 export default (View) => {
   class Container extends View.Component {
-    constructor (props) {
-      super(props)
-      const controller = props.controller
-      this.hasDevtools = Boolean(controller && controller.devtools)
-
-      this.registerComponent = controller ? this.registerComponent.bind(this) : noop
-      this.unregisterComponent = controller ? this.unregisterComponent.bind(this) : noop
-      this.updateComponent = controller ? this.updateComponent.bind(this) : noop
-    }
     getChildContext () {
-      const controller = (
-        this.props.controller ||
-        this.createDummyController(this.props.state)
-      )
+      const {controller} = this.props
+      if (!controller) {
+        throwError('You are not passing controller to Container')
+      }
+      const {componentDependencyStore, devtools = noop} = controller
       return {
         cerebral: {
           controller: controller,
-          registerComponent: this.registerComponent,
-          unregisterComponent: this.unregisterComponent,
-          updateComponent: this.updateComponent
+          registerComponent: registerComponent.bind(this, componentDependencyStore, devtools),
+          unregisterComponent: unregisterComponent.bind(this, componentDependencyStore, devtools),
+          updateComponent: updateComponent.bind(this, componentDependencyStore, devtools)
         }
       }
-    }
-    /*
-      When testing and running on the server there is no need to
-      initialize all of Cerebral. So by not passing a controller
-      to this Container it will create a dummy version which inserts
-      state and mocks any signals when connecting the component.
-    */
-    createDummyController (state = {}) {
-      return {
-        options: {},
-        on () {},
-        getState (path) {
-          return ensurePath(path).reduce((currentState, pathKey) => {
-            return currentState[pathKey]
-          }, state)
-        },
-        getSignal () {
-          return () => {}
-        }
-      }
-    }
-    registerComponent (component, depsMap) {
-      this.props.controller.componentDependencyStore.addEntity(component, depsMap)
-      if (this.hasDevtools) {
-        this.props.controller.devtools.updateComponentsMap(component, depsMap)
-      }
-    }
-    unregisterComponent (component, depsMap) {
-      this.props.controller.componentDependencyStore.removeEntity(component, depsMap)
-      if (this.hasDevtools) {
-        this.props.controller.devtools.updateComponentsMap(component, null, depsMap)
-      }
-    }
-    updateComponent (component, prevDepsMap, depsMap) {
-      this.props.controller.componentDependencyStore.removeEntity(component, prevDepsMap)
-      this.props.controller.componentDependencyStore.addEntity(component, depsMap)
-      if (this.hasDevtools) {
-        this.props.controller.devtools.updateComponentsMap(component, depsMap, prevDepsMap)
-      }
-      component._update()
     }
     render () {
       return this.props.children
@@ -72,7 +24,7 @@ export default (View) => {
 
   if (View.PropTypes) {
     Container.propTypes = {
-      controller: View.PropTypes.object,
+      controller: View.PropTypes.object.isRequired,
       children: View.PropTypes.node.isRequired
     }
     Container.childContextTypes = {
@@ -81,4 +33,27 @@ export default (View) => {
   }
 
   return Container
+}
+
+function registerComponent (componentDependencyStore, devtools, component, depsMap) {
+  componentDependencyStore.addEntity(component, depsMap)
+  if (devtools) {
+    devtools.updateComponentsMap(component, depsMap)
+  }
+}
+
+function unregisterComponent (componentDependencyStore, devtools, component, depsMap) {
+  componentDependencyStore.removeEntity(component, depsMap)
+  if (devtools) {
+    devtools.updateComponentsMap(component, null, depsMap)
+  }
+}
+
+function updateComponent (componentDependencyStore, devtools, component, prevDepsMap, depsMap) {
+  componentDependencyStore.removeEntity(component, prevDepsMap)
+  componentDependencyStore.addEntity(component, depsMap)
+  if (devtools) {
+    devtools.updateComponentsMap(component, depsMap, prevDepsMap)
+  }
+  component._update()
 }

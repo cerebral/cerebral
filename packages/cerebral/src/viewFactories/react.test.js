@@ -13,12 +13,11 @@ const React = require('react')
 const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
 const Controller = require('../Controller').default
-const Container = require('./container').default
-const connect = require('./connect').default
 const Computed = require('../Computed').default
+const {Container, StateContainer, connect} = require('./react')
 
 describe('React', () => {
-  describe('container', () => {
+  describe('state container', () => {
     it('should be able to wrap app with container', () => {
       class TestComponent extends React.Component {
         render () {
@@ -28,9 +27,9 @@ describe('React', () => {
         }
       }
       const tree = TestUtils.renderIntoDocument((
-        <Container>
+        <StateContainer>
           <TestComponent />
-        </Container>
+        </StateContainer>
       ))
 
       assert.ok(TestUtils.findRenderedComponentWithType(tree, TestComponent))
@@ -47,13 +46,15 @@ describe('React', () => {
         )
       })
       const tree = TestUtils.renderIntoDocument((
-        <Container state={state}>
+        <StateContainer state={state}>
           <TestComponent />
-        </Container>
+        </StateContainer>
       ))
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
+  })
+  describe('container', () => {
     it('should be able to expose controller', () => {
       const controller = Controller({
         state: {
@@ -74,6 +75,22 @@ describe('React', () => {
       ))
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
+    it('should throw if no controller provided', () => {
+      const TestComponent = connect({
+        foo: 'foo'
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <Container>
+            <TestComponent />
+          </Container>
+        ))
+      })
     })
   })
   describe('connect', () => {

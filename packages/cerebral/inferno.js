@@ -1,1 +1,1 @@
-module.exports = require('./lib/inferno')
+module.exports = require('./lib/viewFactories/inferno')
