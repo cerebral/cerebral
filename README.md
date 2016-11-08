@@ -21,11 +21,31 @@ A state controller with its own debugger
 ## Contribute
 The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
 
-1. Clone the monorepo
+1. Clone the monorepo: `git clone https://github.com/cerebral/cerebral.git`
 2. In root: `npm install`
 3. Run `npm run setup` which will build code and bootstrap it together
 
 The packages are located under `packages` folder and there is **no need** to run `npm install` for each package.
+
+### Using monorepo for your own apps
+If you want to use Cerebral 2 directly from your cloned repo, you can create a symlink
+to the `packages/cerebral` directory into the `node_modules` directory of your app.
+
+If your app and the cerebral monorepo are in the same folder you can do from inside your
+app directory:
+
+```sh
+$ ln -s ../../cerebral/packages/cerebral/ node_modules/
+```
+
+Similar you can link other packages from the `packages` directory into your app's
+`node_modules` folder.
+
+Just remember to unlink the package before installing it from npm:
+
+```sh
+$ unlink node_modules/cerebral
+```
 
 ### Running demos
 Go to the respective `packages/some-demo-folder` and run `npm start`
