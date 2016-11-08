@@ -10,14 +10,19 @@ const VERSION = 'v1'
   - Stores data related to time travel, if activated
 */
 class Devtools {
-  constructor (options = {storeMutations: true, preventExternalMutations: true, enforceSerializable: true, verifyStrictRender: true}) {
+  constructor (options = {
+    storeMutations: true,
+    preventExternalMutations: true,
+    enforceSerializable: true,
+    verifyStrictRender: true
+  }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
     this.debuggerComponentDetailsId = 1
-    this.storeMutations = options.storeMutations
-    this.preventExternalMutations = options.preventExternalMutations
-    this.enforceSerializable = options.enforceSerializable
-    this.strictPathReplaceError = options.verifyStrictRender
+    this.storeMutations = Boolean(options.storeMutations)
+    this.preventExternalMutations = Boolean(options.preventExternalMutations)
+    this.enforceSerializable = Boolean(options.enforceSerializable)
+    this.verifyStrictRender = Boolean(options.verifyStrictRender)
     this.backlog = []
     this.mutations = []
     this.latestExecutionId = null

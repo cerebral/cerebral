@@ -102,7 +102,7 @@ class Controller extends EventEmitter {
       componentsToRender = this.componentDependencyStore.getAllUniqueEntities()
     } else if (this.options.strictRender) {
       componentsToRender = this.componentDependencyStore.getStrictUniqueEntities(changes)
-      if (this.devtools) {
+      if (this.devtools && this.devtools.verifyStrictRender) {
         verifyStrictRender(changes, this.componentDependencyStore.map)
       }
     } else {
