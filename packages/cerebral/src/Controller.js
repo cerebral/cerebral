@@ -1,3 +1,4 @@
+import DependencyStore from './DependencyStore'
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
@@ -16,9 +17,11 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   based on top level providers and providers defined in modules
 */
 class Controller extends EventEmitter {
-  constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, strictRender = false}) {
+  constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
     super()
-    this.strictRender = strictRender
+    this.computedDependencyStore = computedDependencyStore
+    this.componentDependencyStore = new DependencyStore()
+    this.options = options
     this.flush = this.flush.bind(this)
     this.devtools = devtools
     this.model = new Model({}, this.devtools)
@@ -63,30 +66,61 @@ class Controller extends EventEmitter {
     this.emit('initialized')
   }
   /*
-    Whenever the view needs to be updated this method is called.
-    It will first flag any computed for changes and then emit the flush
-    event which the view layer listens to
+    Whenever computeds and components needs to be updated, this method
+    can be called
   */
   flush (force) {
     const changes = this.model.flush()
+
+    this.updateComputeds(changes, force)
+    this.updateComponents(changes, force)
+    this.emit('flush', changes, Boolean(force))
+  }
+  updateComputeds (changes, force) {
     let computedsAboutToBecomeDirty
 
     if (force) {
-      computedsAboutToBecomeDirty = computedDependencyStore.getAllUniqueEntities()
-    } else if (this.strictRender) {
-      computedsAboutToBecomeDirty = computedDependencyStore.getStrictUniqueEntities(changes)
-      if (Boolean(this.devtools) && this.devtools.verifyStrictRender) {
-        verifyStrictRender(changes, computedDependencyStore.map)
-      }
+      computedsAboutToBecomeDirty = this.computedDependencyStore.getAllUniqueEntities()
+    } else if (this.options.strictRender) {
+      computedsAboutToBecomeDirty = this.computedDependencyStore.getStrictUniqueEntities(changes)
     } else {
-      computedsAboutToBecomeDirty = computedDependencyStore.getUniqueEntities(changes)
+      computedsAboutToBecomeDirty = this.computedDependencyStore.getUniqueEntities(changes)
     }
 
     computedsAboutToBecomeDirty.forEach((computed) => {
       computed.flag()
     })
+  }
+  /*
+    On "flush" use changes to extract affected components
+    from dependency store and render them
+  */
+  updateComponents (changes, force) {
+    let componentsToRender = []
 
-    this.emit('flush', changes, Boolean(force))
+    if (force) {
+      componentsToRender = this.componentDependencyStore.getAllUniqueEntities()
+    } else if (this.options.strictRender) {
+      componentsToRender = this.componentDependencyStore.getStrictUniqueEntities(changes)
+      if (this.devtools) {
+        verifyStrictRender(changes, this.componentDependencyStore.map)
+      }
+    } else {
+      componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
+    }
+
+    const start = Date.now()
+    componentsToRender.forEach((component) => {
+      if (this.devtools) {
+        this.devtools.updateComponentsMap(component)
+      }
+      component._update(force)
+    })
+    const end = Date.now()
+
+    if (this.devtools && componentsToRender.length) {
+      this.devtools.sendComponentsMap(componentsToRender, changes, start, end)
+    }
   }
   /*
     Conveniance method for grabbing the model

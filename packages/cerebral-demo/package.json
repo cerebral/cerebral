@@ -2,22 +2,29 @@
   "name": "cerebral-demo",
   "version": "0.1.0",
   "private": true,
-  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "author": "Gaspard Bucher <gaspard@lucidogen.io>",
   "contributors": [
-    "Aleksey Guryanov <gurianov@gmail.com>"
+    "Aleksey Guryanov <gurianov@gmail.com>",
+    "Christian Alfoni <christianalfoni@gmail.com>"
   ],
   "devDependencies": {
+    "node-sass": "^3.11.2",
     "react-scripts": "0.6.1"
   },
   "dependencies": {
+    "bulma": "^0.2.3",
+    "cerebral": "^2.0.0-0",
+    "cerebral-router": "^1.0.0-0",
+    "js-joda": "^1.1.13",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
-    "cerebral": "^2.0.0-0",
-    "cerebral-router": "^1.0.0-0"
+    "uuid": "^2.0.3"
   },
   "scripts": {
+    "prestart": "npm run sass",
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "sass": "./node_modules/.bin/node-sass src/scss/app.scss -o public/css/",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

@@ -6,7 +6,7 @@ import App from './modules/app'
 import Recorder from './modules/recorder'
 
 const controller = Controller({
-  strictRender: true,
+  options: {strictRender: true},
   devtools: Devtools(),
   router: Router({
     onlyHash: true,
