@@ -31,7 +31,7 @@ followed by  `npm install`
 This may take a little while and does **not** mean that cerebral is a huge download. In fact cerebral as a production build is very small compared to other popular frameworks and therefore has fast loading times. The tutorial runs on [react-create-app](https://facebook.github.io/react/blog/2016/07/22/create-apps-with-no-configuration.html) by Facebook.
 After npm did its job you can fire up the project with:
 
-`npm start`
+`npm run ch01`
 
 Go to *localhost:3000* and you should see a blue button with some text in it.
 So yeah, congratulations you have mastered the first step in the tutorial.
