@@ -7,7 +7,7 @@ import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
-import {EventEmitter} from 'events'
+import EventEmitter from 'eventemitter3'
 import {dependencyStore as computedDependencyStore} from './Computed'
 
 /*
