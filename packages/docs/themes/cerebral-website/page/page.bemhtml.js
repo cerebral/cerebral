@@ -22,9 +22,9 @@ block('page')(
       return layouts
     }, {})
 
-    return applyNext();
+    return applyNext()
   }),
-  content()(function() {
+  content()(function () {
     return [
       { elem: 'header' },
       { elem: 'content', content: this.ctx.content },

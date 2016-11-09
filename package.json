@@ -52,7 +52,8 @@
     "ignore": [
       "**/node_modules/",
       "**/build/"
-    ]
+    ],
+    "globals": [ "block", "content", "replace", "tag", "def", "applyNext", "applyCtx" ]
   },
   "private": true
 }
