@@ -6,7 +6,7 @@ block('page').elem('content').match(function () {
       {
         block: 'row',
         content: [
-          { 
+          {
             elem: 'col',
             elemMods: { sw: 24, lw: 5, sol: true, mol: true },
             content: { block: 'side-nav' }
@@ -18,7 +18,7 @@ block('page').elem('content').match(function () {
               { block: 'page', elem: 'edit' },
               this.ctx.content
             ]
-          },
+          }
         ]
       }
     ]
@@ -26,11 +26,11 @@ block('page').elem('content').match(function () {
 )
 
 block('page').elem('content').mod('layout', 'root')(
-  def()(function() {
+  def()(function () {
     var links = this.ctx.content.shift().content
-        .filter(function (i) { return i && i.tag})
+        .filter(function (i) { return i && i.tag })
         .map(function (li) {
-          var link = li.content[0] 
+          var link = li.content[0]
           return {
             block: 'button',
             mods: { theme: 'islands', size: 'xl', type: 'link' },

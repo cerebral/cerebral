@@ -1,5 +1,5 @@
 var Prism = require('prismjs')
-var entities = require("entities")
+var entities = require('entities')
 
 module.exports = tree => {
   tree.match({ tag: 'code' }, node => {

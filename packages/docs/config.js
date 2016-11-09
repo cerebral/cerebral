@@ -1,30 +1,30 @@
 var join = require('path').join
 
 module.exports = {
-  "themes": [
+  'themes': [
     join('..', 'node_modules', 'bem-components', 'common.blocks'),
     join('..', 'node_modules', 'bem-components', 'desktop.blocks'),
     join('..', 'node_modules', 'bem-components', 'design', 'common.blocks'),
     join('..', 'node_modules', 'bem-components', 'design', 'desktop.blocks'),
-    "cerebral-website"
+    'cerebral-website'
   ],
-  "langs": [
-    "en"
+  'langs': [
+    'en'
   ],
-  "output": "dist",
-  "debug": false,
-  "server": {
+  'output': 'dist',
+  'debug': false,
+  'server': {
     tunnel: false,
     open: false
   },
-  "posthtmlPlugins": [].concat(
+  'posthtmlPlugins': [].concat(
     require('mad-mark').posthtmlPlugins,
     process.env.NODE_ENV === 'build' ? require('./plugins/posthtml-images') : () => {},
     require('./plugins/posthtml-links'),
     require('./plugins/posthtml-prism'),
     require('./plugins/posthtml-youtube')
   ),
-  "postcssPlugins": [
+  'postcssPlugins': [
     require('sharps').postcss({
       columns: 24,
       maxWidth: '1100px',
