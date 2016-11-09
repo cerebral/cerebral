@@ -32,7 +32,8 @@ module.exports = {
     {name: 'forms'},
     {name: 'http'},
     {name: 'useragent'},
-    {name: 'firebase'}
+    {name: 'firebase'},
+    {name: 'website'}
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
