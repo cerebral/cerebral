@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state} from './'
+import {state, string} from './'
 
 describe('operator.state', () => {
   it('should build path', () => {
@@ -11,8 +11,8 @@ describe('operator.state', () => {
       },
       signals: {
         test: [
-          () => {
-            assert.deepEqual(state`foo.${input`ref`}`({input: {ref: 'bar'}}).path, 'foo.bar')
+          (context) => {
+            assert.deepEqual(string`foo.${state`foo`}`(context).toValue(), 'foo.bar')
           }
         ]
       }
