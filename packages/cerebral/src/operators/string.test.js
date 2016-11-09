@@ -3,17 +3,17 @@ import Controller from '../Controller'
 import assert from 'assert'
 import {input, string} from './'
 
-describe('operator.input', () => {
-  it('should read value from input', () => {
+describe('operator.string', () => {
+  it('should build path', () => {
     const controller = new Controller({
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${input`foo`}`(context).toValue(), 'foo.bar')
+            assert.deepEqual(string`foo.${input`ref`}`(context).toValue(), 'foo.bar')
           }
         ]
       }
     })
-    controller.getSignal('test')({foo: 'bar'})
+    controller.getSignal('test')({ref: 'bar'})
   })
 })
