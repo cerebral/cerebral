@@ -14,7 +14,7 @@ function makeDist () {
     if (test('-d', dir)) {
       var part = dir.split('/').slice(-1)[0]
       prepare(part)
-      sed('-i', /\/tutorial\/.*"/g, '/tutorial/' + part + '"', paths.package)
+      sed('-i', /\/tutorial\/?.*"/g, '/tutorial/' + part + '"', paths.package)
       exec('npm run build')
       cp('-R', paths.build, path.join(paths.dist, part))
     }
