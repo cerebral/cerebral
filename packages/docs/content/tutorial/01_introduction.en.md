@@ -12,7 +12,7 @@ Now clone the repo to a folder on your computer, either by command line:
 
 or using the desktop application.
 
-Then go to directory **cerebral/packages/cerebral-website-tutorial** and run the command:
+Then go to directory **cerebral/packages/tutorial** and run the command:
 
 `npm install`
 
