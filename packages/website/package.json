@@ -2,7 +2,6 @@
   "name": "cerebral-website",
   "version": "0.0.0",
   "private": "true",
-  "main": "index.js",
   "scripts": {
     "clean": "shx rm -rf build && shx mkdir -p ./build",
     "website:build": "cd ../docs && npm run build",
