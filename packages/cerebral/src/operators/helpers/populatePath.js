@@ -5,6 +5,10 @@ export default function populatePath (context, strings, values) {
       return currentPath + string + context.state.compute(valueTemplate)
     }
 
-    return currentPath + string + (valueTemplate ? valueTemplate(context).toValue() : '')
+    if (valueTemplate && typeof valueTemplate === 'function') {
+      return currentPath + string + valueTemplate(context).toValue()
+    }
+
+    return currentPath + string + (valueTemplate || '')
   }, '')
 }
