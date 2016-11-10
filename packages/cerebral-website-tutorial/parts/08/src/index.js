@@ -1,58 +1,72 @@
 import React from 'react'
-import { render } from 'react-dom'
-import { Controller } from 'cerebral'
+import {render} from 'react-dom'
+import {Controller} from 'cerebral'
 import App from './components/App'
-import { Container } from 'cerebral/react'
+import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import { set, state, input, wait } from 'cerebral/operators'
+import HttpProvider from 'cerebral-provider-http'
+import {set, state, debounce, input, string} from 'cerebral/operators'
+
+const toastDebounce = debounce.shared()
+function showToast (message, ms, type = null) {
+  return [
+    set(state`toast`, {type}),
+    set(state`toast.message`, message),
+    ...toastDebounce(ms, [
+      set(state`toast`, null)
+    ])
+  ]
+}
+
+function getRepo (repoName) {
+  function get ({http, path}) {
+    return http.get(`/repos/cerebral/${repoName}`)
+      .then(response => path.success({data: response.result}))
+      .catch(error => path.error({data: error.result}))
+  }
+
+  return get
+}
+
+function setStarsSum ({state}) {
+  state.set('starsSum',
+    state.get('repos.cerebral.stargazers_count') +
+    state.get('repos.addressbar.stargazers_count')
+  )
+}
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
   state: {
     title: 'Hello from Cerebral!',
-    appTitle: 'Cerebral Tutorial App',
-    toast: {
-      message: 'no message yet'
-    },
-    originalValue: '',
-    extendedValue: ''
+    subTitle: 'Working on my state management',
+    toast: null,
+    repos: {},
+    starsSum: 0
   },
   signals: {
     buttonClicked: [
-      set(state`toast.message`, 'Button Clicked!'),
-      wait(4000),
-      set(state`toast.message`, '')
-    ],
-    saveButtonClicked: [
-      set(state`originalValue`, input`value`),
-      myAction1,
-      myAction2,
-      myAction3,
-      set(state`extendedValue`, input`value`),
-      set(state`toast.message`, input`value`),
-      wait(8000),
-      set(state`toast.message`, '')
+      [
+        ...showToast('Loading data for repos', 2000),
+        getRepo('cerebral'), {
+          success: [set(state`repos.cerebral`, input`data`)],
+          error: []
+        },
+        getRepo('addressbar'), {
+          success: [set(state`repos.addressbar`, input`data`)],
+          error: []
+        }
+      ],
+      setStarsSum,
+      ...showToast(string`The repos has a total star count of ${state`starsSum`}`, 4000, 'success')
     ]
-  }
+  },
+  providers: [
+    HttpProvider({
+      baseUrl: 'https://api.github.com'
+    })
+  ]
 })
-
-function myAction1 ({input}) {
-  return {
-    value: input.value + ' extended by myAction1'
-  }
-}
-
-function myAction2 ({input}) {
-  return ({
-    value: input.value + ' and also by myAction2',
-    aKeyAddedByMyAction2: 'testvalue'
-  })
-}
-function myAction3 ({input, state}) {
-  return ({
-    value: input.value.toUpperCase()
-  })
-}
 
 render((
   <Container controller={controller}>

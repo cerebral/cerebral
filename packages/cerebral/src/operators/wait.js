@@ -1,11 +1,15 @@
-function waitFactory (ms) {
-  function wait () {
+function waitFactory (ms, continueChain) {
+  function wait ({path}) {
     return new Promise((resolve) => {
-      setTimeout(resolve, ms)
+      setTimeout(() => resolve(path.timeout()), ms)
     })
   }
 
-  return wait
+  return [
+    wait, {
+      timeout: continueChain
+    }
+  ]
 }
 
 export default waitFactory

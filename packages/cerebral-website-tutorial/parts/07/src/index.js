@@ -1,51 +1,40 @@
 import React from 'react'
-import { render } from 'react-dom'
-import { Controller } from 'cerebral'
+import {render} from 'react-dom'
+import {Controller} from 'cerebral'
 import App from './components/App'
-import { Container } from 'cerebral/react'
+import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import { set, state, wait, input } from 'cerebral/operators'
+import HttpProvider from 'cerebral-provider-http'
+import {set, state, wait, input} from 'cerebral/operators'
+
+function showToast (message, ms, type = null) {
+  return [
+    set(state`toast`, {type}),
+    set(state`toast.message`, message),
+    ...wait(ms, [
+      set(state`toast`, null)
+    ])
+  ]
+}
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
   state: {
     title: 'Hello from Cerebral!',
-    appTitle: 'Cerebral Tutorial App',
-    toast: {
-      message: 'no message yet'
-    },
-    originalValue: '',
-    extendedValue: ''
+    subTitle: 'Working on my state management',
+    toast: null
   },
   signals: {
     buttonClicked: [
-      set(state`toast.message`, 'Button Clicked!'),
-      wait(4000),
-      set(state`toast.message`, '')
-    ],
-    saveButtonClicked: [
-      set(state`originalValue`, input`value`),
-      myAction1,
-      myAction2,
-      set(state`extendedValue`, input`value`),
-      set(state`toast.message`, input`value`),
-      wait(8000),
-      set(state`toast.message`, '')
+      ...showToast(input`message`, 4000)
     ]
-  }
+  },
+  providers: [
+    HttpProvider({
+      baseUrl: 'https://api.github.com'
+    })
+  ]
 })
-function myAction1 ({input}) {
-  return {
-    value: input.value + ' extended by myAction1'
-  }
-}
-
-function myAction2 ({input}) {
-  return ({
-    value: input.value + ' and also by myAction2',
-    aKeyAddedByMyAction2: 'testvalue'
-  })
-}
 
 render((
   <Container controller={controller}>
