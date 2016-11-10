@@ -4,20 +4,25 @@
   "private": "true",
   "main": "index.js",
   "scripts": {
-    "clean": "rm -rf build",
-    "build-website": "cd ../docs && npm run build",
-    "copy-website": "cp -R ../docs/dist ./build",
-    "copy-todomvc": "cp -R ../todomvc/build ./build/todomvc",
-    "copy-demo": "cp -R ../demo/build ./build/demo",
+    "clean": "shx rm -rf build && shx mkdir -p ./build",
+    "website:build": "cd ../docs && npm run build",
+    "website:copy": "shx cp -R ../docs/dist/* ./build",
+    "website": "run-s website:*",
+    "tutorial:build": "cd ../tutorial && npm run dist",
+    "tutorial:copy": "shx mkdir -p ./build/tutorial && shx cp -R ../tutorial/dist/* ./build/tutorial",
+    "tutorial": "run-s tutorial:*",
+    "todomvc": "shx mkdir -p ./build/todomvc && shx cp -R ../todomvc/build/* ./build/todomvc",
+    "demo": "shx mkdir -p ./build/demo && shx cp -R ../demo/build/* ./build/demo",
     "deploy": "gh-pages -d build -b master -r https://cerebraljs:$GH_TOKEN@github.com/cerebral/cerebral.github.io.git",
-    "ci": "run-s clean build-website copy-website copy-todomvc copy-demo deploy"
+    "build": "run-p website tutorial todomvc demo",
+    "ci": "run-s clean build deploy"
   },
   "author": "Alexey Gurianov <gurianov@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "gh-pages": "^0.11.0",
     "npm-run-all": "^3.1.1",
-    "shelljs": "^0.7.5"
+    "shx": "^0.2.0"
   }
 }
