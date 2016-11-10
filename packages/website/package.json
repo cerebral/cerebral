@@ -1,0 +1,23 @@
+{
+  "name": "cerebral-website",
+  "version": "0.0.0",
+  "private": "true",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rm -rf build",
+    "build-website": "cd ../docs && npm run build",
+    "copy-website": "cp -R ../docs/dist ./build",
+    "copy-todomvc": "cp -R ../todomvc/build ./build/todomvc",
+    "copy-demo": "cp -R ../demo/build ./build/demo",
+    "deploy": "gh-pages -d build -b master -r https://cerebraljs:$GH_TOKEN@github.com/cerebral/cerebral.github.io.git",
+    "ci": "run-s clean build-website copy-website copy-todomvc copy-demo deploy"
+  },
+  "author": "Alexey Gurianov <gurianov@gmail.com>",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "gh-pages": "^0.11.0",
+    "npm-run-all": "^3.1.1",
+    "shelljs": "^0.7.5"
+  }
+}

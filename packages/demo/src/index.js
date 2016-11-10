@@ -25,7 +25,7 @@ const controller = Controller({
       '/projects': 'projects.routed',
       '/tasks': 'tasks.routed'
     },
-    onlyHash: false
+    onlyHash: true
   }),
   modules: {
     app,
