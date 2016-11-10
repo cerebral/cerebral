@@ -17,7 +17,7 @@ export default connect({
           className='c-button c-button--info c-button--block'
           onClick={() => props.buttonClicked()}
         >
-          Update state
+          Get repos
         </button>
         <Toast />
       </div>

@@ -5,8 +5,7 @@ import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
-import {set, state, debounce, input, string} from 'cerebral/operators'
-import starsSum from './computeds/starsSum'
+import {set, state, debounce, input} from 'cerebral/operators'
 
 const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
@@ -35,13 +34,12 @@ const controller = Controller({
     title: 'Hello from Cerebral!',
     subTitle: 'Working on my state management',
     toast: null,
-    repos: {},
-    starsSum: 0
+    repos: {}
   },
   signals: {
     buttonClicked: [
       [
-        ...showToast('Loading data for repos', 2000),
+        ...showToast('Loading data for repos...', 2000),
         getRepo('cerebral'), {
           success: [set(state`repos.cerebral`, input`data`)],
           error: []
@@ -51,7 +49,7 @@ const controller = Controller({
           error: []
         }
       ],
-      ...showToast(string`The repos has a total star count of ${starsSum}`, 4000, 'success')
+      ...showToast('Repos loaded', 2000, 'success')
     ]
   },
   providers: [

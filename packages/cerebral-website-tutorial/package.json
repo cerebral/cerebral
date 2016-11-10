@@ -18,29 +18,23 @@
     "js-logger": "1.3.0",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"
-    
+
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "ch01": "cd ./parts/01 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/01/g' ../../public/index.html && npm start",
-    "ch02": "cd ./parts/02 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/02/g' ../../public/index.html && npm start",
-    "ch03": "cd ./parts/03 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/03/g' ../../public/index.html && npm start",
-    "ch04": "cd ./parts/04 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/04/g' ../../public/index.html && npm start",
-    "ch05": "cd ./parts/05 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/05/g' ../../public/index.html && npm start",
-    "ch06": "cd ./parts/06 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/06/g' ../../public/index.html && npm start",
-    "ch07": "cd ./parts/07 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/07/g' ../../public/index.html && npm start",
-    "ch08": "cd ./parts/08 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/08/g' ../../public/index.html && npm start",
-    "ch09": "cd ./parts/09 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/09/g' ../../public/index.html && npm start",
-    "ch10_1": "cd ./parts/10_1 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/10_1/g' ../../public/index.html && npm start",
-    "ch10_2": "cd ./parts/10_2 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/10_2/g' ../../public/index.html && npm start",
-    "ch11": "cd ./parts/11 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/11/g' ../../public/index.html && npm start",
-    "ch12": "cd ./parts/12 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/12/g' ../../public/index.html && npm start",
-    "ch13": "cd ./parts/13 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/13/g' ../../public/index.html && npm start",
-    "ch14": "cd ./parts/14 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/14/g' ../../public/index.html && npm start",
-    "ch15": "cd ./parts/15 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/15/g' ../../public/index.html && npm start",
-    "ch16": "cd ./parts/16 && rm -rf ../../src/* ../../public/*  && cp -R * ../../ && cp -R ../public ../../ && sed -i 's/%N%/16/g' ../../public/index.html && npm start"
+    "ch01": "rm -rf src/* && cp -R parts/01/src . && npm start",
+    "ch02": "rm -rf src/* && cp -R parts/02/src . && npm start",
+    "ch03": "rm -rf src/* && cp -R parts/03/src . && npm start",
+    "ch04": "rm -rf src/* && cp -R parts/04/src . && npm start",
+    "ch05": "rm -rf src/* && cp -R parts/05/src . && npm start",
+    "ch06": "rm -rf src/* && cp -R parts/06/src . && npm start",
+    "ch07": "rm -rf src/* && cp -R parts/07/src . && npm start",
+    "ch08": "rm -rf src/* && cp -R parts/08/src . && npm start",
+    "ch09": "rm -rf src/* && cp -R parts/09/src . && npm start",
+    "ch10": "rm -rf src/* && cp -R parts/10/src . && npm start",
+    "ch11": "rm -rf src/* && cp -R parts/11/src . && npm start"
   }
 }

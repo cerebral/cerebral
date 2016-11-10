@@ -184,6 +184,23 @@ export default function HttpProviderFactory (moduleOptions) {
         }
       }
     }
+
+    if (context.debugger) {
+      context.http = Object.keys(context.http).reduce((wrappedHttp, key) => {
+        const originMethod = context.http[key]
+        wrappedHttp[key] = (...args) => {
+          context.debugger.send({
+            method: `http.${key}`,
+            color: context.debugger.getColor(key),
+            args: args
+          })
+
+          return originMethod(...args)
+        }
+        return wrappedHttp
+      }, {})
+    }
+
     return context
   }
   return HttpProvider
