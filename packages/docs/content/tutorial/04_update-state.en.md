@@ -1,10 +1,10 @@
 ---
-title: Update state (Signals)
+title: ch03. Update state
 ---
 
-## 5: Update state (Signals)
+## Update state
 
-`npm run ch03`
+`npm run start:ch 03`
 
 Defining state and user interfaces is more about describing how something should look, rather than how it should update. Updates are the tricky part, this is where we usually introduce complexity in our applications.
 

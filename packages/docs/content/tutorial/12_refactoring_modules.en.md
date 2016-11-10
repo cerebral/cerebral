@@ -1,8 +1,10 @@
 ---
-title: Refactoring using Modules
+title: ch11. Modules
 ---
 
-## 16: Refactoring using Modules
+## Modules
+
+`npm run start:ch 11`
 
 Glad you are still with us! Hopefully you have enjoyed our journey so far and hopefully you still have a sip left of your coffee or drink. It's time for cleaning up.
 
@@ -24,9 +26,6 @@ Welcome to the world of **modules**. We will build the following structure:
 ├── package.json
 ├── ...
 ```
-
-So do a final:
-`npm run ch11`
 
 Our *./src/index.js* looks a lot cleaner and we have put our code into the conventional folders recommended by the Cerebral community. Let us look closer at the changes:
 

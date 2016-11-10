@@ -1,10 +1,10 @@
 ---
-title: Input and custom Actions
+title: ch05. Actions
 ---
 
-## 7: Input and custom Actions
+## Actions
 
-`npm run ch05`
+`npm run start:ch 05`
 
 Signals can take an input-object which then can be further processed by its actions.
 
@@ -77,3 +77,7 @@ export default connect({
 ```
 
 Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Please keep an eye on the **debugger**. You can track how the flow of the input between the actions as they execute. Keep in mind that the result object from an action will be merged with the input and handed over to the next action. You might just have well used a different property for the shouted message.
+
+### Challenge
+
+- Add another custom action which transforms the input value to Uppercase. You may override existing properties on the input or create a new one

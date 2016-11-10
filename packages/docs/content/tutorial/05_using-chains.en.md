@@ -1,10 +1,10 @@
 ---
-title: Using chains
+title: ch04. Chains
 ---
 
-## 6: Using chains
+## Chains
 
-`npm run ch04`
+`npm run start:ch 04`
 
 A signal can trigger a chain of actions. For now we have seen it trigger the **set**-action. In this chapter we have added a **Toast** component which displays any message set on its related state.
 

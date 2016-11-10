@@ -1,10 +1,10 @@
 ---
-title: Render state
+title: ch02. Render state
 ---
 
-## 3: Render state
+## Render state
 
-`npm run ch02`
+`npm run start:ch 02`
 
 Now lets get that state displayed in our application.
 First of all we need to tell our component (App) to **connect** to the state.
@@ -41,3 +41,10 @@ connect({
 we told Cerebral that this component is interested in the value on the path **title**, and we wanted it exposed as **title** to our component as well. Because this component now depends on the **title** state it gets rendered whenever the path has a change.
 
 Congratulations, you have now created application state and exposed it to a component. You have now gained the power of translating the state of the application into something a user can understand. You will notice with Cerebral that this is a very clear separation. You define your application state in Cerebral and you use components to translate this state into a user interface.
+
+### Challenge
+
+It's time for your first challenge!
+
+- Add another state to the store called *subTitle*
+- Connect *subTitle* to the App component and display it in a *H3* element

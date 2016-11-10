@@ -1,10 +1,10 @@
 ---
-title: Routing
+title: ch10. Routing
 ---
 
-## 14: Routing
+## Routing
 
-`npm run ch10`
+`npm run start:ch 10`
 
 Now that our tutorial UI gets more complex it is a good idea to separate it a little bit. We want a home tab and a repos tab. Our two repos should load when we click the repos tab or hit the url directly.
 
@@ -137,3 +137,7 @@ const controller = Controller({
 ```
 
 As you can see, defining *routes* is as easy as linking them to *signals*. Now go to your browsers addressbar and enter *localhost/#/repos* and voilà the reposRouted signal gets called. And it also works the other way around. When you now click your tabs the url will also update!
+
+### Challenge
+
+Go to your browsers addressbar and enter an invalid route like: localhost/#/*foo* and press Enter. Now check the console! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error.

@@ -1,10 +1,10 @@
 ---
-title: Providers
+title: ch09. Providers
 ---
 
-## 13: Providers
+## Providers
 
-`npm run ch09`
+`npm run start:ch 09`
 
 Good news, we have already used a provider before. Do you remember the *http-provider* we are using to get data from servers?
 

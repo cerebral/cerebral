@@ -1,10 +1,10 @@
 ---
-title: Compute State
+title: ch08. Compute state
 ---
 
-## 12: Compute State
+## Compute state
 
-`npm run ch08`
+`npm run start:ch 08`
 
 In the previous challenge the solution was to use an action to sum the star counts together. It looks like this:
 

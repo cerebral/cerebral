@@ -2,7 +2,7 @@
 title: Introduction
 ---
 
-## 1: Introduction
+## Introduction
 
 This tutorial will take you through the core concepts of Cerebral. To get started you will need to clone the cerebral Github repository. To do so you need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed, or the [Github desktop](https://desktop.github.com/) client.
 
@@ -18,13 +18,6 @@ Then go to directory **cerebral/packages/cerebral-website-tutorial** and run the
 
 This may take a little while and does **not** mean that Cerebral is a huge download. In fact Cerebral as a production build is very small compared to other popular frameworks.
 
-When the install is done you can fire up the first chapter with:
-
-`npm run ch01`
-
-Go to *localhost:3000* and you should see the text "Welcome to the tutorial!".
-Congratulations you have mastered the first step in the tutorial.
-
 Our Goal now is to go through some concepts and show off the features of Cerebral:
 
 - **Controller**
@@ -39,7 +32,7 @@ They are all explained in depth in the [Concepts](../concepts/01_the-architectur
 ### How does this tutorial work?
 Whenever you execute the script:
 
-`npm run chxx`
+`npm run start:ch xx`
 
 The code for that chapter is loaded and the development server is automatically started. Any changes you have made will be deleted. If you for some reason exit the development server you can start it again by:
 

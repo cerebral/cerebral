@@ -1,10 +1,10 @@
 ---
-title: Control flow using Path
+title: ch07. Paths
 ---
 
-## 10: Control flow using Path
+## Paths
 
-`npm run ch07`
+`npm run start:ch 07`
 
 In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows (which is just another chain of actions and operators) depending on the result of the previous action.
 
@@ -136,3 +136,7 @@ function showToast(message, ms, type = null) {
 ```
 
 Congratulations! Now you know how to control your flow using **paths**. And if you need **parallel actions/operators**, well just add another array **[]** to the chain. You have even gotten insight into very complex control flow using **debounce**.
+
+### Challenge
+
+We would like you to run two getRepo(...) requests. One to *cerebral/cerebral* and one to *cerebral/addressbar*. So it is a good idea to make *getRepo* a factory instead. On their successes they should insert their data into the state tree. Also create an action that sums the stars and adds a third state in the state tree with the sum of both repos star count. This part requires you to read up on how to set and get state in actions. This sum action should run and be displayed in a toast after both *getRepo* are done running. Remove any other success and error toasts.

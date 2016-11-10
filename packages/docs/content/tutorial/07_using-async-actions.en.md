@@ -1,10 +1,10 @@
 ---
-title: Using simple async actions
+title: ch06. Async actions
 ---
 
-## 9: Using simple async actions
+## Async actions
 
-`npm run ch06`
+`npm run start:ch 06`
 
 Until now we have mostly used synchronous actions inside our **signals** and the flow was therefore straightforward. Example:
 
