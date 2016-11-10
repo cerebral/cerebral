@@ -14,7 +14,7 @@ export default {
         name: 'Cerebral',
         notes: 'Make sense of complex apps.',
         ref: 'cerebral',
-        image: '/img/cerebral-mini.png',
+        image: 'cerebral-mini.png',
         website: 'cerebraljs.com'
       },
       'calvin': {
