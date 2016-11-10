@@ -1,4 +1,4 @@
-import EventEmitter from 'events'
+import EventEmitter from 'eventemitter3'
 import executeTree from './executeTree'
 import createStaticTree from './staticTree'
 import ExecutionProvider from './providers/Execution'
