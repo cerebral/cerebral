@@ -9,6 +9,6 @@ export default function populatePath (context, strings, values) {
       return currentPath + string + valueTemplate(context).toValue()
     }
 
-    return currentPath + string + (valueTemplate ? valueTemplate : '')
+    return currentPath + string + (valueTemplate || '')
   }, '')
 }
