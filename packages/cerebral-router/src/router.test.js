@@ -20,7 +20,7 @@ describe('Router', () => {
   it('should be able to define routes as config', () => {
     let count = 0
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         routes: {
           '/': 'test'
@@ -51,7 +51,7 @@ describe('Router', () => {
   it('should not trigger if preventAutostart option was provided', () => {
     let count = 0
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         preventAutostart: true,
         routes: {
@@ -67,7 +67,7 @@ describe('Router', () => {
   it('should support nested route definitions', () => {
     let count = 0
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         routes: {
           '/': 'foo',
@@ -92,7 +92,7 @@ describe('Router', () => {
   it('should throw on missing signal', () => {
     assert.throws(() => {
       Controller({
-        devtools: {init() {}, send() {}},
+        devtools: {init () {}, send () {}},
         router: Router({
           routes: {
             '/': 'test'
@@ -104,7 +104,7 @@ describe('Router', () => {
   it('should throw on duplicate signal', () => {
     assert.throws(() => {
       Controller({
-        devtools: {init() {}, send() {}},
+        devtools: {init () {}, send () {}},
         router: Router({
           routes: {
             '/': 'test',
@@ -120,7 +120,7 @@ describe('Router', () => {
   it('should expose `getUrl` method on router provider', () => {
     addressbar.value = addressbar.origin + '/test'
     const controller = Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         baseUrl: '/test',
         onlyHash: true,
@@ -142,7 +142,7 @@ describe('Router', () => {
   })
   it('should update addressbar for routable signal call', () => {
     const controller = Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         preventAutostart: true,
         routes: {
@@ -185,7 +185,7 @@ describe('Router', () => {
     addressbar.value = addressbar.origin + '/test'
     let count = 0
     const controller = Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         routes: {
           '/test': 'test'
@@ -202,7 +202,7 @@ describe('Router', () => {
   })
   it('should allow redirect to url and trigger corresponded signal', (done) => {
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         routes: {
           '/': 'doRedirect',
@@ -223,7 +223,7 @@ describe('Router', () => {
   })
   it('should replaceState on redirect by default', () => {
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         preventAutostart: true,
         routes: {
@@ -244,7 +244,7 @@ describe('Router', () => {
   })
   it('should expose goTo on context provider', (done) => {
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         preventAutostart: true,
         routes: {
@@ -265,7 +265,7 @@ describe('Router', () => {
   })
   it('should allow redirect to signal', (done) => {
     const controller = Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         preventAutostart: true,
         routes: {
@@ -295,7 +295,7 @@ describe('Router', () => {
   })
   it('should warn if trying redirect to signal not bound to route', () => {
     const controller = Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         preventAutostart: true,
         routes: {
@@ -319,7 +319,7 @@ describe('Router', () => {
   })
   it('should prevent navigation and warn when no signals was matched', () => {
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         baseUrl: '/base',
         preventAutostart: true,
@@ -340,7 +340,7 @@ describe('Router', () => {
   })
   it('should not prevent navigation when no signals was matched if allowEscape option was provided', () => {
     Controller({
-      devtools: {init() {}, send() {}},
+      devtools: {init () {}, send () {}},
       router: Router({
         baseUrl: '/base',
         allowEscape: true,
