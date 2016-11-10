@@ -24,7 +24,7 @@ export default connect(
           <div className='media'>
             <div className='media-left'>
               <figure className='image is-32x32'>
-                <img src={client.image || '/img/client-mini.png'} alt='user' />
+                <img src={`/img/${client.image}` || '/img/client-mini.png'} alt='user' />
               </figure>
             </div>
             <div className='media-content'>
