@@ -6,16 +6,16 @@ const MENUS = [
   {
     name: 'Work',
     entries: [
-      {name: 'Today', icon: 'fa-clock-o', url: '/'},
-      {name: 'Report', icon: 'fa-bar-chart', url: '/report'}
+      {name: 'Today', icon: 'fa-clock-o', url: '#/'},
+      {name: 'Report', icon: 'fa-bar-chart', url: '#/report'}
     ]
   },
   {
     name: 'Manage',
     entries: [
-      {name: 'Clients', icon: 'fa-users', url: '/clients'},
-      {name: 'Projects', icon: 'fa-folder', url: '/projects'},
-      {name: 'Tasks', icon: 'fa-tasks', url: '/tasks'}
+      {name: 'Clients', icon: 'fa-users', url: '#/clients'},
+      {name: 'Projects', icon: 'fa-folder', url: '#/projects'},
+      {name: 'Tasks', icon: 'fa-tasks', url: '#/tasks'}
     ]
   }
 ]

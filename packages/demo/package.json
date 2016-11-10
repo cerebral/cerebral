@@ -24,6 +24,7 @@
   "scripts": {
     "prestart": "npm run sass",
     "start": "react-scripts start",
+    "prebuild": "npm run sass",
     "build": "react-scripts build",
     "sass": "./node_modules/.bin/node-sass src/scss/app.scss -o public/css/",
     "test": "react-scripts test --env=jsdom",
