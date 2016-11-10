@@ -17,7 +17,7 @@
   },
   "homepage": "https://cerebral.github.io/cerebral-website/api/08_router.html",
   "dependencies": {
-    "addressbar": "^1.0.2",
+    "addressbar": "^1.0.3",
     "url-mapper": "^1.1.1"
   },
   "peerDependencies": {

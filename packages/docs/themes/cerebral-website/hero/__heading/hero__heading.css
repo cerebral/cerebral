@@ -1,0 +1,13 @@
+.hero__title {
+  font-size: 48px;
+  line-height: 56px;
+  font-weight: 600;
+  color: #92dff0;
+}
+
+.hero__sub-title {
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+  color: #fff;
+}

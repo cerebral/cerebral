@@ -1,0 +1,13 @@
+.page__content {
+  padding: 40px;
+}
+
+.page__content .paragraph {
+  text-align: justify;
+}
+
+@media (max-width: 600px) {
+  .page__content {
+    padding: 10px;
+  }
+}
