@@ -4,6 +4,9 @@ title: ch06. Async actions
 
 ## Async actions
 
+[Preview](06)
+
+Run script from the command line to start:
 `npm run start:ch 06`
 
 Until now we have mostly used synchronous actions inside our **signals** and the flow was therefore straightforward. Example:

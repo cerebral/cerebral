@@ -4,6 +4,9 @@ title: ch02. Render state
 
 ## Render state
 
+[Preview](02)
+
+Run script from the command line to start:
 `npm run start:ch 02`
 
 Now lets get that state displayed in our application.

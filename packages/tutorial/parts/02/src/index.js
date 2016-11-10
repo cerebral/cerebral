@@ -6,7 +6,7 @@ import Devtools from 'cerebral/devtools'
 import App from './components/App'
 
 const controller = Controller({
-  devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
+  devtools: Devtools(),
   state: {
     title: 'Hello from Cerebral!'
   }
