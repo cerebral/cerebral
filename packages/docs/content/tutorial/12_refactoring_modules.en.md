@@ -4,6 +4,9 @@ title: ch11. Modules
 
 ## Modules
 
+[Preview](11)
+
+Run script from the command line to start:
 `npm run start:ch 11`
 
 Glad you are still with us! Hopefully you have enjoyed our journey so far and hopefully you still have a sip left of your coffee or drink. It's time for cleaning up.

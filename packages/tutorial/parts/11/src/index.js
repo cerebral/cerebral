@@ -11,7 +11,7 @@ import home from './modules/home'
 import repos from './modules/repos'
 
 const controller = Controller({
-  devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
+  devtools: Devtools(),
   router: Router({
     routes: {
       '/': 'home.routed',
