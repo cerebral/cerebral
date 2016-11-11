@@ -25,7 +25,7 @@ module.exports = {
     {name: 'Operators'},
     {name: 'Devtools'},
     {name: 'Providers'},
-    {name: 'cerebral-router'},
+    {name: 'router'},
     {name: 'function-tree'},
     {name: 'demos'},
     {name: 'todomvc'},
