@@ -1,6 +1,7 @@
 ---
 side-nav:
   - get-started
+  - tutorial
   - concepts
   - getting-real
   - migration

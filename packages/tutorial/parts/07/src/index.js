@@ -18,7 +18,7 @@ function showToast (message, ms, type = null) {
 }
 
 const controller = Controller({
-  devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
+  devtools: Devtools(),
   state: {
     title: 'Hello from Cerebral!',
     subTitle: 'Working on my state management',

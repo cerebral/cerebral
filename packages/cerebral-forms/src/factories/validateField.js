@@ -23,8 +23,9 @@ export default function validateFieldFactory (path) {
     const formPath = fieldPath.slice().splice(0, fieldPath.length - 1)
     const field = state.get(fieldPath)
     const form = state.get(formPath)
+    const validationResult = runValidation(fieldPath, field, form)
 
-    state.merge(fieldPath, runValidation(fieldPath, field, form))
+    state.merge(fieldPath, validationResult)
 
     let dependentFields = []
     if (Array.isArray(field.dependsOn)) {
@@ -33,7 +34,7 @@ export default function validateFieldFactory (path) {
       dependentFields = [field.dependsOn]
     }
 
-    dependentFields.forEach((stringPath) => {
+    const depententOfValidationResult = dependentFields.reduce((currentValidationResult, stringPath) => {
       const dependentFieldPath = stringPath.split('.')
       const dependentFormPath = dependentFieldPath.slice().splice(0, dependentFieldPath.length - 1)
       const field = state.get(dependentFieldPath)
@@ -43,8 +44,17 @@ export default function validateFieldFactory (path) {
         throw new Error(`The path ${stringPath} used with "dependsOn" on field ${fieldPath.join('.')} is not correct, please check it`)
       }
 
-      state.merge(fieldPath, runValidation(dependentFieldPath, field, form))
-    })
+      const dependentValidationResult = runValidation(dependentFieldPath, field, form)
+      state.merge(dependentFieldPath, dependentValidationResult)
+
+      if (currentValidationResult.isValid && !dependentValidationResult.isValid) {
+        return dependentValidationResult
+      }
+
+      return currentValidationResult
+    }, validationResult)
+
+    state.merge(fieldPath, depententOfValidationResult)
   }
 
   return validateField

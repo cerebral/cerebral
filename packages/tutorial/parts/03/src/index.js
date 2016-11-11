@@ -6,7 +6,7 @@ import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 
 const controller = Controller({
-  devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
+  devtools: Devtools(),
   state: {
     title: 'Hello from Cerebral!',
     subTitle: 'Working on my state management'

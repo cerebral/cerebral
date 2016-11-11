@@ -16,7 +16,7 @@ A state controller with its own debugger
 [https://www.cerebraljs.com/](http://www.cerebraljs.com/).
 
 ## Cerebral v2 is still a work in progress. Please head over to our cerebral v2 WIP website for more information:
-[https://cerebral.github.io/cerebral-website/](http://cerebral.github.io/cerebral-website).
+[https://cerebral.github.io/](https://cerebral.github.io/).
 
 ## Contribute
 The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
