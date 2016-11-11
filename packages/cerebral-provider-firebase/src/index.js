@@ -10,6 +10,11 @@ import createOnChildChanged from './createOnChildChanged'
 import createOnValue from './createOnValue'
 import createTask from './createTask'
 import value from './value'
+import push from './push'
+import set from './set'
+import update from './update'
+import remove from './remove'
+import transaction from './transaction'
 import createUserWithEmailAndPassword from './createUserWithEmailAndPassword'
 import signInWithEmailAndPassword from './signInWithEmailAndPassword'
 import signOutService from './signOut'
@@ -51,6 +56,11 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         onChildChanged: createOnChildChanged(context.controller),
         onValue: createOnValue(context.controller),
         value,
+        push,
+        update,
+        set,
+        remove,
+        transaction,
         task: createTask(options),
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword,
