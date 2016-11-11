@@ -7,7 +7,7 @@ import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
-import {EventEmitter} from 'events'
+import EventEmitter from 'eventemitter3'
 import {dependencyStore as computedDependencyStore} from './Computed'
 
 /*
@@ -59,6 +59,8 @@ class Controller extends EventEmitter {
 
     if (this.devtools) {
       this.devtools.init(this)
+    } else if (process.env.NODE_ENV !== 'production') {
+      console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/getting-real/03_devtools.html')
     }
 
     if (this.router) this.router.init()

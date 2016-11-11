@@ -9,11 +9,12 @@ describe('operators.wait', () => {
     const controller = new Controller({
       signals: {
         test: [
-          wait(100),
-          () => {
-            assert.ok(Date.now() - start >= 100)
-            done()
-          }
+          ...wait(100, [
+            () => {
+              assert.ok(Date.now() - start >= 100)
+              done()
+            }
+          ])
         ]
       }
     })

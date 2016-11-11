@@ -9,7 +9,7 @@ node_js:
   - '6'
   - '4'
 before_install:
-  - npm i -g npm@^2.0.0
+  - npm i -g npm@^3.0.0
 before_script:
   - npm prune
 after_success:
@@ -20,7 +20,7 @@ after_success:
     if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_NODE_VERSION == '6' ]]; then
       git config --global user.email "cerebraljs@gmail.com" ;
       git config --global user.name "Cerebral JS" ;
-      npm run ci;
+      npm run deploy;
     fi
 branches:
   except:
