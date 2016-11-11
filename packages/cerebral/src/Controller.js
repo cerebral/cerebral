@@ -59,7 +59,7 @@ class Controller extends EventEmitter {
 
     if (this.devtools) {
       this.devtools.init(this)
-    } else if (process.env.NODE_ENV !== 'production') {
+    } else if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/getting-real/03_devtools.html')
     }
 
