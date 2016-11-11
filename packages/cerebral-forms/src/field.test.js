@@ -63,7 +63,6 @@ describe('field', () => {
           password: {
             value: '',
             isRequired: true,
-            isValueRules: ['isValue'],
             requiredMessage: 'Password is required.',
             validationRules: [
               'minLength:15'
@@ -76,7 +75,6 @@ describe('field', () => {
           repeatPassword: {
             value: '',
             isRequired: true,
-            isValueRules: ['isValue'],
             validationRules: [
               'equalsField:password'
             ],
@@ -93,8 +91,10 @@ describe('field', () => {
       }
     })
     controller.getSignal('fieldChanged')({field: 'form.password', value: 'abcdefghijklmnopqrstuvxyz'})
+    assert.equal(controller.getState('form.password.isValid'), false)
+    assert.equal(controller.getState('form.repeatPassword.isValid'), false)
     controller.getSignal('fieldChanged')({field: 'form.repeatPassword', value: 'abcdefghijklmnopqrstuvxyz'})
-    let state = controller.getState()
-    assert(state.form.password.isValid, true)
+    assert.equal(controller.getState('form.password.isValid'), true)
+    assert.equal(controller.getState('form.repeatPassword.isValid'), true)
   })
 })
