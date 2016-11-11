@@ -125,14 +125,13 @@ function showToast(message, ms, type = null) {
 ...
 {
   buttonClicked: [
-     ...showToast(string`Loading data for repo: ${input`repo`}`),
-     getRepo, {
-       success: [
-          ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 'success')
-       ],
-       error: [
-         ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 'error')
-       ]
+    ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+    getRepo, {
+      success: [
+      ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
+      ],
+      error: [
+        ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
     }
   ]
 }
