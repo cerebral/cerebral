@@ -27,7 +27,9 @@ export default {
         // Will only be valid if this other field is also valid.
         // Point to a field in the model
         dependsOn: 'app.myForm.repeatPassword'
-
+        // You could also add an array to dependsOn to support multiple depends
+        // dependsOn: ['app.myForm.repeatPassword', 'app.someOtherForm.someField']
+        
         // Some properties are default and rarely changed, but you
         // are free to change them
 
