@@ -35,6 +35,8 @@ const controller = Controller({
 export default controller
 ```
 
+The ```js controller.getSignals() ``` is removed from 2.x so favor ```js controller.getSignal('some.signal') ``` instead
+
 ### Modules
 In 1.x you would have done something like this.
 
