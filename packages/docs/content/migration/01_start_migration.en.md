@@ -35,7 +35,7 @@ const controller = Controller({
 export default controller
 ```
 
-The ```js controller.getSignals() ``` is removed from 2.x so favor ```js controller.getSignal('some.signal') ``` instead
+The ``` controller.getSignals() ``` is removed from 2.x so favor ``` controller.getSignal('some.signal') ``` instead.
 
 ### Modules
 In 1.x you would have done something like this.
@@ -387,3 +387,15 @@ const controller = Controller({
 
 export default controller
 ```
+
+### Model
+
+In cererbral 1.x you could update or set some state within you action. The following functions is removed from cerebral 2.x
+
+- logModel
+- export
+- findWhere
+- keys
+- import
+- toJs
+- toJson
