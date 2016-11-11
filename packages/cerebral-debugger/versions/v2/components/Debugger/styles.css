@@ -1,0 +1,61 @@
+.debugger {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: "Helvetica Neue", Arial;
+  color: #333;
+  background-color: #FAFAFA;
+}
+
+.toolbar {
+  flex: 0 0 40px;
+  display: flex;
+}
+
+.mutationsError {
+  flex: 0 0 40px;
+  display: flex;
+  background-color: #eb1e1e;
+  align-items: center;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.mutationsError h1, .mutationsError h4 {
+  color: #FFF;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.mutationsError h1 {
+  font-size: 22px;
+  margin-right: 10px;
+}
+
+.mutationsError h4 {
+  font-weight: normal;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+}
+
+.loading {
+  text-align: center;
+}
+
+.loading h3 {
+  color: #333;
+}
+
+.disabled {
+  padding: 50px;
+  text-align: center;
+}
+
+@media (max-width: 1270px) {
+    .hiddenOnSmall {
+        display: none !important;
+    }
+}

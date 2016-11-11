@@ -1,0 +1,34 @@
+.service {
+  margin-left: 2px;
+  margin: 3px 0;
+  display: flex;
+}
+
+.service i {
+  flex: 0 0 auto;
+  top: 0;
+  color: #DDD;
+}
+
+.serviceName {
+  font-weight: bold;
+  margin-left: 5px;
+  flex: 0 0 auto;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.serviceMethod {
+  margin-left: 5px;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.serviceArgs {
+  margin-left: 5px;
+  flex: 1;
+  font-size: 12px;
+  line-height: 20px;
+}
