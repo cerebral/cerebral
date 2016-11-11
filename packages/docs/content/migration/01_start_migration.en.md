@@ -390,7 +390,7 @@ export default controller
 
 ### Model
 
-In cererbral 1.x you could update or set some state within you action. The following functions is removed from cerebral 2.x
+In Cerebral 1.x you could update or set some state within you action. The following functions is removed from Cerebral 2.x
 
 - logModel
 - export
