@@ -2,6 +2,7 @@
   "name": "cerebral-tutorial",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://cerebral.github.io/tutorial",
   "author": "Philipp Knecht <fopsdev@gmail.com>",
   "contributors": [
     "Aleksey Guryanov <gurianov@gmail.com>",
@@ -21,11 +22,10 @@
     "react-dom": "^15.3.2"
   },
   "scripts": {
-    "prepare": "shjs prepare.js",
+    "prepare": "shjs scripts/prepare.js",
     "start": "react-scripts start",
     "start:ch": "run-s \"prepare {1}\" start --",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "dist": "shjs scripts/dist.js"
   }
 }

@@ -18,6 +18,7 @@ describe('Router - matching', () => {
     it('root route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           preventAutostart: true,
           routes: {
@@ -53,6 +54,7 @@ describe('Router - matching', () => {
     it('simple route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           preventAutostart: true,
           routes: {
@@ -88,6 +90,7 @@ describe('Router - matching', () => {
     it('deep route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           preventAutostart: true,
           routes: {
@@ -124,6 +127,7 @@ describe('Router - matching', () => {
     it('params route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           preventAutostart: true,
           routes: {
@@ -159,6 +163,7 @@ describe('Router - matching', () => {
     it('several params route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           preventAutostart: true,
           routes: {
@@ -201,6 +206,7 @@ describe('Router - matching', () => {
     it('regexp route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           preventAutostart: true,
           routes: {
@@ -245,6 +251,7 @@ describe('Router - matching', () => {
     it('catch all route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           preventAutostart: true,
           routes: {
@@ -275,6 +282,7 @@ describe('Router - matching', () => {
     it('root route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           baseUrl: '/base',
           preventAutostart: true,
@@ -313,6 +321,7 @@ describe('Router - matching', () => {
     it('root route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           onlyHash: true,
           preventAutostart: true,
@@ -352,6 +361,7 @@ describe('Router - matching', () => {
     it('root route', () => {
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           onlyHash: true,
           baseUrl: '/base',
@@ -393,6 +403,7 @@ describe('Router - matching', () => {
       addressbar.value = addressbar.origin + '/base/'
       let count = 0
       const controller = Controller({
+        devtools: {init () {}, send () {}},
         router: Router({
           onlyHash: true,
           preventAutostart: true,
