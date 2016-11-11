@@ -56,7 +56,7 @@ We have just created a **factory**. A function that returns an action. The actio
 
 Cerebral factories are not only restricted to actions, you can also have chain factories. Let us create our own custom **showToast** chain factory.
 
-Instead of returning am action, we return a chain. As you can see we have moved the actions we defined previously into this array, using the arguments passed into the factory.
+Instead of returning an action, we return a chain. As you can see we have moved the actions we defined previously into this array, using the arguments passed into the factory.
 
 ```js
 ...

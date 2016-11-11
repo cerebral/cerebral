@@ -48,7 +48,7 @@ connect({
 ```
 As you can see the App-Component depends on **subTitle**. That means it will render automatically whenever **subTitle** changes. Because we use the *set* operator to change the state at *subTitle*, Cerebral just knows which components need to update and thus there is no dirty checking or other value comparison needed.
 
-To trigger the signal we need to wire up a click-handler on a button (*./src/components/App/index.js*):
+To trigger the signal we need to wire up a click-handler on a button and add our signal **buttonClicked** to the **connect(..)** method (*./src/components/App/index.js*):
 
 ```js
 import React from 'react'

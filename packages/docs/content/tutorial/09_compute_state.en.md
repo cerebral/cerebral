@@ -41,7 +41,7 @@ Now whenever this *Computed* is accessed it is either using a cached value to re
 
 Let us finish this example. To do so please create a new folder named *./src/computeds* and save a file named *starsSum.js* containing the snippet we just looked at. Then we would like to use our computed both in the signal and we also want to show the count in our component.
 
-First the signal you can now remove the **setStarsSum** action and just use the computed directly:
+Let us remove the **setStarsSum** action and just use the computed directly:
 
 ```js
 ...
