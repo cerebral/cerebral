@@ -8,7 +8,7 @@ export default function push (path, payload) {
   return newItem.set(payload)
     .then(() => {
       return {
-        key: newItem.key,
+        key: newItem.key
       }
     })
     .catch((err) => {

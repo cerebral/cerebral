@@ -6,5 +6,5 @@ export default function remove (path) {
   const ref = createRef(path)
   return ref.remove()
           .then(() => ({}))
-          .catch((error) => ({error: error.message}));
+          .catch((error) => ({error: error.message}))
 }
