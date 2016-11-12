@@ -38,7 +38,9 @@ const controller = Controller({
     // Warnings when passing in non-serializable data to signals and state tree
     enforceSerializable: true,
     // Warnings when strict render path usage is wrong
-    verifyStrictRender: true
+    verifyStrictRender: true,
+    //Throw error when overwriting existing input property
+    preventInputPropReplacement: false
   })
 })
 ```

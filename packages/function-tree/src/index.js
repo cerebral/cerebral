@@ -54,8 +54,8 @@ class FunctionTreeExecution extends EventEmitter {
     emits events and handles its returned value. Also handles
     the returned value being a promise
   */
-  runFunction (funcDetails, payload, next) {
-    const context = this.createContext(funcDetails, payload)
+  runFunction (funcDetails, payload, prevPayload, next) {
+    const context = this.createContext(funcDetails, payload, prevPayload)
     const functionTree = this.functionTree
     const errorCallback = this.errorCallback
     const execution = this
@@ -133,7 +133,7 @@ class FunctionTreeExecution extends EventEmitter {
   /*
     Creates the context for the next running function
   */
-  createContext (funcDetails, payload) {
+  createContext (funcDetails, payload, prevPayload) {
     return [
       ExecutionProvider(this, Abort),
       InputProvider(),
@@ -141,7 +141,7 @@ class FunctionTreeExecution extends EventEmitter {
     ].concat(this.functionTree.contextProviders).reduce(function (currentContext, contextProvider) {
       var newContext = (
         typeof contextProvider === 'function'
-          ? contextProvider(currentContext, funcDetails, payload)
+          ? contextProvider(currentContext, funcDetails, payload, prevPayload)
           : Object.assign(currentContext, contextProvider)
       )
 
@@ -216,7 +216,7 @@ class FunctionTree extends EventEmitter {
       execution.runFunction,
       payload,
       (funcDetails, path, currentPayload) => {
-        this.emit('pathStart', path, funcDetails, execution, currentPayload)
+        this.emit('pathStart', path, execution, funcDetails, currentPayload)
       },
       (currentPayload) => {
         this.emit('pathEnd', execution, currentPayload)
