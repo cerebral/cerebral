@@ -16,7 +16,7 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
           const outputs = Object.keys(funcDetails.outputs)
 
           if (~outputs.indexOf(result.path)) {
-            branchStart(newPayload)
+            branchStart(funcDetails, result.path, newPayload)
             runBranch(funcDetails.outputs[result.path], 0, newPayload, outputResult)
           } else {
             throw new Error(`function-tree - function ${funcDetails.name} must use one of its possible outputs: ${outputs.join(', ')}.`)
