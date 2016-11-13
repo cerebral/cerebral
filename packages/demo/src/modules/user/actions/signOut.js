@@ -1,7 +1,7 @@
-function signOut({ firebase, path}) {
+function signOut ({firebase, path}) {
   return firebase.signOut()
     .then(path.success)
-    .catch(path.error);
+    .catch(path.error)
 }
 
 export default signOut

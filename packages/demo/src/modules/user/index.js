@@ -19,7 +19,7 @@ export default {
     createUserClicked: [
       createUser, {
         success: [],
-        error: [],
+        error: []
       }
     ],
     signInClicked: [
@@ -28,9 +28,9 @@ export default {
           set(state`user.$loggedIn`, true),
           set(state`user.signIn.$email`, ''),
           set(state`user.signIn.$password`, ''),
-          set(state`user.currentUser`, input`user`),
+          set(state`user.currentUser`, input`user`)
         ],
-        error: [],
+        error: []
       }
     ],
     signOutClicked: [
@@ -39,9 +39,9 @@ export default {
           set(state`user.$loggedIn`, false),
           set(state`user.signIn.$email`, ''),
           set(state`user.signIn.$password`, ''),
-          set(state`user.currentUser`, null),
+          set(state`user.currentUser`, null)
         ],
-        error: [],
+        error: []
       }
     ]
   }

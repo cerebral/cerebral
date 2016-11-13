@@ -6,12 +6,12 @@ export default connect(
   {
     t: translations,
     $email: 'user.signIn.$email',
-    $password: 'user.signIn.$password',
+    $password: 'user.signIn.$password'
   },
   {
     fieldChanged: 'user.fieldChanged',
     signInClicked: 'user.signInClicked',
-    createUserClicked: 'user.createUserClicked',
+    createUserClicked: 'user.createUserClicked'
   },
   function Login ({t, $email, $password, fieldChanged, signInClicked, createUserClicked}) {
     return (

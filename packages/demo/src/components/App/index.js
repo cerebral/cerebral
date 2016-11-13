@@ -53,7 +53,7 @@ export default connect(
                   {currentUser && (
                     <div className='nav-item'>
                       <a
-                        href="#"
+                        href='#'
                         onClick={() => signOutClicked()}
                       >
                         {t.loginSignOutButton}
