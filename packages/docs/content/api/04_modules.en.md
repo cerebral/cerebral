@@ -28,7 +28,7 @@ export default (module) => {
   return {
     state: {},
     signals: {},
-    moduleS: {}
+    modules: {}
   }
 }
 ```
