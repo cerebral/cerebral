@@ -165,7 +165,11 @@ class Controller extends EventEmitter {
       throwError(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal`)
     }
 
-    this.runTree(name, signal, payload || {})
+    this.runTree(name, signal, payload || {}, (error) => {
+      if (error) {
+        throw error
+      }
+    })
   }
   /*
     Returns a function which binds the name/path of signal,
