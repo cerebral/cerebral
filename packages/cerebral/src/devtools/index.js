@@ -14,7 +14,8 @@ class Devtools {
     storeMutations: true,
     preventExternalMutations: true,
     enforceSerializable: true,
-    verifyStrictRender: true
+    verifyStrictRender: true,
+    preventInputPropReplacement: false
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
@@ -23,6 +24,7 @@ class Devtools {
     this.preventExternalMutations = Boolean(options.preventExternalMutations)
     this.enforceSerializable = Boolean(options.enforceSerializable)
     this.verifyStrictRender = Boolean(options.verifyStrictRender)
+    this.preventInputPropReplacement = Boolean(options.preventInputPropReplacement)
     this.backlog = []
     this.mutations = []
     this.latestExecutionId = null
@@ -172,7 +174,7 @@ class Devtools {
         this.backlog.push(detail)
       }
     })
-    this.controller.runTree.on('pathStart', (path, funcDetails, execution) => {
+    this.controller.runTree.on('pathStart', (path, execution, funcDetails) => {
       const detail = JSON.stringify({
         type: 'executionPathStart',
         data: {
@@ -180,6 +182,26 @@ class Devtools {
             executionId: execution.id,
             functionIndex: funcDetails.functionIndex,
             path
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        const event = new window.CustomEvent('cerebral2.client.message', {detail})
+        window.dispatchEvent(event)
+      } else {
+        this.backlog.push(detail)
+      }
+    })
+    this.controller.runTree.on('functionStart', (execution, funcDetails, payload) => {
+      const detail = JSON.stringify({
+        type: 'execution',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            payload,
+            data: null
           }
         }
       })
