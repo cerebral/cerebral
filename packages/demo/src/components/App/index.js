@@ -14,9 +14,13 @@ const TaglineRe = /^(.*)\[Cerebral\](.*)$/
 export default connect(
   {
     t: translations,
-    loggedIn: 'user.$loggedIn'
+    loggedIn: 'user.$loggedIn',
+    currentUser: 'user.currentUser'
   },
-  function Demo ({t, loggedIn}) {
+  {
+    signOutClicked: 'user.signOutClicked'
+  },
+  function Demo ({t, loggedIn, currentUser, signOutClicked}) {
     const match = TaglineRe.exec(t.SiteTagLine)
     const tagline = match
       ? <h2 className='subtitle'>{match[1]}<a href='http://cerebraljs.com'>Cerebral</a>{match[2]}</h2>
@@ -41,6 +45,22 @@ export default connect(
                   <div className='nav-item'>
                     <LangSelector />
                   </div>
+                  {currentUser && (
+                    <div className='nav-item'>
+                      {currentUser.email}
+                    </div>
+                  )}
+                  {currentUser && (
+                    <div className='nav-item'>
+                      <a
+                        href="#"
+                        onClick={() => signOutClicked()}
+                      >
+                        {t.loginSignOutButton}
+                      </a>
+
+                    </div>
+                  )}
                 </div>
               </nav>
             </div>

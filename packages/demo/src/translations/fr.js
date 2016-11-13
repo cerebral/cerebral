@@ -7,6 +7,9 @@ export default {
   pleaseLogin: 'Authentification',
   loginUserPlaceholder: 'Email',
   loginPasswordPlaceholder: 'Mot de passe',
+  loginSignInButton: 'Se connecter',
+  loginCreateUserButton: 'Créer un utilisateur',
+  loginSignOutButton: 'Se déconnecter',
   // Day of Week
   Dow0: 'Lun',
   Dow1: 'Mar',
