@@ -38,13 +38,17 @@ export default (View) => {
   state and mocks any signals when connecting the component.
 */
 function createDummyController (state = {}) {
+  const getState = (path) => {
+    return ensurePath(path).reduce((currentState, pathKey) => {
+      return currentState[pathKey]
+    }, state)
+  }
   return {
     options: {},
     on () {},
-    getState (path) {
-      return ensurePath(path).reduce((currentState, pathKey) => {
-        return currentState[pathKey]
-      }, state)
+    getState,
+    model: {
+      get: getState
     },
     getSignal () {
       return () => {}
