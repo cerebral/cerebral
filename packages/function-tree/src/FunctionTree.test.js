@@ -21,16 +21,39 @@ describe('FunctionTree', () => {
   })
   it('should pass arguments to context creator and run it for each action', () => {
     const execute = FunctionTree([
-      function SomeProvider (context, functionDetails, payload) {
+      function SomeProvider (context, functionDetails, payload, prevPayload) {
         assert.ok(context)
         assert.equal(functionDetails.functionIndex, 0)
         assert.deepEqual(payload, {foo: 'bar'})
+        assert.equal(prevPayload, null)
 
         return context
       }
     ])
 
     execute([
+      () => {}
+    ], {
+      foo: 'bar'
+    })
+  })
+  it('should pass previous payload to context provider', () => {
+    const execute = FunctionTree([
+      function SomeProvider (context, functionDetails, payload, prevPayload) {
+        if (functionDetails.functionIndex === 0) {
+          assert.deepEqual(payload, {foo: 'bar'})
+          assert.equal(prevPayload, null)
+        } else {
+          assert.deepEqual(payload, {foo: 'bar2'})
+          assert.deepEqual(prevPayload, {foo: 'bar'})
+        }
+
+        return context
+      }
+    ])
+
+    execute([
+      () => ({foo: 'bar2'}),
       () => {}
     ], {
       foo: 'bar'
