@@ -12,7 +12,7 @@ The **Container** you use to expose Cerebral to your components can also be used
 ```js
 import React from 'react'
 import {mount} from 'enzyme'
-import {Container} from 'cerebral/react'
+import {StateContainer} from 'cerebral/react'
 
 import Foo from './Foo'
 
@@ -22,9 +22,9 @@ describe('<Foo />', () => {
       foo: 'bar'
     }
     const wrapper = mount(
-      <Container state={state}>
+      <StateContainer state={state}>
         <Foo />
-      </Container>
+      </StateContainer>
     )
     expect(wrapper.find('.foo')).to.have.length(1)
   })

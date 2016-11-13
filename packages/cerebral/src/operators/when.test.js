@@ -37,4 +37,49 @@ describe('operators.when', () => {
     controller.getSignal('test')()
     assert.equal(count, 1)
   })
+  it('should check truthy input using function', () => {
+    let accepted = 0
+    let discarded = 0
+    const controller = new Controller({
+      signals: {
+        test: [
+          when(input`value`, (value) => Boolean(value.length)), {
+            true: [
+              () => { accepted++ }
+            ],
+            false: [
+              () => { discarded++ }
+            ]
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')({value: ''})
+    controller.getSignal('test')({value: 'foo'})
+    assert.equal(accepted, 1)
+    assert.equal(discarded, 1)
+  })
+  it('should check truthy state using function', () => {
+    let discarded = 0
+    const controller = new Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        test: [
+          when(state`foo`, (value) => value === 'bar'), {
+            true: [
+              ({state}) => { state.set('foo', 'bar2') }
+            ],
+            false: [
+              () => { discarded++ }
+            ]
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+    controller.getSignal('test')()
+    assert.equal(discarded, 1)
+  })
 })

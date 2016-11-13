@@ -8,9 +8,7 @@ export default function state (strings, ...values) {
     return {
       target,
       path,
-      toValue () {
-        return context.state.get(path)
-      }
+      value: context.state.get(path)
     }
   }
 }

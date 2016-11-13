@@ -7,7 +7,7 @@ title: Router
 ### Instantiate
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral/router'
+import Router from 'cerebral-router'
 
 const controller = Controller({
   router: Router({
@@ -22,7 +22,7 @@ const controller = Controller({
 ### Define routes
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral/router'
+import Router from 'cerebral-router'
 
 const controller = Controller({
   router: Router({
@@ -37,7 +37,7 @@ const controller = Controller({
 ### Dynamic routes
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral/router'
+import Router from 'cerebral-router'
 
 const controller = Controller({
   router: Router({
@@ -53,7 +53,7 @@ const controller = Controller({
 ### Nested routes
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral/router'
+import Router from 'cerebral-router'
 
 const controller = Controller({
   router: Router({

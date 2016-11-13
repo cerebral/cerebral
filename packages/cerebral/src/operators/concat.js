@@ -1,17 +1,17 @@
-export default function (targetTemplate, valueTemplate) {
-  if (typeof targetTemplate !== 'function') {
+export default function (target, value) {
+  if (typeof target !== 'function') {
     throw new Error('Cerebral operator.concat: You have to use a state template tag as first argument')
   }
 
   function concat (context) {
-    const target = targetTemplate(context)
-    const value = typeof valueTemplate === 'function' ? valueTemplate(context).toValue() : valueTemplate
+    const targetTemplate = target(context)
+    const concatValue = typeof value === 'function' ? value(context).value : value
 
-    if (target.target !== 'state') {
+    if (targetTemplate.target !== 'state') {
       throw new Error('Cerebral operator.concat: You have to use a state template tag as first argument')
     }
 
-    context.state.concat(target.path, value)
+    context.state.concat(targetTemplate.path, concatValue)
   }
 
   concat.displayName = 'operator.concat'
