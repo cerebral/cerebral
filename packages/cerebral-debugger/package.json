@@ -1,11 +1,11 @@
 {
   "name": "cerebral-boilerplate",
-  "version": "0.1.0",
+  "version": "1.0.0-alpha.1",
   "description": "A boilerplate for Cerebral",
   "main": "server.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cerebral/cerebral-boilerplate.git"
+    "url": "https://github.com/cerebral/cerebral.git"
   },
   "keywords": [
     "express",
@@ -16,9 +16,9 @@
   "author": "Christian Alfoni",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cerebral/cerebral-boilerplate/issues"
+    "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral-boilerplate",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-debugger#readme",
   "scripts": {
     "start": "node server",
     "build": "rimraf extension/build && NODE_ENV=production webpack --config ./webpack.production.config.js --progress --colors"
