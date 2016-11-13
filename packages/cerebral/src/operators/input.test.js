@@ -9,7 +9,7 @@ describe('operator.input', () => {
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${input`foo`}`(context).toValue(), 'foo.bar')
+            assert.deepEqual(string`foo.${input`foo`}`(context).value, 'foo.bar')
           }
         ]
       }

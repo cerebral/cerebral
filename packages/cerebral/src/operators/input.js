@@ -8,11 +8,9 @@ export default function input (strings, ...values) {
     return {
       target,
       path,
-      toValue () {
-        return path.split('.').reduce((currentValue, key) => {
-          return currentValue[key]
-        }, context.input)
-      }
+      value: path.split('.').reduce((currentValue, key) => {
+        return currentValue[key]
+      }, context.input)
     }
   }
 }

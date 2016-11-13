@@ -12,7 +12,7 @@ describe('operator.state', () => {
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${state`foo`}`(context).toValue(), 'foo.bar')
+            assert.deepEqual(string`foo.${state`foo`}`(context).value, 'foo.bar')
           }
         ]
       }

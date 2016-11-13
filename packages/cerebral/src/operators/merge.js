@@ -1,18 +1,18 @@
-export default function (targetTemplate, valueTemplate) {
-  if (typeof targetTemplate !== 'function') {
+export default function (target, value) {
+  if (typeof target !== 'function') {
     throw new Error('Cerebral operator.merge: You have to use a state template tag as first argument')
   }
 
   function merge (context) {
-    const target = targetTemplate(context)
-    const value = typeof valueTemplate === 'function' ? valueTemplate(context).toValue() : valueTemplate
+    const targetTemplate = target(context)
+    const mergeValue = typeof value === 'function' ? value(context).value : value
 
-    if (target.target !== 'state') {
+    if (targetTemplate.target !== 'state') {
       throw new Error('Cerebral operator.merge: You have to use a state template tag as first argument')
     }
 
-    context.state.merge(target.path, Object.keys(value).reduce((currentValue, key) => {
-      currentValue[key] = typeof value[key] === 'function' ? value[key](context).toValue() : value[key]
+    context.state.merge(targetTemplate.path, Object.keys(mergeValue).reduce((currentValue, key) => {
+      currentValue[key] = typeof mergeValue[key] === 'function' ? mergeValue[key](context).value : mergeValue[key]
 
       return currentValue
     }, {}))
