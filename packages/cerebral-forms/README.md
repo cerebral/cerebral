@@ -2,7 +2,7 @@
 Signals, actions and state factories to create forms
 
 ## API
-Cerebral forms is basically a function that creates state needed to handle validation and an action factory for validating fields. It is simple in nature, but handles
+Cerebral forms is basically a function that creates state needed to handle validation and an action factory for validating fields. It is simple in nature, but handles all the complexity that comes with forms.
 
 ### form
 A state factory for creating form state. Used when defining initial state or dynamically with an action. You can put forms inside forms.
@@ -29,7 +29,7 @@ export default {
         dependsOn: 'app.myForm.repeatPassword'
         // You could also add an array to dependsOn to support multiple depends
         // dependsOn: ['app.myForm.repeatPassword', 'app.someOtherForm.someField']
-        
+
         // Some properties are default and rarely changed, but you
         // are free to change them
 
