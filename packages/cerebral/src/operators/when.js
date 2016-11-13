@@ -1,8 +1,9 @@
-function whenFactory (template) {
+function whenFactory (target, whenFunc) {
   function when (context) {
-    const exists = Boolean(template(context).toValue())
+    const targetValue = target(context).value
+    const isTrue = Boolean(typeof whenFunc === 'function' ? whenFunc(targetValue) : targetValue)
 
-    return exists ? context.path.true() : context.path.false()
+    return isTrue ? context.path.true() : context.path.false()
   }
 
   when.displayName = 'operator.when'

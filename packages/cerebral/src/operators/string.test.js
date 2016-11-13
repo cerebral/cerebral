@@ -10,7 +10,7 @@ describe('operator.string', () => {
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${input`ref`}`(context).toValue(), 'foo.bar')
+            assert.deepEqual(string`foo.${input`ref`}`(context).value, 'foo.bar')
           }
         ]
       }
@@ -28,7 +28,7 @@ describe('operator.string', () => {
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${computed}`(context).toValue(), 'foo.bar')
+            assert.deepEqual(string`foo.${computed}`(context).value, 'foo.bar')
           }
         ]
       }

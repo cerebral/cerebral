@@ -8,9 +8,7 @@ export default function string (strings, ...values) {
     return {
       target,
       path,
-      toValue () {
-        return path
-      }
+      value: path
     }
   }
 }

@@ -1,12 +1,16 @@
-export default function (targetTemplate) {
-  function toggle (context) {
-    const {target, path} = targetTemplate(context)
+export default function (target) {
+  if (typeof target !== 'function') {
+    throw new Error('Cerebral operator.toggle: You have to use a state template tag as first argument')
+  }
 
-    if (target !== 'state') {
+  function toggle (context) {
+    const targetTemplate = target(context)
+
+    if (targetTemplate.target !== 'state') {
       throw new Error('Cerebral operator.toggle: You have to use a state template tag as first argument')
     }
 
-    context.state.set(path, !context.state.get(path))
+    context.state.set(targetTemplate.path, !context.state.get(targetTemplate.path))
   }
 
   toggle.displayName = 'operator.toggle'
