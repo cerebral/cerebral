@@ -30,7 +30,7 @@ var DEFAULT_OPTIONS = {
   onResponse: function (xhr, resolve, reject) {
     var result = xhr.responseText
 
-    if (xhr.getResponseHeader('content-type').indexOf('application/json') >= 0) {
+    if (result && xhr.getResponseHeader('content-type').indexOf('application/json') >= 0) {
       result = JSON.parse(xhr.responseText)
     }
 
