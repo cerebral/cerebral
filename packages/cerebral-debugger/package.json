@@ -26,6 +26,7 @@
   "dependencies": {
     "cerebral": "^2.0.0-0",
     "cerebral-module-useragent": "^1.0.0-alpha.1",
+    "color": "^0.11.4",
     "classnames": "^2.2.5",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"
