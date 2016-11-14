@@ -8,7 +8,7 @@ import {
 
 export default connect({},
   class JSONInput extends React.Component {
-    constructor(props) {
+    constructor (props) {
       super(props)
       this.state = {
         isValid: true,
@@ -18,10 +18,10 @@ export default connect({},
       this.onChange = this.onChange.bind(this)
       this.onSubmit = this.onSubmit.bind(this)
     }
-    componentDidMount(prevProps, prevState) {
+    componentDidMount (prevProps, prevState) {
       this.refs.input.select()
     }
-    onChange(event) {
+    onChange (event) {
       let value = event.target.value
       let isValid = true
       let parsedValue = value
@@ -43,24 +43,24 @@ export default connect({},
         isValid
       })
     }
-    onBlur() {
+    onBlur () {
       this.setState({
         value: this.state.initialValue
       })
       this.props.onBlur()
     }
-    onSubmit(event) {
+    onSubmit (event) {
       event.preventDefault()
       this.props.onSubmit(this.state.value)
     }
-    render() {
+    render () {
       return (
         <form style={{display: 'inline'}} onSubmit={this.onSubmit}>
           <input
-            ref="input"
-            type="Text"
+            ref='input'
+            type='Text'
             autoFocus
-            onKeyDown={(event) => {event.keyCode === 27 && this.onBlur()}}
+            onKeyDown={(event) => { event.keyCode === 27 && this.onBlur() }}
             className={this.state.isValid ? styles.input : styles.invalidInput}
             value={String(this.state.value)}
             onChange={this.onChange}

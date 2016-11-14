@@ -17,22 +17,22 @@ const colors = {
   unshift: '#28a0aa'
 }
 
-function Service({service}) {
+function Service ({service}) {
   const serviceNameStyle = {
     color: '#28a0aa'
   }
 
   return (
     <div className={styles.service}>
-      <i className={icons.service}/>
+      <i className={icons.service} />
       <span className={styles.serviceName} style={serviceNameStyle}>{service.method}</span>
       <span className={styles.serviceArgs}>
         {service.args.map((arg, index) => {
-          return <Inspector key={index} value={arg}/>
+          return <Inspector key={index} value={arg} />
         })}
       </span>
     </div>
   )
 }
 
- export default Service
+export default Service

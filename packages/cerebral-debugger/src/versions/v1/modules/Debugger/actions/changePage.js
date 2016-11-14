@@ -1,5 +1,5 @@
-function changePage({input, state}) {
-  state.set('debugger.currentPage', input.page);
+function changePage ({input, state}) {
+  state.set('debugger.currentPage', input.page)
 }
 
-export default changePage;
+export default changePage

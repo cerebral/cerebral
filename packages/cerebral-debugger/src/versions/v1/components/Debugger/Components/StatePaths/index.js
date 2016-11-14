@@ -1,9 +1,9 @@
-import React from 'react';
-import styles from './styles.css';
-import connector from 'connector';
+import React from 'react'
+import styles from './styles.css'
+import connector from 'connector'
 
 function componentsMapPathClick (path) {
-  connector.sendEvent('componentMapPath', path);
+  connector.sendEvent('componentMapPath', path)
 }
 
 export default function StatePaths (props) {
@@ -13,7 +13,7 @@ export default function StatePaths (props) {
     <div className={styles.wrapper}>
       <div className={styles.componentsWrapper}>
         <div
-          key="header"
+          key='header'
           className={styles.itemHeader}
         >
           <div className={styles.pathName}>
@@ -21,9 +21,9 @@ export default function StatePaths (props) {
           </div>
           <div className={styles.components}>
             {Object.keys(props.map).reduce((count, key) => {
-              const components = props.map[key].filter(component => uniqueComponents.indexOf(component) === -1);
-              uniqueComponents = uniqueComponents.concat(components);
-              return count + components.length;
+              const components = props.map[key].filter(component => uniqueComponents.indexOf(component) === -1)
+              uniqueComponents = uniqueComponents.concat(components)
+              return count + components.length
             }, 0)} {' '} <small>registered components</small>
           </div>
         </div>
@@ -43,9 +43,9 @@ export default function StatePaths (props) {
                 }).join(', ')}
               </div>
             </div>
-          );
+          )
         })}
       </div>
     </div>
-  );
+  )
 }

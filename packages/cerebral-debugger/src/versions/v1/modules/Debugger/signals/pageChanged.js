@@ -1,5 +1,5 @@
-import changePage from '../actions/changePage';
+import changePage from '../actions/changePage'
 
 export default [
   changePage
-];
+]

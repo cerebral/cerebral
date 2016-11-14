@@ -16,30 +16,30 @@ export default connect({
   mutationClicked: 'debugger.mutationClicked'
 },
   class Signal extends React.Component {
-    constructor(props) {
+    constructor (props) {
       super(props)
       this.renderAction = this.renderAction.bind(this)
       this.onMutationClick = this.onMutationClick.bind(this)
       this.onActionClick = this.onActionClick.bind(this)
     }
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate (nextProps) {
       return nextProps.currentPage === 'signals' || !nextProps.media.small
     }
-    onMutationClick(path) {
+    onMutationClick (path) {
       this.props.mutationClicked({
         path
       })
     }
-    onActionClick(action) {
+    onActionClick (action) {
       connector.inspect(this.props.signal.name, action.actionIndex)
     }
-    componentDidMount() {
+    componentDidMount () {
       Prism.highlightAll()
     }
-    componentDidUpdate() {
+    componentDidUpdate () {
       Prism.highlightAll()
     }
-    renderOutputs(action) {
+    renderOutputs (action) {
       return Object.keys(action.outputs).map((output, index) => {
         const isOutput = (
           this.props.signal.functionsRun[action.functionIndex] &&
@@ -49,7 +49,7 @@ export default connect({
 
         return (
           <div className={styles.output} style={style} key={index}>
-            {isOutput ? <i className={icons.right}/> : <i className={icons.empty}/>}
+            {isOutput ? <i className={icons.right} /> : <i className={icons.empty} />}
             <div className={styles.outputPath}>
               <div className={styles.outputName}>{output}</div>
               {action.outputs[output].map(this.renderAction)}
@@ -58,7 +58,7 @@ export default connect({
         )
       })
     }
-    renderAction(action, index) {
+    renderAction (action, index) {
       if (Array.isArray(action)) {
         return (
           <div className={styles.asyncHeader} key={index}>
@@ -76,11 +76,11 @@ export default connect({
           key={index}
           onMutationClick={this.onMutationClick}
           onActionClick={this.onActionClick}>
-        {action.outputs ? this.renderOutputs(action) : null}
+          {action.outputs ? this.renderOutputs(action) : null}
         </Action>
       )
     }
-    render() {
+    render () {
       if (!this.props.signal) {
         return <span>No signal yet...</span>
       }

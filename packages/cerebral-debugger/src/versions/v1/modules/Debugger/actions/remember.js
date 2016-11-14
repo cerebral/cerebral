@@ -1,4 +1,4 @@
-function remember({input, state}) {
+function remember ({input, state}) {
   state.set('debugger.model', state.get('debugger.initialModel'))
   state.set('debugger.currentRememberedSignalExecutionId', input.executionId)
   const mutations = state.get('debugger.mutations')
@@ -18,4 +18,4 @@ function remember({input, state}) {
   }
 }
 
-export default remember;
+export default remember

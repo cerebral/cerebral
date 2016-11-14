@@ -18,11 +18,11 @@ export default connect({
   resetClicked: 'debugger.resetClicked'
 },
   class Signals extends React.Component {
-    constructor(props) {
+    constructor (props) {
       super(props)
       this.state = {copiedSignals: null}
     }
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate (nextProps, nextState) {
       return (
         this.props.currentPage !== nextProps.currentPage ||
         this.props.media.small !== nextProps.media.small ||
@@ -32,22 +32,22 @@ export default connect({
         this.props.isExecuting !== nextProps.isExecuting
       )
     }
-    onResetClick() {
+    onResetClick () {
       this.props.resetClicked()
       connector.sendEvent('reset')
     }
-    onCopySignalsClick() {
+    onCopySignalsClick () {
       this.setState({copiedSignals: JSON.stringify(this.props.signalsList.reverse(), null, 2)}, () => {
         this.textarea.select()
       })
     }
-    render() {
+    render () {
       const currentSignalExecutionId = this.props.currentSignalExecutionId
 
       return (
         <div className={classNames(styles.signals, this.props.className)}>
           <div className={styles.list}>
-            <List/>
+            <List />
             <button
               onClick={() => this.onCopySignalsClick()}
               className={styles.rewrite}
@@ -62,12 +62,12 @@ export default connect({
             </button>
           </div>
           <div className={styles.signal}>
-            <Signal/>
+            <Signal />
           </div>
           {
             this.state.copiedSignals ?
               <li className={styles.textarea}>
-                <textarea ref={(node) => this.textarea = node} value={this.state.copiedSignals} onBlur={() => this.setState({copiedSignals: null})}/>
+                <textarea ref={(node) => this.textarea = node} value={this.state.copiedSignals} onBlur={() => this.setState({copiedSignals: null})} />
               </li>
             :
               null

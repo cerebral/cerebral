@@ -1,25 +1,25 @@
-import computedSignalsList from 'common/computed/signalsList';
+import computedSignalsList from 'common/computed/signalsList'
 
-function updateSignal({input, state}) {
-  const signalsList = state.compute(computedSignalsList);
+function updateSignal ({input, state}) {
+  const signalsList = state.compute(computedSignalsList)
   const execution = input.data.execution
-  const signalPath = `debugger.signals.${execution.executionId}`;
-  const signal = state.get(signalPath);
+  const signalPath = `debugger.signals.${execution.executionId}`
+  const signal = state.get(signalPath)
 
   if (signal.functionsRun[execution.functionIndex]) {
-    state.push(`${signalPath}.functionsRun.${execution.functionIndex}.data`, execution.data);
+    state.push(`${signalPath}.functionsRun.${execution.functionIndex}.data`, execution.data)
   } else {
     state.set(`${signalPath}.functionsRun.${execution.functionIndex}`, {
       payload: execution.payload,
       data: execution.data ? [execution.data] : []
-    });
+    })
   }
   if (execution.data && execution.data.type === 'mutation') {
-    state.push('debugger.mutations',  {
+    state.push('debugger.mutations', {
       executionId: execution.executionId,
       data: execution.data
-    });
+    })
   }
 }
 
-export default updateSignal;
+export default updateSignal

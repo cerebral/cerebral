@@ -1,5 +1,5 @@
-function switchType({input, path}) {
-  return path[input.type]();
+function switchType ({input, path}) {
+  return path[input.type]()
 }
 
-export default switchType;
+export default switchType

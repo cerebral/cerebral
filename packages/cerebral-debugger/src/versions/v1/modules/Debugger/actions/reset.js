@@ -1,4 +1,4 @@
-function reset({state}) {
+function reset ({state}) {
   state.merge('debugger', {
     isExecuting: false,
     currentPage: 'signals',
@@ -8,11 +8,11 @@ function reset({state}) {
     expandedSignalGroups: [],
     currentMutationPath: null,
     mutationsError: false
-  });
+  })
   // Do update correctly
-  state.set('debugger.signals', {});
-  state.set('debugger.mutations', []);
-  state.set('debugger.model', state.get('debugger.initialModel'));
+  state.set('debugger.signals', {})
+  state.set('debugger.mutations', [])
+  state.set('debugger.model', state.get('debugger.initialModel'))
 }
 
-export default reset;
+export default reset

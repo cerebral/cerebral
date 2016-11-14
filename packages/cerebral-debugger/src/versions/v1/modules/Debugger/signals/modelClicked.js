@@ -1,5 +1,5 @@
-import resetMutationPath from '../actions/resetMutationPath';
+import resetMutationPath from '../actions/resetMutationPath'
 
 export default [
   resetMutationPath
-];
+]

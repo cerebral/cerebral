@@ -1,8 +1,8 @@
-function endSignalExecution({input, state}) {
+function endSignalExecution ({input, state}) {
   const execution = input.data.execution
-  const signalPath = `debugger.signals.${execution.executionId}`;
+  const signalPath = `debugger.signals.${execution.executionId}`
 
-  state.set(`${signalPath}.isExecuting`, false);
+  state.set(`${signalPath}.isExecuting`, false)
 }
 
-export default endSignalExecution;
+export default endSignalExecution

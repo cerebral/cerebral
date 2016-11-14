@@ -1,5 +1,5 @@
-import updateModel from '../actions/updateModel';
+import updateModel from '../actions/updateModel'
 
 export default [
   updateModel
-];
+]

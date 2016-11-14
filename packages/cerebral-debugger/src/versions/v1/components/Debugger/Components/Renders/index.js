@@ -1,38 +1,38 @@
-import React from 'react';
-import styles from './styles.css';
+import React from 'react'
+import styles from './styles.css'
 
-function getTime(date) {
-  const hours = String(date.getHours()).length === 2 ? date.getHours() : '0' + date.getHours();
-  const minutes = String(date.getMinutes()).length === 2 ? date.getMinutes() : '0' + date.getMinutes();
-  const seconds = String(date.getSeconds()).length === 2 ? date.getSeconds() : '0' + date.getSeconds();
-  return hours + ':' + minutes + ':' + seconds;
+function getTime (date) {
+  const hours = String(date.getHours()).length === 2 ? date.getHours() : '0' + date.getHours()
+  const minutes = String(date.getMinutes()).length === 2 ? date.getMinutes() : '0' + date.getMinutes()
+  const seconds = String(date.getSeconds()).length === 2 ? date.getSeconds() : '0' + date.getSeconds()
+  return hours + ':' + minutes + ':' + seconds
 }
 
-function extractPaths(paths) {
-  const allPaths = [];
-  function traverse(currentPaths, pathArray) {
+function extractPaths (paths) {
+  const allPaths = []
+  function traverse (currentPaths, pathArray) {
     Object.keys(currentPaths).forEach(key => {
-      pathArray.push(key);
+      pathArray.push(key)
       if (currentPaths[key] === true) {
-        allPaths.push(pathArray.join('.'));
+        allPaths.push(pathArray.join('.'))
       } else {
-        traverse(currentPaths[key], pathArray);
+        traverse(currentPaths[key], pathArray)
       }
-      pathArray.pop();
-    });
+      pathArray.pop()
+    })
   }
-  traverse(paths, []);
+  traverse(paths, [])
 
-  return allPaths;
+  return allPaths
 }
 
-function unique(array) {
+function unique (array) {
   return array.reduce((newArray, item) => {
     if (newArray.indexOf(item) === -1) {
-      return newArray.concat(item);
+      return newArray.concat(item)
     }
 
-    return newArray;
+    return newArray
   }, [])
 }
 
@@ -41,7 +41,7 @@ export default function Renders (props) {
     <div className={styles.wrapper}>
       <div className={styles.renderWrapper}>
         {props.renders.map((render, index) => {
-          const date = new Date(render.start);
+          const date = new Date(render.start)
 
           return (
             <div className={styles.item} key={index}>
@@ -57,7 +57,7 @@ export default function Renders (props) {
                         <div className={styles.path} key={index}>
                           <strong>{path}</strong>
                         </div>
-                      );
+                      )
                     })}
                   </div>
                 </div>
@@ -67,7 +67,7 @@ export default function Renders (props) {
                 </div>
               </div>
             </div>
-          );
+          )
         })}
       </div>
     </div>

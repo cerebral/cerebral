@@ -1,5 +1,5 @@
-import remember from '../actions/remember';
+import remember from '../actions/remember'
 
 export default [
   remember
-];
+]

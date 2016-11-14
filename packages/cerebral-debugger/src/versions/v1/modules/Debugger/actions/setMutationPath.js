@@ -1,5 +1,5 @@
-function setMutationPath({input, state}) {
-  state.set('debugger.currentMutationPath', input.path);
+function setMutationPath ({input, state}) {
+  state.set('debugger.currentMutationPath', input.path)
 }
 
-export default setMutationPath;
+export default setMutationPath

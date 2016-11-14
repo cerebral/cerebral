@@ -17,7 +17,7 @@ const colors = {
   unshift: '#28a0aa'
 }
 
-function Mutation({mutation, onMutationClick}) {
+function Mutation ({mutation, onMutationClick}) {
   const mutationNameStyle = {
     color: colors[mutation.method]
   }
@@ -25,16 +25,16 @@ function Mutation({mutation, onMutationClick}) {
 
   return (
     <div className={styles.mutation}>
-      <i className={icons.mutation}/>
+      <i className={icons.mutation} />
       <span className={styles.mutationName} style={mutationNameStyle}>{mutation.method}</span>
       <span className={styles.mutationPath} onClick={() => onMutationClick(mutation.args[0])}>{mutation.args[0].join('.')}</span>
       <span className={styles.mutationArgs}>
         {args.map((arg, index) => {
-          return <Inspector key={index} value={arg}/>
+          return <Inspector key={index} value={arg} />
         })}
       </span>
     </div>
   )
 }
 
- export default Mutation
+export default Mutation

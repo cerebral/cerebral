@@ -1,5 +1,5 @@
-import setCurrentExecutionId from '../actions/setCurrentExecutionId';
+import setCurrentExecutionId from '../actions/setCurrentExecutionId'
 
 export default [
   setCurrentExecutionId
-];
+]

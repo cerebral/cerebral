@@ -12,7 +12,7 @@ import {
 import JSONInput from './JSONInput'
 import connector from 'connector'
 
-function isInPath(source, target) {
+function isInPath (source, target) {
   if (!source || !target) {
     return false
   }
@@ -24,7 +24,7 @@ function isInPath(source, target) {
   }, true)
 }
 
-function renderType(value, hasNext, path, propertyKey, highlightPath, modelChanged) {
+function renderType (value, hasNext, path, propertyKey, highlightPath, modelChanged) {
   if (value === undefined) {
     return null
   }
@@ -36,7 +36,7 @@ function renderType(value, hasNext, path, propertyKey, highlightPath, modelChang
         hasNext={hasNext}
         path={path}
         propertyKey={propertyKey}
-        highlightPath={highlightPath}/>
+        highlightPath={highlightPath} />
     )
   }
   if (isObject(value)) {
@@ -46,7 +46,7 @@ function renderType(value, hasNext, path, propertyKey, highlightPath, modelChang
         hasNext={hasNext}
         path={path}
         propertyKey={propertyKey}
-        highlightPath={highlightPath}/>
+        highlightPath={highlightPath} />
     )
   }
 
@@ -57,16 +57,15 @@ function renderType(value, hasNext, path, propertyKey, highlightPath, modelChang
       path={path}
       modelChanged={modelChanged}
       propertyKey={propertyKey}
-      highlightPath={highlightPath}/>
+      highlightPath={highlightPath} />
   )
-
 }
 
 class ObjectValue extends React.Component {
   static contextTypes = {
     options: React.PropTypes.object.isRequired
   }
-  constructor(props, context) {
+  constructor (props, context) {
     super(props)
     const numberOfKeys = Object.keys(props.value).length
     const isHighlightPath = !!(this.props.highlightPath && isInPath(this.props.highlightPath, this.props.path))
@@ -79,7 +78,7 @@ class ObjectValue extends React.Component {
     this.onCollapseClick = this.onCollapseClick.bind(this)
     this.onExpandClick = this.onExpandClick.bind(this)
   }
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     return (
       nextState.isCollapsed !== this.state.isCollapsed ||
       this.context.options.canEdit ||
@@ -87,7 +86,7 @@ class ObjectValue extends React.Component {
       nextProps.highlightPath !== this.props.highlightPath
     )
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const context = this.context
     const props = nextProps
     const numberOfKeys = Object.keys(props.value).length
@@ -99,15 +98,14 @@ class ObjectValue extends React.Component {
         isCollapsed: !preventCollapse && !isHighlightPath && (numberOfKeys > 3 || numberOfKeys === 0 ? true : context.options.expanded ? false : true)
       })
     }
-
   }
-  onExpandClick() {
+  onExpandClick () {
     this.setState({isCollapsed: false})
   }
-  onCollapseClick() {
+  onCollapseClick () {
     this.setState({isCollapsed: true})
   }
-  renderProperty(key, value, index, hasNext, path) {
+  renderProperty (key, value, index, hasNext, path) {
     this.props.path.push(key)
     const property = (
       <div className={styles.objectProperty} key={index}>
@@ -117,13 +115,13 @@ class ObjectValue extends React.Component {
     this.props.path.pop()
     return property
   }
-  renderKeys(keys) {
+  renderKeys (keys) {
     if (keys.length > 3) {
       return keys.slice(0, 3).join(', ') + '...'
     }
     return keys.join(', ')
   }
-  render() {
+  render () {
     const {value, hasNext} = this.props
     const isExactHighlightPath = this.props.highlightPath && String(this.props.highlightPath) === String(this.props.path)
 
@@ -161,7 +159,7 @@ class ArrayValue extends React.Component {
   static contextTypes = {
     options: React.PropTypes.object.isRequired
   }
-  constructor(props, context) {
+  constructor (props, context) {
     super(props)
     const numberOfItems = props.value.length
     const isHighlightPath = this.props.highlightPath && isInPath(this.props.highlightPath, this.props.path)
@@ -171,7 +169,7 @@ class ArrayValue extends React.Component {
     this.onCollapseClick = this.onCollapseClick.bind(this)
     this.onExpandClick = this.onExpandClick.bind(this)
   }
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     return (
       nextState.isCollapsed !== this.state.isCollapsed ||
       this.context.options.canEdit ||
@@ -179,7 +177,7 @@ class ArrayValue extends React.Component {
       nextProps.highlightPath !== this.props.highlightPath
     )
   }
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     const context = this.context
     const props = nextProps
     const numberOfItems = props.value.length
@@ -190,13 +188,13 @@ class ArrayValue extends React.Component {
       })
     }
   }
-  onExpandClick() {
+  onExpandClick () {
     this.setState({isCollapsed: false})
   }
-  onCollapseClick() {
+  onCollapseClick () {
     this.setState({isCollapsed: true})
   }
-  renderItem(item, index, hasNext, path) {
+  renderItem (item, index, hasNext, path) {
     this.props.path.push(index)
     const arrayItem = (
       <div className={styles.arrayItem} key={index}>
@@ -206,7 +204,7 @@ class ArrayValue extends React.Component {
     this.props.path.pop()
     return arrayItem
   }
-  render() {
+  render () {
     const {value, hasNext} = this.props
     const isExactHighlightPath = this.props.highlightPath && String(this.props.highlightPath) === String(this.props.path)
 
@@ -243,7 +241,7 @@ class Value extends React.Component {
   static contextTypes = {
     options: React.PropTypes.object.isRequired
   }
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       isEditing: false,
@@ -254,19 +252,19 @@ class Value extends React.Component {
     this.onBlur = this.onBlur.bind(this)
     this.onClick = this.onClick.bind(this)
   }
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate (nextProps, nextState) {
     return (
       nextProps.value !== this.props.value ||
       nextState.isEditing !== this.state.isEditing ||
       nextProps.path !== this.props.path
     )
   }
-  onClick() {
+  onClick () {
     this.setState({
       isEditing: this.context.options.canEdit ? true : false
     })
   }
-  onSubmit(value) {
+  onSubmit (value) {
     this.props.modelChanged({
       path: this.state.path,
       value
@@ -278,36 +276,36 @@ class Value extends React.Component {
       value: value
     })
   }
-  onBlur() {
+  onBlur () {
     this.setState({isEditing: false})
   }
-  renderValue(value, hasNext) {
+  renderValue (value, hasNext) {
     const isExactHighlightPath = this.props.highlightPath && String(this.props.highlightPath) === String(this.props.path)
 
     if (this.state.isEditing) {
       return (
         <div className={isExactHighlightPath ? styles.highlightValue : null}>
-          {this.props.propertyKey ? this.props.propertyKey + ': ' : <span/>}
+          {this.props.propertyKey ? this.props.propertyKey + ': ' : <span />}
           <span>
             <JSONInput
               value={value}
               onBlur={this.onBlur}
-              onSubmit={this.onSubmit}/>
+              onSubmit={this.onSubmit} />
           </span>
-            {hasNext ? ',' : null}
+          {hasNext ? ',' : null}
         </div>
         )
     } else {
       return (
         <div className={isExactHighlightPath ? styles.highlightValue : null}>
-          {this.props.propertyKey ? this.props.propertyKey + ': ' : <span/>}
+          {this.props.propertyKey ? this.props.propertyKey + ': ' : <span />}
           <span onClick={this.onClick}>{isString(value) ? '"' + value + '"' : String(value)}</span>
           {hasNext ? ',' : null}
         </div>
       )
     }
   }
-  render() {
+  render () {
     let className = styles.string
     if (isNumber(this.props.value)) className = styles.number
     if (isBoolean(this.props.value)) className = styles.boolean
@@ -324,7 +322,7 @@ class Inspector extends React.Component {
   static childContextTypes = {
     options: React.PropTypes.object.isRequired
   }
-  getChildContext() {
+  getChildContext () {
     return {
       options: {
         expanded: this.props.expanded || false,
@@ -332,7 +330,7 @@ class Inspector extends React.Component {
       }
     }
   }
-  render() {
+  render () {
     return renderType(this.props.value, false, [], null, this.props.path, this.props.modelChanged)
   }
 }

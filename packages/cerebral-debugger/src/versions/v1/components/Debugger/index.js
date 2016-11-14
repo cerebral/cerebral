@@ -20,18 +20,18 @@ export default connect({
             <Toolbar />
           </div>
           <div className={styles.disabled}>
-            <img src="logo.png" width="200"/>
+            <img src='logo.png' width='200' />
             <h1>Disabled</h1>
             <h3>Enable debugger and refresh</h3>
           </div>
         </div>
-      );
+      )
     }
-    const mutationsError = props.mutationsError;
+    const mutationsError = props.mutationsError
 
     return (
       <div className={styles.debugger}>
-         {
+        {
            mutationsError ?
              <div className={styles.mutationsError}>
                <h1>Ops!</h1>
@@ -45,19 +45,19 @@ export default connect({
         <div className={styles.content}>
           {
             props.currentPage === 'signals' ?
-              <Signals className={props.currentPage !== 'signals' ? styles.hiddenOnSmall : null}/>
+              <Signals className={props.currentPage !== 'signals' ? styles.hiddenOnSmall : null} />
             :
               null
           }
           {
             props.currentPage === 'components' ?
-              <Components className={props.currentPage !== 'components' ? styles.hiddenOnSmall : null}/>
+              <Components className={props.currentPage !== 'components' ? styles.hiddenOnSmall : null} />
             :
               null
           }
           {
             props.currentPage !== 'components' ?
-              <Model className={props.currentPage !== 'model' ? styles.hiddenOnSmall : null}/>
+              <Model className={props.currentPage !== 'model' ? styles.hiddenOnSmall : null} />
             :
               null
           }

@@ -15,7 +15,7 @@ export default connect({
   modelClicked: 'debugger.modelClicked'
 },
   class Model extends React.Component {
-    shouldComponentUpdate(nextProps) {
+    shouldComponentUpdate (nextProps) {
       return (
         this.props.currentPage !== nextProps.currentPage ||
         this.props.media.small !== nextProps.media.small ||
@@ -23,7 +23,7 @@ export default connect({
         this.props.model !== nextProps.model
       )
     }
-    render() {
+    render () {
       return (
         <div className={classNames(styles.wrapper, this.props.className)}>
           <div className={styles.model} onClick={() => this.props.modelClicked()}>
