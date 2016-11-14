@@ -1,6 +1,6 @@
 {
     "name": "Cerebral2 Debugger",
-    "version": "0.6",
+    "version": "0.7",
     "description": "A debugger for Cerebral 2",
     "devtools_page": "devtools.html",
     "content_scripts": [
