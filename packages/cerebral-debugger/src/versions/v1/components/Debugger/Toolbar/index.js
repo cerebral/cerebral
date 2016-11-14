@@ -2,8 +2,8 @@ import React from 'react'
 import classNames from 'classnames'
 import {connect} from 'cerebral/react'
 import styles from './styles.css'
-import icons from 'common/icons.css'
-import signalsList from 'common/computed/signalsList'
+import icons from '../../../../../common/icons.css'
+import signalsList from '../../../../../common/computed/signalsList'
 
 export default connect({
   currentPage: 'debugger.currentPage',

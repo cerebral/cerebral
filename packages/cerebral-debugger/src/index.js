@@ -1,6 +1,8 @@
-import {connect} from 'connector'
+const connector = process.env.NODE_ENV === 'production'
+  ? require('./connector/extension')
+  : require('./connector/simulated')
 
-connect((version) => {
+connector.connect((version) => {
   require.ensure([], function () {
     try {
       require.resolve('./versions/' + version + '/index.js')

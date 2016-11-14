@@ -1,4 +1,4 @@
-import computedSignalsList from 'common/computed/signalsList'
+import computedSignalsList from '../../../../../common/computed/signalsList'
 
 function addSignal ({input, state}) {
   const signalsList = state.compute(computedSignalsList)

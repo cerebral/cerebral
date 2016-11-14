@@ -8,9 +8,12 @@ import {
   isBoolean,
   isNumber,
   isNull
-} from 'common/utils'
+} from '../../../../../common/utils'
 import JSONInput from './JSONInput'
-import connector from 'connector'
+
+const connector = process.env.NODE_ENV === 'production'
+  ? require('../../../../../connector/extension')
+  : require('../../../../../connector/simulated')
 
 function isInPath (source, target) {
   if (!source || !target) {

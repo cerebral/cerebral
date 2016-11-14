@@ -1,10 +1,13 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import styles from './styles.css'
-import {intToRGB, hashCode, nameToColors} from 'common/utils'
+import {intToRGB, hashCode, nameToColors} from '../../../../../../common/utils'
 import classnames from 'classnames'
-import connector from 'connector'
-import signalsList from 'common/computed/signalsList'
+import signalsList from '../../../../../../common/computed/signalsList'
+
+const connector = process.env.NODE_ENV === 'production'
+  ? require('../../../../../../connector/extension')
+  : require('../../../../../../connector/simulated')
 
 export default connect({
   debugger: 'debugger',
