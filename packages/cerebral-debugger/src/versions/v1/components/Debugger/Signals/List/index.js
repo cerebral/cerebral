@@ -64,7 +64,7 @@ export default connect({
       }
 
       let groupCount = 1
-      for (let x = index + 1 x < this.props.signalsList.length - 1x++) {
+      for (let x = index + 1; x < this.props.signalsList.length - 1; x++) {
         if (this.props.signalsList[x].groupId === signal.groupId) {
           groupCount++
         } else {

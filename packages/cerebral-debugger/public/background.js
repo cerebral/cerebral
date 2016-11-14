@@ -1,3 +1,4 @@
+/* global chrome */
 chrome.extension.onConnect.addListener(function (port) {
   var extensionListener = function (message, sender, sendResponse) {
     if (message.tabId && message.content) {

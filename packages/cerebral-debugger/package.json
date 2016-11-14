@@ -2,7 +2,6 @@
   "name": "cerebral-debugger",
   "version": "2.0.0",
   "description": "Cerebral Debugger",
-  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/cerebral/cerebral.git"
@@ -18,10 +17,9 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-debugger#readme",
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build&&rm -rf extension/build&&mv build extension/build",
+    "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "prepublish": "npm run build"
   },
