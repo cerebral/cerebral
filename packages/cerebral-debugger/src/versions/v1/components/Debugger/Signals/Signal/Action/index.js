@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './styles.css'
-import icons from 'common/icons.css'
+import icons from '../../../../../../../common/icons.css'
 import classnames from 'classnames'
 
 import Inspector from '../../../Inspector'

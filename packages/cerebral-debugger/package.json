@@ -21,7 +21,7 @@
   "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-debugger#readme",
   "scripts": {
     "start": "react-scripts start",
-    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=extension/build -s",
+    "build": "react-scripts build&&rm -rf extension/build&&mv build extension/build",
     "test": "react-scripts test --env=jsdom",
     "prepublish": "npm run build"
   },

@@ -1,12 +1,15 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import styles from './styles.css'
-import icons from 'common/icons.css'
-import connector from 'connector'
+import icons from '../../../../../../common/icons.css'
 
-import currentSignal from 'common/computed/currentSignal'
+import currentSignal from '../../../../../../common/computed/currentSignal'
 
 import Action from './Action'
+
+const connector = process.env.NODE_ENV === 'production'
+  ? require('../../../../../../connector/extension')
+  : require('../../../../../../connector/simulated')
 
 export default connect({
   currentPage: 'debugger.currentPage',

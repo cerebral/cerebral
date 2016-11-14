@@ -4,7 +4,7 @@ import {connect} from 'cerebral/react'
 import {
   isObject,
   isArray
-} from 'common/utils'
+} from '../../../../../../common/utils'
 
 export default connect({},
   class JSONInput extends React.Component {

@@ -1,6 +1,9 @@
 import React from 'react'
 import styles from './styles.css'
-import connector from 'connector'
+
+const connector = process.env.NODE_ENV === 'production'
+  ? require('../../../../../../connector/extension')
+  : require('../../../../../../connector/simulated')
 
 function componentsMapPathClick (path) {
   connector.sendEvent('componentMapPath', path)

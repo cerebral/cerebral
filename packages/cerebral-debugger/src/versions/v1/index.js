@@ -1,7 +1,5 @@
-import Prism from 'common/prism'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import {onChange} from 'connector'
 import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import UserAgent from 'cerebral-module-useragent'
@@ -9,11 +7,15 @@ import Devtools from 'cerebral/devtools'
 import DebuggerModule from './modules/Debugger'
 import Debugger from './components/Debugger'
 
+const connector = process.env.NODE_ENV === 'production'
+  ? require('../../connector/extension')
+  : require('../../connector/simulated')
+
 let currentController = null
 
 export default {
   render: function () {
-    onChange((payload) => {
+    connector.onChange((payload) => {
       if (payload.type !== 'init' && !currentController) {
         return
       }
