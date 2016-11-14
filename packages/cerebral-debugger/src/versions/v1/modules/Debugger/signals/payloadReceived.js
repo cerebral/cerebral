@@ -7,7 +7,6 @@ import endSignalExecution from '../actions/endSignalExecution'
 import runMutation from '../actions/runMutation'
 import updateComponentsMap from '../actions/updateComponentsMap'
 import updateRenders from '../actions/updateRenders'
-import setExecutionState from '../actions/setExecutionState'
 import runRecordedMutation from '../actions/runRecordedMutation'
 
 export default [

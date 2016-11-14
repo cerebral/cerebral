@@ -1,7 +1,7 @@
 import {Computed} from 'cerebral'
 
 export default Computed({
-  signals: 'debugger.signals'
+  signals: 'debugger.signals.**'
 }, props => {
   const signals = props.signals
 

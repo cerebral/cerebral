@@ -1,4 +1,4 @@
-import computedSignalsList from 'common/computed/signalsList'
+import computedSignalsList from '../../../../../common/computed/signalsList'
 
 function addSignal ({input, state}) {
   const signalsList = state.compute(computedSignalsList)
@@ -14,6 +14,7 @@ function addSignal ({input, state}) {
     functionsRun: {}
   }
   state.set(`debugger.signals.${execution.executionId}`, newSignal)
+  state.set('debugger.executingSignalsCount', state.get('debugger.executingSignalsCount') + 1)
 
   const currentSignalExecutionId = state.get('debugger.currentSignalExecutionId')
   if (!signalsList.length || currentSignalExecutionId === signalsList[0].executionId) {

@@ -5,18 +5,18 @@
   overflow: hidden;
 }
 
-.list {
+.signals-list {
   flex: 2;
   min-width: 200px;
 }
 
-.signal {
+.signals-signal {
   margin-left: 10px;
   flex: 4;
-    overflow: auto;
+  overflow: auto;
 }
 
-.rewrite {
+.signals-rewrite {
   display: block;
   border-top: 0;
   border-left: 1px solid #DDD;
@@ -30,11 +30,11 @@
   cursor: pointer;
   font-weight: bold;
 }
-.rewrite:hover {
+.signals-rewrite:hover {
   background-color: #FAFAFA;
 }
 
-.reset {
+.signals-reset {
   display: block;
   border-top: 0;
   border-left: 1px solid #DDD;
@@ -51,30 +51,30 @@
   margin-bottom: 5px;
   font-weight: bold;
 }
-.reset:hover {
+.signals-reset:hover {
   background-color: #FAFAFA;
 }
 
-.textarea {
+.signals-textarea {
   position: fixed;
   left: 0;
   top: 0;
   z-index: 99999;
 }
 
-.textarea textarea {
+.signals-textarea textarea {
   width: 300px;
   height: 300px;
 }
 
 @media (max-width: 650px) {
-    .list {
+    .signals-list {
         flex: 0;
         min-width: 25vw;
         max-width: 25vw;
     }
 
-    button {
+    .signals button {
         font-size: 7px;
     }
 }

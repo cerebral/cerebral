@@ -1,3 +1,4 @@
+/* global chrome */
 let onChangeCallback
 let hasInitialized = false
 let backlog = []
@@ -14,7 +15,7 @@ const connector = {
   },
   sendEvent (eventName, payload) {
     if (payload === undefined) {
-      var src = 'var event = new Event("cerebral2.debugger.' + eventName + '");window.dispatchEvent(event);'
+      const src = 'var event = new Event("cerebral2.debugger.' + eventName + '");window.dispatchEvent(event);'
       chrome.devtools.inspectedWindow.eval(src, function (res, err) {
         if (err) {
           console.log(err)
@@ -24,7 +25,7 @@ const connector = {
       var detail = {
         detail: payload
       }
-      var src = 'var event = new CustomEvent("cerebral2.debugger.' + eventName + '", ' + JSON.stringify(detail) + ');window.dispatchEvent(event);'
+      const src = 'var event = new CustomEvent("cerebral2.debugger.' + eventName + '", ' + JSON.stringify(detail) + ');window.dispatchEvent(event);'
       chrome.devtools.inspectedWindow.eval(src, function (res, err) {
         if (err) {
           console.log(err)

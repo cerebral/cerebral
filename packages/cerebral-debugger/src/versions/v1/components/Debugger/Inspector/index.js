@@ -1,6 +1,5 @@
+import './styles.css'
 import React from 'react'
-import {connect} from 'cerebral/react'
-import styles from './styles.css'
 import {
   isObject,
   isArray,
@@ -12,8 +11,8 @@ import {
 import JSONInput from './JSONInput'
 
 const connector = process.env.NODE_ENV === 'production'
-  ? require('../../../../../connector/extension')
-  : require('../../../../../connector/simulated')
+  ? require('../../../../../connector/extension').default
+  : require('../../../../../connector/simulated').default
 
 function isInPath (source, target) {
   if (!source || !target) {
@@ -37,6 +36,7 @@ function renderType (value, hasNext, path, propertyKey, highlightPath, modelChan
       <ArrayValue
         value={value}
         hasNext={hasNext}
+        modelChanged={modelChanged}
         path={path}
         propertyKey={propertyKey}
         highlightPath={highlightPath} />
@@ -47,6 +47,7 @@ function renderType (value, hasNext, path, propertyKey, highlightPath, modelChan
       <ObjectValue
         value={value}
         hasNext={hasNext}
+        modelChanged={modelChanged}
         path={path}
         propertyKey={propertyKey}
         highlightPath={highlightPath} />
@@ -111,8 +112,8 @@ class ObjectValue extends React.Component {
   renderProperty (key, value, index, hasNext, path) {
     this.props.path.push(key)
     const property = (
-      <div className={styles.objectProperty} key={index}>
-        <div className={styles.objectPropertyValue}>{renderType(value, hasNext, path.slice(), key, this.props.highlightPath)}</div>
+      <div className='inspector-objectProperty' key={index}>
+        <div className='inspector-bjectPropertyValue'>{renderType(value, hasNext, path.slice(), key, this.props.highlightPath, this.props.modelChanged)}</div>
       </div>
     )
     this.props.path.pop()
@@ -130,7 +131,7 @@ class ObjectValue extends React.Component {
 
     if (this.state.isCollapsed) {
       return (
-        <div className={isExactHighlightPath ? styles.highlightObject : styles.object} onClick={this.onExpandClick}>
+        <div className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'} onClick={this.onExpandClick}>
           {this.props.propertyKey ? this.props.propertyKey + ': ' : null}
           <strong>{'{ '}</strong>{this.renderKeys(Object.keys(value))}<strong>{' }'}</strong>
           {hasNext ? ',' : null}
@@ -139,7 +140,7 @@ class ObjectValue extends React.Component {
     } else if (this.props.propertyKey) {
       const keys = Object.keys(value)
       return (
-        <div className={isExactHighlightPath ? styles.highlightObject : styles.object}>
+        <div className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'}>
           <div onClick={this.onCollapseClick}>{this.props.propertyKey}: <strong>{'{ '}</strong></div>
           {keys.map((key, index) => this.renderProperty(key, value[key], index, index < keys.length - 1, this.props.path))}
           <div><strong>{' }'}</strong>{hasNext ? ',' : null}</div>
@@ -148,7 +149,7 @@ class ObjectValue extends React.Component {
     } else {
       const keys = Object.keys(value)
       return (
-        <div className={isExactHighlightPath ? styles.highlightObject : styles.object}>
+        <div className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'}>
           <div onClick={this.onCollapseClick}><strong>{'{ '}</strong></div>
           {keys.map((key, index) => this.renderProperty(key, value[key], index, index < keys.length - 1, this.props.path, this.props.highlightPath))}
           <div><strong>{' }'}</strong>{hasNext ? ',' : null}</div>
@@ -200,7 +201,7 @@ class ArrayValue extends React.Component {
   renderItem (item, index, hasNext, path) {
     this.props.path.push(index)
     const arrayItem = (
-      <div className={styles.arrayItem} key={index}>
+      <div className='inspector-arrayItem' key={index}>
         {renderType(item, hasNext, path.slice())}
       </div>
     )
@@ -213,16 +214,15 @@ class ArrayValue extends React.Component {
 
     if (this.state.isCollapsed) {
       return (
-        <div className={isExactHighlightPath ? styles.highlightArray : styles.array} onClick={this.onExpandClick}>
+        <div className={isExactHighlightPath ? 'inspector-array inspector-highlight' : 'inspector-array'} onClick={this.onExpandClick}>
           {this.props.propertyKey ? this.props.propertyKey + ': ' : null}
           <strong>{'[ '}</strong>{value.length}<strong>{' ]'}</strong>
           {hasNext ? ',' : null}
         </div>
       )
     } else if (this.props.propertyKey) {
-      const keys = Object.keys(value)
       return (
-        <div className={isExactHighlightPath ? styles.highlightArray : styles.array}>
+        <div className={isExactHighlightPath ? 'inspector-array inspector-highlight' : 'inspector-array'}>
           <div onClick={this.onCollapseClick}>{this.props.propertyKey}: <strong>{'[ '}</strong></div>
           {value.map((item, index) => this.renderItem(item, index, index < value.length - 1, this.props.path))}
           <div><strong>{' ]'}</strong>{hasNext ? ',' : null}</div>
@@ -230,7 +230,7 @@ class ArrayValue extends React.Component {
       )
     } else {
       return (
-        <div className={isExactHighlightPath ? styles.highlightArray : styles.array}>
+        <div className={isExactHighlightPath ? 'inspector-array inspector-highlight' : 'inspector-array'}>
           <div onClick={this.onCollapseClick}><strong>{'[ '}</strong></div>
           {value.map((item, index) => this.renderItem(item, index, index < value.length - 1, this.props.path))}
           <div><strong>{' ]'}</strong>{hasNext ? ',' : null}</div>
@@ -287,7 +287,7 @@ class Value extends React.Component {
 
     if (this.state.isEditing) {
       return (
-        <div className={isExactHighlightPath ? styles.highlightValue : null}>
+        <div className={isExactHighlightPath ? 'inspector-highlight' : null}>
           {this.props.propertyKey ? this.props.propertyKey + ': ' : <span />}
           <span>
             <JSONInput
@@ -300,7 +300,7 @@ class Value extends React.Component {
         )
     } else {
       return (
-        <div className={isExactHighlightPath ? styles.highlightValue : null}>
+        <div className={isExactHighlightPath ? 'inspector-highlight' : null}>
           {this.props.propertyKey ? this.props.propertyKey + ': ' : <span />}
           <span onClick={this.onClick}>{isString(value) ? '"' + value + '"' : String(value)}</span>
           {hasNext ? ',' : null}
@@ -309,10 +309,10 @@ class Value extends React.Component {
     }
   }
   render () {
-    let className = styles.string
-    if (isNumber(this.props.value)) className = styles.number
-    if (isBoolean(this.props.value)) className = styles.boolean
-    if (isNull(this.props.value)) className = styles.null
+    let className = 'inspector-string'
+    if (isNumber(this.props.value)) className = 'inspector-number'
+    if (isBoolean(this.props.value)) className = 'inspector-boolean'
+    if (isNull(this.props.value)) className = 'inspector-null'
     return (
       <div className={className}>
         {this.renderValue(this.props.value, this.props.hasNext)}

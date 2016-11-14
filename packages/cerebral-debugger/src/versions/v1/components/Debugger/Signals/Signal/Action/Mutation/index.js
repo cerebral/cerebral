@@ -1,6 +1,5 @@
+import './styles.css'
 import React from 'react'
-import styles from './styles.css'
-import icons from '../../../../../../../../common/icons.css'
 
 import Inspector from '../../../../Inspector'
 
@@ -24,11 +23,11 @@ function Mutation ({mutation, onMutationClick}) {
   const args = mutation.args.slice(1)
 
   return (
-    <div className={styles.mutation}>
-      <i className={icons.mutation} />
-      <span className={styles.mutationName} style={mutationNameStyle}>{mutation.method}</span>
-      <span className={styles.mutationPath} onClick={() => onMutationClick(mutation.args[0])}>{mutation.args[0].join('.')}</span>
-      <span className={styles.mutationArgs}>
+    <div className='mutation'>
+      <i className='icon icon-mutation' />
+      <span className='mutation-mutationName' style={mutationNameStyle}>{mutation.method}</span>
+      <span className='mutation-mutationPath' onClick={() => onMutationClick(mutation.args[0])}>{mutation.args[0].join('.')}</span>
+      <span className='mutation-mutationArgs'>
         {args.map((arg, index) => {
           return <Inspector key={index} value={arg} />
         })}

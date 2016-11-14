@@ -1,4 +1,4 @@
-.input {
+.JSONinput-input {
   position: relative;
   border: 0;
   text-indent: 3px;
@@ -15,7 +15,6 @@
   box-sizing: border-box;
 }
 
-.invalidInput {
-  composes: input;
+.JSONinput-invalidInput {
   border: 1px solid red;
 }

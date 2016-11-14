@@ -1,6 +1,6 @@
+import './styles.css'
 import React from 'react'
 import {connect} from 'cerebral/react'
-import styles from './styles.css'
 
 import Toolbar from './Toolbar'
 import Signals from './Signals'
@@ -15,12 +15,12 @@ export default connect({
   function Debugger (props) {
     if (props.settings.disableDebugger) {
       return (
-        <div className={styles.debugger}>
-          <div className={styles.toolbar}>
+        <div className='debugger'>
+          <div className='debugger-toolbar'>
             <Toolbar />
           </div>
-          <div className={styles.disabled}>
-            <img src='logo.png' width='200' />
+          <div className='debugger-disabled'>
+            <img src='logo.png' width='200' role='presentation'/>
             <h1>Disabled</h1>
             <h3>Enable debugger and refresh</h3>
           </div>
@@ -30,34 +30,34 @@ export default connect({
     const mutationsError = props.mutationsError
 
     return (
-      <div className={styles.debugger}>
+      <div className='debugger'>
         {
            mutationsError ?
-             <div className={styles.mutationsError}>
+             <div className='debugger-mutationsError'>
                <h1>Ops!</h1>
                <h4>Signal "{mutationsError.signalName}" causes an error doing <strong>{mutationsError.mutation.name}</strong>("{mutationsError.mutation.path.join('.')}", {JSON.stringify(mutationsError.mutation.args).replace(/^\[/, '').replace(/\]$/, '')})</h4>
              </div>
           :
-            <div className={styles.toolbar}>
+            <div className='debugger-toolbar'>
               <Toolbar />
             </div>
         }
-        <div className={styles.content}>
+        <div className='debugger-content'>
           {
             props.currentPage === 'signals' ?
-              <Signals className={props.currentPage !== 'signals' ? styles.hiddenOnSmall : null} />
+              <Signals className={props.currentPage !== 'signals' ? 'debugger-hiddenOnSmall' : null} />
             :
               null
           }
           {
             props.currentPage === 'components' ?
-              <Components className={props.currentPage !== 'components' ? styles.hiddenOnSmall : null} />
+              <Components className={props.currentPage !== 'components' ? 'debugger-hiddenOnSmall' : null} />
             :
               null
           }
           {
             props.currentPage !== 'components' ?
-              <Model className={props.currentPage !== 'model' ? styles.hiddenOnSmall : null} />
+              <Model className={props.currentPage !== 'model' ? 'debugger-hiddenOnSmall' : null} />
             :
               null
           }

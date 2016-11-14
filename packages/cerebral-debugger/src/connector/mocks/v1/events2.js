@@ -80,7 +80,7 @@ module.exports = [{
   }
 }, {
   type: 'executionEnd',
-  datetime: 50000,
+  datetime: 5000,
   data: {
     execution: {
       'executionId': 5

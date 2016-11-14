@@ -6,27 +6,27 @@
   overflow-y: scroll;
 }
 
-.title {
+.signal-title {
   margin: 0;
   padding: 10px 10px 0 10px;
   font-size: 20px;
 }
 
-.chain {
+.signal-chain {
   padding: 10px;
 }
 
-.asyncHeader {
+.signal-asyncHeader {
   display: flex;
   align-items: flex-start;
 }
 
-.asyncHeader > i {
+.signal-asyncHeader > i {
   top: 0;
   font-size: 20px;
 }
 
-.async {
+.signal-async {
   flex: 1;
   border-top: 1px solid #DDD;
   border-left: 5px solid #DDD;
@@ -37,22 +37,22 @@
   margin-bottom: 10px;
 }
 
-.output {
+.signal-output {
   margin-top: 5px;
   display: flex;
   align-items: flex-start;
 }
 
-.output > i {
+.signal-output > i {
   top: 0;
   flex: 0 0 20px;
 }
 
-.outputName {
+.signal-outputName {
   height: 20px;
   line-height: 20px;
 }
 
-.outputPath {
+.signal-outputPath {
   flex: 1;
 }

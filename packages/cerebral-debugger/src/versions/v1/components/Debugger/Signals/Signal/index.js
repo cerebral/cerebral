@@ -1,21 +1,19 @@
+/* global Prism */
+import './styles.css'
 import React from 'react'
 import {connect} from 'cerebral/react'
-import styles from './styles.css'
-import icons from '../../../../../../common/icons.css'
-
-import currentSignal from '../../../../../../common/computed/currentSignal'
 
 import Action from './Action'
 
 const connector = process.env.NODE_ENV === 'production'
-  ? require('../../../../../../connector/extension')
-  : require('../../../../../../connector/simulated')
+  ? require('../../../../../../connector/extension').default
+  : require('../../../../../../connector/simulated').default
 
-export default connect({
+export default connect(props => ({
   currentPage: 'debugger.currentPage',
-  media: 'useragent.media',
-  signal: currentSignal
-}, {
+  useragent: 'useragent.**',
+  signal: `debugger.signals.${props.currentSignalExecutionId}.**`
+}), {
   mutationClicked: 'debugger.mutationClicked'
 },
   class Signal extends React.Component {
@@ -26,7 +24,7 @@ export default connect({
       this.onActionClick = this.onActionClick.bind(this)
     }
     shouldComponentUpdate (nextProps) {
-      return nextProps.currentPage === 'signals' || !nextProps.media.small
+      return nextProps.currentPage === 'signals' || !nextProps.useragent.media.small
     }
     onMutationClick (path) {
       this.props.mutationClicked({
@@ -51,10 +49,10 @@ export default connect({
         const style = isOutput ? null : {opacity: 0.3}
 
         return (
-          <div className={styles.output} style={style} key={index}>
-            {isOutput ? <i className={icons.right} /> : <i className={icons.empty} />}
-            <div className={styles.outputPath}>
-              <div className={styles.outputName}>{output}</div>
+          <div className='signal-output' style={style} key={index}>
+            {isOutput ? <i className='icon icon-right' /> : <i className='icon icon-empty' />}
+            <div className='signal-outputPath'>
+              <div className='signal-outputName'>{output}</div>
               {action.outputs[output].map(this.renderAction)}
             </div>
           </div>
@@ -64,8 +62,8 @@ export default connect({
     renderAction (action, index) {
       if (Array.isArray(action)) {
         return (
-          <div className={styles.asyncHeader} key={index}>
-            <div className={styles.async}>
+          <div className='signal-asyncHeader' key={index}>
+            <div className='signal-async'>
               {action.map(this.renderAction)}
             </div>
           </div>
@@ -89,9 +87,9 @@ export default connect({
       }
 
       return (
-        <div className={styles.signal}>
-          <h3 className={styles.title}>{this.props.signal.name}</h3>
-          <div className={styles.chain}>
+        <div className='signal'>
+          <h3 className='signal-title'>{this.props.signal.name}</h3>
+          <div className='signal-chain'>
             {this.props.signal.staticTree.map((action, index) => this.renderAction(action, index))}
           </div>
         </div>

@@ -1,8 +1,3 @@
-.wrapper {
-  flex: 1;
-  padding: 10px;
-}
-
 .model {
   background-color: #FFF;
   border-radius: 3px;
@@ -13,4 +8,9 @@
   border: 1px solid #DDD;
   height: calc(100vh - 60px);
   overflow-y: scroll;
+}
+
+.model-wrapper {
+  flex: 1;
+  padding: 10px;
 }

@@ -1,6 +1,4 @@
-import orderSignals from './orderSignals'
-
-let initCallback
+const VERSION = 'v1'
 let onChangeCallback
 
 const connector = window.CONNECTOR = {

@@ -1,6 +1,6 @@
 const connector = process.env.NODE_ENV === 'production'
-  ? require('./connector/extension')
-  : require('./connector/simulated')
+  ? require('./connector/extension').default
+  : require('./connector/simulated').default
 
 connector.connect((version) => {
   require.ensure([], function () {
@@ -13,7 +13,7 @@ connector.connect((version) => {
       return
     }
 
-    var debug = require('./versions/' + version + '/index.js')
+    var debug = require('./versions/' + version + '/index.js').default
     document.querySelector('#root').style.visibility = 'visible'
     document.querySelector('#error').style.display = 'none'
     debug.render()

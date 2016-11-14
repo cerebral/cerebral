@@ -1,28 +1,20 @@
+import './styles.css'
 import React from 'react'
-import styles from './styles.css'
-
-const connector = process.env.NODE_ENV === 'production'
-  ? require('../../../../../../connector/extension')
-  : require('../../../../../../connector/simulated')
-
-function componentsMapPathClick (path) {
-  connector.sendEvent('componentMapPath', path)
-}
 
 export default function StatePaths (props) {
   let uniqueComponents = []
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.componentsWrapper}>
+    <div className='statePaths-wrapper'>
+      <div className='statePaths-componentsWrapper'>
         <div
           key='header'
-          className={styles.itemHeader}
+          className='statePaths-itemHeader'
         >
-          <div className={styles.pathName}>
+          <div className='statePaths-pathName'>
             {Object.keys(props.map).length} <small>active state paths</small>
           </div>
-          <div className={styles.components}>
+          <div className='statePaths-components'>
             {Object.keys(props.map).reduce((count, key) => {
               const components = props.map[key].filter(component => uniqueComponents.indexOf(component) === -1)
               uniqueComponents = uniqueComponents.concat(components)
@@ -34,13 +26,13 @@ export default function StatePaths (props) {
           return (
             <div
               key={key}
-              className={styles.item}
+              className='statePaths-item'
               onClick={() => this.componentMapPathClick({
                 mapPath: key
               })}
             >
-              <div className={styles.pathName}>{key}</div>
-              <div className={styles.components}>
+              <div className='statePaths-pathName'>{key}</div>
+              <div className='statePaths-components'>
                 {props.map[key].map((component) => {
                   return component.name
                 }).join(', ')}

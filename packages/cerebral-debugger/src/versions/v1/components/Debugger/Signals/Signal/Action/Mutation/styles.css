@@ -10,7 +10,7 @@
   color: #DDD;
 }
 
-.mutationName {
+.mutation-mutationName {
   font-weight: bold;
   margin-left: 5px;
   flex: 0 0 auto;
@@ -18,7 +18,7 @@
   line-height: 20px;
 }
 
-.mutationPath {
+.mutation-mutationPath {
   margin-left: 5px;
   text-decoration: underline;
   cursor: pointer;
@@ -27,11 +27,11 @@
   line-height: 20px;
 }
 
-.mutationPath:hover {
+.mutation-mutationPath:hover {
   color: #1e78c3;
 }
 
-.mutationArgs {
+.mutation-mutationArgs {
   margin-left: 5px;
   flex: 1;
   font-size: 12px;

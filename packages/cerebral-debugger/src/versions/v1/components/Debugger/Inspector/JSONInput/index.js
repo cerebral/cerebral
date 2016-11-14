@@ -1,5 +1,5 @@
+import './styles.css'
 import React from 'react'
-import styles from './styles.css'
 import {connect} from 'cerebral/react'
 import {
   isObject,
@@ -61,7 +61,7 @@ export default connect({},
             type='Text'
             autoFocus
             onKeyDown={(event) => { event.keyCode === 27 && this.onBlur() }}
-            className={this.state.isValid ? styles.input : styles.invalidInput}
+            className={this.state.isValid ? 'JSONinput-input' : 'JSONinput-input JSONinput-invalidInput'}
             value={String(this.state.value)}
             onChange={this.onChange}
             onBlur={() => this.onBlur()}

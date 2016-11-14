@@ -1,13 +1,16 @@
+import './styles.css'
 import React from 'react'
 import {connect} from 'cerebral/react'
-import styles from './styles.css'
-import {intToRGB, hashCode, nameToColors} from 'common/utils'
+import {nameToColors} from '../../../../../../common/utils'
 import classnames from 'classnames'
-import connector from 'connector'
-import signalsList from 'common/computed/signalsList'
+import signalsList from '../../../../../../common/computed/signalsList'
+
+const connector = process.env.NODE_ENV === 'production'
+  ? require('../../../../../../connector/extension').default
+  : require('../../../../../../connector/simulated').default
 
 export default connect({
-  debugger: 'debugger',
+  debugger: 'debugger.*',
   signalsList: signalsList,
   isExecuting: 'debugger.isExecuting'
 }, {
@@ -45,9 +48,9 @@ export default connect({
       }
       const isActive = currentSignalExecutionId === signal.executionId
       const className = classnames({
-        [styles.item]: true,
-        [styles.activeItem]: isActive,
-        [styles.grouped]: signal.isGrouped,
+        'list-item': true,
+        'list-activeItem': isActive,
+        'list-grouped': signal.isGrouped,
         pulse: signal.isExecuting
       })
       const isInOpenGroup = this.props.debugger.expandedSignalGroups.indexOf(signal.groupId) !== -1
@@ -61,7 +64,7 @@ export default connect({
       }
 
       let groupCount = 1
-      for (let x = index + 1 x < this.props.signalsList.length - 1x++) {
+      for (let x = index + 1; x < this.props.signalsList.length - 1; x++) {
         if (this.props.signalsList[x].groupId === signal.groupId) {
           groupCount++
         } else {
@@ -75,9 +78,9 @@ export default connect({
           onDoubleClick={() => this.onSignalDoubleClick(signal, index)}
           className={className}
           key={index}>
-          {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className={styles.remembered}/> : null}
-          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className={styles.indicator} style={signalStyle}/>}
-          <span className={styles.name}>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
+          {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className='list-remembered'/> : null}
+          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className='list-indicator' style={signalStyle}/>}
+          <span className='list-name'>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
         </li>
       )
     }
@@ -85,7 +88,7 @@ export default connect({
       const signals = this.props.signalsList
 
       return (
-        <ul className={styles.list}>
+        <ul className='list'>
           {signals.map((signal, index) => this.renderSignal(signal, index))}
         </ul>
       )

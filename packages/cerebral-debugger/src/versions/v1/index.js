@@ -1,3 +1,4 @@
+import '../../common/icons.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import {Controller} from 'cerebral'
@@ -8,8 +9,8 @@ import DebuggerModule from './modules/Debugger'
 import Debugger from './components/Debugger'
 
 const connector = process.env.NODE_ENV === 'production'
-  ? require('../../connector/extension')
-  : require('../../connector/simulated')
+  ? require('../../connector/extension').default
+  : require('../../connector/simulated').default
 
 let currentController = null
 
@@ -23,6 +24,9 @@ export default {
       if (!currentController) {
         currentController = Controller({
           devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
+          options: {
+            strictRender: true
+          },
           modules: {
             debugger: DebuggerModule,
             useragent: UserAgent({

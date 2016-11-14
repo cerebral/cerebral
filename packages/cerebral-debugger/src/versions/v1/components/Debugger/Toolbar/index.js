@@ -1,13 +1,12 @@
+import './styles.css'
 import React from 'react'
 import classNames from 'classnames'
 import {connect} from 'cerebral/react'
-import styles from './styles.css'
-import icons from '../../../../../common/icons.css'
 import signalsList from '../../../../../common/computed/signalsList'
 
 export default connect({
   currentPage: 'debugger.currentPage',
-  isExecuting: 'debugger.isExecuting',
+  executingSignalsCount: 'debugger.executingSignalsCount',
   appSignals: signalsList
 }, {
   pageChanged: 'debugger.pageChanged'
@@ -21,29 +20,29 @@ export default connect({
     }
     render () {
       return (
-        <ul className={styles.toolbar}>
-          <li className={styles.item}>
-            <ul className={styles.tabs}>
+        <ul className='toolbar'>
+          <li className='toolbar-item'>
+            <ul className='toolbar-tabs'>
               <li
-                className={classNames(styles.tab, {[styles.activeTab]: this.props.currentPage === 'signals'})}
+                className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'signals'})}
                 onClick={() => this.props.pageChanged({page: 'signals'})}>
-                <i className={icons.signals} /> CONTROLLER
+                <i className='icon icon-signals' /> CONTROLLER
               </li>
               <li
-                className={classNames(styles.tab, {[styles.activeTab]: this.props.currentPage === 'components'})}
+                className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'components'})}
                 onClick={() => this.props.pageChanged({page: 'components'})}>
-                <i className={icons.components} /> VIEW
+                <i className='icon icon-components' /> COMPONENTS
               </li>
               <li
-                className={classNames(styles.tabOnSmall, styles.tab, {[styles.activeTab]: this.props.currentPage === 'model'})}
+                className={classNames('toolbar-tabOnSmall', 'toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'model'})}
                 onClick={() => this.props.pageChanged({page: 'model'})}>
-                <i className={icons.model} /> MODEL
+                <i className='icon icon-model' /> STATE-TREE
               </li>
-              <li className={styles.rightItem}>
-                {this.props.isExecuting ? 'executing' : 'idle'}
-                <div className={classNames({
-                  [styles.idle]: !this.props.isExecuting,
-                  [styles.executing]: this.props.isExecuting
+              <li className='toolbar-rightItem'>
+                {Boolean(this.props.executingSignalsCount) ? 'executing' : 'idle'}
+                <div className={classNames('toolbar-led', {
+                  'toolbar-led--idle': !Boolean(this.props.executingSignalsCount),
+                  'toolbar-led--executing': Boolean(this.props.executingSignalsCount)
                 })} />
               </li>
             </ul>

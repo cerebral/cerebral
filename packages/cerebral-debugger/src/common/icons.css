@@ -23,24 +23,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.empty {
-  composes: icon;
-}
-.empty:before {
+.icon-empty {}
+.icon-empty:before {
   content: " "
 }
 
-.mutation {
-  composes: icon;
-}
-.mutation:before {
+.icon-mutation {}
+.icon-mutation:before {
     content: "\e161";
 }
 
-.service {
-  composes: icon;
-}
-.service:before {
+.icon-service {}
+.icon-service:before {
     content: "\e8b8";
 }
 
@@ -51,79 +45,57 @@
     content: "\e889";
 }
 
-.model {
-  composes: icon;
-}
-.model:before {
+.icon-model {}
+.icon-model:before {
   content: "\e1db";
 }
 
-.parallel {
-  composes: icon;
-}
-.parallel:before {
+.icon-parallel {}
+.icon-parallel:before {
   content: "\e53b";
 }
 
-.action {
-  composes: icon;
-}
-.action:before {
+.icon-action {}
+.icon-action:before {
   content: "\e86c";
 }
 
-.asyncAction {
-  composes: icon;
-}
-.asyncAction:before {
+.icon-asyncAction {}
+.icon-asyncAction:before {
   content: "\e889";
 }
 
-.skippedOutput {
-  composes: icon;
-}
-.skippedOutput:before {
+.icon-skippedOutput {}
+.icon-skippedOutput:before {
     content: "\e5cd";
 }
 
-.signals {
-  composes: icon;
-}
-.signals:before {
+.icon-signals {}
+.icon-signals:before {
     content: "\e565";
 }
 
-.right {
-  composes: icon;
-}
-.right:before {
+.icon-right {}
+.icon-right:before {
     content: "\e5cc";
 }
 
-.runningAction {
-  composes: icon;
-}
-.runningAction:before {
+.icon-runningAction {}
+.icon-runningAction:before {
   content: "\e5d5";
 }
 
-.down {
-  composes: icon;
-}
-.down:before {
+.icon-down {}
+.icon-down:before {
     content: "\e5cf";
 }
 
-.warning {
-  composes: icon;
-}
-.warning:before {
+.icon-warning {}
+.icon-warning:before {
     content: "\e002";
 }
 
-.components {
-  composes: icon;
-}
-.components:before {
+.icon-components {}
+.icon-components:before {
     content: "\e871";
 }

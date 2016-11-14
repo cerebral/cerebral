@@ -11,7 +11,7 @@ export default {
   state: {
     settings: {},
     initialModel: {},
-    isExecuting: false,
+    executingSignalsCount: 0,
     model: {},
     currentPage: 'signals',
     lastMutationCount: 0,

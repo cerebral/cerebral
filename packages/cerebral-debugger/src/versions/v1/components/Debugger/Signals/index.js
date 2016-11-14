@@ -1,20 +1,20 @@
+import './styles.css'
 import React from 'react'
 import classNames from 'classnames'
 import {connect} from 'cerebral/react'
-import styles from './styles.css'
 import signalsList from '../../../../../common/computed/signalsList'
 
 import List from './List'
 import Signal from './Signal'
 
 const connector = process.env.NODE_ENV === 'production'
-  ? require('../../../../../connector/extension')
-  : require('../../../../../connector/simulated')
+  ? require('../../../../../connector/extension').default
+  : require('../../../../../connector/simulated').default
 
 export default connect({
   currentPage: 'debugger.currentPage',
-  signalsList: signalsList(),
-  media: 'useragent.media',
+  signalsList: signalsList,
+  useragent: 'useragent.**',
   currentSignalExecutionId: 'debugger.currentSignalExecutionId',
   isExecuting: 'debugger.isExecuting'
 }, {
@@ -28,7 +28,7 @@ export default connect({
     shouldComponentUpdate (nextProps, nextState) {
       return (
         this.props.currentPage !== nextProps.currentPage ||
-        this.props.media.small !== nextProps.media.small ||
+        this.props.useragent.media.small !== nextProps.useragent.media.small ||
         this.props.currentSignalExecutionId !== nextProps.currentSignalExecutionId ||
         this.props.mutationsError !== nextProps.mutationsError ||
         this.state.copiedSignals !== nextState.copiedSignals ||
@@ -48,28 +48,28 @@ export default connect({
       const currentSignalExecutionId = this.props.currentSignalExecutionId
 
       return (
-        <div className={classNames(styles.signals, this.props.className)}>
-          <div className={styles.list}>
+        <div className={classNames('signals', this.props.className)}>
+          <div className='signals-list'>
             <List />
             <button
               onClick={() => this.onCopySignalsClick()}
-              className={styles.rewrite}
+              className='signals-rewrite'
               disabled={!currentSignalExecutionId}>
               Copy signals data
             </button>
             <button
               onClick={() => this.onResetClick()}
-              className={styles.reset}
+              className='signals-reset'
               disabled={!currentSignalExecutionId || this.props.isExecuting}>
               Reset all state
             </button>
           </div>
-          <div className={styles.signal}>
-            <Signal />
+          <div className='signals-signal'>
+            <Signal currentSignalExecutionId={currentSignalExecutionId}/>
           </div>
           {
             this.state.copiedSignals ?
-              <li className={styles.textarea}>
+              <li className='signals-textarea'>
                 <textarea ref={(node) => this.textarea = node} value={this.state.copiedSignals} onBlur={() => this.setState({copiedSignals: null})} />
               </li>
             :

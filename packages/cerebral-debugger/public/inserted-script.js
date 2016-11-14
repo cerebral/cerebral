@@ -1,3 +1,4 @@
+/* global chrome */
 // This is included and executed in the inspected page
 (function (window) {
   var update = function (event) {

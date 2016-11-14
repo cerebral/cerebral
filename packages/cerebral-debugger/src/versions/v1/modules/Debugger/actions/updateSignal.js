@@ -1,7 +1,4 @@
-import computedSignalsList from 'common/computed/signalsList'
-
 function updateSignal ({input, state}) {
-  const signalsList = state.compute(computedSignalsList)
   const execution = input.data.execution
   const signalPath = `debugger.signals.${execution.executionId}`
   const signal = state.get(signalPath)

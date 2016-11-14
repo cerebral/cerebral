@@ -1,5 +1,5 @@
+import './styles.css'
 import React from 'react'
-import styles from './styles.css'
 
 function getTime (date) {
   const hours = String(date.getHours()).length === 2 ? date.getHours() : '0' + date.getHours()
@@ -38,32 +38,32 @@ function unique (array) {
 
 export default function Renders (props) {
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.renderWrapper}>
+    <div className='renders-wrapper'>
+      <div className='renders-renderWrapper'>
         {props.renders.map((render, index) => {
           const date = new Date(render.start)
 
           return (
-            <div className={styles.item} key={index}>
-              <div className={styles.itemHeader}>
+            <div className='renders-item' key={index}>
+              <div className='renders-itemHeader'>
                 <strong>{getTime(date)}</strong> - {render.duration}ms
               </div>
-              <div className={styles.renderDataWrapper}>
-                <div className={styles.paths}>
-                  <div className={styles.pathsHeader}><small>Paths changed</small></div>
-                  <div className={styles.pathsList}>
+              <div className='renders-renderDataWrapper'>
+                <div className='renders-paths'>
+                  <div className='renders-pathsHeader'><small>Paths changed</small></div>
+                  <div className='renders-pathsList'>
                     {extractPaths(render.changes || {}).map((path, index) => {
                       return (
-                        <div className={styles.path} key={index}>
+                        <div className='renders-path' key={index}>
                           <strong>{path}</strong>
                         </div>
                       )
                     })}
                   </div>
                 </div>
-                <div className={styles.components}>
-                  <div className={styles.componentsHeader}><small>Components rendered</small></div>
-                  <div className={styles.componentsList}>{unique(render.components).join(', ')}</div>
+                <div className='renders-components'>
+                  <div className='renders-componentsHeader'><small>Components rendered</small></div>
+                  <div className='renders-componentsList'>{unique(render.components).join(', ')}</div>
                 </div>
               </div>
             </div>

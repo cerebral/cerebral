@@ -7,12 +7,12 @@
   background-color: #FAFAFA;
 }
 
-.toolbar {
+.debugger-toolbar {
   flex: 0 0 40px;
   display: flex;
 }
 
-.mutationsError {
+.debugger-mutationsError {
   flex: 0 0 40px;
   display: flex;
   background-color: #eb1e1e;
@@ -21,41 +21,41 @@
   box-sizing: border-box;
 }
 
-.mutationsError h1, .mutationsError h4 {
+.debugger-mutationsError h1, .debugger-mutationsError h4 {
   color: #FFF;
   margin: 0;
   opacity: 0.8;
 }
 
-.mutationsError h1 {
+.debugger-mutationsError h1 {
   font-size: 22px;
   margin-right: 10px;
 }
 
-.mutationsError h4 {
+.debugger-mutationsError h4 {
   font-weight: normal;
 }
 
-.content {
+.debugger-content {
   flex: 1;
   display: flex;
 }
 
-.loading {
+.debugger-loading {
   text-align: center;
 }
 
-.loading h3 {
+.debugger-loading h3 {
   color: #333;
 }
 
-.disabled {
+.debugger-disabled {
   padding: 50px;
   text-align: center;
 }
 
 @media (max-width: 1270px) {
-    .hiddenOnSmall {
+    .debugger-hiddenOnSmall {
         display: none !important;
     }
 }

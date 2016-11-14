@@ -10,7 +10,7 @@
   color: #DDD;
 }
 
-.serviceName {
+.service-serviceName {
   font-weight: bold;
   margin-left: 5px;
   flex: 0 0 auto;
@@ -18,7 +18,7 @@
   line-height: 20px;
 }
 
-.serviceMethod {
+.service-serviceMethod {
   margin-left: 5px;
   cursor: pointer;
   flex: 0 0 auto;
@@ -26,7 +26,7 @@
   line-height: 20px;
 }
 
-.serviceArgs {
+.service-serviceArgs {
   margin-left: 5px;
   flex: 1;
   font-size: 12px;
