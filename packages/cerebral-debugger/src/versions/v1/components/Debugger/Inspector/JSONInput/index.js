@@ -29,7 +29,7 @@ export default connect({},
       try {
         parsedValue = JSON.parse(value)
       } catch (e) {
-        isValid = value.length ? true : false
+        isValid = !!value.length
       }
 
       if (isObject(parsedValue) || isArray(parsedValue)) {
