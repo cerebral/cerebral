@@ -59,7 +59,11 @@ class Controller extends EventEmitter {
 
     if (this.devtools) {
       this.devtools.init(this)
-    } else if (process.env.NODE_ENV !== 'production' && typeof window !== 'undefined') {
+    } else if (
+      process.env.NODE_ENV !== 'production' &&
+      typeof navigator !== 'undefined' &&
+      /Chrome/.test(navigator.userAgent)
+    ) {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/getting-real/03_devtools.html')
     }
 
@@ -161,7 +165,11 @@ class Controller extends EventEmitter {
       throwError(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal`)
     }
 
-    this.runTree(name, signal, payload || {})
+    this.runTree(name, signal, payload || {}, (error) => {
+      if (error) {
+        throw error
+      }
+    })
   }
   /*
     Returns a function which binds the name/path of signal,

@@ -11,11 +11,10 @@ export default function createOnChildChanged (controller) {
       'child_changed',
       signal,
       (data) => {
-        controller.getSignal(signal)({
+        controller.getSignal(signal)(Object.assign({
           key: data.key,
-          value: data.val(),
-          ...options.payload
-        })
+          value: data.val()
+        }, options.payload))
       }
     )
   }

@@ -53,6 +53,31 @@ describe('React', () => {
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
+    it('should support computed', () => {
+      const specialName = Computed(
+        {name: 'foo'},
+        function specialName ({name}) {
+          return 'special ' + name
+        }
+      )
+      const state = {
+        foo: 'bar'
+      }
+      const TestComponent = connect({
+        foo: specialName
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <StateContainer state={state}>
+          <TestComponent />
+        </StateContainer>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'special bar')
+    })
   })
   describe('container', () => {
     it('should be able to expose controller', () => {

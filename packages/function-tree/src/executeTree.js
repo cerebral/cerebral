@@ -3,9 +3,9 @@
   of execution
 */
 export default function executeTree (tree, resolveFunctionResult, initialPayload, branchStart, branchEnd, end) {
-  function runBranch (branch, index, payload, nextBranch) {
+  function runBranch (branch, index, payload, prevPayload, nextBranch) {
     function runNextItem (result) {
-      runBranch(branch, index + 1, result, nextBranch)
+      runBranch(branch, index + 1, result, payload, nextBranch)
     }
 
     function processFunctionOutput (funcDetails, outputResult) {
@@ -16,8 +16,8 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
           const outputs = Object.keys(funcDetails.outputs)
 
           if (~outputs.indexOf(result.path)) {
-            branchStart(newPayload)
-            runBranch(funcDetails.outputs[result.path], 0, newPayload, outputResult)
+            branchStart(funcDetails, result.path, newPayload)
+            runBranch(funcDetails.outputs[result.path], 0, newPayload, payload, outputResult)
           } else {
             throw new Error(`function-tree - function ${funcDetails.name} must use one of its possible outputs: ${outputs.join(', ')}.`)
           }
@@ -37,16 +37,16 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
     } else if (Array.isArray(currentItem)) {
       const itemLength = currentItem.length
       currentItem.reduce((payloads, action) => {
-        resolveFunctionResult(action, payload, processFunctionOutput(action, (payload) => {
+        resolveFunctionResult(action, payload, prevPayload, processFunctionOutput(action, (payload) => {
           payloads.push(payload)
           if (payloads.length === itemLength) runNextItem(Object.assign.apply(Object, [{}].concat(payloads)))
         }))
         return payloads
       }, [])
     } else {
-      resolveFunctionResult(currentItem, payload, processFunctionOutput(currentItem, runNextItem))
+      resolveFunctionResult(currentItem, payload, prevPayload, processFunctionOutput(currentItem, runNextItem))
     }
   }
 
-  return runBranch(tree, 0, initialPayload, end)
+  return runBranch(tree, 0, initialPayload, null, end)
 }

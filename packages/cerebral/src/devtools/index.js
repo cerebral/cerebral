@@ -2,7 +2,7 @@
 import {debounce} from '../utils'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
-const VERSION = 'v1'
+const VERSION = 'v2'
 
 /*
   Connects to the Cerebral debugger
@@ -14,7 +14,8 @@ class Devtools {
     storeMutations: true,
     preventExternalMutations: true,
     enforceSerializable: true,
-    verifyStrictRender: true
+    verifyStrictRender: true,
+    preventInputPropReplacement: false
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
@@ -23,10 +24,10 @@ class Devtools {
     this.preventExternalMutations = Boolean(options.preventExternalMutations)
     this.enforceSerializable = Boolean(options.enforceSerializable)
     this.verifyStrictRender = Boolean(options.verifyStrictRender)
+    this.preventInputPropReplacement = Boolean(options.preventInputPropReplacement)
     this.backlog = []
     this.mutations = []
     this.latestExecutionId = null
-    this.executionCount = 0
     this.initialModelString = null
     this.isConnected = false
     this.controller = null
@@ -135,23 +136,81 @@ class Devtools {
     called again
   */
   watchExecution () {
-    this.controller.runTree.on('start', () => {
-      if (this.executionCount === 0) {
-        const event = new window.CustomEvent('cerebral2.client.message', {
-          detail: JSON.stringify({type: 'executionChange', data: {isExecuting: true}})
-        })
+    this.controller.runTree.on('start', (execution) => {
+      const detail = JSON.stringify({
+        type: 'executionStart',
+        data: {
+          execution: {
+            executionId: execution.id,
+            name: execution.name,
+            staticTree: execution.staticTree,
+            datetime: execution.datetime
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        const event = new window.CustomEvent('cerebral2.client.message', {detail})
         window.dispatchEvent(event)
+      } else {
+        this.backlog.push(detail)
       }
-      this.executionCount++
     })
     this.controller.runTree.on('end', (execution) => {
+      const detail = JSON.stringify({
+        type: 'executionEnd',
+        data: {
+          execution: {
+            executionId: execution.id
+          }
+        }
+      })
       this.latestExecutionId = execution.id
-      this.executionCount--
-      if (this.executionCount === 0) {
-        const event = new window.CustomEvent('cerebral2.client.message', {
-          detail: JSON.stringify({type: 'executionChange', data: {isExecuting: false}})
-        })
+
+      if (this.isConnected) {
+        const event = new window.CustomEvent('cerebral2.client.message', {detail})
         window.dispatchEvent(event)
+      } else {
+        this.backlog.push(detail)
+      }
+    })
+    this.controller.runTree.on('pathStart', (path, execution, funcDetails) => {
+      const detail = JSON.stringify({
+        type: 'executionPathStart',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            path
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        const event = new window.CustomEvent('cerebral2.client.message', {detail})
+        window.dispatchEvent(event)
+      } else {
+        this.backlog.push(detail)
+      }
+    })
+    this.controller.runTree.on('functionStart', (execution, funcDetails, payload) => {
+      const detail = JSON.stringify({
+        type: 'execution',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            payload,
+            data: null
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        const event = new window.CustomEvent('cerebral2.client.message', {detail})
+        window.dispatchEvent(event)
+      } else {
+        this.backlog.push(detail)
       }
     })
   }
@@ -168,8 +227,7 @@ class Devtools {
         type: 'init',
         version: this.VERSION,
         data: {
-          initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel,
-          executions: []
+          initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
         }
       }).replace(`"${PLACEHOLDER_INITIAL_MODEL}"`, this.initialModelString)
     })
@@ -211,15 +269,13 @@ class Devtools {
     }
 
     const data = {
-      executions: [{
-        name: context.execution.name,
+      execution: {
         executionId: context.execution.id,
         functionIndex: functionDetails.functionIndex,
-        staticTree: functionDetails.functionIndex === 0 && !debuggingData ? context.execution.staticTree : null,
         payload: payload,
         datetime: context.execution.datetime,
         data: mutationString ? PLACEHOLDER_DEBUGGING_DATA : debuggingData
-      }]
+      }
     }
 
     if (mutationString) {
@@ -241,7 +297,7 @@ class Devtools {
     function tree might also use this to send debugging data. Like when
     mutations are done or any wrapped methods run.
   */
-  send (debuggingData = null, context, functionDetails, payload) {
+  send (debuggingData, context, functionDetails, payload) {
     const detail = this.createEventDetail(debuggingData, context, functionDetails, payload)
 
     if (this.isConnected) {
