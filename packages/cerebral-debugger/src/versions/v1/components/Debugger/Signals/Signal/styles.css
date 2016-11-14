@@ -1,0 +1,58 @@
+.signal {
+  background-color: #FFF;
+  border-radius: 3px;
+  border: 1px solid #DDD;
+  height: calc(100vh - 65px);
+  overflow-y: scroll;
+}
+
+.signal-title {
+  margin: 0;
+  padding: 10px 10px 0 10px;
+  font-size: 20px;
+}
+
+.signal-chain {
+  padding: 10px;
+}
+
+.signal-asyncHeader {
+  display: flex;
+  align-items: flex-start;
+}
+
+.signal-asyncHeader > i {
+  top: 0;
+  font-size: 20px;
+}
+
+.signal-async {
+  flex: 1;
+  border-top: 1px solid #DDD;
+  border-left: 5px solid #DDD;
+  border-bottom: 1px solid #DDD;
+  border-right: 1px solid #DDD;
+  border-radius: 2px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.signal-output {
+  margin-top: 5px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.signal-output > i {
+  top: 0;
+  flex: 0 0 20px;
+}
+
+.signal-outputName {
+  height: 20px;
+  line-height: 20px;
+}
+
+.signal-outputPath {
+  flex: 1;
+}

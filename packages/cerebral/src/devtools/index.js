@@ -2,7 +2,7 @@
 import {debounce} from '../utils'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
-const VERSION = 'v2'
+const VERSION = 'v1'
 
 /*
   Connects to the Cerebral debugger

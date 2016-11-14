@@ -1,0 +1,37 @@
+{
+  "name": "cerebral-debugger",
+  "version": "2.0.0",
+  "description": "Cerebral Debugger",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cerebral/cerebral.git"
+  },
+  "keywords": [
+    "express",
+    "webpack",
+    "node",
+    "cerebral"
+  ],
+  "author": "Christian Alfoni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "cerebral": "^2.0.0-0",
+    "cerebral-module-useragent": "^1.0.0-alpha.1",
+    "color": "^0.11.4",
+    "classnames": "^2.2.5",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2"
+  },
+  "devDependencies": {
+    "react-scripts": "0.7.0"
+  }
+}
