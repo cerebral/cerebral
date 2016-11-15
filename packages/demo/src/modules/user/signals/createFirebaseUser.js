@@ -1,5 +1,6 @@
 import {set, state, input} from 'cerebral/operators'
 import createUser from '../actions/createUser'
+import firebaseInit from '../../app/signals/firebaseInit'
 
 const createFirebaseUser = [
   createUser, {
@@ -9,7 +10,8 @@ const createFirebaseUser = [
       set(state`user.signIn.$password`, ''),
       set(state`user.currentUser`, input`user`),
       set(state`user.signIn.$validationsErrors`, {}),
-      set(state`user.signIn.$error`, '')
+      set(state`user.signIn.$error`, ''),
+      ...firebaseInit
     ],
     invalid: [
       set(state`user.signIn.$validationsErrors`, input`validationsErrors`),

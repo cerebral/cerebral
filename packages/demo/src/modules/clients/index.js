@@ -6,6 +6,8 @@ import editClient from './signals/editClient'
 import closeDraft from './signals/closeDraft'
 import closeModal from './signals/closeModal'
 import updateDraft from './signals/updateDraft'
+import firebaseRemoveItem from '../../factories/firebaseRemoveItem'
+import firebaseMergeItem from '../../factories/firebaseMergeItem'
 
 export default {
   state: {
@@ -54,6 +56,9 @@ export default {
       set(state`app.$selectedView`, 'Clients')
     ],
     penClicked: editClient,
-    saveClicked: saveDraft
+    saveClicked: saveDraft,
+    clients_ChildAdded: [ firebaseMergeItem('clients.all') ],
+    clients_ChildChanged: [ firebaseMergeItem('clients.all') ],
+    clients_ChildRemoved: [ firebaseRemoveItem('clients.all') ]
   }
 }

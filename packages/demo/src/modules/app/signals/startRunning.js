@@ -1,4 +1,4 @@
-import startNewTask from '../actions/startNewTask'
+import startNewTask from '../../../factories/startNewTask'
 import updateNow from './updateNow'
 
 export default [

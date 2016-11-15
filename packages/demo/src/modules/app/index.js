@@ -1,5 +1,6 @@
 import {input, set, state, unset, when} from 'cerebral/operators'
 import getUser from '../user/actions/getUser'
+import firebaseInit from './signals/firebaseInit'
 
 export default {
   state: {
@@ -15,7 +16,8 @@ export default {
           getUser, {
             success: [
               set(state`user.$loggedIn`, true),
-              set(state`user.currentUser`, input`user`)
+              set(state`user.currentUser`, input`user`),
+              ...firebaseInit
             ],
             error: [
               set(state`user.$loggedIn`, false)

@@ -1,5 +1,5 @@
 import {state, unset} from 'cerebral/operators'
-import saveRunningTask from '../actions/saveRunningTask'
+import saveRunningTask from '../../../factories/saveRunningTask'
 
 export default [
   saveRunningTask,
