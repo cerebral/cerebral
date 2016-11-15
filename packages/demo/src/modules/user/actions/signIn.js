@@ -17,7 +17,12 @@ function signIn ({firebase, path, state}) {
   }
 
   return firebase.signInWithEmailAndPassword(email, password)
-    .then(path.success)
+    .then((result) => {
+      if (result.error) {
+        return path.error(result)
+      }
+      return path.success(result)
+    })
     .catch(path.error)
 }
 
