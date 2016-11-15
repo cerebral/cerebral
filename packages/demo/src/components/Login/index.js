@@ -1,50 +1,122 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
+import { connect } from 'cerebral/react'
 import translations from '../../computed/translations'
+import LangSelector from '../LangSelector'
 
 export default connect(
   {
     t: translations,
     $email: 'user.signIn.$email',
-    $password: 'user.signIn.$password'
+    $password: 'user.signIn.$password',
+    $validationsErrors: 'user.signIn.$validationsErrors',
+    $error: 'user.signIn.$error'
   },
   {
     fieldChanged: 'user.fieldChanged',
     signInClicked: 'user.signInClicked',
     createUserClicked: 'user.createUserClicked'
   },
-  function Login ({t, $email, $password, fieldChanged, signInClicked, createUserClicked}) {
+  function Login ({
+    t,
+    // state
+    $email,
+    $password,
+    $validationsErrors,
+    $error,
+    // signals
+    fieldChanged,
+    signInClicked,
+    createUserClicked
+  }) {
+    function getField ({
+      field,
+      icon,
+      value,
+      placeholder,
+      fieldType,
+      message
+    }) {
+      return (
+        <p className='control has-icon'>
+          <input className='input'
+            type={fieldType}
+            placeholder={placeholder}
+            value={value}
+            onChange={e => fieldChanged({
+              field,
+              value: e.target.value
+            })}
+          />
+          {message && (
+            <i className='fa fa-warning' />
+          )}
+          {message && (
+            <span className='help is-danger'>
+              {message}
+            </span>
+          )}
+          {!message && (
+            <i className={icon} />
+          )}
+        </p>
+      )
+    }
+
+    function getEmail () {
+      let hasValidationError = $validationsErrors && $validationsErrors.EMAIL_EMPTY
+      let hasError = $error
+      let message = ''
+      if (hasValidationError) {
+        message = t.loginValidationEmailRequired
+      } else if (hasError) {
+        let translation = t.loginErrors[ $error.code ]
+        message = translation || $error.message
+      }
+      return getField({
+        field: 'user.signIn.$email',
+        icon: 'fa fa-user',
+        value: $email,
+        placeholder: t.loginEmailPlaceholder,
+        fieldType: 'email',
+        message: message
+      })
+    }
+
+    function getPassword () {
+      let hasValidationError = $validationsErrors && $validationsErrors.PASSWORD_EMPTY
+      let message = ''
+      if (hasValidationError) {
+        message = t.loginValidationPasswordRequired
+      }
+      return getField({
+        field: 'user.signIn.$password',
+        icon: 'fa fa-key',
+        value: $password,
+        placeholder: t.loginPasswordPlaceholder,
+        fieldType: 'password',
+        message: message
+      })
+    }
+
     return (
       <div className='modal is-active'>
         <div className='modal-background' />
         <div className='modal-content'>
           <div className='box'>
-            <h2 className='title'>{t.pleaseLogin}</h2>
-            <p className='control has-icon'>
-              <input className='input' type='text'
-                autoFocus
-                placeholder={t.loginUserPlaceholder}
-                value={$email}
-                onChange={e => fieldChanged({
-                  field: 'user.signIn.$email',
-                  value: e.target.value
-                })}
-                name='login'
-                />
-              <i className='fa fa-user' />
-            </p>
-            <p className='control has-icon'>
-              <input className='input' type='password'
-                placeholder={t.loginPasswordPlaceholder}
-                value={$password}
-                onChange={e => fieldChanged({
-                  field: 'user.signIn.$password',
-                  value: e.target.value
-                })}
-                name='password'
-                />
-              <i className='fa fa-key' />
-            </p>
+
+            <nav className='nav'>
+              <div className='nav-left'>
+                <h2 className='title'>{t.pleaseLogin}</h2>
+              </div>
+              <div className='nav-right'>
+                <div className='nav-item'>
+                  <LangSelector />
+                </div>
+              </div>
+            </nav>
+
+            {getEmail()}
+            {getPassword()}
 
             <nav className='level'>
               <div className='level-left' />
