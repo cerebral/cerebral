@@ -1,6 +1,6 @@
 {
   "name": "cerebral-provider-http",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-0",
   "description": "HTTP provider for Cerebral 2",
   "main": "lib/index.js",
   "scripts": {

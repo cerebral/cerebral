@@ -1,6 +1,6 @@
 {
   "name": "cerebral",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0-0",
   "description": "A state controller with its own debugger",
   "main": "index.js",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",

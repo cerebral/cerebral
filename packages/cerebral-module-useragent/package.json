@@ -1,6 +1,6 @@
 {
   "name": "cerebral-module-useragent",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-0",
   "description": "Adds useragent specs to your cerebral state model",
   "main": "lib/index.js",
   "scripts": {

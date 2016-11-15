@@ -1,6 +1,6 @@
 {
   "name": "cerebral-forms",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-0",
   "description": "Signals, actions and state factories to create forms",
   "main": "lib/index.js",
   "scripts": {
