@@ -1,5 +1,5 @@
-import reset from '../actions/reset';
+import reset from '../actions/reset'
 
 export default [
   reset
-];
+]

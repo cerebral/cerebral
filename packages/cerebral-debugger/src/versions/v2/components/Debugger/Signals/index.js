@@ -65,15 +65,14 @@ export default connect({
             </button>
           </div>
           <div className='signals-signal'>
-            <Signal currentSignalExecutionId={currentSignalExecutionId}/>
+            <Signal currentSignalExecutionId={currentSignalExecutionId} />
           </div>
           {
-            this.state.copiedSignals ?
-              <li className='signals-textarea'>
-                <textarea ref={(node) => this.textarea = node} value={this.state.copiedSignals} onBlur={() => this.setState({copiedSignals: null})} />
+            this.state.copiedSignals
+              ? <li className='signals-textarea'>
+                <textarea ref={(node) => { this.textarea = node }} value={this.state.copiedSignals} onBlur={() => this.setState({copiedSignals: null})} />
               </li>
-            :
-              null
+              : null
           }
         </div>
       )

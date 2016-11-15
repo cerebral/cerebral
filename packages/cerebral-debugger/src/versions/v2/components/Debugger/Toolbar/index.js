@@ -12,7 +12,7 @@ export default connect({
   pageChanged: 'debugger.pageChanged'
 },
   class Toolbar extends React.Component {
-    constructor (props) {
+    constructor (props) {
       super(props)
       this.state = {
         copiedSignals: null
@@ -39,10 +39,10 @@ export default connect({
                 <i className='icon icon-model' /> STATE-TREE
               </li>
               <li className='toolbar-rightItem'>
-                {Boolean(this.props.executingSignalsCount) ? 'executing' : 'idle'}
+                {this.props.executingSignalsCount ? 'executing' : 'idle'}
                 <div className={classNames('toolbar-led', {
-                  'toolbar-led--idle': !Boolean(this.props.executingSignalsCount),
-                  'toolbar-led--executing': Boolean(this.props.executingSignalsCount)
+                  'toolbar-led--idle': !this.props.executingSignalsCount,
+                  'toolbar-led--executing': !!this.props.executingSignalsCount
                 })} />
               </li>
             </ul>

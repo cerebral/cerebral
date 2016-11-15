@@ -176,7 +176,7 @@ class ArrayValue extends React.Component {
     this.onCollapseClick = this.onCollapseClick.bind(this)
     this.onExpandClick = this.onExpandClick.bind(this)
   }
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps (nextProps) {
     const context = this.context
     const props = nextProps
     const numberOfItems = props.value.length
