@@ -67,13 +67,17 @@ export default {
 }
 ```
 
+Sometimes you want more control over your form. ``` isPristine ``` for example changes from false to true whenever you do a validation on the field. Sometimes you might want blur events instead to show error messages to the user. You are completely free to add whatever state you need when you create your fields. An isTouched property might be used to make blur events but you can call it whatever you like, it's just state.
+
+
 ```js
 import {form} from 'cerebral-forms'
 
 export default function MyAction({state}) {
   state.set('some.new.form', form({
     name: {
-      value: ''
+      value: '',
+      isTouched: false // change this field onBlur to have more control over error messages
     },
     age: {
       value: 18
