@@ -1,7 +1,6 @@
 block('footer')(
   tag()('footer'),
   content()(function () {
-    var base = this._layout === 'root' ? './' : '../'
     return {
       block: 'row',
       content: [
@@ -11,7 +10,7 @@ block('footer')(
           elemMods: { sw: 24, lw: 6 },
           content: [
             { block: 'footer', elem: 'header', content: 'ORGANIZATION' },
-            { block: 'footer', elem: 'link', url: base + 'contributors', content: 'Contributors' },
+            { block: 'footer', elem: 'link', url: 'https://github.com/cerebral/cerebral/graphs/contributors', content: 'Contributors' },
             { block: 'footer', elem: 'link', url: 'http://www.webpackbin.com', content: 'www.webpackbin.com' },
             { block: 'footer', elem: 'link', url: 'http://www.christianalfoni.com', content: 'www.christianalfoni.com' }
           ]

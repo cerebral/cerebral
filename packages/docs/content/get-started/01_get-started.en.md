@@ -10,4 +10,4 @@ If you are not familiar with Node and/or Webpack it can be a good idea to start 
 
 To actually install Cerebral, run this in your project folder:
 
-`npm install cerebral`
+`npm install cerebral@next --save`
