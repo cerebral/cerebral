@@ -6,7 +6,6 @@ import editClient from './signals/editClient'
 import closeDraft from './signals/closeDraft'
 import closeModal from './signals/closeModal'
 import updateDraft from './signals/updateDraft'
-import getCurrentUser from '../common/signals/getCurrentUser'
 
 export default {
   state: {
@@ -52,7 +51,6 @@ export default {
     ],
     reviewChangesClicked: closeModal,
     routed: [
-      ...getCurrentUser,
       set(state`app.$selectedView`, 'Clients')
     ],
     penClicked: editClient,

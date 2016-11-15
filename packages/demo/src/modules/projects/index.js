@@ -5,7 +5,6 @@ import discardDraft from './signals/discardDraft'
 import editProject from './signals/editProject'
 import updateDraft from './signals/updateDraft'
 import saveDraft from './signals/saveDraft'
-import getCurrentUser from '../common/signals/getCurrentUser'
 
 export default {
   state: {
@@ -49,7 +48,6 @@ export default {
       set(state`projects.$showProjectSelector`, true)
     ],
     routed: [
-      ...getCurrentUser,
       set(state`app.$selectedView`, 'Projects')
     ],
     saveClicked: saveDraft,

@@ -1,14 +1,31 @@
-import {input, set, state, unset} from 'cerebral/operators'
-import getCurrentUser from '../common/signals/getCurrentUser'
+import {input, set, state, unset, when} from 'cerebral/operators'
+import getUser from '../user/actions/getUser'
 
 export default {
   state: {
     $selectedView: 'Today',
-    $lang: 'en'
+    $lang: 'en',
+    $loading: true
   },
   signals: {
+    bootstrap: [
+      when(state`user.$loggedIn`), {
+        true: [],
+        false: [
+          getUser, {
+            success: [
+              set(state`user.$loggedIn`, true),
+              set(state`user.currentUser`, input`user`)
+            ],
+            error: [
+              set(state`user.$loggedIn`, false)
+            ]
+          }
+        ]
+      },
+      set(state`app.$loading`, false)
+    ],
     routed: [
-      ...getCurrentUser,
       set(state`app.$selectedView`, 'Today')
     ],
     langOptionClicked: [

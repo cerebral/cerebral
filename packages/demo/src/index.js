@@ -50,6 +50,8 @@ const controller = Controller({
   }
 })
 
+controller.getSignal('app.bootstrap')({})
+
 render((
   <Container controller={controller} >
     <App />
