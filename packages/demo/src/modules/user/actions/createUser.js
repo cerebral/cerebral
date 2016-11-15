@@ -1,4 +1,4 @@
-function createUser ({ firebase, path, state }) {
+function createUser ({firebase, path, state}) {
   const email = state.get('user.signIn.$email')
   const password = state.get('user.signIn.$password')
 

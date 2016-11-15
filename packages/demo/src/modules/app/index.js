@@ -1,4 +1,5 @@
 import {input, set, state, unset} from 'cerebral/operators'
+import getCurrentUser from '../common/signals/getCurrentUser'
 
 export default {
   state: {
@@ -7,6 +8,7 @@ export default {
   },
   signals: {
     routed: [
+      ...getCurrentUser,
       set(state`app.$selectedView`, 'Today')
     ],
     langOptionClicked: [

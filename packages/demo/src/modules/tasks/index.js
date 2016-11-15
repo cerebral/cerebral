@@ -1,6 +1,7 @@
 import {input, set, state} from 'cerebral/operators'
 import startStopRunning from './signals/startStopRunning'
 import updateNow from './signals/updateNow'
+import getCurrentUser from '../common/signals/getCurrentUser'
 
 export default {
   state: {
@@ -24,6 +25,7 @@ export default {
       set(state`tasks.$running.description`, input`description`)
     ],
     routed: [
+      ...getCurrentUser,
       set(state`app.$selectedView`, 'Tasks')
     ],
     startStopClicked: startStopRunning,
