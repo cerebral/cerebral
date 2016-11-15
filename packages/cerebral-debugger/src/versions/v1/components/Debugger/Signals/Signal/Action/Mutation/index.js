@@ -29,7 +29,7 @@ function Mutation ({mutation, onMutationClick}) {
       <span className='mutation-mutationPath' onClick={() => onMutationClick(mutation.args[0])}>{mutation.args[0].join('.')}</span>
       <span className='mutation-mutationArgs'>
         {args.map((arg, index) => {
-          return <Inspector key={index} value={arg} />
+          return <Inspector key={index} value={arg} />
         })}
       </span>
     </div>

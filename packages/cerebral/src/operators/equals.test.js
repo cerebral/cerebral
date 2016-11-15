@@ -3,7 +3,7 @@ import Controller from '../Controller'
 import assert from 'assert'
 import {input, state, equals} from './'
 
-describe('operators.equals', () => {
+describe('operator.equals', () => {
   it('should go down path based on input', () => {
     let count = 0
     const controller = new Controller({

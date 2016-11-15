@@ -4,7 +4,6 @@
   var update = function (event) {
     if (!event.detail) {
       throw new Error('You have to pass a serializeable object to a signal. Did you pass a mouse event maybe?')
-      return
     }
 
     try {

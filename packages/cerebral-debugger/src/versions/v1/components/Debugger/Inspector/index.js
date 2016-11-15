@@ -76,7 +76,10 @@ class ObjectValue extends React.Component {
     const preventCollapse = this.props.path.length === 0 && context.options.expanded
 
     this.state = {
-      isCollapsed: !preventCollapse && !isHighlightPath && (numberOfKeys > 3 || numberOfKeys === 0 ? true : context.options.expanded ? false : true)
+      isCollapsed: (
+        !preventCollapse && !isHighlightPath &&
+        (numberOfKeys > 3 || numberOfKeys === 0 ? true : !context.options.expanded)
+      )
     }
 
     this.onCollapseClick = this.onCollapseClick.bind(this)
@@ -91,7 +94,10 @@ class ObjectValue extends React.Component {
 
     if (this.state.isCollapsed) {
       this.setState({
-        isCollapsed: !preventCollapse && !isHighlightPath && (numberOfKeys > 3 || numberOfKeys === 0 ? true : context.options.expanded ? false : true)
+        isCollapsed: (
+          !preventCollapse && !isHighlightPath &&
+          (numberOfKeys > 3 || numberOfKeys === 0 ? true : !context.options.expanded)
+        )
       })
     }
   }
@@ -162,7 +168,10 @@ class ArrayValue extends React.Component {
     const numberOfItems = props.value.length
     const isHighlightPath = this.props.highlightPath && isInPath(this.props.highlightPath, this.props.path)
     this.state = {
-      isCollapsed: !isHighlightPath && (numberOfItems > 3 || numberOfItems === 0) ? true : context.options.expanded ? false : true
+      isCollapsed: (
+        !isHighlightPath &&
+        (numberOfItems > 3 || numberOfItems === 0) ? true : !context.options.expanded
+      )
     }
     this.onCollapseClick = this.onCollapseClick.bind(this)
     this.onExpandClick = this.onExpandClick.bind(this)
@@ -174,7 +183,10 @@ class ArrayValue extends React.Component {
     const isHighlightPath = props.highlightPath && isInPath(props.highlightPath, props.path)
     if (this.state.isCollapsed) {
       this.setState({
-        isCollapsed: !isHighlightPath && (numberOfItems > 3 || numberOfItems === 0) ? true : context.options.expanded ? false : true
+        isCollapsed: (
+          !isHighlightPath &&
+          (numberOfItems > 3 || numberOfItems === 0) ? true : !context.options.expanded
+        )
       })
     }
   }
@@ -245,7 +257,7 @@ class Value extends React.Component {
   }
   onClick () {
     this.setState({
-      isEditing: this.context.options.canEdit ? true : false
+      isEditing: !!this.context.options.canEdit
     })
   }
   onSubmit (value) {

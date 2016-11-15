@@ -18,7 +18,7 @@ export default connect({
   signalDoubleClicked: 'debugger.signalDoubleClicked'
 },
   class SignalsList extends React.Component {
-    onSignalClick(event, signal, index) {
+    onSignalClick (event, signal, index) {
       if (event.nativeEvent.detail > 1) {
         return
       }
@@ -27,7 +27,7 @@ export default connect({
         groupId: signal.groupId
       })
     }
-    onSignalDoubleClick(signal) {
+    onSignalDoubleClick (signal) {
       if (this.props.debugger.isExecuting) {
         return
       }
@@ -36,7 +36,7 @@ export default connect({
       })
       connector.sendEvent('remember', signal.executionId)
     }
-    renderSignal(signal, index) {
+    renderSignal (signal, index) {
       const prevSignal = this.props.signalsList[index - 1]
       const currentSignalExecutionId = this.props.debugger.currentSignalExecutionId
       const namePath = signal.name.split('.')
@@ -78,13 +78,13 @@ export default connect({
           onDoubleClick={() => this.onSignalDoubleClick(signal, index)}
           className={className}
           key={index}>
-          {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className='list-remembered'/> : null}
-          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className='list-indicator' style={signalStyle}/>}
+          {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className='list-remembered' /> : null}
+          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className='list-indicator' style={signalStyle} />}
           <span className='list-name'>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
         </li>
       )
     }
-    render() {
+    render () {
       const signals = this.props.signalsList
 
       return (

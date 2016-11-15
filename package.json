@@ -51,7 +51,8 @@
     "parser": "babel-eslint",
     "ignore": [
       "**/node_modules/",
-      "**/build/"
+      "**/build/",
+      "packages/cerebral-debugger/public/prism.js"
     ],
     "globals": [ "block", "content", "replace", "tag", "def", "applyNext", "applyCtx" ]
   },

@@ -163,4 +163,16 @@ describe('Controller', () => {
     })
     controller.getSignal('test')()
   })
+  it('should flush model after module initialization', () => {
+    const controller = new Controller({
+      modules: {
+        editor: {
+          state: {
+            this: 'that'
+          }
+        }
+      }
+    })
+    assert.deepEqual(controller.model.flush(), {})
+  })
 })
