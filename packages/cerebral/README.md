@@ -32,3 +32,8 @@ Go to [https://cerebral.github.io](https://cerebral.github.io/api)
 [standard-url]: http://standardjs.com/
 [discord-image]: https://img.shields.io/badge/discord-join%20chat-blue.svg
 [discord-url]: https://discord.gg/0kIweV4bd2bwwsvH
+
+### Install
+This is still alpha but to test the bleeding edge
+
+`npm install cerebral@next --save`
