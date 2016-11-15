@@ -3,7 +3,7 @@ import Controller from '../Controller'
 import assert from 'assert'
 import {wait} from './'
 
-describe('operators.wait', () => {
+describe('operator.wait', () => {
   it('should hold execution for set time', (done) => {
     const start = Date.now()
     const controller = new Controller({

@@ -3,7 +3,7 @@ import Controller from '../Controller'
 import assert from 'assert'
 import {input, state, unset} from './'
 
-describe('operators.unset', () => {
+describe('operator.unset', () => {
   it('should unset value in model', () => {
     const controller = new Controller({
       state: {

@@ -3,7 +3,7 @@ import Controller from '../Controller'
 import assert from 'assert'
 import {input, state, unshift} from './'
 
-describe('operators.unshift', () => {
+describe('operator.unshift', () => {
   it('should unshift value in model', () => {
     const controller = new Controller({
       state: {

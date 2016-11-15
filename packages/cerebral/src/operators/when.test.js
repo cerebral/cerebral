@@ -3,7 +3,7 @@ import Controller from '../Controller'
 import assert from 'assert'
 import {input, state, when} from './'
 
-describe('operators.when', () => {
+describe('operator.when', () => {
   it('should check truthy value of input', () => {
     let count = 0
     const controller = new Controller({
