@@ -8,7 +8,7 @@ function firebaseGetValue ({firebasePath, uidPath, localCollectionPath}) {
 
     return firebase.value(`${firebasePath}${uid}`)
       .then((result) => {
-        state.set(localCollectionPath, result.value)
+        state.set(localCollectionPath, result.value || [])
         return path.success(result)
       })
       .catch(path.error)
