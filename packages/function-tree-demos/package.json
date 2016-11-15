@@ -12,7 +12,7 @@
     "axios": "^0.15.2",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
-    "function-tree": "^0.5.0-0",
+    "function-tree": "next",
     "mobx": "^2.6.0",
     "mobx-react": "^3.5.8",
     "react": "^15.3.2",

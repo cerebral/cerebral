@@ -11,8 +11,8 @@
     "react-scripts": "0.7.0"
   },
   "dependencies": {
-    "cerebral": "^2.0.0-0",
-    "cerebral-router": "^1.0.0-0",
+    "cerebral": "next",
+    "cerebral-router": "next",
     "classnames": "^2.2.5",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",

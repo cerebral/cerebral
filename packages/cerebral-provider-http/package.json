@@ -23,6 +23,6 @@
   "homepage":
     "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-http#readme",
   "peerDependencies": {
-    "cerebral": "^2.0.0-0"
+    "cerebral": "next"
   }
 }
