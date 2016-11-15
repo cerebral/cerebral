@@ -69,6 +69,7 @@ class Controller extends EventEmitter {
 
     if (this.router) this.router.init()
 
+    this.model.flush()
     this.emit('initialized')
   }
   /*
