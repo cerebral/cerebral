@@ -2,6 +2,11 @@
 HTTP Provider for Cerebral2
 Based on prior art from [cerebral-module-http](https://github.com/cerebral/cerebral-module-http)
 
+### Install
+This is still alpha but to test the bleeding edge
+
+`npm install cerebral-provider-http@next --save`
+
 ### Todos
 Create npm install
 Test FileUpload
