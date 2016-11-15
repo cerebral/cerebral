@@ -1,0 +1,39 @@
+.mutation {
+  margin-left: 2px;
+  margin: 3px 0;
+  display: flex;
+}
+
+.mutation i {
+  flex: 0 0 auto;
+  top: 0;
+  color: #DDD;
+}
+
+.mutation-mutationName {
+  font-weight: bold;
+  margin-left: 5px;
+  flex: 0 0 auto;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.mutation-mutationPath {
+  margin-left: 5px;
+  text-decoration: underline;
+  cursor: pointer;
+  flex: 0 0 auto;
+  font-size: 12px;
+  line-height: 20px;
+}
+
+.mutation-mutationPath:hover {
+  color: #1e78c3;
+}
+
+.mutation-mutationArgs {
+  margin-left: 5px;
+  flex: 1;
+  font-size: 12px;
+  line-height: 20px;
+}
