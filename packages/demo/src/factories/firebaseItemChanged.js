@@ -1,4 +1,4 @@
-function firebaseMergeItem (statePath) {
+function firebaseItemChanged (statePath) {
   return function mergeItem ({ state, input }) {
     const { key, value } = input
     state.set(`${statePath}.${key}`, value)
@@ -6,4 +6,4 @@ function firebaseMergeItem (statePath) {
   }
 }
 
-export default firebaseMergeItem
+export default firebaseItemChanged

@@ -11,9 +11,10 @@ export default connect(
     selectedClient: 'clients.$draft.**'
   }),
   {
-    penClick: 'clients.penClicked'
+    penClick: 'clients.penClicked',
+    trashClick: 'clients.trashClicked'
   },
-  function Client ({client, selectedClient, penClick}) {
+  function Client ({client, selectedClient, penClick, trashClick}) {
     if (selectedClient && selectedClient.ref === client.ref) {
       return <ClientForm clientRef={client.ref} />
     }
@@ -45,6 +46,9 @@ export default connect(
             <div className='level-right'>
               <a className='level-item' onClick={() => penClick({ref: client.ref})}>
                 <span className='icon is-small'><i className='fa fa-pencil' /></span>
+              </a>
+              <a className='level-item' onClick={() => trashClick({ref: client.ref})}>
+                <span className='icon is-small'><i className='fa fa-trash' /></span>
               </a>
             </div>
           </nav>

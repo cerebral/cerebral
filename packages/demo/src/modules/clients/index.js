@@ -3,11 +3,12 @@ import addClient from './signals/addClient'
 import discardDraft from './signals/discardDraft'
 import saveDraft from './signals/saveDraft'
 import editClient from './signals/editClient'
+import removeClient from './signals/removeClient'
 import closeDraft from './signals/closeDraft'
 import closeModal from './signals/closeModal'
 import updateDraft from './signals/updateDraft'
-import firebaseRemoveItem from '../../factories/firebaseRemoveItem'
-import firebaseMergeItem from '../../factories/firebaseMergeItem'
+import firebaseItemRemoved from '../../factories/firebaseItemRemoved'
+import firebaseItemChanged from '../../factories/firebaseItemChanged'
 
 export default {
   state: {
@@ -56,9 +57,10 @@ export default {
       set(state`app.$selectedView`, 'Clients')
     ],
     penClicked: editClient,
+    trashClicked: removeClient,
     saveClicked: saveDraft,
-    clients_ChildAdded: [ firebaseMergeItem('clients.all') ],
-    clients_ChildChanged: [ firebaseMergeItem('clients.all') ],
-    clients_ChildRemoved: [ firebaseRemoveItem('clients.all') ]
+    clients_ChildAdded: [ firebaseItemChanged('clients.all') ],
+    clients_ChildChanged: [ firebaseItemChanged('clients.all') ],
+    clients_ChildRemoved: [ firebaseItemRemoved('clients.all') ]
   }
 }
