@@ -1,6 +1,7 @@
 {
   "name": "cerebral-debugger",
   "version": "2.0.0",
+  "private": true,
   "description": "Cerebral Debugger",
   "repository": {
     "type": "git",
