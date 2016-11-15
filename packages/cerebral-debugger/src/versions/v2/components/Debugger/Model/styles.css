@@ -1,0 +1,16 @@
+.model {
+  background-color: #FFF;
+  border-radius: 3px;
+  margin: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid #DDD;
+  height: calc(100vh - 60px);
+  overflow-y: scroll;
+}
+
+.model-wrapper {
+  flex: 1;
+  padding: 10px;
+}

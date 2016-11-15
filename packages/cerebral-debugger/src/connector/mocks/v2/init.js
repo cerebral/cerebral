@@ -4,10 +4,7 @@ module.exports = {
   'data': {
     'initialModel': {
       'foo': {
-        'bar': null,
-        'fii': 'hm',
-        'ho': 'ha',
-        'bip': 'bop'
+        'bar': null
       }
     }
   }
