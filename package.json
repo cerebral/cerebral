@@ -54,7 +54,18 @@
       "**/build/",
       "packages/cerebral-debugger/public/prism.js"
     ],
-    "globals": [ "block", "content", "replace", "tag", "def", "applyNext", "applyCtx" ]
+    "globals": [
+      "block",
+      "content",
+      "replace",
+      "tag",
+      "def",
+      "applyNext",
+      "applyCtx"
+    ]
   },
-  "private": true
+  "private": true,
+  "dependencies": {
+    "inquirer": "^1.2.3"
+  }
 }
