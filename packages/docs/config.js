@@ -15,7 +15,8 @@ module.exports = {
   'debug': false,
   'server': {
     tunnel: false,
-    open: false
+    open: false,
+    port: 8080
   },
   'posthtmlPlugins': [].concat(
     require('mad-mark').posthtmlPlugins,
