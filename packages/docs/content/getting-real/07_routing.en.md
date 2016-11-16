@@ -4,7 +4,11 @@ title: Routing
 
 ## Routing
 
-Typically applications uses a router. To instantiate the Cerebral router you:
+Typically applications uses a router. To instantiate the Cerebral router you install it as a separate packge:
+
+`npm install cerebral-router@next --save`
+
+Then you instantiate it on the controller:
 
 ```js
 import {Controller} from 'cerebral'

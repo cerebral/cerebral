@@ -4,6 +4,9 @@ title: Router
 
 ## Router
 
+### Install
+`npm install cerebral-router@next --save`
+
 ### Instantiate
 ```js
 import {Controller} from 'cerebral'
