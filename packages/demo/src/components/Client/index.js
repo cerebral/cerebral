@@ -44,12 +44,16 @@ export default connect(
               <Email email={client.email} />
             </div>
             <div className='level-right'>
-              <a className='level-item' onClick={() => penClick({ref: client.ref})}>
-                <span className='icon is-small'><i className='fa fa-pencil' /></span>
-              </a>
-              <a className='level-item' onClick={() => trashClick({ref: client.ref})}>
-                <span className='icon is-small'><i className='fa fa-trash' /></span>
-              </a>
+              {client.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => penClick({ref: client.ref})}>
+                  <span className='icon is-small'><i className='fa fa-pencil' /></span>
+                </a>
+              )}
+              {client.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => trashClick({ref: client.ref})}>
+                  <span className='icon is-small'><i className='fa fa-trash' /></span>
+                </a>
+              )}
             </div>
           </nav>
 

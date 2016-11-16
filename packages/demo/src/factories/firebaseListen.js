@@ -1,4 +1,4 @@
-function firebaseListen ({moduleName, firebasePath, uidPath, childAddedOptions}) {
+export default function firebaseListen ({moduleName, firebasePath, uidPath, childAddedOptions}) {
   return function ({firebase, state}) {
     const signalName = firebasePath.replace('.', '_')
     let uid = ''
@@ -14,5 +14,3 @@ function firebaseListen ({moduleName, firebasePath, uidPath, childAddedOptions})
     firebase.onChildChanged(`${firebasePath}${uid}`, `${moduleName}.${signalName}_ChildChanged`, {})
   }
 }
-
-export default firebaseListen

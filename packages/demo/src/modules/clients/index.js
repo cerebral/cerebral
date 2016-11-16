@@ -12,35 +12,12 @@ import firebaseItemChanged from '../../factories/firebaseItemChanged'
 
 export default {
   state: {
-    all: {
-      'cerebral': {
-        name: 'Cerebral',
-        notes: 'Make sense of complex apps.',
-        ref: 'cerebral',
-        image: 'cerebral-mini.png',
-        website: 'cerebraljs.com'
-      },
-      'calvin': {
-        ref: 'calvin',
-        name: 'Calvin and Hobbes Ltd',
-        email: 'calvin@hobbes.com',
-        phone: '123456789'
-      },
-      'largo': {
-        ref: 'largo',
-        name: 'Largo Winch et al'
-      },
-      'no-client': {
-        ref: 'no-client',
-        name: 'No client'
-      }
-    },
+    all: {},
     $filter: ''
   },
   signals: {
     addClicked: addClient,
     discardClicked: discardDraft,
-    cardClicked: editClient,
     enterPressed: saveDraft,
     escPressed: discardDraft,
     filterChanged: [

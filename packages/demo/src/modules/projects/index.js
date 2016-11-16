@@ -5,37 +5,17 @@ import discardDraft from './signals/discardDraft'
 import editProject from './signals/editProject'
 import updateDraft from './signals/updateDraft'
 import saveDraft from './signals/saveDraft'
+import firebaseItemChanged from '../../factories/firebaseItemChanged'
+import firebaseItemRemoved from '../../factories/firebaseItemRemoved'
 
 export default {
   state: {
-    all: {
-      'no-project': {
-        ref: 'no-project',
-        name: 'no project',
-        clientRef: 'no-client'
-      },
-      'cerebral-demo': {
-        ref: 'cerebral-demo',
-        name: 'Cerebral demo',
-        clientRef: 'cerebral'
-      },
-      'learn-inferno': {
-        ref: 'learn-inferno',
-        name: 'Learn Inferno',
-        clientRef: 'no-client'
-      },
-      'read-calvin': {
-        ref: 'read-calvin',
-        name: 'Read Calvin',
-        clientRef: 'calvin'
-      }
-    },
+    all: {},
     $filter: ''
   },
   signals: {
     addClicked: addProject,
     cancelClicked: discardDraft,
-    cardClicked: editProject,
     enterPressed: saveDraft,
     escPressed: discardDraft,
     formValueChanged: updateDraft,
@@ -55,6 +35,9 @@ export default {
     selectorProjectClicked: [
       set(state`tasks.$running.projectRef`, input`ref`),
       ...closeProjectSelector
-    ]
+    ],
+    projects_ChildAdded: [firebaseItemChanged('projects.all')],
+    projects_ChildChanged: [firebaseItemChanged('projects.all')],
+    projects_ChildRemoved: [firebaseItemRemoved('projects.all')]
   }
 }
