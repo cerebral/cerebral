@@ -1,8 +1,8 @@
 ---
-title: Introduction
+title: Prerequisites
 ---
 
-## Introduction
+## Prerequisites
 
 This tutorial will take you through the core concepts of Cerebral. To get started you will need to clone the cerebral Github repository. To do so you need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed, or the [Github desktop](https://desktop.github.com/) client.
 
