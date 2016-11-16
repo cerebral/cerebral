@@ -115,5 +115,5 @@ This the entry point of your application and this is where we bring it all toget
 If you are not familiar with [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), the syntax that looks like HTML, it can be explained briefly as "some sugar over normal JavaScript". This is **not** html in JavaScript, it is pure JavaScript, it just allows you to define the UI with familiar syntax. You might think this is "icky", but trust us... UIs has become a lot more complex over the years and we need the power of JavaScript to describe and manage them!
 
 ### Installing the debugger
-The Cerebral debugger is a Chrome extension. You can install it from the [chrome store](https://chrome.google.com/webstore/detail/cerebral-debugger/ddefoknoniaeoikpgneklcbjlipfedbb). Once the debugger is installed your Chrome devtools will have a new tab called **cerebral2**. Open it.
+The Cerebral debugger is a Chrome extension. You can install it from the [chrome store](https://chrome.google.com/webstore/detail/cerebral2-debugger/ghoadjdodkgkbbmhhpbfhgikjgjelojc). Once the debugger is installed your Chrome devtools will have a new tab called **cerebral2**. Open it.
 Not a lot to see right now, so let us move on.
