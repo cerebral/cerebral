@@ -17,15 +17,16 @@ function runValidation (fieldPath, field, form) {
   }
 }
 
-export default function validateFieldFactory (path) {
-  function validateField ({input, state}) {
-    const fieldPath = (path || input.field).split('.')
+export default function validateFieldFactory (pathTemplate) {
+  function validateField (context) {
+    const path = typeof pathTemplate === 'function' ? pathTemplate(context).value : pathTemplate
+    const fieldPath = path.split('.')
     const formPath = fieldPath.slice().splice(0, fieldPath.length - 1)
-    const field = state.get(fieldPath)
-    const form = state.get(formPath)
+    const field = context.state.get(fieldPath)
+    const form = context.state.get(formPath)
     const validationResult = runValidation(fieldPath, field, form)
 
-    state.merge(fieldPath, validationResult)
+    context.state.merge(fieldPath, validationResult)
 
     let dependentFields = []
     if (Array.isArray(field.dependsOn)) {
@@ -37,15 +38,15 @@ export default function validateFieldFactory (path) {
     const depententOfValidationResult = dependentFields.reduce((currentValidationResult, stringPath) => {
       const dependentFieldPath = stringPath.split('.')
       const dependentFormPath = dependentFieldPath.slice().splice(0, dependentFieldPath.length - 1)
-      const field = state.get(dependentFieldPath)
-      const form = state.get(dependentFormPath)
+      const field = context.state.get(dependentFieldPath)
+      const form = context.state.get(dependentFormPath)
 
       if (!form) {
         throw new Error(`The path ${stringPath} used with "dependsOn" on field ${fieldPath.join('.')} is not correct, please check it`)
       }
 
       const dependentValidationResult = runValidation(dependentFieldPath, field, form)
-      state.merge(dependentFieldPath, dependentValidationResult)
+      context.state.merge(dependentFieldPath, dependentValidationResult)
 
       if (currentValidationResult.isValid && !dependentValidationResult.isValid) {
         return dependentValidationResult
@@ -54,7 +55,7 @@ export default function validateFieldFactory (path) {
       return currentValidationResult
     }, validationResult)
 
-    state.merge(fieldPath, depententOfValidationResult)
+    context.state.merge(fieldPath, depententOfValidationResult)
   }
 
   return validateField

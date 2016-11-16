@@ -26,11 +26,12 @@ function resetArray (formArray) {
   }, [])
 }
 
-export default function resetFormFactory (formPath) {
-  function resetForm ({state}) {
-    const form = state.get(formPath)
+export default function resetFormFactory (formPathTemplate) {
+  function resetForm (context) {
+    const formPath = typeof formPathTemplate === 'function' ? formPathTemplate(context).value : formPathTemplate
+    const form = context.state.get(formPath)
 
-    state.set(formPath, resetObject(form))
+    context.state.set(formPath, resetObject(form))
   }
 
   return resetForm
