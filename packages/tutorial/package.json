@@ -22,9 +22,10 @@
     "react-dom": "^15.3.2"
   },
   "scripts": {
+    "start": "shjs scripts/run",
     "prepare": "shjs scripts/prepare.js",
-    "start": "react-scripts start",
-    "start:ch": "run-s \"prepare {1}\" start --",
+    "tutorial": "react-scripts start",
+    "chapter": "run-s \"prepare {1}\" --",
     "build": "react-scripts build",
     "dist": "shjs scripts/dist.js"
   }

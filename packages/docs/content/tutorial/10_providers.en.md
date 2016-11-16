@@ -4,10 +4,7 @@ title: ch09. Providers
 
 ## Providers
 
-[Preview](09)
-
-Run script from the command line to start:
-`npm run start:ch 09`
+**Load up chapter 09** - [Preview](09)
 
 Good news, we have already used a provider before. Do you remember the *http-provider* we are using to get data from servers?
 

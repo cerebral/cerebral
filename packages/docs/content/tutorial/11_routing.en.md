@@ -4,10 +4,7 @@ title: ch10. Routing
 
 ## Routing
 
-[Preview](10)
-
-Run script from the command line to start:
-`npm run start:ch 10`
+**Load up chapter 10** - [Preview](10)
 
 Now that our tutorial UI gets more complex it is a good idea to separate it a little bit. We want a home tab and a repos tab. Our two repos should load when we click the repos tab or hit the url directly.
 

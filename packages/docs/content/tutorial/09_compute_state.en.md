@@ -4,10 +4,7 @@ title: ch08. Compute state
 
 ## Compute state
 
-[Preview](08)
-
-Run script from the command line to start:
-`npm run start:ch 08`
+**Load up chapter 08** - [Preview](08)
 
 In the previous challenge the solution was to use an action to sum the star counts together. It looks like this:
 

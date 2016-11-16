@@ -30,13 +30,11 @@ Our Goal now is to go through some concepts and show off the features of Cerebra
 They are all explained in depth in the [Concepts](../concepts/01_the-architecture.html) section.
 
 ### How does this tutorial work?
-Whenever you execute the script:
-
-`npm run start:ch xx`
-
-The code for that chapter is loaded and the development server is automatically started. Any changes you have made will be deleted. If you for some reason exit the development server you can start it again by:
+To start the tutorial, run:
 
 `npm start`
+
+This fires up the actual development server. Go to your browser and *localhost:3000*. It also provides you a list of the chapters directly in the terminal. Just change chapters there when you want to move on. The application running in the browser will update.
 
 For beginners in web development we have the following advice: Just follow the tutorial, don't get distracted too much by advanced concepts. Learning new things takes some iterations and often it is more helpful to try to build something yourself. Please head over to our [discord chat](https://discord.gg/0kIweV4bd2bwwsvH) and we are more than happy to help you out.
 
