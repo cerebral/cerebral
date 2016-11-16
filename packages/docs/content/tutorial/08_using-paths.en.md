@@ -116,7 +116,8 @@ import { set, state, debounce, input, string } from 'cerebral/operators'
 const toastDebounce = debounce.shared()
 function showToast(message, ms, type = null) {
   return [
-    set(state`toast`, {message, type}),
+    set(state`toast`, {type}),
+    set(state`toast.message`, message),
     ...toastDebounce(ms, [
       set(state`toast.`, null)
     ])
