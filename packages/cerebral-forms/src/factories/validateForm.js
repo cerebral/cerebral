@@ -1,10 +1,11 @@
 import validate from '../utils/validate'
 import checkHasValue from '../utils/checkHasValue'
 
-export default function validateFormFactory (passedFormPath) {
-  function validateForm ({input, state}) {
-    const formPath = (passedFormPath || input.form).split('.')
-    const currentPathValue = state.get(formPath)
+export default function validateFormFactory (passedFormPathTemplate) {
+  function validateForm (context) {
+    const passedFormPath = typeof passedFormPathTemplate === 'function' ? passedFormPathTemplate(context).value : passedFormPathTemplate
+    const formPath = passedFormPath.split('.')
+    const currentPathValue = context.state.get(formPath)
 
     function validateForm (path, form) {
       Object.keys(form).forEach(function (key) {
@@ -33,7 +34,7 @@ export default function validateFormFactory (passedFormPath) {
         !field.isRequired
       )
 
-      state.merge(path, {
+      context.state.merge(path, {
         isValid: isValid,
         hasValue: hasValue,
         errorMessage: isValid ? null : field.errorMessages[result.failedRuleIndex],

@@ -1,14 +1,15 @@
 import isValidFormHelper from '../helpers/isValidForm'
 
-function isValidFormFactory (formPath) {
-  function isValidForm ({state, path}) {
-    const form = state.get(formPath)
+function isValidFormFactory (formPathTemplate) {
+  function isValidForm (context) {
+    const formPath = typeof formPathTemplate === 'function' ? formPathTemplate(context).value : formPathTemplate
+    const form = context.state.get(formPath)
 
     if (isValidFormHelper(form)) {
-      return path.true()
+      return context.path.true()
     }
 
-    return path.false()
+    return context.path.false()
   }
 
   return isValidForm

@@ -15,7 +15,7 @@ export {default as getFormFields} from './helpers/getFormFields'
 export {default as getInvalidFormFields} from './helpers/getInvalidFormFields'
 
 export function isValidForm (form) {
-  if (typeof form === 'string') {
+  if (typeof form === 'string' || typeof form === 'function') {
     return isValidFormFactory(form)
   }
 
