@@ -7,7 +7,7 @@ title: ch02. Render state
 [Preview](02)
 
 Run script from the command line to start:
-`npm run start:ch 02`
+`npm run chapter 02`
 
 Now lets get that state displayed in our application.
 First of all we need to tell our component (App) to **connect** to the state.

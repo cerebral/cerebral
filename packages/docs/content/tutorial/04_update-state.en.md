@@ -7,7 +7,7 @@ title: ch03. Update state
 [Preview](03)
 
 Run script from the command line to start:
-`npm run start:ch 03`
+`npm run chapter 03`
 
 Defining state and user interfaces is more about describing how something should look, rather than how it should update. Updates are the tricky part, this is where we usually introduce complexity in our applications.
 

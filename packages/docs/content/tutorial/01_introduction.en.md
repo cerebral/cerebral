@@ -32,11 +32,13 @@ They are all explained in depth in the [Concepts](../concepts/01_the-architectur
 ### How does this tutorial work?
 Whenever you execute the script:
 
-`npm run start:ch xx`
+`npm run chapter xx`
 
-The code for that chapter is loaded and the development server is automatically started. Any changes you have made will be deleted. If you for some reason exit the development server you can start it again by:
+The code for that chapter is loaded. Open up a second terminal tab where you run:
 
 `npm start`
+
+This fires up the actual development server. Go to your browser and *localhost:3000*. Whenever you change chapters, just run the chapter script again in the first terminal tab and the browser will automatically reload.
 
 For beginners in web development we have the following advice: Just follow the tutorial, don't get distracted too much by advanced concepts. Learning new things takes some iterations and often it is more helpful to try to build something yourself. Please head over to our [discord chat](https://discord.gg/0kIweV4bd2bwwsvH) and we are more than happy to help you out.
 

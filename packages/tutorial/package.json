@@ -24,7 +24,7 @@
   "scripts": {
     "prepare": "shjs scripts/prepare.js",
     "start": "react-scripts start",
-    "start:ch": "run-s \"prepare {1}\" start --",
+    "chapter": "run-s \"prepare {1}\" --",
     "build": "react-scripts build",
     "dist": "shjs scripts/dist.js"
   }

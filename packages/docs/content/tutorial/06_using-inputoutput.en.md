@@ -7,7 +7,7 @@ title: ch05. Actions
 [Preview](05)
 
 Run script from the command line to start:
-`npm run start:ch 05`
+`npm run chapter 05`
 
 Signals can take an input-object which then can be further processed by its actions.
 
