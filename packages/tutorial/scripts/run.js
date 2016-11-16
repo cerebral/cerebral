@@ -1,24 +1,19 @@
-/* global rm, cp, sed */
-var path = require('path')
+/* global ls, test */
 var paths = require('./paths')
 var inquirer = require('inquirer')
 var exec = require('child_process').exec
 var tutorial = exec('react-scripts start')
+var prepare = require('./prepare')
 var runningInquirer = false
-
-function prepare (part) {
-  rm('-rf', paths.src)
-  cp('-R', path.join(paths.parts, part, 'src'), paths.root)
-  cp(paths.partsIndex, paths.public)
-  sed('-i', '%N%', part, paths.publicIndex)
-}
 
 function chooseChapter (chapter) {
   inquirer.prompt([{
     type: 'list',
     name: 'chapter',
     message: 'Choose next chapter',
-    choices: ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11'],
+    choices: ls('-d', paths.parts + '/*')
+      .filter(function (item) { return test('-d', item) })
+      .map(function (dir) { return dir.split('/').slice(-1)[0] }),
     default: chapter
   }]).then(function (answers) {
     console.log('------------------------------')
