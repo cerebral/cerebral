@@ -6,23 +6,23 @@ import LangSelector from '../LangSelector'
 export default connect(
   {
     t: translations,
-    $email: 'user.signIn.$email',
-    $password: 'user.signIn.$password',
-    $validationsErrors: 'user.signIn.$validationsErrors',
-    $error: 'user.signIn.$error'
+    email: 'user.$signIn.email',
+    password: 'user.$signIn.password',
+    validationErrors: 'user.$signIn.validationErrors',
+    error: 'user.$signIn.error'
   },
   {
     fieldChanged: 'user.fieldChanged',
-    signInClicked: 'user.signInClicked',
+    signInClicked: 'user.$signInClicked',
     createUserClicked: 'user.createUserClicked'
   },
   function Login ({
     t,
     // state
-    $email,
-    $password,
-    $validationsErrors,
-    $error,
+    email,
+    password,
+    validationErrors,
+    error,
     // signals
     fieldChanged,
     signInClicked,
@@ -63,19 +63,19 @@ export default connect(
     }
 
     function getEmail () {
-      let hasValidationError = $validationsErrors && $validationsErrors.EMAIL_EMPTY
-      let hasError = $error
+      let hasValidationError = validationErrors && validationErrors.EMAIL_EMPTY
+      let hasError = error
       let message = ''
       if (hasValidationError) {
         message = t.loginValidationEmailRequired
       } else if (hasError) {
-        let translation = t.loginErrors[ $error.code ]
-        message = translation || $error.message
+        let translation = t.loginErrors[ error.code ]
+        message = translation || error.message
       }
       return getField({
-        field: 'user.signIn.$email',
+        field: 'user.$signIn.email',
         icon: 'fa fa-user',
-        value: $email,
+        value: email,
         placeholder: t.loginEmailPlaceholder,
         fieldType: 'email',
         message: message
@@ -83,15 +83,15 @@ export default connect(
     }
 
     function getPassword () {
-      let hasValidationError = $validationsErrors && $validationsErrors.PASSWORD_EMPTY
+      let hasValidationError = validationErrors && validationErrors.PASSWORD_EMPTY
       let message = ''
       if (hasValidationError) {
         message = t.loginValidationPasswordRequired
       }
       return getField({
-        field: 'user.signIn.$password',
+        field: 'user.$signIn.password',
         icon: 'fa fa-key',
-        value: $password,
+        value: password,
         placeholder: t.loginPasswordPlaceholder,
         fieldType: 'password',
         message: message

@@ -5,9 +5,9 @@ const signOutFirebase = [
   signOut, {
     success: [
       set(state`user.$loggedIn`, false),
-      set(state`user.signIn.$email`, ''),
-      set(state`user.signIn.$password`, ''),
-      set(state`user.currentUser`, null)
+      set(state`user.$signIn.email`, ''),
+      set(state`user.$signIn.password`, ''),
+      set(state`user.$currentUser`, null)
     ],
     error: []
   }

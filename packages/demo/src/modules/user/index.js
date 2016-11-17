@@ -5,13 +5,13 @@ import signOutFirebase from './signals/signOutFirebase'
 
 export default {
   state: {
-    $loggedIn: false,
     lang: 'en',
-    signIn: {
-      $email: '',
-      $password: ''
+    $loggedIn: false,
+    $signIn: {
+      email: '',
+      password: ''
     },
-    currentUser: null
+    $currentUser: null
   },
   signals: {
     fieldChanged: [

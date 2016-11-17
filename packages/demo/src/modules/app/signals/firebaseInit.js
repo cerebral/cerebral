@@ -7,18 +7,18 @@ export default [
   firebaseListen({
     moduleName: 'clients',
     firebasePath: 'clients',
-    uidPath: 'user.currentUser.uid'
+    uidPath: 'user.$currentUser.uid'
   }),
   firebaseListen({
     moduleName: 'projects',
     firebasePath: 'projects',
-    uidPath: 'user.currentUser.uid'
+    uidPath: 'user.$currentUser.uid'
   }),
 
   // get data first time
   firebaseGetValue({
     firebasePath: 'clients',
-    uidPath: 'user.currentUser.uid'
+    uidPath: 'user.$currentUser.uid'
   }), {
     success: [
       set(state`clients.all`, {
@@ -36,7 +36,7 @@ export default [
   },
   firebaseGetValue({
     firebasePath: 'projects',
-    uidPath: 'user.currentUser.uid'
+    uidPath: 'user.$currentUser.uid'
   }), {
     success: [
       set(state`projects.all`, {

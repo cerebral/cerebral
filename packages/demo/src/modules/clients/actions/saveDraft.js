@@ -2,7 +2,7 @@ import firebaseUpdateItem from '../../../factories/firebaseUpdateItem'
 
 function saveDraft ({state, path, firebase}) {
   const draft = state.get('clients.$draft')
-  const uid = state.get('user.currentUser.uid')
+  const uid = state.get('user.$currentUser.uid')
   return firebaseUpdateItem({
     firebase,
     moduleName: 'clients',

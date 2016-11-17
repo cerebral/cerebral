@@ -1,19 +1,19 @@
 function signIn ({firebase, path, state}) {
-  const email = state.get('user.signIn.$email')
-  const password = state.get('user.signIn.$password')
+  const email = state.get('user.$signIn.email')
+  const password = state.get('user.$signIn.password')
 
   // validate
-  let validationsErrors = {}
+  let validationErrors = {}
   if (email.length === 0) {
-    validationsErrors.EMAIL_EMPTY = true
+    validationErrors.EMAIL_EMPTY = true
   }
   if (password.length === 0) {
-    validationsErrors.PASSWORD_EMPTY = true
+    validationErrors.PASSWORD_EMPTY = true
   }
 
-  let invalid = Object.keys(validationsErrors)
+  let invalid = Object.keys(validationErrors)
   if (invalid.length > 0) {
-    return path.invalid({validationsErrors})
+    return path.invalid({validationErrors})
   }
 
   return firebase.signInWithEmailAndPassword(email, password)

@@ -15,18 +15,18 @@ export default connect(
   {
     t: translations,
     loggedIn: 'user.$loggedIn',
-    $loading: 'app.$loading',
-    currentUser: 'user.currentUser'
+    loading: 'app.$loading',
+    currentUser: 'user.$currentUser'
   },
   {
     signOutClicked: 'user.signOutClicked'
   },
-  function Demo ({t, loggedIn, $loading, currentUser, signOutClicked}) {
+  function Demo ({t, loggedIn, loading, currentUser, signOutClicked}) {
     const match = TaglineRe.exec(t.SiteTagLine)
     const tagline = match
       ? <h2 className='subtitle'>{match[1]}<a href='http://cerebraljs.com'>Cerebral</a>{match[2]}</h2>
       : <h2 className='subtitle'>{t.SiteTagLine}</h2>
-    if ($loading) {
+    if (loading) {
       return null
     }
     if (!loggedIn) {
@@ -56,13 +56,9 @@ export default connect(
                   )}
                   {currentUser && (
                     <div className='nav-item'>
-                      <a
-                        href='#'
-                        onClick={() => signOutClicked()}
-                      >
+                      <a href='#' onClick={() => signOutClicked()}>
                         {t.loginSignOutButton}
                       </a>
-
                     </div>
                   )}
                 </div>

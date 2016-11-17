@@ -16,7 +16,7 @@ export default {
           getUser, {
             success: [
               set(state`user.$loggedIn`, true),
-              set(state`user.currentUser`, input`user`),
+              set(state`user.$currentUser`, input`user`),
               ...firebaseInit
             ],
             error: [
