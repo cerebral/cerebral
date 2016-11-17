@@ -24,9 +24,7 @@
   },
   "scripts": {
     "start": "shjs scripts/run",
-    "prepare": "shjs scripts/prepare.js",
     "tutorial": "react-scripts start",
-    "chapter": "run-s \"prepare {1}\" --",
     "build": "react-scripts build",
     "dist": "shjs scripts/dist.js"
   }
