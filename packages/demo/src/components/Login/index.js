@@ -69,7 +69,7 @@ export default connect(
             </nav>
 
             <Input
-              fieldType="email"
+              fieldType='email'
               placeholder={t.loginEmailPlaceholder}
               value={email}
               onChange={e => fieldChanged({
@@ -77,11 +77,11 @@ export default connect(
                 value: e.target.value
               })}
               message={emailValidationMessage}
-              icon="fa fa-user"
+              icon='fa fa-user'
             />
 
             <Input
-              fieldType="password"
+              fieldType='password'
               placeholder={t.loginPasswordPlaceholder}
               value={password}
               onChange={e => fieldChanged({
@@ -89,7 +89,7 @@ export default connect(
                 value: e.target.value
               })}
               message={passwordValidationMessage}
-              icon="fa fa-user"
+              icon='fa fa-user'
             />
 
             <nav className='level'>

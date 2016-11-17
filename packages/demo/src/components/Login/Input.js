@@ -4,21 +4,21 @@ export default function Input ({fieldType, placeholder, value, onChange, message
   return (
     <p className='control has-icon'>
       <input className='input'
-             type={fieldType}
-             placeholder={placeholder}
-             value={value}
-             onChange={e => onChange(e)}
+        type={fieldType}
+        placeholder={placeholder}
+        value={value}
+        onChange={e => onChange(e)}
       />
       {message && (
-        <i className='fa fa-warning'/>
+        <i className='fa fa-warning' />
       )}
       {message && (
         <span className='help is-danger'>
-              {message}
-            </span>
+          {message}
+        </span>
       )}
       {!message && (
-        <i className={icon}/>
+        <i className={icon} />
       )}
     </p>
   )
