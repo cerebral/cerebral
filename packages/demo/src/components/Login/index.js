@@ -2,6 +2,7 @@ import React from 'react'
 import { connect } from 'cerebral/react'
 import translations from '../../computed/translations'
 import LangSelector from '../LangSelector'
+import Input from './Input'
 
 export default connect(
   {
@@ -13,7 +14,7 @@ export default connect(
   },
   {
     fieldChanged: 'user.fieldChanged',
-    signInClicked: 'user.$signInClicked',
+    signInClicked: 'user.signInClicked',
     createUserClicked: 'user.createUserClicked'
   },
   function Login ({
@@ -28,75 +29,27 @@ export default connect(
     signInClicked,
     createUserClicked
   }) {
-    function getField ({
-      field,
-      icon,
-      value,
-      placeholder,
-      fieldType,
-      message
-    }) {
-      return (
-        <p className='control has-icon'>
-          <input className='input'
-            type={fieldType}
-            placeholder={placeholder}
-            value={value}
-            onChange={e => fieldChanged({
-              field,
-              value: e.target.value
-            })}
-          />
-          {message && (
-            <i className='fa fa-warning' />
-          )}
-          {message && (
-            <span className='help is-danger'>
-              {message}
-            </span>
-          )}
-          {!message && (
-            <i className={icon} />
-          )}
-        </p>
-      )
-    }
+    let emailValidationMessage = ''
+    let passwordValidationMessage = ''
 
-    function getEmail () {
+    function validate () {
+      // validate email
       let hasValidationError = validationErrors && validationErrors.EMAIL_EMPTY
-      let hasError = error
-      let message = ''
       if (hasValidationError) {
-        message = t.loginValidationEmailRequired
-      } else if (hasError) {
-        let translation = t.loginErrors[ error.code ]
-        message = translation || error.message
+        emailValidationMessage = t.loginValidationEmailRequired
+      } else if (error) {
+        let translation = t.loginErrors[error.code]
+        emailValidationMessage = translation || error.message
       }
-      return getField({
-        field: 'user.$signIn.email',
-        icon: 'fa fa-user',
-        value: email,
-        placeholder: t.loginEmailPlaceholder,
-        fieldType: 'email',
-        message: message
-      })
+
+      // validate password
+      hasValidationError = validationErrors && validationErrors.PASSWORD_EMPTY
+      if (hasValidationError) {
+        passwordValidationMessage = t.loginValidationPasswordRequired
+      }
     }
 
-    function getPassword () {
-      let hasValidationError = validationErrors && validationErrors.PASSWORD_EMPTY
-      let message = ''
-      if (hasValidationError) {
-        message = t.loginValidationPasswordRequired
-      }
-      return getField({
-        field: 'user.$signIn.password',
-        icon: 'fa fa-key',
-        value: password,
-        placeholder: t.loginPasswordPlaceholder,
-        fieldType: 'password',
-        message: message
-      })
-    }
+    validate()
 
     return (
       <div className='modal is-active'>
@@ -115,8 +68,29 @@ export default connect(
               </div>
             </nav>
 
-            {getEmail()}
-            {getPassword()}
+            <Input
+              fieldType="email"
+              placeholder={t.loginEmailPlaceholder}
+              value={email}
+              onChange={e => fieldChanged({
+                field: 'user.$signIn.email',
+                value: e.target.value
+              })}
+              message={emailValidationMessage}
+              icon="fa fa-user"
+            />
+
+            <Input
+              fieldType="password"
+              placeholder={t.loginPasswordPlaceholder}
+              value={password}
+              onChange={e => fieldChanged({
+                field: 'user.$signIn.password',
+                value: e.target.value
+              })}
+              message={passwordValidationMessage}
+              icon="fa fa-user"
+            />
 
             <nav className='level'>
               <div className='level-left' />
