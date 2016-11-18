@@ -43,7 +43,7 @@ const controller = Controller(...)
 ```
 As you can see actions receives an argument, which we [destructure](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to grab the *input*. The argument itself is called the **context**. So **input** is on the **context**.
 
-Now we just need to change our button click to actually pass a message (*src/components/Input/index.js*):
+Now we just need to change our button click to actually pass a message (*src/components/App/index.js*):
 
 ```js
 import React from 'react'
