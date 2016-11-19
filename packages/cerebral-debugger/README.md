@@ -1,27 +1,40 @@
-# cerebral-debugger-prototype
-Prototype for the new debugger
+# electron-quick-start
 
-## The goal
-We want to build a new debugger with ideas from @delaneyj, as seen in this mockup:
+**Clone and run for a quick way to see an Electron in action.**
 
-![mockup.jpg](mockup.jpg)
+This is a minimal Electron application based on the [Quick Start Guide](http://electron.atom.io/docs/latest/tutorial/quick-start) within the Electron documentation.
 
-There will be revisions to this mock, but you get the idea of the vision.
+**Use this app along with the [Electron API Demos](http://electron.atom.io/#get-started) app for API code examples to help you get started.**
 
-## How to start
-`npm start -- --v2`
+A basic Electron application needs just these files:
 
-### Sending fake data
-The debugger will receive a simulated INIT message when it fires up. To send more fake data use the console to:
+- `package.json` - Points to the app's main file and lists its details and dependencies.
+- `main.js` - Starts the app and creates a browser window to render HTML. This is the app's **main process**.
+- `index.html` - A web page to render. This is the app's **renderer process**.
 
-`CONNECTOR.receiveEvent('v2/someMockData')`
+You can learn more about each of these components within the [Quick Start Guide](http://electron.atom.io/docs/latest/tutorial/quick-start).
 
-Or with timed events:
-`CONNECTOR.receiveEvents('v2/someMockData')`
+## To Use
 
-The mocked data is put into the folder `connector\mocks\v2\someMockData`. Look at existing examples for more help.
+To clone and run this repository you'll need [Git](https://git-scm.com) and [Node.js](https://nodejs.org/en/download/) (which comes with [npm](http://npmjs.com)) installed on your computer. From your command line:
 
-### Data used by debugger
-The debugger receives the raw signals from the client application. These signals are then converted to a data structure that
-makes it easier to create lists etc. The raw signals are at path `['debugger', 'currentApp', 'signals']` and the converted
-signals are at `['debugger', 'signals']`. The debugger signals just has a path reference to the actual signals inside the *currentApp.
+```bash
+# Clone this repository
+git clone https://github.com/electron/electron-quick-start
+# Go into the repository
+cd electron-quick-start
+# Install dependencies
+npm install
+# Run the app
+npm start
+```
+
+Learn more about Electron and its API in the [documentation](http://electron.atom.io/docs/latest).
+
+## Other Example Apps
+
+For more example apps, see the
+[list of boilerplates](http://electron.atom.io/community/#boilerplates)
+created by the awesome electron community.
+
+#### License [CC0 1.0 (Public Domain)](LICENSE.md)
