@@ -222,13 +222,13 @@
   <body>
     <div id="error">
       <h1>Please refresh your app to use the debugger...</h1>
-      <img src="./chromeExtension/logo.png" width="200"/>
+      <img src="./logo.png" width="200"/>
     </div>
     <div id="root" style="height: 100%;"></div>
     <script>
       (function() {
         const prism = document.createElement('script');
-        prism.src = process.env.NODE_ENV !== 'development' ? './chromeExtension/prism.js' : 'http://localhost:9000/prism.js';
+        prism.src = process.env.NODE_ENV !== 'development' ? './prism.js' : 'http://localhost:9000/prism.js';
         document.write(prism.outerHTML);
 
         const app = document.createElement('script');

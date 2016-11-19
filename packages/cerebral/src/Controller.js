@@ -19,6 +19,7 @@ import {dependencyStore as computedDependencyStore} from './Computed'
 class Controller extends EventEmitter {
   constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
     super()
+    console.log('wuuuut?');
     this.computedDependencyStore = computedDependencyStore
     this.componentDependencyStore = new DependencyStore()
     this.options = options

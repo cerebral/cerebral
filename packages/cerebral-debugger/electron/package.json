@@ -1,0 +1,20 @@
+{
+  "name": "electron-quick-start",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A minimal Electron application",
+  "main": "main.js",
+  "repository": "https://github.com/electron/electron-quick-start",
+  "keywords": [
+    "Electron",
+    "quick",
+    "start",
+    "tutorial",
+    "demo"
+  ],
+  "author": "GitHub",
+  "license": "CC0-1.0",
+  "dependencies": {
+    "ws": "^1.1.1"
+  }
+}

@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "description": "A minimal Electron application",
-  "main": "main.js",
+  "main": "electron/main.js",
   "scripts": {
-    "start": "DEBUGGER_TARGET=electron NODE_ENV=development concurrently -k 'node devServer.js' 'npm run electron'",
+    "start": "DEBUGGER_TARGET=electron NODE_ENV=development concurrently -k 'node ./electron/devServer.js' 'npm run electron'",
     "electron": "electron .",
-    "build:electron": "NODE_ENV=production DEBUGGER_TARGET=electron webpack && rm -r CerebralDebugger-darwin-x64 && electron-packager . CerebralDebugger --platform=darwin",
-    "build:chrome": "NODE_ENV=production webpack"
+    "build:electron": "NODE_ENV=production webpack --config webpack.electron.config && rm -r ./electron/dist && electron-packager ./electron CerebralDebugger --platform=darwin --out ./electron/dist",
+    "build:chromeExtension": "NODE_ENV=production webpack --config webpack.chromeExtension.config"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
