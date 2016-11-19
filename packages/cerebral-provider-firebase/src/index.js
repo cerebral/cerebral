@@ -20,23 +20,25 @@ import signInWithEmailAndPassword from './signInWithEmailAndPassword'
 import signOutService from './signOut'
 import signInWithFacebook from './signInWithFacebook'
 
-export function signInAnonymously (context) {
-  return context.firebase.signInAnonymously()
-    .then(context.path.success)
-    .catch(context.path.error)
-}
-
-export function getUser (context) {
-  return context.firebase.getUser()
-    .then(context.path.success)
-    .catch(context.path.error)
-}
-
-export function signOut (context) {
-  return context.firebase.signOut()
-    .then(context.path.success)
-    .catch(context.path.error)
-}
+export {default as createUserWithEmailAndPassword} from './factories/createUserWithEmailAndPassword'
+export {default as getUser} from './factories/getUser'
+export {default as off} from './factories/off'
+export {default as onChildAdded} from './factories/onChildAdded'
+export {default as onChildChanged} from './factories/onChildChanged'
+export {default as onChildRemoved} from './factories/onChildRemoved'
+export {default as onValue} from './factories/onValue'
+export {default as sendPasswordResetEmail} from './factories/sendPasswordResetEmail'
+export {default as signInAnonymously} from './factories/signInAnonymously'
+export {default as signInWithEmailAndPassword} from './factories/signInWithEmailAndPassword'
+export {default as signInWithFacebook} from './factories/signInWithFacebook'
+export {default as signOut} from './factories/signOut'
+export {default as task} from './factories/task'
+export {default as value} from './factories/value'
+export {default as set} from './factories/set'
+export {default as update} from './factories/update'
+export {default as push} from './factories/push'
+export {default as remove} from './factories/remove'
+export {default as transaction} from './factories/transaction'
 
 export default function FirebaseProviderFactory (options = { payload: {} }) {
   firebase.initializeApp(options.config)

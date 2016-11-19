@@ -31,10 +31,184 @@ const controller = Controller({
 })
 ```
 
+**Important notes**
+
+- The Cerebral firebase provider uses **dot** notation to keep consistency with Cerebral itself
+
+- All factories supports template tags, allowing you to dynamically create paths and points to values
+
+
+### Set data
+
+#### set
+Write data to this database location. This will overwrite any data at this location and all child locations. Passing **null** for the new value is equivalent to calling remove(); all data at this location or any child location will be deleted.
+
+**action**
+```javascript
+function someAction({firebase, path}) {
+  return firebase.set('foo.bar', 'baz')
+    .then(path.success)
+    .catch(path.error)
+}
+```
+
+**factory**
+```javascript
+import {input} from 'cerebral/operators'
+import {set} from 'cerebral-provider-firebase'
+
+export default [
+  set('foo.bar', input`foo`), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### update
+As opposed to the set() method, update() can be use to selectively update only the referenced properties at the current location (instead of replacing all the child properties at the current location).
+
+**action**
+```javascript
+function someAction({firebase, path}) {
+  return firebase.update({
+    'foo': 'bar',
+    'items.item1.isAwesome': true
+  })
+    .then(path.success)
+    .catch(path.error)
+}
+```
+
+**factory**
+```javascript
+import {input} from 'cerebral/operators'
+import {update} from 'cerebral-provider-firebase'
+
+export default [
+  update({
+    'foo.bar': input`bar`,
+    'foo.baz': input`baz`
+  }), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### push
+Generates a new child location using a unique key and returns its reference from the action. An example being `{key: "-KWKImT_t3SLmkJ4s3-w"}`.
+
+**action**
+```javascript
+function someAction({firebase, path}) {
+  return firebase.push('users', {
+    name: 'Bob'
+  })
+    .then(path.success)
+    .catch(path.error)
+}
+```
+
+**factory**
+```javascript
+import {state} from 'cerebral/operators'
+import {push} from 'cerebral-provider-firebase'
+
+export default [
+  push('users', state`newUser`), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### remove
+Remove the data at this database location.
+
+**action**
+```javascript
+function someAction({ firebase, path}) {
+  return firebase.remove('foo.bar')
+    .then(path.success)
+    .catch(path.error)
+}
+```
+
+**factory**
+```javascript
+import {input, toString} from 'cerebral/operators'
+import {remove} from 'cerebral-provider-firebase'
+
+export default [
+  remove(toString`users.${input`userKey`}`), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### transaction
+Atomically modifies the data at the provided location.
+
+Unlike a normal set(), which just overwrites the data regardless of its previous value, transaction() is used to modify the existing value to a new value, ensuring there are no conflicts with other clients writing to the same location at the same time.
+
+To accomplish this, you pass transaction() an update function which is used to transform the current value into a new value. If another client writes to the location before your new value is successfully written, your update function will be called again with the new current value, and the write will be retried. This will happen repeatedly until your write succeeds without conflict or you abort the transaction by not returning a value from your update function.
+
+**action**
+```javascript
+function someAction({firebase, path}) {
+
+  function transactionFunction(currentData){
+    if (currentData === null) {
+      return { foo: 'bar' }
+    }
+
+    return // Abort the transaction.
+  }
+
+  return firebase.transaction('some.transaction.path', transactionFunction)
+    .then((result) => {
+      if(result.committed){
+        return path.success({result: result.value})
+      } else {
+        return path.abort()
+      }
+    })
+    .catch(path.error)
+}
+```
+
+**factory**
+```javascript
+import {input, toString} from 'cerebral/operators'
+import {transaction} from 'cerebral-provider-firebase'
+
+function transactionFunction(currentData){
+  if (currentData === null) {
+    return { foo: 'bar' }
+  }
+
+  return // Abort the transaction.
+}
+
+export default [
+  transaction('foo.bar', transactionFunction), {
+    success: [],
+    error: []
+  }
+]
+```
+
+Note: Modifying data with set() will cancel any pending transactions at that location, so extreme care should be taken if mixing set() and transaction() to update the same data.
+
+Note: When using transactions with Security and Firebase Rules in place, be aware that a client needs .read access in addition to .write access in order to perform a transaction. This is because the client-side nature of transactions requires the client to read the data in order to transactionally update it.
+
 ### Retrieve data
-The Cerebral firebase provider uses **dot** notation to keep consistency with Cerebral itself.
 
 #### Value
+
+**action**
 ```js
 function someAction({ firebase, path }) {
   return firebase.value('someKey.foo')
@@ -44,10 +218,25 @@ function someAction({ firebase, path }) {
 ```
 The result will be available as `{ key: 'foo', value: 'bar' }`. Or `{ error: 'error message'}`.
 
+**factory**
+```javascript
+import {input, toString} from 'cerebral/operators'
+import {value} from 'cerebral-provider-firebase'
+
+export default [
+  value('foo.bar'), {
+    success: [],
+    error: []
+  }
+]
+```
+
 ### Retrieve data with updates
 When you also want to know when your queried data updates you have the following methods:
 
 #### onValue
+
+**action**
 ```js
 function someAction({ firebase }) {
   firebase.onValue('someKey.foo', 'someModule.fooUpdated');
@@ -62,7 +251,18 @@ function someAction({ firebase }) {
 }
 ```
 
+**factory**
+```javascript
+import {onValue} from 'cerebral-provider-firebase'
+
+export default [
+  onValue('foo.bar', 'some.signal')
+]
+```
+
 #### onChildAdded
+
+**action**
 ```js
 function someAction({ firebase }) {
   firebase.onChildAdded('posts', 'posts.postAdded', {
@@ -87,7 +287,22 @@ function someAction({ firebase }) {
 }
 ```
 
+**factory**
+```javascript
+import {state} from 'cerebral/operators'
+import {onChildAdded} from 'cerebral-provider-firebase'
+
+export default [
+  onChildAdded('foo.bar', 'some.signal', {
+    orderByChild: 'count',
+    limitToFirst: state`config.limitToFirst`
+  })
+]
+```
+
 #### onChildRemoved
+
+**action**
 ```js
 function someAction({ firebase }) {
   firebase.onChildRemoved('posts', 'posts.postRemoved', {
@@ -104,7 +319,20 @@ function someAction({ firebase }) {
 }
 ```
 
+**factory**
+```javascript
+import {onChildRemoved} from 'cerebral-provider-firebase'
+
+export default [
+  onChildRemoved('foo.bar', 'some.signal', {
+    // Same options as above
+  })
+]
+```
+
 #### onChildChanged
+
+**action**
 ```js
 function someAction({ firebase }) {
   firebase.onChildChanged('posts', 'posts.postChanged', {
@@ -121,9 +349,21 @@ function someAction({ firebase }) {
 }
 ```
 
+**factory**
+```javascript
+import {onChildChanged} from 'cerebral-provider-firebase'
+
+export default [
+  onChildChanged('foo.bar', 'some.signal', {
+    // Same options as above
+  })
+]
+```
+
 ### Tasks
 If you are using the [firebase-queue](https://github.com/firebase/firebase-queue) and need to create tasks, you can do that with:
 
+**action**
 ```js
 function someAction({ firebase, path, state }) {
   return firebase.task('create_post', {
@@ -137,11 +377,28 @@ function someAction({ firebase, path, state }) {
 
 This will add a task at `queue/tasks`. There is no output from a resolved task, it just resolves when the action has been processed.
 
+**factory**
+```javascript
+import {state, input} from 'cerebral/operators'
+import {task} from 'cerebral-provider-firebase'
+
+export default [
+  task('some_task', {
+    uid: state`user.uid`,
+    data: input`data`
+  }), {
+    success: [],
+    error: []
+  }
+]
+```
+
 ### Authentication
 
 #### Get user
 Will resolve to `{user: {}}` if user exists. If user was redirected from Facebook/Google etc. as part of first sign in, this method will handle the confirmed registration of the user.
 
+**action**
 ```js
 function someAction({ firebase, path }) {
   return firebase.getUser()
@@ -150,97 +407,7 @@ function someAction({ firebase, path }) {
 }
 ```
 
-#### Anonymous login
-This login will method will resolve to existing anonymous or create a new one for you. Resolves to `{user: {}}`.
-
-```js
-function someAction({ firebase, path }) {
-  return firebase.signInAnonymously()
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-#### Create user with email and password
-Register a new user with email and password. Resolves to `{user: {}}`.
-
-```js
-function someAction({ firebase, path, state }) {
-  const email = state.get('register.email')
-  const password = state.get('register.password')
-
-  return firebase.createUserWithEmailAndPassword(email, password)
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-#### Sign in user with email and password
-Sign in a user with email and password. Resolves to `{user: {}}`.
-
-```js
-function someAction({ firebase, path, state }) {
-  const email = state.get('register.email')
-  const password = state.get('register.password')
-
-  return firebase.signInWithEmailAndPassword(email, password)
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-#### Sign in with Facebook
-Sign in a user with Facebook. Resolves to `{user: {}}`, or redirects.
-
-```js
-function someAction({ firebase, path, state }) {
-  return firebase.signInWithFacebook({
-    redirect: false, // Use popup or redirect. Redirect typically for mobile
-    scopes: [] // Facebook scopes to access
-  })
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-#### Sign out
-Sign out user. **getUser** will now not resolve a user anymore.
-
-```js
-function someAction({ firebase, path }) {
-  return firebase.signOut()
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-#### Send reset password email
-
-```js
-function someAction({ firebase, path, state }) {
-  return firebase.sendPasswordResetEmail(state.get('user.email'))
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-### Action factories
-
-#### signInAnonymously
-
-```javascript
-import {signInAnonymously} from 'cerebral-provider-firebase'
-
-export default [
-  signInAnonymously(), {
-    success: [],
-    error: []
-  }
-]
-```
-
-#### getUser
-
+**factory**
 ```javascript
 import {getUser} from 'cerebral-provider-firebase'
 
@@ -252,9 +419,131 @@ export default [
 ]
 ```
 
-#### signOut
+#### Anonymous login
+This login will method will resolve to existing anonymous or create a new one for you. Resolves to `{user: {}}`.
 
+**action**
+```js
+function someAction({ firebase, path }) {
+  return firebase.signInAnonymously()
+    .then(path.success)
+    .catch(path.error);
+}
+```
+
+**factory**
 ```javascript
+import {signInAnonymously} from 'cerebral-provider-firebase'
+
+export default [
+  signInAnonymously(), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### Create user with email and password
+Register a new user with email and password. Resolves to `{user: {}}`.
+
+**action**
+```js
+function someAction({ firebase, path, state }) {
+  const email = state.get('register.email')
+  const password = state.get('register.password')
+
+  return firebase.createUserWithEmailAndPassword(email, password)
+    .then(path.success)
+    .catch(path.error);
+}
+```
+
+**factory**
+```javascript
+import {state} from 'cerebral/operators'
+import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase'
+
+export default [
+  createUserWithEmailAndPassword(state`newUser.email`, state`newUser.password`), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### Sign in user with email and password
+Sign in a user with email and password. Resolves to `{user: {}}`.
+
+**action**
+```js
+function someAction({ firebase, path, state }) {
+  const email = state.get('register.email')
+  const password = state.get('register.password')
+
+  return firebase.signInWithEmailAndPassword(email, password)
+    .then(path.success)
+    .catch(path.error);
+}
+```
+
+**factory**
+```javascript
+import {input} from 'cerebral/operators'
+import {signInWithEmailAndPassword} from 'cerebral-provider-firebase'
+
+export default [
+  signInWithEmailAndPassword(input`email`, input`password`), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### Sign in with Facebook
+Sign in a user with Facebook. Resolves to `{user: {}}`, or redirects.
+
+**action**
+```js
+function someAction({ firebase, path, state }) {
+  return firebase.signInWithFacebook({
+    redirect: false, // Use popup or redirect. Redirect typically for mobile
+    scopes: [] // Facebook scopes to access
+  })
+    .then(path.success)
+    .catch(path.error);
+}
+```
+
+**factory**
+```javascript
+import {state} from 'cerebral/operators'
+import {signInWithFacebook} from 'cerebral-provider-firebase'
+
+export default [
+  signInWithFacebook({
+    redirect: state`useragent.media.small`
+  }), {
+    success: [],
+    error: []
+  }
+]
+```
+
+#### Sign out
+Sign out user. **getUser** will now not resolve a user anymore.
+
+**action**
+```js
+function someAction({ firebase, path }) {
+  return firebase.signOut()
+    .then(path.success)
+    .catch(path.error);
+}
+```
+
+**factory**
+```javascript
+import {state} from 'cerebral/operators'
 import {signOut} from 'cerebral-provider-firebase'
 
 export default [
@@ -264,119 +553,27 @@ export default [
   }
 ]
 ```
-### Adding data
 
-#### set
-Write data to this database location.
+#### Send reset password email
 
-This will overwrite any data at this location and all child locations.
-
-
-Passing null for the new value is equivalent to calling remove(); all data at this location or any child location will be deleted.
-
-```javascript
-function someAction({ firebase, path}) {
-  return firebase.set('foo',payload)
+**action**
+```js
+function someAction({ firebase, path, state }) {
+  return firebase.sendPasswordResetEmail(state.get('user.email'))
     .then(path.success)
     .catch(path.error);
 }
 ```
 
-#### update
-The payload argument contains multiple property/value pairs that will be written to the database together. Each child property can either be a simple property (for example, "name"), or a relative path (for example, "name/first") from the current location to the data to update.
-
-As opposed to the set() method, update() can be use to selectively update only the referenced properties at the current location (instead of replacing all the child properties at the current location).
-
-A single update() will generate a single "value" event at the location where the update() was performed, regardless of how many children were modified.
-
-Note that modifying data with update() will cancel any pending transactions at that location, so extreme care should be taken if mixing update() and transaction() to modify the same data.
-
-Passing null to update() will remove the data at this location.
-
+**factory**
 ```javascript
-function someAction({ firebase, path}) {
-  return firebase.update('foo',payload)
-    .then(path.success)
-    .catch(path.error);
-}
-```
+import {state} from 'cerebral/operators'
+import {sendPasswordResetEmail} from 'cerebral-provider-firebase'
 
-#### push
-Generates a new child location using a unique key and returns its reference.
-
-push returns the key of new item `{key: "-KWKImT_t3SLmkJ4s3-w"}`
-
-This is the most common pattern for adding data to a collection of items.
-
-The unique key generated by push() are ordered by the current time, so the resulting list of items will be chronologically sorted.
-
-```javascript
-function someAction({ firebase, path}) {
-  return firebase.push('bar',payload)
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-#### remove
-Remove the data at this database location.
-
-Any data at child locations will also be deleted.
-
-Equivalent to passing null as a value to set() operation
-
-```javascript
-function someAction({ firebase, path}) {
-  return firebase.remove(`foo.bar`)
-    .then(path.success)
-    .catch(path.error);
-}
-```
-
-#### transaction
-Returns a transaction object
-
-```javascript
-{
-  committed:true //if transaction was successful,
-  value: 'newValue' //if transaction was successful
-}
-
-{
-  committed:false //if transaction was unsuccessful,
-  value: 'existingValue' //if transaction was unsuccessful,
-}
-```
-
-Atomically modifies the data at the provided location.
-
-Unlike a normal set(), which just overwrites the data regardless of its previous value, transaction() is used to modify the existing value to a new value, ensuring there are no conflicts with other clients writing to the same location at the same time.
-
-To accomplish this, you pass transaction() an update function which is used to transform the current value into a new value. If another client writes to the location before your new value is successfully written, your update function will be called again with the new current value, and the write will be retried. This will happen repeatedly until your write succeeds without conflict or you abort the transaction by not returning a value from your update function.
-
-Note: Modifying data with set() will cancel any pending transactions at that location, so extreme care should be taken if mixing set() and transaction() to update the same data.
-
-Note: When using transactions with Security and Firebase Rules in place, be aware that a client needs .read access in addition to .write access in order to perform a transaction. This is because the client-side nature of transactions requires the client to read the data in order to transactionally update it.
-
-```javascript
-function someAction({ firebase, path}) {
-
-  function transactionFunction(currentData){
-    if (currentData === null) {
-      return { foo: 'bar' };
-    } else {
-      return; // Abort the transaction.
-    }
+export default [
+  sendPasswordResetEmail(state`user.email`), {
+    success: [],
+    error: []
   }
-
-  return firebase.transaction('transactionPath',transactionFunction)
-    .then((result) => {
-      if(result.committed){
-        return path.success({result: result.value})
-      } else {
-        return path.fail({result: result.value})
-      }
-    })
-    .catch(path.error);
-}
+]
 ```
