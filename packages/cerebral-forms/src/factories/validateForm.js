@@ -28,7 +28,7 @@ export default function validateFormFactory (passedFormPathTemplate) {
     function doValidation (path, form, key) {
       const field = form[key]
       const hasValue = checkHasValue(form, field.value, field.isValueRules)
-      const result = validate(form, field.value, field.validations)
+      const result = validate(form, field.value, field.validationRules)
       const isValid = result.isValid && (
         (field.isRequired && hasValue) ||
         !field.isRequired
