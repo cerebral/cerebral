@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {Computed} from '../'
-import {input, string} from './'
+import {input, toString} from './'
 
 describe('operator.string', () => {
   it('should build path', () => {
@@ -10,7 +10,7 @@ describe('operator.string', () => {
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${input`ref`}`(context).value, 'foo.bar')
+            assert.deepEqual(toString`foo.${input`ref`}`(context).value, 'foo.bar')
           }
         ]
       }
@@ -28,7 +28,7 @@ describe('operator.string', () => {
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${computed}`(context).value, 'foo.bar')
+            assert.deepEqual(toString`foo.${computed}`(context).value, 'foo.bar')
           }
         ]
       }

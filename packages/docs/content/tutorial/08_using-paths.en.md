@@ -32,17 +32,17 @@ Let us implement something similar. We are going to grab information about githu
 
 ```js
 ...
-import {set, state, wait, input, string} from 'cerebral/operators'
+import {set, state, wait, input, toString} from 'cerebral/operators'
 ...
 {
   buttonClicked: [
-     ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+     ...showToast(toString`Loading data for repo: ${input`repo`}`, 2000),
      getRepo, {
        success: [
-          ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
+          ...showToast(toString`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
        ],
        error: [
-         ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
+         ...showToast(toString`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
       }
   ]
 }
@@ -85,13 +85,13 @@ Replace your signal with the following snippet:
 {
   buttonClicked: [
     [
-      ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+      ...showToast(toString`Loading data for repo: ${input`repo`}`, 2000),
       getRepo, {
         success: [
-           ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
+           ...showToast(toString`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
         ],
         error: [
-          ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
+          ...showToast(toString`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
        }  
     ]
   ]
@@ -108,7 +108,7 @@ Instead of using **wait**, we can use **debounce**. It is difficult to wrap your
 
 ```js
 ...
-import { set, state, debounce, input, string } from 'cerebral/operators'
+import { set, state, debounce, input, toString } from 'cerebral/operators'
 ...
 const toastDebounce = debounce.shared()
 function showToast(message, ms, type = null) {
@@ -123,13 +123,13 @@ function showToast(message, ms, type = null) {
 ...
 {
   buttonClicked: [
-    ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+    ...showToast(toString`Loading data for repo: ${input`repo`}`, 2000),
     getRepo, {
       success: [
-      ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
+      ...showToast(toString`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
       ],
       error: [
-        ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
+        ...showToast(toString`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
     }
   ]
 }

@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, string} from './'
+import {input, toString} from './'
 
 describe('operator.input', () => {
   it('should read value from input', () => {
@@ -9,7 +9,7 @@ describe('operator.input', () => {
       signals: {
         test: [
           (context) => {
-            assert.deepEqual(string`foo.${input`foo`}`(context).value, 'foo.bar')
+            assert.deepEqual(toString`foo.${input`foo`}`(context).value, 'foo.bar')
           }
         ]
       }

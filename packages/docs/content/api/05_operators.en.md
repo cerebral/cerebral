@@ -201,13 +201,13 @@ function setFactory(target, value) {
 }
 ```
 
-Custom operators often wants to extract paths, though not necessarily related to state or input. That is why we have template tag **string**:
+Custom operators often wants to extract paths, though not necessarily related to state or input. That is why we have template tag **toString**:
 
 ```js
-import {string} from 'cerebral/operators'
+import {toString} from 'cerebral/operators'
 import showMessage from '../factories/showMessage'
 import starsCount from '../computeds/starsCount'
 [
-  showMessage(string`There are ${starsCount} left`)
+  showMessage(toString`There are ${starsCount} left`)
 ]
 ```

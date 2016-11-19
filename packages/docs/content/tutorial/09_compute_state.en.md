@@ -57,7 +57,7 @@ import starsSum from './computeds/starsSum'
         error: []
       }
     ],
-    ...showToast(string`The repos have ${starsSum} stars`, 5000)
+    ...showToast(toString`The repos have ${starsSum} stars`, 5000)
   ]
 }
 ...
