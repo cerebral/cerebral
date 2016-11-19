@@ -13,7 +13,7 @@ describe('validate', () => {
             name: {
               value: 'Ben',
               validationRules: ['isNumeric'],
-              errorMessages: ['Not a number']
+              validationMessages: ['Not a number']
             }
           })
         }
@@ -28,7 +28,7 @@ describe('validate', () => {
             name: {
               value: 'Ben',
               validationRules: ['minLength:5', 'isNumeric'],
-              errorMessages: ['Not long enough', 'Not a number']
+              validationMessages: ['Not long enough', 'Not a number']
             }
           })
         }
@@ -46,7 +46,7 @@ describe('validate', () => {
                 minLength: 5,
                 isNumeric: true
               }],
-              errorMessages: ['Not valid value']
+              validationMessages: ['Not valid value']
             }
           })
         }

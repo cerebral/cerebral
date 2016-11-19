@@ -34,7 +34,8 @@ describe('field', () => {
           validationRules: null,
           isValid: true,
           errorMessage: null,
-          errorMessages: [],
+          validationMessages: [],
+          requiredMessage: null,
           isValueRules: ['isValue'],
           isRequired: false,
           hasValue: true,
@@ -46,7 +47,8 @@ describe('field', () => {
           validationRules: ['isNumeric'],
           isValid: true,
           errorMessage: null,
-          errorMessages: [],
+          validationMessages: [],
+          requiredMessage: null,
           isValueRules: ['isValue'],
           isRequired: false,
           hasValue: true,
@@ -67,7 +69,7 @@ describe('field', () => {
             validationRules: [
               'minLength:15'
             ],
-            errorMessages: [
+            validationMessages: [
               'Password must be at least 15 characters.'
             ],
             dependsOn: 'form.repeatPassword'
@@ -78,7 +80,7 @@ describe('field', () => {
             validationRules: [
               'equalsField:password'
             ],
-            errorMessages: [
+            validationMessages: [
               'Password must match repeat password.'
             ],
             requiredMessage: 'Repeat password is required.',

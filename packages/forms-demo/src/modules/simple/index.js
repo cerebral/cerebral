@@ -15,7 +15,7 @@ export default {
       email: {
         value: '',
         validationRules: ['isEmail'],
-        errorMessages: ['You must enter a valid email'],
+        validationMessages: ['You must enter a valid email'],
         isRequired: false
       }
     })
