@@ -2,9 +2,9 @@
 Firebase provider for Cerebral
 
 ### Install
-This is still alpha but to test the bleeding edge
+This is still alpha but to test the bleeding edge. Put "cerebral-provider-firebase": "next" in package.json and do.
 
-`npm install cerebral-provider-firebase@next --save`
+`npm install cerebral-provider-firebase@next`
 
 ## Setup
 

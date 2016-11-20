@@ -18,9 +18,9 @@ The useragent module puts information about the browser into your model, and it 
 - Internet connectivity
 
 ### Install
-This is still alpha but to test the bleeding edge
+This is still alpha but to test the bleeding edge. Put "cerebral-module-useragent": "next" in package.json and do.
 
-`npm install cerebral-module-useragent@next --save`
+`npm install cerebral-module-useragent@next`
 
 ### Setup
 ```js

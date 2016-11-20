@@ -3,7 +3,10 @@ HTTP Provider for Cerebral2
 Based on prior art from [cerebral-module-http](https://github.com/cerebral/cerebral-module-http)
 
 ### Install
-`npm install cerebral-provider-http@next --save`
+
+Put "cerebral-provider-http": "next" in package.json and do.
+
+`npm install cerebral-provider-http@next`
 
 ### Instantiate
 
