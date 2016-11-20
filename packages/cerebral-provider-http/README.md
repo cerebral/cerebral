@@ -8,6 +8,8 @@ Put "cerebral-provider-http": "next" in package.json and do.
 
 `npm install cerebral-provider-http@next`
 
+**NOTE**: If you need to update to a later @next release than execute the npm install again.
+
 ### Instantiate
 
 ```js

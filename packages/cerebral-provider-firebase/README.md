@@ -6,6 +6,8 @@ This is still alpha but to test the bleeding edge. Put "cerebral-provider-fireba
 
 `npm install cerebral-provider-firebase@next`
 
+**NOTE**: If you need to update to a later @next release than execute the npm install again.
+
 ## Setup
 
 ```javascript

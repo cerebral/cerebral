@@ -22,6 +22,8 @@ This is still alpha but to test the bleeding edge. Put "cerebral-module-useragen
 
 `npm install cerebral-module-useragent@next`
 
+**NOTE**: If you need to update to a later @next release than execute the npm install again.
+
 ### Setup
 ```js
 import {Controller} from 'cerebral'

@@ -6,6 +6,8 @@ This is still alpha but to test the bleeding edge. Put "cerebral-forms": "next" 
 
 `npm install cerebral-forms@next`
 
+**NOTE**: If you need to update to a later @next release than execute the npm install again.
+
 ## API
 Cerebral forms is basically a function that creates state needed to handle validation and an action factory for validating fields. It is simple in nature, but handles all the complexity that comes with forms.
 
