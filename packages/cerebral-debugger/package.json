@@ -7,8 +7,10 @@
   "scripts": {
     "start": "DEBUGGER_TARGET=electron NODE_ENV=development concurrently -k 'node ./electron/devServer.js' 'npm run electron'",
     "electron": "electron .",
-    "build:electron": "NODE_ENV=production webpack --config webpack.electron.config && rm -r ./electron/dist && electron-packager ./electron CerebralDebugger --platform=darwin --out ./electron/dist",
-    "build:chromeExtension": "NODE_ENV=production webpack --config webpack.chromeExtension.config"
+    "build:chromeExtension": "NODE_ENV=production webpack --config webpack.chromeExtension.config",
+    "build:electron": "NODE_ENV=production webpack --config webpack.electron.config && npm run prepare:electron && npm run package:electron",
+    "prepare:electron": "rimraf electron/dist electron/node_modules && copyfiles 'node_modules/ws/**/*' 'node_modules/ultron/**/*' 'node_modules/options/**/*' electron",
+    "package:electron": "electron-packager ./electron CerebralDebugger --platform=darwin --out ./electron/dist"
   },
   "repository": "https://github.com/electron/electron-quick-start",
   "keywords": [
@@ -35,6 +37,7 @@
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",
     "concurrently": "^3.1.0",
+    "copyfiles": "^1.0.0",
     "css-loader": "^0.26.0",
     "electron": "^1.4.1",
     "electron-packager": "^8.3.0",
