@@ -1,4 +1,4 @@
-import {set, state} from 'cerebral/operators'
+import {set, state, input} from 'cerebral/operators'
 import {form, changeField, validateForm} from 'cerebral-forms'
 
 export default {
@@ -26,7 +26,7 @@ export default {
     ],
     fieldChanged: changeField,
     validateEntireForm: [
-      validateForm('simple.form')
+      validateForm(input`formPath`)
     ]
   }
 }
