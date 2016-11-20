@@ -37,7 +37,7 @@ export default function validateFormFactory (passedFormPathTemplate) {
       context.state.merge(path, {
         isValid: isValid,
         hasValue: hasValue,
-        errorMessage: isValid ? null : (field.errorMessages && field.errorMessages.length > 0 ? field.errorMessages[result.failedRuleIndex] : null),
+        errorMessage: isValid ? null : (field.validationMessages && field.validationMessages.length > 0 ? field.validationMessages[result.failedRuleIndex] : null),
         isPristine: false
       })
     }

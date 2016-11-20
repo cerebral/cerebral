@@ -13,7 +13,7 @@ function runValidation (fieldPath, field, form) {
     isValid,
     isPristine: false,
     hasValue: checkHasValue(form, field.value, field.isValueRules),
-    errorMessage: result.isValid ? null : field.errorMessages[result.failedRuleIndex]
+    errorMessage: result.isValid ? null : field.validationMessages[result.failedRuleIndex]
   }
 }
 

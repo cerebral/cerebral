@@ -12,6 +12,8 @@ Cerebral forms is basically a function that creates state needed to handle valid
 ### form
 A state factory for creating form state. Used when defining initial state or dynamically with an action. You can put forms inside forms.
 
+You can add any properties to a form where properties containing an object with a "value" property are identified as fields.
+
 ```js
 import {form} from 'cerebral-forms'
 
@@ -25,10 +27,12 @@ export default {
         // with colon separation
         validationRules: ['minLength:3'],
         // Error messages mapped to same index as validation rule
-        errorMessages: ['Must be at least 3 characters long'],
+        validationMessages: ['Must be at least 3 characters long'],
         // When setting isRequired to true the field will be invalid if there
         // is no value. To determine if there is not value, check "isValueRules" below
         isRequired: false,
+        // Error message when field is required but has no value
+        requiredMessage: null,
         // Will only be valid if this other field is also valid.
         // Point to a field in the model
         dependsOn: 'app.myForm.repeatPassword'
@@ -62,7 +66,7 @@ export default {
       lastName: {
         value: '',
         // Combine rules using an object
-        errorMessages: [{
+        validationRules: [{
           minLength: 3,
           isAlpha: true
         }]
@@ -87,6 +91,35 @@ export default function MyAction({state}) {
     age: {
       value: 18
     }
+  }))
+}
+```
+
+#### Set a default value for the whole form
+You can set a default value for a property using a factory:
+```js
+import {Form, getFormFields} from 'cerebral-forms'
+
+const MyFormFactory = (form) => {
+  const myForm = Form(form)
+  const fields = getFormFields(myForm)
+
+  fields.forEach((field) => {
+    field.requiredMessage = field.requiredMessage || 'This field is required'
+    field.someProp = field.someProp || 'Some default'
+  })
+
+  return myForm
+}
+
+import {form} from 'cerebral-forms'
+
+export default function MyAction({state}) {
+  state.set('some.new.form', form({
+    name: {
+      value: '',
+    },
+    showErrors = false
   }))
 }
 ```

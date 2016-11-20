@@ -148,7 +148,7 @@ describe('isValidFrom', () => {
           firstName: {
             value: 'ben',
             validationRules: ['isFirstUpperCase'],
-            errorMessages: ['first letter is not uppercase']
+            validationMessages: ['first letter is not uppercase']
           }
         })
       }
@@ -162,12 +162,13 @@ describe('isValidFrom', () => {
       firstName: {
         value: 'ben',
         validationRules: [ 'isFirstUpperCase' ],
-        errorMessages: [ 'first letter is not uppercase' ],
+        validationMessages: [ 'first letter is not uppercase' ],
         defaultValue: 'ben',
         isValid: false,
         errorMessage: 'first letter is not uppercase',
         isValueRules: [ 'isValue' ],
         isRequired: false,
+        requiredMessage: null,
         hasValue: true,
         isPristine: true
       }
