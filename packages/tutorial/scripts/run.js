@@ -2,7 +2,6 @@
 var paths = require('./paths')
 var inquirer = require('inquirer')
 var exec = require('child_process').exec
-var tutorial = exec('react-scripts start')
 var prepare = require('./prepare')
 var runningInquirer = false
 
@@ -28,6 +27,8 @@ function chooseChapter (chapter) {
 }
 
 console.log('Running development server...')
+prepare('01')
+var tutorial = exec('react-scripts start')
 tutorial.stdout.on('data', function (data) {
   if (data.indexOf('Something is already running') >= 0) {
     console.log('ERROR: Something already running on port 3000')
