@@ -18,7 +18,7 @@ connector.connect(() => {
     }
 
     if (!currentController) {
-      document.body.removeChild(document.querySelector('#error'));
+      document.body.removeChild(document.querySelector('#error'))
       currentController = Controller({
         devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
         options: {

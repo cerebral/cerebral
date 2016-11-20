@@ -1,4 +1,4 @@
-/* global CustomEvent */
+/* global CustomEvent WebSocket */
 import {debounce} from '../utils'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
@@ -169,7 +169,7 @@ class Devtools {
         this.ws.send(JSON.stringify({type: 'ping'}))
       }
     } else {
-      const event = new window.CustomEvent('cerebral2.client.message', {
+      const event = new CustomEvent('cerebral2.client.message', {
         detail: JSON.stringify({type: 'ping'})
       })
       window.dispatchEvent(event)
@@ -184,7 +184,7 @@ class Devtools {
     if (this.remoteDebugger) {
       this.ws.send(stringifiedMessage)
     } else {
-      const event = new window.CustomEvent('cerebral2.client.message', {detail: stringifiedMessage})
+      const event = new CustomEvent('cerebral2.client.message', {detail: stringifiedMessage})
       window.dispatchEvent(event)
     }
   }

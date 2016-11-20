@@ -1,5 +1,4 @@
-const webpack = require('webpack')
-
+const path = require('path')
 const config = {
   entry: './src/index',
   module: {
@@ -16,14 +15,14 @@ const config = {
     }]
   },
   output: {
-    path: __dirname + '/chromeExtension/build',
+    path: path.resolve('chromeExtension', 'build'),
     filename: 'bundle.js'
   },
   resolve: {
     alias: {
-      connector: __dirname + '/connectors/chromeExtension.js'
+      connector: path.resolve('connectors', 'chromeExtension.js')
     }
   }
-};
+}
 
-module.exports = config;
+module.exports = config

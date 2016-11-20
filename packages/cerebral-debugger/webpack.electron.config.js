@@ -1,5 +1,6 @@
 const webpack = require('webpack')
 const webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
+const path = require('path')
 
 const plugins = []
 if (process.env.NODE_ENV !== 'production') {
@@ -26,18 +27,18 @@ const config = {
     }]
   },
   output: {
-    path: __dirname + '/electron/build',
+    path: path.resolve('electron', 'build'),
     publicPath: 'http://localhost:9000/dist/',
     filename: 'bundle.js'
   },
   resolve: {
     alias: {
-      connector: __dirname + '/connectors/electron.js'
+      connector: path.resolve('connectors', 'electron.js')
     }
   },
   plugins: plugins
-};
+}
 
-config.target = webpackTargetElectronRenderer(config);
+config.target = webpackTargetElectronRenderer(config)
 
-module.exports = config;
+module.exports = config
