@@ -25,10 +25,10 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "cerebral": "next",
-    "cerebral-module-useragent": "next",
-    "color": "^0.11.4",
+    "cerebral": "^2.0.0-0-alpha.36dab802",
+    "cerebral-module-useragent": "^1.0.0-0-alpha.36dab802",
     "classnames": "^2.2.5",
+    "color": "^0.11.4",
     "react": "^15.3.2",
     "react-dom": "^15.3.2"
   },

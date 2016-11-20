@@ -21,9 +21,9 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage":
-    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-module-useragent#readme",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-module-useragent#readme",
   "dependencies": {
+    "cerebral": "^2.0.0-0-alpha.36dab802",
     "feature.js": "^1.0.0",
     "match-media": "^0.2.0",
     "offline-js": "^0.7.18",
