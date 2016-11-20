@@ -28,9 +28,5 @@
   "devDependencies": {
     "cerebral": "next",
     "xhr-mock": "https://github.com/christianalfoni/xhr-mock.git"
-  },
-  "dependencies": {
-    "cerebral": "^2.0.0-0-alpha.36dab802",
-    "xhr-mock": "git+https://github.com/christianalfoni/xhr-mock.git"
   }
 }
