@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {isValidForm, form, rules, getInvalidFormFields} from '..'
+import {isValidForm, form, validateForm, rules, getInvalidFormFields} from '..'
 import assert from 'assert'
 
 describe('isValidFrom', () => {
@@ -172,5 +172,34 @@ describe('isValidFrom', () => {
         isPristine: true
       }
     })
+  })
+
+  it('should be invalid', () => {
+    const controller = Controller({
+      signals: {
+        validateForm: [
+          validateForm('form')
+        ]
+      },
+      state: {
+        form: form({
+          firstName: {
+            value: 'ben',
+            isRequired: true
+          },
+          lastName: {
+            value: 'bensson',
+            isRequired: true
+          },
+          email: {
+            value: 's',
+            validationRules: ['isEmail']
+          }
+        })
+      }
+    })
+    controller.getSignal('validateForm')()
+    let state = controller.getState()
+    assert.equal(state.form.email.isValid, false)
   })
 })

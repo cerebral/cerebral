@@ -28,7 +28,7 @@ export default function validateFormFactory (passedFormPathTemplate) {
     function doValidation (path, form, key) {
       const field = form[key]
       const hasValue = checkHasValue(form, field.value, field.isValueRules)
-      const result = validate(form, field.value, field.validations)
+      const result = validate(form, field.value, field.validationRules)
       const isValid = result.isValid && (
         (field.isRequired && hasValue) ||
         !field.isRequired
@@ -37,7 +37,7 @@ export default function validateFormFactory (passedFormPathTemplate) {
       context.state.merge(path, {
         isValid: isValid,
         hasValue: hasValue,
-        errorMessage: isValid ? null : field.errorMessages[result.failedRuleIndex],
+        errorMessage: isValid ? null : (field.errorMessages && field.errorMessages.length > 0 ? field.errorMessages[result.failedRuleIndex] : null),
         isPristine: false
       })
     }
