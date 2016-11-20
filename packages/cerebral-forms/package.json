@@ -24,8 +24,7 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage":
-    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms#readme",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms#readme",
   "peerDependencies": {
     "cerebral": "next"
   },
@@ -40,5 +39,8 @@
       "**/*.test.js",
       "**/testHelper.js"
     ]
+  },
+  "dependencies": {
+    "cerebral": "^2.0.0-0-alpha.36dab802"
   }
 }

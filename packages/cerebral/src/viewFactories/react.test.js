@@ -14,7 +14,7 @@ const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
 const Controller = require('../Controller').default
 const Computed = require('../Computed').default
-const {Container, StateContainer, connect, connectDecorator} = require('./react')
+const {Container, StateContainer, connect, decorator} = require('./react')
 
 describe('React', () => {
   describe('state container', () => {
@@ -57,7 +57,7 @@ describe('React', () => {
       const state = {
         foo: 'bar'
       }
-      const TestComponent = connectDecorator({
+      const TestComponent = decorator({
         foo: 'foo'
       })(
         (props) => {

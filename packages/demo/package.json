@@ -14,8 +14,8 @@
   },
   "dependencies": {
     "bulma": "^0.2.3",
-    "cerebral": "next",
-    "cerebral-router": "next",
+    "cerebral": "^2.0.0-0-alpha.36dab802",
+    "cerebral-router": "^1.0.0-0-alpha.36dab802",
     "js-joda": "^1.1.13",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",
