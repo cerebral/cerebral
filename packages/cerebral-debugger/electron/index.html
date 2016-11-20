@@ -227,10 +227,6 @@
     <div id="root" style="height: 100%;"></div>
     <script>
       (function() {
-        const prism = document.createElement('script');
-        prism.src = process.env.NODE_ENV !== 'development' ? './prism.js' : 'http://localhost:9000/prism.js';
-        document.write(prism.outerHTML);
-
         const app = document.createElement('script');
         app.src = process.env.NODE_ENV !== 'development' ? './build/bundle.js' : 'http://localhost:9000/dist/bundle.js';
         document.write(app.outerHTML);
