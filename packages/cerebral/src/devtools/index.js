@@ -168,6 +168,8 @@ class Devtools {
       this.ws.onopen = () => {
         this.ws.send(JSON.stringify({type: 'ping'}))
       }
+      this.ws.onclose = () => this.reInit()
+      this.ws.onerror = () => this.reInit()
     } else {
       const event = new CustomEvent('cerebral2.client.message', {
         detail: JSON.stringify({type: 'ping'})
@@ -176,6 +178,18 @@ class Devtools {
     }
 
     this.watchExecution()
+  }
+  /*
+    When websocket close, reinit with chrome extension
+  */
+  reInit () {
+    this.remoteDebugger = null
+    this.addListeners()
+
+    const event = new CustomEvent('cerebral2.client.message', {
+      detail: JSON.stringify({type: 'ping'})
+    })
+    window.dispatchEvent(event)
   }
   /*
     Sends message to chrome extension or remote debugger
