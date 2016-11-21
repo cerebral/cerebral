@@ -2,9 +2,11 @@
 Signals, actions and state factories to create forms
 
 ## Install
-This is still alpha but to test the bleeding edge
+This is still alpha but to test the bleeding edge.
 
 `npm install cerebral-forms@next --save`
+
+**NOTE**: If you need to update to a later @next release than execute above command again.
 
 ## API
 Cerebral forms is basically a function that creates state needed to handle validation and an action factory for validating fields. It is simple in nature, but handles all the complexity that comes with forms.

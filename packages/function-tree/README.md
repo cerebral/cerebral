@@ -3,9 +3,11 @@
 When a function is not enough
 
 ### Install
-This is still alpha but to test the bleeding edge
+This is still alpha but to test the bleeding edge.
 
 `npm install function-tree@next --save`
+
+**NOTE**: If you need to update to a later @next release than execute above command again.
 
 ### What is it?
 The article [The case for function-tree](http://www.christianalfoni.com/articles/2016_09_11_The-case-for-function-tree) will give you an explanation of why it was built and how it works. Please get your wet feet with that and/or have a look at the demos and API below.
