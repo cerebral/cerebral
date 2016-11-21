@@ -6,8 +6,15 @@ title: Devtools
 
 Cerebral has a powerful development tool. It knows about all the state in your application, all the state updates, side effects run, state paths currently active in your components and when they render. All the things Cerebral helps you with, it visualizes in the debugger.
 
-#### Install Chrome extension
-You will need the Chrome Extension from the [chrome store](https://chrome.google.com/webstore/detail/cerebral2-debugger/ghoadjdodkgkbbmhhpbfhgikjgjelojc). When installed you will get a **Cerebral2** tab in the Chrome devtools.
+#### Install debugger
+
+[Chrome Extension](https://chrome.google.com/webstore/detail/cerebral2-debugger/ghoadjdodkgkbbmhhpbfhgikjgjelojc)
+
+[Cerebral Debugger for mac](https://docs.google.com/uc?id=0B1pYKovu9UpybHRMRm9YZU10WUU&export=download)
+
+[Cerebral Debugger for windows](https://docs.google.com/uc?id=0B1pYKovu9UpyU0lkU2UyWklMV28&export=download)
+
+[Cerebral Debugger for linux](https://docs.google.com/uc?id=0B1pYKovu9UpyWE85UWVHNFRCQkk&export=download)
 
 #### Initialize the devtools
 You initialize the devtools by adding it to the controller.

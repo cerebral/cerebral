@@ -9,7 +9,10 @@
     "build:chromeExtension": "NODE_ENV=production webpack --config webpack.chromeExtension.config",
     "build:electron": "NODE_ENV=production webpack --config webpack.electron.config && npm run prepare:electron && npm run package:electron",
     "prepare:electron": "rimraf electron/dist electron/node_modules && copyfiles 'node_modules/ws/**/*' 'node_modules/ultron/**/*' 'node_modules/options/**/*' electron",
-    "package:electron": "electron-packager ./electron CerebralDebugger --platform=darwin --out ./electron/dist"
+    "package:electron": "npm run package:electron:mac && npm run package:electron:win && npm run package:electron:linux",
+    "package:electron:mac": "electron-packager ./electron CerebralDebugger --platform=darwin --out ./electron/dist",
+    "package:electron:win": "electron-packager ./electron CerebralDebugger --platform=win32 --out ./electron/dist",
+    "package:electron:linux": "electron-packager ./electron CerebralDebugger --platform=linux --out ./electron/dist"
   },
   "repository": "https://github.com/cerebral/cerebral",
   "author": "Christian Alfoni",
