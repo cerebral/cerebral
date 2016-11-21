@@ -86,7 +86,7 @@ export default (View) => {
         if (
           this.context.cerebral.controller.devtools &&
           this.context.cerebral.controller.devtools.bigComponentsWarning &&
-          Object.keys(propsToPass).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
+          Object.keys(statePaths || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
         ) {
           console.warn(`Component named ${Component.displayName || Component.name} has a lot of state dependencies, consider refactoring. Adjust this option in devtools`)
         }
