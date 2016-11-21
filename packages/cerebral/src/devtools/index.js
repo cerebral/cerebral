@@ -1,4 +1,4 @@
-/* global CustomEvent */
+/* global CustomEvent WebSocket */
 import {debounce} from '../utils'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
@@ -19,7 +19,8 @@ class Devtools {
     bigComponentsWarning: {
       state: 5,
       signals: 5
-    }
+    },
+    remoteDebugger: null
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
@@ -30,6 +31,7 @@ class Devtools {
     this.verifyStrictRender = Boolean(options.verifyStrictRender)
     this.preventInputPropReplacement = Boolean(options.preventInputPropReplacement)
     this.bigComponentsWarning = options.bigComponentsWarning
+    this.remoteDebugger = options.remoteDebugger
     this.backlog = []
     this.mutations = []
     this.latestExecutionId = null
@@ -37,6 +39,7 @@ class Devtools {
     this.isConnected = false
     this.controller = null
     this.originalRunTreeFunction = null
+    this.ws = null
 
     this.sendInitial = this.sendInitial.bind(this)
     this.sendComponentsMap = debounce(this.sendComponentsMap, 50)
@@ -90,6 +93,56 @@ class Devtools {
     this.controller.flush(true)
   }
   /*
+    Sets up the listeners to Chrome Extension or remote debugger
+  */
+  addListeners () {
+    if (this.remoteDebugger) {
+      this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
+      this.ws.onmessage = (event) => {
+        const message = JSON.parse(event.data)
+        switch (message.type) {
+          case 'changeModel':
+            this.controller.model.set(message.data.path, message.data.value)
+            this.controller.flush()
+            break
+          case 'remember':
+            if (!this.storeMutations) {
+              console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
+            }
+            this.remember(message.data)
+            break
+          case 'reset':
+            this.reset()
+            break
+          case 'pong':
+            this.sendInitial()
+            break
+          case 'ping':
+            this.sendInitial()
+            break
+        }
+      }
+    } else {
+      window.addEventListener('cerebral2.debugger.changeModel', (event) => {
+        this.controller.model.set(event.detail.path, event.detail.value)
+        this.controller.flush()
+      })
+      window.addEventListener('cerebral2.debugger.remember', (event) => {
+        if (!this.storeMutations) {
+          console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
+        }
+        this.remember(event.detail)
+      })
+      window.addEventListener('cerebral2.debugger.reset', (event) => {
+        this.reset()
+      })
+      // When debugger responds a client ping
+      window.addEventListener('cerebral2.debugger.pong', this.sendInitial)
+      // When debugger pings the client
+      window.addEventListener('cerebral2.debugger.ping', this.sendInitial)
+    }
+  }
+  /*
     The debugger might be ready or it might not. The initial communication
     with the debugger requires a "ping" -> "pong" to identify that it
     is ready to receive messages.
@@ -109,30 +162,31 @@ class Devtools {
       this.initialModelString = JSON.stringify(controller.model.get())
     }
 
-    window.addEventListener('cerebral2.debugger.changeModel', (event) => {
-      controller.model.set(event.detail.path, event.detail.value)
-      controller.flush()
-    })
-    window.addEventListener('cerebral2.debugger.remember', (event) => {
-      if (!this.storeMutations) {
-        console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
-      }
-      this.remember(event.detail)
-    })
-    window.addEventListener('cerebral2.debugger.reset', (event) => {
-      this.reset()
-    })
-    // When debugger responds a client ping
-    window.addEventListener('cerebral2.debugger.pong', this.sendInitial)
-    // When debugger pings the client
-    window.addEventListener('cerebral2.debugger.ping', this.sendInitial)
+    this.addListeners()
 
-    const event = new window.CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify({type: 'ping'})
-    })
-    window.dispatchEvent(event)
+    if (this.remoteDebugger) {
+      this.ws.onopen = () => {
+        this.ws.send(JSON.stringify({type: 'ping'}))
+      }
+    } else {
+      const event = new CustomEvent('cerebral2.client.message', {
+        detail: JSON.stringify({type: 'ping'})
+      })
+      window.dispatchEvent(event)
+    }
 
     this.watchExecution()
+  }
+  /*
+    Sends message to chrome extension or remote debugger
+  */
+  sendMessage (stringifiedMessage) {
+    if (this.remoteDebugger) {
+      this.ws.send(stringifiedMessage)
+    } else {
+      const event = new CustomEvent('cerebral2.client.message', {detail: stringifiedMessage})
+      window.dispatchEvent(event)
+    }
   }
   /*
     Watches function tree for execution of signals. This is passed to
@@ -142,7 +196,7 @@ class Devtools {
   */
   watchExecution () {
     this.controller.runTree.on('start', (execution) => {
-      const detail = JSON.stringify({
+      const message = JSON.stringify({
         type: 'executionStart',
         data: {
           execution: {
@@ -155,14 +209,13 @@ class Devtools {
       })
 
       if (this.isConnected) {
-        const event = new window.CustomEvent('cerebral2.client.message', {detail})
-        window.dispatchEvent(event)
+        this.sendMessage(message)
       } else {
-        this.backlog.push(detail)
+        this.backlog.push(message)
       }
     })
     this.controller.runTree.on('end', (execution) => {
-      const detail = JSON.stringify({
+      const message = JSON.stringify({
         type: 'executionEnd',
         data: {
           execution: {
@@ -173,14 +226,13 @@ class Devtools {
       this.latestExecutionId = execution.id
 
       if (this.isConnected) {
-        const event = new window.CustomEvent('cerebral2.client.message', {detail})
-        window.dispatchEvent(event)
+        this.sendMessage(message)
       } else {
-        this.backlog.push(detail)
+        this.backlog.push(message)
       }
     })
     this.controller.runTree.on('pathStart', (path, execution, funcDetails) => {
-      const detail = JSON.stringify({
+      const message = JSON.stringify({
         type: 'executionPathStart',
         data: {
           execution: {
@@ -192,14 +244,13 @@ class Devtools {
       })
 
       if (this.isConnected) {
-        const event = new window.CustomEvent('cerebral2.client.message', {detail})
-        window.dispatchEvent(event)
+        this.sendMessage(message)
       } else {
-        this.backlog.push(detail)
+        this.backlog.push(message)
       }
     })
     this.controller.runTree.on('functionStart', (execution, funcDetails, payload) => {
-      const detail = JSON.stringify({
+      const message = JSON.stringify({
         type: 'execution',
         data: {
           execution: {
@@ -212,10 +263,9 @@ class Devtools {
       })
 
       if (this.isConnected) {
-        const event = new window.CustomEvent('cerebral2.client.message', {detail})
-        window.dispatchEvent(event)
+        this.sendMessage(message)
       } else {
-        this.backlog.push(detail)
+        this.backlog.push(message)
       }
     })
   }
@@ -225,47 +275,39 @@ class Devtools {
   */
   sendInitial () {
     const initialModel = this.controller.model.get()
+    const message = JSON.stringify({
+      type: 'init',
+      version: this.VERSION,
+      data: {
+        initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
+      }
+    }).replace(`"${PLACEHOLDER_INITIAL_MODEL}"`, this.initialModelString)
 
     this.isConnected = true
-    const initEvent = new window.CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify({
-        type: 'init',
-        version: this.VERSION,
-        data: {
-          initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
-        }
-      }).replace(`"${PLACEHOLDER_INITIAL_MODEL}"`, this.initialModelString)
-    })
-    window.dispatchEvent(initEvent)
+    this.sendMessage(message)
 
-    this.backlog.forEach((detail) => {
-      const event = new window.CustomEvent('cerebral2.client.message', {
-        detail
-      })
-      window.dispatchEvent(event)
+    this.backlog.forEach((backlogItem) => {
+      this.sendMessage(backlogItem)
     })
     this.backlog = []
 
-    const event = new CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify({
-        type: 'components',
-        data: {
-          map: this.debuggerComponentsMap,
-          render: {
-            components: []
-          }
+    this.sendMessage(JSON.stringify({
+      type: 'components',
+      data: {
+        map: this.debuggerComponentsMap,
+        render: {
+          components: []
         }
-      })
-    })
-    window.dispatchEvent(event)
+      }
+    }))
   }
   /*
-    Create the stringified event detail for the debugger. As we need to
+    Create the stringified message for the debugger. As we need to
     store mutations with the default true "storeMutations" option used
     by time travel and jumping between Cerebral apps, we are careful
     not doing unnecessary stringifying.
   */
-  createEventDetail (debuggingData, context, functionDetails, payload) {
+  createExecutionMessage (debuggingData, context, functionDetails, payload) {
     const type = 'execution'
     let mutationString = ''
 
@@ -302,16 +344,13 @@ class Devtools {
     function tree might also use this to send debugging data. Like when
     mutations are done or any wrapped methods run.
   */
-  send (debuggingData, context, functionDetails, payload) {
-    const detail = this.createEventDetail(debuggingData, context, functionDetails, payload)
+  sendExecutionData (debuggingData, context, functionDetails, payload) {
+    const message = this.createExecutionMessage(debuggingData, context, functionDetails, payload)
 
     if (this.isConnected) {
-      const event = new window.CustomEvent('cerebral2.client.message', {
-        detail
-      })
-      window.dispatchEvent(event)
+      this.sendMessage(message)
     } else {
-      this.backlog.push(detail)
+      this.backlog.push(message)
     }
   }
   /*
@@ -367,21 +406,18 @@ class Devtools {
     debugger updates
   */
   sendComponentsMap (componentsToRender, changes, start, end) {
-    const event = new CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify({
-        type: 'components',
-        data: {
-          map: this.debuggerComponentsMap,
-          render: {
-            start: start,
-            duration: end - start,
-            changes: changes,
-            components: componentsToRender.map(this.extractComponentName)
-          }
+    this.sendMessage(JSON.stringify({
+      type: 'components',
+      data: {
+        map: this.debuggerComponentsMap,
+        render: {
+          start: start,
+          duration: end - start,
+          changes: changes,
+          components: componentsToRender.map(this.extractComponentName)
         }
-      })
-    })
-    window.dispatchEvent(event)
+      }
+    }))
   }
 }
 

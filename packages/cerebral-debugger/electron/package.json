@@ -1,0 +1,11 @@
+{
+  "name": "cerebral-debugger",
+  "version": "2.0.0",
+  "private": true,
+  "main": "main.js",
+  "repository": "https://github.com/cerebral/cerebral",
+  "author": "Christian Alfoni",
+  "dependencies": {
+    "ws": "^1.1.1"
+  }
+}

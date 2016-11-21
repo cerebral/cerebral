@@ -12,7 +12,7 @@ function DebuggerProviderFactory () {
 
     context.debugger = {
       send (debuggerData) {
-        devtools.send(debuggerData, context, functionDetails, payload)
+        devtools.sendExecutionData(debuggerData, context, functionDetails, payload)
       },
       getColor () {
         return '#333'

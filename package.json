@@ -52,7 +52,8 @@
     "ignore": [
       "**/node_modules/",
       "**/build/",
-      "packages/cerebral-debugger/public/prism.js"
+      "packages/cerebral-debugger/chromeExtension/prism.js",
+      "packages/cerebral-debugger/electron/prism.js"
     ],
     "globals": [
       "block",

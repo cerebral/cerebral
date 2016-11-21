@@ -7,3 +7,4 @@ coverage
 dist
 lib
 build
+*darwin-x64
