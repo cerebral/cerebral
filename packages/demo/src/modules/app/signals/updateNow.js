@@ -1,4 +1,4 @@
-import updateNow from '../actions/updateNow'
+import updateNow from '../../tasks/actions/updateNow'
 
 export default [
   updateNow

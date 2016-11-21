@@ -3,41 +3,21 @@ import addClient from './signals/addClient'
 import discardDraft from './signals/discardDraft'
 import saveDraft from './signals/saveDraft'
 import editClient from './signals/editClient'
+import removeClient from './signals/removeClient'
 import closeDraft from './signals/closeDraft'
 import closeModal from './signals/closeModal'
 import updateDraft from './signals/updateDraft'
+import firebaseItemRemoved from '../../factories/firebaseItemRemoved'
+import firebaseItemChanged from '../../factories/firebaseItemChanged'
 
 export default {
   state: {
-    all: {
-      'cerebral': {
-        name: 'Cerebral',
-        notes: 'Make sense of complex apps.',
-        ref: 'cerebral',
-        image: 'cerebral-mini.png',
-        website: 'cerebraljs.com'
-      },
-      'calvin': {
-        ref: 'calvin',
-        name: 'Calvin and Hobbes Ltd',
-        email: 'calvin@hobbes.com',
-        phone: '123456789'
-      },
-      'largo': {
-        ref: 'largo',
-        name: 'Largo Winch et al'
-      },
-      'no-client': {
-        ref: 'no-client',
-        name: 'No client'
-      }
-    },
+    all: {},
     $filter: ''
   },
   signals: {
     addClicked: addClient,
     discardClicked: discardDraft,
-    cardClicked: editClient,
     enterPressed: saveDraft,
     escPressed: discardDraft,
     filterChanged: [
@@ -54,6 +34,10 @@ export default {
       set(state`app.$selectedView`, 'Clients')
     ],
     penClicked: editClient,
-    saveClicked: saveDraft
+    trashClicked: removeClient,
+    saveClicked: saveDraft,
+    clients_ChildAdded: [ firebaseItemChanged('clients.all') ],
+    clients_ChildChanged: [ firebaseItemChanged('clients.all') ],
+    clients_ChildRemoved: [ firebaseItemRemoved('clients.all') ]
   }
 }

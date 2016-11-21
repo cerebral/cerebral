@@ -1,5 +1,5 @@
-import startNewTask from '../actions/startNewTask'
 import updateNow from './updateNow'
+import startNewTask from '../../tasks/actions/startNewTask'
 
 export default [
   startNewTask,

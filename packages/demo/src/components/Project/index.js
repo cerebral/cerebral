@@ -11,16 +11,16 @@ export default connect(
     selectedProject: 'projects.$draft'
   }),
   {
-    cardClick: 'projects.cardClicked',
-    penClick: 'projects.penClicked'
+    penClick: 'projects.penClicked',
+    trashClick: 'clients.trashClicked'
   },
-  function project ({project, selectedProject, cardClick, penClick}) {
+  function project ({project, selectedProject, penClick, trashClick}) {
     if (selectedProject && selectedProject.ref === project.ref) {
       return <ProjectForm projectRef={project.ref} />
     }
     return (
       <div className='card'>
-        <div className='card-content' onClick={() => cardClick({ref: project.ref})}>
+        <div className='card-content'>
           <div className='media'>
             <div className='media-left'>
               <span className='icon is-medium'>
@@ -31,7 +31,7 @@ export default connect(
               <p className='title is-5'>
                 {project.name}
               </p>
-              <p className='subtitle is-6'>{project.client.name}</p>
+              <p className='subtitle is-6'>{project.client && project.client.name}</p>
             </div>
             <div className='media-right'>
               {displayElapsed(project.elapsed)}
@@ -45,9 +45,16 @@ export default connect(
           <nav className='level' onClick={e => e.stopPropagation()}>
             <div className='level-left' />
             <div className='level-right'>
-              <a className='level-item' onClick={() => penClick({ref: project.ref})}>
-                <span className='icon is-small'><i className='fa fa-pencil' /></span>
-              </a>
+              {project.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => penClick({ref: project.ref})}>
+                  <span className='icon is-small'><i className='fa fa-pencil' /></span>
+                </a>
+              )}
+              {project.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => trashClick({ref: project.ref})}>
+                  <span className='icon is-small'><i className='fa fa-trash' /></span>
+                </a>
+              )}
             </div>
           </nav>
         </div>

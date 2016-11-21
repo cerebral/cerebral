@@ -1,9 +1,17 @@
-function saveDraft ({state, path}) {
+import firebaseUpdateItem from '../../../factories/firebaseUpdateItem'
+
+function saveDraft ({state, path, firebase}) {
   const draft = state.get('clients.$draft')
-
-  state.set(`clients.all.${draft.ref}`, draft)
-
-  return path.success()
+  const uid = state.get('user.$currentUser.uid')
+  return firebaseUpdateItem({
+    firebase,
+    moduleName: 'clients',
+    uid,
+    id: draft.ref,
+    payload: draft
+  })
+    .then(path.success)
+    .catch(path.error)
 }
 
 export default saveDraft

@@ -4,16 +4,7 @@ import updateNow from './signals/updateNow'
 
 export default {
   state: {
-    all: {
-      'cerebral-demo-01': {
-        description: 'basic layout with bulma.io #view',
-        elapsed: 3009,
-        endedAt: '2016-10-26T20:18:36Z',
-        projectRef: 'cerebral-demo',
-        ref: 'cerebral-demo-01',
-        startedAt: '2016-10-26T20:18:36Z'
-      }
-    },
+    all: {},
     $running: {
       projectRef: 'no-project'
     }

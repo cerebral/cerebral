@@ -1,11 +1,32 @@
-import {input, set, state, unset} from 'cerebral/operators'
+import {input, set, state, unset, when} from 'cerebral/operators'
+import getUser from '../user/actions/getUser'
+import firebaseInit from './signals/firebaseInit'
 
 export default {
   state: {
     $selectedView: 'Today',
-    $lang: 'en'
+    $lang: 'en',
+    $loading: true
   },
   signals: {
+    bootstrap: [
+      when(state`user.$loggedIn`), {
+        true: [],
+        false: [
+          getUser, {
+            success: [
+              set(state`user.$loggedIn`, true),
+              set(state`user.$currentUser`, input`user`),
+              ...firebaseInit
+            ],
+            error: [
+              set(state`user.$loggedIn`, false)
+            ]
+          }
+        ]
+      },
+      set(state`app.$loading`, false)
+    ],
     routed: [
       set(state`app.$selectedView`, 'Today')
     ],

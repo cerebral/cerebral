@@ -16,6 +16,7 @@
     "bulma": "^0.2.3",
     "cerebral": "next",
     "cerebral-router": "next",
+    "cerebral-provider-firebase": "1.0.0-0",
     "js-joda": "^1.1.13",
     "react": "^15.3.2",
     "react-dom": "^15.3.2",

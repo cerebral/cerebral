@@ -5,8 +5,15 @@ export default {
   SiteTagLine: 'Une saisie des heures basée sur [Cerebral]',
   // Login, Auth
   pleaseLogin: 'Authentification',
-  loginUserPlaceholder: 'Email',
+  loginEmailPlaceholder: 'Email',
   loginPasswordPlaceholder: 'Mot de passe',
+  loginSignInButton: 'Se connecter',
+  loginCreateUserButton: 'Créer un utilisateur',
+  loginSignOutButton: 'Se déconnecter',
+  loginErrors: {
+    'auth/email-already-in-use': 'L\'adresse e-mail est déjà utilisée par un autre compte.',
+    'auth/too-many-requests': 'Nous avons bloqué toutes les demandes de ce périphérique en raison d\'une activité inhabituelle. Réessayez plus tard.'
+  },
   // Day of Week
   Dow0: 'Lun',
   Dow1: 'Mar',
