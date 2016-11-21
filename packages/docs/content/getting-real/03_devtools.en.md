@@ -43,7 +43,10 @@ const controller = Controller({
     preventInputPropReplacement: false,
     // Shows a warning when you have components with number of state dependencies
     // or signals above the set number
-    bigComponentsWarning: {state: 5, signals: 5}
+    bigComponentsWarning: {state: 5, signals: 5},
+    // Connect to Electron debugger (external debugger). It will fall back to
+    // chrome extension if unable to connect
+    remoteDebugger: 'localhost:8080'
   })
 })
 ```
