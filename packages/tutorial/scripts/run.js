@@ -26,7 +26,7 @@ function chooseChapter (chapter) {
   })
 }
 
-console.log('Running development server...')
+console.log('Starting development server, please hold...')
 prepare('01')
 var tutorial = exec('react-scripts start')
 tutorial.stdout.on('data', function (data) {

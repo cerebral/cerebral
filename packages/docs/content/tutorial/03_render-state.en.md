@@ -30,7 +30,7 @@ export default connect({
 
 And voilà, your application should now display the title state. And this is the essence of creating web applications. We define state and how that state should be displayed in the user interface.
 
-But our application does not do much. We have to introduce the concept of change. With the debugger we can actually force a change to our state and make the UI update. Click the title state in the Chrome debugger, change it and hit enter. You will see the application display your changed state.
+But our application does not do much. We have to introduce the concept of change. With the debugger we can actually force a change to our state and make the UI update. Click the title state in the debugger, change it and hit enter. You will see the application display your changed state.
 
 Thanks to
 ```js

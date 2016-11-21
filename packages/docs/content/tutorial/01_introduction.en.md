@@ -6,15 +6,9 @@ title: Introduction
 
 Requirements for this tutorial is that you have [Node](https://nodejs.org/en/) version 5 or higher installed. You would definitely benefit from a fresh cup of coffee or a beer as well, ready to learn something new :)
 
-This tutorial will take you through the core concepts of Cerebral. To get started you will need to clone the cerebral Github repository. To do so you need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed, or the [Github desktop](https://desktop.github.com/) client.
+This tutorial will take you through the core concepts of Cerebral. To get started you can [download this tutorial as a ZIP file](https://raw.githubusercontent.com/cerebral/cerebral/master/packages/tutorial/tutorial.zip).
 
-Now clone the repo to a folder on your computer, either by command line:
-
-`git clone https://github.com/cerebral/cerebral.git`
-
-or using the desktop application.
-
-Then go to directory **cerebral/packages/tutorial** and run the command:
+Extract the content to a folder of your choice, go to your terminal/command line, traverse to the directory where the files are and run:
 
 `npm install`
 
@@ -114,6 +108,5 @@ This the entry point of your application and this is where we bring it all toget
 
 If you are not familiar with [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), the syntax that looks like HTML, it can be explained briefly as "some sugar over normal JavaScript". This is **not** html in JavaScript, it is pure JavaScript, it just allows you to define the UI with familiar syntax. You might think this is "icky", but trust us... UIs has become a lot more complex over the years and we need the power of JavaScript to describe and manage them!
 
-### Installing the debugger
-The Cerebral debugger is a Chrome extension. You can install it from the [chrome store](https://chrome.google.com/webstore/detail/cerebral2-debugger/ghoadjdodkgkbbmhhpbfhgikjgjelojc). Once the debugger is installed your Chrome devtools will have a new tab called **cerebral2**. Open it.
-Not a lot to see right now, so let us move on.
+### The debugger
+The Cerebral debugger is a huge deal. It is an essential tool for handling complexity in your applications. You can choose to install a standalone application or the chrome extension. Take a detour to [devtools page](02_devtools.html), install it and then refresh your application before moving on.
