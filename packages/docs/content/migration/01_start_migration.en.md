@@ -35,6 +35,8 @@ const controller = Controller({
 export default controller
 ```
 
+``` controller.getSignals() ``` is removed from 2.x so favor ``` controller.getSignal('some.signal') ``` instead.
+
 ### Modules
 In 1.x you would have done something like this.
 
@@ -72,6 +74,64 @@ const controller = Controller({
 
 export default controller
 ```
+
+In 1.x you would create your own module like this.
+
+```js
+// 1.x
+export default module => {
+  module.addState({
+    items: [],
+    newItemTitle: '',
+    isSaving: false,
+    error: null
+  })
+
+  module.addSignals({
+    newItemTitleSubmitted: submitNewItemTitle
+  })
+}
+```
+
+addState, addSignals has been removed, so in 2.x you simple return an object.
+
+```js
+// 2.x
+export default {
+  state: {
+    items: [],
+    newItemTitle: '',
+    isSaving: false,
+    error: null
+  },
+  signals: {
+    newItemTitleSubmitted: submitNewItemTitle
+  }
+}
+```
+
+### Operators
+The biggest change to Cerebral 2.x is the operators. You can read more about them in the Operators docs. They have become very powerful and you can create your own operators. Operators in Cerebral 2.x has been moved into core Cerebral. You can still use the old operators if you want by installing them as usual via npm.
+
+```js
+npm install cerebral-operators --save
+```
+
+The new operators now uses tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
+
+```js
+import {
+  state,
+  input,
+  set
+} from 'cerebral/operators'
+
+export default [
+  set(state`foo.bar`, input`bar`)
+]
+
+```
+
 
 ### Signals
 You handle signals mostly the same way as in 1.x. You can describe signals in a module or in the controller directly.
@@ -132,7 +192,7 @@ function myAction({state, output}) {
 myAction.outputs = ['awesome', 'notSoAwesome']
 ```
 
-With the new **path** concept this is simpler. In 2.x you would just do what is stated below. Please note the **return path...**.
+With the new **path** concept this is simpler. In 2.x you would just do what is stated below. Please note the **return path...**. The same is true with promises. They need to be returned.
 
 ```js
 function myAction({state, path}) {
@@ -329,6 +389,55 @@ export default connect({
 )
 ```
 
+In 1.x you had all signals in props. In Cerebral 2.x we favor to be explicit about what signals you need.
+
+```js
+// 2.x
+import React from 'react';
+import {connect} from 'cerebral/react';
+
+export default connect({
+  isLoading: 'app.isLoading'
+}, {
+  someSignal: 'app.someSignal'
+}.
+  function App(props) {
+    return (
+      <div>
+        {props.isLoading ? 'loading...' : null}
+      </div>
+    )
+  }
+)
+```
+
+As you can see the second argument to connect is the signals. If you don't need signals in the Component the second argument should be the Component. If you really want all signals in props as in 1.x you can set this as an option in the controller.
+
+```js
+// 2.x
+import {Controller} from 'cerebral'
+import ContextProvider from 'cerebral/providers/context'
+import axios from 'axios'
+
+const controller = Controller({
+  options: {
+     signalsProp: true
+   }
+})
+```
+
+
+###  Model
+The following functions is removed from Cerebral 2.x when using state inside an action
+
+- logModel
+- export
+- findWhere
+- keys
+- import
+- toJs
+- toJson
+
 ### Strict render mode
 To setup strict render mode in 1.x for React was specified as follows.
 
@@ -347,7 +456,9 @@ import {Controller} from 'cerebral'
 import Devtools from 'cerebral/devtools'
 
 const controller = Controller({
-  strictRender: true
+  options: {
+    strictRender: true
+  }
 })
 
 export default controller
