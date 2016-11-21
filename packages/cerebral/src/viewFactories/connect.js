@@ -1,21 +1,19 @@
-export default HOC => function connect (paths, passedSignals, injectedProps, passedComponent) {
+function connect (HOC, paths, passedSignals, injectedProps, passedComponent) {
   let component = passedComponent
   let signals = passedSignals
   let props = injectedProps
 
-  if (arguments.length === 3) {
+  if (arguments.length === 4) {
     component = props
     props = null
-  } else if (arguments.length === 2) {
+  } else if (arguments.length === 3) {
     component = signals
     signals = null
   }
 
-  if (!component) {
-    return function (decoratedComponent) {
-      return HOC(paths, signals, props, decoratedComponent)
-    }
-  }
-
   return HOC(paths, signals, props, component)
 }
+
+export default HOC => (...args) => connect(HOC, ...args)
+
+export const decoratorFactory = (HOC) => (...args) => (component) => connect(HOC, ...args, component)

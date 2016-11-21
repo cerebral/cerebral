@@ -14,7 +14,7 @@ const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
 const Controller = require('../Controller').default
 const Computed = require('../Computed').default
-const {Container, StateContainer, connect} = require('./react')
+const {Container, StateContainer, connect, decorator} = require('./react')
 
 describe('React', () => {
   describe('state container', () => {
@@ -45,6 +45,27 @@ describe('React', () => {
           <div>{props.foo}</div>
         )
       })
+      const tree = TestUtils.renderIntoDocument((
+        <StateContainer state={state}>
+          <TestComponent />
+        </StateContainer>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
+    it('should be able to expose state with connectDecorator', () => {
+      const state = {
+        foo: 'bar'
+      }
+      const TestComponent = decorator({
+        foo: 'foo'
+      })(
+        (props) => {
+          return (
+            <div>{props.foo}</div>
+          )
+        }
+      )
       const tree = TestUtils.renderIntoDocument((
         <StateContainer state={state}>
           <TestComponent />
