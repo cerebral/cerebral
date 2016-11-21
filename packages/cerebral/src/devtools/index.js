@@ -15,7 +15,11 @@ class Devtools {
     preventExternalMutations: true,
     enforceSerializable: true,
     verifyStrictRender: true,
-    preventInputPropReplacement: false
+    preventInputPropReplacement: false,
+    bigComponentsWarning: {
+      state: 5,
+      signals: 5
+    }
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
@@ -25,6 +29,7 @@ class Devtools {
     this.enforceSerializable = Boolean(options.enforceSerializable)
     this.verifyStrictRender = Boolean(options.verifyStrictRender)
     this.preventInputPropReplacement = Boolean(options.preventInputPropReplacement)
+    this.bigComponentsWarning = options.bigComponentsWarning
     this.backlog = []
     this.mutations = []
     this.latestExecutionId = null
