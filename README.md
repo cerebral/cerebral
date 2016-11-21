@@ -18,6 +18,17 @@ A state controller with its own debugger
 ## Cerebral v2 is still a work in progress. Please head over to our cerebral v2 WIP website for more information:
 [https://cerebral.github.io/](https://cerebral.github.io/).
 
+## Try out Cerebral 2
+To try out Cerebral 2 you can install any package with:
+
+`npm install {cerebralPackage}@next --save-exact`
+
+This will install the latest version of that package. New versions are automatically deployed whenever pull requests are merged into master.
+
+When you want to update your packages you **have to update all used packages in one go**, for example:
+
+`npm install cerebral@next cerebral-router@next cerebral-provider-http@next --save-exact`
+
 ## Contribute
 The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
 

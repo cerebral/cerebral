@@ -2,11 +2,7 @@
 Firebase provider for Cerebral
 
 ### Install
-This is still alpha but to test the bleeding edge.
-
-`npm install cerebral-provider-firebase@next --save`
-
-**NOTE**: If you need to update to a later @next release than execute above command again.
+This project is still in alpha. To test alpha version check [instructions in monorepo](https://github.com/cerebral/cerebral/blob/master/README.md).
 
 ## Setup
 
