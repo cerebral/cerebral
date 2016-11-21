@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, set, state} from './'
+import {input, string, set, state} from './'
 
 describe('operator.set', () => {
   it('should set value to model', () => {
@@ -17,6 +17,19 @@ describe('operator.set', () => {
     })
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
+  })
+  it('should set value to input', () => {
+    const controller = new Controller({
+      signals: {
+        test: [
+          set(input`foo`, 'bar'),
+          ({input}) => {
+            assert.equal(input.foo, 'bar')
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
   })
   it('should set non string value to model', () => {
     const controller = new Controller({
@@ -69,7 +82,7 @@ describe('operator.set', () => {
       },
       signals: {
         test: [
-          set(input`foo`, 'bar')
+          set(string`foo`, 'bar')
         ]
       }
     })
