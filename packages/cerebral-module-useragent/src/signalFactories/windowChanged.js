@@ -1,8 +1,8 @@
-import {set, state, input} from 'cerebral/operators'
+import {merge, state, input} from 'cerebral/operators'
 
 export default (path) => {
   return [
-    set(state`${path.join('.')}.media`, input`media`),
-    set(state`${path.join('.')}.window`, input`windowSpec`)
+    merge(state`${path.join('.')}.media`, input`media`),
+    merge(state`${path.join('.')}.window`, input`windowSpec`)
   ]
 }
