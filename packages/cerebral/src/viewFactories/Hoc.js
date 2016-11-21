@@ -83,9 +83,24 @@ export default (View) => {
           return currentProps
         }, {}))
 
+        if (
+          this.context.cerebral.controller.devtools &&
+          this.context.cerebral.controller.devtools.bigComponentsWarning &&
+          Object.keys(propsToPass).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
+        ) {
+          console.warn(`Component named ${Component.displayName || Component.name} has a lot of state dependencies, consider refactoring. Adjust this option in devtools`)
+        }
+
         if (this.signals) {
           const extractedSignals = typeof signals === 'function' ? signals(propsToPass) : signals
 
+          if (
+            this.context.cerebral.controller.devtools &&
+            this.context.cerebral.controller.devtools.bigComponentsWarning &&
+            Object.keys(extractedSignals).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.signals
+          ) {
+            console.warn(`Component named ${Component.displayName || Component.name} has a lot of signals, consider refactoring. Adjust this option in devtools`)
+          }
           propsToPass = Object.keys(extractedSignals).reduce((currentProps, key) => {
             currentProps[key] = controller.getSignal(extractedSignals[key])
 

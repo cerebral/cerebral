@@ -39,8 +39,11 @@ const controller = Controller({
     enforceSerializable: true,
     // Warnings when strict render path usage is wrong
     verifyStrictRender: true,
-    //Throw error when overwriting existing input property
-    preventInputPropReplacement: false
+    // Throw error when overwriting existing input property
+    preventInputPropReplacement: false,
+    // Shows a warning when you have components with number of state dependencies
+    // or signals above the set number
+    bigComponentsWarning: {state: 5, signals: 5}
   })
 })
 ```
