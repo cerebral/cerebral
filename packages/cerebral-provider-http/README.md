@@ -4,11 +4,11 @@ Based on prior art from [cerebral-module-http](https://github.com/cerebral/cereb
 
 ### Install
 
-Put "cerebral-provider-http": "next" in package.json and do.
+This is still alpha but to test the bleeding edge.
 
-`npm install cerebral-provider-http@next`
+`npm install cerebral-provider-http@next --save`
 
-**NOTE**: If you need to update to a later @next release than execute the npm install again.
+**NOTE**: If you need to update to a later @next release than execute above command again.
 
 ### Instantiate
 
