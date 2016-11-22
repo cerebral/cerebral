@@ -1,5 +1,4 @@
-import validate from '../utils/validate'
-import checkHasValue from '../utils/checkHasValue'
+import runValidation from '../utils/runValidation'
 
 export default function validateFormFactory (passedFormPathTemplate) {
   function validateForm (context) {
@@ -12,7 +11,7 @@ export default function validateFormFactory (passedFormPathTemplate) {
         if (Array.isArray(form[key])) {
           validateArray(path.concat(key), form[key])
         } else if ('value' in form[key]) {
-          doValidation(path.concat(key), form, key)
+          context.state.merge(path.concat(key), runValidation(form[key], form))
         } else {
           validateForm(path.concat(key), form[key])
         }
@@ -22,23 +21,6 @@ export default function validateFormFactory (passedFormPathTemplate) {
     function validateArray (path, formArray) {
       formArray.forEach((form, index) => {
         validateForm(path.concat(index), form)
-      })
-    }
-
-    function doValidation (path, form, key) {
-      const field = form[key]
-      const hasValue = checkHasValue(form, field.value, field.isValueRules)
-      const result = validate(form, field.value, field.validationRules)
-      const isValid = result.isValid && (
-        (field.isRequired && hasValue) ||
-        !field.isRequired
-      )
-
-      context.state.merge(path, {
-        isValid: isValid,
-        hasValue: hasValue,
-        errorMessage: isValid ? null : (field.validationMessages && field.validationMessages.length > 0 ? field.validationMessages[result.failedRuleIndex] : null),
-        isPristine: false
       })
     }
 
