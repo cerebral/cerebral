@@ -1,21 +1,4 @@
-import validate from '../utils/validate'
-import checkHasValue from '../utils/checkHasValue'
-
-function runValidation (fieldPath, field, form) {
-  const hasValue = checkHasValue(form, field.value, field.isValueRules)
-  const result = validate(form, field.value, field.validationRules)
-  const isValid = result.isValid && (
-    (field.isRequired && hasValue) ||
-    !field.isRequired
-  )
-
-  return {
-    isValid,
-    isPristine: false,
-    hasValue: checkHasValue(form, field.value, field.isValueRules),
-    errorMessage: result.isValid ? null : field.validationMessages[result.failedRuleIndex]
-  }
-}
+import runValidation from '../utils/runValidation'
 
 export default function validateFieldFactory (pathTemplate) {
   function validateField (context) {
@@ -24,7 +7,7 @@ export default function validateFieldFactory (pathTemplate) {
     const formPath = fieldPath.slice().splice(0, fieldPath.length - 1)
     const field = context.state.get(fieldPath)
     const form = context.state.get(formPath)
-    const validationResult = runValidation(fieldPath, field, form)
+    const validationResult = runValidation(field, form)
 
     context.state.merge(fieldPath, validationResult)
 
@@ -45,7 +28,7 @@ export default function validateFieldFactory (pathTemplate) {
         throw new Error(`The path ${stringPath} used with "dependsOn" on field ${fieldPath.join('.')} is not correct, please check it`)
       }
 
-      const dependentValidationResult = runValidation(dependentFieldPath, field, form)
+      const dependentValidationResult = runValidation(field, form)
       context.state.merge(dependentFieldPath, dependentValidationResult)
 
       if (currentValidationResult.isValid && !dependentValidationResult.isValid) {
