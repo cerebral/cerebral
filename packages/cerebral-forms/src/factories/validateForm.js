@@ -8,12 +8,14 @@ export default function validateFormFactory (passedFormPathTemplate) {
 
     function validateForm (path, form) {
       Object.keys(form).forEach(function (key) {
-        if (Array.isArray(form[key])) {
-          validateArray(path.concat(key), form[key])
-        } else if ('value' in form[key]) {
-          context.state.merge(path.concat(key), runValidation(form[key], form))
-        } else {
-          validateForm(path.concat(key), form[key])
+        if (form[key] === Object(form[key])) {
+          if (Array.isArray(form[key])) {
+            validateArray(path.concat(key), form[key])
+          } else if ('value' in form[key]) {
+            context.state.merge(path.concat(key), runValidation(form[key], form))
+          } else {
+            validateForm(path.concat(key), form[key])
+          }
         }
       })
     }

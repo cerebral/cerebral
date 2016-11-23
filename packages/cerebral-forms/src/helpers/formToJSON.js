@@ -1,11 +1,15 @@
 function extractObject (object) {
   return Object.keys(object).reduce((newObject, key) => {
-    if (Array.isArray(object[key])) {
-      newObject[key] = extractArray(object[key])
-    } else if (object[key] && 'value' in object[key]) {
-      newObject[key] = object[key].value
-    } else if (object[key] && typeof object[key] === 'object') {
-      newObject[key] = extractObject(object[key])
+    if (object[key] && object[key] === Object(object[key])) {
+      if (Array.isArray(object[key])) {
+        newObject[key] = extractArray(object[key])
+      } else if ('value' in object[key]) {
+        newObject[key] = object[key].value
+      } else {
+        newObject[key] = extractObject(object[key])
+      }
+    } else if (object[key]) {
+      newObject[key] = object[key]
     }
 
     return newObject

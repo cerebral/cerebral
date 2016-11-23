@@ -10,7 +10,7 @@ export default function getFormFields (object, currentPath = [], allFields = {})
       currentPath.pop()
 
       return allFields
-    } else if ('value' in object[key]) {
+    } else if (object[key] === Object(object[key]) && 'value' in object[key]) {
       allFields[currentPath.join('.')] = object[key]
       currentPath.pop()
 
