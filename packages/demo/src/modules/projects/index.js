@@ -24,7 +24,7 @@ export default {
     discardClicked: collection.discardDraft,
     enterPressed: collection.update,
     escPressed: collection.discardDraft,
-    filterChanged: collection.updateFiler,
+    filterChanged: collection.updateFilter,
     filterEnterPressed: collection.create,
     formValueChanged: collection.updateDraft,
     penClicked: collection.edit,

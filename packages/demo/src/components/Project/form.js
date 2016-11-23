@@ -17,7 +17,7 @@ export default connect(
     saveClick: 'projects.saveClicked'
   },
   function ProjectForm ({clients, item, t, discardClick, saveClick}) {
-    const client = clients[item.clientKey]
+    const client = clients[item.clientKey] || clients['no-client']
     return (
       <div className='card'>
         <div className='card-content'>

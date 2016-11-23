@@ -9,7 +9,7 @@ export default Computed(
   }),
   function projectWithDetails ({clients, project, tasks}) {
     const elapsed = tasks.reduce((sum, t) => sum + t.elapsed, 0)
-    const client = clients[project.clientKey]
+    const client = clients[project.clientKey] || clients['no-client']
     return Object.assign({}, project, {client, elapsed})
   }
 )

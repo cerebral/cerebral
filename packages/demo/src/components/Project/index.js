@@ -7,11 +7,13 @@ import ProjectForm from './form'
 
 export default connect(
   ({itemKey}) => ({
-    item: projectWithDetails.props({itemKey})
+    item: projectWithDetails.props({itemKey}),
+    // FIXME: should be removed. Temporary to force update.
+    foo: `projects.$draft.key`
   }),
   {
     penClick: 'projects.penClicked',
-    trashClick: 'clients.trashClicked'
+    trashClick: 'projects.trashClicked'
   },
   function project ({item, isSelected, penClick, trashClick}) {
     if (isSelected) {
