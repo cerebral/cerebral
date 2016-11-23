@@ -1,4 +1,4 @@
-/* global rm, ls, cp, sed */
+/* global rm, mkdir, ls, cp, sed */
 var path = require('path')
 var paths = require('./paths')
 
@@ -17,6 +17,8 @@ function prepare (part) {
         rm('-rf', path.join(paths.src, file))
       }
     })
+  } else {
+    mkdir(paths.src)
   }
 
   ls(path.join(paths.parts, part, 'src')).forEach(function (file) {
