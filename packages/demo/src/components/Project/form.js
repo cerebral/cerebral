@@ -9,15 +9,15 @@ import Textarea from '../Textarea'
 export default connect(
   {
     clients: 'clients.all.**',
-    project: `projects.$draft.**`,
+    item: `projects.$draft.**`,
     t: translations
   },
   {
-    discardClick: 'projects.cancelClicked',
+    discardClick: 'projects.discardClicked',
     saveClick: 'projects.saveClicked'
   },
-  function ProjectForm ({clients, project, t, discardClick, saveClick}) {
-    const client = clients[project.clientRef]
+  function ProjectForm ({clients, item, t, discardClick, saveClick}) {
+    const client = clients[item.clientKey]
     return (
       <div className='card'>
         <div className='card-content'>
@@ -29,7 +29,7 @@ export default connect(
             </div>
             <div className='media-content'>
               <p className='title is-5'>
-                {project.name}
+                {item.name}
               </p>
               <p className='subtitle is-6'>{client.name}</p>
             </div>
@@ -60,7 +60,7 @@ export default connect(
               <Input field='name' autoFocus placeholderKey='ProjectName' />
             </p>
             <p className='control'>
-              <Select field='clientRef' />
+              <Select field='clientKey' />
             </p>
             <p className='control'>
               <Textarea field='notes' placeholderKey='Notes' />

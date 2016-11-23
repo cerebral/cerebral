@@ -19,11 +19,13 @@ export default connect(
       <div className='card'>
         <div className='card-content'>
           <div className='media'>
-            <div className='media-left'>
-              <figure className='image is-32x32'>
-                <img src={`/img/${client.image}` || '/img/client-mini.png'} alt='user' />
-              </figure>
-            </div>
+            { client.image &&
+              <div className='media-left'>
+                <figure className='image is-32x32'>
+                  <img src={`/img/${client.image}`} alt='user' />
+                </figure>
+              </div>
+            }
             <div className='media-content'>
               <p className='title is-5'>
                 {client.name}

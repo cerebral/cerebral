@@ -8,8 +8,8 @@ export default Computed(
   ({tasks}) => {
     const days = {}
     const result = []
-    Object.keys(tasks).forEach(ref => {
-      const task = tasks[ref]
+    Object.keys(tasks).forEach(key => {
+      const task = tasks[key]
       const dayDate = sortDayString(task.startedAt)
       let list = days[dayDate]
       if (!list) {

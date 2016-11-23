@@ -7,8 +7,8 @@ export default Computed(
   },
   ({projects, filter}) => {
     const f = filter.toLowerCase()
-    return Object.keys(projects).filter((ref) => (
-      !filter || projects[ref].name.toLowerCase().indexOf(f) >= 0
+    return Object.keys(projects).filter((key) => (
+      !filter || projects[key].name.toLowerCase().indexOf(f) >= 0
     ))
   }
 )

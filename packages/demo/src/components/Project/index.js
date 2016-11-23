@@ -6,17 +6,16 @@ import {displayElapsed} from '../../helpers/dateTime'
 import ProjectForm from './form'
 
 export default connect(
-  ({projectRef}) => ({
-    project: projectWithDetails.props({projectRef}),
-    selectedProject: 'projects.$draft'
+  ({itemKey}) => ({
+    item: projectWithDetails.props({itemKey})
   }),
   {
     penClick: 'projects.penClicked',
     trashClick: 'clients.trashClicked'
   },
-  function project ({project, selectedProject, penClick, trashClick}) {
-    if (selectedProject && selectedProject.ref === project.ref) {
-      return <ProjectForm projectRef={project.ref} />
+  function project ({item, isSelected, penClick, trashClick}) {
+    if (isSelected) {
+      return <ProjectForm itemKey={item.key} />
     }
     return (
       <div className='card'>
@@ -29,29 +28,29 @@ export default connect(
             </div>
             <div className='media-content'>
               <p className='title is-5'>
-                {project.name}
+                {item.name}
               </p>
-              <p className='subtitle is-6'>{project.client && project.client.name}</p>
+              <p className='subtitle is-6'>{item.client && item.client.name}</p>
             </div>
             <div className='media-right'>
-              {displayElapsed(project.elapsed)}
+              {displayElapsed(item.elapsed)}
             </div>
           </div>
 
           <div className='content'>
-            {project.notes}
+            {item.notes}
           </div>
 
           <nav className='level' onClick={e => e.stopPropagation()}>
             <div className='level-left' />
             <div className='level-right'>
-              {project.$isDefaultItem !== true && (
-                <a className='level-item' onClick={() => penClick({ref: project.ref})}>
+              {item.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => penClick({key: item.key})}>
                   <span className='icon is-small'><i className='fa fa-pencil' /></span>
                 </a>
               )}
-              {project.$isDefaultItem !== true && (
-                <a className='level-item' onClick={() => trashClick({ref: project.ref})}>
+              {item.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => trashClick({key: item.key})}>
                   <span className='icon is-small'><i className='fa fa-trash' /></span>
                 </a>
               )}

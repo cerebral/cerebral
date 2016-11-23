@@ -6,7 +6,7 @@ export default connect(
   {
     filter: 'projects.$filter',
     projectsByClient: visibleProjectsByClient,
-    selectedProject: 'tasks.$running.projectRef'
+    selectedProject: 'tasks.$running.projectKey'
   },
   {
     onBackgroundClick: 'projects.selectorBackgroundClick',
@@ -34,10 +34,10 @@ export default connect(
                     <p className='menu-label'>{client.name}</p>
                     <ul className='menu-list'>
                       {client.projects.map(project => (
-                        <li key={project.ref}
-                          onClick={() => onProjectClick({ref: project.ref})}>
+                        <li key={project.key}
+                          onClick={() => onProjectClick({ref: project.key})}>
                           &nbsp;&nbsp;
-                          <span className={`tag ${project.ref === selectedProject ? 'is-primary' : ''}`}>
+                          <span className={`tag ${project.key === selectedProject ? 'is-primary' : ''}`}>
                             {project.name}
                           </span>
                         </li>

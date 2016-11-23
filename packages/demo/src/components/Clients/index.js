@@ -1,15 +1,15 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import visibleClientRefs from '../../computed/visibleClientRefs'
+import visibleClientKeys from '../../computed/visibleClientKeys'
 import translations from '../../computed/translations'
 
 import Client from '../Client'
-import SaveDraftModal from './SaveDraftModal'
 
 export default connect(
   {
-    clientRefs: visibleClientRefs,
+    clientKeys: visibleClientKeys,
     filter: 'clients.$filter',
+    selectedKey: 'clients.$draft.key',
     t: translations
   },
   {
@@ -17,7 +17,7 @@ export default connect(
     onChange: 'clients.filterChanged',
     onClick: 'clients.addClicked'
   },
-  function Clients ({clientRefs, filter, t, enterPressed, onChange, onClick}) {
+  function Clients ({clientKeys, filter, selectedKey, t, enterPressed, onChange, onClick}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -27,7 +27,6 @@ export default connect(
 
     return (
       <div>
-        <SaveDraftModal />
         <div className='level'>
           <div className='level-left'>
             <div className='level-item'>
@@ -35,7 +34,7 @@ export default connect(
                 <input className='input'
                   placeholder={t.ClientNameFilter}
                   value={filter || ''}
-                  onChange={e => onChange({filter: e.target.value})}
+                  onChange={e => onChange({value: e.target.value})}
                   onKeyPress={onKeyPress}
                   />
                 <button className='button is-primary'
@@ -47,9 +46,9 @@ export default connect(
           </div>
         </div>
         <div className='columns is-multiline'>
-          {clientRefs.map(ref => (
-            <div key={ref} className='column'>
-              <Client clientRef={ref} />
+          {clientKeys.map(key => (
+            <div key={key} className='column'>
+              <Client itemKey={key} isSelected={key === selectedKey} />
             </div>
           ))}
         </div>

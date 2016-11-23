@@ -22,7 +22,7 @@ export default connect(
     }
 
     const onChange = e => {
-      valueChanged({field, value: e.target.value})
+      valueChanged({key: field, value: e.target.value})
     }
 
     return (

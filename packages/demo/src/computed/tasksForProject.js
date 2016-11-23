@@ -4,7 +4,7 @@ export default Computed(
   {
     tasks: 'tasks.all.**'
   },
-  ({projectRef, tasks}) => (
-    Object.keys(tasks).map(ref => tasks[ref]).filter(task => (task.projectRef === projectRef))
+  ({itemKey, tasks}) => (
+    Object.keys(tasks).map(key => tasks[key]).filter(task => (task.projectKey === itemKey))
   )
 )

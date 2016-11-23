@@ -1,8 +1,8 @@
 import {Computed} from 'cerebral'
 
 export default Computed(
-  ({projectRef}) => ({
-    project: `projects.all.${projectRef}.**`
+  ({itemKey}) => ({
+    project: `projects.all.${itemKey}.**`
   }),
   ({project}) => project
 )

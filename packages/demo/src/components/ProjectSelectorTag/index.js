@@ -1,11 +1,11 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import ProjectSelector from '../ProjectSelector'
-import projectFromRef from '../../computed/projectFromRef'
+import projectFromKey from '../../computed/projectFromKey'
 
 export default connect(
-  ({projectRef}) => ({
-    project: projectFromRef.props({projectRef}),
+  ({itemKey}) => ({
+    project: projectFromKey.props({itemKey}),
     showSelector: 'projects.$showProjectSelector'
   }),
   {

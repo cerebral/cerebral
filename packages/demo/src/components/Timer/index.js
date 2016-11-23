@@ -39,7 +39,7 @@ export default connect(
             </p>
           </div>
           <div className='level-item'>
-            <ProjectSelectorTag projectRef={task.projectRef} />
+            <ProjectSelectorTag itemKey={task.projectKey} />
           </div>
         </div>
         <div className='level-right'>

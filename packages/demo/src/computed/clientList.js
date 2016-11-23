@@ -5,6 +5,6 @@ export default Computed(
     clients: 'clients.all.**'
   },
   function clientList ({clients}) {
-    return Object.keys(clients).map(ref => clients[ref]).sort((a, b) => a.name <= b.name ? -1 : 1)
+    return Object.keys(clients).map(key => clients[key]).sort((a, b) => a.name <= b.name ? -1 : 1)
   }
 )

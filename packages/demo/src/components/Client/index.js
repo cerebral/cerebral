@@ -6,33 +6,37 @@ import Email from '../Email'
 import Phone from '../Phone'
 
 export default connect(
-  ({clientRef}) => ({
-    client: `clients.all.${clientRef}`,
-    selectedClient: 'clients.$draft.**'
+  ({itemKey}) => ({
+    item: `clients.all.${itemKey}`,
+    // FIXME: should be removed. Temporary to force update.
+    foo: `clients.$draft.key`
   }),
   {
     penClick: 'clients.penClicked',
     trashClick: 'clients.trashClicked'
   },
-  function Client ({client, selectedClient, penClick, trashClick}) {
-    if (selectedClient && selectedClient.ref === client.ref) {
-      return <ClientForm clientRef={client.ref} />
+  function Client ({item, penClick, isSelected, trashClick}) {
+    console.log(item.name, isSelected)
+    if (isSelected) {
+      return <ClientForm itemKey={item.key} />
     }
 
     return (
       <div className='card'>
         <div className='card-content'>
           <div className='media'>
-            <div className='media-left'>
-              <figure className='image is-32x32'>
-                <img src={`/img/${client.image}` || '/img/client-mini.png'} alt='user' />
-              </figure>
-            </div>
+            { item.image &&
+              <div className='media-left'>
+                <figure className='image is-32x32'>
+                  <img src={`/img/${item.image}`} alt='user' />
+                </figure>
+              </div>
+            }
             <div className='media-content'>
-              <p className='title is-5'>{client.name}</p>
-              {client.website &&
+              <p className='title is-5'>{item.name}</p>
+              {item.website &&
                 <p className='subtitle is-6'>
-                  <a href={`http://${client.website}`}>{client.website}</a>
+                  <a href={`http://${item.website}`}>{item.website}</a>
                 </p>
               }
             </div>
@@ -40,24 +44,24 @@ export default connect(
 
           <nav className='level'>
             <div className='level-left'>
-              <Phone phone={client.phone} />
-              <Email email={client.email} />
+              <Phone phone={item.phone} />
+              <Email email={item.email} />
             </div>
             <div className='level-right'>
-              {client.$isDefaultItem !== true && (
-                <a className='level-item' onClick={() => penClick({ref: client.ref})}>
+              {item.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => penClick({key: item.key})}>
                   <span className='icon is-small'><i className='fa fa-pencil' /></span>
                 </a>
               )}
-              {client.$isDefaultItem !== true && (
-                <a className='level-item' onClick={() => trashClick({ref: client.ref})}>
+              {item.$isDefaultItem !== true && (
+                <a className='level-item' onClick={() => trashClick({key: item.key})}>
                   <span className='icon is-small'><i className='fa fa-trash' /></span>
                 </a>
               )}
             </div>
           </nav>
 
-          {client.notes && <div className='content'>{client.notes}</div>}
+          {item.notes && <div className='content'>{item.notes}</div>}
         </div>
       </div>
     )

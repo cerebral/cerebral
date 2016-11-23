@@ -10,6 +10,6 @@ export default Computed(
     const f = filter.toLowerCase()
     return clients.filter(client => (
       !filter || client.name.toLowerCase().indexOf(f) >= 0
-    )).map(client => client.ref)
+    )).map(client => client.key)
   }
 )

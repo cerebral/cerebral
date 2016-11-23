@@ -2,14 +2,14 @@ import {Computed} from 'cerebral'
 import tasksForProject from './tasksForProject'
 
 export default Computed(
-  ({projectRef}) => ({
+  ({itemKey}) => ({
     clients: 'clients.all.**',
-    project: `projects.all.${projectRef}.**`,
-    tasks: tasksForProject.props({projectRef})
+    project: `projects.all.${itemKey}.**`,
+    tasks: tasksForProject.props({itemKey})
   }),
-  function projectWithDetails ({clients, project, projectRef, tasks}) {
+  function projectWithDetails ({clients, project, tasks}) {
     const elapsed = tasks.reduce((sum, t) => sum + t.elapsed, 0)
-    const client = clients[project.clientRef]
+    const client = clients[project.clientKey]
     return Object.assign({}, project, {client, elapsed})
   }
 )

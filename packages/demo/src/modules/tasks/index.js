@@ -1,12 +1,17 @@
 import {input, set, state} from 'cerebral/operators'
+import Collection from '../common/Collection'
 import startStopRunning from './signals/startStopRunning'
 import updateNow from './signals/updateNow'
+
+const collection = Collection('tasks')
+
+export const init = collection.init
 
 export default {
   state: {
     all: {},
     $running: {
-      projectRef: 'no-project'
+      projectKey: 'no-project'
     }
   },
   signals: {
