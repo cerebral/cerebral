@@ -1,4 +1,4 @@
-import updateField from './signals/updateField'
+import {form, changeField} from 'cerebral-forms'
 import createFirebaseUser from './signals/createFirebaseUser'
 import signInWithFirebase from './signals/signInWithFirebase'
 import signOutFirebase from './signals/signOutFirebase'
@@ -7,16 +7,27 @@ export default {
   state: {
     lang: 'en',
     $loggedIn: false,
-    $signIn: {
-      email: '',
-      password: ''
-    },
+    $signIn: form({
+      email: {
+        value: '',
+        validationRules: ['isEmail'],
+        validationMessages: ['loginValidationEmailNotValid'],
+        isRequired: true,
+        requiredMessage: 'loginValidationEmailRequired'
+      },
+      password: {
+        value: '',
+        validationRules: ['minLength:5'],
+        validationMessages: ['loginValidationPasswordTooShort'],
+        isRequired: true,
+        requiredMessage: 'loginValidationPasswordRequired'
+      },
+      showErrors: false
+    }),
     $currentUser: null
   },
   signals: {
-    fieldChanged: [
-      updateField
-    ],
+    fieldChanged: changeField,
     createUserClicked: createFirebaseUser,
     signInClicked: signInWithFirebase,
     signOutClicked: signOutFirebase

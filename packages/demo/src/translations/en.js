@@ -11,7 +11,9 @@ export default {
   loginCreateUserButton: 'Create user',
   loginSignOutButton: 'Sign Out',
   loginValidationEmailRequired: 'Must provide an email',
+  loginValidationEmailNotValid: 'Not a valid email',
   loginValidationPasswordRequired: 'Must provide a password',
+  loginValidationPasswordTooShort: 'Password too short',
   loginErrors: {
     'auth/email-already-in-use': 'The email address is already in use by another account.',
     'auth/too-many-requests': 'We have blocked all requests from this device due to unusual activity. Try again later.'

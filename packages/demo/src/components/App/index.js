@@ -42,7 +42,7 @@ export default connect(
                   <a className='nav-item is-brand'>
                     {/* Wait until we have a logo that scales well in this place
                       <img src='/cerebral-logo.png' alt='Cerebral logo' />
-                      */}
+                    */}
                   </a>
                 </div>
                 <div className='nav-right'>
