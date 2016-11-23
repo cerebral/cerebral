@@ -1,26 +1,26 @@
 .heading_lvl_1,
 .heading_lvl_2,
 .heading_lvl_3 {
-  font-weight: 600;
+  font-weight: 300;
   color: #00a1c9;
 }
 
 .heading_lvl_1,
 .heading_lvl_2 {
-  font-size: 48px;
-  line-height: 56px;
+  font-size: 38px;
+  line-height: 46px;
   margin: 0;
 }
 
 .heading_lvl_3 {
-  font-size: 32px;
-  line-height: 40px;
+  font-size: 26px;
+  line-height: 30px;
 }
 
 .heading_lvl_4 {
-  font-size: 24px;
-  line-height: 32px;
-  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 300;
   color: #223338;
   margin: 0
 }
