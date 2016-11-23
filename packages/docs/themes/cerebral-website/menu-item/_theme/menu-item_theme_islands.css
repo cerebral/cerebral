@@ -1,5 +1,21 @@
+.menu_size_xl .menu__group-title~.menu-item_theme_islands, .menu_size_xl[class*=menu_mode] .menu-item_theme_islands {
+  padding: 0 20px;
+}
+
+.menu-item_theme_islands {
+  font-size: 13px;
+  line-height: 22px;
+  color: #555;
+}
 .menu-item_theme_islands.menu-item_hovered {
-  background-color: #00a1c9;
-  color: #FFF;
-  border-radius: 2px;
+  background-color: transparent;
+  color: #00a1c9;
+}
+.menu_theme_islands.menu_size_xl .menu__group-title {
+  padding: 0 10px;
+}
+.menu-item_theme_islands.menu-item_checked {
+  background: none;
+  font-weight: 600;
+  color: #333;
 }
