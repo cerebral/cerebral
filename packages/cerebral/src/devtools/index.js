@@ -20,18 +20,20 @@ class Devtools {
       state: 5,
       signals: 5
     },
-    remoteDebugger: null
+    remoteDebugger: null,
+    multipleApps: true
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
     this.debuggerComponentDetailsId = 1
-    this.storeMutations = Boolean(options.storeMutations)
-    this.preventExternalMutations = Boolean(options.preventExternalMutations)
-    this.enforceSerializable = Boolean(options.enforceSerializable)
-    this.verifyStrictRender = Boolean(options.verifyStrictRender)
-    this.preventInputPropReplacement = Boolean(options.preventInputPropReplacement)
-    this.bigComponentsWarning = options.bigComponentsWarning
-    this.remoteDebugger = options.remoteDebugger
+    this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
+    this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
+    this.enforceSerializable = typeof options.enforceSerializable === 'undefined' ? true : options.enforceSerializable
+    this.verifyStrictRender = typeof options.verifyStrictRender === 'undefined' ? true : options.verifyStrictRender
+    this.preventInputPropReplacement = options.preventInputPropReplacement || false
+    this.bigComponentsWarning = options.bigComponentsWarning || {state: 5, signals: 5}
+    this.remoteDebugger = options.remoteDebugger || null
+    this.multipleApps = typeof options.multipleApps === 'undefined' ? true : options.multipleApps
     this.backlog = []
     this.mutations = []
     this.latestExecutionId = null
@@ -40,6 +42,7 @@ class Devtools {
     this.controller = null
     this.originalRunTreeFunction = null
     this.ws = null
+    this.isUpdatingDebuggerAfterTabChange = false
 
     this.sendInitial = this.sendInitial.bind(this)
     this.sendComponentsMap = debounce(this.sendComponentsMap, 50)
@@ -177,6 +180,30 @@ class Devtools {
       window.dispatchEvent(event)
     }
 
+    if (this.multipleApps) {
+      let hidden, visibilityChange
+      if (typeof document.hidden !== 'undefined') {
+        hidden = 'hidden'
+        visibilityChange = 'visibilitychange'
+      } else if (typeof document.msHidden !== 'undefined') {
+        hidden = 'msHidden'
+        visibilityChange = 'msvisibilitychange'
+      } else if (typeof document.webkitHidden !== 'undefined') {
+        hidden = 'webkitHidden'
+        visibilityChange = 'webkitvisibilitychange'
+      }
+
+      document.addEventListener(visibilityChange, () => {
+        if (!document[hidden]) {
+          this.isUpdatingDebuggerAfterTabChange = true
+          this.backlog.forEach((message) => {
+            this.sendMessage(message)
+          })
+          this.isUpdatingDebuggerAfterTabChange = false
+        }
+      }, false)
+    }
+
     this.watchExecution()
   }
   /*
@@ -195,6 +222,10 @@ class Devtools {
     Sends message to chrome extension or remote debugger
   */
   sendMessage (stringifiedMessage) {
+    if (this.multipleApps && !this.isUpdatingDebuggerAfterTabChange) {
+      this.backlog.push(stringifiedMessage)
+    }
+
     if (this.remoteDebugger) {
       this.ws.send(stringifiedMessage)
     } else {
@@ -303,7 +334,10 @@ class Devtools {
     this.backlog.forEach((backlogItem) => {
       this.sendMessage(backlogItem)
     })
-    this.backlog = []
+
+    if (!this.multipleApps) {
+      this.backlog = []
+    }
 
     this.sendMessage(JSON.stringify({
       type: 'components',

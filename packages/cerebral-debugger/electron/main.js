@@ -1,13 +1,10 @@
 'use strict'
 const electron = require('electron')
 const WebSocketServer = require('ws').Server
-const wss = new WebSocketServer({ port: 8080 })
-
-// Module to control application life.
+const defaultMenu = require('electron-default-menu')
+const storage = require('electron-json-storage')
 const app = electron.app
-// Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
-
 const path = require('path')
 const url = require('url')
 
@@ -16,41 +13,69 @@ const url = require('url')
 let mainWindow
 
 function createWindow () {
-  // Create the browser window.
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  const menu = defaultMenu(electron.app, electron.shell)
+  let currentClient
+  let wss
 
-  // and load the index.html of the app.
+  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow.on('closed', function () { mainWindow = null })
   mainWindow.loadURL(url.format({
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
   }))
 
-  // Open the DevTools.
   if (process.env.NODE_ENV === 'development') {
     mainWindow.webContents.openDevTools()
   }
 
-  // Emitted when the window is closed.
-  mainWindow.on('closed', function () {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
-    mainWindow = null
-  })
-
-  let currentClient
   electron.ipcMain.on('message', function (event, payload) {
     if (!currentClient) {
       return
     }
     currentClient.send(JSON.stringify(payload))
   })
-  wss.on('connection', function (ws) {
-    ws.on('message', function (message) {
-      mainWindow.webContents.send('message', JSON.parse(message))
+
+  function initializeWebsocket () {
+    wss.on('connection', function (ws) {
+      ws.on('message', function (message) {
+        mainWindow.webContents.send('message', JSON.parse(message))
+      })
+      currentClient = ws
     })
-    currentClient = ws
+  }
+
+  storage.get('selectedPort', (error, selectedPort) => {
+    if (error) {
+      throw error
+    }
+
+    wss = new WebSocketServer({ port: parseInt(selectedPort || 8585) })
+    menu.splice(4, 0, {
+      label: 'Port',
+      submenu: [
+        '8585 (default)',
+        '8686',
+        '8787',
+        '8888',
+        '8989'
+      ].map((label) => {
+        return {
+          checked: label === selectedPort,
+          type: 'radio',
+          label,
+          click: (item, focusedWindow) => {
+            wss.close()
+            wss = new WebSocketServer({ port: parseInt(label) })
+            initializeWebsocket()
+            storage.set('selectedPort', label)
+          }
+        }
+      })
+    })
+
+    electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(menu))
+    initializeWebsocket()
   })
 }
 

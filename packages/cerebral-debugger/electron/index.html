@@ -20,6 +20,25 @@
         text-align: center;
       }
 
+      #error ul {
+        text-align: left;
+      }
+
+      #error li {
+        margin-bottom: 10px;
+      }
+
+      #error .requirementsList {
+        width: 400px;
+        margin: 0 auto;
+      }
+
+      #error a {
+        color: #00a1c9;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
       .spin {
         -webkit-animation:spin 4s linear infinite;
         animation:spin 4s linear infinite;
@@ -220,9 +239,24 @@
     </style>
   </head>
   <body>
+    <script>
+      const {shell} = require('electron')
+
+      function openWebsite() {
+        shell.openExternal('https://cerebral.github.io/api/02_devtools.html')
+      }
+    </script>
     <div id="error">
-      <h1>Please refresh your app to use the debugger...</h1>
       <img src="./logo.png" width="200"/>
+      <h1>Requirements to run the debugger</h1>
+      <div class="requirementsList">
+        <ul>
+          <li>Run a Cerebral application with the devtools</li>
+          <li>Add the "remoteDebugger" option</li>
+          <li>You might need to refresh the application to connect</li>
+        </ul>
+        More information can be found <a onclick="openWebsite()">at the Cerebral website</a>
+      </div>
     </div>
     <div id="root" style="height: 100%;"></div>
     <script>

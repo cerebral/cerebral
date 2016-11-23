@@ -53,7 +53,9 @@ const controller = Controller({
     bigComponentsWarning: {state: 5, signals: 5},
     // Connect to Electron debugger (external debugger). It will fall back to
     // chrome extension if unable to connect
-    remoteDebugger: 'localhost:8080'
+    remoteDebugger: 'localhost:8585',
+    // Will reset debugger to currently focused application
+    multipleApps: true
   })
 })
 ```
