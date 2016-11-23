@@ -31,6 +31,21 @@ describe('operator.set', () => {
     })
     controller.getSignal('test')()
   })
+  it('should set deep value to input', () => {
+    const controller = new Controller({
+      signals: {
+        test: [
+          set(input`foo`, {bing: 'bor'}),
+          set(input`foo.bar`, 'baz'),
+          ({input}) => {
+            assert.equal(input.foo.bar, 'baz')
+            assert.equal(input.foo.bing, 'bor')
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+  })
   it('should set non string value to model', () => {
     const controller = new Controller({
       state: {

@@ -14,9 +14,15 @@ export default function (target, value) {
     if (targetTemplate.target === 'state') {
       context.state.set(targetTemplate.path, setValue)
     } else {
-      return {
-        [targetTemplate.path]: setValue
-      }
+      const result = Object.assign({}, context.input)
+      const parts = targetTemplate.path.split('.')
+      const key = parts.pop()
+      const target = parts.reduce((target, key) => {
+        return (target[key] = Object.assign({}, target[key] || {}))
+      }, result)
+      target[key] = setValue
+
+      return result
     }
   }
 
