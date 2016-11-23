@@ -2,17 +2,19 @@ import configureField from '../utils/configureField'
 
 function resetObject (form) {
   return Object.keys(form).reduce(function (newForm, key) {
-    if (Array.isArray(form[key])) {
-      newForm[key] = resetArray(form[key])
-    } else if ('value' in form[key]) {
-      const newField = Object.keys(form[key]).reduce((newField, fKey) => {
-        newField[fKey] = form[key][fKey]
-        return newField
-      }, {})
-      newField.value = newField.defaultValue
-      newForm[key] = configureField(form, newField)
-    } else {
-      newForm[key] = resetObject(form[key])
+    if (form[key] === Object(form[key])) {
+      if (Array.isArray(form[key])) {
+        newForm[key] = resetArray(form[key])
+      } else if ('value' in form[key]) {
+        const newField = Object.keys(form[key]).reduce((newField, fKey) => {
+          newField[fKey] = form[key][fKey]
+          return newField
+        }, {})
+        newField.value = newField.defaultValue
+        newForm[key] = configureField(form, newField)
+      } else {
+        newForm[key] = resetObject(form[key])
+      }
     }
 
     return newForm
