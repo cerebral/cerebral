@@ -240,4 +240,23 @@ describe('FunctionTree', () => {
     assert(branchStartCount, 2)
     assert(branchEndCount, 2)
   })
+  it('should pass correct input on empty paths', () => {
+    function actionA ({path}) {
+      return path.true()
+    }
+    function actionB ({input}) {
+      assert.deepEqual(input, {foo: 'bar'})
+    }
+    const execute = FunctionTree([])
+    const tree = [
+      actionA, {
+        true: [],
+        false: []
+      },
+      actionB
+    ]
+    execute(tree, {
+      foo: 'bar'
+    })
+  })
 })
