@@ -41,7 +41,7 @@ const controller = Controller({
 #### set
 Write data to this database location. This will overwrite any data at this location and all child locations. Passing **null** for the new value is equivalent to calling remove(); all data at this location or any child location will be deleted.
 
-**action**
+*action*
 ```javascript
 function someAction({firebase, path}) {
   return firebase.set('foo.bar', 'baz')
@@ -50,7 +50,7 @@ function someAction({firebase, path}) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {input} from 'cerebral/operators'
 import {set} from 'cerebral-provider-firebase'
@@ -66,7 +66,7 @@ export default [
 #### update
 As opposed to the set() method, update() can be use to selectively update only the referenced properties at the current location (instead of replacing all the child properties at the current location).
 
-**action**
+*action*
 ```javascript
 function someAction({firebase, path}) {
   return firebase.update({
@@ -78,7 +78,7 @@ function someAction({firebase, path}) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {input} from 'cerebral/operators'
 import {update} from 'cerebral-provider-firebase'
@@ -97,7 +97,7 @@ export default [
 #### push
 Generates a new child location using a unique key and returns its reference from the action. An example being `{key: "-KWKImT_t3SLmkJ4s3-w"}`.
 
-**action**
+*action*
 ```javascript
 function someAction({firebase, path}) {
   return firebase.push('users', {
@@ -108,7 +108,7 @@ function someAction({firebase, path}) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {state} from 'cerebral/operators'
 import {push} from 'cerebral-provider-firebase'
@@ -124,7 +124,7 @@ export default [
 #### remove
 Remove the data at this database location.
 
-**action**
+*action*
 ```javascript
 function someAction({ firebase, path}) {
   return firebase.remove('foo.bar')
@@ -133,7 +133,7 @@ function someAction({ firebase, path}) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {input, toString} from 'cerebral/operators'
 import {remove} from 'cerebral-provider-firebase'
@@ -153,7 +153,7 @@ Unlike a normal set(), which just overwrites the data regardless of its previous
 
 To accomplish this, you pass transaction() an update function which is used to transform the current value into a new value. If another client writes to the location before your new value is successfully written, your update function will be called again with the new current value, and the write will be retried. This will happen repeatedly until your write succeeds without conflict or you abort the transaction by not returning a value from your update function.
 
-**action**
+*action*
 ```javascript
 function someAction({firebase, path}) {
 
@@ -177,7 +177,7 @@ function someAction({firebase, path}) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {input, toString} from 'cerebral/operators'
 import {transaction} from 'cerebral-provider-firebase'
@@ -206,7 +206,7 @@ Note: When using transactions with Security and Firebase Rules in place, be awar
 
 #### Value
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path }) {
   return firebase.value('someKey.foo')
@@ -216,7 +216,7 @@ function someAction({ firebase, path }) {
 ```
 The result will be available as `{ key: 'foo', value: 'bar' }`. Or `{ error: 'error message'}`.
 
-**factory**
+*factory*
 ```javascript
 import {input, toString} from 'cerebral/operators'
 import {value} from 'cerebral-provider-firebase'
@@ -234,7 +234,7 @@ When you also want to know when your queried data updates you have the following
 
 #### onValue
 
-**action**
+*action*
 ```js
 function someAction({ firebase }) {
   firebase.onValue('someKey.foo', 'someModule.fooUpdated');
@@ -249,7 +249,7 @@ function someAction({ firebase }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {onValue} from 'cerebral-provider-firebase'
 
@@ -260,7 +260,7 @@ export default [
 
 #### onChildAdded
 
-**action**
+*action*
 ```js
 function someAction({ firebase }) {
   firebase.onChildAdded('posts', 'posts.postAdded', {
@@ -285,7 +285,7 @@ function someAction({ firebase }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {state} from 'cerebral/operators'
 import {onChildAdded} from 'cerebral-provider-firebase'
@@ -300,7 +300,7 @@ export default [
 
 #### onChildRemoved
 
-**action**
+*action*
 ```js
 function someAction({ firebase }) {
   firebase.onChildRemoved('posts', 'posts.postRemoved', {
@@ -317,7 +317,7 @@ function someAction({ firebase }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {onChildRemoved} from 'cerebral-provider-firebase'
 
@@ -330,7 +330,7 @@ export default [
 
 #### onChildChanged
 
-**action**
+*action*
 ```js
 function someAction({ firebase }) {
   firebase.onChildChanged('posts', 'posts.postChanged', {
@@ -347,7 +347,7 @@ function someAction({ firebase }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {onChildChanged} from 'cerebral-provider-firebase'
 
@@ -361,7 +361,7 @@ export default [
 ### Tasks
 If you are using the [firebase-queue](https://github.com/firebase/firebase-queue) and need to create tasks, you can do that with:
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path, state }) {
   return firebase.task('create_post', {
@@ -375,7 +375,7 @@ function someAction({ firebase, path, state }) {
 
 This will add a task at `queue/tasks`. There is no output from a resolved task, it just resolves when the action has been processed.
 
-**factory**
+*factory*
 ```javascript
 import {state, input} from 'cerebral/operators'
 import {task} from 'cerebral-provider-firebase'
@@ -396,7 +396,7 @@ export default [
 #### Get user
 Will resolve to `{user: {}}` if user exists. If user was redirected from Facebook/Google etc. as part of first sign in, this method will handle the confirmed registration of the user.
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path }) {
   return firebase.getUser()
@@ -405,7 +405,7 @@ function someAction({ firebase, path }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {getUser} from 'cerebral-provider-firebase'
 
@@ -420,7 +420,7 @@ export default [
 #### Anonymous login
 This login will method will resolve to existing anonymous or create a new one for you. Resolves to `{user: {}}`.
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path }) {
   return firebase.signInAnonymously()
@@ -429,7 +429,7 @@ function someAction({ firebase, path }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {signInAnonymously} from 'cerebral-provider-firebase'
 
@@ -444,7 +444,7 @@ export default [
 #### Create user with email and password
 Register a new user with email and password. Resolves to `{user: {}}`.
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path, state }) {
   const email = state.get('register.email')
@@ -456,7 +456,7 @@ function someAction({ firebase, path, state }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {state} from 'cerebral/operators'
 import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase'
@@ -472,7 +472,7 @@ export default [
 #### Sign in user with email and password
 Sign in a user with email and password. Resolves to `{user: {}}`.
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path, state }) {
   const email = state.get('register.email')
@@ -484,7 +484,7 @@ function someAction({ firebase, path, state }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {input} from 'cerebral/operators'
 import {signInWithEmailAndPassword} from 'cerebral-provider-firebase'
@@ -500,7 +500,7 @@ export default [
 #### Sign in with Facebook
 Sign in a user with Facebook. Resolves to `{user: {}}`, or redirects.
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path, state }) {
   return firebase.signInWithFacebook({
@@ -512,7 +512,7 @@ function someAction({ firebase, path, state }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {state} from 'cerebral/operators'
 import {signInWithFacebook} from 'cerebral-provider-firebase'
@@ -530,7 +530,7 @@ export default [
 #### Sign out
 Sign out user. **getUser** will now not resolve a user anymore.
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path }) {
   return firebase.signOut()
@@ -539,7 +539,7 @@ function someAction({ firebase, path }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {state} from 'cerebral/operators'
 import {signOut} from 'cerebral-provider-firebase'
@@ -554,7 +554,7 @@ export default [
 
 #### Send reset password email
 
-**action**
+*action*
 ```js
 function someAction({ firebase, path, state }) {
   return firebase.sendPasswordResetEmail(state.get('user.email'))
@@ -563,7 +563,7 @@ function someAction({ firebase, path, state }) {
 }
 ```
 
-**factory**
+*factory*
 ```javascript
 import {state} from 'cerebral/operators'
 import {sendPasswordResetEmail} from 'cerebral-provider-firebase'
