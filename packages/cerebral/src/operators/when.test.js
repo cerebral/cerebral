@@ -82,4 +82,47 @@ describe('operator.when', () => {
     controller.getSignal('test')()
     assert.equal(discarded, 1)
   })
+  it('should check truthy state using function and multiple values', () => {
+    const results = []
+    const controller = new Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        test: [
+          when(state`foo`, input`bar`, (foo, bar) => foo === bar), {
+            true: [
+              () => { results.push('true') }
+            ],
+            false: [
+              () => { results.push('false') }
+            ]
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')({bar: 'bar'})
+    controller.getSignal('test')({bar: 'nope'})
+    assert.deepEqual(results, ['true', 'false'])
+  })
+  it('should check truthy state using function and literal values', () => {
+    const results = []
+    const controller = new Controller({
+      signals: {
+        test: [
+          when(input`foo`, 'bar', (foo, bar) => foo === bar), {
+            true: [
+              () => { results.push('true') }
+            ],
+            false: [
+              () => { results.push('false') }
+            ]
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')({foo: 'bar'})
+    controller.getSignal('test')({foo: 'nope'})
+    assert.deepEqual(results, ['true', 'false'])
+  })
 })

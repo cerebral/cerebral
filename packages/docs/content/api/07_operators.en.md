@@ -131,6 +131,8 @@ export default [
 ]
 ```
 
+#### debounce
+
 The **debounce** operator cancels out the existing call to the action returned when the signal triggers again within the milliseconds set. This is typically used with factories, for example to show notifications:
 
 ```js
@@ -156,6 +158,26 @@ function showNotificationFactory(message, ms) {
 ```
 
 Wherever this **showNofication** factory is used, in whatever signal, it will cancel out any other. This makes sure that notifications are always shown at the set time, no matter what existing notification is already there.
+
+#### when
+
+When used with a truth function, the **when** operator supports more then a single "value" argument. The truth function must come last:
+
+```js
+import {input, state, when} from 'cerebral/operators'
+
+export default [
+  when(state`clients.$draft.key`, input`key`,
+    (draftKey, updatedKey) => draftKey === updatedKey
+  ), {
+    true: [
+      // Another person edited client, reset form to new value
+      set(state`clients.$draft`, input`value`)
+    ],
+    false: []
+  }
+]
+```
 
 ### Custom operators
 You can easily create your own operators and use the operator tags. Here showing the implementation of **set**
