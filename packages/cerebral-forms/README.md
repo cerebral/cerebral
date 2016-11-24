@@ -96,12 +96,15 @@ export default function MyAction({state}) {
 #### Set a default value for the whole form
 You can set a default value for a property using a factory:
 ```js
-import {Form, getFormFields} from 'cerebral-forms'
+import {form, getFormFields} from 'cerebral-forms'
 
-const MyFormFactory = (form) => {
-  const myForm = Form(form)
+const MyFormFactory = (formObject) => {
+  const myForm = form(formObject)
   const fields = getFormFields(myForm)
-
+  
+  // You can also set some special properties for the whole form
+  newForm.showErrors = false
+  
   fields.forEach((field) => {
     field.requiredMessage = field.requiredMessage || 'This field is required'
     field.someProp = field.someProp || 'Some default'
@@ -117,7 +120,7 @@ export default function MyAction({state}) {
     name: {
       value: '',
     },
-    showErrors = false
+    showErrors: false
   }))
 }
 ```
