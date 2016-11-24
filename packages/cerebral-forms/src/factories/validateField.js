@@ -18,7 +18,7 @@ export default function validateFieldFactory (pathTemplate) {
       dependentFields = [field.dependsOn]
     }
 
-    const depententOfValidationResult = dependentFields.reduce((currentValidationResult, stringPath) => {
+    const dependentOfValidationResult = dependentFields.reduce((currentValidationResult, stringPath) => {
       const dependentFieldPath = stringPath.split('.')
       const dependentFormPath = dependentFieldPath.slice().splice(0, dependentFieldPath.length - 1)
       const field = context.state.get(dependentFieldPath)
@@ -38,7 +38,7 @@ export default function validateFieldFactory (pathTemplate) {
       return currentValidationResult
     }, validationResult)
 
-    context.state.merge(fieldPath, depententOfValidationResult)
+    context.state.merge(fieldPath, dependentOfValidationResult)
   }
 
   return validateField
