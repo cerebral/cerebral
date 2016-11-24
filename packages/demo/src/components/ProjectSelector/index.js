@@ -24,7 +24,7 @@ export default connect(
                 placeholder='Find project...'
                 value={filter || ''}
                 autoFocus
-                onChange={e => onChange({filter: e.target.value})}
+                onChange={e => onChange({value: e.target.value})}
                 type='text' style={{border: 0, marginTop: '3px', boxShadow: 'none'}} />
             </header>
             <div className='card-content'>
@@ -35,7 +35,7 @@ export default connect(
                     <ul className='menu-list'>
                       {client.projects.map(project => (
                         <li key={project.key}
-                          onClick={() => onProjectClick({ref: project.key})}>
+                          onClick={() => onProjectClick({key: project.key})}>
                           &nbsp;&nbsp;
                           <span className={`tag ${project.key === selectedProject ? 'is-primary' : ''}`}>
                             {project.name}

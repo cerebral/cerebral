@@ -62,6 +62,8 @@ export default {
   Telephone: 'Téléphone',
   WebsiteUrl: 'Site web',
   Email: 'Email',
+  // Client
+  ClientNameFilter: 'Nom du client...',
   // Project
   ProjectNameFilter: 'Nom du projet...',
   // Generic

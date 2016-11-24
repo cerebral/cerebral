@@ -5,7 +5,7 @@ import closeProjectSelector from './signals/closeProjectSelector'
 
 const collection = Collection('projects', {
   'no-project': {
-    ref: 'no-project',
+    key: 'no-project',
     name: 'no project',
     clientKey: 'no-client',
     $isDefaultItem: true
@@ -38,7 +38,7 @@ export default {
     saveClicked: collection.update,
     selectorBackgroundClick: closeProjectSelector,
     selectorProjectClicked: [
-      set(state`tasks.$running.projectKey`, input`ref`),
+      set(state`tasks.$running.projectKey`, input`key`),
       ...closeProjectSelector
     ],
     trashClicked: collection.remove,

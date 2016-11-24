@@ -12,7 +12,7 @@ export default Computed(
     const result = []
     projectKeys.forEach(key => {
       const project = projects[key]
-      const clientKey = project.clientKey
+      const clientKey = project.clientKey || 'no-client'
       let list = clientList[clientKey]
       if (!list) {
         list = []

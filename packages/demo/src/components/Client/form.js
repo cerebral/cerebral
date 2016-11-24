@@ -64,7 +64,9 @@ export default connect(
             <Input field='email' icon='envelope' placeholderKey='Email' />
             <Input field='phone' icon='phone' placeholderKey='Telephone' />
             <p className='control'>
-              <Textarea field='notes' placeholderKey='Notes' />
+              <Textarea field='notes'
+                moduleName='clients'
+                placeholderKey='Notes' />
             </p>
           </div>
         </div>

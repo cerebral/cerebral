@@ -7,7 +7,7 @@ import translations from '../../computed/translations'
 
 export default connect(
   {
-    task: runningTask,
+    item: runningTask,
     t: translations
   },
   {
@@ -15,7 +15,7 @@ export default connect(
     enterPressed: 'tasks.enterPressed',
     onClick: 'tasks.startStopClicked'
   },
-  function Timer ({task, t, onChange, enterPressed, onClick}) {
+  function Timer ({item, t, onChange, enterPressed, onClick}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -29,23 +29,23 @@ export default connect(
           <div className='level-item'>
             <p className='control has-addons'>
               <input className='input' type='text' style={{width: 230}}
-                value={task.description || ''}
-                onChange={(e) => onChange({description: e.target.value})}
+                value={item.name || ''}
+                onChange={(e) => onChange({value: e.target.value})}
                 onKeyPress={onKeyPress}
                 placeholder={t.WhatAreYouDoing} />
               <button className='button' onClick={() => onClick()}>
-                {task.startedAt ? 'Stop' : 'Start'}
+                {item.startedAt ? 'Stop' : 'Start'}
               </button>
             </p>
           </div>
           <div className='level-item'>
-            <ProjectSelectorTag itemKey={task.projectKey} />
+            <ProjectSelectorTag itemKey={item.projectKey} />
           </div>
         </div>
         <div className='level-right'>
           <div className='level-item'>
             <h3 className='title is-4'>
-              {displayTaskDuration(task)}
+              {displayTaskDuration(item)}
             </h3>
           </div>
         </div>

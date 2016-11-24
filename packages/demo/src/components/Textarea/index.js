@@ -2,14 +2,14 @@ import React from 'react'
 import {connect} from 'cerebral/react'
 
 export default connect(
-  ({field}) => ({
-    value: `clients.$draft.${field}`
+  ({moduleName, field}) => ({
+    value: `${moduleName}.$draft.${field}`
   }),
-  {
-    enterPressed: 'clients.enterPressed',
-    escPressed: 'clients.escPressed',
-    valueChanged: 'clients.formValueChanged'
-  },
+  ({moduleName}) => ({
+    enterPressed: `${moduleName}.enterPressed`,
+    escPressed: `${moduleName}.escPressed`,
+    valueChanged: `${moduleName}.formValueChanged`
+  }),
   function Input ({field, value, placeholder, autoFocus, enterPressed, escPressed, valueChanged}) {
     const onKeyPress = e => {
       switch (e.key) {
@@ -20,7 +20,7 @@ export default connect(
     }
 
     const onChange = e => {
-      valueChanged({field, value: e.target.value})
+      valueChanged({key: field, value: e.target.value})
     }
 
     return (

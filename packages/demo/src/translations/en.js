@@ -61,12 +61,13 @@ export default {
   Save: 'Save',
   // Client
   UnsavedClientChanges: 'You have unsaved client edits. Save them ?',
-  ClientNameFilter: 'Client name...',
   CompanyName: 'Company name',
   ImageUrl: '64x64 image url',
   Telephone: 'Telephone',
   WebsiteUrl: 'Website',
   Email: 'Email',
+  // Client
+  ClientNameFilter: 'Client name...',
   // Project
   ProjectNameFilter: 'Project name...',
   // Generic

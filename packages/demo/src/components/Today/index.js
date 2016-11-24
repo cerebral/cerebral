@@ -24,9 +24,9 @@ export default connect(
             </thead>
             <tbody>
               {day.tasks.map(task =>
-                <tr key={task.ref}>
+                <tr key={task.key}>
                   <td style={{width: 60}}>{displayTime(task.startedAt)}</td>
-                  <td>{task.description}</td>
+                  <td>{task.name}</td>
                   <td style={{width: 160}}><a href='#'>{projects[task.projectKey].name}</a></td>
                   <td>{displayElapsed(task.elapsed)}</td>
                 </tr>

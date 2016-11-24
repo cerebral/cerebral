@@ -1,6 +1,6 @@
 import {input, merge, set, state, when} from 'cerebral/operators'
 import {onChildAdded, onChildChanged, onChildRemoved, value} from 'cerebral-provider-firebase'
-import {paths, setPaths} from './paths'
+import {paths, setPaths} from '../paths'
 
 export default function init (moduleName, initState = {}) {
   const {collectionPath, errorPath} = paths(moduleName)

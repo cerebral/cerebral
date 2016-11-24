@@ -63,7 +63,9 @@ export default connect(
               <Select field='clientKey' />
             </p>
             <p className='control'>
-              <Textarea field='notes' placeholderKey='Notes' />
+              <Textarea field='notes'
+                moduleName='projects'
+                placeholderKey='Notes' />
             </p>
           </div>
         </div>

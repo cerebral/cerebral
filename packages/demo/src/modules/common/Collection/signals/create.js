@@ -1,7 +1,7 @@
 import {input, set, state} from 'cerebral/operators'
 import {set as setRemote} from 'cerebral-provider-firebase'
 import makeRef from '../../operators/makeRef'
-import {setPaths, paths} from './paths'
+import {setPaths, paths} from '../paths'
 
 export default function (moduleName) {
   const {draftPath, errorPath, filterPath} = paths(moduleName)

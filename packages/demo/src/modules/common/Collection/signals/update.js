@@ -1,6 +1,6 @@
 import {input, set, state, unset} from 'cerebral/operators'
 import {set as setRemote} from 'cerebral-provider-firebase'
-import {paths, setPaths} from './paths'
+import {paths, setPaths} from '../paths'
 import timestampValue from './timestampValue'
 
 export default function (moduleName) {

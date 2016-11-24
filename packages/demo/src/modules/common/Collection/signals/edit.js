@@ -1,5 +1,5 @@
 import {input, set, state} from 'cerebral/operators'
-import {paths, setPaths} from './paths'
+import {paths, setPaths} from '../paths'
 
 export default function (moduleName) {
   const {draftPath} = paths(moduleName)
