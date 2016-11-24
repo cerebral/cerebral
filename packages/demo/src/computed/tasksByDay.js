@@ -1,11 +1,12 @@
 import {Computed} from 'cerebral'
-import {sortDayString} from '../helpers/dateTime'
+import {elapsedSeconds, sortDayString} from '../helpers/dateTime'
 
 export default Computed(
   {
+    now: 'tasks.$now',
     tasks: 'tasks.all.**'
   },
-  ({tasks}) => {
+  ({now, tasks}) => {
     const days = {}
     const result = []
     Object.keys(tasks).forEach(key => {
@@ -24,7 +25,13 @@ export default Computed(
       list.push(task)
     })
     result.forEach(day => {
-      day.totalElapsed = day.tasks.reduce((sum, t) => sum + t.elapsed, 0)
+      day.totalElapsed = day.tasks.reduce((sum, t) => (
+        sum + (
+          typeof t.elapsed === 'number'
+            ? t.elapsed
+            : elapsedSeconds(t.startedAt, now)
+        )
+      ), 0)
       day.tasks.sort((a, b) => a.startedAt <= b.startedAt ? 1 : -1)
     })
     result.sort((a, b) => a.dayDate <= b.dayDate ? 1 : -1)

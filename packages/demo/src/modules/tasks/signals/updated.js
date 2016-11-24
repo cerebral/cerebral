@@ -1,24 +1,16 @@
-import {input, set, state, when} from 'cerebral/operators'
-import {paths} from '../../common/Collection/paths'
-
+import {input, when} from 'cerebral/operators'
 import updated from '../../common/Collection/signals/updated'
+import updateNow from './updateNow'
 
-const updatedFactory = (moduleName) => {
-  const {draftPath} = paths(moduleName)
-  return [
-    ...updated(moduleName),
-    when(input`key`, key => key === 'running'), {
-      true: [
-        when(state`${draftPath}.key`, key => key === 'running'), {
-          true: [
-            set(state`${draftPath}`, input`value`)
-          ],
-          false: []
-        }
-      ],
-      false: []
-    }
-  ]
-}
-
-export default updatedFactory('tasks')
+export default [
+  // We have a running task
+  when(input`value.elapsed`,
+    elapsed => typeof elapsed !== 'number'
+  ), {
+    true: [
+      () => {console.log('UPDATE NOW')},
+      ...updateNow],
+    false: []
+  },
+  updated('tasks')
+]

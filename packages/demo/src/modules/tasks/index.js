@@ -13,6 +13,7 @@ export default {
   state: {
     all: {},
     $draft: {
+      key: 'running',
       projectKey: 'no-project'
     }
   },
@@ -26,6 +27,6 @@ export default {
     ],
     startStopClicked: startStopRunning,
     timeHasPassed: updateNow,
-    updated: updated
+    updated
   }
 }
