@@ -1,10 +1,24 @@
-import {input, set, state} from 'cerebral/operators'
-import updateNow from './updateNow'
+import {input, set, state, unset} from 'cerebral/operators'
 import now from '../../common/operators/now'
+import {paths} from '../../common/Collection/paths'
+import updateNow from './updateNow'
 
-export default [
-  set(input`startedAt`, now),
-  set(state`tasks.$now`, input`startedAt`),
-  set(state`tasks.$running.startedAt`, input`startedAt`),
-  ...updateNow
-]
+import create from '../../common/Collection/signals/create'
+
+export default function (moduleName) {
+  const {draftPath} = paths(moduleName)
+  return [
+    set(input`startedAt`, now),
+    set(state`tasks.$now`, input`startedAt`),
+
+    unset(state`${draftPath}.endedAt`),
+    unset(state`${draftPath}.elapsed`),
+    set(state`${draftPath}.key`, 'running'),
+    set(state`${draftPath}.startedAt`, input`startedAt`),
+
+    set(input`value`, state`${draftPath}`),
+    set(input`key`, 'running'),
+    ...updateNow,
+    ...create(moduleName)
+  ]
+}

@@ -3,8 +3,8 @@ import startRunning from './startRunning'
 import stopRunning from './stopRunning'
 
 export default [
-  when(state`tasks.$running.startedAt`), {
-    true: stopRunning,
-    false: startRunning
+  when(state`tasks.$draft.startedAt`), {
+    true: stopRunning('tasks'),
+    false: startRunning('tasks')
   }
 ]

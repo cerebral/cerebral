@@ -6,7 +6,7 @@ export default connect(
   {
     filter: 'projects.$filter',
     projectsByClient: visibleProjectsByClient,
-    selectedProject: 'tasks.$running.projectKey'
+    selectedProject: 'tasks.$draft.projectKey'
   },
   {
     onBackgroundClick: 'projects.selectorBackgroundClick',

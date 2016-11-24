@@ -38,7 +38,7 @@ export default {
     saveClicked: collection.update,
     selectorBackgroundClick: closeProjectSelector,
     selectorProjectClicked: [
-      set(state`tasks.$running.projectKey`, input`key`),
+      set(state`tasks.$draft.projectKey`, input`key`),
       ...closeProjectSelector
     ],
     trashClicked: collection.remove,

@@ -4,7 +4,7 @@ import {elapsedSeconds} from '../helpers/dateTime'
 export default Computed(
   {
     now: 'tasks.$now',
-    task: 'tasks.$running.**'
+    task: 'tasks.$draft.**'
   },
   ({now, task}) => {
     if (task.startedAt) {

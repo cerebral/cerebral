@@ -30,7 +30,7 @@ export default connect(
             <p className='control has-addons'>
               <input className='input' type='text' style={{width: 230}}
                 value={item.name || ''}
-                onChange={(e) => onChange({value: e.target.value})}
+                onChange={(e) => onChange({key: 'name', value: e.target.value})}
                 onKeyPress={onKeyPress}
                 placeholder={t.WhatAreYouDoing} />
               <button className='button' onClick={() => onClick()}>
