@@ -46,3 +46,15 @@ export default function initializeFormFactory (formPathTemplate, initialValuesTe
 
   return initializeForm
 }
+
+function resetFormFactory (formPathTemplate) {
+  function resetForm (context) {
+    const formPath = typeof formPathTemplate === 'function' ? formPathTemplate(context).value : formPathTemplate
+    const form = context.state.get(formPath)
+
+    context.state.set(formPath, initializeObject(form))
+  }
+
+  return resetForm
+}
+export { resetFormFactory as resetForm}

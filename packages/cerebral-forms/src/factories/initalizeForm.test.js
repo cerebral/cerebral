@@ -75,28 +75,6 @@ describe('initializeForm', () => {
     })
     assert.equal(controller.getState('form.name.defaultValue'), 'Ben')
   })
-  it('initialize without initialValues should behave like resetForm', () => {
-    const controller = Controller({
-      signals: {
-        initialize: [
-          initializeForm(input`form`)
-        ],
-        changeField
-      },
-      state: {
-        form: form({
-          name: {
-            value: ''
-          }
-        })
-      }
-    })
-    controller.getSignal('changeField')({field: 'form.name', value: 'Other name'})
-    controller.getSignal('initialize')({
-      form: 'form'
-    })
-    assert.equal(controller.getState('form.name.value'), '')
-  })
   it('Should support nested forms', () => {
     const controller = Controller({
       signals: {
@@ -129,33 +107,6 @@ describe('initializeForm', () => {
     })
     assert.equal(controller.getState('form.name.value'), 'Ben')
     assert.equal(controller.getState('form.address.street.value'), '21 2nd Street')
-  })
-  it('Should reset nested Form', () => {
-    const controller = Controller({
-      signals: {
-        initialize: [
-          initializeForm(input`form`)
-        ],
-        changeField
-      },
-      state: {
-        form: form({
-          name: {
-            value: ''
-          },
-          address: form({
-            street: {
-              value: ''
-            }
-          })
-        })
-      }
-    })
-    controller.getSignal('changeField')({field: 'form.address.street', value: '21 2nd Street'})
-    controller.getSignal('initialize')({
-      form: 'form'
-    })
-    assert.equal(controller.getState('form.address.street.value'), '')
   })
   it('Should support nested form arrays', () => {
     const controller = Controller({
@@ -195,7 +146,7 @@ describe('initializeForm', () => {
     assert.equal(controller.getState('form.address.0.street.value'), '21 2nd Street')
     assert.equal(controller.getState('form.address.1.street.value'), '31 3nd Street')
   })
-  it('Should reset nested form arrays', () => {
+  it('Should support nested form arrays', () => {
     const controller = Controller({
       signals: {
         initialize: [
@@ -234,44 +185,6 @@ describe('initializeForm', () => {
     })
     assert.equal(controller.getState('form.name.value'), 'Ben')
     assert.equal(controller.getState('form.address.0.street.value'), '21 2nd Street')
-    assert.equal(controller.getState('form.address.1.street.value'), '31 3nd Street')
-  })
-  it('Reset nested form with arrays', () => {
-    const controller = Controller({
-      signals: {
-        initialize: [
-          initializeForm(input`form`, input`initialValues`)
-        ],
-        changeField
-      },
-      state: {
-        form: form({
-          name: {
-            value: ''
-          },
-          address: [
-            form({
-              street: {
-                value: ''
-              }
-            }),
-            form({
-              street: {
-                value: '31 3nd Street'
-              }
-            })
-          ]
-        })
-      }
-    })
-    controller.getSignal('changeField')({field: 'form.address.0.street', value: '21 2nd Street'})
-    controller.getSignal('changeField')({field: 'form.address.1.street', value: ''})
-    controller.getSignal('changeField')({field: 'form.name', value: 'Ben'})
-    controller.getSignal('initialize')({
-      form: 'form'
-    })
-    assert.equal(controller.getState('form.name.value'), '')
-    assert.equal(controller.getState('form.address.0.street.value'), '')
     assert.equal(controller.getState('form.address.1.street.value'), '31 3nd Street')
   })
 })
