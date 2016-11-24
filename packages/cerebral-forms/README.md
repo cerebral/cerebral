@@ -112,6 +112,17 @@ const MyFormFactory = (formObject) => {
 
   return myForm
 }
+
+import {form} from 'cerebral-forms'
+
+export default function MyAction({state}) {
+  state.set('some.new.form', form({
+    name: {
+      value: '',
+    },
+    showErrors: false
+  }))
+}
 ```
 
 ### field
