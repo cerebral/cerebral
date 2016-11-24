@@ -50,7 +50,7 @@ function createWindow () {
       throw error
     }
 
-    wss = new WebSocketServer({ port: parseInt(selectedPort || 8585) })
+    wss = new WebSocketServer({ port: typeof selectedPort === 'string' ? parseInt(selectedPort) : 8585 })
     menu.splice(4, 0, {
       label: 'Port',
       submenu: [
