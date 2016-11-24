@@ -129,6 +129,76 @@ describe('validate', () => {
       controller.getSignal('fieldChanged')({value: 'Ben'})
       assert.equal(controller.getState('form.firstName.isValid'), false)
     })
+    it('should validate depending on other fields', () => {
+      const controller = Controller({
+        state: {
+          form: form({
+            firstName: {
+              value: '',
+              dependsOn: 'form.lastName'
+            },
+            lastName: {
+              value: '',
+              isRequired: true
+            }
+          })
+        },
+        signals: {
+          fieldChanged: [
+            set(state`form.firstName.value`, input`value`),
+            validateField('form.firstName')
+          ]
+        }
+      })
+      assert.equal(controller.getState('form.firstName.isValid'), true)
+      controller.getSignal('fieldChanged')({value: 'Ben'})
+      assert.equal(controller.getState('form.firstName.isValid'), false)
+    })
+    it('should show correct errorMessages', () => {
+      const controller = Controller({
+        state: {
+          form: form({
+            password: {
+              value: '',
+              validationRules: ['minLength:5'],
+              validationMessages: ['Too short'],
+              dependsOn: 'form.confirmPassword',
+              isRequired: true,
+              requiredMessage: 'Password is required'
+            },
+            confirmPassword: {
+              value: '',
+              validationRules: ['equalsField:password'],
+              validationMessages: ['Not equal to password'],
+              isRequired: true,
+              requiredMessage: 'You must confirm password'
+            }
+          })
+        },
+        signals: {
+          fieldChanged: [
+            set(state`form.password.value`, input`value1`),
+            set(state`form.confirmPassword.value`, input`value2`),
+            validateField('form.password'),
+            validateField('form.confirmPassword')
+          ]
+        }
+      })
+      controller.getSignal('fieldChanged')({value1: 'test', value2: 'otherPassword'})
+      assert.equal(controller.getState('form.password.errorMessage'), 'Too short')
+      assert.equal(controller.getState('form.confirmPassword.errorMessage'), 'Not equal to password')
+      controller.getSignal('fieldChanged')({value1: '', value2: 'otherPassword'})
+      assert.equal(controller.getState('form.password.errorMessage'), 'Password is required')
+      assert.equal(controller.getState('form.confirmPassword.errorMessage'), 'Not equal to password')
+      controller.getSignal('fieldChanged')({value1: 'password', value2: ''})
+      assert.equal(controller.getState('form.password.errorMessage'), null)
+      assert.equal(controller.getState('form.confirmPassword.errorMessage'), 'You must confirm password')
+      controller.getSignal('fieldChanged')({value1: 'password', value2: 'password'})
+      assert.equal(controller.getState('form.password.errorMessage'), null)
+      assert.equal(controller.getState('form.confirmPassword.errorMessage'), null)
+      assert.equal(controller.getState('form.password.isValid'), true)
+      assert.equal(controller.getState('form.confirmPassword.isValid'), true)
+    })
   })
   describe('validateForm', () => {
     it('should validate form', () => {
