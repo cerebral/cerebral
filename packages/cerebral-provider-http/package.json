@@ -23,10 +23,10 @@
   },
   "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-http#readme",
   "peerDependencies": {
-    "cerebral": "next"
+    "cerebral": "2.0.0-0"
   },
   "devDependencies": {
-    "cerebral": "next",
+    "cerebral": "2.0.0-0",
     "xhr-mock": "https://github.com/christianalfoni/xhr-mock.git"
   }
 }

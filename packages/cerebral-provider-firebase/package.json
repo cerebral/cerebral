@@ -26,9 +26,9 @@
     "firebase": "^3.5.2"
   },
   "peerDependencies": {
-    "cerebral": "next"
+    "cerebral": "2.0.0-0"
   },
   "devDependencies": {
-    "cerebral": "next"
+    "cerebral": "2.0.0-0"
   }
 }
