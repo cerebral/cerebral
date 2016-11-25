@@ -1,16 +1,20 @@
 import {Computed} from 'cerebral'
-import visibleProjectKeys from './visibleProjectKeys'
+import visibleKeys from '../common/Collection/computed/visibleKeys'
+import paths from '../common/Collection/paths'
+
+const projectsPath = paths('projects').collectionPath
+const clientsPath = paths('clients').collectionPath
 
 export default Computed(
   {
-    projectKeys: visibleProjectKeys,
-    projects: 'projects.all.**',
-    clients: 'clients.all.**'
+    visibleProjectKeys: visibleKeys('projects'),
+    projects: `${projectsPath}.**`,
+    clients: `${clientsPath}.**`
   },
-  ({projectKeys, projects, clients}) => {
+  ({visibleProjectKeys, projects, clients}) => {
     const clientList = {}
     const result = []
-    projectKeys.forEach(key => {
+    visibleProjectKeys.forEach(key => {
       const project = projects[key]
       const clientKey = project.clientKey || 'no-client'
       let list = clientList[clientKey]

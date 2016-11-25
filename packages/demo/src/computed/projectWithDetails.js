@@ -1,12 +1,17 @@
 import {Computed} from 'cerebral'
+import paths from '../common/Collection/paths'
+
 import tasksForProject from './tasksForProject'
 import {elapsedSeconds} from '../helpers/dateTime'
 
+const projectsPath = paths('projects').collectionPath
+const clientsPath = paths('clients').collectionPath
+
 export default Computed(
   ({itemKey}) => ({
-    clients: 'clients.all.**',
+    clients: `${clientsPath}.**`,
     now: 'tasks.$now',
-    project: `projects.all.${itemKey}.**`,
+    project: `${projectsPath}.${itemKey}.**`,
     tasks: tasksForProject.props({itemKey})
   }),
   function projectWithDetails ({clients, now, project, tasks}) {

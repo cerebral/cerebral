@@ -1,5 +1,5 @@
 import {input, set, state} from 'cerebral/operators'
-import Collection from '../common/Collection'
+import Collection from '../../common/Collection'
 
 import closeProjectSelector from './signals/closeProjectSelector'
 
@@ -20,12 +20,12 @@ export default {
     $filter: ''
   },
   signals: {
-    addClicked: collection.create,
+    addClicked: collection.newItem,
     discardClicked: collection.discardDraft,
     enterPressed: collection.update,
     escPressed: collection.discardDraft,
     filterChanged: collection.updateFilter,
-    filterEnterPressed: collection.create,
+    filterEnterPressed: collection.newItem,
     formValueChanged: collection.updateDraft,
     penClicked: collection.edit,
     projectTagClicked: [

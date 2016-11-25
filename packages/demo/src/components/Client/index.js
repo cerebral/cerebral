@@ -15,10 +15,9 @@ export default connect(
     penClick: 'clients.penClicked',
     trashClick: 'clients.trashClicked'
   },
-  function Client ({item, penClick, isSelected, trashClick}) {
-    console.log(item.name, isSelected)
+  function Client ({item, itemKey, penClick, isSelected, trashClick}) {
     if (isSelected) {
-      return <ClientForm itemKey={item.key} />
+      return <ClientForm itemKey={itemKey} />
     }
 
     return (

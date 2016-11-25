@@ -1,8 +1,8 @@
-import {input, set, state, when} from 'cerebral/operators'
-import {paths} from '../../common/Collection/paths'
+import {debounce, state, when} from 'cerebral/operators'
+import paths from '../../../common/Collection/paths'
 
-import updateDraft from '../../common/Collection/signals/updateDraft'
-import update from '../../common/Collection/signals/update'
+import updateDraft from '../../../common/Collection/signals/updateDraft'
+import update from '../../../common/Collection/signals/update'
 
 const updateDraftFactory = (moduleName) => {
   const {draftPath} = paths(moduleName)
@@ -10,8 +10,9 @@ const updateDraftFactory = (moduleName) => {
     ...updateDraft(moduleName),
     when(state`${draftPath}.key`, key => key === 'running'), {
       true: [
-        ...update(moduleName),
-        set(state`${draftPath}`, input`value`)
+        debounce(400, [
+          ...update(moduleName)
+        ])
       ],
       false: []
     }

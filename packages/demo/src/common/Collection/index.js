@@ -2,12 +2,13 @@ import init from './signals/init'
 import create from './signals/create'
 import discardDraft from './signals/discardDraft'
 import edit from './signals/edit'
+import newItem from './signals/newItem'
 import update from './signals/update'
 import updated from './signals/updated'
-import remove from './signals/remove'
-import removed from './signals/removed'
 import updateDraft from './signals/updateDraft'
 import updateFilter from './signals/updateFilter'
+import remove from './signals/remove'
+import removed from './signals/removed'
 
 export default function collection (moduleName, initState) {
   return {
@@ -15,6 +16,7 @@ export default function collection (moduleName, initState) {
     discardDraft: discardDraft(moduleName),
     edit: edit(moduleName),
     init: init(moduleName, initState),
+    newItem: newItem(moduleName),
     update: update(moduleName),
     updated: updated(moduleName),
     remove: remove(moduleName),

@@ -15,10 +15,11 @@ export default connect(
     penClick: 'projects.penClicked',
     trashClick: 'projects.trashClicked'
   },
-  function project ({item, isSelected, penClick, trashClick}) {
+  function project ({item, itemKey, isSelected, penClick, trashClick}) {
     if (isSelected) {
-      return <ProjectForm itemKey={item.key} />
+      return <ProjectForm itemKey={itemKey} />
     }
+
     return (
       <div className='card'>
         <div className='card-content'>

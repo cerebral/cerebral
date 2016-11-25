@@ -1,5 +1,5 @@
 import {set, state} from 'cerebral/operators'
-import Collection from '../common/Collection'
+import Collection from '../../common/Collection'
 import startStopRunning from './signals/startStopRunning'
 import updated from './signals/updated'
 import updateDraft from './signals/updateDraft'

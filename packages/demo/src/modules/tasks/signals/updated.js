@@ -1,5 +1,5 @@
 import {input, when} from 'cerebral/operators'
-import updated from '../../common/Collection/signals/updated'
+import updated from '../../../common/Collection/signals/updated'
 import updateNow from './updateNow'
 
 export default [
@@ -7,9 +7,7 @@ export default [
   when(input`value.elapsed`,
     elapsed => typeof elapsed !== 'number'
   ), {
-    true: [
-      () => {console.log('UPDATE NOW')},
-      ...updateNow],
+    true: [...updateNow],
     false: []
   },
   updated('tasks')

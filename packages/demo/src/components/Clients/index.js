@@ -1,23 +1,18 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import visibleClientKeys from '../../computed/visibleClientKeys'
-import translations from '../../computed/translations'
+import listProps from '../../common/Collection/props/list'
+import translations from '../../common/computed/translations'
 
 import Client from '../Client'
 
 export default connect(
-  {
-    clientKeys: visibleClientKeys,
-    filter: 'clients.$filter',
-    selectedKey: 'clients.$draft.key',
-    t: translations
-  },
+  Object.assign(listProps('clients'), {t: translations}),
   {
     enterPressed: 'clients.filterEnterPressed',
     onChange: 'clients.filterChanged',
     onClick: 'clients.addClicked'
   },
-  function Clients ({clientKeys, filter, selectedKey, t, enterPressed, onChange, onClick}) {
+  function Clients ({filter, selectedKey, visibleKeys, t, enterPressed, onChange, onClick}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -46,7 +41,7 @@ export default connect(
           </div>
         </div>
         <div className='columns is-multiline'>
-          {clientKeys.map(key => (
+          {visibleKeys.map(key => (
             <div key={key} className='column'>
               <Client itemKey={key} isSelected={key === selectedKey} />
             </div>

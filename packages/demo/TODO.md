@@ -6,11 +6,10 @@
 * @gaspard split signIn and signUp
 * @gaspard save running task to firebase.
   * start: create with id 'running'
-  * name update: write to firebase
-  * stop: copy to real ref, remove start time in 'running'
-  ==> create does not set input`key` if exists
-  ==> set key to 'running' before create
-  ==> timer gets running task from tasks.all.running
-  ==> forget about tasks.$draft
-
-* Collection.updated should update draft if key matches
+  * task name change: write to firebase
+  * prevent updateNow from triggering more then once.
+  * On timer start:
+    1. create clean 'running' element => saved => draft
+  * On timer end:
+    1. create with new ref from draft
+    2. create stopped 'running' element

@@ -1,9 +1,10 @@
 import {input, state, unset} from 'cerebral/operators'
-import {setPaths} from '../paths'
+import paths from '../paths'
 
 export default function (moduleName) {
+  const {dynamicPaths} = paths(moduleName)
   return [
-    ...setPaths(moduleName),
+    ...dynamicPaths,
     unset(state`${input`itemPath`}`)
   ]
 }

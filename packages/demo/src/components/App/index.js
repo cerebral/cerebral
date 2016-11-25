@@ -1,7 +1,7 @@
 /* eslint-disable no-script-url */
 import React from 'react'
 import {connect} from 'cerebral/react'
-import translations from '../../computed/translations'
+import translations from '../../common/computed/translations'
 
 import LangSelector from '../LangSelector'
 import Login from '../Login'

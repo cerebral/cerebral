@@ -9,3 +9,7 @@ export const displayTaskDuration = (task) => {
     return noDurationString
   }
 }
+
+export const isRunning = (task) => {
+  return task.startedAt && !task.endedAt
+}

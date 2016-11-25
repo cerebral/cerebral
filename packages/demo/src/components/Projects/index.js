@@ -1,23 +1,18 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import visibleProjectKeys from '../../computed/visibleProjectKeys'
-import translations from '../../computed/translations'
+import listProps from '../../common/Collection/props/list'
+import translations from '../../common/computed/translations'
 
 import Project from '../Project'
 
 export default connect(
-  {
-    filter: 'projects.$filter',
-    projectKeys: visibleProjectKeys,
-    selectedKey: 'projects.$draft.key',
-    t: translations
-  },
+  Object.assign(listProps('projects'), {t: translations}),
   {
     enterPressed: 'projects.filterEnterPressed',
     onChange: 'projects.filterChanged',
     onClick: 'projects.addClicked'
   },
-  function Projects ({filter, projectKeys, selectedKey, t, enterPressed, onChange, onClick}) {
+  function Projects ({filter, selectedKey, visibleKeys, t, enterPressed, onChange, onClick}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -46,9 +41,9 @@ export default connect(
           </div>
         </div>
         <div className='columns is-multiline'>
-          {projectKeys.map(key => (
+          {visibleKeys.map(key => (
             <div key={key} className='column'>
-              <Project itemKey={key} isSelected={key === selectedKey}/>
+              <Project itemKey={key} isSelected={key === selectedKey} />
             </div>
           ))}
         </div>

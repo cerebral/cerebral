@@ -1,12 +1,12 @@
 import {input, merge, set, state, when} from 'cerebral/operators'
 import {onChildAdded, onChildChanged, onChildRemoved, value} from 'cerebral-provider-firebase'
-import {paths, setPaths} from '../paths'
+import paths from '../paths'
 
 export default function init (moduleName, initState = {}) {
-  const {collectionPath, errorPath} = paths(moduleName)
+  const {collectionPath, dynamicPaths, errorPath} = paths(moduleName)
   return [
     // prepare remote and local path
-    ...setPaths(moduleName),
+    ...dynamicPaths,
     // start listening
     onChildAdded(
       input`remoteCollectionPath`, `${moduleName}.updated`),

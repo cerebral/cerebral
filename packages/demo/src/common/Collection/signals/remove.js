@@ -1,10 +1,11 @@
 import {input} from 'cerebral/operators'
 import {remove} from 'cerebral-provider-firebase'
-import {setPaths} from '../paths'
+import paths from '../paths'
 
 export default function (moduleName) {
+  const {dynamicPaths} = paths(moduleName)
   return [
-    ...setPaths(moduleName),
+    ...dynamicPaths,
     remove(input`remoteItemPath`), {
       success: [],
       error: []

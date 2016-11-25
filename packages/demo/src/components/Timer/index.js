@@ -1,9 +1,9 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import ProjectSelectorTag from '../ProjectSelectorTag'
-import {displayTaskDuration} from '../../helpers/task'
+import {displayTaskDuration, isRunning} from '../../helpers/task'
 import runningTask from '../../computed/runningTask'
-import translations from '../../computed/translations'
+import translations from '../../common/computed/translations'
 
 export default connect(
   {
@@ -34,7 +34,7 @@ export default connect(
                 onKeyPress={onKeyPress}
                 placeholder={t.WhatAreYouDoing} />
               <button className='button' onClick={() => onClick()}>
-                {item.startedAt ? 'Stop' : 'Start'}
+                {isRunning(item) ? 'Stop' : 'Start'}
               </button>
             </p>
           </div>

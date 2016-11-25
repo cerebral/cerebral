@@ -1,9 +1,9 @@
 import {input, set, state, unset} from 'cerebral/operators'
-import now from '../../common/operators/now'
-import {paths} from '../../common/Collection/paths'
+import now from '../operators/now'
+import paths from '../../../common/Collection/paths'
 import updateNow from './updateNow'
 
-import create from '../../common/Collection/signals/create'
+import create from '../../../common/Collection/signals/create'
 
 export default function (moduleName) {
   const {draftPath} = paths(moduleName)
