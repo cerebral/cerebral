@@ -18,7 +18,7 @@ export default function validateFieldFactory (pathTemplate) {
       dependentFields = [field.dependsOn]
     }
 
-    const depententOfValidationResult = dependentFields.reduce((currentValidationResult, stringPath) => {
+    const dependentOfValidationResult = dependentFields.reduce((currentValidationResult, stringPath) => {
       const dependentFieldPath = stringPath.split('.')
       const dependentFormPath = dependentFieldPath.slice().splice(0, dependentFieldPath.length - 1)
       const dependentField = context.state.get(dependentFieldPath)
@@ -28,17 +28,18 @@ export default function validateFieldFactory (pathTemplate) {
         throw new Error(`The path ${stringPath} used with "dependsOn" on field ${fieldPath.join('.')} is not correct, please check it`)
       }
 
+
       const dependentValidationResult = runValidation(dependentField, dependentForm)
       context.state.merge(dependentFieldPath, dependentValidationResult)
 
       if (currentValidationResult.isValid && !dependentValidationResult.isValid) {
-        return dependentValidationResult
+        return Object.assign(currentValidationResult, { isValid: false })
       }
 
       return currentValidationResult
     }, validationResult)
-
-    context.state.merge(fieldPath, depententOfValidationResult)
+    console.log(fieldPath,validationResult, dependentOfValidationResult)
+    context.state.merge(fieldPath, dependentOfValidationResult)
   }
 
   return validateField
