@@ -7,7 +7,9 @@ import Recorder from './modules/recorder'
 
 const controller = Controller({
   options: {strictRender: true},
-  devtools: Devtools(),
+  devtools: Devtools({
+    remoteDebugger: 'localhost:8585'
+  }),
   router: Router({
     onlyHash: true,
     routes: {

@@ -42,7 +42,7 @@ class Devtools {
     this.controller = null
     this.originalRunTreeFunction = null
     this.ws = null
-    this.isUpdatingDebuggerAfterTabChange = false
+    this.isResettingDebugger = false
 
     this.sendInitial = this.sendInitial.bind(this)
     this.sendComponentsMap = debounce(this.sendComponentsMap, 50)
@@ -171,7 +171,10 @@ class Devtools {
       this.ws.onopen = () => {
         this.ws.send(JSON.stringify({type: 'ping'}))
       }
-      this.ws.onclose = () => this.reInit()
+      this.ws.onclose = () => {
+        console.warn('You have configured remoteDebugger, but could not connect. Falling back to Chrome extension')
+        this.reInit()
+      }
       this.ws.onerror = () => this.reInit()
     } else {
       const event = new CustomEvent('cerebral2.client.message', {
@@ -195,11 +198,11 @@ class Devtools {
 
       document.addEventListener(visibilityChange, () => {
         if (!document[hidden]) {
-          this.isUpdatingDebuggerAfterTabChange = true
+          this.isResettingDebugger = true
           this.backlog.forEach((message) => {
             this.sendMessage(message)
           })
-          this.isUpdatingDebuggerAfterTabChange = false
+          this.isResettingDebugger = false
         }
       }, false)
     }
@@ -222,7 +225,7 @@ class Devtools {
     Sends message to chrome extension or remote debugger
   */
   sendMessage (stringifiedMessage) {
-    if (this.multipleApps && !this.isUpdatingDebuggerAfterTabChange) {
+    if (this.multipleApps && !this.isResettingDebugger) {
       this.backlog.push(stringifiedMessage)
     }
 
@@ -328,16 +331,18 @@ class Devtools {
       }
     }).replace(`"${PLACEHOLDER_INITIAL_MODEL}"`, this.initialModelString)
 
-    this.isConnected = true
+    this.isResettingDebugger = true
     this.sendMessage(message)
-
     this.backlog.forEach((backlogItem) => {
       this.sendMessage(backlogItem)
     })
+    this.isResettingDebugger = false
 
     if (!this.multipleApps) {
       this.backlog = []
     }
+
+    this.isConnected = true
 
     this.sendMessage(JSON.stringify({
       type: 'components',
