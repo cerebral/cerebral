@@ -28,7 +28,6 @@ export default function validateFieldFactory (pathTemplate) {
         throw new Error(`The path ${stringPath} used with "dependsOn" on field ${fieldPath.join('.')} is not correct, please check it`)
       }
 
-
       const dependentValidationResult = runValidation(dependentField, dependentForm)
       context.state.merge(dependentFieldPath, dependentValidationResult)
 
@@ -38,7 +37,7 @@ export default function validateFieldFactory (pathTemplate) {
 
       return currentValidationResult
     }, validationResult)
-    console.log(fieldPath,validationResult, dependentOfValidationResult)
+
     context.state.merge(fieldPath, dependentOfValidationResult)
   }
 
