@@ -18,7 +18,9 @@ import App from './components/App'
 
 const controller = Controller({
   options: {strictRender: true},
-  devtools: Devtools(),
+  devtools: Devtools({
+    remoteDebugger: 'localhost:8585'
+  }),
   router: Router({
     routes: {
       '/': 'app.routed',

@@ -7,10 +7,7 @@ import Input from './Input'
 export default connect(
   {
     t: translations,
-    email: 'user.$signIn.email',
-    password: 'user.$signIn.password',
-    validationErrors: 'user.$signIn.validationErrors',
-    error: 'user.$signIn.error'
+    signIn: 'user.$signIn.**'
   },
   {
     fieldChanged: 'user.fieldChanged',
@@ -20,36 +17,13 @@ export default connect(
   function Login ({
     t,
     // state
-    email,
-    password,
-    validationErrors,
-    error,
+    signIn,
     // signals
     fieldChanged,
     signInClicked,
     createUserClicked
   }) {
-    let emailValidationMessage = ''
-    let passwordValidationMessage = ''
-
-    function validate () {
-      // validate email
-      let hasValidationError = validationErrors && validationErrors.EMAIL_EMPTY
-      if (hasValidationError) {
-        emailValidationMessage = t.loginValidationEmailRequired
-      } else if (error) {
-        let translation = t.loginErrors[error.code]
-        emailValidationMessage = translation || error.message
-      }
-
-      // validate password
-      hasValidationError = validationErrors && validationErrors.PASSWORD_EMPTY
-      if (hasValidationError) {
-        passwordValidationMessage = t.loginValidationPasswordRequired
-      }
-    }
-
-    validate()
+    const showError = field => signIn.showErrors && !field.isValid
 
     return (
       <div className='modal is-active'>
@@ -69,26 +43,27 @@ export default connect(
             </nav>
 
             <Input
-              fieldType='email'
               placeholder={t.loginEmailPlaceholder}
-              value={email}
+              value={signIn.email.value}
               onChange={e => fieldChanged({
                 field: 'user.$signIn.email',
                 value: e.target.value
               })}
-              message={emailValidationMessage}
+              message={t[signIn.email.errorMessage]}
+              showError={showError(signIn.email)}
               icon='fa fa-user'
             />
 
             <Input
               fieldType='password'
               placeholder={t.loginPasswordPlaceholder}
-              value={password}
+              value={signIn.password.value}
               onChange={e => fieldChanged({
                 field: 'user.$signIn.password',
                 value: e.target.value
               })}
-              message={passwordValidationMessage}
+              message={t[signIn.password.errorMessage]}
+              showError={showError(signIn.password)}
               icon='fa fa-user'
             />
 

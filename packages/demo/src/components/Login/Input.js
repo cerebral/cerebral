@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Input ({fieldType, placeholder, value, onChange, message, icon}) {
+export default function Input ({fieldType, placeholder, value, onChange, message, showError, icon}) {
   return (
     <p className='control has-icon'>
       <input className='input'
@@ -9,15 +9,15 @@ export default function Input ({fieldType, placeholder, value, onChange, message
         value={value}
         onChange={e => onChange(e)}
       />
-      {message && (
+      {showError && (
         <i className='fa fa-warning' />
       )}
-      {message && (
+      {showError && (
         <span className='help is-danger'>
           {message}
         </span>
       )}
-      {!message && (
+      {!showError && (
         <i className={icon} />
       )}
     </p>

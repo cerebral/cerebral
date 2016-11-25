@@ -1,25 +1,27 @@
 import {set, state, input} from 'cerebral/operators'
+import {isValidForm} from 'cerebral-forms'
 import signIn from '../actions/signIn'
 import firebaseInit from '../../app/signals/firebaseInit'
 
 const signInWithFirebase = [
-  signIn, {
-    success: [
-      set(state`user.$loggedIn`, true),
-      set(state`user.$signIn.email`, ''),
-      set(state`user.$signIn.password`, ''),
-      set(state`user.$currentUser`, input`user`),
-      set(state`user.$signIn.validationErrors`, {}),
-      set(state`user.$signIn.error`, ''),
-      ...firebaseInit
+  isValidForm('user.$signIn'), {
+    true: [
+      signIn, {
+        success: [
+          set(state`user.$loggedIn`, true),
+          set(state`user.$signIn.email`, ''),
+          set(state`user.$signIn.password`, ''),
+          set(state`user.$currentUser`, input`user`),
+          set(state`user.$signIn.error`, ''),
+          ...firebaseInit
+        ],
+        error: [
+          set(state`user.$signIn.error`, input`error`)
+        ]
+      }
     ],
-    invalid: [
-      set(state`user.$signIn.validationErrors`, input`validationErrors`),
-      set(state`user.$signIn.error`, '')
-    ],
-    error: [
-      set(state`user.$signIn.error`, input`error`),
-      set(state`user.$signIn.validationErrors`, {})
+    false: [
+      set(state`user.$signIn.showErrors`, true)
     ]
   }
 ]
