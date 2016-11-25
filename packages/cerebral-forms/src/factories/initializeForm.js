@@ -23,16 +23,16 @@ function initializeObject (form, initialValues) {
 }
 
 function initializeArray (formArray, initialValues) {
-  if(initialValues && formArray.length < initialValues.length){
+  if (initialValues && formArray.length < initialValues.length) {
     return initialValues.reduce((newFormArray, value, index) => {
       newFormArray[index] = initializeObject(formArray[index] || formArray[0], value)
       return newFormArray
     }, [])
   }
   return formArray.reduce((newFormArray, form, index) => {
-      newFormArray[index] = initializeObject(form, initialValues && initialValues[index])
-      return newFormArray
-    }, [])
+    newFormArray[index] = initializeObject(form, initialValues && initialValues[index])
+    return newFormArray
+  }, [])
 }
 
 export default function initializeFormFactory (formPathTemplate, initialValuesTemplate) {
@@ -57,4 +57,5 @@ function resetFormFactory (formPathTemplate) {
 
   return resetForm
 }
-export { resetFormFactory as resetForm}
+
+export {resetFormFactory as resetForm}
