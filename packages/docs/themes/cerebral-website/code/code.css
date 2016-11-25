@@ -1,13 +1,19 @@
+.code {
+  font-family: Roboto Mono,Monaco,Andale Mono,Ubuntu Mono,monospace;
+  font-size: 97%;
+  color: ##008fb3;
+}
+
 pre .code {
   padding: 10px 15px;
-  font-family: Roboto Mono,Monaco,Andale Mono,Ubuntu Mono,monospace;
   font-size: 14px;
   color: #fff;
   line-height: 24px;
   background: #223338;
   border-radius: 3px;
-  margin: 0;
-  white-space: pre;
+  margin: 30px auto 60px;
+  max-width: 600px; /* 70 chars */
+  white-space: pre-wrap;
   display: block;
   overflow-x: auto;
 }

@@ -6,6 +6,11 @@
   text-align: justify;
 }
 
+.page_content .paragraph,
+.page_content .list {
+  max-width: 740px;
+}
+
 @media (max-width: 600px) {
   .page__content {
     padding: 10px;
