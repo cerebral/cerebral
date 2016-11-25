@@ -85,20 +85,90 @@ export default [
 ```
 
 ### Flow control operators
-There are also operators that helps control the flow of execution.
+
+These operators help control the execution flow.
+
+#### equals
+
+This operator chooses a specific path based on the provided value.
 
 ```js
-import {
-  state,
-  input,
-  when,
-  equals,
-  wait,
-  debounce
-} from 'cerebral/operators'
+import {equals, state} from 'cerebral/operators'
 
 export default [
-  // Conditional truthy check of state or input
+  equals(state`user.role`), {
+    admin: [],
+    user: [],
+    otherwise: [] // When no match
+  }
+],
+```
+
+#### debounce
+
+Hold action until the given amount of time in milliseconds has passed. If the
+signal triggers again within this time frame, the previous signal goes down the
+"discarded" path while the new signal holds for the given time. This is
+typically used for typeahead functionality. Beware that the debounce operator
+is **shared** globally: this means that any call to debounce cancels any
+currently on hold signal. For a debounce that is not globally shared, use
+`debounce.shared()` (see example below).
+
+```js
+import {debounce} 'cerebral/operators'
+
+export default [
+  ...debounce(200, [
+    runThisAction
+  ]),
+]
+```
+
+For a debounce that is **not globally shared**, use `debounce.shared()`. This
+is typically used with factories, for example to show notifications where the
+notification should not be cancelled by another debounce call (like a typeahead
+signal):
+
+```js
+import {debounce, input, set, state} from 'cerebral/operators'
+
+// Now only calls to notificationDebounce cancel signals waiting on this.
+const notificationDebounce = debounce.shared()
+
+export default [
+  set(state`notification`, input`message`),
+  ...notificationDebounce(5000, [
+    unset(state`notification`)
+  ])
+]
+```
+
+With this notification signal, there is always a single notification present and
+the notification is always shown for 5 seconds (unless it is overwritten by
+another notification). Other calls to `debounce` will not cancel this one.
+
+#### wait
+
+Wait for the given time in milliseconds and then continue chain.
+
+```js
+import {wait} from 'cerebral/operators'
+
+export default [
+  ...wait(200, [
+    doSomething
+  ])
+]
+```
+
+#### when
+
+Run signal path depending on a truth value or function evaluation.
+
+```js
+import {when} from 'cerebral/operators'
+
+export default [
   when(state`foo.isAwesome`), {
     true: [],
     false: []
@@ -107,61 +177,12 @@ export default [
   when(state`foo.isAwesome`, (value) => value.length === 3 ), {
     true: [],
     false: []
-  },
-
-  // Based on value go down a specific path
-  equals(state`user.role`), {
-    admin: [],
-    user: [],
-    otherwise: [] // When no match
-  },
-
-  // Wait 200ms, then continue chain
-  ...wait(200, [
-    doSomething
-  ]),
-
-  // Hold action until 200ms has passed. If signal
-  // triggers again within 200ms the previous signal
-  // goes down "discarded" path, while new signal holds
-  // for 200ms. Typical typeahead functionality
-  ...debounce(200, [
-    runThisAction
-  ]),
+  }
 ]
 ```
 
-#### debounce
-
-The **debounce** operator cancels out the existing call to the action returned when the signal triggers again within the milliseconds set. This is typically used with factories, for example to show notifications:
-
-```js
-import {debounce} from 'cerebral/operators'
-
-const sharedDebounce = debounce.share()
-function showNotificationFactory(message, ms) {
-  function showNotification({state}) {
-    state.set('notification', message)
-  }
-
-  function hideNotification() {
-    state.set('notification', null)
-  }
-
-  return [
-    showNotification,
-    ...sharedDebounce(ms, [
-      hideNotification
-    ])
-  ]
-}
-```
-
-Wherever this **showNofication** factory is used, in whatever signal, it will cancel out any other. This makes sure that notifications are always shown at the set time, no matter what existing notification is already there.
-
-#### when
-
-When used with a truth function, the **when** operator supports more then a single "value" argument. The truth function must come last:
+When used with a truth function, the `when` operator supports more then a single
+"value" argument. The truth function must come last.
 
 ```js
 import {input, state, when} from 'cerebral/operators'
