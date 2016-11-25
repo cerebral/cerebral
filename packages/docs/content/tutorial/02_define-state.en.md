@@ -22,3 +22,6 @@ const controller = Controller({
 ```
 
 Thats it! The application should automatically reload and you will see this state in the Chrome debugger.
+
+
+**Want to dive deeper?** - [Go in depth](../in-depth/03_state.html), or move on with the tutorial

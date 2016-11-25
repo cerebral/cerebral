@@ -1,6 +1,6 @@
 import {state, input, set} from 'cerebral/operators'
-import showToast from '../../common/factories/showToast'
-import getRepo from '../../common/factories/getRepo'
+import showToast from '../../../common/factories/showToast'
+import getRepo from '../../../common/factories/getRepo'
 
 export default [
   set(state`app.activeTab`, 'repos'),

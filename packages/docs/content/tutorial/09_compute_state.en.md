@@ -100,3 +100,5 @@ If you wonder why the button updates its star count before the toast, it is beca
 Thats it for now regarding *Computeds*. Of course summarizing some numbers is pretty simple stuff, but you can compute state into any result. Very powerful!
 
 But now it has only been Cerebral stuff, what if you want to use other libraries in your action flow? Well, refill your coffee or open up another drink and enjoy the next chapter introducing **providers**.
+
+**Want to dive deeper?** - [Go in depth](../in-depth/11_computed.html), or move on with the tutorial

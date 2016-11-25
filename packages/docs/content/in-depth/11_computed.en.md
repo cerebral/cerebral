@@ -1,8 +1,8 @@
 ---
-title: Compute state
+title: Computed
 ---
 
-## Compute state
+## Computed
 
 Very often the components needs to produce state based on a combination of other state. A very typical example is to show items of a list based on a dynamic limit. The whole list is stored in your state tree, but you only want to show for example the 10 latest. Instead of defining this in the component itself, you can use a **computed**. The signature is very much like connecting state to a component, but instead of returning a user interface description, it returns a value.
 

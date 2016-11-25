@@ -93,3 +93,5 @@ function getRepo(repoName) {
 
 Now run your code and check the console after doing a request do a server.
 Thats it! You have just successfully integrated another provider!
+
+**Want to dive deeper?** - [Go in depth](../in-depth/07_providers.html), or move on with the tutorial
