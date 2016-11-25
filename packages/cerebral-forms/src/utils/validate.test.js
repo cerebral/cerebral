@@ -114,7 +114,8 @@ describe('validate', () => {
             },
             lastName: {
               value: '',
-              isRequired: true
+              isRequired: true,
+              requiredMessage: 'Last Name is required'
             }
           })
         },
@@ -128,31 +129,9 @@ describe('validate', () => {
       assert.equal(controller.getState('form.firstName.isValid'), true)
       controller.getSignal('fieldChanged')({value: 'Ben'})
       assert.equal(controller.getState('form.firstName.isValid'), false)
-    })
-    it('should validate depending on other fields', () => {
-      const controller = Controller({
-        state: {
-          form: form({
-            firstName: {
-              value: '',
-              dependsOn: 'form.lastName'
-            },
-            lastName: {
-              value: '',
-              isRequired: true
-            }
-          })
-        },
-        signals: {
-          fieldChanged: [
-            set(state`form.firstName.value`, input`value`),
-            validateField('form.firstName')
-          ]
-        }
-      })
-      assert.equal(controller.getState('form.firstName.isValid'), true)
-      controller.getSignal('fieldChanged')({value: 'Ben'})
-      assert.equal(controller.getState('form.firstName.isValid'), false)
+      assert.equal(controller.getState('form.firstName.errorMessage'), null)
+      assert.equal(controller.getState('form.lastName.errorMessage'), 'Last Name is required')
+
     })
     it('should show correct errorMessages', () => {
       const controller = Controller({
