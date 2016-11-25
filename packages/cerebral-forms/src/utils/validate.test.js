@@ -129,9 +129,62 @@ describe('validate', () => {
       assert.equal(controller.getState('form.firstName.isValid'), true)
       controller.getSignal('fieldChanged')({value: 'Ben'})
       assert.equal(controller.getState('form.firstName.isValid'), false)
+      assert.equal(controller.getState('form.lastName.isValid'), false)
       assert.equal(controller.getState('form.firstName.errorMessage'), null)
       assert.equal(controller.getState('form.lastName.errorMessage'), 'Last Name is required')
-
+    })
+    it('should validate depending on other fields if dependsOn is array', () => {
+      const controller = Controller({
+        state: {
+          form: form({
+            firstName: {
+              value: '',
+              dependsOn: ['form.lastName']
+            },
+            lastName: {
+              value: '',
+              isRequired: true,
+              requiredMessage: 'Last Name is required'
+            }
+          })
+        },
+        signals: {
+          fieldChanged: [
+            set(state`form.firstName.value`, input`value`),
+            validateField('form.firstName')
+          ]
+        }
+      })
+      assert.equal(controller.getState('form.firstName.isValid'), true)
+      controller.getSignal('fieldChanged')({value: 'Ben'})
+      assert.equal(controller.getState('form.firstName.isValid'), false)
+      assert.equal(controller.getState('form.lastName.isValid'), false)
+      assert.equal(controller.getState('form.firstName.errorMessage'), null)
+      assert.equal(controller.getState('form.lastName.errorMessage'), 'Last Name is required')
+    })
+    it('should throw an error if dependsOn field path is not correct', () => {
+      const controller = Controller({
+        state: {
+          form: form({
+            firstName: {
+              value: '',
+              dependsOn: 'form.someField'
+            },
+            lastName: {
+              value: '',
+              isRequired: true,
+              requiredMessage: 'Last Name is required'
+            }
+          })
+        },
+        signals: {
+          fieldChanged: [
+            set(state`form.firstName.value`, input`value`),
+            validateField('form.firstName')
+          ]
+        }
+      })
+      assert.throws(() => { controller.getSignal('fieldChanged')({value: 'Ben'}) }, Error, 'Error: The path form.someField used with "dependsOn" on field form.firstName is not correct, please check it')
     })
     it('should show correct errorMessages', () => {
       const controller = Controller({
