@@ -101,10 +101,10 @@ import {form, getFormFields} from 'cerebral-forms'
 const MyFormFactory = (formObject) => {
   const myForm = form(formObject)
   const fields = getFormFields(myForm)
-  
+
   // You can also set some special properties for the whole form
   newForm.showErrors = false
-  
+
   fields.forEach((field) => {
     field.requiredMessage = field.requiredMessage || 'This field is required'
     field.someProp = field.someProp || 'Some default'
@@ -113,6 +113,16 @@ const MyFormFactory = (formObject) => {
   return myForm
 }
 
+```
+
+#### Custom global props
+You can add custom props to the root to the form state.
+
+For example if you want to show validation errors only
+when submitting the form you can add a `showErrors` prop
+which you set true when validation fails during form submit.
+
+```js
 import {form} from 'cerebral-forms'
 
 export default function MyAction({state}) {
