@@ -7,7 +7,6 @@
 * @gaspard save running task to firebase.
   * start: create with id 'running'
   * task name change: write to firebase
-  * prevent updateNow from triggering more then once.
   * On timer start:
     1. create clean 'running' element => saved => draft
   * On timer end:
