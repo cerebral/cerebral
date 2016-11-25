@@ -41,7 +41,7 @@ export default function initializeFormFactory (formPathTemplate, initialValuesTe
     const initialValues = typeof initialValuesTemplate === 'function' ? initialValuesTemplate(context).value : initialValuesTemplate
     const form = context.state.get(formPath)
 
-    context.state.set(formPath, initializeObject(form, initialValues))
+    context.state.merge(formPath, initializeObject(form, initialValues))
   }
 
   return initializeForm
@@ -52,7 +52,7 @@ function resetFormFactory (formPathTemplate) {
     const formPath = typeof formPathTemplate === 'function' ? formPathTemplate(context).value : formPathTemplate
     const form = context.state.get(formPath)
 
-    context.state.set(formPath, initializeObject(form))
+    context.state.merge(formPath, initializeObject(form))
   }
 
   return resetForm
