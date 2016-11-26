@@ -246,7 +246,7 @@ export default [
   // static
   initializeForm('path.to.form', initialValues),
   // dynamic
-  resetForm(input`formPath`, input`initialValuesPath`),
+  initializeForm(input`formPath`, input`initialValuesPath`),
   doThat
 ]
 ```

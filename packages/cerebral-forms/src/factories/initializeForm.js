@@ -3,18 +3,19 @@ import configureField from '../utils/configureField'
 function initializeObject (form, initialValues) {
   return Object.keys(form).reduce(function (newForm, key) {
     if (form[key] === Object(form[key])) {
+      const newInitialValues = initialValues && initialValues[key]
       if (Array.isArray(form[key])) {
-        newForm[key] = initializeArray(form[key], initialValues && initialValues[key])
+        newForm[key] = initializeArray(form[key], newInitialValues)
       } else if ('value' in form[key]) {
         const newField = Object.keys(form[key]).reduce((newField, fKey) => {
           newField[fKey] = form[key][fKey]
           return newField
         }, {})
-        newField.defaultValue = initialValues && initialValues[key] || newField.defaultValue
+        newField.defaultValue = newInitialValues || newField.defaultValue
         newField.value = newField.defaultValue
         newForm[key] = configureField(form, newField)
       } else {
-        newForm[key] = initializeObject(form[key], initialValues && initialValues[key])
+        newForm[key] = initializeObject(form[key], newInitialValues)
       }
     }
 
