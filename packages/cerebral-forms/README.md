@@ -101,10 +101,10 @@ import {form, getFormFields} from 'cerebral-forms'
 const MyFormFactory = (formObject) => {
   const myForm = form(formObject)
   const fields = getFormFields(myForm)
-  
+
   // You can also set some special properties for the whole form
   newForm.showErrors = false
-  
+
   fields.forEach((field) => {
     field.requiredMessage = field.requiredMessage || 'This field is required'
     field.someProp = field.someProp || 'Some default'
@@ -227,6 +227,30 @@ export default [
   }
 ]
 ```
+
+
+### initializeForm
+An **action** factory you can use to initialize any form via initialValues from any chain. It will replace current value with the initialValues value or default value defined. And revalidate.
+
+```js
+import {input} from 'cerebral/operators'
+import {initializeForm} from 'cerebral-forms'
+
+const initialValues = {
+  name: 'Mike',
+  age: 18
+}
+
+export default [
+  doThis,
+  // static
+  initializeForm('path.to.form', initialValues),
+  // dynamic
+  resetForm(input`formPath`, input`initialValuesPath`),
+  doThat
+]
+```
+
 
 ### resetForm
 An **action** factory you can use to reset any form from any chain. It will replace current value with the initial or default value defined. And revalidate.
