@@ -6,9 +6,7 @@ title: Introduction
 
 Requirements for this tutorial is that you have [Node](https://nodejs.org/en/) version 5 or higher installed. You would definitely benefit from a fresh cup of coffee or a beer as well, ready to learn something new :)
 
-This tutorial will take you through the core concepts of Cerebral. To get started you will need to clone the cerebral Github repository. To do so you need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed, or the [Github desktop](https://desktop.github.com/) client.
-
-Now clone the repo to a folder on your computer, either by command line:
+This tutorial will take you through the core concepts of Cerebral. To get started you will need to clone the cerebral Github repository. To do so you need [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) installed, or the [Github desktop](https://desktop.github.com/) client. Now clone the repo to a folder on your computer, either by command line:
 
 `git clone https://github.com/cerebral/cerebral.git`
 
@@ -29,7 +27,7 @@ Our Goal now is to go through some concepts and show off the features of Cerebra
 - **Providers**
 - **Routing**
 
-They are all explained in depth in the [Concepts](../concepts/01_the-architecture.html) section.
+They are all explained in depth in the [In depth](../in-depth/01_the-architecture.html) section.
 
 ### How does this tutorial work?
 To start the tutorial, run:
@@ -115,5 +113,4 @@ This the entry point of your application and this is where we bring it all toget
 If you are not familiar with [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), the syntax that looks like HTML, it can be explained briefly as "some sugar over normal JavaScript". This is **not** html in JavaScript, it is pure JavaScript, it just allows you to define the UI with familiar syntax. You might think this is "icky", but trust us... UIs has become a lot more complex over the years and we need the power of JavaScript to describe and manage them!
 
 ### Installing the debugger
-The Cerebral debugger is a Chrome extension. You can install it from the [chrome store](https://chrome.google.com/webstore/detail/cerebral2-debugger/ghoadjdodkgkbbmhhpbfhgikjgjelojc). Once the debugger is installed your Chrome devtools will have a new tab called **cerebral2**. Open it.
-Not a lot to see right now, so let us move on.
+Please install either the standalone or chrome extension debugger, following [these instructions](../get-started/02_debugger.html)

@@ -2,8 +2,8 @@
 side-nav:
   - get-started
   - tutorial
-  - concepts
-  - getting-real
+  - in-depth
+  - best-practices
   - migration
   - api
 ---

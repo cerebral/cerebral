@@ -52,9 +52,9 @@ Cerebral does not look at the updates in your application as "value updates", bu
 2. Since there is no value comparison in Cerebral it has a **strict render mode**. Traditionally if you change an item in an array, also the array itself has a change. This means that the component handling the array will render whenever an item needs to render. In large applications **strict render mode** will give you a lot more control of how your components should react to a state change.
 
 ### Render state
-In smaller applications it does not matter that much where you define the state of the application. It is easy to reason about the application because it is small enough to fit in ones head. In larger application it becomes a problem if state is defined "all over the place". Since Cerebral stores all the state of the application in a single state tree we need a way to expose that state to the components.
+In smaller applications it does not matter that much where you define the state of the application. It is easy to reason about the application because it is small enough to fit in ones head. In larger application it becomes a problem if state is defined "all over the place".
 
-In some frameworks this is done by passing the whole model or collection of models/stores from the top of the application and down from one component to the next. This can become very tedious and fragile as all nested components completely depend on their parent. In Cerebral the state of the application is directly connected to each component:
+Since Cerebral stores all the state of the application in a single state tree we need a way to expose that state to the components. In some frameworks this is done by passing the whole model or collection of models/stores from the top of the application and down from one component to the next. This can become very tedious and fragile as all nested components completely depend on their parent. In Cerebral the state of the application is directly connected to each component:
 
 ```js
 connect({

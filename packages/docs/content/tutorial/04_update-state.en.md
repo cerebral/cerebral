@@ -76,3 +76,5 @@ export default connect({
 Now click it and take a look at the debugger. You will see the debugger list the execution of the signal, with information about what happened. This is also a tool the Cerebral debugger provides to give you insight into your application. Very handy for example when you need to dig into a **complex application** after not touching it for a long time, introduce a new team member to the application or debug complex execution flows.
 
 So now changing the *subTitle* is kind of a silly state change on a button click. Let's introduce a very simple "Toast"-Component which will display our **buttonClicked** output.
+
+**Want to dive deeper?** - [Go in depth](../in-depth/04_signals.html), or move on with the tutorial

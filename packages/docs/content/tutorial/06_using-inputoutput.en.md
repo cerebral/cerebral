@@ -81,3 +81,5 @@ Now we are ready to test drive our changes. Click the button and you should see 
 ### Challenge
 
 - Add another custom action which transforms the input value to Uppercase. You may override existing properties on the input or create a new one
+
+**Want to dive deeper?** - [Go in depth](../in-depth/06_actions.html), or move on with the tutorial

@@ -48,3 +48,5 @@ It's time for your first challenge!
 
 - Add another state to the store called *subTitle*
 - Connect *subTitle* to the App component and display it in a *H3* element
+
+**Want to dive deeper?** - [Go in depth](../in-depth/10_connect.html), or move on with the tutorial
