@@ -21,4 +21,4 @@ const controller = Controller({
 ...
 ```
 
-Thats it! The application should automatically reload and you will see this state in the Chrome debugger.
+Thats it! The application should automatically reload and you will see this state in the debugger.
