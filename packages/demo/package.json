@@ -6,7 +6,8 @@
   "author": "Gaspard Bucher <gaspard@lucidogen.io>",
   "contributors": [
     "Aleksey Guryanov <gurianov@gmail.com>",
-    "Christian Alfoni <christianalfoni@gmail.com>"
+    "Christian Alfoni <christianalfoni@gmail.com>",
+    "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
   "devDependencies": {
     "node-sass": "^3.11.2",
