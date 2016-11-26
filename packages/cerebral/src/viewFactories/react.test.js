@@ -398,6 +398,84 @@ describe('React', () => {
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
+    it('should update on props change', () => {
+      const controller = Controller({})
+      class TestComponentClass2 extends React.Component {
+        render () {
+          return (
+            <div>{this.props.foo}</div>
+          )
+        }
+      }
+      const TestComponent2 = connect({}, TestComponentClass2)
+      class TestComponentClass extends React.Component {
+        constructor (props) {
+          super(props)
+          this.state = {foo: 'bar'}
+        }
+        changePath () {
+          this.setState({
+            foo: 'bar2'
+          })
+        }
+        render () {
+          return (
+            <span><TestComponent2 foo={this.state.foo} /></span>
+          )
+        }
+      }
+      const TestComponent = connect({}, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+      component.changePath()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+    })
+    it('should update on dynamic connect and props change', () => {
+      const controller = Controller({
+        state: {
+          users: {0: 'foo', 1: 'bar'},
+          currentUser: '0'
+        },
+        signals: {
+          changeUser: [
+            ({state}) => state.set('currentUser', '1')
+          ]
+        }
+      })
+      class TestComponentClass2 extends React.Component {
+        render () {
+          return (
+            <div>{this.props.user}</div>
+          )
+        }
+      }
+      const TestComponent2 = connect((props) => ({
+        user: `users.${props.currentUser}`
+      }), TestComponentClass2)
+      class TestComponentClass extends React.Component {
+        render () {
+          return (
+            <span><TestComponent2 currentUser={this.props.currentUser} /></span>
+          )
+        }
+      }
+      const TestComponent = connect({
+        currentUser: 'currentUser'
+      }, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
+      controller.getSignal('changeUser')()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
     describe('STRICT render update', () => {
       it('should not update when parent path changes', () => {
         let renderCount = 0

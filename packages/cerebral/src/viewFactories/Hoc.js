@@ -34,8 +34,8 @@ export default (View) => {
         const hasChange = propsDiffer(this.props, nextProps)
 
         // If dynamic paths, we need to update them
-        if (typeof paths === 'function') {
-          this.evaluatedPaths = CerebralComponent.getStatePaths(nextProps)
+        if (hasChange && typeof paths === 'function') {
+          this.evaluatedPaths = CerebralComponent.getStatePaths(nextProps, this.context.cerebral.controller)
 
           const nextDepsMap = this.getDepsMap()
 
@@ -43,7 +43,9 @@ export default (View) => {
             this.context.cerebral.updateComponent(this, this.depsMap, nextDepsMap)
             this.depsMap = nextDepsMap
           }
-        } else if (hasChange) {
+        }
+
+        if (hasChange) {
           this._update()
         }
       }
