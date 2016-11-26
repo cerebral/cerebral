@@ -8,6 +8,6 @@ To install Cerebral you need to use the Node Package Manager. NPM is part of [No
 
 To install Cerebral, run the following in your project root:
 
-`npm install cerebral@next --save`
+`npm install cerebral@next --save --save-exact`
 
 If you are just testing out Cereral it can be an idea to use [create-react-app](https://facebook.github.io/react/blog/2016/07/22/create-apps-with-no-configuration.html) as a starting point.
