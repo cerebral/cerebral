@@ -73,7 +73,7 @@ Or you can run tests for specific packages by going to package root and do the s
 ### Changing the code
 When you make a code change you should create a branch first. When the code is changed and backed up by a test you can commit it from **the root** using:
 
-`git run commit`
+`npm run commit`
 
 This will give you a guide to creating a commit message. Then you just push and create a pull request as normal on Github.
 
