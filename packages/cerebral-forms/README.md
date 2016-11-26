@@ -238,6 +238,30 @@ export default [
 ]
 ```
 
+
+### initializeForm
+An **action** factory you can use to initialize any form via initialValues from any chain. It will replace current value with the initialValues value or default value defined. And revalidate.
+
+```js
+import {input} from 'cerebral/operators'
+import {initializeForm} from 'cerebral-forms'
+
+const initialValues = {
+  name: 'Mike',
+  age: 18
+}
+
+export default [
+  doThis,
+  // static
+  initializeForm('path.to.form', initialValues),
+  // dynamic
+  initializeForm(input`formPath`, input`initialValuesPath`),
+  doThat
+]
+```
+
+
 ### resetForm
 An **action** factory you can use to reset any form from any chain. It will replace current value with the initial or default value defined. And revalidate.
 
