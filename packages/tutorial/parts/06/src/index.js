@@ -9,9 +9,8 @@ import {set, state, wait, input} from 'cerebral/operators'
 function showToast (message, ms) {
   return [
     set(state`toast`, message),
-    ...wait(ms, [
-      set(state`toast`, null)
-    ])
+    wait(ms),
+    set(state`toast`, null)
   ]
 }
 

@@ -6,33 +6,67 @@ title: Organizing
 
 Cerebral uses a concept called **modules** to organize application code. These allow you to wrap state and signals into a namespace without isolating them. Any action run in a signal can change any state in the application.
 
-Typically the file structure for modules looks like this:
+Typically the file structure for modules looks like this. We call it the **chains pattern**. This is where a signal points to one or multiple chains when they are defined:
 
 ```js
 /modules
-  /Home
+  /home
     /actions
     /chains
     index.js
 main.js
 ```
 
+```js
+import doThis from './chains/doThis'
+
+export default {
+  signals: {
+    somethingHappened: doThis
+  }
+}
+```
+
+The **signals** pattern looks like this:
+
+```js
+/modules
+  /home
+    /actions
+    /signals
+    index.js
+main.js
+```
+
+```js
+import somethingHappened from './signals/somethingHappened'
+
+export default {
+  signals: {
+    somethingHappened
+  }
+}
+```
+
+There is no "correct way" to do this, to what makes sense to you and your team.
+
+
 In the **main.js** file, the module is added to the controller:
 
 ```js
 import {Controller} from 'cerebral'
-import HomeModule from './modules/Home'
+import home from './modules/home'
 
 const controller = Controller({
   modules: {
-    home: HomeModule
+    home
   }
 })
 ```
 
-Any signal and state defined inside the *Home* module will live on the namespace chosen during controller instantiation. In the example above, this is: **home**.
+Any signal and state defined inside the *home* module will live on the namespace chosen during controller instantiation. In the example above, this is: **home**.
 
-The *modules/Home/index.js* typically looks like this:
+The *modules/home/index.js* typically looks like this:
 
 ```js
 import updateLatestPosts from './chains/updateLatestPosts'
@@ -54,7 +88,7 @@ And this is how an application scales: by defining modules and submodules. Actio
   /actions
   /chains
 /modules
-  /Home
+  /home
     /actions
     /chains
     index.js
@@ -73,7 +107,7 @@ A very important point in Cerebral is that your components do not affect the str
   /actions
   /chains
 /modules
-  /Home
+  /home
     /actions
     /chains
     index.js

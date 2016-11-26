@@ -72,6 +72,54 @@ export default connect({
 
 So there is no magic to **modules**, they just namespace signals and state. There is no isolation going on. Any module can change any state of the application. This prevents you from getting into problems as your application grows.
 
+We also did one last fix here on **showToast**. We allowed it to stick. That way we can show a message while our repos are loading and then hide it with a timed showToast later. We simply return two different chains based on a set time being passed in:
+
+```js
+...
+const toastDebounce = debounce.shared()
+function showToast (message, ms, type = null) {
+  if (ms) {
+    return [
+      set(state`app.toast`, {type}),
+      set(state`app.toast.message`, message),
+      toastDebounce(ms), {
+        continue: [
+          set(state`app.toast`, null)
+        ],
+        discard: []
+      }
+    ]
+  }
+
+  return [
+    set(state`app.toast`, {type}),
+    set(state`app.toast.message`, message)
+  ]
+}
+...
+```
+
+And we move our sticky *showToast* to the beginning of loading repos, without a set time:
+
+```js
+...
+export default [
+  set(state`app.activeTab`, 'repos'),
+  ...showToast('Loading data for repos...'),
+  [
+    getRepo('cerebral'), {
+      success: [set(state`repos.list.cerebral`, input`data`)],
+      error: []
+    },
+    getRepo('addressbar'), {
+      success: [set(state`repos.list.addressbar`, input`data`)],
+      error: []
+    }
+  ],
+  ...showToast('Repos loaded', 2000, 'success')
+]
+```
+
 Congratulations! You have reached the end of our *Get Started* - tutorial.
 There is a lot of other good stuff on this website. So please check it out!
 

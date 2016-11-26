@@ -32,7 +32,53 @@ state`users.${input`userId`}`
 ```
 
 There is nothing magic about this, it is pure JavaScript and is a very helpful
-way of expressing business logic.
+way of expressing business logic. Here are that operator tags for Cerebral:
+
+#### input
+
+Input can be used both as a value source and as value target for operations.
+
+Get input value:
+
+```js
+set(state`notification`, input`message`)
+```
+
+Set input value for next actions in chain:
+
+```js
+set(input`key`, state`clients.$draft.key`)
+```
+
+#### state
+
+State can be used both as a value source and as value target for operations.
+
+Get state value:
+
+```js
+set(input`value`, state`clients.all.${input`key`}`)
+```
+
+Mutate state:
+
+```js
+set(state`key`, input`key`)
+```
+
+#### string
+
+The string operator tag is used when not targeting state or input. For example the HTTP provider uses it to dynamically build urls:
+
+```js
+httpGet(string`/items/${input`itemId`}`)
+```
+
+You might want to use it for a notification factory or similar:
+
+```js
+showMessage(string`Hi there ${state`user.name`}, whatup?`)
+```
 
 ### State operators
 
@@ -53,22 +99,6 @@ Concatenate a value to an array
 
 ```js
 concat(state`some.list`, ['foo', 'bar'])
-```
-
-#### input
-
-Input can be used both as a value source and as value target for operations.
-
-Get input value:
-
-```js
-set(state`notification`, input`message`)
-```
-
-Set input value for next actions in chain:
-
-```js
-set(input`key`, state`clients.$draft.key`)
 ```
 
 #### merge
@@ -123,22 +153,6 @@ Splice an array in place.
 
 ```js
 splice(state`some.list`, 0, 2)
-```
-
-#### state
-
-State can be used both as a value source and as value target for operations.
-
-Get state value:
-
-```js
-set(input`value`, state`clients.all.${input`key`}`)
-```
-
-Mutate state:
-
-```js
-set(state`key`, input`key`)
 ```
 
 #### toggle

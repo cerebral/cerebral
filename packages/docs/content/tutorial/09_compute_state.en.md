@@ -46,8 +46,8 @@ import starsSum from './computeds/starsSum'
 ...
 {
   buttonClicked: [
-    ...showToast('Loading data for repos...', 2000),
     [
+      ...showToast('Loading data for repos...', 2000),
       getRepo('cerebral'), {
         success: [set(state`repos.cerebral`, input`result`)],
         error: []

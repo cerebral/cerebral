@@ -104,33 +104,38 @@ We got even more flow control now, telling Cerebral to execute actions/operators
 
 But... there is an issue here. Did you notice that these **showToast** action factories does not cancel each other out? So the initial 2 second wait might close the toast where it was supposed to hold for 5 seconds after a success? There is a way to fix this.
 
-Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. By itself it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behaviour to be shared across them. Whenever any *showToast* is called, we want the existing pending toast timer to be discarded. This just ensures whenever we display a toast it will stay there for the time set, unless a new toast is triggered.
+Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. Simply said it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behaviour to be shared across them. Whenever any *showToast* is called, we want the existing pending toast timer to be discarded. This just ensures whenever we display a toast it will stay there for the time set, unless a new toast is triggered.
 
 ```js
 ...
 import { set, state, debounce, input, string } from 'cerebral/operators'
 ...
 const toastDebounce = debounce.shared()
-function showToast(message, ms, type = null) {
+function showToast (message, ms, type = null) {
   return [
-    set(state`toast`, {type}),
-    set(state`toast.message`, message),
-    ...toastDebounce(ms, [
-      set(state`toast.`, null)
-    ])
+    set(state`app.toast`, {type}),
+    set(state`app.toast.message`, message),
+    toastDebounce(ms), {
+      continue: [
+        set(state`app.toast`, null)
+      ],
+      discard: []
+    }
   ]
 }
 ...
 {
   buttonClicked: [
-    ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
-    getRepo, {
-      success: [
-      ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
-      ],
-      error: [
-        ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
-    }
+    [
+      ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+      getRepo, {
+        success: [
+        ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
+        ],
+        error: [
+          ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
+      }
+    ]
   ]
 }
 ```

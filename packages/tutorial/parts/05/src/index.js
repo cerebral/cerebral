@@ -16,9 +16,8 @@ const controller = Controller({
   signals: {
     buttonClicked: [
       set(state`toast`, 'Button Clicked!'),
-      ...wait(4000, [
-        set(state`toast`, null)
-      ])
+      ...wait(4000),
+      set(state`toast`, null)
     ]
   }
 })
