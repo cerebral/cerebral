@@ -133,34 +133,63 @@ describe('validate', () => {
       assert.equal(controller.getState('form.firstName.errorMessage'), null)
       assert.equal(controller.getState('form.lastName.errorMessage'), 'Last Name is required')
     })
-    it('should validate depending on other fields if dependsOn is array', () => {
+    it('should validate depending on other fields when more than one dependent field', () => {
       const controller = Controller({
         state: {
           form: form({
             firstName: {
               value: '',
-              dependsOn: ['form.lastName']
+              dependsOn: ['form.lastName', 'form.age']
             },
             lastName: {
               value: '',
               isRequired: true,
               requiredMessage: 'Last Name is required'
+            },
+            age: {
+              value: '',
+              validationRules: ['isNumeric'],
+              validationMessages: ['Must be numeric']
             }
           })
         },
         signals: {
           fieldChanged: [
-            set(state`form.firstName.value`, input`value`),
-            validateField('form.firstName')
+            set(state`form.firstName.value`, input`firstName`),
+            set(state`form.lastName.value`, input`lastName`),
+            set(state`form.age.value`, input`age`),
+            validateField('form.firstName'),
+            validateField('form.lastName'),
+            validateField('form.age')
           ]
         }
       })
       assert.equal(controller.getState('form.firstName.isValid'), true)
-      controller.getSignal('fieldChanged')({value: 'Ben'})
+      controller.getSignal('fieldChanged')({firstName: 'Ben', lastName: 'Young', age: 30})
+      assert.equal(controller.getState('form.firstName.isValid'), true)
+      assert.equal(controller.getState('form.lastName.isValid'), true)
+      assert.equal(controller.getState('form.age.isValid'), true)
+      controller.getSignal('fieldChanged')({firstName: 'Ben', lastName: '', age: 30})
       assert.equal(controller.getState('form.firstName.isValid'), false)
       assert.equal(controller.getState('form.lastName.isValid'), false)
+      assert.equal(controller.getState('form.age.isValid'), true)
       assert.equal(controller.getState('form.firstName.errorMessage'), null)
       assert.equal(controller.getState('form.lastName.errorMessage'), 'Last Name is required')
+      assert.equal(controller.getState('form.age.errorMessage'), null)
+      controller.getSignal('fieldChanged')({firstName: 'Ben', lastName: '', age: 'five'})
+      assert.equal(controller.getState('form.firstName.isValid'), false)
+      assert.equal(controller.getState('form.lastName.isValid'), false)
+      assert.equal(controller.getState('form.age.isValid'), false)
+      assert.equal(controller.getState('form.firstName.errorMessage'), null)
+      assert.equal(controller.getState('form.lastName.errorMessage'), 'Last Name is required')
+      assert.equal(controller.getState('form.age.errorMessage'), 'Must be numeric')
+      controller.getSignal('fieldChanged')({firstName: 'Ben', lastName: 'Young', age: 'five'})
+      assert.equal(controller.getState('form.firstName.isValid'), false)
+      assert.equal(controller.getState('form.lastName.isValid'), true)
+      assert.equal(controller.getState('form.age.isValid'), false)
+      assert.equal(controller.getState('form.firstName.errorMessage'), null)
+      assert.equal(controller.getState('form.lastName.errorMessage'), null)
+      assert.equal(controller.getState('form.age.errorMessage'), 'Must be numeric')
     })
     it('should throw an error if dependsOn field path is not correct', () => {
       const controller = Controller({
