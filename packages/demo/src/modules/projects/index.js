@@ -1,7 +1,8 @@
-import {input, set, state} from 'cerebral/operators'
+import {set, state} from 'cerebral/operators'
 import Collection from '../../common/Collection'
 
-import closeProjectSelector from './signals/closeProjectSelector'
+import projectSelectorClose from './signals/projectSelectorClose'
+import projectSelectorSelect from './signals/projectSelectorSelect'
 
 const collection = Collection('projects', {
   'no-project': {
@@ -36,11 +37,8 @@ export default {
       set(state`app.$selectedView`, 'Projects')
     ],
     saveClicked: collection.update,
-    selectorBackgroundClick: closeProjectSelector,
-    selectorProjectClicked: [
-      set(state`tasks.$draft.projectKey`, input`key`),
-      ...closeProjectSelector
-    ],
+    selectorBackgroundClick: projectSelectorClose,
+    selectorProjectClicked: projectSelectorSelect,
     trashClicked: collection.remove,
     updated: collection.updated
   }

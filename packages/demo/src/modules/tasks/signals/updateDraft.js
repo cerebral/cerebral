@@ -1,18 +1,30 @@
-import {debounce, state, when} from 'cerebral/operators'
+import {debounce, input, set, state, when} from 'cerebral/operators'
 import paths from '../../../common/Collection/paths'
 
 import updateDraft from '../../../common/Collection/signals/updateDraft'
-import update from '../../../common/Collection/signals/update'
+import save from '../../../common/Collection/signals/save'
 
 const updateDraftFactory = (moduleName) => {
   const {draftPath} = paths(moduleName)
   return [
     ...updateDraft(moduleName),
-    when(state`${draftPath}.key`, key => key === 'running'), {
+    when(state`${draftPath}.key`, state`${draftPath}.startedAt`,
+      (key, startedAt) => startedAt && key === 'running'
+    ), {
       true: [
-        debounce(400, [
-          ...update(moduleName)
-        ])
+        // Updates to the running task as saved as they
+        // are made.
+        debounce(400), {
+          continue: [
+            set(input`key`, state`${draftPath}.key`),
+            set(input`value`, state`${draftPath}`),
+            ...save(moduleName), {
+              success: [],
+              error: []
+            }
+          ],
+          discard: []
+        }
       ],
       false: []
     }

@@ -1,4 +1,4 @@
-import {displayElapsed} from './dateTime'
+import {displayElapsed} from '../../helpers/dateTime'
 
 const noDurationString = displayElapsed(0)
 

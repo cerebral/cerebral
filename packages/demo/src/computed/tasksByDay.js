@@ -14,6 +14,9 @@ export default Computed(
     const result = []
     Object.keys(tasks).forEach(key => {
       const task = tasks[key]
+      if (!task.startedAt) {
+        return
+      }
       const dayDate = sortDayString(task.startedAt)
       let list = days[dayDate]
       if (!list) {

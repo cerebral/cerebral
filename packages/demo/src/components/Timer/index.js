@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import ProjectSelectorTag from '../ProjectSelectorTag'
-import {displayTaskDuration, isRunning} from '../../helpers/task'
+import {displayTaskDuration, isRunning} from '../../modules/tasks/helpers'
 import runningTask from '../../computed/runningTask'
 import translations from '../../common/computed/translations'
 
@@ -11,7 +11,7 @@ export default connect(
     t: translations
   },
   {
-    onChange: 'tasks.runningInputChanged',
+    onChange: 'tasks.formValueChanged',
     enterPressed: 'tasks.enterPressed',
     onClick: 'tasks.startStopClicked'
   },

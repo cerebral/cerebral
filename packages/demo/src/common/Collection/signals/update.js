@@ -1,25 +1,21 @@
 import {input, set, state, unset} from 'cerebral/operators'
-import {set as setRemote} from 'cerebral-provider-firebase'
 import paths from '../paths'
-import timestampValue from './timestampValue'
+import save from './save'
 
 export default function (moduleName) {
-  const {draftPath, dynamicPaths, errorPath} = paths(moduleName)
-  return [
+  const {draftPath, errorPath} = paths(moduleName)
+  const p = [
     set(input`key`, state`${draftPath}.key`),
     set(input`value`, state`${draftPath}`),
-    ...timestampValue,
-    ...dynamicPaths,
-    setRemote(input`remoteItemPath`, input`value`), {
+    ...save(moduleName), {
       success: [
         // Clear form.
         unset(state`${draftPath}.key`)
-        // FIXME: Would be nice if we could clear draft but then path change notification is for draft...
-        // , unset(state`${draftPath}`)
       ],
       error: [
-        set(state`${errorPath}`)
+        set(state`${errorPath}`, input`error`)
       ]
     }
   ]
+  return p
 }

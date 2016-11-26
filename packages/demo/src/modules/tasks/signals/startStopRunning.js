@@ -1,11 +1,14 @@
 import {state, when} from 'cerebral/operators'
+import paths from '../../../common/Collection/paths'
+import {isRunning} from '../helpers'
 import startRunning from './startRunning'
 import stopRunning from './stopRunning'
-import {isRunning} from '../../../helpers/task'
+
+const {draftPath} = paths('tasks')
 
 export default [
-  when(state`tasks.$draft`, isRunning), {
-    true: stopRunning('tasks'),
-    false: startRunning('tasks')
+  when(state`${draftPath}`, isRunning), {
+    true: stopRunning,
+    false: startRunning
   }
 ]

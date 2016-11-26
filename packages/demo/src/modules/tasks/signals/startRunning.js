@@ -1,24 +1,31 @@
 import {input, set, state, unset} from 'cerebral/operators'
 import now from '../operators/now'
 import paths from '../../../common/Collection/paths'
+import save from '../../../common/Collection/signals/save'
 import updateNow from './updateNow'
 
-import create from '../../../common/Collection/signals/create'
+const moduleName = 'tasks'
+const {draftPath, errorPath} = paths(moduleName)
 
-export default function (moduleName) {
-  const {draftPath} = paths(moduleName)
-  return [
-    set(input`startedAt`, now),
-    set(state`tasks.$now`, input`startedAt`),
+export default [
+  set(state`tasks.$now`, now),
+  // FIXME: set key = 'running' in draft
+  set(state`${draftPath}.key`, 'running'),
+  set(state`${draftPath}.startedAt`, state`tasks.$now`),
+  unset(state`${draftPath}.endedAt`),
+  unset(state`${draftPath}.elapsed`),
 
-    unset(state`${draftPath}.endedAt`),
-    unset(state`${draftPath}.elapsed`),
-    set(state`${draftPath}.key`, 'running'),
-    set(state`${draftPath}.startedAt`, input`startedAt`),
+  set(input`value`, state`${draftPath}`),
+  set(input`key`, 'running'),
 
-    set(input`value`, state`${draftPath}`),
-    set(input`key`, 'running'),
-    ...updateNow,
-    ...create(moduleName)
-  ]
-}
+  // Save as running task in collection
+  ...save(moduleName), {
+    success: [
+      // Start running
+      ...updateNow
+    ],
+    error: [
+      set(state`${errorPath}`)
+    ]
+  }
+]

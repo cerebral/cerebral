@@ -35,7 +35,7 @@ export default connect(
                     <ul className='menu-list'>
                       {client.projects.map(project => (
                         <li key={project.key}
-                          onClick={() => onProjectClick({key: project.key})}>
+                          onClick={() => onProjectClick({key: 'projectKey', value: project.key})}>
                           &nbsp;&nbsp;
                           <span className={`tag ${project.key === selectedProject ? 'is-primary' : ''}`}>
                             {project.name}
