@@ -65,46 +65,8 @@ function MyProvider (options = {}) {
   return (context) => {
     context.myProvider = cachedProvider = cachedProvider || createProvider(context)
 
-    return context
-  }
-}
-```
-
-This is a very typical setup for a provider. It creates and caches it.
-
-### Supporting the debugger
-You can make your context provider support the debugger by using the debugger that is exposed by the Cerebral devtools, when active.
-
-```js
-function MyProvider (options = {}) {
-  let cachedProvider = null
-
-  function createProvider (context) {
-    return {
-      doSomething() {},
-      doSomethingElse() {}
-    }
-  }
-
-  return (context) => {
-    context.myProvider = cachedProvider = cachedProvider || createProvider(context)
-
     if (context.debugger) {
-      context.myProvider = Object.keys(context.myProvider).reduce((wrappedProvider, key) => {
-        const originFunc = cachedProvider[key]
-
-        wrappedProvider[key] = (...args) => {
-          context.debugger.send({
-            method: key,
-            args,
-            color: '#333'
-          })
-
-          return originFunc.apply(cachedProvider, args)
-        }
-
-        return wrappedProvider
-      }, {})
+      context.debugger.wrapProvider('myProvider')
     }
 
     return context
@@ -112,4 +74,4 @@ function MyProvider (options = {}) {
 }
 ```
 
-We are just wrapping the methods exported from the provider passing information to the debugger.
+This is a very typical setup for a provider. It creates and caches it. It also wraps and methods exposed if the debugger is available, tracking its execution.
