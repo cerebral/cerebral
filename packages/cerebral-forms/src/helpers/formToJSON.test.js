@@ -34,7 +34,25 @@ describe('formToJSON', () => {
       }
     })
   })
+  it('should return form with only it\'s values', () => {
+    const controller = Controller({
+      state: {
+        form: form({
+          name: {
+            value: 'Ben'
+          },
+          showErrors: true
+        })
+      }
+    })
 
+    let state = controller.getState()
+    assert.deepEqual(formToJSON(state), {
+      form: {
+        name: 'Ben'
+      }
+    })
+  })
   it('should return values for array of forms', () => {
     const controller = Controller({
       state: {

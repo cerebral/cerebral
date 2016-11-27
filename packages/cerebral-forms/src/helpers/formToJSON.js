@@ -8,8 +8,6 @@ function extractObject (object) {
       } else {
         newObject[key] = extractObject(object[key])
       }
-    } else if (object[key]) {
-      newObject[key] = object[key]
     }
 
     return newObject

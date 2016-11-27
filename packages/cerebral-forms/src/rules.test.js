@@ -144,6 +144,10 @@ describe('rules', () => {
       assert.equal(rules.isNumeric(1212), true)
     })
 
+    it('should return false due to number and points', () => {
+      assert.equal(rules.isNumeric('1212.12.1.2'), false)
+    })
+
     it('should return true due to float', () => {
       assert.equal(rules.isNumeric(1212.34), true)
     })
