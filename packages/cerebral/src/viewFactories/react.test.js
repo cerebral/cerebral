@@ -295,7 +295,7 @@ describe('React', () => {
       component.callSignal()
       assert.equal(renderCount, 3)
     })
-    it('should be able to dynamically define state dependencies', () => {
+    it('should be able to dynamically define state dependencies with props', () => {
       const controller = Controller({
         state: {
           foo: 'bar',
@@ -342,6 +342,37 @@ describe('React', () => {
       const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
       component.changePath()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+    })
+    it('should be able to dynamically define state dependencies with state', () => {
+      const controller = Controller({
+        state: {
+          users: {0: 'foo', 1: 'bar'},
+          currentUser: '0'
+        },
+        signals: {
+          changeUser: [
+            ({state}) => state.set('currentUser', '1')
+          ]
+        }
+      })
+      class TestComponentClass extends React.Component {
+        render () {
+          return (
+            <div>{this.props.user}</div>
+          )
+        }
+      }
+      const TestComponent = connect((props, state) => ({
+        user: `users.${state('currentUser')}`
+      }), TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
+      controller.getSignal('changeUser')()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
     it('should compute Computed on state update', () => {
       const controller = Controller({
@@ -397,6 +428,43 @@ describe('React', () => {
       ))
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
+    it('should update on props change', () => {
+      const controller = Controller({})
+      class TestComponentClass2 extends React.Component {
+        render () {
+          return (
+            <div>{this.props.foo}</div>
+          )
+        }
+      }
+      const TestComponent2 = connect({}, TestComponentClass2)
+      class TestComponentClass extends React.Component {
+        constructor (props) {
+          super(props)
+          this.state = {foo: 'bar'}
+        }
+        changePath () {
+          this.setState({
+            foo: 'bar2'
+          })
+        }
+        render () {
+          return (
+            <span><TestComponent2 foo={this.state.foo} /></span>
+          )
+        }
+      }
+      const TestComponent = connect({}, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+      component.changePath()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
     })
     describe('STRICT render update', () => {
       it('should not update when parent path changes', () => {

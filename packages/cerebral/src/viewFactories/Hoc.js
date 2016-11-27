@@ -4,15 +4,36 @@ import {cleanPath, propsDiffer} from './../utils'
 export default (View) => {
   return function HOC (paths, signals, injectedProps, Component) {
     class CerebralComponent extends View.Component {
-      static getStatePaths (props) {
+      static getStatePaths (props, controller) {
         if (!paths) {
           return {}
         }
-        return typeof paths === 'function' ? paths(props) : paths
+
+        if (typeof paths === 'function') {
+          const dynamicPaths = {}
+          const getState = (path) => {
+            dynamicPaths[`__${path}`] = path
+
+            return controller.getState(path)
+          }
+          return {
+            static: paths(props, getState),
+            dynamic: dynamicPaths
+          }
+        }
+
+        return {
+          static: paths,
+          dynamic: {}
+        }
       }
-      constructor (props) {
-        super(props)
-        this.evaluatedPaths = CerebralComponent.getStatePaths(props)
+      constructor (props, context) {
+        super(props, context)
+        if (!context.cerebral || !context.cerebral.controller) {
+          throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
+        }
+
+        this.evaluatedPaths = CerebralComponent.getStatePaths(this.props, context.cerebral.controller)
         this.signals = signals
         this.injectedProps = injectedProps
         this.Component = Component
@@ -20,10 +41,6 @@ export default (View) => {
         this.depsMap = this.getDepsMap()
       }
       componentWillMount () {
-        if (!this.context.cerebral.controller) {
-          throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
-        }
-
         if (!this.evaluatedPaths) {
           return
         }
@@ -34,8 +51,8 @@ export default (View) => {
         const hasChange = propsDiffer(this.props, nextProps)
 
         // If dynamic paths, we need to update them
-        if (typeof paths === 'function') {
-          this.evaluatedPaths = CerebralComponent.getStatePaths(nextProps)
+        if (hasChange && typeof paths === 'function') {
+          this.evaluatedPaths = CerebralComponent.getStatePaths(nextProps, this.context.cerebral.controller)
 
           const nextDepsMap = this.getDepsMap()
 
@@ -43,7 +60,9 @@ export default (View) => {
             this.context.cerebral.updateComponent(this, this.depsMap, nextDepsMap)
             this.depsMap = nextDepsMap
           }
-        } else if (hasChange) {
+        }
+
+        if (hasChange) {
           this._update()
         }
       }
@@ -62,12 +81,14 @@ export default (View) => {
         })
       }
       getDepsMap () {
-        return Object.keys(this.evaluatedPaths).reduce((currentDepsMap, pathKey) => {
-          if (this.evaluatedPaths[pathKey] instanceof Computed) {
-            return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].depsMap)
+        const allDeps = Object.assign({}, this.evaluatedPaths.static, this.evaluatedPaths.dynamic)
+
+        return Object.keys(allDeps).reduce((currentDepsMap, pathKey) => {
+          if (allDeps[pathKey] instanceof Computed) {
+            return Object.assign(currentDepsMap, allDeps[pathKey].depsMap)
           }
 
-          currentDepsMap[pathKey] = this.evaluatedPaths[pathKey]
+          currentDepsMap[pathKey] = allDeps[pathKey]
 
           return currentDepsMap
         }, {})
@@ -76,10 +97,10 @@ export default (View) => {
         const controller = this.context.cerebral.controller
         const model = controller.model
         const props = this.props || {}
-        const statePaths = CerebralComponent.getStatePaths(this.props)
+        const statePaths = CerebralComponent.getStatePaths(this.props, this.context.cerebral.controller)
 
-        let propsToPass = Object.assign({}, props, Object.keys(statePaths || {}).reduce((currentProps, key) => {
-          currentProps[key] = statePaths[key] instanceof Computed ? statePaths[key].getValue(model) : controller.getState(cleanPath(statePaths[key]))
+        let propsToPass = Object.assign({}, props, Object.keys(statePaths ? statePaths.static : {}).reduce((currentProps, key) => {
+          currentProps[key] = statePaths.static[key] instanceof Computed ? statePaths.static[key].getValue(model) : controller.getState(cleanPath(statePaths.static[key]))
           return currentProps
         }, {}))
 
