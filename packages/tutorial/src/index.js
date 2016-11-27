@@ -1,3 +1,4 @@
+import Router from 'cerebral-router'
 import React from 'react'
 import {render} from 'react-dom'
 import {Controller} from 'cerebral'
@@ -5,29 +6,20 @@ import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
-import {set, state, wait, input} from 'cerebral/operators'
-
-function showToast (message, ms, type = null) {
-  return [
-    set(state`toast`, {type}),
-    set(state`toast.message`, message),
-    wait(ms),
-    set(state`toast`, null)
-  ]
-}
+import app from './modules/app'
+import home from './modules/home'
+import repos from './modules/repos'
 
 const controller = Controller({
   devtools: Devtools(),
-  state: {
-    title: 'Hello from Cerebral!',
-    subTitle: 'Working on my state management',
-    toast: null
-  },
-  signals: {
-    buttonClicked: [
-      ...showToast(input`message`, 4000)
-    ]
-  },
+  router: Router({
+    routes: {
+      '/': 'home.routed',
+      '/repos': 'repos.routed'
+    },
+    onlyHash: true
+  }),
+  modules: {app, home, repos},
   providers: [
     HttpProvider({
       baseUrl: 'https://api.github.com'

@@ -1,6 +1,6 @@
 ---
 side-nav:
-  - get-started
+  - install
   - tutorial
   - in-depth
   - best-practices
@@ -9,7 +9,7 @@ side-nav:
 ---
 
 * [Try the demo](http://cerebral.github.io/cerebral-todomvc/)
-* [Get started](./get-started/)
+* [Install](./install/)
 * [API](./api/)
 
 [![Cerebral 1.0 Launch](https://img.youtube.com/vi/-hKCYFPhUSs/0.jpg)](https://www.youtube.com/watch?v=-hKCYFPhUSs)

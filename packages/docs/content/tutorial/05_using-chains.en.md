@@ -16,14 +16,11 @@ import {set, state, wait} from 'cerebral/operators'
 {
   buttonClicked: [
     set(state`toast`, 'Button Clicked!'),
-    ...wait(4000, [
-      set(state`toast`, null)
-    ])
+    wait(4000),
+    set(state`toast`, null)
   ]
 }
 ```
-
-Since the **wait** operator returns an array we use the [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) to merge the chain into our existing chain.
 
 Now when we check again in the debugger you will see all the 3 actions executed when signal *buttonClicked* got triggered.
 

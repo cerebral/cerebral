@@ -21,9 +21,8 @@ import {set, state, wait, input} from 'cerebral/operators'
   buttonClicked: [
     shoutIt,
     set(state`toast`, input`message`),
-    ...wait(4000, [
-      set(state`toast`, null)
-    ])
+    wait(4000),
+    set(state`toast`, null)
   ]  
 }
 ```

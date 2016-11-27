@@ -24,28 +24,23 @@ We already have an example of this in our code. The **wait** operator runs async
 {
   buttonClicked:[
     set(state`toast`, input`message`),
-    ...wait(4000, [
-      set(state`toast`, null)
-    ])
+    wait(4000),
+    set(state`toast`, null)
   ]
 }
 ```
 
-The signal executes with the same behaviour, it waits for an action to resolve before moving to the next. Let us look at how **wait** is defined:
+The signal executes with the same behavior, it waits for an action to resolve before moving to the next. Let us look at how **wait** is defined:
 
 ```js
-function waitFactory (ms, continueChain) {
-  function wait ({path}) {
+function waitFactory (ms) {
+  function wait () {
     return new Promise((resolve) => {
-      setTimeout(() => resolve(path.timeout()), ms)
+      setTimeout(resolve, ms)
     })
   }
 
-  return [
-    wait, {
-      timeout: continueChain
-    }
-  ]
+  return wait
 }
 ```
 
@@ -60,9 +55,8 @@ Instead of returning an action, we return a chain. As you can see we have moved 
 function showToast(message, ms) {
   return [
     set(state`toast`, message),
-    ...wait(ms, [
-      set(state`toast`, null)
-    ])
+    wait(ms),
+    set(state`toast`, null)
   ]
 }
 ...
@@ -78,6 +72,6 @@ We need to adjust *src/index.js*:
 }
 ```
 
-Again since **showToast** returns a chain we use the spread operator to merge into into our existing chain.
+Since **showToast** returns an array we use the [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) to merge into into our existing chain.
 
 Congratulations! You have successfully mastered the power of factories. But there are couple of more concepts that will help you define state changes, jump over to the next chapter to find out more.
