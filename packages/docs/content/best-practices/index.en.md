@@ -1,4 +1,4 @@
 ---
-redirect: ./01_routing
+redirect: ./01_organizing
 title: 'Best practices'
 ---

@@ -16,24 +16,6 @@ function DebuggerProviderFactory () {
       },
       getColor () {
         return '#333'
-      },
-      wrapProvider (providerKey) {
-        const provider = context[providerKey]
-
-        context[providerKey] = Object.keys(provider).reduce((wrappedProvider, key) => {
-          const originalFunc = provider[key]
-
-          wrappedProvider[key] = (...args) => {
-            context.debugger.send({
-              method: `${providerKey}.${key}`,
-              args: args
-            })
-
-            return originalFunc.apply(provider, args)
-          }
-
-          return wrappedProvider
-        }, {})
       }
     }
 

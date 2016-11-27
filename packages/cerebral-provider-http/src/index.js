@@ -51,63 +51,80 @@ export default function HttpProviderFactory (passedOptions) {
       })
     }
 
-    context.http = cachedProvider = cachedProvider || {
-      request: requestService,
-      get (url, passedQuery, options = {}) {
-        const query = passedQuery || options.query
+    if (cachedProvider) {
+      context.http = cachedProvider
+    } else {
+      context.http = cachedProvider = {
+        request: requestService,
+        get (url, passedQuery, options = {}) {
+          const query = passedQuery || options.query
 
-        options.url = query && Object.keys(query).length ? url + '?' + urlEncode(query) : url
-        options.method = 'GET'
+          options.url = query && Object.keys(query).length ? url + '?' + urlEncode(query) : url
+          options.method = 'GET'
 
-        return requestService(options)
-      },
-      post (url, body, options = {}) {
-        options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
-        options.method = 'POST'
-        options.body = body
+          return requestService(options)
+        },
+        post (url, body, options = {}) {
+          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.method = 'POST'
+          options.body = body
 
-        return requestService(options)
-      },
-      put (url, body, options = {}) {
-        options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
-        options.method = 'PUT'
-        options.body = body
+          return requestService(options)
+        },
+        put (url, body, options = {}) {
+          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.method = 'PUT'
+          options.body = body
 
-        return requestService(options)
-      },
-      patch (url, body, options = {}) {
-        options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
-        options.method = 'PATCH'
-        options.body = body
+          return requestService(options)
+        },
+        patch (url, body, options = {}) {
+          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.method = 'PATCH'
+          options.body = body
 
-        return requestService(options)
-      },
-      delete (url, query, options = {}) {
-        options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
-        options.method = 'DELETE'
+          return requestService(options)
+        },
+        delete (url, query, options = {}) {
+          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.method = 'DELETE'
 
-        return requestService(options)
-      },
-      updateOptions (newOptions) {
-        moduleOptions = mergeWith(newOptions, moduleOptions)
-      },
-      abort (regexp) {
-        const matchingUrls = Object.keys(requests).filter((url) => {
-          return Boolean(url.match(new RegExp(regexp)))
-        })
-        matchingUrls.forEach((url) => {
-          requests[url].xhr.abort()
-        })
-      },
-      fileUpload (options = {}) {
-        options.url = moduleOptions.baseUrl + options.url
+          return requestService(options)
+        },
+        updateOptions (newOptions) {
+          moduleOptions = mergeWith(newOptions, moduleOptions)
+        },
+        abort (regexp) {
+          const matchingUrls = Object.keys(requests).filter((url) => {
+            return Boolean(url.match(new RegExp(regexp)))
+          })
+          matchingUrls.forEach((url) => {
+            requests[url].xhr.abort()
+          })
+        },
+        fileUpload (options = {}) {
+          options.url = moduleOptions.baseUrl + options.url
 
-        return new FileUpload(options)
+          return new FileUpload(options)
+        }
       }
     }
 
     if (context.debugger) {
-      context.debugger.wrapProvider('http')
+      context.http = Object.keys(context.http).reduce((wrappedHttp, key) => {
+        const originMethod = context.http[key]
+        wrappedHttp[key] = (...args) => {
+          context.debugger.send({
+            method: `http.${key}`,
+            color: context.debugger.getColor(key),
+            args: args
+          })
+
+          return originMethod(...args)
+        }
+
+        return wrappedHttp
+      }, {})
     }
 
     return context
