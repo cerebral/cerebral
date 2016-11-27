@@ -55,6 +55,21 @@ export default connect((props) => ({
 )
 ```
 
+Expose state based on existing state:
+
+```js
+import React from 'react'
+import {connect} from 'cerebral/react'
+
+export default connect((props, state) => ({
+  user: `users.${state('currentUserKey')}`
+}),
+  function App(props) {
+    props.user
+  }
+)
+```
+
 ### Exposing signals
 ```js
 import React from 'react'
