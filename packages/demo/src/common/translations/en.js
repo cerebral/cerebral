@@ -6,6 +6,8 @@ export default {
   // Login, Auth
   pleaseSignIn: 'Please Sign In',
   createAccount: 'Create a new account',
+  tryApplicationAnonymously: 'Try application anonymously',
+  Anonymous: 'Anonymous',
   loginEmailPlaceholder: 'Email',
   loginPasswordPlaceholder: 'Password',
   loginSignIn: 'Sign In',

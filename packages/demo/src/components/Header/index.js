@@ -37,7 +37,7 @@ export default connect(
               <div className='nav-right'>
                 {currentUser && (
                   <div className='nav-item'>
-                    {currentUser.email}
+                    {currentUser.email || t.Anonymous}
                   </div>
                 )}
                 {currentUser && (

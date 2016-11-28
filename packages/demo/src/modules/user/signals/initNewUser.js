@@ -1,13 +1,12 @@
 import {set, state, input} from 'cerebral/operators'
 import {set as setRemote} from 'cerebral-provider-firebase'
-import createUser from '../actions/createUser'
 import firebaseInit from '../../app/signals/firebaseInit'
 import paths from '../../../common/Collection/paths'
 
 const signInPath = 'user.$signIn'
 const {dynamicPaths} = paths('user')
 const createFirebaseUser = [
-  createUser, {
+  {
     success: [
       set(state`${signInPath}.email.value`, ''),
       set(state`${signInPath}.password.value`, ''),

@@ -9,6 +9,7 @@ export default connect(
     signIn: 'user.$signIn.**'
   },
   {
+    anonClick: 'user.signInAnonClicked',
     buttonClick: 'user.signInClicked',
     enterPress: 'user.signInEnterPressed',
     fieldChange: 'user.fieldChanged'
@@ -18,6 +19,7 @@ export default connect(
     // state
     signIn,
     // signals
+    anonClick,
     fieldChange,
     enterPress,
     buttonClick
@@ -56,7 +58,13 @@ export default connect(
         />
 
         <nav className='level'>
-          <div className='level-left' />
+          <div className='level-left'>
+            <button className='button is-info'
+              onClick={() => anonClick()}
+              >
+              {t.tryApplicationAnonymously}
+            </button>
+          </div>
           <div className='level-right'>
             <div className='level-item'>
               <p className='control'>

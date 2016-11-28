@@ -1,4 +1,4 @@
-function createUser ({firebase, path, state}) {
+function createUserWithEmailAndPassword ({firebase, path, state}) {
   const email = state.get('user.$signIn.email.value')
   const password = state.get('user.$signIn.password.value')
 
@@ -26,4 +26,4 @@ function createUser ({firebase, path, state}) {
     .catch(path.error)
 }
 
-export default createUser
+export default createUserWithEmailAndPassword

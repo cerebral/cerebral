@@ -14,6 +14,11 @@
   position: relative;
 }
 
+.nav .Selector {
+  border-left: 1px solid #444;
+  padding-left: 20px;
+}
+
 .SelectorLeft, .SelectorRight {
   border-radius: 2px;
   background: white;
@@ -38,9 +43,12 @@
   .SelectorLeft, .SelectorRight {
     background: #444;
   }
-}
-.Selector > a:hover {
-  color: #aaa;
+  .Selector > a {
+    color: #666;
+    &:hover {
+      color: #aaa;
+    }
+  }
 }
 
 // Fix lang selector on the right with smaller screens
