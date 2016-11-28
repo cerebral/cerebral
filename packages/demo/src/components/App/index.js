@@ -46,9 +46,6 @@ export default connect(
                   </a>
                 </div>
                 <div className='nav-right'>
-                  <div className='nav-item'>
-                    <LangSelector />
-                  </div>
                   {currentUser && (
                     <div className='nav-item'>
                       {currentUser.email}
@@ -57,10 +54,13 @@ export default connect(
                   {currentUser && (
                     <div className='nav-item'>
                       <a href='#' onClick={() => signOutClicked()}>
-                        {t.loginSignOutButton}
+                        {t.loginSignOut}
                       </a>
                     </div>
                   )}
+                  <div className='nav-item'>
+                    <LangSelector />
+                  </div>
                 </div>
               </nav>
             </div>

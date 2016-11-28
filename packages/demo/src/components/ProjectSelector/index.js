@@ -4,16 +4,17 @@ import visibleProjectsByClient from '../../computed/visibleProjectsByClient'
 
 export default connect(
   {
+    editedTask: 'tasks.$draft',
     filter: 'projects.$filter',
-    projectsByClient: visibleProjectsByClient,
-    selectedProject: 'tasks.$draft.projectKey'
+    projectsByClient: visibleProjectsByClient
   },
   {
     onBackgroundClick: 'projects.selectorBackgroundClick',
     onChange: 'projects.filterChanged',
     onProjectClick: 'projects.selectorProjectClicked'
   },
-  function ProjectSelector ({filter, projectsByClient, selectedProject, onBackgroundClick, onChange, onProjectClick}) {
+  function ProjectSelector ({editedTask, filter, projectsByClient, onBackgroundClick, onChange, onProjectClick}) {
+    const selectedProject = editedTask && editedTask.projectKey
     return (
       <div>
         <div className='SelectorBackground' onClick={() => onBackgroundClick()} />

@@ -39,6 +39,9 @@
     background: #444;
   }
 }
+.Selector > a:hover {
+  color: #aaa;
+}
 
 // Fix lang selector on the right with smaller screens
 @media screen and (max-width: 979px) {

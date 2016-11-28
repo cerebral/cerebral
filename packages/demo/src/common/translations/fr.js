@@ -4,12 +4,13 @@ export default {
   CerebralDemo: 'Démo Cerebral',
   SiteTagLine: 'Une saisie des heures basée sur [Cerebral]',
   // Login, Auth
-  pleaseLogin: 'Authentification',
+  pleaseSignIn: 'Veuillez vous authentifier',
+  createAccount: 'Création d\'un nouveau compte',
   loginEmailPlaceholder: 'Email',
   loginPasswordPlaceholder: 'Mot de passe',
-  loginSignInButton: 'Se connecter',
-  loginCreateUserButton: 'Créer un utilisateur',
-  loginSignOutButton: 'Se déconnecter',
+  loginSignIn: 'Se connecter',
+  loginCreateUser: 'Créer un utilisateur',
+  loginSignOut: 'Se déconnecter',
   loginErrors: {
     'auth/email-already-in-use': 'L\'adresse e-mail est déjà utilisée par un autre compte.',
     'auth/too-many-requests': 'Nous avons bloqué toutes les demandes de ce périphérique en raison d\'une activité inhabituelle. Réessayez plus tard.'

@@ -3,7 +3,10 @@
 * on update of client website url, add missing 'http://' if needed and in Client/index.js and Client/form.js, remove adding http://
 * refuse to delete project with tasks or move tasks to no-project.
 * refuse to delete client with projects or move projects to no-client.
+* Create (dark) footer with links to cerebral stuff and language selector.
+* Tasks component to search for tasks.., not sure what should go there.
 
-* @henri-hulski apply cerebral forms on signIn
-* @gaspard split signIn and signUp
+* @julio ? implement sendEmailVerification
+and applyActionCode
+
 * @gaspard edit/delete tasks...

@@ -4,12 +4,13 @@ export default {
   CerebralDemo: 'Cerebral Demo',
   SiteTagLine: 'Time tracking application based on [Cerebral]', // [Cerebral] becomes a link here
   // Login, Auth
-  pleaseLogin: 'Please login',
+  pleaseSignIn: 'Please Sign In',
+  createAccount: 'Create a new account',
   loginEmailPlaceholder: 'Email',
   loginPasswordPlaceholder: 'Password',
-  loginSignInButton: 'Sign In',
-  loginCreateUserButton: 'Create user',
-  loginSignOutButton: 'Sign Out',
+  loginSignIn: 'Sign In',
+  loginCreateUser: 'Create user',
+  loginSignOut: 'Sign Out',
   loginValidationEmailRequired: 'Must provide an email',
   loginValidationEmailNotValid: 'Not a valid email',
   loginValidationPasswordRequired: 'Must provide a password',

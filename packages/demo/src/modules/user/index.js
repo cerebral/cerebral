@@ -1,3 +1,4 @@
+import {input, set, state} from 'cerebral/operators'
 import {form, changeField} from 'cerebral-forms'
 import createFirebaseUser from './signals/createFirebaseUser'
 import signInWithFirebase from './signals/signInWithFirebase'
@@ -24,12 +25,18 @@ export default {
       },
       showErrors: false
     }),
+    $loginTab: 'SignIn',
     $currentUser: null
   },
   signals: {
-    fieldChanged: changeField,
     createUserClicked: createFirebaseUser,
+    createUserEnterPressed: createFirebaseUser,
+    fieldChanged: changeField,
     signInClicked: signInWithFirebase,
-    signOutClicked: signOutFirebase
+    signInEnterPressed: signInWithFirebase,
+    signOutClicked: signOutFirebase,
+    loginTabClicked: [
+      set(state`user.$loginTab`, input`value`)
+    ]
   }
 }

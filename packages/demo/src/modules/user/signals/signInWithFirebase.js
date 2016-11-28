@@ -9,13 +9,14 @@ const signInWithFirebase = [
       signIn, {
         success: [
           set(state`user.$loggedIn`, true),
-          set(state`user.$signIn.email`, ''),
-          set(state`user.$signIn.password`, ''),
+          set(state`user.$signIn.email.value`, ''),
+          set(state`user.$signIn.password.value`, ''),
           set(state`user.$currentUser`, input`user`),
           set(state`user.$signIn.error`, ''),
           ...firebaseInit
         ],
         error: [
+          set(state`user.$signIn.password.value`, ''),
           set(state`user.$signIn.error`, input`error`)
         ]
       }
