@@ -4,10 +4,11 @@ import startStopRunning from './signals/startStopRunning'
 import updated from './signals/updated'
 import updateDraft from './signals/updateDraft'
 import updateNow from './signals/updateNow'
+import tasksInit from './signals/init'
 
 const collection = Collection('tasks')
 
-export const init = collection.init
+export const init = tasksInit
 
 export default {
   state: {
