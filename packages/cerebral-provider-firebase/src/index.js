@@ -74,20 +74,7 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
     }
 
     if (context.debugger) {
-      context.firebase = Object.keys(context.firebase).reduce((debuggedFirebase, key) => {
-        const originalFunc = context.firebase[key]
-
-        debuggedFirebase[key] = (...args) => {
-          context.debugger.send({
-            method: `firebase.${key}`,
-            args: args
-          })
-
-          return originalFunc.apply(context.firebase, args)
-        }
-
-        return debuggedFirebase
-      }, {})
+      context.debugger.wrapProvider('firebase')
     }
 
     return context
