@@ -1,6 +1,6 @@
 function createUser ({firebase, path, state}) {
-  const email = state.get('user.$signIn.email')
-  const password = state.get('user.$signIn.password')
+  const email = state.get('user.$signIn.email.value')
+  const password = state.get('user.$signIn.password.value')
 
   // validate
   let validationErrors = {}
