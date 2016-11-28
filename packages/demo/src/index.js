@@ -3,6 +3,7 @@ import {render} from 'react-dom'
 import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import FirebaseProvider from 'cerebral-provider-firebase'
+import firebaseConfig from './firebaseConfig'
 
 // Modules
 import Devtools from 'cerebral/devtools'
@@ -32,15 +33,7 @@ const controller = Controller({
   }),
 
   providers: [
-    FirebaseProvider({
-      config: {
-        apiKey: 'AIzaSyAhFPZDaXOoqiokOhLnH-xMRWiikW6YU1s',
-        authDomain: 'cerebral-demo.firebaseapp.com',
-        databaseURL: 'https://cerebral-demo.firebaseio.com',
-        storageBucket: 'cerebral-demo.appspot.com',
-        messagingSenderId: '403831873900'
-      }
-    })
+    FirebaseProvider({config: firebaseConfig})
   ],
 
   modules: {
