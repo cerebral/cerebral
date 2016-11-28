@@ -339,5 +339,9 @@ describe('rules', () => {
     it('should return true due to length > 4', () => {
       assert.equal(rules.minLength('some1', null, 4), true)
     })
+
+    it('should return true due to empty field', () => {
+      assert.equal(rules.minLength('', null, 4), true)
+    })
   })
 })
