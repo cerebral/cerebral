@@ -12,9 +12,9 @@ const updateDraftFactory = (moduleName) => {
       (key, startedAt) => startedAt && key === 'running'
     ), {
       true: [
-        // Updates to the running task as saved as they
+        // Updates to the running task are saved as they
         // are made.
-        debounce(400), {
+        debounce(1000), {
           continue: [
             set(input`key`, state`${draftPath}.key`),
             set(input`value`, state`${draftPath}`),

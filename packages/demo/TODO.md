@@ -10,3 +10,4 @@
 and applyActionCode
 
 * @gaspard edit/delete tasks...
+* @gaspard fix editing name of running task (it is saved and the `updated` call changes the field the user is currently typing in). Should prevent updates to forms field when it is focussed.

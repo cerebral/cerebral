@@ -4,6 +4,7 @@ import startStopRunning from './signals/startStopRunning'
 import updated from './signals/updated'
 import updateDraft from './signals/updateDraft'
 import updateNow from './signals/updateNow'
+import startStopUpdateNow from './signals/startStopUpdateNow'
 import tasksInit from './signals/init'
 
 const collection = Collection('tasks')
@@ -27,6 +28,7 @@ export default {
     ],
     startStopClicked: startStopRunning,
     timeHasPassed: updateNow,
-    updated
+    updated,
+    visibilityChanged: startStopUpdateNow
   }
 }

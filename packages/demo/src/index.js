@@ -4,6 +4,7 @@ import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import FirebaseProvider from 'cerebral-provider-firebase'
 import firebaseConfig from './firebaseConfig'
+import * as visibility from './helpers/visibility'
 
 // Modules
 import Devtools from 'cerebral/devtools'
@@ -46,9 +47,12 @@ const controller = Controller({
 })
 
 controller.getSignal('app.bootstrap')({})
+visibility.register(controller.getSignal('tasks.visibilityChanged'))
 
 render((
   <Container controller={controller} >
     <App />
   </Container>
 ), document.querySelector('#root'))
+
+// Visibility API

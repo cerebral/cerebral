@@ -10,13 +10,15 @@ export default [
   set(state`tasks.$now`, now),
   debounce(1000), {
     continue: [
-      when(state`tasks.$now`), {
+      when(state`tasks.$now`, state`tasks.$nowHidden`,
+        (now, hidden) => now && !hidden
+      ), {
         true: [
           // Still running
           triggerAgain
         ],
         false: [
-          // Terminated
+          // Terminated or hidden
         ]
       }
     ],
