@@ -16,6 +16,10 @@ export default Computed(
     const result = []
     visibleProjectKeys.forEach(key => {
       const project = projects[key]
+      if (!project) {
+        // Not saved yet
+        return
+      }
       const clientKey = project.clientKey || 'no-client'
       let list = clientList[clientKey]
       if (!list) {
