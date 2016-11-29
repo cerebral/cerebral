@@ -34,7 +34,6 @@ describe('operator.debounce', () => {
           [ debounce(50), {
             continue: [
               () => {
-                console.log(result)
                 assert.deepEqual(result, ['parallel', 'parallel', 'discard'])
                 done()
               }
