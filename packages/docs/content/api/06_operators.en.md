@@ -103,14 +103,12 @@ concat(state`some.list`, ['foo', 'bar'])
 
 #### merge
 
-Merge each value inside a given target. Merge supports using template tags on
-merged values. Note that the braces here do not indicate a path for signal flow
-and is placed inside the function call:
+Merge objects into existing value. If no value exists, an empty object will be created. Merge supports using operator tags on key values:
 
 ```js
-merge(state`clients.$draft`, {
-  key: input`key`,
-  name: state`clients.$filter`
+merge(state`clients.$draft`, input`newDraft`, {
+  foo: 'bar',
+  bar: input`baz`
 })
 ```
 

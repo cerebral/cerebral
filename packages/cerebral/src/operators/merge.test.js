@@ -56,4 +56,43 @@ describe('operator.merge', () => {
       controller.getSignal('test')({users: {}})
     }, /operator.merge/)
   })
+  it('should create object if no value', () => {
+    const controller = new Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          merge(state`users`, {joe: 'Joe'})
+        ]
+      }
+    })
+    controller.getSignal('test')()
+    assert.deepEqual(controller.getState(), {users: {joe: 'Joe'}})
+  })
+  it('should merge multiple objects', () => {
+    const controller = new Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          merge(state`users`, {joe: 'Joe'}, input`extend`, {
+            bob: input`bob`
+          })
+        ]
+      }
+    })
+    controller.getSignal('test')({
+      extend: {
+        jack: 'Jack'
+      },
+      bob: 'Bob'
+    })
+    assert.deepEqual(controller.getState(), {
+      users: {
+        joe: 'Joe',
+        jack: 'Jack',
+        bob: 'Bob'
+      }
+    })
+  })
 })
