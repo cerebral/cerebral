@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import translations from '../../computed/translations'
-import * as LANGS from '../../translations'
+import translations from '../../common/computed/translations'
+import * as LANGS from '../../common/translations'
 
 const LANG_OPTS = Object.keys(LANGS).map(lang => (
   [lang, LANGS[lang].language]

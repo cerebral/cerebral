@@ -3,6 +3,8 @@ import {render} from 'react-dom'
 import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import FirebaseProvider from 'cerebral-provider-firebase'
+import firebaseConfig from './firebaseConfig'
+import * as visibility from './helpers/visibility'
 
 // Modules
 import Devtools from 'cerebral/devtools'
@@ -19,7 +21,7 @@ import App from './components/App'
 const controller = Controller({
   options: {strictRender: true},
   devtools: Devtools({
-    remoteDebugger: 'localhost:8585'
+    // remoteDebugger: 'localhost:8585'
   }),
   router: Router({
     routes: {
@@ -32,15 +34,7 @@ const controller = Controller({
   }),
 
   providers: [
-    FirebaseProvider({
-      config: {
-        apiKey: 'AIzaSyAhFPZDaXOoqiokOhLnH-xMRWiikW6YU1s',
-        authDomain: 'cerebral-demo.firebaseapp.com',
-        databaseURL: 'https://cerebral-demo.firebaseio.com',
-        storageBucket: 'cerebral-demo.appspot.com',
-        messagingSenderId: '403831873900'
-      }
-    })
+    FirebaseProvider({config: firebaseConfig})
   ],
 
   modules: {
@@ -53,9 +47,12 @@ const controller = Controller({
 })
 
 controller.getSignal('app.bootstrap')({})
+visibility.register(controller.getSignal('tasks.visibilityChanged'))
 
 render((
   <Container controller={controller} >
     <App />
   </Container>
 ), document.querySelector('#root'))
+
+// Visibility API

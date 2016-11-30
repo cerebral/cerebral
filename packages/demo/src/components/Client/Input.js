@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import translations from '../../computed/translations'
+import translations from '../../common/computed/translations'
 
 export default connect(
   ({field}) => ({
@@ -22,7 +22,7 @@ export default connect(
     }
 
     const onChange = e => {
-      valueChanged({field, value: e.target.value})
+      valueChanged({key: field, value: e.target.value})
     }
 
     return (

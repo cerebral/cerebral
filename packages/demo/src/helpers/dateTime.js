@@ -66,6 +66,11 @@ export const displayElapsed = (seconds) => (
 )
 
 export const elapsedSeconds = (fromDateTimeString, toDateTimeString) => {
+  if (!fromDateTimeString || !toDateTimeString) {
+    // This happens on task stop. Should fix.
+    // FIXME: Find what race condition creates this.
+    return 0
+  }
   const fromDateTime = parse(fromDateTimeString)
   const toDateTime = parse(toDateTimeString)
   return Duration.between(fromDateTime, toDateTime).seconds()

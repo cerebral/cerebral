@@ -1,17 +1,18 @@
 import {Computed} from 'cerebral'
 import {elapsedSeconds} from '../helpers/dateTime'
+import {isRunning} from '../modules/tasks/helpers'
 
 export default Computed(
   {
     now: 'tasks.$now',
-    task: 'tasks.$running.**'
+    task: 'tasks.$draft.**'
   },
   ({now, task}) => {
-    if (task.startedAt) {
+    if (isRunning(task)) {
       const elapsed = elapsedSeconds(task.startedAt, now)
-      return Object.assign({}, task, {endedAt: now, elapsed})
+      return Object.assign({}, task, {elapsed})
     } else {
-      return task
+      return Object.assign({}, task, {elapsed: 0})
     }
   }
 )

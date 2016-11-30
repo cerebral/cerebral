@@ -12,6 +12,12 @@
 
 .Selector {
   position: relative;
+  cursor: pointer;
+}
+
+.nav .Selector {
+  border-left: 1px solid #444;
+  padding-left: 20px;
 }
 
 .SelectorLeft, .SelectorRight {
@@ -37,6 +43,12 @@
 #root .is-dark {
   .SelectorLeft, .SelectorRight {
     background: #444;
+  }
+  .Selector > a {
+    color: #666;
+    &:hover {
+      color: #aaa;
+    }
   }
 }
 

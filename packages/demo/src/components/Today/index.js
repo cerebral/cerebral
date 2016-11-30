@@ -19,16 +19,26 @@ export default connect(
                 <th colSpan='3'>
                   <Date date={day.date} />
                 </th>
-                <th style={{width: 100}}>{displayElapsed(day.totalElapsed)}</th>
+                <th style={{width: 100}}>
+                  {displayElapsed(day.totalElapsed)}
+                </th>
               </tr>
             </thead>
             <tbody>
               {day.tasks.map(task =>
-                <tr key={task.ref}>
-                  <td style={{width: 60}}>{displayTime(task.startedAt)}</td>
-                  <td>{task.description}</td>
-                  <td style={{width: 160}}><a href='#'>{projects[task.projectRef].name}</a></td>
-                  <td>{displayElapsed(task.elapsed)}</td>
+                <tr key={task.key}>
+                  <td style={{width: 60}}>
+                    {displayTime(task.startedAt)}
+                  </td>
+                  <td>
+                    {task.name}
+                  </td>
+                  <td style={{width: 160}}><a href='#'>
+                    {projects[task.projectKey].name}
+                  </a></td>
+                  <td>
+                    {displayElapsed(task.elapsed)}
+                  </td>
                 </tr>
               )}
             </tbody>

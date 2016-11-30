@@ -1,15 +1,22 @@
 import {Computed} from 'cerebral'
-import {sortDayString} from '../helpers/dateTime'
+import {elapsedSeconds, sortDayString} from '../helpers/dateTime'
+import paths from '../common/Collection/paths'
+
+const {collectionPath} = paths('tasks')
 
 export default Computed(
   {
-    tasks: 'tasks.all.**'
+    now: 'tasks.$now',
+    tasks: `${collectionPath}.**`
   },
-  ({tasks}) => {
+  ({now, tasks}) => {
     const days = {}
     const result = []
-    Object.keys(tasks).forEach(ref => {
-      const task = tasks[ref]
+    Object.keys(tasks).forEach(key => {
+      const task = tasks[key]
+      if (!task.startedAt) {
+        return
+      }
       const dayDate = sortDayString(task.startedAt)
       let list = days[dayDate]
       if (!list) {
@@ -21,10 +28,16 @@ export default Computed(
           tasks: list
         })
       }
-      list.push(task)
+
+      if (!task.endedAt) {
+        const elapsed = elapsedSeconds(task.startedAt, now)
+        list.push(Object.assign({}, task, {elapsed}))
+      } else {
+        list.push(task)
+      }
     })
     result.forEach(day => {
-      day.totalElapsed = day.tasks.reduce((sum, t) => sum + t.elapsed, 0)
+      day.totalElapsed = day.tasks.reduce((sum, task) => sum + task.elapsed, 0)
       day.tasks.sort((a, b) => a.startedAt <= b.startedAt ? 1 : -1)
     })
     result.sort((a, b) => a.dayDate <= b.dayDate ? 1 : -1)

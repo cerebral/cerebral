@@ -4,16 +4,17 @@ import visibleProjectsByClient from '../../computed/visibleProjectsByClient'
 
 export default connect(
   {
+    editedTask: 'tasks.$draft',
     filter: 'projects.$filter',
-    projectsByClient: visibleProjectsByClient,
-    selectedProject: 'tasks.$running.projectRef'
+    projectsByClient: visibleProjectsByClient
   },
   {
     onBackgroundClick: 'projects.selectorBackgroundClick',
     onChange: 'projects.filterChanged',
     onProjectClick: 'projects.selectorProjectClicked'
   },
-  function ProjectSelector ({filter, projectsByClient, selectedProject, onBackgroundClick, onChange, onProjectClick}) {
+  function ProjectSelector ({editedTask, filter, projectsByClient, onBackgroundClick, onChange, onProjectClick}) {
+    const selectedProject = editedTask && editedTask.projectKey
     return (
       <div>
         <div className='SelectorBackground' onClick={() => onBackgroundClick()} />
@@ -24,7 +25,7 @@ export default connect(
                 placeholder='Find project...'
                 value={filter || ''}
                 autoFocus
-                onChange={e => onChange({filter: e.target.value})}
+                onChange={e => onChange({value: e.target.value})}
                 type='text' style={{border: 0, marginTop: '3px', boxShadow: 'none'}} />
             </header>
             <div className='card-content'>
@@ -34,10 +35,10 @@ export default connect(
                     <p className='menu-label'>{client.name}</p>
                     <ul className='menu-list'>
                       {client.projects.map(project => (
-                        <li key={project.ref}
-                          onClick={() => onProjectClick({ref: project.ref})}>
+                        <li key={project.key}
+                          onClick={() => onProjectClick({key: 'projectKey', value: project.key})}>
                           &nbsp;&nbsp;
-                          <span className={`tag ${project.ref === selectedProject ? 'is-primary' : ''}`}>
+                          <span className={`tag ${project.key === selectedProject ? 'is-primary' : ''}`}>
                             {project.name}
                           </span>
                         </li>

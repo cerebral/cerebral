@@ -1,23 +1,34 @@
-import {input, set, state} from 'cerebral/operators'
+import {set, state} from 'cerebral/operators'
+import Collection from '../../common/Collection'
 import startStopRunning from './signals/startStopRunning'
+import updated from './signals/updated'
+import updateDraft from './signals/updateDraft'
 import updateNow from './signals/updateNow'
+import startStopUpdateNow from './signals/startStopUpdateNow'
+import tasksInit from './signals/init'
+
+const collection = Collection('tasks')
+
+export const init = tasksInit
 
 export default {
   state: {
     all: {},
-    $running: {
-      projectRef: 'no-project'
+    $draft: {
+      key: 'running',
+      projectKey: 'no-project'
     }
   },
   signals: {
     enterPressed: startStopRunning,
-    runningInputChanged: [
-      set(state`tasks.$running.description`, input`description`)
-    ],
+    formValueChanged: updateDraft,
+    removed: collection.removed,
     routed: [
       set(state`app.$selectedView`, 'Tasks')
     ],
     startStopClicked: startStopRunning,
-    timeHasPassed: updateNow
+    timeHasPassed: updateNow,
+    updated,
+    visibilityChanged: startStopUpdateNow
   }
 }

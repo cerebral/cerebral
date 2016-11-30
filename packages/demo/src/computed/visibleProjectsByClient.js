@@ -1,34 +1,42 @@
 import {Computed} from 'cerebral'
-import visibleProjectRefs from './visibleProjectRefs'
+import visibleKeys from '../common/Collection/computed/visibleKeys'
+import paths from '../common/Collection/paths'
+
+const projectsPath = paths('projects').collectionPath
+const clientsPath = paths('clients').collectionPath
 
 export default Computed(
   {
-    projectRefs: visibleProjectRefs,
-    projects: 'projects.all.**',
-    clients: 'clients.all.**'
+    visibleProjectKeys: visibleKeys('projects'),
+    projects: `${projectsPath}.**`,
+    clients: `${clientsPath}.**`
   },
-  ({projectRefs, projects, clients}) => {
+  ({visibleProjectKeys, projects, clients}) => {
     const clientList = {}
     const result = []
-    projectRefs.forEach(ref => {
-      const project = projects[ref]
-      const clientRef = project.clientRef
-      let list = clientList[clientRef]
+    visibleProjectKeys.forEach(key => {
+      const project = projects[key]
+      if (!project) {
+        // Not saved yet
+        return
+      }
+      const clientKey = project.clientKey || 'no-client'
+      let list = clientList[clientKey]
       if (!list) {
         list = []
-        clientList[clientRef] = list
+        clientList[clientKey] = list
         result.push({
-          ref: clientRef,
-          name: clients[clientRef].name,
+          key: clientKey,
+          name: clients[clientKey].name,
           projects: list
         })
       }
       list.push(project)
     })
     result.sort((a, b) => {
-      if (a.ref === 'no-client') {
+      if (a.key === 'no-client') {
         return -1
-      } else if (b.ref === 'no-client') {
+      } else if (b.key === 'no-client') {
         return 1
       } else {
         return a.name <= b.name ? -1 : 0

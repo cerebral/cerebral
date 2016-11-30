@@ -1,21 +1,21 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import ProjectSelectorTag from '../ProjectSelectorTag'
-import {displayTaskDuration} from '../../helpers/task'
+import {displayTaskDuration, isRunning} from '../../modules/tasks/helpers'
 import runningTask from '../../computed/runningTask'
-import translations from '../../computed/translations'
+import translations from '../../common/computed/translations'
 
 export default connect(
   {
-    task: runningTask,
+    item: runningTask,
     t: translations
   },
   {
-    onChange: 'tasks.runningInputChanged',
+    onChange: 'tasks.formValueChanged',
     enterPressed: 'tasks.enterPressed',
     onClick: 'tasks.startStopClicked'
   },
-  function Timer ({task, t, onChange, enterPressed, onClick}) {
+  function Timer ({item, t, onChange, enterPressed, onClick}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -29,23 +29,23 @@ export default connect(
           <div className='level-item'>
             <p className='control has-addons'>
               <input className='input' type='text' style={{width: 230}}
-                value={task.description || ''}
-                onChange={(e) => onChange({description: e.target.value})}
+                value={item.name || ''}
+                onChange={(e) => onChange({key: 'name', value: e.target.value})}
                 onKeyPress={onKeyPress}
                 placeholder={t.WhatAreYouDoing} />
               <button className='button' onClick={() => onClick()}>
-                {task.startedAt ? 'Stop' : 'Start'}
+                {isRunning(item) ? 'Stop' : 'Start'}
               </button>
             </p>
           </div>
           <div className='level-item'>
-            <ProjectSelectorTag projectRef={task.projectRef} />
+            <ProjectSelectorTag itemKey={item.projectKey || 'no-project'} />
           </div>
         </div>
         <div className='level-right'>
           <div className='level-item'>
             <h3 className='title is-4'>
-              {displayTaskDuration(task)}
+              {displayTaskDuration(item)}
             </h3>
           </div>
         </div>

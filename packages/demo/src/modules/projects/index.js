@@ -1,12 +1,19 @@
-import {input, set, state} from 'cerebral/operators'
-import addProject from './signals/addProject'
-import closeProjectSelector from './signals/closeProjectSelector'
-import discardDraft from './signals/discardDraft'
-import editProject from './signals/editProject'
-import updateDraft from './signals/updateDraft'
-import saveDraft from './signals/saveDraft'
-import firebaseItemChanged from '../../factories/firebaseItemChanged'
-import firebaseItemRemoved from '../../factories/firebaseItemRemoved'
+import {set, state} from 'cerebral/operators'
+import Collection from '../../common/Collection'
+
+import projectSelectorClose from './signals/projectSelectorClose'
+import projectSelectorSelect from './signals/projectSelectorSelect'
+
+const collection = Collection('projects', {
+  'no-project': {
+    key: 'no-project',
+    name: 'no project',
+    clientKey: 'no-client',
+    $isDefaultItem: true
+  }
+})
+
+export const init = collection.init
 
 export default {
   state: {
@@ -14,30 +21,25 @@ export default {
     $filter: ''
   },
   signals: {
-    addClicked: addProject,
-    cancelClicked: discardDraft,
-    enterPressed: saveDraft,
-    escPressed: discardDraft,
-    formValueChanged: updateDraft,
-    filterChanged: [
-      set(state`projects.$filter`, input`filter`)
-    ],
-    filterEnterPressed: addProject,
-    penClicked: editProject,
+    addClicked: collection.newItem,
+    discardClicked: collection.discardDraft,
+    enterPressed: collection.update,
+    escPressed: collection.discardDraft,
+    filterChanged: collection.updateFilter,
+    filterEnterPressed: collection.newItem,
+    formValueChanged: collection.updateDraft,
+    penClicked: collection.edit,
     projectTagClicked: [
       set(state`projects.$showProjectSelector`, true)
     ],
+    removed: collection.removed,
     routed: [
       set(state`app.$selectedView`, 'Projects')
     ],
-    saveClicked: saveDraft,
-    selectorBackgroundClick: closeProjectSelector,
-    selectorProjectClicked: [
-      set(state`tasks.$running.projectRef`, input`ref`),
-      ...closeProjectSelector
-    ],
-    projects_ChildAdded: [firebaseItemChanged('projects.all')],
-    projects_ChildChanged: [firebaseItemChanged('projects.all')],
-    projects_ChildRemoved: [firebaseItemRemoved('projects.all')]
+    saveClicked: collection.update,
+    selectorBackgroundClick: projectSelectorClose,
+    selectorProjectClicked: projectSelectorSelect,
+    trashClicked: collection.remove,
+    updated: collection.updated
   }
 }

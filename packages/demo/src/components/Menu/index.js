@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import translations from '../../computed/translations'
+import translations from '../../common/computed/translations'
 
 const MENUS = [
   {

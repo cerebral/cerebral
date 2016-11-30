@@ -1,6 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import translations from '../../computed/translations'
+import translations from '../../common/computed/translations'
 
 export default connect(
   ({field}) => ({
@@ -13,7 +13,7 @@ export default connect(
   },
   function Input ({clients, field, value, placeholder, autoFocus, enterPressed, escPressed, valueChanged, t}) {
     const onChange = e => {
-      valueChanged({field, value: e.target.value})
+      valueChanged({key: field, value: e.target.value})
     }
 
     const clientsList = Object.keys(clients).map(ref => clients[ref]).sort((a, b) => a <= b ? -1 : 1)
@@ -26,7 +26,7 @@ export default connect(
         name={field}
         >
         {clientsList.map(c => (
-          <option key={c.ref} value={c.ref}>
+          <option key={c.key} value={c.key}>
             {c.name}
           </option>
         ))}

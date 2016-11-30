@@ -1,36 +1,38 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
-import translations from '../../computed/translations'
+import translations from '../../common/computed/translations'
 
 import Input from './Input'
 import Textarea from '../Textarea'
 
 export default connect(
   {
-    client: `clients.$draft.**`,
+    item: `clients.$draft.**`,
     t: translations
   },
   {
     discardClick: 'clients.discardClicked',
     saveClick: 'clients.saveClicked'
   },
-  function ClientForm ({client, t, discardClick, saveClick}) {
+  function ClientForm ({item, t, discardClick, saveClick}) {
     return (
       <div className='card'>
         <div className='card-content'>
           <div className='media'>
-            <div className='media-left'>
-              <figure className='image is-32x32'>
-                <img src={`/img/${client.image}` || '/img/client-mini.png'} alt='user' />
-              </figure>
-            </div>
+            { item.image &&
+              <div className='media-left'>
+                <figure className='image is-32x32'>
+                  <img src={`/img/${item.image}`} alt='user' />
+                </figure>
+              </div>
+            }
             <div className='media-content'>
               <p className='title is-5'>
-                {client.name}
+                {item.name}
               </p>
-              {client.website &&
+              {item.website &&
                 <p className='subtitle is-6'>
-                  <a href={`http://${client.website}`}>{client.website}</a>
+                  <a href={`http://${item.website}`}>{item.website}</a>
                 </p>
               }
             </div>
@@ -62,7 +64,9 @@ export default connect(
             <Input field='email' icon='envelope' placeholderKey='Email' />
             <Input field='phone' icon='phone' placeholderKey='Telephone' />
             <p className='control'>
-              <Textarea field='notes' placeholderKey='Notes' />
+              <Textarea field='notes'
+                moduleName='clients'
+                placeholderKey='Notes' />
             </p>
           </div>
         </div>
