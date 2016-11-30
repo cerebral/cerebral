@@ -162,8 +162,15 @@ class Model {
       return array.concat(value)
     })
   }
-  merge (path, value) {
-    this.checkValue(value, path)
+  merge (path, ...values) {
+    this.checkValues(values, path)
+
+    // Create object if no present
+    if (!this.get(path)) {
+      this.set(path, {})
+    }
+
+    const value = Object.assign(...values)
 
     // We want this to behave like setting multiple keys
     for (let prop in value) {
