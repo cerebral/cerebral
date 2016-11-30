@@ -56,6 +56,9 @@ class Controller extends EventEmitter {
     this.runTree.on('asyncFunction', () => this.flush())
     this.runTree.on('pathEnd', () => this.flush())
     this.runTree.on('end', () => this.flush())
+    this.runTree.on('error', (error) => {
+      throw error
+    })
 
     if (this.devtools) {
       this.devtools.init(this)
@@ -166,11 +169,7 @@ class Controller extends EventEmitter {
       throwError(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal`)
     }
 
-    this.runTree(name, signal, payload || {}, (error) => {
-      if (error) {
-        throw error
-      }
-    })
+    this.runTree(name, signal, payload || {})
   }
   /*
     Returns a function which binds the name/path of signal,
