@@ -385,7 +385,7 @@ export default [
 - **isExisty** - Checks for truthy value
 - **matchRegexp** - Only in object form: [{matchRegexp: /\s/g}]
 - **isUndefined** - Checks if undefined
-- **isEmpyString** - Checks if empty string
+- **isEmpty** - Checks if empty string
 - **isEmail** - Checks if valid email format
 - **isUrl** - Checks if valid url format
 - **isTrue** - Checks if actual true value
