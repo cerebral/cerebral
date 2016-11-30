@@ -25,18 +25,30 @@ export function isObject (obj) {
   return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 }
 
-export function isSerializable (value) {
+export function isSerializable (value, additionalTypes = []) {
+  const validType = additionalTypes.reduce((currentValid, type) => {
+    if (currentValid || value instanceof type) {
+      return true
+    }
+
+    return currentValid
+  }, false)
+
   if (
+    value !== undefined &&
     (
-      isObject(value) &&
-      Object.prototype.toString.call(value) === '[object Object]' &&
-      value.constructor === Object
-    ) ||
-    typeof value === 'number' ||
-    typeof value === 'string' ||
-    typeof value === 'boolean' ||
-    value === null ||
-    Array.isArray(value)
+      validType ||
+      (
+        isObject(value) &&
+        Object.prototype.toString.call(value) === '[object Object]' &&
+        value.constructor === Object
+      ) ||
+      typeof value === 'number' ||
+      typeof value === 'string' ||
+      typeof value === 'boolean' ||
+      value === null ||
+      Array.isArray(value)
+    )
   ) {
     return true
   }
@@ -107,3 +119,19 @@ export function debounce (func, wait) {
 }
 
 export const noop = () => {}
+
+export const forceSerializable = (value) => {
+  if (value && !isSerializable(value)) {
+    const name = value.constructor.name
+
+    try {
+      Object.defineProperty(value, 'toJSON', {
+        value () {
+          return `[${name}]`
+        }
+      })
+    } catch (e) {}
+  }
+
+  return value
+}

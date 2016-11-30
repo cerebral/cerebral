@@ -257,21 +257,29 @@ describe('Model', () => {
       })
     })
   })
-  describe('Enforce serializable', () => {
+  describe('Serializable', () => {
     it('should throw error if value inserted is not serializable', () => {
       const model = new Model({
         foo: 'bar'
-      }, {enforceSerializable: true})
+      }, {})
       assert.throws(() => {
         model.set(['foo'], new Date())
       })
     })
-    it('should throw error if value inserted is not serializable', () => {
+    it('should NOT throw error if value inserted is serializable', () => {
       const model = new Model({
         foo: 'bar'
-      }, {enforceSerializable: true})
+      }, {})
       assert.doesNotThrow(() => {
         model.set(['foo'], [])
+      })
+    })
+    it('should NOT throw error if passing allowed type in devtools', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, {allowedTypes: [Date]})
+      assert.doesNotThrow(() => {
+        model.set(['foo'], new Date())
       })
     })
   })

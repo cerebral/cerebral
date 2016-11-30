@@ -109,29 +109,27 @@ describe('Controller', () => {
     })
     assert.equal(controller.getModel(), controller.model)
   })
-  it('should throw when passing in unserializable payload property to signal', () => {
+  it('should create JSON stringify friendly value of unserializable payload property to signal', () => {
     const controller = new Controller({
-      devtools: {enforceSerializable: true, init () {}},
+      devtools: {init () {}},
       signals: {
-        foo: []
+        foo: [({input}) => assert.equal(JSON.stringify(input), '{"date":"[Date]"}')]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('foo')({
-        date: new Date()
-      })
+    controller.getSignal('foo')({
+      date: new Date()
     })
   })
-  it('should throw when passing in unserializable payload to signal', () => {
+  it('should ignore when passing in unserializable payload to signal', () => {
     const controller = new Controller({
-      devtools: {enforceSerializable: true, init () {}},
+      devtools: {init () {}},
       signals: {
-        foo: []
+        foo: [
+          ({input}) => assert.deepEqual(input, {})
+        ]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('foo')(new Date())
-    })
+    controller.getSignal('foo')(new Date())
   })
   it('should throw when pointing to a non existing signal', () => {
     const controller = new Controller({})

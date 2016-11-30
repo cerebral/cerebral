@@ -28,7 +28,7 @@ import {set, state, wait, input} from 'cerebral/operators'
 ```
 
 We would like to access the input-object from within our action.
-So lets have a look at such a sample action. You can create on the lint above the instantiation of the controller:
+So lets have a look at such a sample action. You can create on the line above the instantiation of the controller:
 
 ```js
 ...

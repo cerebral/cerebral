@@ -30,7 +30,7 @@ const controller = Controller({
   }
 })
 ```
-We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". A signal is defined using a **chain**, which is basically an **array of actions**. What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. That is why we use **set**, a Cerebral operator. Calling set will create an action for us that will put the value *Updating some state* on the state path *subTitle*. If you are unfamiliar with [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) in JavaScript, you should read about them.
+We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". A signal is defined using an array containing functions. What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. That is why we use **set**, a Cerebral operator. Calling set will create a function for us that will put the value *Updating some state* on the state path *subTitle*. If you are unfamiliar with [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) in JavaScript, you should read about them.
 
 Please take a closer look at *./src/components/App/index.js*:
 
