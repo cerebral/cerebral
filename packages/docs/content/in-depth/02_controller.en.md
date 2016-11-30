@@ -11,7 +11,7 @@ Your application will have one single controller:
 ```js
 import {Controller} from 'cerebral'
 
-const conroller = Controller({})
+const controller = Controller({})
 ```
 
 The controller is where you define how your application is going to work. Everything from the state, to signals, providers and modules.
@@ -19,7 +19,7 @@ The controller is where you define how your application is going to work. Everyt
 ```js
 import {Controller} from 'cerebral'
 
-const conroller = Controller({
+const controller = Controller({
   state: {},
   signals: {},
   modules: {},
@@ -35,7 +35,7 @@ import {Container} from 'cerebral/react'
 import {render} from 'react-dom'
 import App from './components/App'
 
-const conroller = Controller({
+const controller = Controller({
   state: {},
   signals: {},
   modules: {},
