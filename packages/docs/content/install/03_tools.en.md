@@ -3,7 +3,7 @@ title: Tools
 ---
 
 ## Tools
-Cerebra comes with a official and community made tools.
+Cerebral comes with official and community made tools.
 
 #### [cerebral-forms](https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms)
 
