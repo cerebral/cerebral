@@ -9,8 +9,6 @@ export default function validateFieldFactory (pathTemplate) {
     const form = context.state.get(formPath)
     const validationResult = runValidation(field, form)
 
-    context.state.merge(fieldPath, validationResult)
-
     let dependentFields = []
     if (Array.isArray(field.dependsOn)) {
       dependentFields = field.dependsOn
