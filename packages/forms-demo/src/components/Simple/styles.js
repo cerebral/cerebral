@@ -12,7 +12,8 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 5,
     borderRadius: 3,
-    outline: 'none'
+    outline: 'none',
+    marginRight: 10
   },
   disabled: {
     opacity: 0.5

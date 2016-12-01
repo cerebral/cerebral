@@ -11,15 +11,17 @@ export default connect(
     settings: 'app.settings.**'
   },
   {
-    validateEntireForm: 'simple.validateEntireForm'
+    onSubmitted: 'simple.onSubmitted',
+    onReset: 'simple.onReset'
   },
-  function Simple ({form, settings, validateEntireForm}) {
+  function Simple ({form, settings, onSubmitted, onReset}) {
     const {disableSubmitWhenFormIsInValid} = settings
     let enabled = true
     let buttonStyle = css(
       styles.button,
       styles.enabled
     )
+    const resetButtonStyle = buttonStyle
     if (disableSubmitWhenFormIsInValid.value) {
       enabled = isValidForm(form)
       buttonStyle = css(
@@ -40,7 +42,8 @@ export default connect(
           <Input name={'Email'} path={'simple.form.email'} />
         </div>
         <div style={{marginTop: 50}}>
-          <button onClick={(e) => validateEntireForm({formPath: 'simple.form'})} disabled={!enabled} className={buttonStyle}>Submit</button>
+          <button onClick={(e) => onSubmitted({formPath: 'simple.form'})} disabled={!enabled} className={buttonStyle}>Submit</button>
+          <button onClick={(e) => onReset({formPath: 'simple.form'})} className={resetButtonStyle}>Reset</button>
         </div>
       </div>
     )

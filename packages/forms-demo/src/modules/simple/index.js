@@ -1,5 +1,5 @@
-import {set, state, input} from 'cerebral/operators'
-import {form, changeField, validateForm} from 'cerebral-forms'
+import {set, state, input, when} from 'cerebral/operators'
+import {form, changeField, validateForm, resetForm} from 'cerebral-forms'
 
 export default {
   state: {
@@ -17,16 +17,31 @@ export default {
         validationRules: ['isEmail'],
         validationMessages: ['You must enter a valid email'],
         isRequired: false
-      }
+      },
+      showErrors: false
     })
   },
   signals: {
     routed: [
       set(state`app.currentView`, 'Simple')
     ],
-    fieldChanged: changeField,
-    validateEntireForm: [
+    fieldChanged: [
+      when(state`${input`settingsField`}.value`), {
+        true: [
+          set(state`app.settings.showErrors`, true),
+          changeField
+        ],
+        false: [
+          set(state`${input`field`}.value`, input`value`)
+        ]
+      }
+    ],
+    onSubmitted: [
+      set(state`app.settings.showErrors`, true),
       validateForm(input`formPath`)
+    ],
+    onReset: [
+      resetForm(input`formPath`)
     ]
   }
 }
