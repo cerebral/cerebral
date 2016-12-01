@@ -2,7 +2,7 @@ import DependencyStore from './DependencyStore'
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -145,31 +145,30 @@ class Controller extends EventEmitter {
     return this.model.get(ensurePath(path))
   }
   /*
-    Checks if payload is serializable
-  */
-  isSerializablePayload (payload) {
-    if (!isSerializable(payload)) {
-      return false
-    }
-
-    return Object.keys(payload).reduce((isSerializablePayload, key) => {
-      if (!isSerializable(payload[key])) {
-        return false
-      }
-
-      return isSerializablePayload
-    }, true)
-  }
-  /*
     Uses function tree to run the array and optional
     payload passed in. The payload will be checkd
   */
   runSignal (name, signal, payload = {}) {
-    if (this.devtools && this.devtools.enforceSerializable && !this.isSerializablePayload(payload)) {
-      throwError(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal`)
+    if (this.devtools && (!isObject(payload) || !isSerializable(payload))) {
+      console.warn(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`, payload)
+      payload = {}
     }
 
-    this.runTree(name, signal, payload || {})
+    if (this.devtools) {
+      payload = Object.keys(payload).reduce((currentPayload, key) => {
+        if (!isSerializable(payload, this.devtools.allowedTypes)) {
+          console.warn(`You passed an invalid payload to signal "${name}", on key "${key}". Only serializable values like Object, Array, String, Number and Boolean can be passed in. Also these special value types:`, this.devtools.allowedTypes)
+
+          return currentPayload
+        }
+
+        currentPayload[key] = forceSerializable(payload[key])
+
+        return currentPayload
+      }, {})
+    }
+
+    this.runTree(name, signal, payload)
   }
   /*
     Returns a function which binds the name/path of signal,

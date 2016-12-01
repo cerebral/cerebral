@@ -1,14 +1,10 @@
-import {isObject, isSerializable, throwError} from './utils'
+import {isObject, isSerializable, throwError, forceSerializable} from './utils'
 
 class Model {
   constructor (initialState = {}, devtools = null) {
-    if (devtools) {
-      this.preventExternalMutations = devtools.preventExternalMutations
-      this.enforceSerializable = Boolean(devtools.enforceSerializable)
-    } else {
-      this.preventExternalMutations = false
-      this.enforceSerializable = false
-    }
+    this.devtools = devtools
+    this.preventExternalMutations = devtools ? devtools.preventExternalMutations : false
+
     this.state = (
       this.preventExternalMutations
         ? this.freezeObject(initialState)
@@ -133,15 +129,20 @@ class Model {
   /*
     Checks if value is serializable, if turned on
   */
-  checkValue (value, path) {
-    if (this.enforceSerializable && !isSerializable(value)) {
-      throwError(`You are passing a non serializable value on ${path.join('.')}`)
+  verifyValue (value, path) {
+    if (
+      this.devtools &&
+      !isSerializable(value, this.devtools.allowedTypes)
+    ) {
+      throwError(`You are passing a non serializable value into the state tree on path ${path.join('.')}`)
     }
+
+    return forceSerializable(value)
   }
-  checkValues (values, path) {
-    if (this.enforceSerializable) {
+  verifyValues (values, path) {
+    if (this.devtools) {
       values.forEach((value) => {
-        this.checkValue(value, path)
+        this.verifyValue(value, path)
       })
     }
   }
@@ -151,19 +152,19 @@ class Model {
     }, this.state)
   }
   set (path, value) {
-    this.checkValue(value, path)
+    this.verifyValue(value, path)
     this.updateIn(path, () => {
       return value
     })
   }
   push (path, value) {
-    this.checkValue(value, path)
+    this.verifyValue(value, path)
     this.updateIn(path, (array) => {
       return array.concat(value)
     })
   }
   merge (path, ...values) {
-    this.checkValues(values, path)
+    this.verifyValues(values, path)
 
     // Create object if no present
     if (!this.get(path)) {
@@ -192,7 +193,7 @@ class Model {
     })
   }
   unshift (path, value) {
-    this.checkValue(value, path)
+    this.verifyValue(value, path)
     this.updateIn(path, (array) => {
       array.unshift(value)
 
@@ -200,7 +201,7 @@ class Model {
     })
   }
   splice (path, ...args) {
-    this.checkValues(args, path)
+    this.verifyValues(args, path)
     this.updateIn(path, (array) => {
       array.splice(...args)
 
@@ -218,7 +219,7 @@ class Model {
     })
   }
   concat (path, value) {
-    this.checkValue(value, path)
+    this.verifyValue(value, path)
     this.updateIn(path, (array) => {
       return array.concat(value)
     })

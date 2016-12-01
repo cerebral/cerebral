@@ -1,4 +1,4 @@
-/* global CustomEvent WebSocket */
+/* global CustomEvent WebSocket File FileList Blob */
 import {debounce} from '../utils'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
@@ -13,7 +13,6 @@ class Devtools {
   constructor (options = {
     storeMutations: true,
     preventExternalMutations: true,
-    enforceSerializable: true,
     verifyStrictRender: true,
     preventInputPropReplacement: false,
     bigComponentsWarning: {
@@ -21,14 +20,14 @@ class Devtools {
       signals: 5
     },
     remoteDebugger: null,
-    multipleApps: true
+    multipleApps: true,
+    allowedTypes: []
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
     this.debuggerComponentDetailsId = 1
     this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
     this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
-    this.enforceSerializable = typeof options.enforceSerializable === 'undefined' ? true : options.enforceSerializable
     this.verifyStrictRender = typeof options.verifyStrictRender === 'undefined' ? true : options.verifyStrictRender
     this.preventInputPropReplacement = options.preventInputPropReplacement || false
     this.bigComponentsWarning = options.bigComponentsWarning || {state: 5, signals: 5}
@@ -43,6 +42,7 @@ class Devtools {
     this.originalRunTreeFunction = null
     this.ws = null
     this.isResettingDebugger = false
+    this.allowedTypes = [File, FileList, Blob].concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)
     this.sendComponentsMap = debounce(this.sendComponentsMap, 50)

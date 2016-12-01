@@ -44,8 +44,6 @@ const controller = Controller({
     storeMutations: true,
     // Warnings on mutating outside "state" API
     preventExternalMutations: true,
-    // Warnings when passing in non-serializable data to signals and state tree
-    enforceSerializable: true,
     // Warnings when strict render path usage is wrong
     verifyStrictRender: true,
     // Throw error when overwriting existing input property
@@ -54,7 +52,11 @@ const controller = Controller({
     // or signals above the set number
     bigComponentsWarning: {state: 5, signals: 5},
     // Will reset debugger to currently focused application
-    multipleApps: true
+    multipleApps: true,
+    // In addition to basic JavaScript types Object, Array, String, Number
+    // and Boolean, File, FileList and Blob is allowed to be stored in state
+    // tree. You can add additional types if you know what you are doing :)
+    allowedTypes: []
   })
 })
 ```

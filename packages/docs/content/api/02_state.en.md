@@ -3,7 +3,7 @@ title: State
 ---
 
 ## State
-State can be defined at the top level in the controller and/or in each module. State is defined as plain JavaScript value types. Arrays, objects, strings, numbers and booleans. This means that the state is serializable. There are no classes or other abstractions around state. This makes it easier to reason about how state is translated into user interface, it can be stored on server/local storage and the debugger can now visualize all the state of the application.
+State can be defined at the top level in the controller and/or in each module. State is defined as plain JavaScript value types. Objects, arrays, strings, numbers and booleans. This means that the state is serializable. There are no classes or other abstractions around state. This is an important choice in Cerebral that makes it possible to track changes to update the UI, store state on server/local storage and passing state information to the debugger.
 
 ```js
 import {Controller} from 'cerebral'
@@ -19,15 +19,26 @@ const controller = Controller({
   }
 })
 ```
+### Special values support
+When building an application you often need to keep things like files and blobs in your state for further processing. Cerebral supports these kinds of values because they will never change, or changing them can be used with existing state API. This is the list of supported types:
+
+- **File**
+- **FilesList**
+- **Blob**
+
+If you want to force Cerebral to support other types as well, you can do that with a devtools option. This is perfectly okay, but remember all state changes has to be done though the state API.
+
 ### Get state
 The only way to get state in your application is by connecting it to a component or grabbing it in an action.
 
 ```js
 function someAction({state}) {
   // Get all state
-  state.get()
+  const allState = state.get()
   // Get by path
-  state.get('some.path')
+  const stateAtSomePath = state.get('some.path')
+  // Get computed state by passing in a computed
+  const computedState = state.compute(someComputed)
 }
 ```
 
