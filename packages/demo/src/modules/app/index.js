@@ -27,6 +27,9 @@ export default {
       },
       set(state`app.$loading`, false)
     ],
+    dismissNotificationClicked: [
+      unset(state`app.$error`)
+    ],
     routed: [
       set(state`app.$selectedView`, 'Today')
     ],

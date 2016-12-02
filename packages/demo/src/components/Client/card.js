@@ -2,11 +2,12 @@ import React from 'react'
 import {connect} from 'cerebral/react'
 
 import Email from '../Email'
+import Header from './Header'
 import Phone from '../Phone'
 
 export default connect(
   ({itemKey}) => ({
-    item: `clients.all.${itemKey}`
+    item: `clients.all.${itemKey}.*`
   }),
   {
     penClick: 'clients.penClicked',
@@ -16,23 +17,7 @@ export default connect(
     return (
       <div className='card'>
         <div className='card-content'>
-          <div className='media'>
-            { item.image &&
-              <div className='media-left'>
-                <figure className='image is-32x32'>
-                  <img src={`/img/${item.image}`} alt='user' />
-                </figure>
-              </div>
-            }
-            <div className='media-content'>
-              <p className='title is-5'>{item.name}</p>
-              {item.website &&
-                <p className='subtitle is-6'>
-                  <a href={`http://${item.website}`}>{item.website}</a>
-                </p>
-              }
-            </div>
-          </div>
+          <Header item={item} />
 
           <nav className='level'>
             <div className='level-left'>

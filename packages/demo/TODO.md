@@ -5,6 +5,7 @@
 * refuse to delete client with projects or move projects to no-client.
 * Create (dark) footer with links to cerebral stuff and language selector.
 * Tasks component to search for tasks.., not sure what should go there.
+* CSS style file upload <input> (also when $imageFile is in draft to show file.name)
 
 * @julio ? implement sendEmailVerification
 and applyActionCode

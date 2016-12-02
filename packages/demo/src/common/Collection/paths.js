@@ -18,6 +18,10 @@ export default function paths (moduleName) {
           set(
             input`remoteItemPath`,
             string`${input`remoteCollectionPath`}.${input`key`}`
+          ),
+          set(
+            input`remoteItemImagePath`,
+            string`${input`remoteItemPath`}.image`
           )
         ],
         false: []

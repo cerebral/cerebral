@@ -3,6 +3,7 @@ import {connect} from 'cerebral/react'
 import translations from '../../common/computed/translations'
 
 import Input from './Input'
+import Header from './Header'
 import Textarea from '../Textarea'
 
 export default connect(
@@ -18,25 +19,8 @@ export default connect(
     return (
       <div className='card'>
         <div className='card-content'>
-          <div className='media'>
-            { item.image &&
-              <div className='media-left'>
-                <figure className='image is-32x32'>
-                  <img src={`/img/${item.image}`} alt='user' />
-                </figure>
-              </div>
-            }
-            <div className='media-content'>
-              <p className='title is-5'>
-                {item.name}
-              </p>
-              {item.website &&
-                <p className='subtitle is-6'>
-                  <a href={`http://${item.website}`}>{item.website}</a>
-                </p>
-              }
-            </div>
-          </div>
+          <Header item={item} />
+
           <nav className='level'>
             <div className='level-left' />
             <div className='level-right'>
@@ -59,7 +43,7 @@ export default connect(
 
           <div className='content'>
             <Input field='name' autoFocus placeholderKey='CompanyName' />
-            <Input field='image' icon='image' placeholderKey='ImageUrl' />
+            <Input field='image' type='file' icon='image' placeholderKey='ImageUrl' />
             <Input field='website' icon='globe' placeholderKey='WebsiteUrl' />
             <Input field='email' icon='envelope' placeholderKey='Email' />
             <Input field='phone' icon='phone' placeholderKey='Telephone' />

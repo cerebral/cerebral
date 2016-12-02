@@ -5,6 +5,7 @@ import translations from '../../common/computed/translations'
 
 import Login from '../Login'
 import Menu from '../Menu'
+import Notification from '../Notification'
 import Timer from '../Timer'
 import Workspace from '../Workspace'
 import Header from '../Header'
@@ -35,6 +36,7 @@ export default connect(
       <div className='App'>
         <Header />
         <section className='section'>
+          <Notification />
           <div className='container'>
             <div className='columns'>
               <Menu />

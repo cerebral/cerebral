@@ -12,7 +12,7 @@ export default connect(
     escPressed: 'clients.escPressed',
     valueChanged: 'clients.formValueChanged'
   },
-  function Input ({autoFocus, field, icon, placeholderKey, value, warning, enterPressed, escPressed, valueChanged, t}) {
+  function Input ({autoFocus, field, icon, placeholderKey, type, value, warning, enterPressed, escPressed, valueChanged, t}) {
     const onKeyDown = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -22,17 +22,29 @@ export default connect(
     }
 
     const onChange = e => {
-      valueChanged({key: field, value: e.target.value})
+      let value
+      if (type === 'file') {
+        value = e.target.files[0]
+        // e.stopPropagation()
+        // e.preventDefault()
+        // $imageFile
+        valueChanged({key: `$${field}File`, value})
+      } else {
+        value = e.target.value
+        valueChanged({key: field, value})
+      }
     }
+
+    // FIXME: customize input.file and show $imageFile file.name if present.
 
     return (
       <p className={`control${icon ? ' has-icon' : ''}`}>
-        <input className={`input${warning ? ' is-danger' : ''}`} type='text'
+        <input className={`input${warning ? ' is-danger' : ''}`} type={type || 'text'}
           autoFocus={autoFocus}
           placeholder={t[placeholderKey]}
           onKeyDown={onKeyDown}
           onChange={onChange}
-          value={value || ''}
+          value={type === 'file' ? '' : (value || '')}
           name={field}
           />
         {icon && <i className={`fa fa-${icon}`} />}

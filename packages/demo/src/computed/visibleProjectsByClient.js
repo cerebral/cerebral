@@ -20,7 +20,8 @@ export default Computed(
         // Not saved yet
         return
       }
-      const clientKey = project.clientKey || 'no-client'
+      const client = clients[project.clientKey] || clients['no-client']
+      const clientKey = client.key
       let list = clientList[clientKey]
       if (!list) {
         list = []

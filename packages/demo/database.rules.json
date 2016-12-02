@@ -1,0 +1,19 @@
+{
+  "rules": {
+    "$uid": {
+      "clients": {
+        ".indexOn": "updated_at"
+      },
+      "projects": {
+        ".indexOn": "updated_at"
+      },
+      "tasks": {
+        ".indexOn": "updated_at"
+      },
+      ".read": "auth != null && $uid == auth.uid",
+      ".write": "auth != null && $uid == auth.uid"
+    },
+    ".read": false,
+    ".write": false
+  }
+}

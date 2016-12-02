@@ -34,6 +34,7 @@ export default {
     ],
     saveClicked: collection.update,
     trashClicked: collection.remove,
-    updated: collection.updated
+    updated: collection.updated,
+    uploadProgress: collection.uploadProgress
   }
 }
