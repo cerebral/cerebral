@@ -13,6 +13,8 @@ import value from './value'
 import push from './push'
 import set from './set'
 import update from './update'
+import put from './put'
+import deleteOp from './delete'
 import remove from './remove'
 import transaction from './transaction'
 import createUserWithEmailAndPassword from './createUserWithEmailAndPassword'
@@ -37,6 +39,8 @@ export {default as value} from './factories/value'
 export {default as set} from './factories/set'
 export {default as update} from './factories/update'
 export {default as push} from './factories/push'
+export {default as put} from './factories/put'
+export {default as delete} from './factories/delete'
 export {default as remove} from './factories/remove'
 export {default as transaction} from './factories/transaction'
 
@@ -59,6 +63,8 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         onValue: createOnValue(context.controller),
         value,
         push,
+        put,
+        delete: deleteOp,
         update,
         set,
         remove,

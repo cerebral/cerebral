@@ -87,7 +87,7 @@ parameter to a factory or action. For example as the signal to call on upload
 progress.
 
 ```js
-firebase.upload('remote.path', state`$draft.imageFile`,
+firebase.put('remote.path', state`$draft.imageFile`,
   {progress: signal`clients.$draft.imageProgress`}
 ), {
   success: [],

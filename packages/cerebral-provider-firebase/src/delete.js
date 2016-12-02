@@ -1,11 +1,11 @@
 import {
-  createRef
+  createStorageRef
 } from './helpers'
 
-export default function remove (path) {
-  const ref = createRef(path)
+export default function deleteOp (path, filename) {
+  const ref = createStorageRef(path).child(filename)
   return new Promise((resolve, reject) => {
-    ref.remove().then(
+    ref.delete().then(
       () => resolve({}),
       (error) => reject({error: error.message})
     )

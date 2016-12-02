@@ -14,6 +14,14 @@ export function createRef (path, options = {}) {
   }, firebase.database().ref(path))
 }
 
+export function createStorageRef (path) {
+  if (path.indexOf('/') >= 0) {
+    throw new Error('cerebral-module-firebase: The path "' + path + '" is not valid. Use dot notation for consistency with Cerebral')
+  }
+  path = path.replace(/\./g, '/')
+  return firebase.storage().ref(path)
+}
+
 export function listenTo (ref, path, event, signal, cb) {
   refs[path] = refs[path] || {}
   refs[path][event] = refs[path][event] || {}

@@ -575,3 +575,55 @@ export default [
   }
 ]
 ```
+
+### File Storage
+
+#### put
+
+Upload a new file at the given location. Please note that the file is **not** stored inside the realtime database but into Google Cloud Storage (please consult filrebase documentation). This means that you need to take care of storage security as well.
+
+The options expect a progress field that can be either a signal (that will be called with `progress`, `totalBytes` and `bytesTransferred`) or a state path to directly set `progress` value.
+
+Note that `put` expects a folder as first argument and will use the name of the provided file. If you want to control the filename, add this in the options. In this case, make sure to respect file type and extension...
+
+On success, the input contains an `url` and the `filename`.
+
+```js
+import {input, signal, state, string} from 'cerebral/operators'
+import {put} from 'cerebral-provider-firebase'
+
+// we expect input.file to contain a file provided by
+// a user in an <input type='file' />
+export default [
+  put(string`posts.all.${input`postId`}`, input`file`, {
+    progress: signal`gallery.progress`
+  }), {
+    success: [
+      set(state`posts.all.${input`postId`}.imageUrl`, input`url`),
+      set(state`posts.all.${input`postId`}.imageName`, input`filename`),
+    ],
+    error: []
+  }
+]
+```
+
+#### delete
+
+Use `delete` to remove an uploaded file. Specify the containing folder and filename.
+
+```js
+import {input, state} from 'cerebral/operators'
+import {put} from 'cerebral-provider-firebase'
+
+// we expect input.file to contain a file provided by
+// a user in an <input type='file' />
+export default [
+  firebase.delete(
+    string`posts.all.${input`postId`}`,
+    state`posts.all.${input`postId`}.imageName`
+  ), {
+    success: [],
+    error: []
+  }
+]
+```

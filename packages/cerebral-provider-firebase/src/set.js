@@ -4,7 +4,10 @@ import {
 
 export default function set (path, payload) {
   const ref = createRef(path)
-  return ref.set(payload)
-    .then(() => ({}))
-    .catch((error) => ({error: error.message}))
+  return new Promise((resolve, reject) => {
+    ref.set(payload).then(
+      () => resolve({}),
+      (error) => reject({error: error.message})
+    )
+  })
 }
