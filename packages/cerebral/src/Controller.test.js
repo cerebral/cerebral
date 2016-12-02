@@ -154,7 +154,11 @@ describe('Controller', () => {
         ]
       }
     })
-    controller.on('flush', () => flushCount++)
+    const originFlush = controller.flush
+    controller.flush = function (...args) {
+      flushCount++
+      originFlush.apply(this, args)
+    }
     controller.runTree.once('end', () => {
       assert.equal(flushCount, 3)
       done()
@@ -171,6 +175,20 @@ describe('Controller', () => {
         }
       }
     })
-    assert.deepEqual(controller.model.flush(), {})
+    assert.deepEqual(controller.model.changedPaths, [])
+  })
+  it('should flush async mutations', (done) => {
+    const controller = new Controller({
+      signals: {
+        test: [
+          ({state}) => setTimeout(() => state.set('foo', 'bar'))
+        ]
+      }
+    })
+    controller.on('flush', (changes) => {
+      assert.deepEqual(changes, {foo: true})
+      done()
+    })
+    controller.getSignal('test')()
   })
 })
