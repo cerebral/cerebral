@@ -1,5 +1,6 @@
 /* global CustomEvent WebSocket */
 import WebSocket from 'ws'
+
 const VERSION = 'v1'
 
 class Devtools {
