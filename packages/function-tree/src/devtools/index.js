@@ -1,4 +1,5 @@
 /* global CustomEvent WebSocket */
+import WebSocket from 'ws'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
 const VERSION = 'v1'
 
