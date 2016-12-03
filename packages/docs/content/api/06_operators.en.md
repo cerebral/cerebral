@@ -80,6 +80,21 @@ You might want to use it for a notification factory or similar:
 showMessage(string`Hi there ${state`user.name`}, whatup?`)
 ```
 
+#### signal
+
+The signal operator tag is used when you want to pass another signal as
+parameter to a factory or action. For example as the signal to call on upload
+progress.
+
+```js
+firebase.upload('remote.path', state`$draft.imageFile`,
+  {progress: signal`clients.$draft.imageProgress`}
+), {
+  success: [],
+  error: []
+}
+```
+
 ### State operators
 
 The methods for changing state within actions is also available as operators.
