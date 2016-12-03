@@ -1,6 +1,5 @@
 /* global CustomEvent WebSocket */
 import WebSocket from 'ws'
-const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
 const VERSION = 'v1'
 
 class Devtools {
@@ -177,41 +176,22 @@ class Devtools {
   */
   createExecutionMessage (debuggingData, context, functionDetails, payload) {
     const type = 'execution'
-    let mutationString = ''
-
-    if (this.storeMutations && debuggingData && debuggingData.type === 'mutation') {
-      mutationString = JSON.stringify(debuggingData)
-    }
-
     const data = {
       execution: {
         executionId: context.execution.id,
         functionIndex: functionDetails.functionIndex,
         payload: payload,
         datetime: context.execution.datetime,
-        data: mutationString ? PLACEHOLDER_DEBUGGING_DATA : debuggingData
+        data: debuggingData
       }
-    }
-
-    if (mutationString) {
-      this.mutations.push({
-        executionId: context.execution.id,
-        data: mutationString
-      })
     }
 
     return JSON.stringify({
       type: type,
       version: this.VERSION,
       data: data
-    }).replace(`"${PLACEHOLDER_DEBUGGING_DATA}"`, mutationString)
+    })
   }
-  /*
-    Sends execution data to the debugger. Whenever a signal starts
-    it will send a message to the debugger, but any functions in the
-    function tree might also use this to send debugging data. Like when
-    mutations are done or any wrapped methods run.
-  */
   sendExecutionData (debuggingData, context, functionDetails, payload) {
     const message = this.createExecutionMessage(debuggingData, context, functionDetails, payload)
 
@@ -220,6 +200,23 @@ class Devtools {
     } else {
       this.backlog.push(message)
     }
+  }
+  Provider (options = {colors: {}}) {
+    const sendExecutionData = this.sendExecutionData.bind(this)
+    function provider (context, functionDetails, payload) {
+      context.debugger = {
+        send (data) {
+          sendExecutionData(data, context, functionDetails, payload)
+        },
+        getColor (key) {
+          return options.colors[key] || '#333'
+        }
+      }
+
+      return context
+    }
+
+    return provider
   }
 }
 
