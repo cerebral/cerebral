@@ -82,6 +82,10 @@ class Controller extends EventEmitter {
   flush (force) {
     const changes = this.model.flush()
 
+    if (!force && !Object.keys(changes).length) {
+      return
+    }
+
     this.updateComputeds(changes, force)
     this.updateComponents(changes, force)
     this.emit('flush', changes, Boolean(force))

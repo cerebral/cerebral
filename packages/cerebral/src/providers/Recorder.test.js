@@ -39,7 +39,7 @@ describe('Recorder', () => {
           assert.equal(recording.initialState[0].value, JSON.stringify({
             foo: 'bar'
           }))
-          assert.equal(recording.events.length, 4)
+          assert.equal(recording.events.length, 3)
         }]
       },
       providers: [RecorderProvider({
@@ -170,7 +170,6 @@ describe('Recorder', () => {
           initialState: ['foo']
         })],
         update: [({state}) => state.set('foo', 'bar2')],
-        update2: [({state}) => state.set('foo', 'bar3')],
         stop: [({recorder}) => recorder.stop()],
         play: [({recorder}) => recorder.play({
           allowedSignals: ['stop']
@@ -183,24 +182,20 @@ describe('Recorder', () => {
     controller.getSignal('record')()
     controller.getSignal('update')()
     controller.getSignal('stop')()
-    controller.getSignal('play')()
-    controller.once('flush', (changes) => {
-      assert.deepEqual(changes, {})
-    })
-    timeout.tick()
-    timeout.tick()
     controller.once('flush', (changes) => {
       assert.deepEqual(changes, {
         foo: true
       })
     })
+    controller.getSignal('play')()
     timeout.tick()
     controller.once('flush', (changes) => {
-      assert.deepEqual(changes, {})
+      assert.deepEqual(changes, {
+        foo: true
+      })
       controller.getSignal('stop')()
       done()
     })
-    timeout.tick()
   })
   it('should be able to pause and continue playback', () => {
     const timeout = timeoutMock()

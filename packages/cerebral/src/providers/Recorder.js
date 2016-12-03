@@ -77,7 +77,7 @@ export default function RecorderProvider (options = {}) {
         if (event.type === 'mutation') {
           mutate(event)
         } else if (event.type === 'flush') {
-          controller.flush(currentEventIndex === 0)
+          controller.flush()
         }
 
         lastEventTimestamp = event.timestamp
@@ -140,6 +140,7 @@ export default function RecorderProvider (options = {}) {
             originalRunSignal.apply(controller, args)
           }
         }
+        controller.flush(true)
         runNextEvent()
       },
       record (options = {}) {

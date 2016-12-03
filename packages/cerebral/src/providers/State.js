@@ -18,6 +18,7 @@ function StateProviderFactory () {
 
   function createProvider (context) {
     const model = context.controller.model
+    let asyncTimeout = null
 
     return methods.reduce((currentStateContext, methodKey) => {
       if (methodKey === 'compute') {
@@ -25,6 +26,11 @@ function StateProviderFactory () {
       } else if (typeof model[methodKey] === 'function') {
         currentStateContext[methodKey] = (...args) => {
           const path = ensurePath(args.shift())
+
+          if (methodKey !== 'get') {
+            clearTimeout(asyncTimeout)
+            asyncTimeout = setTimeout(() => context.controller.flush())
+          }
 
           return model[methodKey].apply(model, [path].concat(args))
         }
