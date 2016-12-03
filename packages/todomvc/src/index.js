@@ -1,16 +1,16 @@
-const FunctionTree = require('function-tree').default
-const Devtools = require('function-tree/lib/devtools').default
+import React from 'react'
+import {render} from 'react-dom'
+import controller from './controller'
+import {Container} from 'cerebral/react'
 
-const someTree = FunctionTree([])
-const devtools = Devtools({
-  remoteDebugger: 'localhost:8787'
-})
-devtools.watchExecution(someTree)
+import 'todomvc-common/base.css'
+import 'todomvc-app-css/index.css'
+import './styles.css'
 
-const test = someTree('somename', [
-  function SomeAction({input}) {
-    console.log(input);
-  }
-], {
-  foo: 'bar2'
-})
+import App from './components/App'
+
+render((
+  <Container controller={controller} >
+    <App />
+  </Container>
+), document.querySelector('#root'))

@@ -287,7 +287,7 @@ class Value extends React.Component {
           </span>
           {hasNext ? ',' : null}
         </div>
-        )
+      )
     } else {
       return (
         <div className={isExactHighlightPath ? 'inspector-highlight' : null}>

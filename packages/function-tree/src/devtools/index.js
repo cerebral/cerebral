@@ -1,6 +1,5 @@
-/* global CustomEvent WebSocket */
+/* global CustomEvent */
 import WebSocket from 'ws'
-
 const VERSION = 'v1'
 
 class Devtools {
@@ -9,7 +8,6 @@ class Devtools {
   }) {
     this.VERSION = VERSION
     this.remoteDebugger = options.remoteDebugger || null
-    this.trees = options.trees || []
     this.backlog = []
     this.latestExecutionId = null
     this.isConnected = false
@@ -69,7 +67,7 @@ class Devtools {
         !Array.isArray(value)
       )
 
-      if (isObject && refs.indexOf(value) > -1)  {
+      if (isObject && refs.indexOf(value) > -1) {
         return '[CIRCULAR]'
       } else if (isObject) {
         refs.push(value)
