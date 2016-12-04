@@ -5,8 +5,8 @@ import styles from './styles'
 
 export default connect((props) => (
   {
-    'field': `${props.path}.**`,
-    'settings': 'app.settings.**'
+    field: `${props.path}.**`,
+    settings: 'app.settings.**'
   }),
   {
     fieldChanged: 'simple.fieldChanged'
@@ -15,22 +15,30 @@ export default connect((props) => (
     function onChange (e) {
       fieldChanged({
         field: path,
-        value: e.target.value
+        value: e.target.value,
+        settingsField: 'app.settings.validateOnChange'
       })
     }
-
+    function onBlur (e) {
+      fieldChanged({
+        field: path,
+        value: e.target.value,
+        settingsField: 'app.settings.validateInputOnBlur'
+      })
+    }
     function renderError () {
       const {errorMessage} = field
+      const {showErrors} = settings
       return (
         <div style={{color: '#d64242', fontSize: 11}}>
-          {errorMessage}
+          {showErrors && errorMessage}
         </div>
       )
     }
     return (
       <div style={{marginTop: 10, fontSize: 14}}>
         {name} {field.isRequired ? '*' : ''}<br />
-        <input onChange={(e) => onChange(e)} type={'text'} className={css(styles.input)} />
+        <input onChange={(e) => onChange(e)} onBlur={(e) => onBlur(e)} value={field.value} type={'text'} className={css(styles.input)} />
         {renderError()}
       </div>
     )

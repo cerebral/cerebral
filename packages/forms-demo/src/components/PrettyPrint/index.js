@@ -7,9 +7,13 @@ import styles from './styles'
 
 export default connect((props) => (
   {
-    'form': `${props.currentView}.form.**`
+    form: `${props.currentView}.form.**`,
+    showPanel: 'app.settings.showErrors'
   }),
-  function PrettyPrint ({form}) {
+  function PrettyPrint ({form, showPanel}) {
+    if (!showPanel) {
+      return null
+    }
     const isValid = isValidForm(form)
     let invalidFormFields = getInvalidFormFields(form)
     let result = Object.keys(invalidFormFields).reduce((acc, field) => {

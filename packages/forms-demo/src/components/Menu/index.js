@@ -27,7 +27,10 @@ export default connect(
         </div>
         <div className={css(styles.settingsContainer)}>
           {Object.keys(settings).map((settingKey, index) => {
-            return <SettingsCheckbox key={index} path={`app.settings.${settingKey}`} />
+            if (settings[settingKey] === Object(settings[settingKey])) {
+              return <SettingsCheckbox key={index} path={`app.settings.${settingKey}`} />
+            }
+            return null
           })}
         </div>
       </div>
