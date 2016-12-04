@@ -9,8 +9,8 @@ module.exports = {
   root: resolve('..'),
   src: resolve('../src'),
   dist: resolve('../dist'),
-  parts: resolve('../parts/'),
-  partsIndex: resolve('../parts/index.html'),
+  parts: resolve('../DO_NOT_TOUCH/'),
+  partsIndex: resolve('../DO_NOT_TOUCH/index.html'),
   public: resolve('../public/'),
   publicIndex: resolve('../public/index.html'),
   build: resolve('../build/')
