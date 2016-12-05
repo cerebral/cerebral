@@ -18,6 +18,7 @@ export default (View) => {
         this.Component = Component
         this.cachedSignals = null
         this.depsMap = this.getDepsMap()
+        this.hasWarnedBigComponent = false
       }
       componentWillMount () {
         if (!this.context.cerebral.controller) {
@@ -88,9 +89,11 @@ export default (View) => {
         if (
           this.context.cerebral.controller.devtools &&
           this.context.cerebral.controller.devtools.bigComponentsWarning &&
+          !this.hasWarnedBigComponent &&
           Object.keys(statePaths || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
         ) {
-          console.warn(`Component named ${Component.displayName || Component.name} has a lot of state dependencies, consider refactoring. Adjust this option in devtools`)
+          console.warn(`Component named ${Component.displayName || Component.name} has a lot of state dependencies, consider refactoring or adjust this option in devtools`)
+          this.hasWarnedBigComponent = true
         }
 
         if (this.signals) {
@@ -99,9 +102,11 @@ export default (View) => {
           if (
             this.context.cerebral.controller.devtools &&
             this.context.cerebral.controller.devtools.bigComponentsWarning &&
+            !this.hasWarnedBigComponent &&
             Object.keys(extractedSignals).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.signals
           ) {
-            console.warn(`Component named ${Component.displayName || Component.name} has a lot of signals, consider refactoring. Adjust this option in devtools`)
+            console.warn(`Component named ${Component.displayName || Component.name} has a lot of signals, consider refactoring or adjust this option in devtools`)
+            this.hasWarnedBigComponent = true
           }
           propsToPass = Object.keys(extractedSignals).reduce((currentProps, key) => {
             currentProps[key] = controller.getSignal(extractedSignals[key])
