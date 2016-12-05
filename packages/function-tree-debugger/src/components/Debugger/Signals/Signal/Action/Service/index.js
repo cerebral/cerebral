@@ -4,8 +4,9 @@ import React from 'react'
 import Inspector from '../../../../Inspector'
 
 function Service ({service}) {
+  console.log(service);
   const serviceNameStyle = {
-    color: '#28a0aa'
+    color: service.color || '#28a0aa'
   }
 
   return (

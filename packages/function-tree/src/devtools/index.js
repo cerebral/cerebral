@@ -58,9 +58,25 @@ class Devtools {
       window.dispatchEvent(event)
     }
   }
-  /*
-    When websocket close, reinit with chrome extension
-  */
+  safeStringify (object) {
+    const refs = []
+
+    return JSON.stringify(object, (key, value) => {
+      const isObject = (
+        typeof value === 'object' &&
+        value !== null &&
+        !Array.isArray(value)
+      )
+
+      if (isObject && refs.indexOf(value) > -1)  {
+        return '[CIRCULAR]'
+      } else if (isObject) {
+        refs.push(value)
+      }
+
+      return value
+    })
+  }
   reInit () {
     this.remoteDebugger = null
     this.addListeners()
@@ -79,7 +95,6 @@ class Devtools {
     }
   }
   watchExecution (tree) {
-    console.log(tree);
     tree.on('start', (execution) => {
       const message = JSON.stringify({
         type: 'executionStart',
@@ -135,7 +150,7 @@ class Devtools {
       }
     })
     tree.on('functionStart', (execution, funcDetails, payload) => {
-      const message = JSON.stringify({
+      const message = this.safeStringify({
         type: 'execution',
         data: {
           execution: {
@@ -186,7 +201,7 @@ class Devtools {
       }
     }
 
-    return JSON.stringify({
+    return this.safeStringify({
       type: type,
       version: this.VERSION,
       data: data

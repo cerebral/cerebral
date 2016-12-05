@@ -2,7 +2,6 @@ import './styles.css'
 import React from 'react'
 
 import Inspector from '../../../Inspector'
-import Mutation from './Mutation'
 import Service from './Service'
 
 function Action ({action, execution, children, onMutationClick, onActionClick}) {
@@ -58,9 +57,6 @@ function Action ({action, execution, children, onMutationClick, onActionClick}) 
             <i className='icon icon-down' />
             <div className='action-inputLabel'>Input:</div>
             <div className='action-inputValue'><Inspector value={execution.payload} /></div>
-          </div>
-          <div className='action-mutations'>
-            {execution.data.filter(data => data.type === 'mutation').map((mutation, index) => <Mutation mutation={mutation} key={index} onMutationClick={onMutationClick} />)}
           </div>
           <div className='action-services'>
             {execution.data.filter(data => data.type !== 'mutation').map((service, index) => <Service service={service} key={index} />)}
