@@ -398,6 +398,38 @@ describe('React', () => {
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
+    it('should be able to adjust props with function', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        },
+        signals: {
+          foo: []
+        }
+      })
+      const TestComponent = connect({
+        foo: 'foo'
+      }, {
+        fooSignal: 'foo'
+      }, (ownProps, stateProps, signalProps) => {
+        assert.deepEqual(ownProps, {mip: 'mop'})
+        assert.deepEqual(stateProps, {foo: 'bar'})
+        assert.equal(typeof signalProps.fooSignal, 'function')
+
+        return stateProps
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent mip='mop' />
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
     it('should update on props change', () => {
       const controller = Controller({})
       class TestComponentClass2 extends React.Component {

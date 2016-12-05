@@ -1,5 +1,5 @@
 import {Computed} from './../Computed'
-import {cleanPath, propsDiffer} from './../utils'
+import {cleanPath, propsDiffer, throwError} from './../utils'
 
 export default (View) => {
   return function HOC (paths, signals, injectedProps, Component) {
@@ -80,11 +80,18 @@ export default (View) => {
         const model = controller.model
         const props = this.props || {}
         const statePaths = CerebralComponent.getStatePaths(this.props)
+        let stateProps = {}
+        let signalProps = {}
+        let injectedProps = this.injectedProps || {}
 
-        let propsToPass = Object.assign({}, props, Object.keys(statePaths || {}).reduce((currentProps, key) => {
+        stateProps = Object.keys(statePaths || {}).reduce((currentProps, key) => {
+          if (!statePaths[key]) {
+            throwError(`There is no path or computed assigned to prop ${key}`)
+          }
           currentProps[key] = statePaths[key] instanceof Computed ? statePaths[key].getValue(model) : controller.getState(cleanPath(statePaths[key]))
+
           return currentProps
-        }, {}))
+        }, {})
 
         if (
           this.context.cerebral.controller.devtools &&
@@ -108,20 +115,18 @@ export default (View) => {
             console.warn(`Component named ${Component.displayName || Component.name} has a lot of signals, consider refactoring or adjust this option in devtools`)
             this.hasWarnedBigComponent = true
           }
-          propsToPass = Object.keys(extractedSignals).reduce((currentProps, key) => {
+          signalProps = Object.keys(extractedSignals).reduce((currentProps, key) => {
             currentProps[key] = controller.getSignal(extractedSignals[key])
 
             return currentProps
-          }, propsToPass)
+          }, {})
         }
 
-        if (this.injectedProps) {
-          propsToPass = Object.keys(this.injectedProps).reduce((currentProps, key) => {
-            currentProps[key] = this.injectedProps[key]
-
-            return currentProps
-          }, propsToPass)
+        if (injectedProps && typeof injectedProps === 'function') {
+          return injectedProps(props, stateProps, signalProps)
         }
+
+        const propsToPass = Object.assign({}, props, stateProps, signalProps, injectedProps)
 
         if (this.context.cerebral.controller.options.signalsProp) {
           propsToPass.signals = this.cachedSignals = this.cachedSignals || this.extractModuleSignals(this.context.cerebral.controller.module, '')
