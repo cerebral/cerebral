@@ -46,7 +46,7 @@ export default function update (moduleName) {
                 set(input`value`, state`${input`itemPath`}`),
                 set(input`value.image`, input`url`),
                 when(
-                  input`value.imageName`, input`fileName`,
+                  input`value.imageName`, input`filename`,
                   (oldName, newName) => oldName && newName !== oldName
                 ), {
                   true: [
@@ -63,7 +63,7 @@ export default function update (moduleName) {
                   ],
                   false: []
                 },
-                set(input`value.imageName`, input`fileName`),
+                set(input`value.imageName`, input`filename`),
                 unsetTmp,
                 /*
                 unset(input`value.$imageProgress`),
