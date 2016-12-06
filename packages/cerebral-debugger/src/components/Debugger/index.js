@@ -35,7 +35,7 @@ export default connect({
           mutationsError
           ? <div className='debugger-mutationsError'>
             <h1>Ops!</h1>
-            <h4>Signal "{mutationsError.signalName}" causes an error doing <strong>{mutationsError.mutation.name}</strong>("{mutationsError.mutation.path.join('.')}", {JSON.stringify(mutationsError.mutation.args).replace(/^\[/, '').replace(/\]$/, '')})</h4>
+            <h4>Signal "{mutationsError.signalName}" causes an error doing <strong>{mutationsError.mutation.name}</strong>("{mutationsError.mutation.path.join('.')}", {JSON.stringify(mutationsError.mutation.args).replace(/^\[/, '').replace(/]$/, '')})</h4>
           </div>
           : <div className='debugger-toolbar'>
             <Toolbar />

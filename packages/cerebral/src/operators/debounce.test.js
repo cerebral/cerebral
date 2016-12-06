@@ -31,17 +31,19 @@ describe('operator.debounce', () => {
     const controller = new Controller({
       signals: {
         test: [
-          [ debounce(50), {
-            continue: [
-              () => {
-                assert.deepEqual(result, ['parallel', 'parallel', 'discard'])
-                done()
-              }
-            ],
-            discard: [() => { result.push('discard') }]
-          },
-          () => { result.push('parallel') }
-        ]]
+          [
+            debounce(50), {
+              continue: [
+                () => {
+                  assert.deepEqual(result, ['parallel', 'parallel', 'discard'])
+                  done()
+                }
+              ],
+              discard: [() => { result.push('discard') }]
+            },
+            () => { result.push('parallel') }
+          ]
+        ]
       }
     })
     controller.getSignal('test')()

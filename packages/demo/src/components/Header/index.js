@@ -5,7 +5,7 @@ import translations from '../../common/computed/translations'
 
 import LangSelector from '../LangSelector'
 
-const TaglineRe = /^(.*)\[Cerebral\](.*)$/
+const TaglineRe = /^(.*)\[Cerebral](.*)$/
 
 export default connect(
   {
