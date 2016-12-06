@@ -6,14 +6,14 @@ export default function (moduleName) {
   const {dynamicPaths, errorPath} = paths(moduleName)
   return [
     ...dynamicPaths,
-    set(input`fileName`, state`${input`itemPath`}.imageName`),
+    set(input`filename`, state`${input`itemPath`}.imageName`),
     firebase.remove(input`remoteItemPath`), {
       success: [
-        when(input`fileName`), {
+        when(input`filename`), {
           true: [
             firebase.delete(
               input`remoteItemImagePath`,
-              input`fileName`
+              input`filename`
             ), {
               success: [],
               error: [
