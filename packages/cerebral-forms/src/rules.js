@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 const rules = {
   isExisty (value) {
     return value !== null && value !== undefined
