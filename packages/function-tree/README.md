@@ -88,6 +88,49 @@ const execute = FunctionTree([
 export default execute;
 ```
 
+#### Devtools
+Download the function tree standalone debugger for [Mac](https://drive.google.com/file/d/0B1pYKovu9Upyb1Bkdm5IbkdBN3c/view?usp=sharing), [Windows](https://drive.google.com/file/d/0B1pYKovu9UpyMGRRbG45dWR6R1k/view?usp=sharing) or [Linux](https://drive.google.com/file/d/0B1pYKovu9UpyMFQ5dEdnSy1aN0E/view?usp=sharing).
+
+```js
+import Devtools from 'function-tree/devtools'
+
+// Instantiate the devtools with the port
+// you are running the debugger on
+const devtools = Devtools({
+  remoteDebugger: 'localhost:8585'
+})
+
+// Add the provider to any instantiated
+// function tree you want to pass
+// information from
+const execute = FunctionTree([
+  devtools.Provider({
+    colors: {
+      someContextProvider: 'green'
+    }
+  })
+])
+
+// Watch execution of the tree
+devtools.watchExecution(execute)
+
+export default execute;
+```
+
+You can now do:
+
+```js
+function someFunction(context) {
+  context.debugger.send({
+    method: 'someMethod',
+    args: ['foo', 'bar'],
+    color: 'red'
+  })
+}
+```
+
+This is used by **ContextProvider** under the hood, but you are free to use this at your own leisure :)
+
 #### Extending the context
 
 ```js
