@@ -27,8 +27,17 @@
 }
 
 .service-serviceArgs {
+  display: flex;
   margin-left: 5px;
   flex: 1;
   font-size: 12px;
   line-height: 20px;
+}
+
+.service-serviceArgs > * {
+  margin-left: 5px;
+}
+
+.service-serviceArgs > *:first-child {
+  margin-left: 0;
 }
