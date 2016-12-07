@@ -10,9 +10,9 @@
     "build:electron": "NODE_ENV=production webpack --config webpack.electron.config && npm run prepare:electron && npm run package:electron",
     "prepare:electron": "rimraf electron/dist electron/node_modules && node scripts/createElectronSymlink",
     "package:electron": "npm run package:electron:mac && npm run package:electron:win && npm run package:electron:linux",
-    "package:electron:mac": "electron-packager ./electron CerebralDebugger --platform=darwin --out ./electron/dist",
-    "package:electron:win": "electron-packager ./electron CerebralDebugger --platform=win32 --out ./electron/dist",
-    "package:electron:linux": "electron-packager ./electron CerebralDebugger --platform=linux --out ./electron/dist"
+    "package:electron:mac": "electron-packager ./electron FunctionTreeDebugger --platform=darwin --out ./electron/dist",
+    "package:electron:win": "electron-packager ./electron FunctionTreeDebugger --platform=win32 --out ./electron/dist",
+    "package:electron:linux": "electron-packager ./electron FunctionTreeDebugger --platform=linux --out ./electron/dist"
   },
   "repository": "https://github.com/cerebral/cerebral",
   "author": "Christian Alfoni",

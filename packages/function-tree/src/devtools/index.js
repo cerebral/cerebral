@@ -13,6 +13,7 @@ class Devtools {
     this.isConnected = false
     this.ws = null
     this.isResettingDebugger = false
+    this.isBrowserEnv = typeof window !== 'undefined' && Boolean(window.addEventListener)
 
     this.sendInitial = this.sendInitial.bind(this)
 
@@ -33,7 +34,7 @@ class Devtools {
             break
         }
       }
-    } else {
+    } else if (this.isBrowserEnv) {
       window.addEventListener('funtion-tree.debugger.pong', this.sendInitial)
       window.addEventListener('funtion-tree.debugger.ping', this.sendInitial)
     }
@@ -46,11 +47,17 @@ class Devtools {
         this.ws.send(JSON.stringify({type: 'ping'}))
       }
       this.ws.onclose = () => {
-        console.warn('You have configured remoteDebugger, but could not connect. Falling back to Chrome extension')
-        this.reInit()
+        console.warn('Could not connect to Function Tree Debugger application, make sure it is running on the correct port')
+        if (this.isBrowserEnv) {
+          this.reInit()
+        }
       }
-      this.ws.onerror = () => this.reInit()
-    } else {
+      this.ws.onerror = () => {
+        if (this.isBrowserEnv) {
+          this.reInit()
+        }
+      }
+    } else if (this.isBrowserEnv) {
       const event = new CustomEvent('function-tree.client.message', {
         detail: JSON.stringify({type: 'ping'})
       })
@@ -88,7 +95,7 @@ class Devtools {
   sendMessage (stringifiedMessage) {
     if (this.remoteDebugger) {
       this.ws.send(stringifiedMessage)
-    } else {
+    } else if (this.isBrowserEnv) {
       const event = new CustomEvent('function-tree.client.message', {detail: stringifiedMessage})
       window.dispatchEvent(event)
     }
