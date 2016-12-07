@@ -52,6 +52,7 @@ function Computed (paths, cb) {
       getDepsMap: function () {
         return deps
       },
+      computedName: cb.name,
       get: function (passedState, force) {
         if (!force && Computed.cache[cacheKey]) {
           return Computed.cache[cacheKey]
