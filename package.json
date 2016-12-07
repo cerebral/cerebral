@@ -2,6 +2,9 @@
   "name": "cerebral",
   "version": "0.0.0-semantically-released",
   "description": "A state controller with its own debugger",
+  "release": {
+    "branch": "v1"
+  },
   "main": "src/index.js",
   "scripts": {
     "pretest": "standard",
