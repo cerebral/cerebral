@@ -2,7 +2,7 @@ import {Computed} from './../Computed'
 import {cleanPath, propsDiffer, throwError} from './../utils'
 
 export default (View) => {
-  return function HOC (paths, signals, injectedProps, Component) {
+  return function HOC (paths, signals, mergeProps, Component) {
     class CerebralComponent extends View.Component {
       static getStatePaths (props) {
         if (!paths) {
@@ -14,7 +14,7 @@ export default (View) => {
         super(props)
         this.evaluatedPaths = CerebralComponent.getStatePaths(props)
         this.signals = signals
-        this.injectedProps = injectedProps
+        this.mergeProps = mergeProps
         this.Component = Component
         this.cachedSignals = null
         this.depsMap = this.getDepsMap()
@@ -82,7 +82,7 @@ export default (View) => {
         const statePaths = CerebralComponent.getStatePaths(this.props)
         let stateProps = {}
         let signalProps = {}
-        let injectedProps = this.injectedProps || {}
+        let mergeProps = this.mergeProps || {}
 
         stateProps = Object.keys(statePaths || {}).reduce((currentProps, key) => {
           if (!statePaths[key]) {
@@ -122,11 +122,11 @@ export default (View) => {
           }, {})
         }
 
-        if (injectedProps && typeof injectedProps === 'function') {
-          return injectedProps(props, stateProps, signalProps)
+        if (mergeProps && typeof mergeProps === 'function') {
+          return mergeProps(stateProps, signalProps, props)
         }
 
-        const propsToPass = Object.assign({}, props, stateProps, signalProps, injectedProps)
+        const propsToPass = Object.assign({}, props, stateProps, signalProps, mergeProps)
 
         if (this.context.cerebral.controller.options.signalsProp) {
           propsToPass.signals = this.cachedSignals = this.cachedSignals || this.extractModuleSignals(this.context.cerebral.controller.module, '')

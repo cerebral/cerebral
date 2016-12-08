@@ -411,15 +411,16 @@ describe('React', () => {
         foo: 'foo'
       }, {
         fooSignal: 'foo'
-      }, (ownProps, stateProps, signalProps) => {
-        assert.deepEqual(ownProps, {mip: 'mop'})
+      }, (stateProps, signalProps, ownProps) => {
         assert.deepEqual(stateProps, {foo: 'bar'})
         assert.equal(typeof signalProps.fooSignal, 'function')
+        assert.deepEqual(ownProps, {mip: 'mop'})
 
-        return stateProps
+        return {bar: stateProps.foo + ownProps.mip}
       }, (props) => {
+        assert.deepEqual(Object.keys(props), ['bar'])
         return (
-          <div>{props.foo}</div>
+          <div>{props.bar}</div>
         )
       })
       const tree = TestUtils.renderIntoDocument((
@@ -428,7 +429,7 @@ describe('React', () => {
         </Container>
       ))
 
-      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'barmop')
     })
     it('should update on props change', () => {
       const controller = Controller({})
