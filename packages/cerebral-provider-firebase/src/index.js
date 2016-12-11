@@ -33,6 +33,7 @@ export {default as sendPasswordResetEmail} from './factories/sendPasswordResetEm
 export {default as signInAnonymously} from './factories/signInAnonymously'
 export {default as signInWithEmailAndPassword} from './factories/signInWithEmailAndPassword'
 export {default as signInWithFacebook} from './factories/signInWithFacebook'
+export {default as signInWithGoogle} from './factories/signInWithGoogle'
 export {default as signOut} from './factories/signOut'
 export {default as task} from './factories/task'
 export {default as value} from './factories/value'
