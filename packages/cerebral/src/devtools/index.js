@@ -42,7 +42,10 @@ class Devtools {
     this.originalRunTreeFunction = null
     this.ws = null
     this.isResettingDebugger = false
-    this.allowedTypes = [File, FileList, Blob].concat(options.allowedTypes || [])
+    this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
+    this.allowedTypes = []
+      .concat(this.isBrowserEnv ? [File, FileList, Blob] : [])
+      .concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)
     this.sendComponentsMap = debounce(this.sendComponentsMap, 50)
@@ -172,18 +175,28 @@ class Devtools {
         this.ws.send(JSON.stringify({type: 'ping'}))
       }
       this.ws.onclose = () => {
-        console.warn('You have configured remoteDebugger, but could not connect. Falling back to Chrome extension')
-        this.reInit()
+        if (this.isBrowserEnv) {
+          console.warn('You have configured remoteDebugger, but could not connect. Falling back to Chrome extension')
+          this.reInit()
+        } else {
+          console.warn('You have configured remoteDebugger, but could not connect. Please start the remote debugger and make sure you connect to correct port')
+        }
       }
-      this.ws.onerror = () => this.reInit()
-    } else {
+      this.ws.onerror = () => {
+        if (this.isBrowserEnv) {
+          this.reInit()
+        }
+      }
+    } else if (this.isBrowserEnv) {
       const event = new CustomEvent('cerebral2.client.message', {
         detail: JSON.stringify({type: 'ping'})
       })
       window.dispatchEvent(event)
+    } else {
+      console.warn('The Cerebral devtools is running in a non browser environment. You have to add the remoteDebugger option')
     }
 
-    if (this.multipleApps) {
+    if (this.isBrowserEnv && this.multipleApps) {
       let hidden, visibilityChange
       if (typeof document.hidden !== 'undefined') {
         hidden = 'hidden'
