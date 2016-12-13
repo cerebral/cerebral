@@ -21,6 +21,7 @@ import createUserWithEmailAndPassword from './createUserWithEmailAndPassword'
 import signInWithEmailAndPassword from './signInWithEmailAndPassword'
 import signOutService from './signOut'
 import signInWithFacebook from './signInWithFacebook'
+import signInWithGoogle from './signInWithGoogle'
 
 export {default as createUserWithEmailAndPassword} from './factories/createUserWithEmailAndPassword'
 export {default as getUser} from './factories/getUser'
@@ -57,6 +58,7 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         getUser: getUserService,
         signInAnonymously: signInAnonymouslyService,
         signInWithFacebook: signInWithFacebook,
+        signInWithGoogle: signInWithGoogle,
         off: stopListening,
         onChildAdded: createOnChildAdded(context.controller),
         onChildRemoved: createOnChildRemoved(context.controller),
