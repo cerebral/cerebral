@@ -19,6 +19,6 @@ export default function createTask (options) {
           reject(data.val()._error_details)
         }
       })
-    })
+    }).catch((error) => ({error: error.message}))
   }
 }
