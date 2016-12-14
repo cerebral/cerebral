@@ -284,7 +284,7 @@ describe('validate', () => {
         signals: {
           passwordFieldChanged: [
             set(state`form.password.value`, input`value1`),
-            validateField('form.password'),
+            validateField('form.password')
           ],
           confirmPasswordFieldChanged: [
             set(state`form.confirmPassword.value`, input`value2`),
@@ -293,6 +293,8 @@ describe('validate', () => {
         }
       })
       controller.getSignal('passwordFieldChanged')({value1: 'password'})
+      assert.equal(controller.getState('form.password.isValid'), false)
+      assert.equal(controller.getState('form.confirmPassword.isValid'), false)
       controller.getSignal('confirmPasswordFieldChanged')({value2: 'password'})
       assert.equal(controller.getState('form.password.errorMessage'), null)
       assert.equal(controller.getState('form.confirmPassword.errorMessage'), null)
