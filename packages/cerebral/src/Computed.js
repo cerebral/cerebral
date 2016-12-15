@@ -42,6 +42,18 @@ export class Computed {
     this.isDirty = true
   }
   /*
+    This method is called by manually busting cache of computeds, also busting
+    nested computeds
+  */
+  flagAll () {
+    this.flag()
+    Object.keys(this.paths).forEach((pathKey) => {
+      if (this.paths[pathKey] instanceof Computed) {
+        this.paths[pathKey].flag()
+      }
+    })
+  }
+  /*
     Produces a new value if the computed is dirty or returns existing
     value
   */
