@@ -5,11 +5,11 @@
 }
 
 pre .code {
+  border: 1px solid #ccc;
+  background: #f2f2f2;
   padding: 10px 15px;
   font-size: 14px;
-  color: #fff;
   line-height: 24px;
-  background: #223338;
   border-radius: 3px;
   margin: 30px auto 60px;
   max-width: 600px; /* 70 chars */
