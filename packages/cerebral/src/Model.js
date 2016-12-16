@@ -226,7 +226,7 @@ class Model {
   }
   compute (computed, forceRecompute = false) {
     if (forceRecompute) {
-      computed.flag()
+      computed.flagAll()
     }
     return computed.getValue(this)
   }
