@@ -3,6 +3,7 @@ import {cleanPath, propsDiffer, throwError} from './../utils'
 
 export default (View) => {
   return function HOC (paths, signals, mergeProps, Component) {
+    let hasWarnedBigComponent = false
     class CerebralComponent extends View.Component {
       static getStatePaths (props) {
         if (!paths) {
@@ -18,7 +19,6 @@ export default (View) => {
         this.Component = Component
         this.cachedSignals = null
         this.depsMap = this.getDepsMap()
-        this.hasWarnedBigComponent = false
       }
       componentWillMount () {
         if (!this.context.cerebral.controller) {
@@ -96,11 +96,11 @@ export default (View) => {
         if (
           this.context.cerebral.controller.devtools &&
           this.context.cerebral.controller.devtools.bigComponentsWarning &&
-          !this.hasWarnedBigComponent &&
+          !hasWarnedBigComponent &&
           Object.keys(statePaths || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
         ) {
           console.warn(`Component named ${Component.displayName || Component.name} has a lot of state dependencies, consider refactoring or adjust this option in devtools`)
-          this.hasWarnedBigComponent = true
+          hasWarnedBigComponent = true
         }
 
         if (this.signals) {
@@ -109,11 +109,11 @@ export default (View) => {
           if (
             this.context.cerebral.controller.devtools &&
             this.context.cerebral.controller.devtools.bigComponentsWarning &&
-            !this.hasWarnedBigComponent &&
+            !hasWarnedBigComponent &&
             Object.keys(extractedSignals).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.signals
           ) {
             console.warn(`Component named ${Component.displayName || Component.name} has a lot of signals, consider refactoring or adjust this option in devtools`)
-            this.hasWarnedBigComponent = true
+            hasWarnedBigComponent = true
           }
           signalProps = Object.keys(extractedSignals).reduce((currentProps, key) => {
             currentProps[key] = controller.getSignal(extractedSignals[key])
