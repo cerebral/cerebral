@@ -71,7 +71,7 @@ class Controller extends EventEmitter {
     }
 
     if (this.options.strictRender) {
-      console.warn('We are just notifying you that STRICT RENDER is on')
+      console.info('We are just notifying you that STRICT RENDER is on')
     }
 
     if (this.router) this.router.init()
