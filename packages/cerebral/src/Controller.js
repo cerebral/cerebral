@@ -70,7 +70,10 @@ class Controller extends EventEmitter {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
     }
 
-    if (this.options.strictRender) {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      this.options.strictRender
+    ) {
       console.info('We are just notifying you that STRICT RENDER is on')
     }
 
