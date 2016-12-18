@@ -104,7 +104,7 @@ export default (View) => {
         }
 
         if (this.signals) {
-          const extractedSignals = typeof signals === 'function' ? signals(propsToPass) : signals
+          const extractedSignals = typeof signals === 'function' ? signals(props) : signals
 
           if (
             this.context.cerebral.controller.devtools &&

@@ -343,6 +343,28 @@ describe('React', () => {
       component.changePath()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
     })
+    it('should be able to dynamically define signals', () => {
+      const controller = Controller({
+        state: {
+          test: ''
+        },
+        signals: {
+          foo: [({state}) => state.set('test', 'fooSignal')]
+        }
+      })
+      const TestComponent = connect({
+      }, (props) => ({signal: props.path}),
+      ({signal}) => {
+        signal()
+        return null
+      })
+      TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent path='foo' />
+        </Container>
+      ))
+      assert.equal(controller.getModel().get(['test']), 'fooSignal')
+    })
     it('should compute Computed on state update', () => {
       const controller = Controller({
         state: {
