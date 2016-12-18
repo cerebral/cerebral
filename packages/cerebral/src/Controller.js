@@ -63,7 +63,7 @@ class Controller extends EventEmitter {
     if (this.devtools) {
       this.devtools.init(this)
     } else if (
-      process.env.NODE_ENV !== 'production' &&
+      isDeveloping() &&
       typeof navigator !== 'undefined' &&
       /Chrome/.test(navigator.userAgent)
     ) {
@@ -71,7 +71,7 @@ class Controller extends EventEmitter {
     }
 
     if (
-      process.env.NODE_ENV !== 'production' &&
+      isDeveloping() &&
       this.options.strictRender
     ) {
       console.info('We are just notifying you that STRICT RENDER is on')
