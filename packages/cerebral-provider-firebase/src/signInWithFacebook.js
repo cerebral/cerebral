@@ -15,20 +15,24 @@ export default function signInWithFacebook (options) {
       firebase.auth().signInWithRedirect(provider)
       resolve()
     } else {
-      firebase.auth().signInWithPopup(provider).then((result) => {
-        const user = createUser(result.user)
+      firebase.auth().signInWithPopup(provider)
+      .then(
+        (result) => {
+          const user = createUser(result.user)
 
-        user.accessToken = result.credential.accessToken
-        resolve({
-          user: user
-        })
-      }).catch((error) => {
-        reject({
-          code: error.code,
-          message: error.message,
-          email: error.email
-        })
-      })
+          user.accessToken = result.credential.accessToken
+          resolve({
+            user: user
+          })
+        },
+        (error) => {
+          reject({
+            code: error.code,
+            message: error.message,
+            email: error.email
+          })
+        }
+      )
     }
   })
 }

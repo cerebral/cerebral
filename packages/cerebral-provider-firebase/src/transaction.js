@@ -4,7 +4,11 @@ import {
 
 export default function transaction (path, transactionFunction) {
   const ref = createRef(path)
-  return ref.transaction(transactionFunction)
-    .then((result) => ({committed: result.committed, value: result.snapshot.val()}))
-    .catch((error) => ({error: error.message}))
+  return new Promise((resolve, reject) => {
+    ref.transaction(transactionFunction)
+    .then(
+      (result) => resolve({committed: result.committed, value: result.snapshot.val()}),
+      (error) => reject({error: error.message})
+    )
+  })
 }
