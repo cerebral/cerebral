@@ -172,7 +172,7 @@ describe('FunctionTree', () => {
       })
     })
   })
-  it('should give error when path and no path returned', () => {
+  it('should give error when path and no path returned', (done) => {
     function actionA () {
       return {
         foo: 'bar'
@@ -185,8 +185,9 @@ describe('FunctionTree', () => {
         success: []
       }
     ]
-    execute.once('error', () => {
-      assert.ok(true)
+    execute.once('error', (error) => {
+      assert.ok(error.message.match(/needs to be a path or a Promise/))
+      done()
     })
     execute(tree)
   })

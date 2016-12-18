@@ -116,7 +116,7 @@ class FunctionTreeExecution extends EventEmitter {
       functionTree.emit('functionEnd', execution, funcDetails, payload)
       next(result.toJS())
     } else if (funcDetails.outputs) {
-      let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
+      let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path or a Promise')
 
       errorCallback(error)
     } else if (isValidResult(result)) {
