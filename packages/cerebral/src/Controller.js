@@ -63,15 +63,18 @@ class Controller extends EventEmitter {
     if (this.devtools) {
       this.devtools.init(this)
     } else if (
-      process.env.NODE_ENV !== 'production' &&
+      isDeveloping() &&
       typeof navigator !== 'undefined' &&
       /Chrome/.test(navigator.userAgent)
     ) {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
     }
 
-    if (this.options.strictRender) {
-      console.warn('We are just notifying you that STRICT RENDER is on')
+    if (
+      isDeveloping() &&
+      this.options.strictRender
+    ) {
+      console.info('We are just notifying you that STRICT RENDER is on')
     }
 
     if (this.router) this.router.init()
