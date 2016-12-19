@@ -1,5 +1,6 @@
 /* global CustomEvent WebSocket File FileList Blob */
 import {debounce} from '../utils'
+import Path from 'function-tree/lib/Path'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
 const VERSION = 'v1'
@@ -319,6 +320,28 @@ class Devtools {
             functionIndex: funcDetails.functionIndex,
             payload,
             data: null
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        this.sendMessage(message)
+      } else {
+        this.backlog.push(message)
+      }
+    })
+    this.controller.runTree.on('functionEnd', (execution, funcDetails, payload, result) => {
+      if (!result || (result instanceof Path && !result.payload)) {
+        return
+      }
+
+      const message = JSON.stringify({
+        type: 'executionFunctionEnd',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            output: result instanceof Path ? result.payload : result
           }
         }
       })

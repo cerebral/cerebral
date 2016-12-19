@@ -17,8 +17,8 @@
   "repository": "https://github.com/cerebral/cerebral",
   "author": "Christian Alfoni",
   "dependencies": {
-    "cerebral": "2.0.0-0",
-    "cerebral-module-useragent": "1.0.0-0",
+    "cerebral": "2.0.0-0-alpha.3fcc3e88",
+    "cerebral-module-useragent": "1.0.0-0-alpha.3fcc3e88",
     "classnames": "^2.2.5",
     "color": "^0.11.4",
     "electron-default-menu": "^1.0.0",
@@ -29,7 +29,7 @@
     "ws": "^1.1.1"
   },
   "devDependencies": {
-    "babel-loader": "^6.2.8",
+    "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "babel-preset-stage-0": "^6.16.0",

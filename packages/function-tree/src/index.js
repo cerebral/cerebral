@@ -72,22 +72,22 @@ class FunctionTreeExecution extends EventEmitter {
       move on
     */
     if (isPromise(result)) {
-      functionTree.emit('asyncFunction', execution, funcDetails, payload)
+      functionTree.emit('asyncFunction', execution, funcDetails, payload, result)
       result
         .then(function (result) {
           if (result instanceof Path) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload)
+            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next(result.toJS())
           } else if (funcDetails.outputs) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload)
+            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
           } else if (isValidResult(result)) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload)
+            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next({
               payload: result
             })
           } else {
-            functionTree.emit('functionEnd', execution, funcDetails, payload)
+            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
           }
         })
@@ -95,14 +95,14 @@ class FunctionTreeExecution extends EventEmitter {
           if (result instanceof Error) {
             errorCallback(result)
           } else if (result instanceof Path) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload)
+            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next(result.toJS())
           } else if (funcDetails.outputs) {
             let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
 
             errorCallback(error)
           } else if (isValidResult(result)) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload)
+            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next({
               payload: result
             })
@@ -113,14 +113,14 @@ class FunctionTreeExecution extends EventEmitter {
           }
         })
     } else if (result instanceof Path) {
-      functionTree.emit('functionEnd', execution, funcDetails, payload)
+      functionTree.emit('functionEnd', execution, funcDetails, payload, result)
       next(result.toJS())
     } else if (funcDetails.outputs) {
       let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path or a Promise')
 
       errorCallback(error)
     } else if (isValidResult(result)) {
-      functionTree.emit('functionEnd', execution, funcDetails, payload)
+      functionTree.emit('functionEnd', execution, funcDetails, payload, result)
       next({
         payload: result
       })

@@ -19,9 +19,14 @@ export default connect(props => ({
       this.renderAction = this.renderAction.bind(this)
       this.onMutationClick = this.onMutationClick.bind(this)
       this.onActionClick = this.onActionClick.bind(this)
+      this.state = {expandedOutputs: {}}
     }
-    shouldComponentUpdate (nextProps) {
-      return nextProps.currentPage === 'signals' || !nextProps.useragent.media.small
+    shouldComponentUpdate (nextProps, nextState) {
+      return (
+        nextProps.currentPage === 'signals' ||
+        !nextProps.useragent.media.small ||
+        this.state.expandedOutputs !== nextState.expandedOutputs
+      )
     }
     onMutationClick (path) {
       this.props.mutationClicked({
@@ -37,6 +42,23 @@ export default connect(props => ({
     componentDidUpdate () {
       Prism.highlightAll()
     }
+    toggleOutput (event, action, output) {
+      const expandedOutputs = Object.assign({}, this.state.expandedOutputs)
+
+      event.stopPropagation()
+
+      if (!expandedOutputs[action.functionIndex]) {
+        expandedOutputs[action.functionIndex] = {}
+      }
+
+      if (expandedOutputs[action.functionIndex][output]) {
+        delete expandedOutputs[action.functionIndex][output]
+      } else {
+        expandedOutputs[action.functionIndex][output] = true
+      }
+
+      this.setState({expandedOutputs})
+    }
     renderOutputs (action) {
       return Object.keys(action.outputs).map((output, index) => {
         const isOutput = (
@@ -44,13 +66,18 @@ export default connect(props => ({
           this.props.signal.functionsRun[action.functionIndex].path === output
         )
         const style = isOutput ? null : {opacity: 0.3}
+        const isExpanded = this.state.expandedOutputs[action.functionIndex] && this.state.expandedOutputs[action.functionIndex][output]
 
         return (
           <div className='signal-output' style={style} key={index}>
-            {isOutput ? <i className='icon icon-right' /> : <i className='icon icon-empty' />}
-            <div className='signal-outputPath'>
-              <div className='signal-outputName'>{output}</div>
-              {action.outputs[output].map(this.renderAction)}
+            {isOutput || isExpanded ? (
+              <i className={`icon icon-down ${isOutput ? '' : 'clickable'}`} onClick={(event) => this.toggleOutput(event, action, output)} />
+            ) : (
+              <i className={`icon icon-right ${isOutput ? '' : 'clickable'}`} onClick={(event) => this.toggleOutput(event, action, output)} />
+            )}
+            <div className='signal-outputPath' onClick={(event) => this.toggleOutput(event, action, output)}>
+              <div className={isOutput ? 'signal-outputName executed' : 'signal-outputName'}>{output}</div>
+              {isOutput || isExpanded ? action.outputs[output].map(this.renderAction) : null}
             </div>
           </div>
         )

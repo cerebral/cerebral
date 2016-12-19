@@ -8,12 +8,14 @@ import runMutation from '../actions/runMutation'
 import updateComponentsMap from '../actions/updateComponentsMap'
 import updateRenders from '../actions/updateRenders'
 import runRecordedMutation from '../actions/runRecordedMutation'
+import updateActionOutput from '../actions/updateActionOutput'
 
 export default [
   switchType, {
     init: [setInitialPayload],
     executionStart: [addSignal],
     execution: [updateSignal, runMutation],
+    executionFunctionEnd: [updateActionOutput],
     executionPathStart: [updateSignalPath],
     executionEnd: [endSignalExecution],
     components: [updateComponentsMap, updateRenders],
