@@ -6,6 +6,10 @@
   overflow-y: scroll;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .signal-title {
   margin: 0;
   padding: 10px 10px 0 10px;
@@ -51,6 +55,14 @@
 .signal-outputName {
   height: 20px;
   line-height: 20px;
+  cursor: pointer;
+}
+
+.signal-outputName.executed {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  cursor: default;
 }
 
 .signal-outputPath {

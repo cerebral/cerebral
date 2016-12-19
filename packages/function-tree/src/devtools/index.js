@@ -1,5 +1,6 @@
 /* global CustomEvent */
 import WebSocket from 'ws'
+import Path from 'function-tree/lib/Path'
 const VERSION = 'v1'
 
 class Devtools {
@@ -164,6 +165,28 @@ class Devtools {
             functionIndex: funcDetails.functionIndex,
             payload,
             data: null
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        this.sendMessage(message)
+      } else {
+        this.backlog.push(message)
+      }
+    })
+    tree.on('functionEnd', (execution, funcDetails, payload, result) => {
+      if (!result || (result instanceof Path && !result.payload)) {
+        return
+      }
+
+      const message = JSON.stringify({
+        type: 'executionFunctionEnd',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            output: result instanceof Path ? result.payload : result
           }
         }
       })

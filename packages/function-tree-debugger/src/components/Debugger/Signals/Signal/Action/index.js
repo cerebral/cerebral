@@ -54,18 +54,22 @@ function Action ({action, execution, children, onMutationClick, onActionClick}) 
       {!action.error && execution ? (
         <div>
           <div className='action-actionInput'>
-            <i className='icon icon-down' />
             <div className='action-inputLabel'>Input:</div>
             <div className='action-inputValue'><Inspector value={execution.payload} /></div>
           </div>
           <div className='action-services'>
             {execution.data.filter(data => data.type !== 'mutation').map((service, index) => <Service service={service} key={index} />)}
           </div>
+          {execution.output ? (
+            <div className='action-actionInput'>
+              <div className='action-inputLabel'>Output:</div>
+              <div className='action-inputValue'><Inspector value={execution.output} /></div>
+            </div>
+          ) : null}
           {children}
         </div>
         ) : null}
     </div>
-
   )
 }
 
