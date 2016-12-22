@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, string, set, state} from './'
+import {set} from './'
+import {input, state, string} from '../tags'
 
 describe('operator.set', () => {
   it('should set value to model', () => {

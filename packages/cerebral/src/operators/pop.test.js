@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, pop, state} from './'
+import {pop} from './'
+import {input, state} from '../tags'
 
 describe('operator.pop', () => {
   it('should pop value from model', () => {

@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, splice, state} from './'
+import {splice} from './'
+import {input, state} from '../tags'
 
 describe('operator.splice', () => {
   it('should splice value in model', () => {

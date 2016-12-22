@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, push, state} from './'
+import {push} from './'
+import {input, state} from '../tags'
 
 describe('operator.push', () => {
   it('should push value in model', () => {

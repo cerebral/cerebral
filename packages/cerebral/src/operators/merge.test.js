@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, merge, state} from './'
+import {merge} from './'
+import {state, input} from '../tags'
 
 describe('operator.merge', () => {
   it('should merge value in model', () => {

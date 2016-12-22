@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {concat, input, state} from './'
+import {concat} from './'
+import {input, state} from '../tags'
 
 describe('operator.concat', () => {
   it('should concat literal array in model', () => {

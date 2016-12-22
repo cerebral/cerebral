@@ -4,44 +4,46 @@ import assert from 'assert'
 import {input, set, signal} from './'
 
 describe('operator.signal', () => {
-  it('should return signal from path', (done) => {
-    const barSignal = [
-      (context) => {
-        assert.ok(true)
-        done()
+  it('should return signal from path', () => {
+    const factory = (signalTemplate) => {
+      function action (context) {
+        assert.equal(typeof signalTemplate(context).value, 'function')
       }
-    ]
+
+      return action
+    }
     const controller = new Controller({
       signals: {
-        bar: barSignal,
+        bar: [],
         test: [
-          set(input`progress`, signal`bar`),
-          ({input: {progress}}) => {
-            setTimeout(progress)
-          }
+          factory(signal`bar`)
         ]
       }
     })
     controller.getSignal('test')()
   })
-  it('should allow input in template literal', (done) => {
-    const barSignal = [
-      (context) => {
-        assert.ok(true)
-        done()
+  it('should allow input in template literal', () => {
+    const factory = (signalTemplate) => {
+      function action (context) {
+        assert.equal(typeof signalTemplate(context).value, 'function')
       }
-    ]
+
+      return action
+    }
     const controller = new Controller({
       signals: {
-        refbar: barSignal,
         test: [
-          set(input`progress`, signal`ref${input`ref`}`),
-          ({input: {progress}}) => {
-            setTimeout(progress)
-          }
+          factory(signal`${input`module`}.bar`)
         ]
+      },
+      modules: {
+        foo: {
+          signals: {
+            bar: []
+          }
+        }
       }
     })
-    controller.getSignal('test')({ref: 'bar'})
+    controller.getSignal('test')({module: 'foo'})
   })
 })

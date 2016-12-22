@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, shift, state} from './'
+import {shift} from './'
+import {input, state} from '../tags'
 
 describe('operator.shift', () => {
   it('should shift value in model', () => {

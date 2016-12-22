@@ -1,16 +1,17 @@
 export default function (target) {
   if (typeof target !== 'function') {
-    throw new Error('Cerebral operator.pop: You have to use a state template tag as first argument')
+    throw new Error('Cerebral operator.pop: You have to use the STATE TAG as first argument')
   }
 
-  function pop (context) {
-    const targetTemplate = target(context)
+  function pop ({state, input}) {
+    const getters = {state: state.get, input}
+    const targetTemplate = target(getters)
 
     if (targetTemplate.target !== 'state') {
-      throw new Error('Cerebral operator.pop: You have to use a state template tag as first argument')
+      throw new Error('Cerebral operator.pop: You have to use the STATE TAG tag as first argument')
     }
 
-    context.state.pop(targetTemplate.path)
+    state.pop(targetTemplate.path)
   }
 
   pop.displayName = 'operator.pop'

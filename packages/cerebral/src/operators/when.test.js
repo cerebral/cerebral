@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, when} from './'
+import {when} from './'
+import {input, state} from '../tags'
 
 describe('operator.when', () => {
   it('should check truthy value of input', () => {

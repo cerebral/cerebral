@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, toggle} from './'
+import {toggle} from './'
+import {input, state} from '../tags'
 
 describe('operator.toggle', () => {
   it('should toggle state', () => {

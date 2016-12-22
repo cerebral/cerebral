@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, unset} from './'
+import {unset} from './'
+import {input, state} from '../tags'
 
 describe('operator.unset', () => {
   it('should unset value in model', () => {

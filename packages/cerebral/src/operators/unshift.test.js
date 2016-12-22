@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, unshift} from './'
+import {unshift} from './'
+import {input, state} from '../tags'
 
 describe('operator.unshift', () => {
   it('should unshift value in model', () => {

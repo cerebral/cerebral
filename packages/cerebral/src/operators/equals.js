@@ -1,8 +1,9 @@
 function equalsFactory (target) {
-  function equals (context) {
-    const targetValue = target(context).value
+  function equals ({state, input, path}) {
+    const getters = {state: state.get, input}
+    const targetValue = target(getters).value
 
-    return context.path[targetValue] ? context.path[targetValue]() : context.path.otherwise()
+    return path[targetValue] ? path[targetValue]() : path.otherwise()
   }
 
   equals.displayName = 'operator.equals'
