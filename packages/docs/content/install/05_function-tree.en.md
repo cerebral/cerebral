@@ -3,7 +3,7 @@ title: Function Tree
 ---
 
 ## Function Tree
-You might rather want to use the low level [function-tree](https://github.com/cerebral/cerebral/tree/master/packages/function-tree) project Cerebral is wrapped around. Especially on the server function-tree and its debugger will help you express complex logic and debug it.
+You might want to use the low level [function-tree](https://github.com/cerebral/cerebral/tree/master/packages/function-tree) project, which Cerebral wraps. Especially on the server, function-tree and its debugger will help you express complex logic and debug it.
 
 `npm install function-tree@next --save --save-exact`
 
