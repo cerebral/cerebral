@@ -25,7 +25,11 @@ describe('Http Provider', () => {
           }, {
             success: [
               ({input}) => {
-                assert.deepEqual(input, {result: {foo: 'bar'}, status: 200})
+                assert.deepEqual(input, {
+                  result: {foo: 'bar'},
+                  status: 200,
+                  headers: {'content-type': 'application/json'}
+                })
                 done()
               }
             ]

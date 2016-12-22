@@ -64,3 +64,20 @@ export function convertObjectWithTemplates (obj, context) {
     return convertedObject
   }, {})
 }
+
+export function parseHeaders (rawHeaders) {
+  const headerPairs = rawHeaders.replace(/\r?\n$/, '').split(/\r?\n/)
+
+  return headerPairs.reduce((parsedHeaders, headerPair) => {
+    const index = headerPair.indexOf(':')
+    const key = headerPair.substr(0, index).trim().toLowerCase()
+    const value = headerPair.substr(index + 1).trim()
+    if (key) {
+      parsedHeaders[key] = parsedHeaders[key]
+        ? parsedHeaders[key] + ', ' + value
+        : value
+    }
+
+    return parsedHeaders
+  }, {})
+}
