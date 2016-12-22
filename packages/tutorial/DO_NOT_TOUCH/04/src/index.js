@@ -4,7 +4,8 @@ import {Controller} from 'cerebral'
 import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import {set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 const controller = Controller({
   devtools: Devtools(),

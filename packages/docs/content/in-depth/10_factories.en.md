@@ -50,12 +50,13 @@ export default [
 
 ### Chain factory
 ```js
-import {state, set, wait} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 function showMessageFactory (message, ms) {
   return [
     set(state`app.message`, message),
-    ...wait(ms),
+    wait(ms),
     set(state`app.message`, null)
   ]
 }

@@ -1,12 +1,12 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import Toast from '../Toast'
 
 export default connect({
-  title: 'title',
-  subTitle: 'subTitle'
-}, {
-  buttonClicked: 'buttonClicked'
+  title: state`title`,
+  subTitle: state`subTitle`,
+  buttonClicked: signal`buttonClicked`
 },
   function App (props) {
     return (

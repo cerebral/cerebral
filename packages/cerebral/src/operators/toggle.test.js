@@ -6,7 +6,7 @@ import {input, state} from '../tags'
 
 describe('operator.toggle', () => {
   it('should toggle state', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: true
       },
@@ -20,7 +20,7 @@ describe('operator.toggle', () => {
     assert.deepEqual(controller.getState(), {foo: false})
   })
   it('should toggle state with input', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         todos: {
           one: true,
@@ -37,17 +37,16 @@ describe('operator.toggle', () => {
     assert.deepEqual(controller.getState(), {todos: {one: false, two: false}})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
-      state: {
-      },
-      signals: {
-        test: [
-          toggle(input`foo`)
-        ]
-      }
-    })
     assert.throws(() => {
-      controller.getSignal('test')({foo: true})
+      Controller({
+        state: {
+        },
+        signals: {
+          test: [
+            toggle(input`foo`)
+          ]
+        }
+      })
     }, /operator.toggle/)
   })
 })

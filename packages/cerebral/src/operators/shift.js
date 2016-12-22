@@ -1,17 +1,14 @@
+import Tag from '../tags/Tag'
+
 export default function (target) {
-  if (typeof target !== 'function') {
-    throw new Error('Cerebral operator.shift: You have to use a STATE TAG as first argument')
+  if (!(target instanceof Tag) || target.type !== 'state') {
+    throw new Error('Cerebral operator.shift: You have to use the STATE TAG as first argument')
   }
 
   function shift ({state, input}) {
     const getters = {state: state.get, input}
-    const targetTemplate = target(getters)
 
-    if (targetTemplate.target !== 'state') {
-      throw new Error('Cerebral operator.shift: You have to use a STATE TAG as first argument')
-    }
-
-    state.shift(targetTemplate.path)
+    state.shift(target.getPath(getters))
   }
 
   shift.displayName = 'operator.shift'

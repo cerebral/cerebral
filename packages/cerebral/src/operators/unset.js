@@ -1,17 +1,14 @@
+import Tag from '../tags/Tag'
+
 export default function (target) {
-  if (typeof target !== 'function') {
-    throw new Error('Cerebral operator.unset: You have to use a STATE TAG as first argument')
+  if (!(target instanceof Tag) || target.type !== 'state') {
+    throw new Error('Cerebral operator.unset: You have to use the STATE TAG as first argument')
   }
 
   function unset ({state, input}) {
     const getters = {state: state.get, input}
-    const targetTemplate = target(getters)
 
-    if (targetTemplate.target !== 'state') {
-      throw new Error('Cerebral operator.unset: You have to use a STATE TAG as first argument')
-    }
-
-    state.unset(targetTemplate.path)
+    state.unset(target.getPath(getters))
   }
 
   unset.displayName = 'operator.unset'

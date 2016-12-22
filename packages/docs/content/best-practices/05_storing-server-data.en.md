@@ -35,7 +35,7 @@ const userFromArray = users.filter(user => user.id === id)[0]
 const userFromObject = users[id]
 ```
 
-So which one should you choose? Well, both! Use objects to structure data in the model and use arrays in your views. Lets us see how to achieve that. Imagine you get this data structure from the server:
+So which one should you choose? Well, both! Use objects to structure data in the model and use arrays in your views. Let us see how to achieve that. Imagine you get this data structure from the server:
 
 ```js
 [{
@@ -75,9 +75,10 @@ So let us show all the users in a **Users** component. A naive implementation wo
 
 ```js
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 
 export default Computed({
-  users: 'app.users'
+  users: state`app.users`
 }, props => {
   return Object.keys(props.users)
 })
@@ -109,10 +110,10 @@ With this approach we can now bind each user specifically to the state it needs,
 
 ```js
 import {connect} from 'cerebral/react'
-
-export default connect((props) => ({
-  user: `users.${props.userKey}`
-}),
+import {state, props} from 'cerebral/tags'
+export default connect({
+  user: state`users.${props`userKey`}`
+},
   function User(props) {
     return (
       <li>{props.user.name}</li>
@@ -125,10 +126,11 @@ So this is one of the benefits we get. Optimized rendering. Now lets look what h
 
 ```js
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 
 export default Computed({
-  users: 'app.users',
-  sortOrder: 'app.sortOrder'
+  users: state`app.users`,
+  sortOrder: state`app.sortOrder`
 }, props => {
   return Object.keys(props.users).sort((userAKey, userBKey) => {
     const userA = props.users[userAKey]
@@ -145,7 +147,7 @@ export default Computed({
 })
 ```
 
-Now we have a really good data structure for doing lookups of users, but we also have a powerful concept of producing an array of data that the view can use. The good thing is that these computed will only run when their depending state needs them and they are in use in the view.
+Now we have a really good data structure for doing lookups of users, but we also have a powerful concept of producing an array of data that the view can use. The good thing is that these computed will only run when their depending state changes and they are in use in the view.
 
 What is also important to remember here is that doing these kind of plain javascript computations is extremely fast, it is rendering the view that takes time.
 

@@ -63,10 +63,11 @@ The only difference now is that the modules namespaces our state and signals, wh
 
 ```js
 export default connect({
-  title: 'app.title',
-  subTitle: 'app.subTitle',
-  repos: 'repos.list',
-  activeTab: 'app.activeTab'
+  title: state`app.title`,
+  subTitle: state`app.subTitle`,
+  repos: state`repos.list`,
+  activeTab: state`app.activeTab`,
+  ...
 }, ...)
 ```
 
@@ -80,8 +81,7 @@ const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
   if (ms) {
     return [
-      set(state`app.toast`, {type}),
-      set(state`app.toast.message`, message),
+      merge(state`app.toast.message`, {type, message}),
       toastDebounce(ms), {
         continue: [
           set(state`app.toast`, null)
@@ -92,8 +92,8 @@ function showToast (message, ms, type = null) {
   }
 
   return [
-    set(state`app.toast`, {type}),
-    set(state`app.toast.message`, message)
+    set(state`app.toast`, {}),
+    merge(state`app.toast.message`, {type, message})
   ]
 }
 ...

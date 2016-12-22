@@ -15,9 +15,10 @@ When you connect a component like this...
 
 ```js
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  foo: 'app.foo'
+  foo: state`app.foo`
 },
   function MyComponent () {
 

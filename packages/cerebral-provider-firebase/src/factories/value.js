@@ -1,10 +1,13 @@
-function valueFactory (path) {
-  function value (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
+import {Tag} from 'cerebral/tags'
 
-    return context.firebase.value(pathTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function valueFactory (path) {
+  function value ({firebase, state, input, path}) {
+    const tagGetters = {state: state.get, input}
+    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+
+    return firebase.value(pathTemplate)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return value

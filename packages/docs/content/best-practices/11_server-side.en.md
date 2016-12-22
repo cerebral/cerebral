@@ -34,4 +34,4 @@ export default {
 This way you can import the same state file on your client and on the server. On the server you just populate the missing state.
 
 ### Business logic
-You might also be tempted to use Cerebral to handle server side business logic. But Cerebral is actually a small wrapper around [function-tree](https://github.com/cerebral/function-tree). Function-tree has its own node debugger and gives you more flexibility in handling complexities on the server as well.
+You might also be tempted to use Cerebral to handle server side business logic. But Cerebral is actually a small wrapper around [function-tree](https://github.com/cerebral/function-tree). Function-tree has its own debugger and gives you more flexibility in handling complexities on the server as well.

@@ -8,10 +8,11 @@ Very often the components needs to produce state based on a combination of other
 
 ```js
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 
 export default Computed({
-  limit: 'items.limit',
-  items: 'items.list'
+  limit: state`items.limit`,
+  items: state`items.list`
 }, ({limit, items}) => {
   return items.filter((item, index) => index < limit)
 })
@@ -37,9 +38,10 @@ It would also be possible to pass in the limit as a property:
 
 ```js
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 
 export default Computed({
-  items: 'items.list'
+  items: state`items.list`
 }, (props) => {
   return props.items.filter((item, index) => index < props.limit)
 })

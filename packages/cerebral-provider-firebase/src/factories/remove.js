@@ -1,10 +1,13 @@
-function removeFactory (path) {
-  function remove (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
+import {Tag} from 'cerebral/tags'
 
-    return context.firebase.remove(pathTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function removeFactory (path) {
+  function remove ({firebase, state, input, path}) {
+    const tagGetters = {state: state.get, input}
+    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+
+    return firebase.remove(pathTemplate)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return remove

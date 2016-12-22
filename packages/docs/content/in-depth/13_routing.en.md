@@ -4,7 +4,7 @@ title: Routing
 
 ## Routing
 
-Typically applications uses a router. To instantiate the Cerebral router you install it as a separate packge:
+Typically applications uses a router. To instantiate the Cerebral router you install it as a separate package:
 
 `npm install cerebral-router@next --save`
 
@@ -56,7 +56,8 @@ As we can see, when the root route is hit we want to trigger a signal that says 
 
 *modules/Home/index.js*
 ```js
-import {set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 export default {
   signals: {
@@ -71,7 +72,8 @@ The **/posts** route points to a different module and signal.
 
 *modules/Posts/index.js*
 ```js
-import {set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 export default {
   signals: {
@@ -89,6 +91,7 @@ So we do not render anything based on the route. We render based on state, like 
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 import Home from '../Home'
 import Posts from '../Posts'
 
@@ -98,7 +101,7 @@ const pages = {
 }
 
 export default Connect({
-  currentPage: 'currentPage'
+  currentPage: state`currentPage`
 },
   function App(props) {
     const Page = pages[props.currentPage]

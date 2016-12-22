@@ -1,15 +1,15 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import Toast from '../Toast'
 
 export default connect({
-  title: 'app.title',
-  subTitle: 'app.subTitle',
-  repos: 'repos.list',
-  activeTab: 'app.activeTab'
-}, {
-  homeRouted: 'home.routed',
-  reposRouted: 'repos.routed'
+  title: state`app.title`,
+  subTitle: state`app.subTitle`,
+  repos: state`repos.list`,
+  activeTab: state`app.activeTab`,
+  homeRouted: signal`home.routed`,
+  reposRouted: signal`repos.routed`
 },
   function App (props) {
     return (

@@ -1,10 +1,12 @@
+import {Tag} from 'cerebral/tags'
 import runValidation from '../utils/runValidation'
 
 export default function validateFormFactory (passedFormPathTemplate) {
-  function validateForm (context) {
-    const passedFormPath = typeof passedFormPathTemplate === 'function' ? passedFormPathTemplate(context).value : passedFormPathTemplate
+  function validateForm ({state, input}) {
+    const tagGetters = {state: state.get, input}
+    const passedFormPath = passedFormPathTemplate instanceof Tag ? passedFormPathTemplate.getValue(tagGetters) : passedFormPathTemplate
     const formPath = passedFormPath.split('.')
-    const currentPathValue = context.state.get(formPath)
+    const currentPathValue = state.get(formPath)
 
     function validateForm (path, form) {
       Object.keys(form).forEach(function (key) {
@@ -12,7 +14,7 @@ export default function validateFormFactory (passedFormPathTemplate) {
           if (Array.isArray(form[key])) {
             validateArray(path.concat(key), form[key])
           } else if ('value' in form[key]) {
-            context.state.merge(path.concat(key), runValidation(form[key], form))
+            state.merge(path.concat(key), runValidation(form[key], form))
           } else {
             validateForm(path.concat(key), form[key])
           }

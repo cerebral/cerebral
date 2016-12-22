@@ -1,10 +1,13 @@
-function sendPasswordResetEmailFactory (email) {
-  function sendPasswordResetEmail (context) {
-    const emailTemplate = typeof email === 'function' ? email(context).value : email
+import {Tag} from 'cerebral/tags'
 
-    return context.firebase.sendPasswordResetEmail(emailTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function sendPasswordResetEmailFactory (email) {
+  function sendPasswordResetEmail ({firebase, state, input, path}) {
+    const tagGetters = {state: state.get, input}
+    const emailTemplate = email instanceof Tag ? email.getValue(tagGetters) : email
+
+    return firebase.sendPasswordResetEmail(emailTemplate)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return sendPasswordResetEmail

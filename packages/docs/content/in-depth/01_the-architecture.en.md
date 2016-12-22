@@ -58,7 +58,7 @@ Since Cerebral stores all the state of the application in a single state tree we
 
 ```js
 connect({
-  userName: 'app.user.name'
+  userName: state`app.user.name`
 },
   function User(props) {
     props.userName // "some name" (value stored in 'app.user.name')
@@ -77,7 +77,7 @@ This is where Cerebral really differs from other approaches to application devel
 - requesting data from the server and, depending on the status code of the response, do something with that response which might lead to new requests and/or setting up a listener for data on the server
 - etc...
 
-The point is, updating state can be a very complex flow of operations. This is often where spaghetti code comes from.
+The point is, updating state can be a very complex flow of operations. This is often where spaghetti code comes from and we use abstractions to hide it. The problem with abstractions is that it is very difficult to understand how things actually work and it becomes more difficult to make changes.
 
 To handle everything from a simple toggle to very complex operations, Cerebral has the concept of **signals**. These allow you to compose functions together into a flow that is not only about the "happy path" but properly takes the actual paths of execution into account, them being errors or other reasons to diverge execution. You can define many different execution paths based on whatever you want (a status code, an error, some state, etc). This allows you to write decoupled code, while still bringing everything together in the form of a higher abstraction which greatly helps understanding how things relate to one another (in what order they will run, when they will run, etc). Under the hood, signals are based on [function-tree](https://github.com/cerebral/function-tree), a project that came out of the initial experimentations in the first version of Cerebral.
 

@@ -7,7 +7,7 @@ import {state, input} from '../tags'
 describe('operator.equals', () => {
   it('should go down path based on input', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
@@ -25,7 +25,7 @@ describe('operator.equals', () => {
   })
   it('should go down path based on state', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },

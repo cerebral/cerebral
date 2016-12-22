@@ -5,7 +5,8 @@ import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
-import {set, state, debounce, input, string} from 'cerebral/operators'
+import {set, debounce} from 'cerebral/operators'
+import {state, input, string} from 'cerebral/tags'
 import starsSum from './computeds/starsSum'
 
 const toastDebounce = debounce.shared()

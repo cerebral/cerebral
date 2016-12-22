@@ -1,10 +1,12 @@
 import {convertObjectWithTemplates} from './utils'
 
 function updateFactory (updates) {
-  function update (context) {
-    return context.firebase.update(convertObjectWithTemplates(updates, context))
-      .then(context.path.success)
-      .catch(context.path.error)
+  function update ({firebase, state, input, path}) {
+    const tagGetters = {state: state.get, input}
+
+    return firebase.update(convertObjectWithTemplates(updates, tagGetters))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return update

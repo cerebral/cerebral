@@ -25,7 +25,8 @@ A convention is to attach chains to signals. These chains typically have their o
 *src/chains/updateData.js*
 ```js
 import getData from '../actions/getData'
-import {set, state, input} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 
 export default [
   set(state`isLoading`, true),

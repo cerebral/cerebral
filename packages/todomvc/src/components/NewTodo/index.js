@@ -1,11 +1,11 @@
 import React from 'react'
 import { connect } from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  title: 'app.newTodoTitle'
-}, {
-  titleChanged: 'app.newTodoTitleChanged',
-  submitted: 'app.newTodoSubmitted'
+  title: state`app.newTodoTitle`,
+  titleChanged: signal`app.newTodoTitleChanged`,
+  submitted: signal`app.newTodoSubmitted`
 },
   function NewTodo ({ isSaving, title, titleChanged, submitted }) {
     return (

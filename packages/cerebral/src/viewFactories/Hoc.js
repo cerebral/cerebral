@@ -67,15 +67,21 @@ export default (View) => {
       getDepsMap () {
         return Object.keys(this.evaluatedPaths).reduce((currentDepsMap, pathKey) => {
           if (this.evaluatedPaths[pathKey] instanceof Computed) {
-            return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].depsMap)
+            return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].getDepsMap(this.context.cerebral.controller.model))
           }
 
           if (typeof this.evaluatedPaths[pathKey] === 'string') {
             console.warn(`Defining state dependencies on components (${Component.displayName}) with strings is DEPRECATED. Use the STATE TAG instead`)
             currentDepsMap[pathKey] = this.evaluatedPaths[pathKey]
           } else {
-            return this.evaluatedPaths[pathKey](this.createTagGetters()).tags.reduce((updatedCurrentDepsMap, tag) => {
-              updatedCurrentDepsMap[tag.path] = tag.path
+            const getters = this.createTagGetters()
+
+            return this.evaluatedPaths[pathKey].getTags(getters).reduce((updatedCurrentDepsMap, tag) => {
+              if (tag.type === 'state') {
+                const path = tag.getPath(getters)
+
+                updatedCurrentDepsMap[path] = path
+              }
 
               return updatedCurrentDepsMap
             }, currentDepsMap)
@@ -110,12 +116,13 @@ export default (View) => {
           } else if (typeof stateAndSignalPaths[key] === 'string') {
             currentProps[key] = controller.getState(cleanPath(stateAndSignalPaths[key]))
           } else {
-            const tag = stateAndSignalPaths[key](this.createTagGetters())
+            const tag = stateAndSignalPaths[key]
+            const getters = this.createTagGetters()
 
-            if (tag.target === 'state') {
-              currentProps[key] = controller.getState(cleanPath(tag.path))
-            } else if (tag.target === 'signal') {
-              currentProps[key] = tag.value
+            if (tag.type === 'state') {
+              currentProps[key] = controller.getState(cleanPath(tag.getPath(getters)))
+            } else if (tag.type === 'signal') {
+              currentProps[key] = tag.getValue(getters)
             }
           }
 

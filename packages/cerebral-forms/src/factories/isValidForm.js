@@ -1,15 +1,17 @@
+import {Tag} from 'cerebral/tags'
 import isValidFormHelper from '../helpers/isValidForm'
 
 function isValidFormFactory (formPathTemplate) {
-  function isValidForm (context) {
-    const formPath = typeof formPathTemplate === 'function' ? formPathTemplate(context).value : formPathTemplate
-    const form = context.state.get(formPath)
+  function isValidForm ({state, input, path}) {
+    const tagGetters = {state: state.get, input}
+    const formPath = formPathTemplate instanceof Tag ? formPathTemplate.getValue(tagGetters) : formPathTemplate
+    const form = state.get(formPath)
 
     if (isValidFormHelper(form)) {
-      return context.path.true()
+      return path.true()
     }
 
-    return context.path.false()
+    return path.false()
   }
 
   return isValidForm

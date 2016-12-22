@@ -1,11 +1,13 @@
+import {Tag} from 'cerebral/tags'
 import {convertObjectWithTemplates} from './utils'
 
 function onChildRemovedFactory (path, signal, options = {}) {
-  function onChildRemoved (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-    const signalTemplate = typeof signal === 'function' ? signal(context).value : signal
+  function onChildRemoved ({firebase, state, input, controller}) {
+    const tagGetters = {state: state.get, input}
+    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+    const signalTemplate = signal instanceof Tag ? signal.getValue({state: state.get, input, signal: controller.getSignal.bind(this)}) : signal
 
-    context.firebase.onChildRemoved(pathTemplate, signalTemplate, convertObjectWithTemplates(options, context))
+    firebase.onChildRemoved(pathTemplate, signalTemplate, convertObjectWithTemplates(options, tagGetters))
   }
 
   return onChildRemoved

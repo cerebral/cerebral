@@ -1,14 +1,14 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import counts from '../../computed/counts'
 import cn from 'classnames'
 
 export default connect({
-  filter: 'app.filter',
-  counts: counts
-}, {
-  filterClicked: 'app.filterClicked',
-  clearCompletedClicked: 'app.clearCompletedClicked'
+  filter: state`app.filter`,
+  counts: counts,
+  filterClicked: signal`app.filterClicked`,
+  clearCompletedClicked: signal`app.clearCompletedClicked`
 },
   function Footer ({ filter, counts, filterClicked, clearCompletedClicked }) {
     let countLabel = 'item left'

@@ -1,11 +1,14 @@
-function deleteFactory (pathTemplate, fileTemplate) {
-  function deleteOp (context) {
-    const path = typeof pathTemplate === 'function' ? pathTemplate(context).value : pathTemplate
-    const file = typeof fileTemplate === 'function' ? fileTemplate(context).value : fileTemplate
+import {Tag} from 'cerebral/tags'
 
-    return context.firebase.delete(path, file)
-      .then(context.path.success)
-      .catch(context.path.error)
+function deleteFactory (pathTemplate, fileTemplate) {
+  function deleteOp ({firebase, state, input, path}) {
+    const tagGetters = {state: state.get, input}
+    const firebasePath = pathTemplate instanceof Tag ? pathTemplate.getValue(tagGetters) : pathTemplate
+    const file = fileTemplate instanceof Tag ? fileTemplate.getValue(tagGetters) : fileTemplate
+
+    return firebase.delete(firebasePath, file)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return deleteOp

@@ -6,7 +6,7 @@ import {input, state} from '../tags'
 
 describe('operator.push', () => {
   it('should push value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
@@ -20,7 +20,7 @@ describe('operator.push', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
   })
   it('should push value from input in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
@@ -34,17 +34,16 @@ describe('operator.push', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
-      state: {
-      },
-      signals: {
-        test: [
-          push(input`list`, 'bar')
-        ]
-      }
-    })
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
+      Controller({
+        state: {
+        },
+        signals: {
+          test: [
+            push(input`list`, 'bar')
+          ]
+        }
+      })
     }, /operator.push/)
   })
 })

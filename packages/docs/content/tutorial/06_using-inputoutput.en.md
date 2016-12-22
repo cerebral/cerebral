@@ -6,7 +6,7 @@ title: ch05. Actions
 
 **Load up chapter 05** - [Preview](05)
 
-Signals can take an input-object which then can be further processed by its actions.
+Signals can take an input-object which can be further processed by its actions.
 
 Let us say you have a user input which should get written to state.
 As we now know, the only correct way to write to state is to use **signals** with **actions**. In the previous chapters we have been using operators, but now we are going to create our very own action.
@@ -15,7 +15,8 @@ An action gives us access to the input-object, among other things. This input ob
 
 ```js
 ...
-import {set, state, wait, input} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
@@ -47,13 +48,13 @@ Now we just need to change our button click to actually pass a message (*src/com
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import Toast from './Toast'
 
 export default connect({
-  title: 'title',
-  subTitle: 'subTitle'
-}, {
-  buttonClicked: 'buttonClicked'
+  title: state`title`,
+  subTitle: state`subTitle`,
+  buttonClicked: signal`buttonClicked`
 },
   function App (props) {
     return (
@@ -75,7 +76,7 @@ export default connect({
 )
 ```
 
-Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Please keep an eye on the **debugger**. You can track how the flow of the input between the actions as they execute. Keep in mind that the result object from an action will be merged with the input and handed over to the next action. You might just have well used a different property for the shouted message.
+Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Please keep an eye on the **debugger**. You can track how the flow of the input between the actions as they execute. Keep in mind that the result object from an action will be merged with the input and handed over to the next action. You might just as well used a different property for the shouted message.
 
 ### Challenge
 

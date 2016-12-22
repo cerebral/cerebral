@@ -4,7 +4,8 @@ import {Controller} from 'cerebral'
 import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import {set, state, wait} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 const controller = Controller({
   devtools: Devtools(),
@@ -16,7 +17,7 @@ const controller = Controller({
   signals: {
     buttonClicked: [
       set(state`toast`, 'Button Clicked!'),
-      ...wait(4000),
+      wait(4000),
       set(state`toast`, null)
     ]
   }

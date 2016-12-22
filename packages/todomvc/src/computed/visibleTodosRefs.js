@@ -1,8 +1,9 @@
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 
 export default Computed({
-  todos: 'app.todos.**',
-  filter: 'app.filter'
+  todos: state`app.todos.**`,
+  filter: state`app.filter`
 }, props => {
   return Object.keys(props.todos).filter((ref) => {
     const todo = props.todos[ref]

@@ -6,7 +6,7 @@ import {input, state} from '../tags'
 
 describe('operator.unshift', () => {
   it('should unshift value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
@@ -20,7 +20,7 @@ describe('operator.unshift', () => {
     assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
   })
   it('should unshift value from input in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
@@ -34,17 +34,16 @@ describe('operator.unshift', () => {
     assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
-      state: {
-      },
-      signals: {
-        test: [
-          unshift(input`list`, 'bar')
-        ]
-      }
-    })
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
+      Controller({
+        state: {
+        },
+        signals: {
+          test: [
+            unshift(input`list`, 'bar')
+          ]
+        }
+      })
     }, /operator.unshift/)
   })
 })

@@ -4,7 +4,7 @@ title: Feedback messages
 
 ## Feedback messages
 
-Feedback messages, snackbars, popups etc. There are many names and approaches to how you give users feedback about what they are doing in your application, and maybe more importantly if something goes wrong. These feedback messages can actually be surprisingly complex. The reason is that you do not know when the next message will appear. Maybe showing the first one is not done yet... what should happen? Should it overwrite the current message, but what about the timing? Should it extend the timing of showing that message? Or maybe you want to display the messages on top of the other messages?
+Feedback messages, snackbars, popups, toasts etc. There are many names and approaches to how you give users feedback about what they are doing in your application, and maybe more importantly if something goes wrong. These feedback messages can actually be surprisingly complex. The reason is that you do not know when the next message will appear. Maybe showing the first one is not done yet... what should happen? Should it overwrite the current message, but what about the timing? Should it extend the timing of showing that message? Or maybe you want to display the messages in a list?
 
 We are going to explore how we can solve these scenarios using Cerebral.
 
@@ -22,7 +22,8 @@ export default {
 Now let us create a chain factory we can compose into any other chain to display this message.
 
 ```js
-import {state, set, wait} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 function showMessage (message) {
   return [
@@ -62,7 +63,8 @@ Let us see how we can make this better.
 We can use debouncing instead.
 
 ```js
-import {state, set, debounce} from 'cerebral/operators'
+import {set, debounce} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 // We first create a shared debounce. The benefit
 // of this is that any use of this showMessage factory
@@ -87,7 +89,7 @@ export default showMessage
 Now we have essentially fixed the problem. If again a new message triggers after 4 seconds, the debounce will discard the first one. If no new messages trigger during 5 seconds it will close the message, or if a new one appears it will again replace the text, discard the previous and wait 5 seconds to close.
 
 ### Multiple messages
-What if we wanted to stack messages on top of each other if there were messages there already?
+What if we wanted to stack messages in a list if there were messages there already?
 
 First let us change our state to handle multiple messages:
 
@@ -102,7 +104,8 @@ export default {
 And now let us rather unshift a new message to the array, then remove all messages when 5 seconds has passed.
 
 ```js
-import {state, set, unshift, debounce} from 'cerebral/operators'
+import {set, unshift, debounce} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 const showMessageDebounce = debounce.shared()
 

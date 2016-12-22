@@ -1,11 +1,14 @@
-function pushFactory (path, value) {
-  function push (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-    const valueTemplate = typeof value === 'function' ? value(context).value : value
+import {Tag} from 'cerebral/tags'
 
-    return context.firebase.push(pathTemplate, valueTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function pushFactory (path, value) {
+  function push ({firebase, state, input, path}) {
+    const tagGetters = {state: state.get, input}
+    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+    const valueTemplate = value instanceof Tag ? value.getValue(tagGetters) : value
+
+    return firebase.push(pathTemplate, valueTemplate)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return push

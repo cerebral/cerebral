@@ -1,8 +1,9 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  toast: 'app.toast'
+  toast: state`app.toast`
 },
   function Toast (props) {
     if (!props.toast) {

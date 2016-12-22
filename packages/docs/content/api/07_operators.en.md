@@ -3,109 +3,17 @@ title: Operators
 ---
 
 ## Operators
-You can call operators to create actions for you. These actions will help you
-change state and control the flow of execution.
-
-### Operator tags
-When using operators you want to express dynamic behavior. For example changing
-some state based on the input. Operator tags helps you express this. There are
-three operator tags available, `state`, `input` and `string`.
-
-There are two parts to operator tags. A target, and a template. The target tells
-the operator what to use the template for. And the template resolves to a
-string, for whatever purpose. Usually it is a path to the state tree, or some
-value on an input, but it could be anything.
-
-For example:
-
-```js
-state`foo.bar`
-```
-
-State is the target and "foo.bar" is the template. What this target and template
-is used for is decided by the operator.
-
-Operator tags can also inline other operator tags. For example:
-
-```js
-state`users.${input`userId`}`
-```
-
-There is nothing magic about this, it is pure JavaScript and is a very helpful
-way of expressing business logic. Here are that operator tags for Cerebral:
-
-#### input
-
-Input can be used both as a value source and as value target for operations.
-
-Get input value:
-
-```js
-set(state`notification`, input`message`)
-```
-
-Set input value for next actions in chain:
-
-```js
-set(input`key`, state`clients.$draft.key`)
-```
-
-#### state
-
-State can be used both as a value source and as value target for operations.
-
-Get state value:
-
-```js
-set(input`value`, state`clients.all.${input`key`}`)
-```
-
-Mutate state:
-
-```js
-set(state`key`, input`key`)
-```
-
-#### string
-
-The string operator tag is used when not targeting state or input. For example the HTTP provider uses it to dynamically build urls:
-
-```js
-httpGet(string`/items/${input`itemId`}`)
-```
-
-You might want to use it for a notification factory or similar:
-
-```js
-showMessage(string`Hi there ${state`user.name`}, whatup?`)
-```
-
-#### signal
-
-The signal operator tag is used when you want to pass another signal as
-parameter to a factory or action. For example as the signal to call on upload
-progress.
-
-```js
-firebase.put('remote.path', state`$draft.imageFile`,
-  {progress: signal`clients.$draft.imageProgress`}
-), {
-  success: [],
-  error: []
-}
-```
+You can call operators to create actions for you. These actions will help you change state and control the flow of execution.
 
 ### State operators
 
-The methods for changing state within actions is also available as operators.
-All state operators support using both `state` and `input` operator tags as
-values.
+The methods for changing state within actions is also available as operators. All state operators support using both `state` and `input` tags as values.
 
-All operators are imported as members of the 'cerebral/operators' module. For
-example, this imports `state` and `set`:
+All operators are imported as members of the 'cerebral/operators' module. For example, this imports `state` and `set`:
 
 ```js
-import {set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 ```
 
 #### concat
@@ -201,7 +109,8 @@ These operators help control the execution flow.
 This operator chooses a specific path based on the provided value.
 
 ```js
-import {equals, state} from 'cerebral/operators'
+import {equals} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 export default [
   equals(state`user.role`), {
@@ -239,7 +148,8 @@ export default [
 notifications where a previous notification should be cancelled by a new one.
 
 ```js
-import {debounce, set, state, unset} from 'cerebral/operators'
+import {debounce, set, unset} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 const sharedDebounce = debounce.share()
 function showNotificationFactory(message, ms) {
@@ -318,7 +228,8 @@ When used with a truth function, the `when` operator supports more then a single
 "value" argument. The truth function must come last.
 
 ```js
-import {input, state, when} from 'cerebral/operators'
+import {when} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 
 export default [
   when(state`clients.$draft.key`, input`key`,

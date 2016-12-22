@@ -27,10 +27,11 @@ And in components you can:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 import {ADMIN} from '../../pathConstants'
 
 export default connect({
-  isLoading: `${ADMIN}.isLoading`
+  isLoading: state`${ADMIN}.isLoading`
 },
   function MyComp(props) {
 

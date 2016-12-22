@@ -1,11 +1,14 @@
-function createUserWithEmailAndPasswordFactory (email, password) {
-  function createUserWithEmailAndPassword (context) {
-    const emailTemplate = typeof email === 'function' ? email(context).value : email
-    const passwordTemplate = typeof password === 'function' ? password(context).value : password
+import {Tag} from 'cerebral/tags'
 
-    return context.firebase.createUserWithEmailAndPassword(emailTemplate, passwordTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function createUserWithEmailAndPasswordFactory (email, password) {
+  function createUserWithEmailAndPassword ({firebase, state, input, path}) {
+    const tagGetters = {state: state.get, input}
+    const emailTemplate = email instanceof Tag ? email.getValue(tagGetters) : email
+    const passwordTemplate = password instanceof Tag ? password.getValue(tagGetters) : password
+
+    return firebase.createUserWithEmailAndPassword(emailTemplate, passwordTemplate)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return createUserWithEmailAndPassword

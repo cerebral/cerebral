@@ -1,10 +1,12 @@
-export function convertObjectWithTemplates (obj, context) {
-  if (typeof obj === 'function') {
-    return obj(context).value
+import {Tag} from 'cerebral/tags'
+
+export function convertObjectWithTemplates (obj, tagGetters) {
+  if (obj instanceof Tag) {
+    return obj.getValue(tagGetters)
   }
 
   return Object.keys(obj).reduce((convertedObject, key) => {
-    convertedObject[key] = typeof obj[key] === 'function' ? obj[key](context).value : obj[key]
+    convertedObject[key] = obj[key] instanceof Tag ? obj[key].getValue(tagGetters) : obj[key]
 
     return convertedObject
   }, {})

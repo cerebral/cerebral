@@ -23,9 +23,10 @@ In Cerebral we can automatically compute state using a **Computed**.
 
 ```js
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 
 export default Computed({
-  repos: 'repos'
+  repos: state`repos`
 }, ({repos}) => {
   return Object.keys(repos).reduce((currentCount, repoKey) => {
     return currentCount + repos[repoKey].stargazers_count
@@ -68,15 +69,15 @@ You can use computeds directly in operator tags, in actions and in components:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import starsSum from '../../computeds/starsSum'
 import Toast from '../Toast'
 
 export default connect({
-  title: 'title',
-  subTitle: 'subTitle',
+  title: state`title`,
+  subTitle: state`subTitle`,
+  buttonClicked: signal`buttonClicked`,
   starsCount: starsSum
-}, {
-  buttonClicked: 'buttonClicked'
 },
   function App (props) {
     return (

@@ -16,7 +16,7 @@ export const dependencyStore = new DependencyStore()
 */
 export class Computed {
   constructor (props, factory) {
-    this.props = props
+    this.passedProps = props
     this.func = factory.func
     this.value = null
     this.paths = factory.paths
@@ -56,34 +56,43 @@ export class Computed {
     })
   }
   /*
+    Creates the getters for evaluating tags
+  */
+  createTagGetters (model) {
+    return {
+      state (path) { return model.get(ensurePath(cleanPath(path))) },
+      props: this.passedProps
+    }
+  }
+  /*
     Produces the dependency map to register the compute in the
     dependency store with.
   */
   getDepsMap (model) {
-    if (!this.isRegistered) {
-      dependencyStore.addEntity(this, this.depsMap)
-      this.isRegistered = true
+    if (!this.depsMap) {
+      this.depsMap = Object.keys(this.paths).reduce((currentDepsMap, depsMapKey) => {
+        if (this.paths[depsMapKey] instanceof Computed) {
+          return Object.assign(currentDepsMap, this.paths[depsMapKey].getDepsMap(model))
+        } else if (typeof this.paths[depsMapKey] === 'string') {
+          console.warn('You are defining paths with a string in a Computed, use a STATE TAG instead')
+          currentDepsMap[depsMapKey] = this.paths[depsMapKey]
+        } else {
+          const getters = this.createTagGetters(model)
+
+          currentDepsMap = this.paths[depsMapKey].getTags(getters).reduce((depsMap, tag) => {
+            const path = tag.getPath(getters)
+
+            depsMap[path] = path
+
+            return depsMap
+          }, currentDepsMap)
+        }
+
+        return currentDepsMap
+      }, {})
     }
 
-    return Object.keys(this.paths).reduce((currentDepsMap, depsMapKey) => {
-      if (this.paths[depsMapKey] instanceof Computed) {
-        return Object.assign(currentDepsMap, this.paths[depsMapKey].depsMap)
-      } else if (typeof this.paths[depsMapKey] === 'string') {
-        console.warn('You are defining paths with a string in a Computed, use a STATE TAG instead')
-        currentDepsMap[depsMapKey] = this.paths[depsMapKey]
-      } else {
-        currentDepsMap = this.paths[depsMapKey]({
-          state: model.get.bind(model),
-          props: this.props
-        }).tags.reduce((depsMap, tag) => {
-          depsMap[tag.path] = tag.path
-
-          return depsMap
-        }, currentDepsMap)
-      }
-
-      return currentDepsMap
-    }, {})
+    return this.depsMap
   }
   /*
     Produces a new value if the computed is dirty or returns existing
@@ -91,21 +100,21 @@ export class Computed {
   */
   getValue (model) {
     if (!this.isRegistered) {
-      dependencyStore.addEntity(this, this.depsMap)
+      dependencyStore.addEntity(this, this.depsMap || this.getDepsMap(model))
       this.isRegistered = true
     }
 
     if (this.isDirty) {
       const computedProps = Object.assign(
         {},
-        this.setProps,
+        this.passedProps,
         Object.keys(this.paths).reduce((currentProps, depsMapKey) => {
           if (this.paths[depsMapKey] instanceof Computed) {
             currentProps[depsMapKey] = this.paths[depsMapKey].getValue(model)
           } else if (typeof this.paths[depsMapKey] === 'string') {
             currentProps[depsMapKey] = model.get(ensurePath(cleanPath(this.paths[depsMapKey])))
           } else {
-            currentProps[depsMapKey] =
+            currentProps[depsMapKey] = this.paths[depsMapKey].getValue(this.createTagGetters(model))
           }
 
           return currentProps

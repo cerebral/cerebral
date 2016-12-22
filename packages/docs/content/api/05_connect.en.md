@@ -5,7 +5,7 @@ title: Connect
 ## Connect
 
 ### Choosing a view type
-Cerebral theoretically can use any view layer. Currently it officially supports [React](https://facebook.github.io/react/) and [Inferno](http://infernojs.org/). From a Cerebral perspective they have the exact same API, you just have to choose to import from **cerebral/react** or **cerebral/inferno**. For specific API differences please check their documentation.
+Cerebral technically can use any view layer. Currently it officially supports [React](https://facebook.github.io/react/) and [Inferno](http://infernojs.org/). From a Cerebral perspective they have the exact same API, you just have to choose to import from **cerebral/react** or **cerebral/inferno**. For specific API differences of the two view libraries please check their documentation.
 
 Choose React if you want a huge ecosystem of shared components and documentation. Inferno is faster than React and is recommended to be used when you do not depend heavily on 3rd party components.
 
@@ -30,9 +30,10 @@ render((
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  isLoading: 'app.isLoading'
+  isLoading: state`app.isLoading`
 },
   function App(props) {
     props.isLoading
@@ -45,10 +46,11 @@ Expose state based on props passed to component:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, props} from 'cerebral/tags'
 
-export default connect((props) => ({
-  isLoading: `${props.module}.isLoading`
-}),
+export default connect({
+  isLoading: state`${props`module`}.isLoading`
+},
   function App(props) {
     props.isLoading
   }
@@ -59,11 +61,10 @@ export default connect((props) => ({
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal} from 'cerebral/tags'
 
 export default connect({
-  // State deps
-}, {
-  clicked: 'app.somethingClicked'
+  clicked: signal`app.somethingClicked`
 },
   function App(props) {
     props.clicked
@@ -76,12 +77,11 @@ Expose signals based on props passed to component:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal, props} from 'cerebral/tags'
 
 export default connect({
-  // State deps
-}, (props) => ({
-  clicked: `${props.module}.somethingClicked`
-}),
+  clicked: signal`${props.module}.somethingClicked`
+},
   function App(props) {
     props.clicked
   }
@@ -114,9 +114,10 @@ Now your components will only render when the exact state path defined changes:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  isLoading: 'app.isLoading'
+  isLoading: state`app.isLoading`
 },
   function App(props) {
     props.isLoading
@@ -131,9 +132,10 @@ When in **strict mode** you can specify child path interest. So for example a co
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  list: 'app.list.**'
+  list: state`app.list.**`
 },
   function App(props) {
     props.list
@@ -146,9 +148,10 @@ Or sometimes you are only interested in the immediate child paths. For example w
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  users: 'app.users.*'
+  users: state`app.users.*`
 },
   function App(props) {
     Object.keys(props.users)

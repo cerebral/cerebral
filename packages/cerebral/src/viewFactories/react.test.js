@@ -14,10 +14,10 @@ const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
 const Controller = require('../Controller').default
 const Computed = require('../Computed').default
-const {state, input, signal, props} = require('../tags')
+const {state, signal, props} = require('../tags')
 const {Container, StateContainer, connect, decorator} = require('./react')
 
-describe.only('React', () => {
+describe('React', () => {
   describe('state container', () => {
     it('should be able to wrap app with container', () => {
       class TestComponent extends React.Component {
@@ -857,7 +857,8 @@ describe.only('React', () => {
           foo: state`foo`,
           fooSignal: signal`foo`
         }, TestComponentClass)
-        const tree = TestUtils.renderIntoDocument((
+
+        TestUtils.renderIntoDocument((
           <Container controller={controller}>
             <TestComponent />
           </Container>
@@ -924,7 +925,7 @@ describe.only('React', () => {
         controller.getSignal('foo')()
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
       })
-      it.only('should allow props tag', () => {
+      it('should allow props tag', () => {
         const controller = Controller({
           state: {
             items: {0: 'foo', 1: 'bar'}
@@ -942,7 +943,7 @@ describe.only('React', () => {
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
           <Container controller={controller}>
-            <TestComponent itemKey="0"/>
+            <TestComponent itemKey='0' />
           </Container>
         ))
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')

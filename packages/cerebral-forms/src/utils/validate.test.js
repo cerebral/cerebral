@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {set, state, input} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 import {form, validateField, validateForm} from '..'
 import assert from 'assert'
 

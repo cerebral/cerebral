@@ -1,9 +1,10 @@
 import {Computed} from 'cerebral'
 import visibleTodosRefs from './visibleTodosRefs'
+import {state} from 'cerebral/tags'
 
 export default Computed({
   visibleTodosRefs: visibleTodosRefs,
-  todos: 'app.todos.**'
+  todos: state`app.todos.**`
 }, props => {
   return props.visibleTodosRefs.filter((ref) => {
     return !props.todos[ref].completed

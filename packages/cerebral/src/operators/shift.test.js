@@ -6,7 +6,7 @@ import {input, state} from '../tags'
 
 describe('operator.shift', () => {
   it('should shift value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b', 'c']
       },
@@ -20,17 +20,16 @@ describe('operator.shift', () => {
     assert.deepEqual(controller.getState(), {list: ['b', 'c']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
-      state: {
-      },
-      signals: {
-        test: [
-          shift(input`list`, 'bar')
-        ]
-      }
-    })
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
+      Controller({
+        state: {
+        },
+        signals: {
+          test: [
+            shift(input`list`, 'bar')
+          ]
+        }
+      })
     }, /operator.shift/)
   })
 })

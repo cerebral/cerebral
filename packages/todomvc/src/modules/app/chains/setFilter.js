@@ -1,4 +1,5 @@
-import {set, input, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 
 export default [
   set(state`app.filter`, input`filter`)

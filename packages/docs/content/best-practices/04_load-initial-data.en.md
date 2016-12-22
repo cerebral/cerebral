@@ -13,11 +13,11 @@ In your root component, typically **App**:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  title: 'app.title'
-}, {
-  mounted: 'app.mounted'
+  title: state`app.title`
+  mounted: signal`app.mounted`
 },
   class App extends React.Component {
     componentDidMount() {
@@ -37,7 +37,7 @@ export default connect({
 Now you do whatever data fetching and state updates you need in the **mounted** signal.
 
 ### With routing
-When you use the router there might be multiple entry points to your application and at any point you need to load some initial data. This is where factories comes to play. Imagine one of the modules:
+When you use the router there might be multiple entry points to your application and at any point you need to load some initial data. This is where factories comes in handy. Imagine one of the modules:
 
 ```js
 import openModule from './chains/openModule'
@@ -56,7 +56,8 @@ export default {
 You would do the same with any other routing entry points. The **withInitialData** factory simply does something like this:
 
 ```js
-import {state, set} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 function withInitialData (continueChain) {
   return [

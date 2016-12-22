@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {string, input} from 'cerebral/operators'
+import {string, input} from 'cerebral/tags'
 import HttpProvider, {httpGet, httpPost, httpPut, httpPatch, httpDelete} from './'
 import assert from 'assert'
 import mock from 'xhr-mock'

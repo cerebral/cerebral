@@ -1,3 +1,4 @@
+import {Tag} from 'cerebral/tags'
 import configureField from '../utils/configureField'
 
 function resetObject (form) {
@@ -29,11 +30,12 @@ function resetArray (formArray) {
 }
 
 export default function resetFormFactory (formPathTemplate) {
-  function resetForm (context) {
-    const formPath = typeof formPathTemplate === 'function' ? formPathTemplate(context).value : formPathTemplate
-    const form = context.state.get(formPath)
+  function resetForm ({state, input}) {
+    const tagGetters = {state: state.get, input}
+    const formPath = formPathTemplate instanceof Tag ? formPathTemplate.getValue(tagGetters) : formPathTemplate
+    const form = state.get(formPath)
 
-    context.state.merge(formPath, resetObject(form))
+    state.merge(formPath, resetObject(form))
   }
 
   return resetForm

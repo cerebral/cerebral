@@ -1,9 +1,12 @@
-function onValueFactory (path, signal) {
-  function onValue (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-    const signalTemplate = typeof signal === 'function' ? signal(context).value : signal
+import {Tag} from 'cerebral/tags'
 
-    context.firebase.onValue(pathTemplate, signalTemplate)
+function onValueFactory (path, signal) {
+  function onValue ({firebase, state, input, controller}) {
+    const tagGetters = {state: state.get, input}
+    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+    const signalTemplate = signal instanceof Tag ? signal.getValue({state: state.get, input, signal: controller.getSignal.bind(this)}) : signal
+
+    firebase.onValue(pathTemplate, signalTemplate)
   }
 
   return onValue

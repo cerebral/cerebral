@@ -1,17 +1,15 @@
+import Tag from '../tags/Tag'
+
 export default function (target) {
-  if (typeof target !== 'function') {
-    throw new Error('Cerebral operator.toggle: You have to use a STATE TAG as first argument')
+  if (!(target instanceof Tag) || target.type !== 'state') {
+    throw new Error('Cerebral operator.toggle: You have to use the STATE TAG as first argument')
   }
 
   function toggle ({state, input}) {
     const getters = {state: state.get, input}
-    const targetTemplate = target(getters)
+    const path = target.getPath(getters)
 
-    if (targetTemplate.target !== 'state') {
-      throw new Error('Cerebral operator.toggle: You have to use a STATE TAG as first argument')
-    }
-
-    state.set(targetTemplate.path, !state.get(targetTemplate.path))
+    state.set(path, !state.get(path))
   }
 
   toggle.displayName = 'operator.toggle'
