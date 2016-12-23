@@ -485,7 +485,7 @@ export default controller
 #### 2.x
 ```js
 import Controller from 'cerebral'
-import Devtools from 'cerebra/devtools'
+import Devtools from 'cerebral/devtools'
 
 const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? () => {} : Devtools(),
