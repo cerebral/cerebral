@@ -10,6 +10,7 @@ global.CustomEvent = global.window.CustomEvent = () => {}
 global.window.dispatchEvent = () => {}
 
 const React = require('react')
+const ReactDOM = require('react-dom')
 const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
 const Controller = require('../Controller').default
@@ -136,10 +137,182 @@ describe('React', () => {
             <TestComponent />
           </Container>
         ))
+      }, Error, 'Cerebral - You are not passing controller to Container')
+    })
+    it('should be able to unregister component from container after unmounting component', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
       })
+      const TestComponent = connect({
+        foo: 'foo'
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      const TestComponentRef = TestUtils.findRenderedComponentWithType(tree,TestComponent)
+      assert.equal(TestComponentRef._isUnmounting, undefined)
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode);
+      assert.equal(TestComponentRef._isUnmounting, true)
+      assert.deepEqual(controller.componentDependencyStore.getAllUniqueEntities(), [])
     })
   })
   describe('connect', () => {
+    it('should log with devtools when component state/signals more than devtools', () => {
+      const controller = Controller({
+        devtools: {bigComponentsWarning: {state: 1, signals: 1}, init () {}, send () {}, updateComponentsMap () {}},
+        state: {
+          foo: 'foo',
+          bar: 'bar'
+        },
+        signals: {
+          fooCalled: [],
+          barCalled: []
+        }
+      })
+      const TestComponent = connect({
+        foo: 'foo',
+        bar: 'bar'
+      }, {
+        fooCalled: 'fooCalled'
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      // how to get hasWarnedBigComponent or console.log??
+    })
+    it('should log with devtools when component state/signals more than devtools', () => {
+      const controller = Controller({
+        devtools: {bigComponentsWarning: {state: 1, signals: 1}, init () {}, send () {}, updateComponentsMap () {}},
+        state: {
+          foo: 'foo'
+        },
+        signals: {
+          fooCalled: [],
+          barCalled: []
+        }
+      })
+      const TestComponent = connect({
+      }, {
+        fooCalled: 'fooCalled',
+        barCalled: 'barCalled'
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      // how to get hasWarnedBigComponent or console.log??
+    })
+    it('should be able to remove computed from depsMap after unmounting component', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar',
+          mount: true
+        }
+      })
+      const computed = Computed({
+        foo: 'foo'
+      }, ({foo}) => {
+        return `${foo} computed`
+      })
+      const TestComponent = connect({
+        foo: computed
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      //console.log(computed.factory.cache)
+      const TestComponentRef = TestUtils.findRenderedComponentWithType(tree, TestComponent)
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar computed')
+      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode);
+      assert.equal(TestComponentRef._isUnmounting, true)
+      //console.log(TestComponentRef.depsMap)
+      //console.log(computed.factory.cache)
+    })
+    it('should be able to work undefined paths', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect(undefined, (props) => {
+        assert.deepEqual(props, {})
+        return (
+          <div>bar</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
+    it('should be able to work undefined evaluated paths', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect((props) => (undefined), (props) => {
+        assert.deepEqual(props, {})
+        return (
+          <div>bar</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
+    it('should throw an error if no container component provided', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect({
+        foo: 'foo'
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <TestComponent />
+        ))
+      }, Error, 'Cerebral - Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
+    })
     it('should be able to extract state', () => {
       const controller = Controller({
         state: {
@@ -185,6 +358,27 @@ describe('React', () => {
           <TestComponent />
         </Container>
       ))
+    })
+    it('should throw an error if there is no path or computed assigned to prop', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect({
+        foo: ''
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+      }, Error, 'Cerebral - There is no path or computed assigned to prop foo')
     })
     it('should expose signals prop with an option', () => {
       const controller = Controller({
@@ -403,6 +597,66 @@ describe('React', () => {
       component.callSignal()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2 computed')
     })
+    it('should be able to expose state based on props passed to component', () => {
+      const controller = Controller({
+        state: {
+          users: {0: 'foo', 1: 'bar'}
+        }
+      })
+      const TestComponent = connect((props) => {
+        assert.deepEqual(props, {currentUser: 0})
+        return {
+          user: `users.${props.currentUser}`
+        }
+      }, (props) => {
+        assert.deepEqual(props, {currentUser: 0, user: 'foo'})
+        return (
+          <div>{props.user}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent currentUser={0} />
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
+    })
+    it('should be able to expose signals based on props passed to component', () => {
+      const controller = Controller({
+        state: {
+          users: {0: 'foo', 1: 'bar'}
+        },
+        signals: {
+          changedUser: []
+        }
+      })
+      const TestComponent = connect((props) => {
+        assert.deepEqual(props, {currentUser: 0, changedUserSignalName: 'changedUser'})
+        return {
+          user: `users.${props.currentUser}`
+        }
+      }, (props) => {
+        assert.deepEqual(props, {currentUser: 0, changedUserSignalName: 'changedUser'})
+        return {
+          changedUser: `${props.changedUserSignalName}`
+        }
+      }, (props) => {
+        assert.equal(props.currentUser, 0)
+        assert.equal(props.user, 'foo')
+        assert.equal(typeof props.changedUser, 'function')
+        return (
+          <div>{props.user}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent currentUser={0} changedUserSignalName='changedUser'/>
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
+    })
     it('should be able to inject props', () => {
       const controller = Controller({})
       const TestComponent = connect({}, {}, {
@@ -497,7 +751,7 @@ describe('React', () => {
           currentUser: '0'
         },
         signals: {
-          changeUser: [
+          changedUser: [
             ({state}) => state.set('currentUser', '1')
           ]
         }
@@ -528,7 +782,7 @@ describe('React', () => {
         </Container>
       ))
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
-      controller.getSignal('changeUser')()
+      controller.getSignal('changedUser')()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
     describe('STRICT render update', () => {
