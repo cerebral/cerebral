@@ -1,4 +1,4 @@
-import {urlEncode} from './utils'
+import {urlEncode, parseHeaders} from './utils'
 
 export default {
   method: 'get',
@@ -30,8 +30,12 @@ export default {
     }
 
     if (xhr.status >= 200 && xhr.status < 300) {
+      const responseHeaders = 'getAllResponseHeaders' in xhr
+        ? parseHeaders(xhr.getAllResponseHeaders())
+        : null
       resolve({
         status: xhr.status,
+        headers: responseHeaders,
         result: result
       })
     } else {

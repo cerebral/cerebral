@@ -170,6 +170,7 @@ function someGetAction ({http}) {
     .then((response) => {
       response.status // Status code of response
       response.result // Parsed response text
+      response.headers // Parsed response headers
     })
     // All other status codes
     .catch((response) => {
