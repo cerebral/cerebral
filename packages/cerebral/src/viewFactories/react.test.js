@@ -157,10 +157,10 @@ describe('React', () => {
           <TestComponent />
         </Container>
       ))
-      const TestComponentRef = TestUtils.findRenderedComponentWithType(tree,TestComponent)
+      const TestComponentRef = TestUtils.findRenderedComponentWithType(tree, TestComponent)
       assert.equal(TestComponentRef._isUnmounting, undefined)
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
-      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode);
+      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode)
       assert.equal(TestComponentRef._isUnmounting, true)
       assert.deepEqual(controller.componentDependencyStore.getAllUniqueEntities(), [])
     })
@@ -246,13 +246,13 @@ describe('React', () => {
           <TestComponent />
         </Container>
       ))
-      //console.log(computed.factory.cache)
+      // console.log(computed.factory.cache)
       const TestComponentRef = TestUtils.findRenderedComponentWithType(tree, TestComponent)
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar computed')
-      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode);
+      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode)
       assert.equal(TestComponentRef._isUnmounting, true)
-      //console.log(TestComponentRef.depsMap)
-      //console.log(computed.factory.cache)
+      // console.log(TestComponentRef.depsMap)
+      // console.log(computed.factory.cache)
     })
     it('should be able to work undefined paths', () => {
       const controller = Controller({
@@ -295,11 +295,6 @@ describe('React', () => {
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
     it('should throw an error if no container component provided', () => {
-      const controller = Controller({
-        state: {
-          foo: 'bar'
-        }
-      })
       const TestComponent = connect({
         foo: 'foo'
       }, (props) => {
@@ -651,7 +646,7 @@ describe('React', () => {
       })
       const tree = TestUtils.renderIntoDocument((
         <Container controller={controller}>
-          <TestComponent currentUser={0} changedUserSignalName='changedUser'/>
+          <TestComponent currentUser={ 0 } changedUserSignalName='changedUser'/>
         </Container>
       ))
 

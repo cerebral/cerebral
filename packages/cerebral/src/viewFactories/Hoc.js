@@ -25,9 +25,9 @@ export default (View) => {
           throwError('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
         }
 
-        /*if (!this.evaluatedPaths) {
+        if (!this.evaluatedPaths) {
           return
-        }*/
+        }
 
         this.context.cerebral.registerComponent(this, this.depsMap)
       }
