@@ -21,13 +21,13 @@ export default (View) => {
         this.depsMap = this.getDepsMap()
       }
       componentWillMount () {
-        if (!this.context.cerebral.controller) {
-          throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
+        if (!this.context.cerebral) {
+          throwError('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
         }
 
-        if (!this.evaluatedPaths) {
+        /*if (!this.evaluatedPaths) {
           return
-        }
+        }*/
 
         this.context.cerebral.registerComponent(this, this.depsMap)
       }
@@ -65,7 +65,7 @@ export default (View) => {
         })
       }
       getDepsMap () {
-        return Object.keys(this.evaluatedPaths).reduce((currentDepsMap, pathKey) => {
+        return Object.keys(this.evaluatedPaths || {}).reduce((currentDepsMap, pathKey) => {
           if (this.evaluatedPaths[pathKey] instanceof Computed) {
             return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].depsMap)
           }
