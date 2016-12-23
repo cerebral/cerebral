@@ -180,7 +180,7 @@ class Devtools {
         return
       }
 
-      const message = JSON.stringify({
+      const message = this.safeStringify({
         type: 'executionFunctionEnd',
         data: {
           execution: {
