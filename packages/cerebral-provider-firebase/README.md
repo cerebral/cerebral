@@ -497,7 +497,7 @@ export default [
 ]
 ```
 
-#### Sign in with Facebook
+#### Sign in with Facebook, Google or GitHub
 Sign in a user with Facebook. Resolves to `{user: {}}`, or redirects.
 
 *action*
@@ -526,6 +526,8 @@ export default [
   }
 ]
 ```
+Similar you can sign in with Google or GitHub.
+Just use `signInWithGoogle` or `signInWithGithub` instead `signInWithFacebook`.
 
 #### Sign out
 Sign out user. **getUser** will now not resolve a user anymore.
