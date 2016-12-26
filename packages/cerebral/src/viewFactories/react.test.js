@@ -167,6 +167,11 @@ describe('React', () => {
   })
   describe('connect', () => {
     it('should log with devtools when component state/signals more than devtools', () => {
+      const originalConsoleWarn = console.warn
+      console.warn = (message) => {
+        assert.equal(message, 'Component named MyComponent has a lot of state dependencies, consider refactoring or adjust this option in devtools')
+        console.warn = originalConsoleWarn
+      }
       const controller = Controller({
         devtools: {bigComponentsWarning: {state: 1, signals: 1}, init () {}, send () {}, updateComponentsMap () {}},
         state: {
@@ -183,7 +188,7 @@ describe('React', () => {
         bar: 'bar'
       }, {
         fooCalled: 'fooCalled'
-      }, (props) => {
+      }, function MyComponent (props) {
         return (
           <div>{props.foo}</div>
         )
@@ -193,9 +198,13 @@ describe('React', () => {
           <TestComponent />
         </Container>
       ))
-      // how to get hasWarnedBigComponent or console.log??
     })
     it('should log with devtools when component state/signals more than devtools', () => {
+      const originalConsoleWarn = console.warn
+      console.warn = (message) => {
+        assert.equal(message, 'Component named MyComponent has a lot of signals, consider refactoring or adjust this option in devtools')
+        console.warn = originalConsoleWarn
+      }
       const controller = Controller({
         devtools: {bigComponentsWarning: {state: 1, signals: 1}, init () {}, send () {}, updateComponentsMap () {}},
         state: {
@@ -210,7 +219,7 @@ describe('React', () => {
       }, {
         fooCalled: 'fooCalled',
         barCalled: 'barCalled'
-      }, (props) => {
+      }, function MyComponent (props) {
         return (
           <div>{props.foo}</div>
         )
@@ -220,7 +229,6 @@ describe('React', () => {
           <TestComponent />
         </Container>
       ))
-      // how to get hasWarnedBigComponent or console.log??
     })
     it('should be able to remove computed from depsMap after unmounting component', () => {
       const controller = Controller({
@@ -646,7 +654,7 @@ describe('React', () => {
       })
       const tree = TestUtils.renderIntoDocument((
         <Container controller={controller}>
-          <TestComponent currentUser={ 0 } changedUserSignalName='changedUser'/>
+          <TestComponent currentUser={0} changedUserSignalName='changedUser' />
         </Container>
       ))
 
