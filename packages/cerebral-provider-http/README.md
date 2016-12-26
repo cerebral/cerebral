@@ -170,6 +170,8 @@ function someGetAction ({http}) {
     .then((response) => {
       response.status // Status code of response
       response.result // Parsed response text
+      // The response headers are returned as an object with lowercase header
+      // names as keys. Values belonging to the same key are separated by ', '.
       response.headers // Parsed response headers
     })
     // All other status codes
@@ -221,7 +223,7 @@ Note that this is only related to the **request**. If you want to define what yo
 Since Cerebral can only use serializable data in signals and the state tree, any file uploads must happen in components.
 
 ```js
-import {FileUpload} from 'cerebral-module-http'
+import {FileUpload} from 'cerebral-provider-http'
 
 export default connect({
   fileNames: 'app.fileNames'
