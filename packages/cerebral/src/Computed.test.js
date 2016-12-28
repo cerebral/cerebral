@@ -99,10 +99,10 @@ describe('Computed', () => {
           foo
         }
       })
-      const value = computed.getValue(model)
+      computed.getValue(model)
       model.set(['foobar'], 'foobar2')
       controller.flush()
-      const value2 = computed.getValue(model)
+      computed.getValue(model)
       assert.equal(counter, 1)
     })
 
