@@ -178,6 +178,7 @@ function someGetAction ({http}) {
     .catch((response) => {
       response.status // Status code of response
       response.result // Parsed response text
+      response.headers // Parsed response headers
     })
 }
 ```
