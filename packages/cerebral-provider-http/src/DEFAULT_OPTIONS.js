@@ -29,10 +29,11 @@ export default {
       result = JSON.parse(xhr.responseText)
     }
 
+    const responseHeaders = 'getAllResponseHeaders' in xhr
+      ? parseHeaders(xhr.getAllResponseHeaders())
+      : null
+
     if (xhr.status >= 200 && xhr.status < 300) {
-      const responseHeaders = 'getAllResponseHeaders' in xhr
-        ? parseHeaders(xhr.getAllResponseHeaders())
-        : null
       resolve({
         status: xhr.status,
         headers: responseHeaders,
@@ -41,6 +42,7 @@ export default {
     } else {
       reject({
         status: xhr.status,
+        headers: responseHeaders,
         result: result
       })
     }
