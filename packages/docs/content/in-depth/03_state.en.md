@@ -10,7 +10,7 @@ Cerebral uses a single state tree to store all the state of your application. It
 {}
 ```
 
-Thats it.
+That's it.
 
 You will normally store other objects, arrays, strings, booleans and numbers in it. Forcing you to think of your state in this simple form gives us benefits.
 
@@ -31,7 +31,7 @@ const AppModule = {
   }
 }
 
-const conroller = Controller({
+const controller = Controller({
   modules: {
     app: AppModule
   }
