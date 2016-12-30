@@ -20,16 +20,18 @@ describe('operator.pop', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b']})
   })
   it('should throw on bad argument', () => {
+    const controller = Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          pop(input`list`)
+        ]
+      }
+    })
+
     assert.throws(() => {
-      Controller({
-        state: {
-        },
-        signals: {
-          test: [
-            pop(input`list`)
-          ]
-        }
-      })
+      controller.getSignal('test')()
     }, /operator.pop/)
   })
 })

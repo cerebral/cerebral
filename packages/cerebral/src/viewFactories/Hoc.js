@@ -77,7 +77,7 @@ export default (View) => {
             const getters = this.createTagGetters()
 
             return this.evaluatedPaths[pathKey].getTags(getters).reduce((updatedCurrentDepsMap, tag) => {
-              if (tag.type === 'state') {
+              if (tag.options.isStateDependency) {
                 const path = tag.getPath(getters)
 
                 updatedCurrentDepsMap[path] = path

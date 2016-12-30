@@ -1,4 +1,5 @@
-import {input, set, state, when} from 'cerebral/operators'
+import {set, when} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import * as firebase from 'cerebral-provider-firebase'
 import paths from '../paths'
 

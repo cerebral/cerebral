@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 import * as LANGS from '../../common/translations'
 
@@ -9,15 +10,13 @@ const LANG_OPTS = Object.keys(LANGS).map(lang => (
 
 export default connect(
   {
-    t: translations,
-    showSelector: 'app.$showLangSelector'
+    onBackgroundClick: signal`app.langSelectorBackgroundClicked`,
+    onClick: signal`app.langSelectorClicked`,
+    onOptionClick: signal`app.langOptionClicked`,
+    showSelector: state`app.$showLangSelector`,
+    t: translations
   },
-  {
-    onBackgroundClick: 'app.langSelectorBackgroundClicked',
-    onClick: 'app.langSelectorClicked',
-    onOptionClick: 'app.langOptionClicked'
-  },
-  function LangSelector ({showSelector, t, onBackgroundClick, onClick, onOptionClick}) {
+  function LangSelector ({onBackgroundClick, onClick, onOptionClick, showSelector, t}) {
     return (
       <div className='Selector'>
         <a onClick={() => onClick()}>{t.language}</a>

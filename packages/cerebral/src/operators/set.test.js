@@ -93,16 +93,17 @@ describe('operator.set', () => {
     assert.equal(controller.getState().foo, 'bar2')
   })
   it('should throw on bad argument', () => {
+    const controller = Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          set(string`foo`, 'bar')
+        ]
+      }
+    })
     assert.throws(() => {
-      Controller({
-        state: {
-        },
-        signals: {
-          test: [
-            set(string`foo`, 'bar')
-          ]
-        }
-      })
+      controller.getSignal('test')()
     }, /operator.set/)
   })
 })

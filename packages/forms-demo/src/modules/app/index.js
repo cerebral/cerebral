@@ -1,4 +1,5 @@
-import {set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {form} from 'cerebral-forms'
 import toggleSelectSettings from './chains/toggleSelectSettings'
 

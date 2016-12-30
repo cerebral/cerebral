@@ -1,6 +1,7 @@
 /* eslint-disable no-script-url */
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 
 import Login from '../Login'
@@ -12,15 +13,13 @@ import Header from '../Header'
 
 export default connect(
   {
-    t: translations,
-    loggedIn: 'user.$loggedIn',
-    loading: 'app.$loading',
-    currentUser: 'user.$currentUser'
+    currentUser: state`user.$currentUser`,
+    loading: state`app.$loading`,
+    loggedIn: state`user.$loggedIn`,
+    signOutClicked: signal`user.signOutClicked`,
+    t: translations
   },
-  {
-    signOutClicked: 'user.signOutClicked'
-  },
-  function Demo ({t, loggedIn, loading, currentUser, signOutClicked}) {
+  function Demo ({currentUser, loading, loggedIn, signOutClicked, t}) {
     if (loading) {
       return null
     }

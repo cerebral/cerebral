@@ -21,13 +21,6 @@ describe('Tags', () => {
     const stateObject = {foo: {baz: 'mip'}, bar: 'baz'}
     assert.equal(tag.getValue({state: stateObject}), 'mip')
   })
-  it('should throw when invalid tag composition', () => {
-    const tag = state`foo.${null}`
-    const stateObject = {foo: 'bar'}
-    assert.throws(() => {
-      tag.getValue({state: stateObject})
-    })
-  })
   it('should throw when invalid tag is used', () => {
     const tag = state`foo.${null}`
     assert.throws(() => {
@@ -39,6 +32,22 @@ describe('Tags', () => {
     const stateObject = {foo: 'bar'}
     assert.throws(() => {
       tag.getValue({state: stateObject})
+    })
+  })
+  it('should throw when invalid path is used', () => {
+    const tag = input`foo.bar`
+    const inputObject = {}
+    assert.throws(() => {
+      tag.getValue({input: inputObject})
+    })
+  })
+  it('should NOT throw on undefined value', () => {
+    const tagA = input`foo.bar`
+    const tagB = input`baz`
+    const inputObject = {foo: {}}
+    assert.doesNotThrow(() => {
+      tagA.getValue({input: inputObject})
+      tagB.getValue({input: inputObject})
     })
   })
   it('should return path', () => {

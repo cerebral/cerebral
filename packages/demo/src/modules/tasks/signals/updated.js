@@ -1,4 +1,5 @@
-import {input, state, unset, when} from 'cerebral/operators'
+import {unset, when} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import updated from '../../../common/Collection/signals/updated'
 import updateNow from './updateNow'
 import {isRunning} from '../helpers'

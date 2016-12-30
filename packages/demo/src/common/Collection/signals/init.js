@@ -1,8 +1,7 @@
-import {input, merge, set, state, when} from 'cerebral/operators'
+import {merge, set, when} from 'cerebral/operators'
+import {input, signal, state} from 'cerebral/tags'
 import {onChildAdded, onChildChanged, onChildRemoved, value} from 'cerebral-provider-firebase'
 import paths from '../paths'
-
-let timestamp
 
 export default function init (moduleName, initState = {}) {
   const {collectionPath, dynamicPaths, errorPath} = paths(moduleName)
@@ -10,8 +9,8 @@ export default function init (moduleName, initState = {}) {
     // prepare remote and local path
     ...dynamicPaths,
     () => {
-      // timestamp before calling value
-      timestamp = (new Date()).getTime()
+      // set input.timestamp before calling value
+      return {timestamp: (new Date()).getTime()}
     },
     value(input`remoteCollectionPath`), {
       success: [
@@ -25,17 +24,17 @@ export default function init (moduleName, initState = {}) {
         },
         // start listening
         onChildAdded(
-          input`remoteCollectionPath`, `${moduleName}.updated`,
+          input`remoteCollectionPath`, signal`${moduleName}.updated`,
           {
             orderByChild: 'updated_at',
             // Use the timestamp set before getting value
-            startAt: () => ({value: timestamp})
+            startAt: input`timestamp`
           }
         ),
         onChildChanged(
-          input`remoteCollectionPath`, `${moduleName}.updated`),
+          input`remoteCollectionPath`, signal`${moduleName}.updated`),
         onChildRemoved(
-          input`remoteCollectionPath`, `${moduleName}.removed`)
+          input`remoteCollectionPath`, signal`${moduleName}.removed`)
       ],
       error: [
         set(state`${errorPath}`, input`error`)

@@ -1,13 +1,23 @@
-import {Tag} from 'cerebral/tags'
 import runValidation from '../utils/runValidation'
 
-export default function validateFieldFactory (pathTemplate) {
-  function validateField ({state, input}) {
-    const tagGetters = {state: state.get, input}
-    const path = pathTemplate instanceof Tag ? pathTemplate.getValue(tagGetters) : pathTemplate
-    const fieldPath = path.split('.')
-    const formPath = fieldPath.slice().splice(0, fieldPath.length - 1)
-    const field = state.get(fieldPath)
+export default function validateFieldFactory (fieldPath) {
+  function validateField ({state, resolveArg}) {
+    let path
+
+    if (typeof fieldPath === 'string') {
+      console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into validateField factory')
+      path = fieldPath
+    } else {
+      if (!resolveArg.isTag(fieldPath, 'state')) {
+        throw new Error('Cerebral Forms - validateField factory requires a STATE TAG')
+      }
+
+      path = resolveArg.path(fieldPath)
+    }
+
+    const fieldPathAsArray = path.split('.')
+    const formPath = fieldPathAsArray.slice().splice(0, fieldPathAsArray.length - 1)
+    const field = state.get(path)
     const form = state.get(formPath)
     const validationResult = runValidation(field, form)
 
@@ -37,7 +47,7 @@ export default function validateFieldFactory (pathTemplate) {
       return currentValidationResult
     }, validationResult)
 
-    state.merge(fieldPath, dependentOfValidationResult)
+    state.merge(path, dependentOfValidationResult)
   }
 
   return validateField

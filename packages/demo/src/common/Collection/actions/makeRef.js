@@ -1,5 +1,5 @@
 import {v4} from 'uuid'
 
 export default function (context) {
-  return {value: v4()}
+  return {ref: v4()}
 }

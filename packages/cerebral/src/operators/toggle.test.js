@@ -37,16 +37,18 @@ describe('operator.toggle', () => {
     assert.deepEqual(controller.getState(), {todos: {one: false, two: false}})
   })
   it('should throw on bad argument', () => {
+    const controller = Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          toggle(input`foo`)
+        ]
+      }
+    })
+
     assert.throws(() => {
-      Controller({
-        state: {
-        },
-        signals: {
-          test: [
-            toggle(input`foo`)
-          ]
-        }
-      })
+      controller.getSignal('test')()
     }, /operator.toggle/)
   })
 })

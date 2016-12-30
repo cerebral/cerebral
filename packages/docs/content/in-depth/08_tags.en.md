@@ -36,30 +36,15 @@ state`foo.bar`
 import {Tag} from 'cerebral/tags'
 
 function someFactory(statePath) {
-  function someAction ({state, input}) {
-    // Verify that it is a Tag
-    if (statePath instanceof Tag) {
-      // We create an object defining getters. The getter
-      // is the name of the tag it correlates to and either
-      // a function taking a path or an object for lookups
-      const getters = {
-        state: state.get,
-        input
-      }
-
-      statePath.type // "state"
-      statePath.getPath(getters) // "foo.bar"
-      statePath.getValue(getters) // The value on path "foo.bar" in state tree
-      statePath.getTags(getters) // All tags composed into this tag
-
-    }
+  function someAction ({state, input, resolveArg}) {
+    const isTag = resolveArg.isTag(statePath, 'state') // true/false
+    const path = resolveArg.path(statePath) // "foo.bar"
+    const value = resolveArg.value(statePath) // The value on path "foo.bar" in state tree
   }
 
   return someAction
 }
 ```
-
-So a tag has a **type** which can be used identify some logic you want to run. The value returned from **getPath** is the evaluated path on the tag. The value returned from **getValue** is any extracted value of the tag.
 
 You can easily create your own action factories and use the tags. Here showing the implementation of a **set**
 
@@ -67,25 +52,13 @@ You can easily create your own action factories and use the tags. Here showing t
 import {Tag} from 'cerebral/tags'
 
 function setFactory(target, value) {
-  // We check if it is a tag and type is correct
-  if (
-    !(target instanceof Tag) ||
-    !(target.type === 'state' || target.type === 'input')
-  ) {
-    throw new Error('You have to target state or input when setting')
-  }
+  function set({state, input, resolveArg}) {
+    if (!resolveArg.isTag(target, 'state', 'input')  ) {
+      throw new Error('You have to use STATE or INPUT tag as set target')
+    }
 
-  function set({state, input}) {
-    // We define the getters for populating the paths of a tag
-    const getters = {state: state.get, input}
-
-
-    // Since we allow both using a tag or a hardcoded value as value
-    // we check if it is a tag. Then we either grab the value from the
-    // tag or the value passed in
-    const setValue = value instanceof Tag ? value.getValue(getters) : value
-
-    state.set(target.getPath(getters), setValue)
+    // resolveArg.value will return tag value, function value or plain value
+    state.set(resolveArg.path(target), resolveArg.value(value))
   }
 
   return set

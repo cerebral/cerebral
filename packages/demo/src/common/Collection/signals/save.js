@@ -1,4 +1,5 @@
-import {input, set} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {set as setRemote} from 'cerebral-provider-firebase'
 import paths from '../paths'
 import timestampValue from './timestampValue'

@@ -1,6 +1,7 @@
 import React from 'react'
 import {css} from 'aphrodite'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 import MenuItem from './MenuItem'
 import SettingsCheckbox from './SettingsCheckbox'
 import styles from './styles'
@@ -9,10 +10,9 @@ const types = [
   {name: 'Simple', url: '#/simple'}
 ]
 
-export default connect(
-  {
-    settings: 'app.settings'
-  },
+export default connect({
+  settings: state`app.settings`
+},
   function Menu ({settings}) {
     return (
       <div className={css(styles.container)}>

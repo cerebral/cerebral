@@ -1,4 +1,5 @@
-import {set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import Collection from '../../common/Collection'
 import startStopRunning from './signals/startStopRunning'
 import updated from './signals/updated'

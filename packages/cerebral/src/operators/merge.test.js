@@ -44,16 +44,18 @@ describe('operator.merge', () => {
     }})
   })
   it('should throw on bad argument', () => {
+    const controller = Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          merge(input`users`, {joe: 'Joe'})
+        ]
+      }
+    })
+
     assert.throws(() => {
-      Controller({
-        state: {
-        },
-        signals: {
-          test: [
-            merge(input`users`, {joe: 'Joe'})
-          ]
-        }
-      })
+      controller.getSignal('test')()
     }, /operator.merge/)
   })
   it('should create object if no value', () => {

@@ -21,16 +21,18 @@ describe('operator.unset', () => {
     assert.deepEqual(controller.getState(), {bar: 'baz'})
   })
   it('should throw on bad argument', () => {
+    const controller = Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          unset(input`foo`)
+        ]
+      }
+    })
+
     assert.throws(() => {
-      Controller({
-        state: {
-        },
-        signals: {
-          test: [
-            unset(input`foo`)
-          ]
-        }
-      })
+      controller.getSignal('test')()
     }, /operator.unset/)
   })
 })

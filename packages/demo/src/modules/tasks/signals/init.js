@@ -1,4 +1,5 @@
-import {input, set, state, when} from 'cerebral/operators'
+import {set, when} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import init from '../../../common/Collection/signals/init'
 import paths from '../../../common/Collection/paths'
 import updated from './updated'

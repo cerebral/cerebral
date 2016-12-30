@@ -1,11 +1,6 @@
-import {Tag} from 'cerebral/tags'
-
 function sendPasswordResetEmailFactory (email) {
-  function sendPasswordResetEmail ({firebase, state, input, path}) {
-    const tagGetters = {state: state.get, input}
-    const emailTemplate = email instanceof Tag ? email.getValue(tagGetters) : email
-
-    return firebase.sendPasswordResetEmail(emailTemplate)
+  function sendPasswordResetEmail ({firebase, path, resolveArg}) {
+    return firebase.sendPasswordResetEmail(resolveArg.value(email))
       .then(path.success)
       .catch(path.error)
   }

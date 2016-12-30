@@ -1,18 +1,17 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {props, signal, state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 
 export default connect(
-  ({field}) => ({
-    value: `clients.$draft.${field}`,
-    t: translations
-  }),
   {
-    enterPressed: 'clients.enterPressed',
-    escPressed: 'clients.escPressed',
-    valueChanged: 'clients.formValueChanged'
+    enterPressed: signal`clients.enterPressed`,
+    escPressed: signal`clients.escPressed`,
+    value: state`clients.$draft.${props`field`}`,
+    valueChanged: signal`clients.formValueChanged`,
+    t: translations
   },
-  function Input ({autoFocus, field, icon, placeholderKey, type, value, warning, enterPressed, escPressed, valueChanged, t}) {
+  function Input ({autoFocus, enterPressed, escPressed, field, icon, placeholderKey, type, value, valueChanged, t, warning}) {
     const onKeyDown = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -48,7 +47,7 @@ export default connect(
           name={field}
           />
         {icon && <i className={`fa fa-${icon}`} />}
-        {warning && <span class='help is-warning'>{warning}</span>}
+        {warning && <span className='help is-warning'>{warning}</span>}
       </p>
     )
   }

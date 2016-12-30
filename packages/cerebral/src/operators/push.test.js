@@ -34,16 +34,18 @@ describe('operator.push', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
   })
   it('should throw on bad argument', () => {
+    const controller = Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          push(input`list`, 'bar')
+        ]
+      }
+    })
+
     assert.throws(() => {
-      Controller({
-        state: {
-        },
-        signals: {
-          test: [
-            push(input`list`, 'bar')
-          ]
-        }
-      })
+      controller.getSignal('test')()
     }, /operator.push/)
   })
 })

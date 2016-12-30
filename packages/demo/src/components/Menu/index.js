@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 
 const MENUS = [
@@ -21,7 +22,7 @@ const MENUS = [
 ]
 
 export default connect({
-  selectedView: 'app.$selectedView',
+  selectedView: state`app.$selectedView`,
   t: translations
 },
   function Navbar ({selectedView, t}) {

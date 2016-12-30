@@ -1,14 +1,8 @@
-import {Tag} from 'cerebral/tags'
 import runValidation from '../utils/runValidation'
 
-export default function validateFormFactory (passedFormPathTemplate) {
-  function validateForm ({state, input}) {
-    const tagGetters = {state: state.get, input}
-    const passedFormPath = passedFormPathTemplate instanceof Tag ? passedFormPathTemplate.getValue(tagGetters) : passedFormPathTemplate
-    const formPath = passedFormPath.split('.')
-    const currentPathValue = state.get(formPath)
-
-    function validateForm (path, form) {
+export default function validateFormFactory (formPath) {
+  function validateForm ({state, input, resolveArg}) {
+    function validate (path, form) {
       Object.keys(form).forEach(function (key) {
         if (form[key] === Object(form[key])) {
           if (Array.isArray(form[key])) {
@@ -16,7 +10,7 @@ export default function validateFormFactory (passedFormPathTemplate) {
           } else if ('value' in form[key]) {
             state.merge(path.concat(key), runValidation(form[key], form))
           } else {
-            validateForm(path.concat(key), form[key])
+            validate(path.concat(key), form[key])
           }
         }
       })
@@ -24,11 +18,19 @@ export default function validateFormFactory (passedFormPathTemplate) {
 
     function validateArray (path, formArray) {
       formArray.forEach((form, index) => {
-        validateForm(path.concat(index), form)
+        validate(path.concat(index), form)
       })
     }
+    if (typeof formPath === 'string') {
+      console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into validateForm factory')
+      validate(formPath.split('.'), state.get(formPath))
+    } else {
+      if (!resolveArg.isTag(formPath, 'state')) {
+        throw new Error('Cerebral Forms - validateField factory requires a STATE TAG')
+      }
 
-    validateForm(formPath, currentPathValue)
+      validate(resolveArg.path(formPath).split('.'), resolveArg.value(formPath))
+    }
   }
 
   return validateForm

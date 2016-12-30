@@ -1,19 +1,18 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
 import visibleProjectsByClient from '../../computed/visibleProjectsByClient'
 
 export default connect(
   {
-    editedTask: 'tasks.$draft',
-    filter: 'projects.$filter',
+    editedTask: state`tasks.$draft`,
+    filter: state`projects.$filter`,
+    onBackgroundClick: signal`projects.selectorBackgroundClick`,
+    onChange: signal`projects.filterChanged`,
+    onProjectClick: signal`projects.selectorProjectClicked`,
     projectsByClient: visibleProjectsByClient
   },
-  {
-    onBackgroundClick: 'projects.selectorBackgroundClick',
-    onChange: 'projects.filterChanged',
-    onProjectClick: 'projects.selectorProjectClicked'
-  },
-  function ProjectSelector ({editedTask, filter, projectsByClient, onBackgroundClick, onChange, onProjectClick}) {
+  function ProjectSelector ({editedTask, filter, onBackgroundClick, onChange, onProjectClick, projectsByClient}) {
     const selectedProject = editedTask && editedTask.projectKey
     return (
       <div>

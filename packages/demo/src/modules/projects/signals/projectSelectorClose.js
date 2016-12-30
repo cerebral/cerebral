@@ -1,4 +1,5 @@
-import {set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 export default [
   set(state`projects.$showProjectSelector`, false),

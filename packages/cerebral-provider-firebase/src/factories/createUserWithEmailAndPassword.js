@@ -1,12 +1,6 @@
-import {Tag} from 'cerebral/tags'
-
 function createUserWithEmailAndPasswordFactory (email, password) {
-  function createUserWithEmailAndPassword ({firebase, state, input, path}) {
-    const tagGetters = {state: state.get, input}
-    const emailTemplate = email instanceof Tag ? email.getValue(tagGetters) : email
-    const passwordTemplate = password instanceof Tag ? password.getValue(tagGetters) : password
-
-    return firebase.createUserWithEmailAndPassword(emailTemplate, passwordTemplate)
+  function createUserWithEmailAndPassword ({firebase, path, resolveArg}) {
+    return firebase.createUserWithEmailAndPassword(resolveArg.value(email), resolveArg.value(password))
       .then(path.success)
       .catch(path.error)
   }

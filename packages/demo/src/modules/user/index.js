@@ -1,4 +1,5 @@
-import {input, set, state} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import {form, changeField} from 'cerebral-forms'
 import createUser from './signals/createUser'
 import signIn from './signals/signIn'

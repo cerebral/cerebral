@@ -1,10 +1,8 @@
 import {convertObjectWithTemplates} from './utils'
 
 function signInWithFacebookFactory (options = {}) {
-  function signInWithFacebook ({firebase, state, input, path}) {
-    const tagGetters = {state: state.get, input}
-
-    return firebase.signInWithFacebook(convertObjectWithTemplates(options, tagGetters))
+  function signInWithFacebook ({firebase, path, resolveArg}) {
+    return firebase.signInWithFacebook(convertObjectWithTemplates(options, resolveArg))
       .then(path.success)
       .catch(path.error)
   }

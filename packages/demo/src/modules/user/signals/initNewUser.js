@@ -1,4 +1,5 @@
-import {set, state, input} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import {set as setRemote} from 'cerebral-provider-firebase'
 import firebaseInit from '../../app/signals/firebaseInit'
 import paths from '../../../common/Collection/paths'

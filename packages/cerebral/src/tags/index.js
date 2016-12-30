@@ -7,7 +7,9 @@ function createTemplateTag (tag, options = {}) {
 }
 
 export {default as Tag} from './Tag'
-export const state = createTemplateTag('state')
+export const state = createTemplateTag('state', {
+  isStateDependency: true
+})
 export const input = createTemplateTag('input')
 export const signal = createTemplateTag('signal')
 export const props = createTemplateTag('props')

@@ -53,10 +53,11 @@ export default class Tag {
     Extracts value from object using a path
   */
   extractValueWithPath (obj, path) {
-    return path.split('.').reduce((currentValue, key) => {
-      // if (currentValue[key] === undefined) {
-      //   throw new Error(`A tag is extracting "${path}", but it is not valid`)
-      // }
+    return path.split('.').reduce((currentValue, key, index) => {
+      if (index > 0 && currentValue === undefined) {
+        throw new Error(`A tag is extracting with path "${path}", but it is not valid`)
+      }
+
       return currentValue[key]
     }, obj)
   }

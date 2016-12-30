@@ -1,37 +1,31 @@
-import {Tag} from 'cerebral/tags'
-
-function putFactory (pathTemplate, fileTemplate, optionsTemplate = {}) {
-  function put ({firebase, state, input, controller, path}) {
-    const tagGetters = {state: state.get, input}
-    const firebasePath = pathTemplate instanceof Tag ? pathTemplate.getValue(tagGetters) : pathTemplate
-    const file = fileTemplate instanceof Tag ? fileTemplate.getValue(tagGetters) : fileTemplate
-    const options = Object.keys(optionsTemplate).reduce((opts, key) => {
-      const value = optionsTemplate[key]
+function putFactory (putPath, file, options = {}) {
+  function put ({firebase, input, state, path, resolveArg}) {
+    const evaluatedOptions = Object.keys(options).reduce((currentEvaluatedOptions, key) => {
+      const option = options[key]
 
       if (key === 'progress') {
-        if (!(value instanceof Tag)) {
-          throw new Error('cerebral-module-firebase: The value for \'progress\' option should be a tag.')
+        if (!(resolveArg.istag(option, 'state', 'signal'))) {
+          throw new Error('cerebral-module-firebase: The value for \'progress\' option should be either \'state\' or \'signal\' tag.')
         }
 
-        if (value.type === 'signal') {
-          opts[key] = (progress) => {
+        if (option.type === 'signal') {
+          currentEvaluatedOptions[key] = (progress) => {
             // We call progress signal with same 'input' context
-            value.getValue({state: state.get, input, signal: controller.getSignal.bind(controller)})(Object.assign({}, input, progress))
-          }
-        } else if (value.type === 'state') {
-          opts[key] = (progress) => {
-            state.set(value.getPath(tagGetters), progress.progress)
+            resolveArg.value(option)(Object.assign({}, input, progress))
           }
         } else {
-          throw new Error('cerebral-module-firebase: The target for \'progress\' option should be either \'state\' or \'signal\' tag.')
+          currentEvaluatedOptions[key] = (progress) => {
+            state.set(resolveArg.path(option), progress.progress)
+          }
         }
       } else {
-        opts[key] = value instanceof Tag ? value.getValue(tagGetters) : value
+        currentEvaluatedOptions[key] = resolveArg.value(option)
       }
-      return opts
+
+      return currentEvaluatedOptions
     }, {})
 
-    return firebase.put(firebasePath, file, options)
+    return firebase.put(resolveArg.value(putPath), resolveArg.value(file), evaluatedOptions)
       .then(path.success)
       .catch(path.error)
   }

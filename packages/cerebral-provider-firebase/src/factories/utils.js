@@ -1,12 +1,10 @@
-import {Tag} from 'cerebral/tags'
-
-export function convertObjectWithTemplates (obj, tagGetters) {
-  if (obj instanceof Tag) {
-    return obj.getValue(tagGetters)
+export function convertObjectWithTemplates (obj, resolveArg) {
+  if (resolveArg.isTag(obj)) {
+    return resolveArg.value(obj)
   }
 
   return Object.keys(obj).reduce((convertedObject, key) => {
-    convertedObject[key] = obj[key] instanceof Tag ? obj[key].getValue(tagGetters) : obj[key]
+    convertedObject[key] = resolveArg.value(obj[key])
 
     return convertedObject
   }, {})

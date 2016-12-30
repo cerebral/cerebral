@@ -1,4 +1,5 @@
-import {state, unset} from 'cerebral/operators'
+import {unset} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import paths from '../paths'
 
 export default function (moduleName) {

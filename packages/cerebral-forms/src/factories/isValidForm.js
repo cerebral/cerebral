@@ -1,17 +1,30 @@
-import {Tag} from 'cerebral/tags'
 import isValidFormHelper from '../helpers/isValidForm'
 
-function isValidFormFactory (formPathTemplate) {
-  function isValidForm ({state, input, path}) {
-    const tagGetters = {state: state.get, input}
-    const formPath = formPathTemplate instanceof Tag ? formPathTemplate.getValue(tagGetters) : formPathTemplate
-    const form = state.get(formPath)
+function isValidFormFactory (formPath) {
+  function isValidForm ({state, path, resolveArg}) {
+    if (typeof formPath === 'string') {
+      console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into isValidForm factory')
 
-    if (isValidFormHelper(form)) {
-      return path.true()
+      const form = state.get(formPath)
+
+      if (isValidFormHelper(form)) {
+        return path.true()
+      }
+
+      return path.false()
+    } else {
+      if (!resolveArg.isTag(formPath, 'state')) {
+        throw new Error('Cerebral Forms - isValidForm factory requires a STATE TAG')
+      }
+
+      const form = resolveArg.value(formPath)
+
+      if (isValidFormHelper(form)) {
+        return path.true()
+      }
+
+      return path.false()
     }
-
-    return path.false()
   }
 
   return isValidForm

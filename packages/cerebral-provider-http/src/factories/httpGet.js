@@ -1,12 +1,8 @@
-import {Tag} from 'cerebral/tags'
 import {convertObjectWithTemplates} from '../utils'
 
 function httpGetFactory (url, query = {}) {
-  function httpGet ({http, state, input, path}) {
-    const tagGetters = {state: state.get, input}
-    const urlTemplate = url instanceof Tag ? url.getValue(tagGetters) : url
-
-    return http.get(urlTemplate, convertObjectWithTemplates(query, tagGetters))
+  function httpGet ({http, path, resolveArg}) {
+    return http.get(resolveArg.value(url), convertObjectWithTemplates(query, resolveArg))
       .then(path.success)
       .catch((response) => {
         if (response.isAborted) {

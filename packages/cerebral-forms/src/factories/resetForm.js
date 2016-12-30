@@ -1,4 +1,3 @@
-import {Tag} from 'cerebral/tags'
 import configureField from '../utils/configureField'
 
 function resetObject (form) {
@@ -29,13 +28,23 @@ function resetArray (formArray) {
   }, [])
 }
 
-export default function resetFormFactory (formPathTemplate) {
-  function resetForm ({state, input}) {
-    const tagGetters = {state: state.get, input}
-    const formPath = formPathTemplate instanceof Tag ? formPathTemplate.getValue(tagGetters) : formPathTemplate
-    const form = state.get(formPath)
+export default function resetFormFactory (formPath) {
+  function resetForm ({state, resolveArg}) {
+    if (typeof formPath === 'string') {
+      console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into resetForm factory')
 
-    state.merge(formPath, resetObject(form))
+      const form = state.get(formPath)
+
+      state.merge(formPath, resetObject(form))
+    } else {
+      if (!resolveArg.isTag(formPath, 'state')) {
+        throw new Error('Cerebral Forms - isValidForm factory requires a STATE TAG')
+      }
+
+      const form = resolveArg.value(formPath)
+
+      state.merge(resolveArg.path(formPath), resetObject(form))
+    }
   }
 
   return resetForm

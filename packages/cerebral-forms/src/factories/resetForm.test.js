@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {input} from 'cerebral/tags'
+import {state, input} from 'cerebral/tags'
 import {form, resetForm, changeField} from '..'
 import assert from 'assert'
 
@@ -25,11 +25,11 @@ describe('resetForm', () => {
     controller.getSignal('reset')()
     assert.equal(controller.getState('form.name.value'), 'Ben')
   })
-  it('should reset form by input tag', () => {
+  it('should reset form by state tag', () => {
     const controller = Controller({
       signals: {
         reset: [
-          resetForm(input`form`)
+          resetForm(state`${input`form`}`)
         ],
         changeField
       },
@@ -51,7 +51,7 @@ describe('resetForm', () => {
     const controller = Controller({
       signals: {
         reset: [
-          resetForm(input`form`)
+          resetForm(state`${input`form`}`)
         ],
         changeField
       },
@@ -78,7 +78,7 @@ describe('resetForm', () => {
     const controller = Controller({
       signals: {
         reset: [
-          resetForm(input`form`, input`initialValues`)
+          resetForm(state`${input`form`}`, input`initialValues`)
         ],
         changeField
       },

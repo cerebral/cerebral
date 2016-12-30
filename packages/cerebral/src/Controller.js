@@ -7,6 +7,7 @@ import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
+import ResolveArgProvider from './providers/ResolveArg'
 import EventEmitter from 'eventemitter3'
 import {dependencyStore as computedDependencyStore} from './Computed'
 
@@ -33,7 +34,8 @@ class Controller extends EventEmitter {
     this.router = router ? router(this) : null
 
     const allProviders = [
-      ControllerProvider(this)
+      ControllerProvider(this),
+      ResolveArgProvider()
     ].concat(
       this.router ? [
         this.router.provider

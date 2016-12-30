@@ -34,16 +34,18 @@ describe('operator.splice', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'one', 'two', 'd']})
   })
   it('should throw on bad argument', () => {
+    const controller = Controller({
+      state: {
+      },
+      signals: {
+        test: [
+          splice(input`list`, 1, 1, 'bar')
+        ]
+      }
+    })
+
     assert.throws(() => {
-      Controller({
-        state: {
-        },
-        signals: {
-          test: [
-            splice(input`list`, 1, 1, 'bar')
-          ]
-        }
-      })
+      controller.getSignal('test')()
     }, /operator.splice/)
   })
 })

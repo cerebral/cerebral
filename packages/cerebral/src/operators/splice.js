@@ -1,17 +1,12 @@
-import Tag from '../tags/Tag'
-
 export default function (target, ...args) {
-  if (!(target instanceof Tag) || target.type !== 'state') {
-    throw new Error('Cerebral operator.splice: You have to use the STATE TAG as first argument')
-  }
+  function splice ({state, input, resolveArg}) {
+    if (!resolveArg.isTag(target, 'state')) {
+      throw new Error('Cerebral operator.splice: You have to use the STATE TAG as first argument')
+    }
 
-  function splice ({state, input}) {
-    const getters = {state: state.get, input}
-    const spliceArgs = args.map(arg => (
-      arg instanceof Tag ? arg.getValue(getters) : arg
-    ))
+    const spliceArgs = args.map(arg => resolveArg.value(arg))
 
-    state.splice(target.getPath(getters), ...spliceArgs)
+    state.splice(resolveArg.path(target), ...spliceArgs)
   }
 
   splice.displayName = 'operator.splice'

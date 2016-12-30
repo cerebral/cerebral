@@ -1,20 +1,16 @@
-import Tag from '../tags/Tag'
-
 export default function (target, ...values) {
-  if (!(target instanceof Tag) || target.type !== 'state') {
-    throw new Error('Cerebral operator.merge: You have to use the STATE TAG as first argument')
-  }
+  function merge ({state, input, resolveArg}) {
+    if (!resolveArg.isTag(target, 'state')) {
+      throw new Error('Cerebral operator.merge: You have to use the STATE TAG as first argument')
+    }
 
-  function merge ({state, input}) {
-    const getters = {state: state.get, input}
-
-    state.merge(target.getPath(getters), ...values.map((value) => {
-      if (value instanceof Tag) {
-        return value.getValue(getters)
+    state.merge(resolveArg.path(target), ...values.map((value) => {
+      if (resolveArg.isTag(value)) {
+        return resolveArg.value(value)
       }
 
       return Object.keys(value).reduce((currentValue, key) => {
-        currentValue[key] = value[key] instanceof Tag ? value[key].getValue(getters) : value[key]
+        currentValue[key] = resolveArg.value(value[key])
 
         return currentValue
       }, {})

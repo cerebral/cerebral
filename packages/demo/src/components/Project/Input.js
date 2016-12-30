@@ -1,18 +1,20 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {props, signal, state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 
 export default connect(
-  ({field}) => ({
-    value: `projects.$draft.${field}`,
-    t: translations
-  }),
   {
-    enterPressed: 'projects.enterPressed',
-    escPressed: 'projects.escPressed',
-    valueChanged: 'projects.formValueChanged'
+    // autoFocus
+    enterPressed: signal`projects.enterPressed`,
+    escPressed: signal`projects.escPressed`,
+    // field
+    // placeholderKey
+    value: state`projects.$draft.${props`field`}`,
+    valueChanged: signal`projects.formValueChanged`,
+    t: translations
   },
-  function Input ({field, value, placeholderKey, autoFocus, enterPressed, escPressed, valueChanged, t}) {
+  function Input ({autoFocus, enterPressed, escPressed, field, placeholderKey, value, valueChanged, t}) {
     const onKeyDown = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
