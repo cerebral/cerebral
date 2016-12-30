@@ -1,11 +1,11 @@
 import {Tag} from 'cerebral/tags'
 
-function transactionFactory (path, transactionFunction) {
+function transactionFactory (pathTemplate, transactionFunction) {
   function transaction ({firebase, state, input, path}) {
     const tagGetters = {state: state.get, input}
-    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+    const firebasePath = pathTemplate instanceof Tag ? pathTemplate.getValue(tagGetters) : pathTemplate
 
-    return firebase.transaction(pathTemplate, transactionFunction)
+    return firebase.transaction(firebasePath, transactionFunction)
       .then(path.success)
       .catch(path.error)
   }

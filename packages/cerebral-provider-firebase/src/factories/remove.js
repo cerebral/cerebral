@@ -1,11 +1,11 @@
 import {Tag} from 'cerebral/tags'
 
-function removeFactory (path) {
+function removeFactory (pathTemplate) {
   function remove ({firebase, state, input, path}) {
     const tagGetters = {state: state.get, input}
-    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+    const firebasePath = pathTemplate instanceof Tag ? pathTemplate.getValue(tagGetters) : pathTemplate
 
-    return firebase.remove(pathTemplate)
+    return firebase.remove(firebasePath)
       .then(path.success)
       .catch(path.error)
   }

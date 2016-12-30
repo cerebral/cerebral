@@ -1,11 +1,11 @@
 import {Tag} from 'cerebral/tags'
 
-function valueFactory (path) {
+function valueFactory (pathTemplate) {
   function value ({firebase, state, input, path}) {
     const tagGetters = {state: state.get, input}
-    const pathTemplate = path instanceof Tag ? path.getValue(tagGetters) : path
+    const firebasePath = pathTemplate instanceof Tag ? pathTemplate.getValue(tagGetters) : pathTemplate
 
-    return firebase.value(pathTemplate)
+    return firebase.value(firebasePath)
       .then(path.success)
       .catch(path.error)
   }

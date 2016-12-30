@@ -16,7 +16,7 @@ function putFactory (pathTemplate, fileTemplate, optionsTemplate = {}) {
         if (value.type === 'signal') {
           opts[key] = (progress) => {
             // We call progress signal with same 'input' context
-            value.getValue({state: state.get, input, signal: controller.getSignal.bind(this)})(Object.assign({}, input, progress))
+            value.getValue({state: state.get, input, signal: controller.getSignal.bind(controller)})(Object.assign({}, input, progress))
           }
         } else if (value.type === 'state') {
           opts[key] = (progress) => {
