@@ -4,7 +4,7 @@ title: Signals
 
 ## Signals
 
-The signals of Cerebral is named in past tense. So typically you would name a signal **inputChanged** or **mounted**. You call a signal just like you would call a function, the difference is that you start an execution of one or multiple functions.
+The signals of Cerebral are named in past tense. So typically you would name a signal **inputChanged** or **mounted**. You call a signal just like you would call a function, the difference is that you start an execution of one or multiple functions.
 
 Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the arrays in a function-tree **chains**. These chains contains functions, we call them **actions**. So to sum up: *"signals are chains of actions"*.
 
