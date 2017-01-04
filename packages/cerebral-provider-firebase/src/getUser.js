@@ -18,13 +18,9 @@ export default function getUser () {
         } else {
           const unsubscribe = firebase.auth().onAuthStateChanged(user => {
             unsubscribe()
-            if (user) {
-              resolve({
-                user: createUser(user)
-              })
-            } else {
-              reject()
-            }
+            resolve({
+              user: user ? createUser(user) : null
+            })
           })
         }
       },
