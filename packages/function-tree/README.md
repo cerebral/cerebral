@@ -344,6 +344,7 @@ const execute = FunctionTree([
     functionDetails.name // Name of the function
     functionDetails.functionIndex // The index of the function in the tree, like an ID
     functionDetails.function // A reference to the running function
+    functionDetails.isParallel // If the function is running in parallel with others
 
     context.execution.name // Function tree id
     context.execution.id // Current execution id
@@ -525,6 +526,15 @@ execute.on('functionEnd', (execution, functionDetails, payload) => {})
 
 // Triggers when an async function has been run
 execute.on('asyncFunction', (execution, functionDetails, payload) => {})
+
+// When a parallel execution is about to happen (array in array)
+execute.on('parallelStart', (execution, payload, functionsToResolveCount) => {})
+
+// When a function in parallel execution is done executing
+execute.on('parallelProgress', (execution, payload, functionsStillResolvingCount) => {})
+
+// When a parallel execution is done
+execute.on('parallelEnd', (execution, payload, functionsExecutedCount) => {})
 
 execute(tree)
 ```

@@ -6,7 +6,7 @@ function getFunctionName (fn) {
   return ret
 }
 
-function traverse (functions, item, isChain) {
+function traverse (functions, item, isChain, isParallel) {
   if (Array.isArray(item) && typeof isChain === 'boolean') {
     item = item.slice()
     return item.map((subItem, index) => {
@@ -14,12 +14,12 @@ function traverse (functions, item, isChain) {
         let nextSubItem = item[index + 1]
         if (!Array.isArray(nextSubItem) && typeof nextSubItem === 'object') {
           item.splice(index + 1, 1)
-          return traverse(functions, subItem, nextSubItem)
+          return traverse(functions, subItem, nextSubItem, !isChain)
         } else {
-          return traverse(functions, subItem, null)
+          return traverse(functions, subItem, null, !isChain)
         }
       } else if (Array.isArray(item) && isChain) {
-        return traverse(functions, subItem, false)
+        return traverse(functions, subItem, false, !isChain)
       }
       throw new Error('Signal Tree - Unexpected entry in signal chain')
     }).filter((func) => {
@@ -31,7 +31,8 @@ function traverse (functions, item, isChain) {
     const funcDetails = {
       name: func.displayName || getFunctionName(func),
       functionIndex: functions.push(func) - 1,
-      function: func
+      function: func,
+      isParallel: isParallel
     }
     if (outputs) {
       funcDetails.outputs = {}
