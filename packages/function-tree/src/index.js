@@ -221,6 +221,15 @@ class FunctionTree extends EventEmitter {
       (currentPayload) => {
         this.emit('pathEnd', execution, currentPayload)
       },
+      (currentPayload, functionsToResolve) => {
+        this.emit('parallelStart', execution, currentPayload, functionsToResolve)
+      },
+      (currentPayload, functionsResolved) => {
+        this.emit('parallelProgress', execution, currentPayload, functionsResolved)
+      },
+      (currentPayload, functionsResolved) => {
+        this.emit('parallelEnd', execution, currentPayload, functionsResolved)
+      },
       (finalPayload) => {
         this.emit('end', execution, finalPayload)
         cb && cb(null, execution, finalPayload)

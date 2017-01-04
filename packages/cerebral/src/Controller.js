@@ -53,8 +53,17 @@ class Controller extends EventEmitter {
     )
 
     this.runTree = new FunctionTree(allProviders)
-    this.runTree.on('asyncFunction', () => this.flush())
-    this.runTree.on('pathEnd', () => this.flush())
+    this.runTree.on('asyncFunction', (execution, funcDetails) => {
+      if (!funcDetails.isParallel) {
+        this.flush()
+      }
+    })
+    this.runTree.on('parallelStart', () => this.flush())
+    this.runTree.on('parallelProgress', (execution, currentPayload, functionsResolving) => {
+      if (functionsResolving === 1) {
+        this.flush()
+      }
+    })
     this.runTree.on('end', () => this.flush())
     this.runTree.on('error', (error) => {
       throw error

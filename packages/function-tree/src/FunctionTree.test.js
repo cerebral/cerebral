@@ -118,6 +118,7 @@ describe('FunctionTree', () => {
     execute.once('functionEnd', function (execution, functionDetails, payload) {
       assert.ok(execution.id)
       assert.equal(functionDetails.functionIndex, 0)
+      assert.equal(functionDetails.isParallel, false)
       assert.deepEqual(payload, {foo: 'bar'})
     })
     execute([
@@ -126,7 +127,19 @@ describe('FunctionTree', () => {
       foo: 'bar'
     })
   })
+  it('should indicate parallel execution on function', () => {
+    const execute = FunctionTree()
 
+    execute.once('functionStart', function (execution, functionDetails) {
+      assert.equal(functionDetails.isParallel, true)
+    })
+    execute([
+      [
+        () => {},
+        () => {}
+      ]
+    ])
+  })
   it('should pass final payload on end event', () => {
     const execute = FunctionTree()
     execute.once('end', (execution, payload) => {
@@ -256,6 +269,54 @@ describe('FunctionTree', () => {
       },
       actionB
     ]
+    execute(tree, {
+      foo: 'bar'
+    })
+  })
+  it('should emit parallel events', (done) => {
+    function actionA () {
+      return Promise.resolve({bar: 'baz'})
+    }
+    function actionB () {
+      return Promise.resolve()
+    }
+    const execute = FunctionTree([])
+    const tree = [
+      [
+        actionA,
+        actionB
+      ]
+    ]
+    execute.once('parallelStart', (execution, currentPayload, functionsToResolve) => {
+      assert.ok(execution)
+      assert.deepEqual(currentPayload, {
+        foo: 'bar'
+      })
+      assert.equal(functionsToResolve, 2)
+    })
+    execute.once('parallelProgress', (execution, currentPayload, functionsResolving) => {
+      assert.ok(execution)
+      assert.deepEqual(currentPayload, {
+        foo: 'bar',
+        bar: 'baz'
+      })
+      assert.equal(functionsResolving, 1)
+    })
+    execute.once('parallelEnd', (execution, currentPayload, functionsResolved) => {
+      assert.ok(execution)
+      assert.deepEqual(currentPayload, {
+        foo: 'bar'
+      })
+      assert.equal(functionsResolved, 2)
+    })
+    execute.once('end', (execution, finalPayload) => {
+      assert.deepEqual(finalPayload, {
+        foo: 'bar',
+        bar: 'baz'
+      })
+      done()
+    })
+
     execute(tree, {
       foo: 'bar'
     })

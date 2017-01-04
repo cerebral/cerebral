@@ -2,7 +2,7 @@
   Runs through the tree providing a "next" callback to process next step
   of execution
 */
-export default function executeTree (tree, resolveFunctionResult, initialPayload, branchStart, branchEnd, end) {
+export default function executeTree (tree, resolveFunctionResult, initialPayload, branchStart, branchEnd, parallelStart, parallelProgress, parallelEnd, end) {
   function runBranch (branch, index, payload, prevPayload, nextBranch) {
     function runNextItem (result) {
       runBranch(branch, index + 1, result, payload, nextBranch)
@@ -36,10 +36,16 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
       nextBranch(payload)
     } else if (Array.isArray(currentItem)) {
       const itemLength = currentItem.length
-      currentItem.reduce((payloads, action) => {
+      parallelStart(payload, itemLength)
+      currentItem.reduce((payloads, action, index) => {
         resolveFunctionResult(action, payload, prevPayload, processFunctionOutput(action, (payload) => {
           payloads.push(payload)
-          if (payloads.length === itemLength) runNextItem(Object.assign.apply(Object, [{}].concat(payloads)))
+          if (payloads.length === itemLength) {
+            parallelEnd(payload, itemLength)
+            runNextItem(Object.assign.apply(Object, [{}].concat(payloads)))
+          } else {
+            parallelProgress(payload, itemLength - payloads.length)
+          }
         }))
         return payloads
       }, [])
