@@ -13,13 +13,15 @@ export default function getUser () {
             user.accessToken = result.credential.accessToken
           }
           resolve({
-            user: user
+            user: user,
+            isRedirected: true
           })
         } else {
           const unsubscribe = firebase.auth().onAuthStateChanged(user => {
             unsubscribe()
             resolve({
-              user: user ? createUser(user) : null
+              user: user ? createUser(user) : null,
+              isRedirected: false
             })
           })
         }
