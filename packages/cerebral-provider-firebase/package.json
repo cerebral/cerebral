@@ -1,6 +1,6 @@
 {
   "name": "cerebral-provider-firebase",
-  "version": "1.0.0-0",
+  "version": "1.0.0-b",
   "description": "Firebase provider for Cerebral",
   "main": "lib/index.js",
   "scripts": {
@@ -26,9 +26,9 @@
     "firebase": "^3.5.2"
   },
   "peerDependencies": {
-    "cerebral": "2.0.0-0"
+    "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "cerebral": "2.0.0-0"
+    "cerebral": "^2.0.0-b"
   }
 }

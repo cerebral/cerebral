@@ -19,7 +19,7 @@ after_success:
     echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST; echo $TRAVIS_NODE_VERSION;
     if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_NODE_VERSION == '6' ]]; then
       echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc ;
-      lerna publish -c --npm-tag next --yes ;
+      lerna publish -c $(date +%s) --npm-tag next --yes ;
       git config --global user.email "cerebraljs@gmail.com" ;
       git config --global user.name "Cerebral JS" ;
       npm run deploy;

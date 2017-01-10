@@ -1,6 +1,6 @@
 {
   "name": "cerebral",
-  "version": "2.0.0-0",
+  "version": "2.0.0-b",
   "description": "A state controller with its own debugger",
   "main": "index.js",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
@@ -18,7 +18,7 @@
   "homepage": "http://cerebral.github.io/cerebral-website",
   "dependencies": {
     "eventemitter3": "^2.0.2",
-    "function-tree": "0.5.0-0"
+    "function-tree": "^0.5.0-b"
   },
   "scripts": {
     "test": "../../node_modules/.bin/mocha --compilers js:../../node_modules/babel-register 'src/**/*.test.js'",

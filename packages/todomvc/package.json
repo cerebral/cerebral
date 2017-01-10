@@ -11,11 +11,11 @@
     "react-scripts": "0.7.0"
   },
   "dependencies": {
-    "cerebral": "2.0.0-0",
-    "cerebral-router": "1.0.0-0",
+    "cerebral": "^2.0.0-b",
+    "cerebral-router": "^1.0.0-b",
     "classnames": "^2.2.5",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "todomvc-app-css": "^2.0.6",
     "todomvc-common": "^1.0.2",
     "uuid": "^2.0.3"

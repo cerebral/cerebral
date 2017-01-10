@@ -1,6 +1,6 @@
 {
   "name": "cerebral-forms",
-  "version": "1.0.0-0",
+  "version": "1.0.0-b",
   "description": "Signals, actions and state factories to create forms",
   "main": "lib/index.js",
   "scripts": {
@@ -27,10 +27,10 @@
   "homepage":
     "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms#readme",
   "peerDependencies": {
-    "cerebral": "2.0.0-0"
+    "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "cerebral": "2.0.0-0"
+    "cerebral": "^2.0.0-b"
   },
   "nyc": {
     "exclude": [
