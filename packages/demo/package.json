@@ -31,7 +31,6 @@
     "prebuild": "npm run sass",
     "build": "react-scripts build",
     "sass": "./node_modules/.bin/node-sass src/scss/app.scss -o public/css/",
-    "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "prepublish": "npm run build"
   }

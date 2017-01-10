@@ -3,6 +3,21 @@ language: node_js
 cache:
   directories:
     - node_modules
+    - packages/cerebral/node_modules
+    # - packages/cerebral-debugger/node_modules
+    - packages/cerebral-forms/node_modules
+    # - packages/cerebral-module-useragent/node_modules
+    # - packages/cerebral-provider-firebase/node_modules
+    - packages/cerebral-provider-http/node_modules
+    - packages/cerebral-router/node_modules
+    # - packages/demo/node_modules
+    # - packages/docs/node_modules
+    # - packages/forms-demo/node_modules
+    - packages/function-tree/node_modules
+    # - packages/function-tree-debugger/node_modules
+    # - packages/function-tree-demos/node_modules
+    # - packages/todomvc/node_modules
+    # - packages/tutorial/node_modules
 notifications:
   email: false
 node_js:
@@ -10,6 +25,11 @@ node_js:
   - '4'
 before_install:
   - npm i -g npm@^3.0.0
+  - lerna bootstrap --scope function-tree
+  - lerna bootstrap --scope cerebral
+  - lerna bootstrap --scope cerebral-forms
+  - lerna bootstrap --scope cerebral-provider-http
+  - lerna bootstrap --scope cerebral-router
 before_script:
   - npm prune
 after_success:
@@ -19,6 +39,7 @@ after_success:
     echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST; echo $TRAVIS_NODE_VERSION;
     if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_NODE_VERSION == '6' ]]; then
       echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc ;
+      lerna bootstrap
       lerna publish -c --npm-tag next --yes ;
       git config --global user.email "cerebraljs@gmail.com" ;
       git config --global user.name "Cerebral JS" ;

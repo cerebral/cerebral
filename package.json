@@ -5,7 +5,7 @@
     "setup": "lerna bootstrap",
     "commit": "git-cz",
     "lint": "standard",
-    "pretest": "npm run lint && lerna bootstrap",
+    "pretest": "npm run lint",
     "test": "lerna run test",
     "coverage": "lerna run coverage && istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
