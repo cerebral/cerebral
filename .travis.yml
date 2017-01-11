@@ -13,15 +13,20 @@ after_success:
 - npm run coverage
 - npm run coverage:upload
 - |
-  echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST; if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
-    echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc ;
-    git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral.github.io.git
-    git tag next -f
-    git push auth --tags
-    lerna bootstrap
-    lerna publish -c --npm-tag next --yes ;
-    git config --global user.email "cerebraljs@gmail.com" ;
-    git config --global user.name "Cerebral JS" ;
+  git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral.github.io.git;
+  git config --global user.email "cerebraljs@gmail.com";
+  git config --global user.name "Cerebral JS";
+  echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
+  if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
+    git tag next -f;
+    git push auth --tags -f;
+  fi
+  if [[ $TRAVIS_BRANCH == 'next' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
+    # TODO: parse commit message for instructions to skip publish
+    # TODO: check changed path to decide if npm publish necessary
+    echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
+    lerna bootstrap;
+    lerna publish -c --npm-tag next --yes;
     npm run deploy;
   fi
 branches:
@@ -36,3 +41,4 @@ deploy:
   file: package.json
   on:
     tags: true
+    condition: "$TRAVIS_BRANCH == 'next'"
