@@ -33,7 +33,7 @@ after_success:
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
     lerna bootstrap;
     # lerna publish -c --npm-tag next --yes;
-    # npm run deploy;
+    npm run deploy;
     lerna run build:electron --concurrency 1;
     # lerna run build:chromeExtension --concurrency 1;
     for DIR in debugger/*/electron/dist/*; do
