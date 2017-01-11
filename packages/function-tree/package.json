@@ -4,12 +4,14 @@
   "description": "When a function is not enough",
   "main": "lib/index.js",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --compilers js:../../node_modules/babel-register 'src/**/*.test.js'",
-    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
-    "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test",
+    "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
+    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "coverage": "nyc --reporter=lcov --reporter=json npm run test",
     "prepublish": "npm run build"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@cerebral/monorepo": "0.0.1"
+  },
   "dependencies": {
     "chalk": "^1.1.3",
     "eventemitter3": "^2.0.2",

@@ -4,7 +4,7 @@
   "description": "Firebase provider for Cerebral",
   "main": "lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
+    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -29,6 +29,7 @@
     "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
+    "@cerebral/monorepo": "0.0.1",
     "cerebral": "^2.0.0-b"
   }
 }

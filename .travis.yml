@@ -1,32 +1,19 @@
 sudo: false
 language: node_js
+node_js: '6'
 cache:
   directories:
   - node_modules
-  - packages/cerebral/node_modules
-  - packages/cerebral-forms/node_modules
-  - packages/cerebral-provider-http/node_modules
-  - packages/cerebral-router/node_modules
-  - packages/function-tree/node_modules
 notifications:
   email: false
-node_js:
-- '6'
-- '4'
-before_install:
-- npm i -g npm@^3.0.0
-- lerna bootstrap --scope function-tree
-- lerna bootstrap --scope cerebral
-- lerna bootstrap --scope cerebral-forms
-- lerna bootstrap --scope cerebral-provider-http
-- lerna bootstrap --scope cerebral-router
 before_script:
 - npm prune
+- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-router)'
 after_success:
 - npm run coverage
 - npm run coverage:upload
 - |
-  echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST; echo $TRAVIS_NODE_VERSION; if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' && $TRAVIS_NODE_VERSION == '6' ]]; then
+  echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST; if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc ;
     lerna bootstrap
     lerna publish -c --npm-tag next --yes ;
