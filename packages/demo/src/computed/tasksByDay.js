@@ -1,4 +1,5 @@
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 import {elapsedSeconds, sortDayString} from '../helpers/dateTime'
 import paths from '../common/Collection/paths'
 
@@ -6,8 +7,8 @@ const {collectionPath} = paths('tasks')
 
 export default Computed(
   {
-    now: 'tasks.$now',
-    tasks: `${collectionPath}.**`
+    now: state`tasks.$now`,
+    tasks: state`${collectionPath}.**`
   },
   ({now, tasks}) => {
     const days = {}

@@ -1,4 +1,5 @@
-import {input, state, set, unset} from 'cerebral/operators'
+import {set, unset} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 
 export default [
   set(state`app.todos.${input`ref`}.$isEditing`, false),

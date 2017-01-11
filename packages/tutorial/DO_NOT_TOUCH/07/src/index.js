@@ -5,7 +5,8 @@ import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
-import {set, state, wait, input} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 
 function showToast (message, ms, type = null) {
   return [

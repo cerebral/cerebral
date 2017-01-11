@@ -1,15 +1,14 @@
 import React from 'react'
 import Todo from '../Todo'
 import { connect } from 'cerebral/react'
-
+import {signal} from 'cerebral/tags'
 import isAllChecked from '../../computed/isAllChecked'
 import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
   isAllChecked: isAllChecked,
-  todoRefs: visibleTodosRefs
-}, {
-  toggleAllChanged: 'app.toggleAllChanged'
+  todoRefs: visibleTodosRefs,
+  toggleAllChanged: signal`app.toggleAllChanged`
 },
   function List ({ isAllChecked, todoRefs, toggleAllChanged }) {
     return (

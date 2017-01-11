@@ -1,11 +1,12 @@
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 import {elapsedSeconds} from '../helpers/dateTime'
 import {isRunning} from '../modules/tasks/helpers'
 
 export default Computed(
   {
-    now: 'tasks.$now',
-    task: 'tasks.$draft.**'
+    now: state`tasks.$now`,
+    task: state`tasks.$draft.**`
   },
   ({now, task}) => {
     if (isRunning(task)) {

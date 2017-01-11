@@ -10,7 +10,8 @@ Popups are different than modals. They are more in the realm of dropdowns, popup
 First we need to close all these popup when we click our application. Let us create a chain that closes them:
 
 ```js
-import {state, set} from 'cerebral/operators';
+import {set} from 'cerebral/operators';
+import {state} from 'cerebral/tags'
 
 export default [
   // A specific popover
@@ -40,9 +41,10 @@ And then in our root component we trigger the signal whenever we click our appli
 
 ```js
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({}, {
-  clicked: 'app.clicked'
+  clicked: state`app.clicked`
 },
   function App (props) {
     return (
@@ -61,11 +63,11 @@ So when we now click a button to show a popover we have to ensure that our appli
 
 ```js
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  showSomePopover: 'app.showSomePopover'
-}, {
-  showSomePopoverClicked: 'app.showSomePopoverClicked'
+  showSomePopover: state`app.showSomePopover`,
+  showSomePopoverClicked: signal`app.showSomePopoverClicked`
 },
   function MyPopover(props) {
     return (
@@ -91,7 +93,8 @@ export default connect({
 Using **event.stopPropagation()** we prevent any clicks on the button and the popover itself to propagate up to the application root component. So when our chain handling the popover click runs:
 
 ```js
-import {state, set} from 'cerebral/operators';
+import {set} from 'cerebral/operators';
+import {state} from 'cerebral/tags'
 
 export default [
   set(state`app.showSomePopover`, true)
@@ -102,7 +105,8 @@ We will show the popover. Clicking outside it will hide it. Now, you might want 
 
 ```js
 import closePopovers from '../chains/closePopovers'
-import {state, set} from 'cerebral/operators';
+import {set} from 'cerebral/operators';
+import {state} from 'cerebral/tags'
 
 export default [
   ...closePopovers,
@@ -140,12 +144,12 @@ So now let us imagine that we are dynamically building a list of items which con
 
 ```js
 import {connect} from 'cerebral/react'
+import {state, signal, props} from 'cerebral/tags'
 
-export default connect((props) => ({
-  item: `app.items.${props.itemKey}`
-  currentItemPopover: 'app.currentItemPopover'
-}), {
-  itemPopoverClicked: 'app.itemPopoverClicked'
+export default connect({
+  item: state`app.items.${props`itemKey`}`
+  currentItemPopover: state`app.currentItemPopover`
+  itemPopoverClicked: signal`app.itemPopoverClicked`
 },
   function Item(props) {
     return (
@@ -176,7 +180,8 @@ export default connect((props) => ({
 What we do here is rather check if the current item popover matches the key of the item itself. So our **openItemPopover** chain would look something like:
 
 ```js
-import {state, input, set} from 'cerebral/operators'
+import {input, set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 export default [
   set(state`app.currentItemPopover`, input`itemKey`)
@@ -190,11 +195,11 @@ If your root component does not cover the whole browser you can rather listen to
 
 ```js
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  someState: 'app.someState'
-}, {
-  clicked: 'app.clicked'
+  someState: state`app.someState`,
+  clicked: signal`app.clicked`
 },
   class App extends React.Component {
     componentDidMount() {
@@ -215,11 +220,11 @@ But now we are outside of React own event system. So when you click something yo
 
 ```js
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  showPopover: 'app.showPopover'
-}, {
-  showPopoverClicked: 'app.showPopoverClicked'
+  showPopover: state`app.showPopover`,
+  showPopoverClicked: signal`app.showPopoverClicked`
 },
   function MyPopover(props) {
     return (

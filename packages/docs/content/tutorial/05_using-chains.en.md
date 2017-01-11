@@ -11,7 +11,8 @@ A signal can trigger an array of functions. This array we call a **chain** and t
 Let us add another operator named **wait** and another **set** to close our toast message after a few seconds. So go ahead and change our **buttonClicked** signal in *src/index.js* to execute a 2 more actions:
 ```js
 ...
-import {set, state, wait} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 ...
 {
   buttonClicked: [

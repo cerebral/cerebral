@@ -1,16 +1,15 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {props, signal, state} from 'cerebral/tags'
 import ProjectSelector from '../ProjectSelector'
 
 export default connect(
-  ({itemKey}) => ({
-    item: `projects.all.${itemKey}.**`,
-    showSelector: 'projects.$showProjectSelector'
-  }),
   {
-    onClick: 'projects.projectTagClicked'
+    item: state`projects.all.${props`itemKey`}.**`,
+    onClick: signal`projects.projectTagClicked`,
+    showSelector: state`projects.$showProjectSelector`
   },
-  function ProjectTag ({item, showSelector, onClick}) {
+  function ProjectTag ({item, onClick, showSelector}) {
     if (!item) {
       return null
     }

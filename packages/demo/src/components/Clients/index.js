@@ -6,13 +6,8 @@ import translations from '../../common/computed/translations'
 import Client from '../Client'
 
 export default connect(
-  Object.assign(listProps('clients'), {t: translations}),
-  {
-    enterPressed: 'clients.filterEnterPressed',
-    onChange: 'clients.filterChanged',
-    onClick: 'clients.addClicked'
-  },
-  function Clients ({filter, selectedKey, visibleKeys, t, enterPressed, onChange, onClick}) {
+  listProps('clients', {t: translations}),
+  function Clients ({enterPressed, filter, onChange, onClick, selectedKey, t, visibleKeys}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break

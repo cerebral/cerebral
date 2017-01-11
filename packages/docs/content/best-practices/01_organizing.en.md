@@ -48,7 +48,7 @@ export default {
 }
 ```
 
-There is no "correct way" to do this, to what makes sense to you and your team.
+There is no "correct way" to do this, do what makes sense to you and your team.
 
 
 In the **main.js** file, the module is added to the controller:

@@ -8,7 +8,7 @@ title: ch07. Paths
 
 In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows (which is just another chain of actions and operators) depending on the result of the previous action.
 
-So let us build that scenario introducing *cerebral-http-provider*. *cerebral-http-provider* is a simple http-provider which enables you to request data from servers. We have already added it as a configuration of the controller. The concept of **Providers** will be covered in more detail in the next chapter.
+So let us build that scenario introducing *cerebral-http-provider*. *cerebral-http-provider* is a simple http-provider which enables you to request data from servers. You could have used any other HTTP library if you wanted to. We have already added it as a configuration of the controller. The concept of **Providers** will be covered in more detail in the next chapter.
 
 To handle any kind of diverging execution in a signal we can use the concept of **paths**. A simple signal using paths and a sample async action named *getData* could look like this:
 
@@ -20,7 +20,9 @@ To handle any kind of diverging execution in a signal we can use the concept of 
         processResults,
         showSuccessMessage
       ],
-      error: [showErrorMessage]
+      error: [
+        showErrorMessage
+      ]
     }
   ]
 }
@@ -32,7 +34,8 @@ Let us implement something similar. We are going to grab information about githu
 
 ```js
 ...
-import {set, state, wait, input, string} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state, input, string} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
@@ -108,13 +111,14 @@ Instead of using **wait**, we can use **debounce**. It is difficult to wrap your
 
 ```js
 ...
-import { set, state, debounce, input, string } from 'cerebral/operators'
+import {set, merge, debounce} from 'cerebral/operators'
+import {state, input, string} from 'cerebral/tags'
 ...
 const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
   return [
-    set(state`app.toast`, {type}),
-    set(state`app.toast.message`, message),
+    // We use merge as it supports evaluating tags
+    merge(state`app.toast.message`, {type, message}),
     toastDebounce(ms), {
       continue: [
         set(state`app.toast`, null)

@@ -4,7 +4,8 @@ import {Controller} from 'cerebral'
 import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import {set, state, wait, input} from 'cerebral/operators'
+import {set, wait} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 
 function showToast (message, ms) {
   return [

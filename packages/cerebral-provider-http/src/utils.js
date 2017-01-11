@@ -1,3 +1,5 @@
+import {Tag} from 'cerebral/tags'
+
 export function createResponse (options, resolve, reject) {
   return (event) => {
     switch (event.type) {
@@ -53,13 +55,13 @@ export function urlEncode (obj, prefix) {
   return str.join('&')
 }
 
-export function convertObjectWithTemplates (obj, context) {
-  if (typeof obj === 'function') {
-    return obj(context).value
+export function convertObjectWithTemplates (obj, getters) {
+  if (obj instanceof Tag) {
+    return obj.getValue(getters)
   }
 
   return Object.keys(obj).reduce((convertedObject, key) => {
-    convertedObject[key] = typeof obj[key] === 'function' ? obj[key](context).value : obj[key]
+    convertedObject[key] = obj[key] instanceof Tag ? obj[key].getValue(getters) : obj[key]
 
     return convertedObject
   }, {})

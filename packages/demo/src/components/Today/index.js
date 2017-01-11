@@ -1,12 +1,13 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 import {displayElapsed, displayTime} from '../../helpers/dateTime'
 import tasksByDay from '../../computed/tasksByDay'
 import Date from '../Date'
 
 export default connect(
   {
-    projects: 'projects.all.**',
+    projects: state`projects.all.**`,
     tasksByDay
   },
   function Tasks ({projects, tasksByDay}) {

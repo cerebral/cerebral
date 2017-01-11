@@ -16,12 +16,12 @@ Lets imagine you have a navbar component which should the current count of messa
 function HttpPoller (options = {}) {
   let cachedProvider = null
 
-  function createProvider (context) {
+  function createProvider ({http, controller}) {
     return {
       start (url, frequencyMs, signalPath) {
-        context.http.get(url)
+        http.get(url)
           .then((result) => {
-            context.controller.getSignal(signalPath)(result)
+            controller.getSignal(signalPath)(result)
             setTimeout(this.start.bind(this, url, frequencyMs, signalPath), frequencyMs)
           })
       }
@@ -40,7 +40,7 @@ function HttpPoller (options = {}) {
 }
 ```
 
-This is a very simple implementation that shows you how to trigger signals from within a provider. The poller should also have the possiblity to stop polls of course.
+This is a very simple implementation that shows you how to trigger signals from within a provider. The poller should also have the possibility to stop polls of course.
 
 #### Defining the Action
 
@@ -60,7 +60,8 @@ Now we can implement our signals and their corresponding action chains in our **
 
 *src/modules/navbar/index.js*
 ```js
-import {state, input, set} from 'cerebral/operators'
+import {input, set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import pollMessageCounts from './actions/pollMessageCounts'
 
 export default {

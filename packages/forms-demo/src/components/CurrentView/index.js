@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 import Simple from '../Simple'
 
 const VIEWS = {
@@ -7,7 +8,7 @@ const VIEWS = {
 }
 
 export default connect({
-  currentView: 'app.currentView'
+  currentView: state`app.currentView`
 },
 function CurrentView ({currentView}) {
   const View = VIEWS[currentView]

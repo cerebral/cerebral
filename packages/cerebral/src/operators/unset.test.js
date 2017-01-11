@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, unset} from './'
+import {unset} from './'
+import {input, state} from '../tags'
 
 describe('operator.unset', () => {
   it('should unset value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar',
         bar: 'baz'
@@ -20,7 +21,7 @@ describe('operator.unset', () => {
     assert.deepEqual(controller.getState(), {bar: 'baz'})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -29,8 +30,9 @@ describe('operator.unset', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({foo: 'bar'})
+      controller.getSignal('test')()
     }, /operator.unset/)
   })
 })

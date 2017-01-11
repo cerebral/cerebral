@@ -45,7 +45,7 @@ Just keep in mind that you could use any library as an provider, we've just used
 
 We have already installed the library using npm. So it was sitting there and waiting and now the time is ready to use it!
 
-Because we add a 3rd-party provider we need to wrap it up into a so called *ContextProvider* to get the benefits mentioned before.
+Because we add a 3rd-party provider we need to wrap it up into a so called *ContextProvider* to get the benefits mentioned above.
 
 So please add the following imports to your *./src/index.js*
 ```js

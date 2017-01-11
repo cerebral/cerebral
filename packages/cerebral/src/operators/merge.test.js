@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, merge, state} from './'
+import {merge} from './'
+import {state, input} from '../tags'
 
 describe('operator.merge', () => {
   it('should merge value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         users: {
           john: 'John Difool'
@@ -24,7 +25,7 @@ describe('operator.merge', () => {
     }})
   })
   it('should merge value from input in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         users: {
           john: 'John Difool'
@@ -43,7 +44,7 @@ describe('operator.merge', () => {
     }})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -52,12 +53,13 @@ describe('operator.merge', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({users: {}})
+      controller.getSignal('test')()
     }, /operator.merge/)
   })
   it('should create object if no value', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -70,7 +72,7 @@ describe('operator.merge', () => {
     assert.deepEqual(controller.getState(), {users: {joe: 'Joe'}})
   })
   it('should merge multiple objects', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {

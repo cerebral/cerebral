@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 
 import Input from './Input'
@@ -8,14 +9,12 @@ import Textarea from '../Textarea'
 
 export default connect(
   {
-    item: `clients.$draft.**`,
+    item: state`clients.$draft.**`,
+    discardClick: signal`clients.discardClicked`,
+    saveClick: signal`clients.saveClicked`,
     t: translations
   },
-  {
-    discardClick: 'clients.discardClicked',
-    saveClick: 'clients.saveClicked'
-  },
-  function ClientForm ({item, t, discardClick, saveClick}) {
+  function ClientForm ({item, discardClick, saveClick, t}) {
     return (
       <div className='card'>
         <div className='card-content'>

@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  recorder: 'recorder.*'
-}, {
-  recordClicked: 'recorder.recordClicked',
-  playClicked: 'recorder.playClicked',
-  stopClicked: 'recorder.stopClicked',
-  pauseClicked: 'recorder.pauseClicked'
+  recorder: state`recorder.*`,
+  recordClicked: signal`recorder.recordClicked`,
+  playClicked: signal`recorder.playClicked`,
+  stopClicked: signal`recorder.stopClicked`,
+  pauseClicked: signal`recorder.pauseClicked`
 },
   function Recorder ({ recorder, recordClicked, playClicked, stopClicked, pauseClicked }) {
     const style = {

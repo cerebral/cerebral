@@ -1,5 +1,6 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
+import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 import LangSelector from '../LangSelector'
 import SignIn from './SignIn'
@@ -8,10 +9,8 @@ import CreateUser from './CreateUser'
 export default connect(
   {
     t: translations,
-    tab: 'user.$loginTab'
-  },
-  {
-    tabClick: 'user.loginTabClicked'
+    tab: state`user.$loginTab`,
+    tabClick: signal`user.loginTabClicked`
   },
   function Login ({t, tab, tabClick}) {
     return (

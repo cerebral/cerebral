@@ -1,16 +1,20 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {props, signal, state} from 'cerebral/tags'
+import translations from '../../common/computed/translations'
 
 export default connect(
-  ({moduleName, field}) => ({
-    value: `${moduleName}.$draft.${field}`
-  }),
-  ({moduleName}) => ({
-    enterPressed: `${moduleName}.enterPressed`,
-    escPressed: `${moduleName}.escPressed`,
-    valueChanged: `${moduleName}.formValueChanged`
-  }),
-  function Input ({field, value, placeholder, autoFocus, enterPressed, escPressed, valueChanged}) {
+  {
+    // autoFocus
+    enterPressed: signal`${props`moduleName`}.enterPressed`,
+    escPressed: signal`${props`moduleName`}.escPressed`,
+    // field
+    // placeholderKey
+    t: translations,
+    value: state`${props`moduleName`}.$draft.${props`field`}`,
+    valueChanged: signal`${props`moduleName`}.formValueChanged`
+  },
+  function Input ({autoFocus, enterPressed, escPressed, field, placeholderKey, t, value, valueChanged}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break
@@ -26,7 +30,7 @@ export default connect(
     return (
       <textarea className='textarea'
         autoFocus={autoFocus}
-        placeholder={placeholder}
+        placeholder={t[placeholderKey]}
         onKeyPress={onKeyPress}
         onChange={onChange}
         name={field}

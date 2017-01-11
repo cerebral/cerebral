@@ -1,12 +1,16 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, equals} from './'
+import {equals} from './'
+import {state, input} from '../tags'
 
 describe('operator.equals', () => {
   it('should go down path based on input', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
+      state: {
+        foo: 'bar'
+      },
       signals: {
         test: [
           equals(input`foo`), {
@@ -21,7 +25,7 @@ describe('operator.equals', () => {
   })
   it('should go down path based on state', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },

@@ -1,4 +1,5 @@
-import {set, state, input} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import {isValidForm} from 'cerebral-forms'
 import signIn from '../actions/signIn'
 import firebaseInit from '../../app/signals/firebaseInit'

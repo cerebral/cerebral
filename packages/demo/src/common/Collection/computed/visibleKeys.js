@@ -1,4 +1,5 @@
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 import paths from '../paths'
 import sort from '../sort'
 
@@ -7,9 +8,9 @@ export default function (moduleName) {
 
   return Computed(
     {
-      items: `${collectionPath}.**`,
-      afilter: filterPath,
-      selectedKey: `${draftPath}.key`
+      items: state`${collectionPath}.**`,
+      afilter: state`${filterPath}`,
+      selectedKey: state`${draftPath}.key`
     },
     ({items, afilter, selectedKey}) => {
       const filter = afilter && afilter.toLowerCase()

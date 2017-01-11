@@ -6,7 +6,7 @@ import {wait} from './'
 describe('operator.wait', () => {
   it('should hold execution for set time', (done) => {
     const start = Date.now()
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           wait(100),
@@ -21,7 +21,7 @@ describe('operator.wait', () => {
   })
   it('should hold execution for set time in parallel', (done) => {
     const start = Date.now()
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           [

@@ -1,10 +1,8 @@
 function sendPasswordResetEmailFactory (email) {
-  function sendPasswordResetEmail (context) {
-    const emailTemplate = typeof email === 'function' ? email(context).value : email
-
-    return context.firebase.sendPasswordResetEmail(emailTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+  function sendPasswordResetEmail ({firebase, path, resolveArg}) {
+    return firebase.sendPasswordResetEmail(resolveArg.value(email))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return sendPasswordResetEmail

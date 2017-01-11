@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal} from 'cerebral/tags'
 import ProjectSelectorTag from '../ProjectSelectorTag'
 import {displayTaskDuration, isRunning} from '../../modules/tasks/helpers'
 import runningTask from '../../computed/runningTask'
@@ -7,15 +8,13 @@ import translations from '../../common/computed/translations'
 
 export default connect(
   {
+    enterPressed: signal`tasks.enterPressed`,
     item: runningTask,
+    onChange: signal`tasks.formValueChanged`,
+    onClick: signal`tasks.startStopClicked`,
     t: translations
   },
-  {
-    onChange: 'tasks.formValueChanged',
-    enterPressed: 'tasks.enterPressed',
-    onClick: 'tasks.startStopClicked'
-  },
-  function Timer ({item, t, onChange, enterPressed, onClick}) {
+  function Timer ({enterPressed, item, onChange, onClick, t}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break

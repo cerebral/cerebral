@@ -1,4 +1,5 @@
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 import visibleKeys from '../common/Collection/computed/visibleKeys'
 import paths from '../common/Collection/paths'
 
@@ -8,8 +9,8 @@ const clientsPath = paths('clients').collectionPath
 export default Computed(
   {
     visibleProjectKeys: visibleKeys('projects'),
-    projects: `${projectsPath}.**`,
-    clients: `${clientsPath}.**`
+    projects: state`${projectsPath}.**`,
+    clients: state`${clientsPath}.**`
   },
   ({visibleProjectKeys, projects, clients}) => {
     const clientList = {}

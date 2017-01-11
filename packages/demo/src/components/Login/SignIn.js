@@ -1,29 +1,21 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
+import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
 import translations from '../../common/computed/translations'
 import Input from './Input'
 
 export default connect(
   {
     t: translations,
-    signIn: 'user.$signIn.**'
+    signIn: state`user.$signIn.**`
   },
   {
-    anonClick: 'user.signInAnonClicked',
-    buttonClick: 'user.signInClicked',
-    enterPress: 'user.signInEnterPressed',
-    fieldChange: 'user.fieldChanged'
+    anonClick: signal`user.signInAnonClicked`,
+    buttonClick: signal`user.signInClicked`,
+    enterPress: signal`user.signInEnterPressed`,
+    fieldChange: signal`user.fieldChanged`
   },
-  function Login ({
-    t,
-    // state
-    signIn,
-    // signals
-    anonClick,
-    fieldChange,
-    enterPress,
-    buttonClick
-  }) {
+  function Login ({anonClick, buttonClick, enterPress, fieldChange, signIn, t}) {
     const showError = field => signIn.showErrors && !field.isValid
 
     return (

@@ -1,5 +1,6 @@
 import React from 'react'
 import { connect } from 'cerebral/react'
+import {state} from 'cerebral/tags'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
@@ -7,8 +8,8 @@ import Recorder from '../Recorder'
 import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
-  todos: 'app.todos',
-  isSaving: 'app.isSaving',
+  todos: state`app.todos`,
+  isSaving: state`app.isSaving`,
   visibleTodosRefs: visibleTodosRefs
 },
   function App (props) {

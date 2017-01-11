@@ -1,4 +1,5 @@
-import {debounce, input, set, state, when} from 'cerebral/operators'
+import {debounce, set, when} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import paths from '../../../common/Collection/paths'
 
 import updateDraft from '../../../common/Collection/signals/updateDraft'

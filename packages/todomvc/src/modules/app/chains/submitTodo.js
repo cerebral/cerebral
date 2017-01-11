@@ -1,4 +1,5 @@
-import {input, merge, set, state} from 'cerebral/operators'
+import {merge, set} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 
 import createTodo from '../actions/createTodo'
 import postTodo from '../actions/postTodo'

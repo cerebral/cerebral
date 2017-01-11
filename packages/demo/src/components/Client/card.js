@@ -1,17 +1,16 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {props, signal, state} from 'cerebral/tags'
 
 import Email from '../Email'
 import Header from './Header'
 import Phone from '../Phone'
 
 export default connect(
-  ({itemKey}) => ({
-    item: `clients.all.${itemKey}.*`
-  }),
   {
-    penClick: 'clients.penClicked',
-    trashClick: 'clients.trashClicked'
+    item: state`clients.all.${props`itemKey`}.*`,
+    penClick: signal`clients.penClicked`,
+    trashClick: signal`clients.trashClicked`
   },
   function Client ({item, itemKey, penClick, trashClick}) {
     return (

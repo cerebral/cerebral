@@ -6,7 +6,7 @@ import {debounce} from './'
 describe('operator.debounce', () => {
   it('should debounce execution', (done) => {
     const result = []
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           debounce(50), {
@@ -28,7 +28,7 @@ describe('operator.debounce', () => {
   })
   it('should debounce execution in parallel', (done) => {
     const result = []
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           [

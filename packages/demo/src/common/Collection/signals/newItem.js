@@ -1,5 +1,6 @@
-import {merge, set, state} from 'cerebral/operators'
-import makeRef from '../operators/makeRef'
+import {merge, set} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
+import makeRef from '../actions/makeRef'
 import paths from '../paths'
 
 export default function (moduleName) {
@@ -7,8 +8,9 @@ export default function (moduleName) {
   return [
     // Prepare initial item state
     set(state`${draftPath}`, {}),
+    makeRef,
     merge(state`${draftPath}`, {
-      key: makeRef,
+      key: input`ref`,
       name: state`${filterPath}`
     })
   ]

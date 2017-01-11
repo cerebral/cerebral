@@ -1,5 +1,6 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {signal} from 'cerebral/tags'
 import projectWithDetails from '../../computed/projectWithDetails'
 import {displayElapsed} from '../../helpers/dateTime'
 
@@ -8,8 +9,8 @@ export default connect(
     item: projectWithDetails.props({itemKey})
   }),
   {
-    penClick: 'projects.penClicked',
-    trashClick: 'projects.trashClicked'
+    penClick: signal`projects.penClicked`,
+    trashClick: signal`projects.trashClicked`
   },
   function ProjectCard ({item, itemKey, penClick, trashClick}) {
     return (

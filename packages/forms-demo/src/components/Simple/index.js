@@ -1,19 +1,17 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import {css} from 'aphrodite'
 import styles from './styles'
 import Input from '../Fields/Input'
 import {isValidForm} from 'cerebral-forms'
 
-export default connect(
-  {
-    form: 'simple.form.**',
-    settings: 'app.settings.**'
-  },
-  {
-    onSubmitted: 'simple.onSubmitted',
-    onReset: 'simple.onReset'
-  },
+export default connect({
+  form: state`simple.form.**`,
+  settings: state`app.settings.**`,
+  onSubmitted: signal`simple.onSubmitted`,
+  onReset: signal`simple.onReset`
+},
   function Simple ({form, settings, onSubmitted, onReset}) {
     const {disableSubmitWhenFormIsInValid} = settings
     let enabled = true

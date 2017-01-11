@@ -1,18 +1,19 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  message: 'toast'
+  toast: state`app.toast`
 },
   function Toast (props) {
-    if (!props.message) {
+    if (!props.toast) {
       return null
     }
 
     return (
       <div className='c-alerts c-alerts--bottomright'>
-        <div className='c-alert'>
-          {props.message}
+        <div className={`c-alert ${props.toast.type ? 'c-alert--' + props.toast.type : ''}`}>
+          {props.toast.message}
         </div>
       </div>
     )

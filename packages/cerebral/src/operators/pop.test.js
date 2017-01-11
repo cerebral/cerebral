@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, pop, state} from './'
+import {pop} from './'
+import {input, state} from '../tags'
 
 describe('operator.pop', () => {
   it('should pop value from model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b', 'c']
       },
@@ -19,7 +20,7 @@ describe('operator.pop', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -28,8 +29,9 @@ describe('operator.pop', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
+      controller.getSignal('test')()
     }, /operator.pop/)
   })
 })

@@ -6,13 +6,8 @@ import translations from '../../common/computed/translations'
 import Project from '../Project'
 
 export default connect(
-  Object.assign(listProps('projects'), {t: translations}),
-  {
-    enterPressed: 'projects.filterEnterPressed',
-    onChange: 'projects.filterChanged',
-    onClick: 'projects.addClicked'
-  },
-  function Projects ({filter, selectedKey, visibleKeys, t, enterPressed, onChange, onClick}) {
+  listProps('projects', {t: translations}),
+  function Projects ({enterPressed, filter, onChange, onClick, selectedKey, visibleKeys, t}) {
     const onKeyPress = e => {
       switch (e.key) {
         case 'Enter': enterPressed(); break

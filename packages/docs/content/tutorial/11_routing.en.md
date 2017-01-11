@@ -13,16 +13,16 @@ Let us introduce the tabs first. We will just shove everything into our one comp
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import Toast from '../Toast'
 
 export default connect({
-  title: 'title',
-  subTitle: 'subTitle',
-  repos: 'repos',
-  activeTab: 'activeTab'
-}, {
-  homeRouted: 'homeRouted',
-  reposRouted: 'reposRouted'
+  title: state`title`,
+  subTitle: state`subTitle`,
+  repos: state`repos`,
+  activeTab: state`activeTab`,
+  homeRouted: signal`homeRouted`,
+  reposRouted: signal`reposRouted`
 },
   function App (props) {
     return (

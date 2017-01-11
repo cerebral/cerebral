@@ -19,7 +19,8 @@ export default {
 Either we want to show the modal or we do not. To actually trigger the modal we can create a signal that will toggle the state. To simplify the example we define the chain inside the same file:
 
 ```js
-import {state, toggle} from 'cerebral/operators'
+import {toggle} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 export default {
   state: {
@@ -43,9 +44,8 @@ import {connect} from 'cerebral/react'
 import MyModal from './MyModal'
 
 export default connect({
-  title: 'app.title'
-}, {
-  myModalToggled: 'app.myModalToggled'
+  title: state`app.title`
+  myModalToggled: signal`app.myModalToggled`
 },
   function App(props) {
     return (
@@ -63,13 +63,13 @@ So what to take note of here is that we have created a specific modal component 
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 import ModalContainer from './ModalContainer'
 
 export default connect({
-  show: 'app.showMyModal'
-}, {
-  myModalToggled: 'app.myModalToggled'
+  show: state`app.showMyModal`
+  myModalToggled: signal`app.myModalToggled`
 },
   function MyModal(props) {
     if (!props.show) {
@@ -91,7 +91,8 @@ We control the modal from within the component. Either it does not show anything
 So let us increase complexity here. What if our modal was a modal to show a user based on a userId? An approach to this is adding a **currentUserId** to state. And instead of having a **modalToggled** kind of signal we have one signal for opening the modal, where we set the passed in *userId*, and an other for closing it:
 
 ```js
-import {state, input, set} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 
 export default {
   state: {
@@ -117,15 +118,15 @@ Since we dynamically want to load our user into the modal, we pass it in from th
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 import UserModal from '../UserModal'
 
 export default connect({
-  title: 'app.title',
-  currentUserKey: 'app.currentUserKey',
-  users: 'app.users'
-}, {
-  userModalOpened: 'app.userModalOpened'
+  title: state`app.title`,
+  currentUserKey: state`app.currentUserKey`,
+  users: state`app.users`
+  userModalOpened: signal`app.userModalOpened`
 },
   function App(props) {
     return (
@@ -149,14 +150,14 @@ Now our modal component can grab the user and update separately from the list:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal, props} from 'cerebral/tags'
 
 import ModalContainer from './ModalContainer'
 
-export default connect((props) => ({
-  show: 'app.showMyModal',
-  user: `app.users.${props.currentUserKey}`
-}), {
-  userModalClosed: 'app.userModalClosed'
+export default connect({
+  show: state`app.showMyModal`,
+  user: state`app.users.${props`currentUserKey`}`,
+  userModalClosed: signal`app.userModalClosed`
 },
   function UserModal(props) {
     if (!props.show) {
@@ -175,7 +176,8 @@ export default connect((props) => ({
 What is good about this approach is that you can very easily handle grabbing more information about the user if needed. Lets say we needed to download the user projects when opening the modal:
 
 ```js
-import {state, input, string, when, set} from 'cerebral/operators'
+import {when, set} from 'cerebral/operators'
+import {state, input, string} from 'cerebral/tags'
 import {httpGet} from 'cerebral-provider-http'
 
 export default {
@@ -213,7 +215,8 @@ This is not Cerebral complexity, this is application complexity and it has to be
 So what if we display the user to edit it? Well, we have to take into account that we probably do not want to edit the user directly, we rather want a copy of the data that will later be merged in with the user if we submit it. So instead of pointing to the user, we will copy over the details of the user for edit in our modal. When the modal close, we update the server:
 
 ```js
-import {state, input, string, when, set} from 'cerebral/operators'
+import {when, set} from 'cerebral/operators'
+import {state, input, string} from 'cerebral/tags'
 import {httpPatch} from 'cerebral-provider-http'
 
 export default {

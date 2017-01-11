@@ -1,16 +1,14 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, props, signal} from 'cerebral/tags'
 import {css} from 'aphrodite'
 import styles from './styles'
 
-export default connect((props) => (
-  {
-    field: `${props.path}.**`,
-    settings: 'app.settings.**'
-  }),
-  {
-    fieldChanged: 'simple.fieldChanged'
-  },
+export default connect({
+  field: state`${props`path`}.**`,
+  settings: state`app.settings.**`,
+  fieldChanged: signal`simple.fieldChanged`
+},
   function Input ({name, field, path, settings, fieldChanged}) {
     function onChange (e) {
       fieldChanged({

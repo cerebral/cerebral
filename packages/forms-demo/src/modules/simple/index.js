@@ -1,4 +1,5 @@
-import {set, state, input, when} from 'cerebral/operators'
+import {set, when} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 import {form, changeField, validateForm, resetForm} from 'cerebral-forms'
 
 export default {
@@ -38,10 +39,10 @@ export default {
     ],
     onSubmitted: [
       set(state`app.settings.showErrors`, true),
-      validateForm(input`formPath`)
+      validateForm(state`${input`formPath`}`)
     ],
     onReset: [
-      resetForm(input`formPath`)
+      resetForm(state`${input`formPath`}`)
     ]
   }
 }

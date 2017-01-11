@@ -1,15 +1,15 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, props} from 'cerebral/tags'
 import {isValidForm, getInvalidFormFields, formToJSON} from 'cerebral-forms'
 import {css} from 'aphrodite'
 import syntaxHighlight from '../../helpers/syntaxHighlight'
 import styles from './styles'
 
-export default connect((props) => (
-  {
-    form: `${props.currentView}.form.**`,
-    showPanel: 'app.settings.showErrors'
-  }),
+export default connect({
+  form: state`${props`currentView`}.form.**`,
+  showPanel: state`app.settings.showErrors`
+},
   function PrettyPrint ({form, showPanel}) {
     if (!showPanel) {
       return null

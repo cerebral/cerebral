@@ -44,7 +44,7 @@ function waitFactory (ms) {
 }
 ```
 
-We have just created a **factory**. A function that returns an action. The action itself (wait) returns a promise. This promise is what tells the signal to hold its execution until it is resolved.
+We have just defined a **factory**. A function that returns an action. The action itself (wait) returns a promise. This promise is what tells the signal to hold its execution until it is resolved.
 
 Cerebral factories are not only restricted to actions, you can also have chain factories. Let us create our own custom **showToast** chain factory.
 

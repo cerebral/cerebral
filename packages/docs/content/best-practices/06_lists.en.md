@@ -8,9 +8,10 @@ Typically when working with lists you would:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  items: 'app.items'
+  items: state`app.items`
 },
   function Items(props) {
     return (
@@ -49,9 +50,10 @@ So let us imagine we have a map of items instead:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  items: 'app.items'
+  items: state`app.items`
 },
   function List(props) {
     return (
@@ -70,9 +72,10 @@ We are now giving the component only a reference to the item it should connect t
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, props} from 'cerebral/tags'
 
 export default connect((props) => ({
-  item: `app.items.${props.itemKey}`
+  item: state`app.items.${props`itemKey`}`
 }),
   function Item(props) {
     return (
@@ -90,9 +93,10 @@ Typically you would put a computed in between the component and the items, for s
 
 ```js
 import {Computed} from 'cerebral'
+import {state} from 'cerebral/tags'
 
 export default Computed({
-  items: 'app.items'
+  items: state`app.items`
 }, (props) => {
   return Object.keys(props.items)
     .sort((itemAKey, itemBKey) => {
@@ -138,10 +142,11 @@ Sometimes you want to highlight the current item in a list. You might be tempted
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, props} from 'cerebral/tags'
 
 export default connect((props) => ({
-  item: `app.items.${props.itemKey}`,
-  currentItemKey: 'app.currentItemKey'
+  item: state`app.items.${props`itemKey`}`,
+  currentItemKey: state`app.currentItemKey`
 }),
   function Item(props) {
     return (
@@ -159,10 +164,11 @@ But this will make every item in the list render again when **app.currentItemKey
 import React from 'react'
 import {connect} from 'cerebral/react'
 import itemsKeys from '../computed/itemsKeys'
+import {state} from 'cerebral/tags'
 
 export default connect({
   itemsKeys,
-  currentItemKey 'app.currentItemKey'
+  currentItemKey state`app.currentItemKey`
 },
   function List(props) {
     return (

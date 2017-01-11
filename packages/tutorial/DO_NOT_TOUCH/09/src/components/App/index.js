@@ -1,14 +1,14 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 import starsSum from '../../computeds/starsSum'
 import Toast from '../Toast'
 
 export default connect({
-  title: 'title',
-  subTitle: 'subTitle',
-  starsCount: starsSum
-}, {
-  buttonClicked: 'buttonClicked'
+  title: state`title`,
+  subTitle: state`subTitle`,
+  starsCount: starsSum,
+  buttonClicked: signal`buttonClicked`
 },
   function App (props) {
     return (

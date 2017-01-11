@@ -1,38 +1,36 @@
-function uploadFactory (pathTemplate, fileTemplate, optionsTemplate = {}) {
-  function put (context) {
-    const path = typeof pathTemplate === 'function' ? pathTemplate(context).value : pathTemplate
-    const file = typeof fileTemplate === 'function' ? fileTemplate(context).value : fileTemplate
-    const options = Object.keys(optionsTemplate).reduce((opts, key) => {
-      const value = optionsTemplate[key]
+function putFactory (putPath, file, options = {}) {
+  function put ({firebase, input, state, path, resolveArg}) {
+    const evaluatedOptions = Object.keys(options).reduce((currentEvaluatedOptions, key) => {
+      const option = options[key]
+
       if (key === 'progress') {
-        if (typeof value !== 'function') {
-          throw new Error('cerebral-module-firebase: The value for \'progress\' option should be a tag operator.')
+        if (!(resolveArg.istag(option, 'state', 'signal'))) {
+          throw new Error('cerebral-module-firebase: The value for \'progress\' option should be either \'state\' or \'signal\' tag.')
         }
-        const progressValue = value(context)
-        if (progressValue.target === 'signal') {
-          opts[key] = (progress) => {
+
+        if (option.type === 'signal') {
+          currentEvaluatedOptions[key] = (progress) => {
             // We call progress signal with same 'input' context
-            progressValue.value(Object.assign({}, context.input, progress))
-          }
-        } else if (progressValue.target === 'state') {
-          opts[key] = (progress) => {
-            context.state.set(progressValue.path, progress.progress)
+            resolveArg.value(option)(Object.assign({}, input, progress))
           }
         } else {
-          throw new Error('cerebral-module-firebase: The target for \'progress\' option should be either \'state\' or \'signal\'.')
+          currentEvaluatedOptions[key] = (progress) => {
+            state.set(resolveArg.path(option), progress.progress)
+          }
         }
       } else {
-        opts[key] = typeof value === 'function' ? value(context).value : value
+        currentEvaluatedOptions[key] = resolveArg.value(option)
       }
-      return opts
+
+      return currentEvaluatedOptions
     }, {})
 
-    return context.firebase.put(path, file, options)
-      .then(context.path.success)
-      .catch(context.path.error)
+    return firebase.put(resolveArg.value(putPath), resolveArg.value(file), evaluatedOptions)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return put
 }
 
-export default uploadFactory
+export default putFactory

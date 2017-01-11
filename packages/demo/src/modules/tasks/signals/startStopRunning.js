@@ -1,4 +1,5 @@
-import {state, when} from 'cerebral/operators'
+import {when} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import paths from '../../../common/Collection/paths'
 import {isRunning} from '../helpers'
 import startRunning from './startRunning'

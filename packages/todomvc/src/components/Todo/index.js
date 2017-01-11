@@ -1,16 +1,16 @@
 import React from 'react'
 import classNames from 'classnames'
 import { connect } from 'cerebral/react'
+import {state, signal, props} from 'cerebral/tags'
 
-export default connect(props => ({
-  todo: `app.todos.${props.todoRef}.*`
-}), {
-  todoDoubleClicked: 'app.todoDoubleClicked',
-  newTitleChanged: 'app.todoNewTitleChanged',
-  newTitleSubmitted: 'app.todoNewTitleSubmitted',
-  toggleCompletedChanged: 'app.toggleTodoCompletedChanged',
-  removeTodoClicked: 'app.removeTodoClicked',
-  newTitleAborted: 'app.todoNewTitleAborted'
+export default connect({
+  todo: state`app.todos.${props`todoRef`}.*`,
+  todoDoubleClicked: signal`app.todoDoubleClicked`,
+  newTitleChanged: signal`app.todoNewTitleChanged`,
+  newTitleSubmitted: signal`app.todoNewTitleSubmitted`,
+  toggleCompletedChanged: signal`app.toggleTodoCompletedChanged`,
+  removeTodoClicked: signal`app.removeTodoClicked`,
+  newTitleAborted: signal`app.todoNewTitleAborted`
 },
   class Todo extends React.Component {
     componentDidUpdate (prevProps) {

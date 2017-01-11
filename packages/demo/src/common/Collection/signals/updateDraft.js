@@ -1,4 +1,5 @@
-import {input, set, state, when} from 'cerebral/operators'
+import {set, when} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import paths from '../paths'
 
 const MAX_IMAGE_SIZE = 100 * 1024

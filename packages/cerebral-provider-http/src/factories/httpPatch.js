@@ -1,17 +1,15 @@
 import {convertObjectWithTemplates} from '../utils'
 
 function httpPatchFactory (url, body = {}) {
-  function httpPatch (context) {
-    const urlTemplate = typeof url === 'function' ? url(context).value : url
-
-    return context.http.patch(urlTemplate, convertObjectWithTemplates(body, context))
-      .then(context.path.success)
+  function httpPatch ({http, path, resolveArg}) {
+    return http.patch(resolveArg.value(url), convertObjectWithTemplates(body, resolveArg))
+      .then(path.success)
       .catch((response) => {
         if (response.isAborted) {
-          return context.path.abort(response)
+          return path.abort(response)
         }
 
-        return context.path.error(response)
+        return path.error(response)
       })
   }
 

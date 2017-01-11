@@ -13,7 +13,8 @@ Cerebral allows you to describe updates the same way you describe state and user
 Let us add a signal to our Controller in **src/index.js**:
 
 ```js
-import {state, set} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 ...
 ...
 ...
@@ -30,15 +31,15 @@ const controller = Controller({
   }
 })
 ```
-We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". A signal is defined using an array containing functions. What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. That is why we use **set**, a Cerebral operator. Calling set will create a function for us that will put the value *Updating some state* on the state path *subTitle*. If you are unfamiliar with [template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) in JavaScript, you should read about them.
+We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". A signal is defined using an array containing functions. What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. That is why we use **set**, a Cerebral operator. Calling set will create a function for us that will put the value *Updating some state* on the state path *subTitle*. Notice here that we are reusing the tag called *state*. Tags er an important and powerful feature that you can think of as "targeting something in Cerebral".
 
 Please take a closer look at *./src/components/App/index.js*:
 
 ```js
 ...
 connect({
-  title: 'title',
-  subTitle: 'subTitle'
+  title: state`title`,
+  subTitle: state`subTitle`
 },
   ...
 )
@@ -50,12 +51,12 @@ To trigger the signal we need to wire up a click-handler on a button and add our
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  title: 'title',
-  subTitle: 'subTitle'
-}, {
-  buttonClicked: 'buttonClicked'
+  title: state`title`,
+  subTitle: state`subTitle`,
+  buttonClicked: signal`buttonClicked`
 },
   function App (props) {
     return (
@@ -75,6 +76,6 @@ export default connect({
 ```
 Now click it and take a look at the debugger. You will see the debugger list the execution of the signal, with information about what happened. This is also a tool the Cerebral debugger provides to give you insight into your application. Very handy for example when you need to dig into a **complex application** after not touching it for a long time, introduce a new team member to the application or debug complex execution flows.
 
-So now changing the *subTitle* is kind of a silly state change on a button click. Let's introduce a very simple "Toast"-Component which will display our **buttonClicked** output.
+So now changing the *subTitle* is kind of a silly state change on a button click. Let's introduce a very simple "Toast"-Component which will display our **buttonClicked** output. It has already been added for you on the next chapter.
 
 **Want to dive deeper?** - [Go in depth](../in-depth/04_signals.html), or move on with the tutorial
