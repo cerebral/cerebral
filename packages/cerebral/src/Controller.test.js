@@ -141,16 +141,16 @@ describe('Controller', () => {
     const controller = new Controller({})
     assert.equal(controller.getState('foo.bar'), undefined)
   })
-  it('should flush at async action, path end and end of signal', (done) => {
+  it('should flush at async action, resolved parallel and end of signal', (done) => {
     let flushCount = 0
     const controller = new Controller({
       signals: {
         test: [
-          () => {},
           () => Promise.resolve(),
-          ({path}) => path.foo(), {
-            foo: [() => {}]
-          }
+          [
+            () => Promise.resolve(),
+            () => Promise.resolve()
+          ]
         ]
       }
     })
@@ -160,7 +160,7 @@ describe('Controller', () => {
       originFlush.apply(this, args)
     }
     controller.runTree.once('end', () => {
-      assert.equal(flushCount, 3)
+      assert.equal(flushCount, 4)
       done()
     })
     controller.getSignal('test')()
@@ -187,6 +187,36 @@ describe('Controller', () => {
     })
     controller.on('flush', (changes) => {
       assert.deepEqual(changes, {foo: true})
+      done()
+    })
+    controller.getSignal('test')()
+  })
+  it('should flush optimally in complex signals', (done) => {
+    let flushCount = 0
+    const controller = new Controller({
+      signals: {
+        test: [
+          () => {},
+          () => Promise.resolve(),
+          () => {},
+          [
+            ({path}) => Promise.resolve(path.a()), {
+              a: [
+                () => {}
+              ]
+            },
+            () => Promise.resolve()
+          ]
+        ]
+      }
+    })
+    const originFlush = controller.flush
+    controller.flush = function (...args) {
+      flushCount++
+      originFlush.apply(this, args)
+    }
+    controller.runTree.once('end', () => {
+      assert.equal(flushCount, 4)
       done()
     })
     controller.getSignal('test')()

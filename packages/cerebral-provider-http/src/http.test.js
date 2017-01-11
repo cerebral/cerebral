@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {string, input} from 'cerebral/operators'
+import {string, input} from 'cerebral/tags'
 import HttpProvider, {httpGet, httpPost, httpPut, httpPatch, httpDelete} from './'
 import assert from 'assert'
 import mock from 'xhr-mock'
@@ -25,7 +25,11 @@ describe('Http Provider', () => {
           }, {
             success: [
               ({input}) => {
-                assert.deepEqual(input, {result: {foo: 'bar'}, status: 200})
+                assert.deepEqual(input, {
+                  result: {foo: 'bar'},
+                  status: 200,
+                  headers: {'content-type': 'application/json'}
+                })
                 done()
               }
             ]

@@ -1,14 +1,13 @@
 {
   "name": "cerebral-forms",
-  "version": "1.0.0-0",
+  "version": "1.0.0-b",
   "description": "Signals, actions and state factories to create forms",
   "main": "lib/index.js",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --compilers js:../../node_modules/babel-register 'src/**/*.test.js'",
+    "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
     "test:watch": "npm run test -- --watch",
-    "prebuild": "npm run test",
-    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
-    "coverage": "../../node_modules/.bin/nyc --reporter=lcov --reporter=json npm run test",
+    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "coverage": "nyc --reporter=lcov --reporter=json npm run test",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -27,10 +26,11 @@
   "homepage":
     "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms#readme",
   "peerDependencies": {
-    "cerebral": "2.0.0-0"
+    "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "cerebral": "2.0.0-0"
+    "@cerebral/monorepo": "0.0.1",
+    "cerebral": "^2.0.0-b"
   },
   "nyc": {
     "exclude": [

@@ -1,16 +1,10 @@
 export default function (target) {
-  if (typeof target !== 'function') {
-    throw new Error('Cerebral operator.shift: You have to use a state template tag as first argument')
-  }
-
-  function shift (context) {
-    const targetTemplate = target(context)
-
-    if (targetTemplate.target !== 'state') {
-      throw new Error('Cerebral operator.shift: You have to use a state template tag as first argument')
+  function shift ({state, input, resolveArg}) {
+    if (!resolveArg.isTag(target, 'state')) {
+      throw new Error('Cerebral operator.shift: You have to use the STATE TAG as first argument')
     }
 
-    context.state.shift(targetTemplate.path)
+    state.shift(resolveArg.path(target))
   }
 
   shift.displayName = 'operator.shift'

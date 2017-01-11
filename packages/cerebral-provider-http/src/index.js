@@ -13,7 +13,7 @@ export { default as httpDelete } from './factories/httpDelete'
 export default function HttpProviderFactory (passedOptions) {
   let moduleOptions = mergeWith({}, DEFAULT_OPTIONS)
   if (typeof passedOptions === 'function') {
-    moduleOptions = moduleOptions(moduleOptions)
+    moduleOptions = passedOptions(moduleOptions)
   } else if (passedOptions) {
     moduleOptions = mergeWith(passedOptions, DEFAULT_OPTIONS)
   }

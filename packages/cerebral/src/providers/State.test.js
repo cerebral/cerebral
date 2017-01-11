@@ -189,10 +189,10 @@ describe('State', () => {
           // Set cache
           assert.deepEqual(state.compute(fullName), 'John Difool')
           state.set('user.firstName', 'Animah')
-          // Cache used
-          assert.deepEqual(state.compute(fullName), 'John Difool')
-          // Force recompute
-          assert.deepEqual(state.compute(fullName, true), 'Animah Difool')
+          // Force cache used
+          assert.deepEqual(state.compute(fullName, true), 'John Difool')
+          // Recompute
+          assert.deepEqual(state.compute(fullName), 'Animah Difool')
         }]
       }
     })

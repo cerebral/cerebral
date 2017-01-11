@@ -1,3 +1,5 @@
+import {Tag} from 'cerebral/tags'
+
 export function createResponse (options, resolve, reject) {
   return (event) => {
     switch (event.type) {
@@ -53,14 +55,31 @@ export function urlEncode (obj, prefix) {
   return str.join('&')
 }
 
-export function convertObjectWithTemplates (obj, context) {
-  if (typeof obj === 'function') {
-    return obj(context).value
+export function convertObjectWithTemplates (obj, getters) {
+  if (obj instanceof Tag) {
+    return obj.getValue(getters)
   }
 
   return Object.keys(obj).reduce((convertedObject, key) => {
-    convertedObject[key] = typeof obj[key] === 'function' ? obj[key](context).value : obj[key]
+    convertedObject[key] = obj[key] instanceof Tag ? obj[key].getValue(getters) : obj[key]
 
     return convertedObject
+  }, {})
+}
+
+export function parseHeaders (rawHeaders) {
+  const headerPairs = rawHeaders.replace(/\r?\n$/, '').split(/\r?\n/)
+
+  return headerPairs.reduce((parsedHeaders, headerPair) => {
+    const index = headerPair.indexOf(':')
+    const key = headerPair.substr(0, index).trim().toLowerCase()
+    const value = headerPair.substr(index + 1).trim()
+    if (key) {
+      parsedHeaders[key] = parsedHeaders[key]
+        ? parsedHeaders[key] + ', ' + value
+        : value
+    }
+
+    return parsedHeaders
   }, {})
 }

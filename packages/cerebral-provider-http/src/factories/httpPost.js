@@ -1,17 +1,15 @@
 import {convertObjectWithTemplates} from '../utils'
 
 function httpPostFactory (url, body = {}) {
-  function httpPost (context) {
-    const urlTemplate = typeof url === 'function' ? url(context).value : url
-
-    return context.http.post(urlTemplate, convertObjectWithTemplates(body, context))
-      .then(context.path.success)
+  function httpPost ({http, path, resolveArg}) {
+    return http.post(resolveArg.value(url), convertObjectWithTemplates(body, resolveArg))
+      .then(path.success)
       .catch((response) => {
         if (response.isAborted) {
-          return context.path.abort(response)
+          return path.abort(response)
         }
 
-        return context.path.error(response)
+        return path.error(response)
       })
   }
 

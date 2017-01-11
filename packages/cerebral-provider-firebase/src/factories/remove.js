@@ -1,10 +1,8 @@
-function removeFactory (path) {
-  function remove (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-
-    return context.firebase.remove(pathTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function removeFactory (removePath) {
+  function remove ({firebase, path, resolveArg}) {
+    return firebase.remove(resolveArg.value(removePath))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return remove

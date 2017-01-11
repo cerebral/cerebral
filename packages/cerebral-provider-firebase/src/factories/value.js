@@ -1,10 +1,8 @@
-function valueFactory (path) {
-  function value (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-
-    return context.firebase.value(pathTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function valueFactory (valuePath) {
+  function value ({firebase, path, resolveArg}) {
+    return firebase.value(resolveArg.value(valuePath))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return value

@@ -1,0 +1,31 @@
+{
+  "name": "@cerebral/function-tree-demos",
+  "version": "0.0.0",
+  "private": true,
+  "proxy": "http://localhost:4000",
+  "devDependencies": {
+    "@cerebral/monorepo": "0.0.1"
+  },
+  "dependencies": {
+    "axios": "^0.15.2",
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "function-tree": "^0.5.0-b",
+    "mobx": "^2.6.0",
+    "mobx-react": "^3.5.8",
+    "react": "^15.3.2",
+    "react-dom": "^15.3.2",
+    "react-redux": "^4.4.5",
+    "redux": "^3.6.0"
+  },
+  "scripts": {
+    "start": "run-p start:browser start:server",
+    "start:browser": "react-scripts start",
+    "start:server": "node server.js",
+    "demo:redux": "cross-env REACT_APP_DEMO=redux npm start",
+    "demo:mobx": "cross-env REACT_APP_DEMO=mobx npm start",
+    "demo:node": "node src/node"
+  },
+  "main": "index.js",
+  "license": "MIT"
+}

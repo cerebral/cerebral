@@ -1,10 +1,8 @@
-function transactionFactory (path, transactionFunction) {
-  function transaction (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-
-    return context.firebase.transaction(pathTemplate, transactionFunction)
-      .then(context.path.success)
-      .catch(context.path.error)
+function transactionFactory (transactionPath, transactionFunction) {
+  function transaction ({firebase, path, resolveArg}) {
+    return firebase.transaction(resolveArg.value(transactionPath), transactionFunction)
+      .then(path.success)
+      .catch(path.error)
   }
 
   return transaction

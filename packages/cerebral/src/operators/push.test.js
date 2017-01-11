@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, push, state} from './'
+import {push} from './'
+import {input, state} from '../tags'
 
 describe('operator.push', () => {
   it('should push value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
@@ -19,7 +20,7 @@ describe('operator.push', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
   })
   it('should push value from input in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
@@ -33,7 +34,7 @@ describe('operator.push', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -42,8 +43,9 @@ describe('operator.push', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
+      controller.getSignal('test')()
     }, /operator.push/)
   })
 })

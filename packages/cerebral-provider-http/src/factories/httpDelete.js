@@ -1,17 +1,15 @@
 import {convertObjectWithTemplates} from '../utils'
 
 function httpDeleteFactory (url, query = {}) {
-  function httpDelete (context) {
-    const urlTemplate = typeof url === 'function' ? url(context).value : url
-
-    return context.http.delete(urlTemplate, convertObjectWithTemplates(query, context))
-      .then(context.path.success)
+  function httpDelete ({http, path, resolveArg}) {
+    return http.delete(resolveArg.value(url), convertObjectWithTemplates(query, resolveArg))
+      .then(path.success)
       .catch((response) => {
         if (response.isAborted) {
-          return context.path.abort(response)
+          return path.abort(response)
         }
 
-        return context.path.error(response)
+        return path.error(response)
       })
   }
 

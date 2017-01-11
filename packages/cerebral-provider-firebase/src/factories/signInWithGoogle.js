@@ -1,10 +1,10 @@
 import {convertObjectWithTemplates} from './utils'
 
 function signInWithGoogleFactory (options = {}) {
-  function signInWithGoogle (context) {
-    return context.firebase.signInWithGoogle(convertObjectWithTemplates(options, context))
-      .then(context.path.success)
-      .catch(context.path.error)
+  function signInWithGoogle ({firebase, path, resolveArg}) {
+    return firebase.signInWithGoogle(convertObjectWithTemplates(options, resolveArg))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return signInWithGoogle

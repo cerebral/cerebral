@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, toggle} from './'
+import {toggle} from './'
+import {input, state} from '../tags'
 
 describe('operator.toggle', () => {
   it('should toggle state', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: true
       },
@@ -19,7 +20,7 @@ describe('operator.toggle', () => {
     assert.deepEqual(controller.getState(), {foo: false})
   })
   it('should toggle state with input', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         todos: {
           one: true,
@@ -36,7 +37,7 @@ describe('operator.toggle', () => {
     assert.deepEqual(controller.getState(), {todos: {one: false, two: false}})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -45,8 +46,9 @@ describe('operator.toggle', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({foo: true})
+      controller.getSignal('test')()
     }, /operator.toggle/)
   })
 })
