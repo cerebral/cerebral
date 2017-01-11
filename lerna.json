@@ -1,4 +1,5 @@
 {
   "lerna": "2.0.0-beta.32",
-  "version": "independent"
+  "version": "independent",
+  "packages": ["packages/*", "docs/*", "demos/*", "debugger/*", "."]
 }

@@ -1,39 +1,63 @@
 {
-  "name": "cerebral-monorepo",
+  "name": "@cerebral/monorepo",
+  "private": true,
   "version": "0.0.1",
+  "license": "MIT",
   "scripts": {
     "setup": "lerna bootstrap",
+    "setup:packages": "lerna bootstrap --scope '@(function-tree|cerebral*)'",
+    "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
     "lint": "standard",
     "pretest": "npm run lint",
-    "test": "lerna run test",
-    "coverage": "lerna run coverage && istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
+    "test": "lerna run test --ignore @cerebral/monorepo",
+    "coverage": "lerna run coverage --ignore @cerebral/monorepo",
+    "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "deploy": "cd packages/website && npm run ci"
+    "deploy": "cd docs/website && npm run ci"
   },
-  "license": "MIT",
-  "devDependencies": {
+  "bin": {
+    "babel": "./node_modules/.bin/babel",
+    "mocha": "./node_modules/.bin/mocha",
+    "nyc": "./node_modules/.bin/nyc",
+    "react-scripts": "./node_modules/.bin/react-scripts",
+    "npm-run-all": "./node_modules/.bin/npm-run-all",
+    "run-p": "./node_modules/.bin/run-p",
+    "run-s": "./node_modules/.bin/run-s",
+    "sh-js": "./node_modules/.bin/sh-js",
+    "shx": "./node_modules/.bin/shx",
+    "gh-pages": "./node_modules/.bin/gh-pages"
+  },
+  "dependencies": {
     "babel-cli": "^6.18.0",
     "babel-core": "^6.21.0",
     "babel-eslint": "^7.1.1",
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
+    "babel-preset-stage-0": "^6.16.0",
     "babel-preset-stage-3": "^6.17.0",
     "babel-register": "^6.18.0",
-    "commitizen": "^2.9.5",
+    "gh-pages": "^0.11.0",
     "coveralls": "^2.11.15",
-    "cz-customizable": "^4.0.0",
-    "cz-customizable-ghooks": "^1.4.0",
-    "ghooks": "^2.0.0",
-    "istanbul-combine": "^0.3.0",
+    "cross-env": "^3.1.3",
+    "inquirer": "^1.2.3",
     "jsdom": "^9.9.1",
-    "lerna": "2.0.0-beta.32",
     "mocha": "^3.2.0",
     "mocha-jsdom": "^1.1.0",
+    "npm-run-all": "^3.1.1",
     "nyc": "^10.0.0",
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
+    "react-scripts": "0.8.5",
+    "shelljs": "^0.7.5",
+    "shx": "^0.2.0",
+    "commitizen": "^2.9.5",
+    "cz-customizable": "^4.0.0",
+    "cz-customizable-ghooks": "^1.4.0",
+    "husky": "^0.12.0",
+    "istanbul-combine": "^0.3.0",
+    "lerna": "2.0.0-beta.32",
     "standard": "^8.6.0"
   },
   "config": {
@@ -42,18 +66,13 @@
     },
     "cz-customizable": {
       "config": ".cz-config.js"
-    },
-    "ghooks": {
-      "commit-msg": "node ./node_modules/cz-customizable-ghooks/lib/index.js $2"
     }
   },
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
       "**/node_modules/",
-      "**/build/",
-      "packages/cerebral-debugger/chromeExtension/prism.js",
-      "packages/cerebral-debugger/electron/prism.js"
+      "**/build/"
     ],
     "globals": [
       "block",
@@ -64,9 +83,5 @@
       "applyNext",
       "applyCtx"
     ]
-  },
-  "private": true,
-  "dependencies": {
-    "inquirer": "^1.2.3"
   }
 }
