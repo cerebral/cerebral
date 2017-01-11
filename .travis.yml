@@ -10,19 +10,21 @@ before_script:
 - npm prune
 - lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-router)'
 after_success:
-- npm run coverage
-- npm run coverage:upload
 - |
+  echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
   git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral;
   git config --global user.email "cerebraljs@gmail.com";
   git config --global user.name "Cerebral JS";
-  echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
+  if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_PULL_REQUEST == 'true' ]]; then
+    npm run coverage;
+    npm run coverage:upload;
+  fi
   if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
+    # TODO: parse commit message for instructions to skip tagging and publishing
     git tag next -f;
-    git push auth --tags -f;
+    git push auth --tags -f &>/dev/null;
   fi
   if [[ $TRAVIS_BRANCH == 'next' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
-    # TODO: parse commit message for instructions to skip publish
     # TODO: check changed path to decide if npm publish necessary
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
     lerna bootstrap;
