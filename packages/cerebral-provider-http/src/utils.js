@@ -55,14 +55,13 @@ export function urlEncode (obj, prefix) {
   return str.join('&')
 }
 
-export function convertObjectWithTemplates (obj, getters) {
-  if (obj instanceof Tag) {
-    return obj.getValue(getters)
+export function convertObjectWithTemplates (obj, resolveArg) {
+  if (resolveArg.isTag(obj)) {
+    return resolveArg.value(obj)
   }
 
   return Object.keys(obj).reduce((convertedObject, key) => {
-    convertedObject[key] = obj[key] instanceof Tag ? obj[key].getValue(getters) : obj[key]
-
+    convertedObject[key] = resolveArg.value(obj[key])
     return convertedObject
   }, {})
 }
