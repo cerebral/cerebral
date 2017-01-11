@@ -12,7 +12,7 @@
     "tutorial": "run-s tutorial:*",
     "todomvc": "shx mkdir -p ./build/todomvc && shx cp -R ../../demos/todomvc/build/* ./build/todomvc",
     "demo": "shx mkdir -p ./build/demo && shx cp -R ../../demos/demo/build/* ./build/demo",
-    "deploy": "gh-pages -d build -b master -r https://cerebraljs:$GH_TOKEN@github.com/cerebral/cerebral.github.io.git",
+    "deploy": "gh-pages -d build -b master -r https://cerebraljs:$GH_TOKEN@github.com/cerebral/cerebral.github.io.git &>/dev/null",
     "build": "run-p website tutorial todomvc demo",
     "ci": "run-s clean build deploy"
   },

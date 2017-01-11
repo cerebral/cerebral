@@ -6,6 +6,10 @@ cache:
   - node_modules
 notifications:
   email: false
+addons:
+  apt:
+    packages:
+    - wine
 before_script:
 - npm prune
 - lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-router)'
@@ -28,10 +32,10 @@ after_success:
     # TODO: check changed path to decide if npm publish necessary
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
     lerna bootstrap;
-    lerna publish -c --npm-tag next --yes;
-    npm run deploy;
+    # lerna publish -c --npm-tag next --yes;
+    # npm run deploy;
     lerna run build:electron --concurrency 1;
-    lerna run build:chromeExtension --concurrency 1;
+    # lerna run build:chromeExtension --concurrency 1;
     for DIR in debugger/*/electron/dist/*; do
       zip -r `basename "$DIR"`.zip $DIR;
     done
