@@ -1,5 +1,3 @@
-import {Tag} from 'cerebral/tags'
-
 export function createResponse (options, resolve, reject) {
   return (event) => {
     switch (event.type) {
