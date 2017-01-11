@@ -13,7 +13,7 @@ after_success:
 - npm run coverage
 - npm run coverage:upload
 - |
-  git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral.github.io.git;
+  git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral;
   git config --global user.email "cerebraljs@gmail.com";
   git config --global user.name "Cerebral JS";
   echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
