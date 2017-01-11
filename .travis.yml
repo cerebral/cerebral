@@ -34,11 +34,11 @@ after_success:
     lerna bootstrap;
     # lerna publish -c --npm-tag next --yes;
     npm run deploy;
-    lerna run build:electron --concurrency 1;
+    # lerna run build:electron --concurrency 1;
     # lerna run build:chromeExtension --concurrency 1;
-    for DIR in debugger/*/electron/dist/*; do
-      zip -r `basename "$DIR"`.zip $DIR;
-    done
+    # for DIR in debugger/*/electron/dist/*; do
+      # zip -r `basename "$DIR"`.zip $DIR;
+    # done
   fi
 branches:
   except:
