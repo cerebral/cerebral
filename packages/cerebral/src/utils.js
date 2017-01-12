@@ -118,9 +118,7 @@ export function debounce (func, wait) {
   }
 }
 
-export const noop = () => {}
-
-export const forceSerializable = (value) => {
+export function forceSerializable (value) {
   if (value && !isSerializable(value)) {
     const name = value.constructor.name
 
@@ -135,3 +133,13 @@ export const forceSerializable = (value) => {
 
   return value
 }
+
+export function getProviders (module) {
+  return (module.provider ? [module.provider] : []).concat(Object.keys(module.modules || {})
+    .reduce((nestedProviders, moduleKey) => {
+      return nestedProviders.concat(getProviders(module.modules[moduleKey]))
+    }, [])
+  )
+}
+
+export const noop = () => {}
