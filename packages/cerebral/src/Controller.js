@@ -2,7 +2,7 @@ import DependencyStore from './DependencyStore'
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -26,11 +26,11 @@ class Controller extends EventEmitter {
     this.flush = this.flush.bind(this)
     this.devtools = devtools
     this.model = new Model({}, this.devtools)
-    this.module = new Module([], {
+    this.module = new Module(this, [], {
       state,
       signals,
       modules
-    }, this)
+    })
     this.router = router ? router(this) : null
 
     const allProviders = [
@@ -51,7 +51,7 @@ class Controller extends EventEmitter {
     )).concat(
       StateProvider()
     ).concat(
-      providers.concat(this.module.getProviders())
+      providers.concat(getProviders(this.module))
     )
 
     this.runTree = new FunctionTree(allProviders)
