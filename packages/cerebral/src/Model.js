@@ -12,7 +12,7 @@ class Model {
           : initialState
       )
     } else {
-      this.state = initialState;
+      this.state = initialState
     }
 
     this.changedPaths = []
@@ -141,8 +141,8 @@ class Model {
         !isSerializable(value, this.devtools.allowedTypes)
       ) {
         throwError(`You are passing a non serializable value into the state tree on path ${path.join('.')}`)
+        return forceSerializable(value)
       }
-      return forceSerializable(value)
     }
   }
   verifyValues (values, path) {

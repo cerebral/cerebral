@@ -2,7 +2,7 @@ import DependencyStore from './DependencyStore'
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject} from './utils'
+import {ensurePath, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -30,7 +30,7 @@ class Controller extends EventEmitter {
       this.devtools = devtools
       this.model = new Model({}, this.devtools)
     } else {
-      this.model = new Model({});
+      this.model = new Model({})
     }
 
     this.module = new Module(this, [], {
@@ -38,7 +38,7 @@ class Controller extends EventEmitter {
       signals,
       modules
     })
-    
+
     this.router = router ? router(this) : null
 
     const allProviders = [
@@ -50,7 +50,7 @@ class Controller extends EventEmitter {
       ] : []
     ).concat((
       process.env.NODE_ENV !== 'production' ? [
-        DebuggerProvider()
+        this.devtools ? DebuggerProvider() : undefined
       ] : []
     )).concat((
       process.env.NODE_ENV !== 'production' ? [
