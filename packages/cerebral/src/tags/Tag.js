@@ -14,7 +14,7 @@ export default class Tag {
     Returns all tags, also nested to identify nested state dependencies
     in components
   */
-  getTags (getters) {
+  getTags () {
     return [this].concat(this.getNestedTags())
   }
   /*
@@ -60,7 +60,7 @@ export default class Tag {
   /*
     Grab nested tags from the tags current path
   */
-  getNestedTags (getters) {
+  getNestedTags () {
     return this.strings.reduce((currentPaths, string, idx) => {
       const valueTemplate = this.values[idx]
 
