@@ -1,6 +1,6 @@
 block('page').elem('edit')(
   content()(function () {
-    var url = 'https://github.com/cerebral/cerebral/tree/master/packages/docs/content/'
+    var url = 'https://github.com/cerebral/cerebral/tree/master/docs/docs/content/'
 
     if (this._layout !== 'root') {
       url += this._layout + '/'
