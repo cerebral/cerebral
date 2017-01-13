@@ -47,10 +47,8 @@ export default {
         // when using form reset
         defaultValue: '',
 
-        // Some properties are created for you, set when validation runs
-        // and you can use them in components. You can also set these
-        // properties manually, though usually the validate action factory
-        // is used to handle this
+        // Some properties are created for you by the validate action factory
+        // which can be used in the components.
 
         // Toggled when field is validated
         hasValue: false,
@@ -93,28 +91,6 @@ export default function MyAction({state}) {
 }
 ```
 
-#### Set a default value for the whole form
-You can set a default value for a property using a factory:
-```js
-import {form, getFormFields} from 'cerebral-forms'
-
-const MyFormFactory = (formObject) => {
-  const myForm = form(formObject)
-  const fields = getFormFields(myForm)
-
-  // You can also set some special properties for the whole form
-  newForm.showErrors = false
-
-  fields.forEach((field) => {
-    field.requiredMessage = field.requiredMessage || 'This field is required'
-    field.someProp = field.someProp || 'Some default'
-  })
-
-  return myForm
-}
-
-```
-
 #### Custom global props
 You can add custom props to the root to the form state.
 
@@ -133,6 +109,28 @@ export default function MyAction({state}) {
     showErrors: false
   }))
 }
+```
+
+#### Set a default value for the whole form
+You can set a default value for a property using a factory:
+```js
+import {form, getFormFields} from 'cerebral-forms'
+
+const MyFormFactory = (formObject) => {
+  const myForm = form(formObject)
+  const fields = getFormFields(myForm)
+
+  // You can also set some special properties for the whole form
+  myForm.showErrors = false
+
+  fields.forEach((field) => {
+    field.requiredMessage = field.requiredMessage || 'This field is required'
+    field.someProp = field.someProp || 'Some default'
+  })
+
+  return myForm
+}
+
 ```
 
 ### field

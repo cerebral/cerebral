@@ -33,11 +33,12 @@ class Controller extends EventEmitter {
       this.model = new Model({});
     }
 
-    this.module = new Module([], {
+    this.module = new Module(this, [], {
       state,
       signals,
       modules
-    }, this)
+    })
+    
     this.router = router ? router(this) : null
 
     const allProviders = [
@@ -58,7 +59,7 @@ class Controller extends EventEmitter {
     )).concat(
       StateProvider()
     ).concat(
-      providers.concat(this.module.getProviders())
+      providers.concat(getProviders(this.module))
     )
 
     this.runTree = new FunctionTree(allProviders)
