@@ -26,7 +26,7 @@ export default class Tag {
   */
   getPath (getters) {
     if (!getters) {
-      throw new Error('You can not grab tags from a Tag without getters')
+      throw new Error('You can not grab the path from a Tag without getters')
     }
 
     return this.populatePath(getters)
@@ -36,7 +36,7 @@ export default class Tag {
   */
   getValue (getters) {
     if (!getters) {
-      throw new Error('You can not grab tags from a Tag without getters')
+      throw new Error('You can not grab a value from a Tag without getters')
     }
 
     if (this.options.hasValue && !getters[this.type]) {
