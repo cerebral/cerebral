@@ -15,11 +15,7 @@ export default class Tag {
     in components
   */
   getTags (getters) {
-    if (!getters) {
-      throw new Error('You can not grab tags from a Tag without getters')
-    }
-
-    return [this].concat(this.getNestedTags(getters))
+    return [this].concat(this.getNestedTags())
   }
   /*
     Gets the path of the tag, where nested tags are evaluated
