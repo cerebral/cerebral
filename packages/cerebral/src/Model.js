@@ -2,14 +2,19 @@ import {isObject, isSerializable, throwError, forceSerializable} from './utils'
 
 class Model {
   constructor (initialState = {}, devtools = null) {
-    this.devtools = devtools
-    this.preventExternalMutations = devtools ? devtools.preventExternalMutations : false
+    if (process.env.NODE_ENV !== 'production') {
+      this.devtools = devtools
+      this.preventExternalMutations = devtools ? devtools.preventExternalMutations : false
 
-    this.state = (
-      this.preventExternalMutations
-        ? this.freezeObject(initialState)
-        : initialState
-    )
+      this.state = (
+        this.preventExternalMutations
+          ? this.freezeObject(initialState)
+          : initialState
+      )
+    } else {
+      this.state = initialState;
+    }
+
     this.changedPaths = []
   }
   /*
@@ -130,20 +135,23 @@ class Model {
     Checks if value is serializable, if turned on
   */
   verifyValue (value, path) {
-    if (
-      this.devtools &&
-      !isSerializable(value, this.devtools.allowedTypes)
-    ) {
-      throwError(`You are passing a non serializable value into the state tree on path ${path.join('.')}`)
+    if (process.env.NODE_ENV !== 'production') {
+      if (
+        this.devtools &&
+        !isSerializable(value, this.devtools.allowedTypes)
+      ) {
+        throwError(`You are passing a non serializable value into the state tree on path ${path.join('.')}`)
+      }
+      return forceSerializable(value)
     }
-
-    return forceSerializable(value)
   }
   verifyValues (values, path) {
-    if (this.devtools) {
-      values.forEach((value) => {
-        this.verifyValue(value, path)
-      })
+    if (process.env.NODE_ENV !== 'production') {
+      if (this.devtools) {
+        values.forEach((value) => {
+          this.verifyValue(value, path)
+        })
+      }
     }
   }
   get (path = []) {

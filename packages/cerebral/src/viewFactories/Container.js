@@ -1,4 +1,4 @@
-import {throwError, noop} from '../utils'
+import {throwError} from '../utils'
 
 export default (View) => {
   class Container extends View.Component {
@@ -7,7 +7,7 @@ export default (View) => {
       if (!controller) {
         throwError('You are not passing controller to Container')
       }
-      const {componentDependencyStore, devtools = noop} = controller
+      const {componentDependencyStore, devtools} = controller
       return {
         cerebral: {
           controller: controller,
@@ -37,23 +37,29 @@ export default (View) => {
 
 function registerComponent (componentDependencyStore, devtools, component, depsMap) {
   componentDependencyStore.addEntity(component, depsMap)
-  if (devtools) {
-    devtools.updateComponentsMap(component, depsMap)
+  if (process.env.NODE_ENV !== 'production') {
+    if (devtools) {
+      devtools.updateComponentsMap(component, depsMap)
+    }
   }
 }
 
 function unregisterComponent (componentDependencyStore, devtools, component, depsMap) {
   componentDependencyStore.removeEntity(component, depsMap)
-  if (devtools) {
-    devtools.updateComponentsMap(component, null, depsMap)
+  if (process.env.NODE_ENV !== 'production') {
+    if (devtools) {
+      devtools.updateComponentsMap(component, null, depsMap)
+    }
   }
 }
 
 function updateComponent (componentDependencyStore, devtools, component, prevDepsMap, depsMap) {
   componentDependencyStore.removeEntity(component, prevDepsMap)
   componentDependencyStore.addEntity(component, depsMap)
-  if (devtools) {
-    devtools.updateComponentsMap(component, depsMap, prevDepsMap)
+  if (process.env.NODE_ENV !== 'production') {
+    if (devtools) {
+      devtools.updateComponentsMap(component, depsMap, prevDepsMap)
+    }
   }
   component._update()
 }
