@@ -135,9 +135,8 @@ class Model {
       !isSerializable(value, this.devtools.allowedTypes)
     ) {
       throwError(`You are passing a non serializable value into the state tree on path ${path.join('.')}`)
+      forceSerializable(value)
     }
-
-    return forceSerializable(value)
   }
   verifyValues (values, path) {
     if (this.devtools) {
