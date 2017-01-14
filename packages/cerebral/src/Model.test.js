@@ -222,6 +222,13 @@ describe('Model', () => {
     })
   })
   describe('Serializable', () => {
+    it('should make value forceSerializable when devtools are attached', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, {allowedTypes: [Date]})
+      model.set(['foo'], new Date())
+      assert.equal(model.state.foo.toJSON(), '[Date]')
+    })
     it('should throw error if value inserted is not serializable', () => {
       const model = new Model({
         foo: 'bar'
