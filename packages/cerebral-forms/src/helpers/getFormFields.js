@@ -7,16 +7,11 @@ export default function getFormFields (object, currentPath = [], allFields = {})
         getFormFields(object[key][index], currentPath, allFields)
         currentPath.pop()
       })
-      currentPath.pop()
-
-      return allFields
     } else if (object[key] === Object(object[key]) && 'value' in object[key]) {
       allFields[currentPath.join('.')] = object[key]
-      currentPath.pop()
-
-      return allFields
+    } else if (object[key] === Object(object[key])) {
+      getFormFields(object[key], currentPath, allFields)
     }
-    getFormFields(object[key], currentPath, allFields)
     currentPath.pop()
 
     return allFields

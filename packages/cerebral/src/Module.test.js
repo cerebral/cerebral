@@ -64,4 +64,31 @@ describe('Module', () => {
     controller.getSignal('foo.signalA')()
     controller.getSignal('bar.signalB')()
   })
+  it('should keep module instance', () => {
+    class Foo {
+      constructor () {
+        this.state = {foo: 'bar'}
+        this.signals = {bar: [(context) => { assert.equal(context.foo, 'foo') }]}
+        this.provider = (context) => {
+          context.foo = 'foo'
+
+          return context
+        }
+      }
+
+      getBar () {
+        return 'bar'
+      }
+    }
+
+    const controller = new Controller({
+      modules: {
+        foo: new Foo()
+      }
+    })
+
+    assert.deepEqual(controller.getState(), {foo: {foo: 'bar'}})
+    controller.getSignal('foo.bar')()
+    assert.equal(controller.module.modules.foo.getBar(), 'bar')
+  })
 })

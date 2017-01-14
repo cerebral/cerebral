@@ -14,19 +14,15 @@ export default class Tag {
     Returns all tags, also nested to identify nested state dependencies
     in components
   */
-  getTags (getters) {
-    if (!getters) {
-      throw new Error('You can not grab tags from a Tag without getters')
-    }
-
-    return [this].concat(this.getNestedTags(getters))
+  getTags () {
+    return [this].concat(this.getNestedTags())
   }
   /*
     Gets the path of the tag, where nested tags are evaluated
   */
   getPath (getters) {
     if (!getters) {
-      throw new Error('You can not grab tags from a Tag without getters')
+      throw new Error('You can not grab the path from a Tag without getters')
     }
 
     return this.populatePath(getters)
@@ -36,7 +32,7 @@ export default class Tag {
   */
   getValue (getters) {
     if (!getters) {
-      throw new Error('You can not grab tags from a Tag without getters')
+      throw new Error('You can not grab a value from a Tag without getters')
     }
 
     if (this.options.hasValue && !getters[this.type]) {
@@ -64,7 +60,7 @@ export default class Tag {
   /*
     Grab nested tags from the tags current path
   */
-  getNestedTags (getters) {
+  getNestedTags () {
     return this.strings.reduce((currentPaths, string, idx) => {
       const valueTemplate = this.values[idx]
 
