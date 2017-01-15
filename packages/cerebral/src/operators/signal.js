@@ -1,14 +1,6 @@
-import populatePath from './helpers/populatePath'
+import Tag from '../tags/Tag'
 
 export default function signal (strings, ...values) {
-  return (context) => {
-    const target = 'signal'
-    const path = populatePath(context, strings, values)
-
-    return {
-      target,
-      path,
-      value: context.controller.getSignal(path)
-    }
-  }
+  console.warn('Importing signal from cerebral/operators is deprecated, import it from cerebral/tags')
+  return new Tag('signal', {}, strings, values)
 }

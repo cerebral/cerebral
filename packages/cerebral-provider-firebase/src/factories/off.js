@@ -1,10 +1,6 @@
 function offFactory (path, event, signal) {
-  function off (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-    const eventTemplate = typeof event === 'function' ? event(context).value : event
-    const signalTemplate = typeof signal === 'function' ? signal(context).value : signal
-
-    context.firebase.off(pathTemplate, eventTemplate, signalTemplate)
+  function off ({firebase, resolveArg}) {
+    firebase.off(resolveArg.value(path), resolveArg.value(event), resolveArg.value(signal))
   }
 
   return off

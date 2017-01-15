@@ -22,7 +22,13 @@ function StateProviderFactory () {
 
     return methods.reduce((currentStateContext, methodKey) => {
       if (methodKey === 'compute') {
-        currentStateContext.compute = (...args) => model.compute(...args)
+        currentStateContext.compute = (computed, useCache = false) => {
+          if (!useCache) {
+            computed.flagAll()
+          }
+
+          return computed.getValue({get: currentStateContext.get})
+        }
       } else if (typeof model[methodKey] === 'function') {
         currentStateContext[methodKey] = (...args) => {
           const path = ensurePath(args.shift())

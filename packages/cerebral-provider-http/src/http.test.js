@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {string, input} from 'cerebral/operators'
+import {string, input} from 'cerebral/tags'
 import HttpProvider, {httpGet, httpPost, httpPut, httpPatch, httpDelete} from './'
 import assert from 'assert'
 import mock from 'xhr-mock'
@@ -221,6 +221,41 @@ describe('Http Provider', () => {
     })
     controller.getSignal('test')({
       itemId: 1
+    })
+  })
+  it('should allow factories to accept tags in input data', (done) => {
+    const mockResponse = (req, res) => {
+      assert.equal(req.body(), JSON.stringify({data: 1}))
+      return res
+        .status(200)
+        .header('Content-Type', 'application/json')
+    }
+
+    mock.post('/test', mockResponse)
+    mock.put('/test', mockResponse)
+    mock.patch('/test', mockResponse)
+
+    const controller = Controller({
+      providers: [HttpProvider()],
+      signals: {
+        test: [
+          httpPost('/test', { data: input`data` }), {
+            success: []
+          },
+          httpPut('/test', { data: input`data` }), {
+            success: []
+          },
+          httpPatch('/test', { data: input`data` }), {
+            success: []
+          },
+          () => {
+            done()
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')({
+      data: 1
     })
   })
 })

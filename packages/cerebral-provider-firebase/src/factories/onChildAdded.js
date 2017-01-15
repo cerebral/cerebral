@@ -1,11 +1,8 @@
 import {convertObjectWithTemplates} from './utils'
 
 function onChildAddedFactory (path, signal, options = {}) {
-  function onChildAdded (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-    const signalTemplate = typeof signal === 'function' ? signal(context).value : signal
-
-    context.firebase.onChildAdded(pathTemplate, signalTemplate, convertObjectWithTemplates(options, context))
+  function onChildAdded ({firebase, resolveArg}) {
+    firebase.onChildAdded(resolveArg.value(path), resolveArg.value(signal), convertObjectWithTemplates(options, resolveArg))
   }
 
   return onChildAdded

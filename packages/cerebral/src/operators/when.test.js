@@ -1,12 +1,13 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, when} from './'
+import {when} from './'
+import {input, state} from '../tags'
 
 describe('operator.when', () => {
   it('should check truthy value of input', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           when(input`foo`), {
@@ -21,7 +22,7 @@ describe('operator.when', () => {
   })
   it('should check truthy value of state', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: false
       },
@@ -40,7 +41,7 @@ describe('operator.when', () => {
   it('should check truthy input using function', () => {
     let accepted = 0
     let discarded = 0
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           when(input`value`, (value) => Boolean(value.length)), {
@@ -61,7 +62,7 @@ describe('operator.when', () => {
   })
   it('should check truthy state using function', () => {
     let discarded = 0
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
@@ -84,7 +85,7 @@ describe('operator.when', () => {
   })
   it('should check truthy state using function and multiple values', () => {
     const results = []
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
@@ -107,7 +108,7 @@ describe('operator.when', () => {
   })
   it('should check truthy state using function and literal values', () => {
     const results = []
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           when(input`foo`, 'bar', (foo, bar) => foo === bar), {

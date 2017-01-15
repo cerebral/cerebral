@@ -1,6 +1,5 @@
 /* eslint-env mocha */
 import Controller from './Controller'
-import Module from './Module'
 import assert from 'assert'
 
 describe('Controller', () => {
@@ -63,20 +62,26 @@ describe('Controller', () => {
     })
     assert.deepEqual(controller.getState(), {foo: {foo: 'bar'}})
   })
-  it('should pass instance of module on functions module instantiation', () => {
+  it('should pass instance of controller and path info on functions module instantiation', () => {
     const controller = new Controller({
       modules: {
-        foo: (module) => {
-          assert.ok(module instanceof Module)
-          return {
-            state: {
-              foo: 'bar'
+        foo: {
+          modules: {
+            bar: ({controller, path, name}) => {
+              assert.ok(controller)
+              assert.equal(name, 'bar')
+              assert.equal(path, 'foo.bar')
+              return {
+                state: {
+                  foo: 'bar'
+                }
+              }
             }
           }
         }
       }
     })
-    assert.deepEqual(controller.getState(), {foo: {foo: 'bar'}})
+    assert.deepEqual(controller.getState(), {foo: {bar: {foo: 'bar'}}})
   })
   it('should expose method to get signals', () => {
     const controller = new Controller({

@@ -1,10 +1,10 @@
-export function convertObjectWithTemplates (obj, context) {
-  if (typeof obj === 'function') {
-    return obj(context).value
+export function convertObjectWithTemplates (obj, resolveArg) {
+  if (resolveArg.isTag(obj)) {
+    return resolveArg.value(obj)
   }
 
   return Object.keys(obj).reduce((convertedObject, key) => {
-    convertedObject[key] = typeof obj[key] === 'function' ? obj[key](context).value : obj[key]
+    convertedObject[key] = resolveArg.value(obj[key])
 
     return convertedObject
   }, {})

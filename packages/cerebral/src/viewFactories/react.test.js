@@ -14,6 +14,7 @@ const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
 const Controller = require('../Controller').default
 const Computed = require('../Computed').default
+const {state, signal, props} = require('../tags')
 const {Container, StateContainer, connect, decorator} = require('./react')
 
 describe('React', () => {
@@ -808,6 +809,144 @@ describe('React', () => {
         component.callSignal()
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz2')
         assert.equal(renderCount, 2)
+      })
+    })
+    describe('Tags', () => {
+      it('should support state tags', () => {
+        const controller = Controller({
+          state: {
+            foo: 'bar'
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            return (
+              <div>{this.props.foo}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: state`foo`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      })
+      it('should support signal tags', () => {
+        const controller = Controller({
+          state: {
+            foo: 'bar'
+          },
+          signals: {
+            foo: []
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            assert.equal(typeof this.props.fooSignal, 'function')
+
+            return (
+              <div>{this.props.foo}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: state`foo`,
+          fooSignal: signal`foo`
+        }, TestComponentClass)
+
+        TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+      })
+      it('should rerender when using state tags', () => {
+        const controller = Controller({
+          state: {
+            foo: 'bar'
+          },
+          signals: {
+            foo: [
+              ({state}) => state.set('foo', 'bar2')
+            ]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            return (
+              <div>{this.props.foo}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: state`foo`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+        controller.getSignal('foo')()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+      })
+      it('should rerender when using nested state tags', () => {
+        const controller = Controller({
+          state: {
+            items: {0: 'foo', 1: 'bar'},
+            currentItemKey: '0'
+          },
+          signals: {
+            foo: [
+              ({state}) => state.set('currentItemKey', '1')
+            ]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            return (
+              <div>{this.props.item}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          item: state`items.${state`currentItemKey`}`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
+        controller.getSignal('foo')()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      })
+      it('should allow props tag', () => {
+        const controller = Controller({
+          state: {
+            items: {0: 'foo', 1: 'bar'}
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            return (
+              <div>{this.props.item}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          item: state`items.${props`itemKey`}`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent itemKey='0' />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
       })
     })
   })

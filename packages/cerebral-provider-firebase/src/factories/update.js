@@ -1,10 +1,10 @@
 import {convertObjectWithTemplates} from './utils'
 
 function updateFactory (updates) {
-  function update (context) {
-    return context.firebase.update(convertObjectWithTemplates(updates, context))
-      .then(context.path.success)
-      .catch(context.path.error)
+  function update ({firebase, path, resolveArg}) {
+    return firebase.update(convertObjectWithTemplates(updates, resolveArg))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return update

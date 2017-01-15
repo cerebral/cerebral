@@ -1,8 +1,8 @@
 function getUserFactory () {
-  function getUser (context) {
-    return context.firebase.getUser()
-      .then(context.path.success)
-      .catch(context.path.error)
+  function getUser ({firebase, path}) {
+    return firebase.getUser()
+      .then(path.success)
+      .catch(path.error)
   }
 
   return getUser

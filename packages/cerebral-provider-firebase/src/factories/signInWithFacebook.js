@@ -1,10 +1,10 @@
 import {convertObjectWithTemplates} from './utils'
 
 function signInWithFacebookFactory (options = {}) {
-  function signInWithFacebook (context) {
-    return context.firebase.signInWithFacebook(convertObjectWithTemplates(options, context))
-      .then(context.path.success)
-      .catch(context.path.error)
+  function signInWithFacebook ({firebase, path, resolveArg}) {
+    return firebase.signInWithFacebook(convertObjectWithTemplates(options, resolveArg))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return signInWithFacebook

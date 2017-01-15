@@ -1,8 +1,8 @@
 function signInAnonymouslyFactory () {
-  function signInAnonymously (context) {
-    return context.firebase.signInAnonymously()
-      .then(context.path.success)
-      .catch(context.path.error)
+  function signInAnonymously ({firebase, path}) {
+    return firebase.signInAnonymously()
+      .then(path.success)
+      .catch(path.error)
   }
 
   return signInAnonymously

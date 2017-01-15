@@ -1,11 +1,8 @@
-function pushFactory (path, value) {
-  function push (context) {
-    const pathTemplate = typeof path === 'function' ? path(context).value : path
-    const valueTemplate = typeof value === 'function' ? value(context).value : value
-
-    return context.firebase.push(pathTemplate, valueTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+function pushFactory (pushPath, value) {
+  function push ({firebase, path, resolveArg}) {
+    return firebase.push(resolveArg.value(pushPath), resolveArg.value(value))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return push

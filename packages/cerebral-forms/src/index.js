@@ -1,3 +1,4 @@
+import {Tag} from 'cerebral/tags'
 import isValidFormHelper from './helpers/isValidForm'
 import isValidFormFactory from './factories/isValidForm'
 
@@ -15,7 +16,7 @@ export {default as getFormFields} from './helpers/getFormFields'
 export {default as getInvalidFormFields} from './helpers/getInvalidFormFields'
 
 export function isValidForm (form) {
-  if (typeof form === 'string' || typeof form === 'function') {
+  if (typeof form === 'string' || form instanceof Tag) {
     return isValidFormFactory(form)
   }
 

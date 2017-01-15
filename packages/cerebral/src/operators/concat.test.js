@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {concat, input, state} from './'
+import {concat} from './'
+import {input, state} from '../tags'
 
 describe('operator.concat', () => {
   it('should concat literal array in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['one']
       },
@@ -19,7 +20,7 @@ describe('operator.concat', () => {
     assert.deepEqual(controller.getState(), {list: ['one', 'two']})
   })
   it('should concat state array in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['one'],
         list2: ['two', 'three']
@@ -34,7 +35,7 @@ describe('operator.concat', () => {
     assert.deepEqual(controller.getState(), {list: ['one', 'two', 'three'], list2: ['two', 'three']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['one']
       },
@@ -44,8 +45,9 @@ describe('operator.concat', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
+      controller.getSignal('test')()
     }, /operator.concat/)
   })
 })

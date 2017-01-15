@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, shift, state} from './'
+import {shift} from './'
+import {input, state} from '../tags'
 
 describe('operator.shift', () => {
   it('should shift value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b', 'c']
       },
@@ -19,7 +20,7 @@ describe('operator.shift', () => {
     assert.deepEqual(controller.getState(), {list: ['b', 'c']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -28,8 +29,9 @@ describe('operator.shift', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
+      controller.getSignal('test')()
     }, /operator.shift/)
   })
 })

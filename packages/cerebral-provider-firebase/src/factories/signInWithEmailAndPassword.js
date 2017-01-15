@@ -1,11 +1,8 @@
 function signInWithEmailAndPasswordFactory (email, password) {
-  function signInWithEmailAndPassword (context) {
-    const emailTemplate = typeof email === 'function' ? email(context).value : email
-    const passwordTemplate = typeof password === 'function' ? password(context).value : password
-
-    return context.firebase.signInWithEmailAndPassword(emailTemplate, passwordTemplate)
-      .then(context.path.success)
-      .catch(context.path.error)
+  function signInWithEmailAndPassword ({firebase, path, resolveArg}) {
+    return firebase.signInWithEmailAndPassword(resolveArg.value(email), resolveArg.value(password))
+      .then(path.success)
+      .catch(path.error)
   }
 
   return signInWithEmailAndPassword

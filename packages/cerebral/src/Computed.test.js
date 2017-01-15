@@ -2,6 +2,7 @@
 import Controller from './Controller'
 import Computed from './Computed'
 import assert from 'assert'
+import {state} from './tags'
 
 describe('Computed', () => {
   describe('factory', () => {
@@ -171,7 +172,7 @@ describe('Computed', () => {
       assert.equal(computedA.getValue(model), 'woop')
       assert.equal(computedB.getValue(model), 'woop2')
     })
-    it('should bust cache when flagging all', () => {
+    it('should use cache on state.compute when told so', () => {
       const nestedComputed = Computed({
         foo: 'foo'
       }, ({foo}) => {
@@ -192,7 +193,7 @@ describe('Computed', () => {
             ({state}) => {
               assert.equal(state.compute(computed), 'barbar')
               state.set('foo', 'bar2')
-              assert.deepEqual(state.compute(computed, true), 'bar2bar2')
+              assert.deepEqual(state.compute(computed, true), 'barbar')
             }
           ]
         }
@@ -219,6 +220,24 @@ describe('Computed', () => {
       model.set(['foo'], 'bar3')
       controller.flush()
       assert.equal(computed.getValue(model), 'bar2')
+    })
+    it('should support tags', () => {
+      const controller = Controller({
+        state: {
+          bar: 'bar',
+          items: {0: 'foo', 1: 'baz'},
+          currentItemKey: '1'
+        }
+      })
+      const model = controller.model
+      const computed = Computed({
+        bar: state`bar`,
+        baz: state`items.${state`currentItemKey`}`
+      }, ({foo, bar, baz}) => {
+        return foo + bar + baz
+      })
+      const withProps = computed.props({foo: 'foo'})
+      assert.equal(withProps.getValue(model), 'foobarbaz')
     })
   })
 })

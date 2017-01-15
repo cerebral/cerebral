@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, splice, state} from './'
+import {splice} from './'
+import {input, state} from '../tags'
 
 describe('operator.splice', () => {
   it('should splice value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b', 'c', 'd']
       },
@@ -19,7 +20,7 @@ describe('operator.splice', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'x', 'y', 'd']})
   })
   it('should splice value from input in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b', 'c', 'd']
       },
@@ -33,7 +34,7 @@ describe('operator.splice', () => {
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'one', 'two', 'd']})
   })
   it('should throw on bad argument', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -42,8 +43,9 @@ describe('operator.splice', () => {
         ]
       }
     })
+
     assert.throws(() => {
-      controller.getSignal('test')({list: ['one', 'two']})
+      controller.getSignal('test')()
     }, /operator.splice/)
   })
 })

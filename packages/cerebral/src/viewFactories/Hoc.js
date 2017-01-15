@@ -5,15 +5,15 @@ export default (View) => {
   return function HOC (paths, signals, mergeProps, Component) {
     let hasWarnedBigComponent = false
     class CerebralComponent extends View.Component {
-      static getStatePaths (props) {
+      static getStateAndSignalPaths (props) {
         if (!paths) {
           return {}
         }
         return typeof paths === 'function' ? paths(props) : paths
       }
-      constructor (props) {
-        super(props)
-        this.evaluatedPaths = CerebralComponent.getStatePaths(props)
+      constructor (props, context) {
+        super(props, context)
+        this.evaluatedPaths = CerebralComponent.getStateAndSignalPaths(props)
         this.signals = signals
         this.mergeProps = mergeProps
         this.Component = Component
@@ -36,7 +36,7 @@ export default (View) => {
 
         // If dynamic paths, we need to update them
         if (hasChange && typeof paths === 'function') {
-          this.evaluatedPaths = CerebralComponent.getStatePaths(nextProps, this.context.cerebral.controller)
+          this.evaluatedPaths = CerebralComponent.getStateAndSignalPaths(nextProps, this.context.cerebral.controller)
 
           const nextDepsMap = this.getDepsMap()
 
@@ -67,28 +67,64 @@ export default (View) => {
       getDepsMap () {
         return Object.keys(this.evaluatedPaths).reduce((currentDepsMap, pathKey) => {
           if (this.evaluatedPaths[pathKey] instanceof Computed) {
-            return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].depsMap)
+            return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].getDepsMap(this.context.cerebral.controller.model))
           }
 
-          currentDepsMap[pathKey] = this.evaluatedPaths[pathKey]
+          if (typeof this.evaluatedPaths[pathKey] === 'string') {
+            console.warn(`Defining state dependencies on components (${Component.displayName}) with strings is DEPRECATED. Use the STATE TAG instead`)
+            currentDepsMap[pathKey] = this.evaluatedPaths[pathKey]
+          } else {
+            const getters = this.createTagGetters()
+
+            return this.evaluatedPaths[pathKey].getTags(getters).reduce((updatedCurrentDepsMap, tag) => {
+              if (tag.options.isStateDependency) {
+                const path = tag.getPath(getters)
+
+                updatedCurrentDepsMap[path] = path
+              }
+
+              return updatedCurrentDepsMap
+            }, currentDepsMap)
+          }
 
           return currentDepsMap
         }, {})
+      }
+      createTagGetters () {
+        return {
+          state: this.context.cerebral.controller.getState.bind(this.context.cerebral.controller),
+          props: this.props,
+          signal: this.context.cerebral.controller.getSignal.bind(this.context.cerebral.controller)
+        }
       }
       getProps () {
         const controller = this.context.cerebral.controller
         const model = controller.model
         const props = this.props || {}
-        const statePaths = CerebralComponent.getStatePaths(this.props)
-        let stateProps = {}
-        let signalProps = {}
+        const stateAndSignalPaths = CerebralComponent.getStateAndSignalPaths(this.props)
+        let stateAndSignalsProps = {}
+        let signalProps = {} // DEPRECATED
         let mergeProps = this.mergeProps || {}
 
-        stateProps = Object.keys(statePaths || {}).reduce((currentProps, key) => {
-          if (!statePaths[key]) {
+        stateAndSignalsProps = Object.keys(stateAndSignalPaths || {}).reduce((currentProps, key) => {
+          if (!stateAndSignalPaths[key]) {
             throwError(`There is no path or computed assigned to prop ${key}`)
           }
-          currentProps[key] = statePaths[key] instanceof Computed ? statePaths[key].getValue(model) : controller.getState(cleanPath(statePaths[key]))
+
+          if (stateAndSignalPaths[key] instanceof Computed) {
+            currentProps[key] = stateAndSignalPaths[key].getValue(model)
+          } else if (typeof stateAndSignalPaths[key] === 'string') {
+            currentProps[key] = controller.getState(cleanPath(stateAndSignalPaths[key]))
+          } else {
+            const tag = stateAndSignalPaths[key]
+            const getters = this.createTagGetters()
+
+            if (tag.type === 'state') {
+              currentProps[key] = controller.getState(cleanPath(tag.getPath(getters)))
+            } else if (tag.type === 'signal') {
+              currentProps[key] = tag.getValue(getters)
+            }
+          }
 
           return currentProps
         }, {})
@@ -97,13 +133,18 @@ export default (View) => {
           this.context.cerebral.controller.devtools &&
           this.context.cerebral.controller.devtools.bigComponentsWarning &&
           !hasWarnedBigComponent &&
-          Object.keys(statePaths || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
+          Object.keys(stateAndSignalPaths || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
         ) {
           console.warn(`Component named ${Component.displayName || Component.name} has a lot of state dependencies, consider refactoring or adjust this option in devtools`)
           hasWarnedBigComponent = true
         }
 
         if (this.signals) {
+          if (Object.keys(this.signals).length && mergeProps) {
+            console.warn('The signals argument to connect is deprecated, use signal tag instead on first argument. In next version this argument should be removed')
+          } else {
+            console.warn('The signals argument to connect is deprecated, use signal tag instead on first argument')
+          }
           const extractedSignals = typeof signals === 'function' ? signals(props) : signals
 
           if (
@@ -123,10 +164,10 @@ export default (View) => {
         }
 
         if (mergeProps && typeof mergeProps === 'function') {
-          return mergeProps(stateProps, signalProps, props)
+          return mergeProps(stateAndSignalsProps, signalProps, props)
         }
 
-        const propsToPass = Object.assign({}, props, stateProps, signalProps, mergeProps)
+        const propsToPass = Object.assign({}, props, stateAndSignalsProps, signalProps, mergeProps)
 
         if (this.context.cerebral.controller.options.signalsProp) {
           propsToPass.signals = this.cachedSignals = this.cachedSignals || this.extractModuleSignals(this.context.cerebral.controller.module, '')
