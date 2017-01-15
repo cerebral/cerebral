@@ -1,4 +1,4 @@
-import {isObject, isSerializable, throwError, forceSerializable} from './utils'
+import {isObject, isComplexObject, isSerializable, throwError, forceSerializable} from './utils'
 
 class Model {
   constructor (initialState = {}, devtools = null) {
@@ -75,7 +75,9 @@ class Model {
   }
   /*
     A generic method for making a change to a path, used
-    by multiple mutation methods
+    by multiple mutation methods. Only adds to flush when value
+    actually changed. Complex objects always causes a flush due to
+    for example array sorting
   */
   updateIn (path, cb) {
     if (this.preventExternalMutations) {
@@ -88,10 +90,13 @@ class Model {
       this.state = cb(this.state)
     }
 
-    this.changedPaths.push(path)
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
-        currentState[key] = cb(currentState[key])
+        const newValue = cb(currentState[key])
+        if (currentState[key] !== newValue || isComplexObject(currentState[key]) && isComplexObject(newValue)) {
+          currentState[key] = newValue
+          this.changedPaths.push(path)
+        }
       } else if (!currentState[key]) {
         throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.splice(0, path.length - 1).join('.')}" exist?`)
       }

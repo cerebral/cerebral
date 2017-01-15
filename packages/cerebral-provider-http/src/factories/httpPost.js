@@ -1,8 +1,8 @@
 import {convertObjectWithTemplates, processResponse} from '../utils'
 
 function httpPostFactory (url, body = {}) {
-  function httpPost ({http, path, resolveArg}) {
-    return processResponse(http.post(resolveArg.value(url), convertObjectWithTemplates(body, resolveArg)), path)
+  function httpPost ({http, path, resolve}) {
+    return processResponse(http.post(resolve.value(url), convertObjectWithTemplates(body, resolve)), path)
   }
 
   return httpPost

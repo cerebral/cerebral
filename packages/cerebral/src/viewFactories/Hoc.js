@@ -1,198 +1,300 @@
-import {Computed} from './../Computed'
-import {cleanPath, propsDiffer, throwError} from './../utils'
+import DependencyTracker from '../DependencyTracker'
+import {Compute} from '../Compute'
+import {getChangedProps, throwError, isObject, getWithPath} from './../utils'
 
 export default (View) => {
-  return function HOC (paths, signals, mergeProps, Component) {
-    let hasWarnedBigComponent = false
-    class CerebralComponent extends View.Component {
-      static getStateAndSignalPaths (props) {
-        if (!paths) {
-          return {}
-        }
-        return typeof paths === 'function' ? paths(props) : paths
-      }
-      constructor (props, context) {
-        super(props, context)
-        this.evaluatedPaths = CerebralComponent.getStateAndSignalPaths(props)
-        this.signals = signals
-        this.mergeProps = mergeProps
-        this.Component = Component
-        this.cachedSignals = null
-        this.depsMap = this.getDepsMap()
-      }
-      componentWillMount () {
-        if (!this.context.cerebral.controller) {
-          throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
+  class BaseComponent extends View.Component {
+    constructor (dependencies, mergeProps, props, context) {
+      super(props, context)
+      this.stateGetter = this.stateGetter.bind(this)
+      this.signalGetter = this.signalGetter.bind(this)
+      this.mergeProps = mergeProps
+      /*
+        First we find any dependency functions to convert to DependencyTrackers.
+        They are instantly run to produce their value and map of state
+        dependencies
+      */
+      this.dependencyTrackers = Object.keys(dependencies).reduce((currentDependencyTrackers, dependencyKey) => {
+        if (dependencies[dependencyKey] instanceof Compute) {
+          currentDependencyTrackers[dependencyKey] = new DependencyTracker(dependencies[dependencyKey])
+          currentDependencyTrackers[dependencyKey].run(this.stateGetter, getWithPath(props))
         }
 
-        if (!this.evaluatedPaths) {
-          return
+        return currentDependencyTrackers
+      }, {})
+      this.dependencies = dependencies
+      this.dependencyTrackersDependencyMaps = this.getDependencyTrackersDependencyMaps(props)
+      this.tagsDependencyMap = this.getTagsDependencyMap(props)
+    }
+    /*
+      Register the component to the dependency store with its
+      state tracker and tags state dependencies
+    */
+    componentWillMount () {
+      if (!this.context.cerebral.controller) {
+        throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: https://cerebral.github.io/api/05_connect.html')
+      }
+
+      this.context.cerebral.registerComponent(this, Object.assign(
+        {},
+        this.dependencyTrackersDependencyMaps.state,
+        this.tagsDependencyMap
+      ))
+    }
+    /*
+      We only allow forced render by change of props passed
+      or Container tells it to render
+    */
+    shouldComponentUpdate () {
+      return false
+    }
+    /*
+      If received props differ, we need to update any
+      StateTrackers and tags, cause they might be using
+      props to define a state dependency
+    */
+    componentWillReceiveProps (nextProps) {
+      const propsChanges = getChangedProps(this.props, nextProps)
+      if (propsChanges) {
+        this._updateFromProps(propsChanges, nextProps)
+      }
+    }
+    /*
+      Unregister with existing state dependencies
+    */
+    componentWillUnmount () {
+      this._isUnmounting = true
+      this.context.cerebral.unregisterComponent(this, Object.assign(
+        {},
+        this.dependencyTrackersMaps.state,
+        this.tagsDependencyMap
+      ))
+    }
+    /*
+      A getter for StateTracker and tags to grab state from Cerebral
+    */
+    stateGetter (path) {
+      const value = this.context.cerebral.controller.getState(path)
+
+      if (
+        this.context.cerebral.controller.devtools &&
+        !this.context.cerebral.controller.options.preventDependencyWarning &&
+        isObject(value) &&
+        path.indexOf('*') === -1
+      ) {
+        console.warn(`The value extracted from path ${path} in component ${this._displayName} is not showing interest in children using * or **. Cerebral renders strictly, please adjust or turn off this warning in options.`)
+      }
+
+      return value
+    }
+    /*
+      A getter for tags to grab signals from Cerebral
+    */
+    signalGetter (path) {
+      return this.context.cerebral.controller.getSignal(path)
+    }
+    /*
+      Go through dependencies and identify state trackers and
+      merge in their state dependencies
+    */
+    getDependencyTrackersDependencyMaps (props) {
+      return Object.keys(this.dependencies).reduce((currentDepsMaps, propKey) => {
+        if (this.dependencyTrackers[propKey]) {
+          currentDepsMaps.state = Object.assign(currentDepsMaps.state, this.dependencyTrackers[propKey].stateTrackMap)
+          currentDepsMaps.props = Object.assign(currentDepsMaps.props, this.dependencyTrackers[propKey].propsTrackMap)
+
+          return currentDepsMaps
         }
 
-        this.context.cerebral.registerComponent(this, this.depsMap)
-      }
-      componentWillReceiveProps (nextProps) {
-        const hasChange = propsDiffer(this.props, nextProps)
-
-        // If dynamic paths, we need to update them
-        if (hasChange && typeof paths === 'function') {
-          this.evaluatedPaths = CerebralComponent.getStateAndSignalPaths(nextProps, this.context.cerebral.controller)
-
-          const nextDepsMap = this.getDepsMap()
-
-          if (propsDiffer(this.depsMap, nextDepsMap)) {
-            this.context.cerebral.updateComponent(this, this.depsMap, nextDepsMap)
-            this.depsMap = nextDepsMap
-          }
-        }
-
-        if (hasChange) {
-          this._update()
-        }
-      }
-      shouldComponentUpdate () {
-        // We only allow forced render by change of props passed
-        // or Container tells it to render
-        return false
-      }
-      componentWillUnmount () {
-        this._isUnmounting = true
-        this.context.cerebral.unregisterComponent(this, this.depsMap)
-        Object.keys(this.depsMap).forEach((depsMapKey) => {
-          if (this.depsMap[depsMapKey] instanceof Computed) {
-            this.depsMap[depsMapKey].remove()
-          }
-        })
-      }
-      getDepsMap () {
-        return Object.keys(this.evaluatedPaths).reduce((currentDepsMap, pathKey) => {
-          if (this.evaluatedPaths[pathKey] instanceof Computed) {
-            return Object.assign(currentDepsMap, this.evaluatedPaths[pathKey].getDepsMap(this.context.cerebral.controller.model))
-          }
-
-          if (typeof this.evaluatedPaths[pathKey] === 'string') {
-            console.warn(`Defining state dependencies on components (${Component.displayName || Component.name}) with strings is DEPRECATED. Use the STATE TAG instead`)
-            currentDepsMap[pathKey] = this.evaluatedPaths[pathKey]
-          } else {
-            const getters = this.createTagGetters()
-
-            return this.evaluatedPaths[pathKey].getTags(getters).reduce((updatedCurrentDepsMap, tag) => {
-              if (tag.options.isStateDependency) {
-                const path = tag.getPath(getters)
-
-                updatedCurrentDepsMap[path] = path
-              }
-
-              return updatedCurrentDepsMap
-            }, currentDepsMap)
-          }
-
+        return currentDepsMaps
+      }, {
+        state: {},
+        props: {}
+      })
+    }
+    /*
+      Go through dependencies and extract tags related to state
+      dependencies
+    */
+    getTagsDependencyMap (props) {
+      return Object.keys(this.dependencies).reduce((currentDepsMap, propKey) => {
+        if (this.dependencyTrackers[propKey]) {
           return currentDepsMap
-        }, {})
-      }
-      createTagGetters () {
-        return {
-          state: this.context.cerebral.controller.getState.bind(this.context.cerebral.controller),
-          props: this.props,
-          signal: this.context.cerebral.controller.getSignal.bind(this.context.cerebral.controller)
         }
-      }
-      getProps () {
-        const controller = this.context.cerebral.controller
-        const model = controller.model
-        const props = this.props || {}
-        const stateAndSignalPaths = CerebralComponent.getStateAndSignalPaths(this.props)
-        let stateAndSignalsProps = {}
-        let signalProps = {} // DEPRECATED
-        let mergeProps = this.mergeProps || {}
 
-        stateAndSignalsProps = Object.keys(stateAndSignalPaths || {}).reduce((currentProps, key) => {
-          if (!stateAndSignalPaths[key]) {
-            throwError(`There is no path or computed assigned to prop ${key}`)
+        const getters = this.createTagGetters(props)
+
+        return this.dependencies[propKey].getTags(getters).reduce((updatedCurrentDepsMap, tag) => {
+          if (tag.options.isStateDependency) {
+            const path = tag.getPath(getters)
+
+            updatedCurrentDepsMap[path] = true
           }
 
-          if (stateAndSignalPaths[key] instanceof Computed) {
-            currentProps[key] = stateAndSignalPaths[key].getValue(model)
-          } else if (typeof stateAndSignalPaths[key] === 'string') {
-            currentProps[key] = controller.getState(cleanPath(stateAndSignalPaths[key]))
-          } else {
-            const tag = stateAndSignalPaths[key]
-            const getters = this.createTagGetters()
+          return updatedCurrentDepsMap
+        }, currentDepsMap)
+      }, {})
+    }
+    /*
+      Creates getters passed into tags
+    */
+    createTagGetters (props) {
+      return {
+        state: this.stateGetter,
+        props: getWithPath(props),
+        signal: this.signalGetter
+      }
+    }
+    /*
+      Runs whenever the component has an update and renders.
+      Extracts the actual values from dependency trackers and/or tags
+    */
+    getProps () {
+      const props = this.props || {}
+      const dependenciesProps = Object.keys(this.dependencies).reduce((currentProps, key) => {
+        if (!this.dependencies[key]) {
+          throwError(`There is no dependency assigned to prop ${key}`)
+        }
 
-            if (tag.type === 'state') {
-              currentProps[key] = controller.getState(cleanPath(tag.getPath(getters)))
-            } else if (tag.type === 'signal') {
-              currentProps[key] = tag.getValue(getters)
+        if (this.dependencyTrackers[key]) {
+          currentProps[key] = this.dependencyTrackers[key].value
+        } else {
+          const tag = this.dependencies[key]
+          const getters = this.createTagGetters(props)
+
+          if (tag.type === 'state') {
+            const path = tag.getPath(getters)
+
+            currentProps[key] = this.stateGetter(path)
+
+            if (
+              this.context.cerebral.controller.devtools &&
+              !this.context.cerebral.controller.options.preventDependencyWarning &&
+              isObject(currentProps[key]) &&
+              path.indexOf('*') === -1
+            ) {
+              console.warn(`The connected property ${key} in component ${this._displayName} is not showing interest in children using * or **. You can turn off this warning in options.`)
             }
+          } else if (tag.type === 'signal' || tag.type === 'props') {
+            currentProps[key] = tag.getValue(getters)
           }
-
-          return currentProps
-        }, {})
-
-        if (
-          this.context.cerebral.controller.devtools &&
-          this.context.cerebral.controller.devtools.bigComponentsWarning &&
-          !hasWarnedBigComponent &&
-          Object.keys(stateAndSignalPaths || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.state
-        ) {
-          console.warn(`Component named ${Component.displayName || Component.name} has a lot of state dependencies, consider refactoring or adjust this option in devtools`)
-          hasWarnedBigComponent = true
         }
 
-        if (this.signals) {
-          if (Object.keys(this.signals).length && mergeProps) {
-            console.warn('The signals argument to connect is deprecated, use signal tag instead on first argument. In next version this argument should be removed')
-          } else {
-            console.warn('The signals argument to connect is deprecated, use signal tag instead on first argument')
-          }
-          const extractedSignals = typeof signals === 'function' ? signals(props) : signals
+        return currentProps
+      }, {})
 
-          if (
-            this.context.cerebral.controller.devtools &&
-            this.context.cerebral.controller.devtools.bigComponentsWarning &&
-            !hasWarnedBigComponent &&
-            Object.keys(extractedSignals).length >= this.context.cerebral.controller.devtools.bigComponentsWarning.signals
-          ) {
-            console.warn(`Component named ${Component.displayName || Component.name} has a lot of signals, consider refactoring or adjust this option in devtools`)
-            hasWarnedBigComponent = true
-          }
-          signalProps = Object.keys(extractedSignals).reduce((currentProps, key) => {
-            currentProps[key] = controller.getSignal(extractedSignals[key])
-
-            return currentProps
-          }, {})
-        }
-
-        if (mergeProps && typeof mergeProps === 'function') {
-          return mergeProps(stateAndSignalsProps, signalProps, props)
-        }
-
-        const propsToPass = Object.assign({}, props, stateAndSignalsProps, signalProps, mergeProps)
-
-        if (this.context.cerebral.controller.options.signalsProp) {
-          propsToPass.signals = this.cachedSignals = this.cachedSignals || this.extractModuleSignals(this.context.cerebral.controller.module, '')
-        }
-
-        return propsToPass
+      if (
+        this.context.cerebral.controller.devtools &&
+        this.context.cerebral.controller.devtools.bigComponentsWarning &&
+        !this._hasWarnedBigComponent &&
+        Object.keys(this.dependencies || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning
+      ) {
+        console.warn(`Component named ${this._displayName} has a lot of dependencies, consider refactoring or adjust this option in devtools`)
+        this._hasWarnedBigComponent = true
       }
-      extractModuleSignals (module, parentPath) {
-        return Object.keys(module.signals || {}).reduce((signals, signalKey) => {
-          signals[signalKey] = this.context.cerebral.controller.getSignal(parentPath ? `${parentPath}.${signalKey}` : `${signalKey}`)
 
-          return signals
-        }, Object.keys(module.modules || {}).reduce((modules, moduleKey) => {
-          modules[moduleKey] = this.extractModuleSignals(module.modules[moduleKey], parentPath ? `${parentPath}.${moduleKey}` : `${moduleKey}`)
-
-          return modules
-        }, {}))
+      if (this.mergeProps) {
+        return this.mergeProps(dependenciesProps, props)
       }
-      _update () {
-        if (!this._isUnmounting) {
-          this.forceUpdate()
+
+      return Object.assign({}, props, dependenciesProps)
+    }
+    /*
+      Udpates the dependency trackers by checking state
+      changes and props changes
+    */
+    updateDependencyTrackers (stateChanges, propsChanges, props) {
+      const hasChanged = Object.keys(this.dependencyTrackers).reduce((hasChanged, key) => {
+        if (this.dependencyTrackers[key].match(stateChanges, propsChanges)) {
+          this.dependencyTrackers[key].run(this.stateGetter, getWithPath(props))
+
+          return true
         }
+
+        return hasChanged
+      }, false)
+
+      return hasChanged
+    }
+    /*
+      Called by component when props are passed from parent and they
+      have changed. In this situation both tags and depndency trackers might
+      be affected. Tags are just updated and dependency trackers are matched
+      on props changed
+    */
+    _updateFromProps (propsChanges, props) {
+      const prevDependencyTrackersDependencyMaps = this.dependencyTrackersDependencyMaps
+      const previousTagsDependencyMap = this.tagsDependencyMap
+      const hasChangedDependencyTrackers = this.updateDependencyTrackers({}, propsChanges, props)
+
+      this.tagsDependencyMap = this.getTagsDependencyMap(props)
+      this.dependencyTrackersDependencyMaps = hasChangedDependencyTrackers ? this.getDependencyTrackersDependencyMaps(props) : this.dependencyTrackersDependencyMaps
+
+      const prevDepsMap = Object.assign(
+        {},
+        prevDependencyTrackersDependencyMaps.state,
+        previousTagsDependencyMap
+      )
+      const nextDepsMap = Object.assign(
+        {},
+        this.dependencyTrackersDependencyMaps.state,
+        this.tagsDependencyMap
+      )
+
+      this.context.cerebral.updateComponent(this, prevDepsMap, nextDepsMap)
+
+      this.forceUpdate()
+    }
+    /*
+      Called by Container when the components state dependencies
+      has changed. In this scenario we need to run any dependencyTrackers
+      that matches the state changes. There is no need to update the tags
+      as their declared state deps can not change
+    */
+    _updateFromState (stateChanges) {
+      if (this._isUnmounting) {
+        return
+      }
+
+      const prevDependencyTrackersDependencyMaps = this.dependencyTrackersDependencyMaps
+      const hasChangedDependencyTrackers = this.updateDependencyTrackers(stateChanges, {}, this.props)
+
+      if (hasChangedDependencyTrackers) {
+        const prevDepsMap = Object.assign(
+          {},
+          prevDependencyTrackersDependencyMaps.state,
+          this.tagsDependencyMap
+        )
+        const nextDepsMap = Object.assign(
+          {},
+          this.dependencyTrackersDependencyMaps.state,
+          this.tagsDependencyMap
+        )
+
+        this.context.cerebral.updateComponent(this, prevDepsMap, nextDepsMap)
+      }
+
+      this.forceUpdate()
+    }
+  }
+
+  return function HOC (dependencies, mergeProps, Component) {
+    if (typeof dependencies === 'function') {
+      throw new Error('You can not use a function to define dependencies. Use tags or a function on the specific property you want to dynamically create')
+    }
+
+    if (!dependencies) {
+      throw new Error('There is no reason to connect a component that has no dependencies')
+    }
+
+    class CerebralComponent extends BaseComponent {
+      constructor (props, context) {
+        super(dependencies, mergeProps, props, context)
+        this._displayName = Component.displayName || Component.name
+        this._hasWarnedBigComponent = false
       }
       render () {
-        return View.createElement(this.Component, this.getProps())
+        return View.createElement(Component, this.getProps())
       }
     }
     CerebralComponent.displayName = `CerebralWrapping_${Component.displayName || Component.name}`

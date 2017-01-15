@@ -1,8 +1,8 @@
 import {convertObjectWithTemplates, processResponse} from '../utils'
 
 function httpPatchFactory (url, body = {}) {
-  function httpPatch ({http, path, resolveArg}) {
-    return processResponse(http.patch(resolveArg.value(url), convertObjectWithTemplates(body, resolveArg)), path)
+  function httpPatch ({http, path, resolve}) {
+    return processResponse(http.patch(resolve.value(url), convertObjectWithTemplates(body, resolve)), path)
   }
 
   return httpPatch

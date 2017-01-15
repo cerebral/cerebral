@@ -4,8 +4,6 @@ import {Controller} from 'cerebral'
 import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import {set} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
 
 const controller = Controller({
   devtools: Devtools(),
@@ -16,7 +14,9 @@ const controller = Controller({
   },
   signals: {
     buttonClicked: [
-      set(state`toast`, 'Button Clicked!')
+      function updateSubtitle ({state}) {
+        state.set('subTitle', 'Updating some state')
+      }
     ]
   }
 })
