@@ -8,7 +8,7 @@ import Recorder from '../Recorder'
 import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
-  todos: state`app.todos`,
+  todos: state`app.todos.*`,
   isSaving: state`app.isSaving`,
   visibleTodosRefs: visibleTodosRefs
 },

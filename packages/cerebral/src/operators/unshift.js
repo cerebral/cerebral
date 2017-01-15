@@ -1,10 +1,10 @@
 export default function (target, value) {
-  function unshift ({state, input, resolveArg}) {
-    if (!resolveArg.isTag(target, 'state')) {
+  function unshift ({state, input, resolve}) {
+    if (!resolve.isTag(target, 'state')) {
       throw new Error('Cerebral operator.unshift: You have to use the STATE TAG as first argument')
     }
 
-    state.unshift(resolveArg.path(target), resolveArg.value(value))
+    state.unshift(resolve.path(target), resolve.value(value))
   }
 
   unshift.displayName = `operator.unshift(${String(target)}, ${String(value)})`

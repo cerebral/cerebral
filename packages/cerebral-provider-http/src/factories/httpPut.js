@@ -1,8 +1,8 @@
 import {convertObjectWithTemplates, processResponse} from '../utils'
 
 function httpPutFactory (url, body = {}) {
-  function httpPut ({http, path, resolveArg}) {
-    return processResponse(http.put(resolveArg.value(url), convertObjectWithTemplates(body, resolveArg)), path)
+  function httpPut ({http, path, resolve}) {
+    return processResponse(http.put(resolve.value(url), convertObjectWithTemplates(body, resolve)), path)
   }
 
   return httpPut
