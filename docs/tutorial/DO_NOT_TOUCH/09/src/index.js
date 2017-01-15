@@ -40,7 +40,7 @@ const controller = Controller({
     subTitle: 'Working on my state management',
     toast: null,
     repos: {},
-    starsSum: 0
+    starsCount: 0
   },
   signals: {
     buttonClicked: [

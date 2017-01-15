@@ -1,28 +1,33 @@
-export function propsDiffer (propsA, propsB) {
+export function getChangedProps (propsA, propsB) {
   const propsAKeys = Object.keys(propsA)
   const propsBKeys = Object.keys(propsB)
-  let isDifferent = false
+  const changedProps = {}
 
-  if (propsAKeys.length !== propsBKeys.length) {
-    isDifferent = true
-  } else {
-    for (let i = 0; i < propsBKeys.length; i++) {
-      if (propsA[propsBKeys[i]] !== propsB[propsBKeys[i]]) {
-        isDifferent = true
-        break
-      }
+  for (let i = 0; i < propsAKeys.length; i++) {
+    if (propsA[propsAKeys[i]] !== propsB[propsAKeys[i]]) {
+      changedProps[propsAKeys[i]] = true
     }
   }
 
-  return isDifferent
+  for (let i = 0; i < propsBKeys.length; i++) {
+    if (propsA[propsBKeys[i]] !== propsB[propsBKeys[i]]) {
+      changedProps[propsBKeys[i]] = true
+    }
+  }
+
+  return Object.keys(changedProps).length ? changedProps : null
 }
 
 export function cleanPath (path) {
-  return path.replace(/\.\*\*|\.\*/, '')
+  return typeof path === 'string' ? path.replace(/\.\*\*|\.\*/, '') : path
 }
 
 export function isObject (obj) {
   return typeof obj === 'object' && obj !== null && !Array.isArray(obj)
+}
+
+export function isComplexObject (obj) {
+  return typeof obj === 'object' && obj !== null
 }
 
 export function isSerializable (value, additionalTypes = []) {
@@ -94,7 +99,7 @@ export function verifyStrictRender (changes, dependencyMap) {
     currentPathKey.push(currentChangeKey)
     while (currentChangePath) {
       if (currentChangePath[currentChangeKey] === true && pathArray.length !== 0) {
-        throwError(`You are in strict mode and path "${path}" is being replaced by "${currentPathKey.join('.')}". Change "${path}" to "${currentPathKey.join('.')}" or do not replace the path`)
+        throwError(`Render warning! The path "${path}" is being replaced by "${currentPathKey.join('.')}". Change "${path}" to "${currentPathKey.join('.')}" or do not replace the path`)
       }
       currentPathKey.push(currentChangeKey)
       currentChangePath = currentChangePath[pathArray.shift()]
@@ -140,6 +145,64 @@ export function getProviders (module) {
       return nestedProviders.concat(getProviders(module.modules[moduleKey]))
     }, [])
   )
+}
+
+export function dependencyMatch (changes, dependencyMap, currentKey = '') {
+  let currentMatches = []
+
+  for (const key in changes) {
+    const pathKey = currentKey ? currentKey + '.' + key : key
+
+    let matches = []
+    if (changes[key] === true) {
+      if (dependencyMap[pathKey]) {
+        matches = matches.concat(dependencyMap[pathKey])
+      }
+      if (dependencyMap[pathKey + '.*']) {
+        matches = matches.concat(dependencyMap[pathKey + '.*'])
+      }
+      if (dependencyMap[pathKey + '.**']) {
+        matches = matches.concat(dependencyMap[pathKey + '.**'])
+      }
+    } else {
+      if (dependencyMap[pathKey + '.*']) {
+        const immediateKeys = Object.keys(changes[key])
+        for (let z = 0; z < immediateKeys.length; z++) {
+          if (changes[key][immediateKeys[z]] === true) {
+            matches = matches.concat(dependencyMap[pathKey + '.*'])
+            break
+          }
+        }
+      }
+      if (dependencyMap[pathKey + '.**']) {
+        matches = matches.concat(dependencyMap[pathKey + '.**'])
+      }
+    }
+
+    for (let y = 0; y < matches.length; y++) {
+      if (currentMatches.indexOf(matches[y]) === -1) {
+        currentMatches.push(matches[y])
+      }
+    }
+
+    if (changes[key] !== true) {
+      currentMatches = currentMatches.concat(dependencyMatch(changes[key], dependencyMap, pathKey))
+    }
+  }
+
+  return currentMatches
+}
+
+export function getWithPath (obj) {
+  return (path) => {
+    return path.split('.').reduce((currentValue, key, index) => {
+      if (index > 0 && currentValue === undefined) {
+        throw new Error(`You are extracting with path "${path}", but it is not valid for this object`)
+      }
+
+      return currentValue[key]
+    }, obj)
+  }
 }
 
 export const noop = () => {}

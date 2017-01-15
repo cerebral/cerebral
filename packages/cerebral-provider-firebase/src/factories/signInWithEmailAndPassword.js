@@ -1,6 +1,6 @@
 function signInWithEmailAndPasswordFactory (email, password) {
-  function signInWithEmailAndPassword ({firebase, path, resolveArg}) {
-    return firebase.signInWithEmailAndPassword(resolveArg.value(email), resolveArg.value(password))
+  function signInWithEmailAndPassword ({firebase, path, resolve}) {
+    return firebase.signInWithEmailAndPassword(resolve.value(email), resolve.value(password))
       .then(path.success)
       .catch(path.error)
   }

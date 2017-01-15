@@ -50,10 +50,8 @@ function unregisterComponent (componentDependencyStore, devtools, component, dep
 }
 
 function updateComponent (componentDependencyStore, devtools, component, prevDepsMap, depsMap) {
-  componentDependencyStore.removeEntity(component, prevDepsMap)
-  componentDependencyStore.addEntity(component, depsMap)
+  componentDependencyStore.updateEntity(component, prevDepsMap, depsMap)
   if (devtools) {
     devtools.updateComponentsMap(component, depsMap, prevDepsMap)
   }
-  component._update()
 }

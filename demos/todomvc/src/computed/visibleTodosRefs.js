@@ -1,17 +1,18 @@
-import {Computed} from 'cerebral'
+import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
 
-export default Computed({
-  todos: state`app.todos.**`,
-  filter: state`app.filter`
-}, props => {
-  return Object.keys(props.todos).filter((ref) => {
-    const todo = props.todos[ref]
+export default compute(
+  state`app.todos.**`,
+  state`app.filter`,
+  (todos, filter) => {
+    return Object.keys(todos).filter((ref) => {
+      const todo = todos[ref]
 
-    return (
-      props.filter === 'all' ||
-      (props.filter === 'completed' && todo.completed) ||
-      (props.filter === 'active' && !todo.completed)
-    )
-  })
-})
+      return (
+        filter === 'all' ||
+        (filter === 'completed' && todo.completed) ||
+        (filter === 'active' && !todo.completed)
+      )
+    })
+  }
+)

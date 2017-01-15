@@ -1,3 +1,5 @@
+import {Compute} from '../Compute'
+
 /*
   Creates tag for targetting things with a path in Cerebral
 */
@@ -40,22 +42,10 @@ export default class Tag {
     }
 
     if (this.options.hasValue) {
-      return typeof getters[this.type] === 'function' ? getters[this.type](this.getPath(getters)) : this.extractValueWithPath(getters[this.type], this.getPath(getters))
+      return getters[this.type](this.getPath(getters))
     } else {
       return this.getPath(getters)
     }
-  }
-  /*
-    Extracts value from object using a path
-  */
-  extractValueWithPath (obj, path) {
-    return path.split('.').reduce((currentValue, key, index) => {
-      if (index > 0 && currentValue === undefined) {
-        throw new Error(`A tag is extracting with path "${path}", but it is not valid`)
-      }
-
-      return currentValue[key]
-    }, obj)
   }
   /*
     Grab nested tags from the tags current path
@@ -78,7 +68,7 @@ export default class Tag {
     return this.strings.reduce((currentPath, string, idx) => {
       const valueTemplate = this.values[idx]
 
-      if (valueTemplate instanceof Tag) {
+      if (valueTemplate instanceof Tag || valueTemplate instanceof Compute) {
         return currentPath + string + valueTemplate.getValue(getters)
       }
 
