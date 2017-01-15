@@ -1,6 +1,6 @@
 function valueFactory (valuePath) {
-  function value ({firebase, path, resolveArg}) {
-    return firebase.value(resolveArg.value(valuePath))
+  function value ({firebase, path, resolve}) {
+    return firebase.value(resolve.value(valuePath))
       .then(path.success)
       .catch(path.error)
   }

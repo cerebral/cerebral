@@ -1,4 +1,4 @@
-import {ensurePath} from '../utils'
+import {ensurePath, cleanPath} from '../utils'
 
 function StateProviderFactory () {
   const methods = [
@@ -11,8 +11,7 @@ function StateProviderFactory () {
     'unshift',
     'splice',
     'unset',
-    'concat',
-    'compute'
+    'concat'
   ]
   let provider = null
 
@@ -21,25 +20,15 @@ function StateProviderFactory () {
     let asyncTimeout = null
 
     return methods.reduce((currentStateContext, methodKey) => {
-      if (methodKey === 'compute') {
-        currentStateContext.compute = (computed, useCache = false) => {
-          if (!useCache) {
-            computed.flagAll()
-          }
+      currentStateContext[methodKey] = (...args) => {
+        const path = ensurePath(cleanPath(args.shift()))
 
-          return computed.getValue({get: currentStateContext.get})
+        if (methodKey !== 'get') {
+          clearTimeout(asyncTimeout)
+          asyncTimeout = setTimeout(() => context.controller.flush())
         }
-      } else if (typeof model[methodKey] === 'function') {
-        currentStateContext[methodKey] = (...args) => {
-          const path = ensurePath(args.shift())
 
-          if (methodKey !== 'get') {
-            clearTimeout(asyncTimeout)
-            asyncTimeout = setTimeout(() => context.controller.flush())
-          }
-
-          return model[methodKey].apply(model, [path].concat(args))
-        }
+        return model[methodKey].apply(model, [path].concat(args))
       }
 
       return currentStateContext

@@ -2,13 +2,12 @@ import DependencyStore from './DependencyStore'
 import {FunctionTree} from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders, cleanPath} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
-import ResolveArgProvider from './providers/ResolveArg'
-import {dependencyStore as computedDependencyStore} from './Computed'
+import ResolveProvider from './providers/Resolve'
 
 /*
   The controller is where everything is attached. The devtools
@@ -19,7 +18,6 @@ import {dependencyStore as computedDependencyStore} from './Computed'
 class Controller extends FunctionTree {
   constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
     super()
-    this.computedDependencyStore = computedDependencyStore
     this.componentDependencyStore = new DependencyStore()
     this.options = options
     this.flush = this.flush.bind(this)
@@ -32,9 +30,13 @@ class Controller extends FunctionTree {
     })
     this.router = router ? router(this) : null
 
+    if (options.strictRender) {
+      console.warn('DEPRECATION - No need to use strictRender option anymore, it is the only render mode now')
+    }
+
     this.contextProviders = [
       ControllerProvider(this),
-      ResolveArgProvider()
+      ResolveProvider()
     ].concat(
       this.router ? [
         this.router.provider
@@ -86,20 +88,13 @@ class Controller extends FunctionTree {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
     }
 
-    if (
-      isDeveloping() &&
-      this.options.strictRender
-    ) {
-      console.info('We are just notifying you that STRICT RENDER is on')
-    }
-
     if (this.router) this.router.init()
 
     this.model.flush()
     this.emit('initialized')
   }
   /*
-    Whenever computeds and components needs to be updated, this method
+    Whenever components needs to be updated, this method
     can be called
   */
   flush (force) {
@@ -109,41 +104,19 @@ class Controller extends FunctionTree {
       return
     }
 
-    this.updateComputeds(changes, force)
     this.updateComponents(changes, force)
     this.emit('flush', changes, Boolean(force))
   }
-  updateComputeds (changes, force) {
-    let computedsAboutToBecomeDirty
-
-    if (force) {
-      computedsAboutToBecomeDirty = this.computedDependencyStore.getAllUniqueEntities()
-    } else if (this.options.strictRender) {
-      computedsAboutToBecomeDirty = this.computedDependencyStore.getStrictUniqueEntities(changes)
-    } else {
-      computedsAboutToBecomeDirty = this.computedDependencyStore.getUniqueEntities(changes)
-    }
-
-    computedsAboutToBecomeDirty.forEach((computed) => {
-      computed.flag()
-    })
-  }
-  /*
-    On "flush" use changes to extract affected components
-    from dependency store and render them
-  */
   updateComponents (changes, force) {
     let componentsToRender = []
 
     if (force) {
       componentsToRender = this.componentDependencyStore.getAllUniqueEntities()
-    } else if (this.options.strictRender) {
-      componentsToRender = this.componentDependencyStore.getStrictUniqueEntities(changes)
+    } else {
+      componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
       if (this.devtools && this.devtools.verifyStrictRender) {
         verifyStrictRender(changes, this.componentDependencyStore.map)
       }
-    } else {
-      componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
     }
 
     const start = Date.now()
@@ -151,7 +124,7 @@ class Controller extends FunctionTree {
       if (this.devtools) {
         this.devtools.updateComponentsMap(component)
       }
-      component._update(force)
+      component._updateFromState(changes)
     })
     const end = Date.now()
 
@@ -169,7 +142,7 @@ class Controller extends FunctionTree {
     Method called by view to grab state
   */
   getState (path) {
-    return this.model.get(ensurePath(path))
+    return this.model.get(ensurePath(cleanPath(path)))
   }
   /*
     Uses function tree to run the array and optional
@@ -214,9 +187,7 @@ class Controller extends FunctionTree {
       throwError(`There is no signal at path "${path}"`)
     }
 
-    return function (payload) {
-      this.runSignal(path, signal, payload)
-    }.bind(this)
+    return signal
   }
 }
 

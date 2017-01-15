@@ -17,18 +17,8 @@ export default function createOnValue (controller) {
           return
         }
 
-        const initialPayload = {
-          value: data.val()
-        }
-        let payload = initialPayload
+        const payload = Object.assign({value: data.val()}, options.payload || {})
 
-        if (options.payload) {
-          payload = Object.keys(options.payload).reduce((payload, key) => {
-            payload[key] = options.payload[key]
-
-            return payload
-          }, initialPayload)
-        }
         controller.getSignal(signal)(payload)
       }
     )

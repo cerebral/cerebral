@@ -1,7 +1,7 @@
 import runValidation from '../utils/runValidation'
 
 export default function validateFormFactory (formPath) {
-  function validateForm ({state, input, resolveArg}) {
+  function validateForm ({state, input, resolve}) {
     function validate (path, form) {
       Object.keys(form).forEach(function (key) {
         if (form[key] === Object(form[key])) {
@@ -25,11 +25,11 @@ export default function validateFormFactory (formPath) {
       console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into validateForm factory')
       validate(formPath.split('.'), state.get(formPath))
     } else {
-      if (!resolveArg.isTag(formPath, 'state')) {
+      if (!resolve.isTag(formPath, 'state')) {
         throw new Error('Cerebral Forms - validateField factory requires a STATE TAG')
       }
 
-      validate(resolveArg.path(formPath).split('.'), resolveArg.value(formPath))
+      validate(resolve.path(formPath).split('.'), resolve.value(formPath))
     }
   }
 

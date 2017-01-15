@@ -6,7 +6,6 @@ import App from './modules/app'
 import Recorder from './modules/recorder'
 
 const controller = Controller({
-  options: {strictRender: true},
   devtools: Devtools({
     remoteDebugger: 'localhost:8787'
   }),

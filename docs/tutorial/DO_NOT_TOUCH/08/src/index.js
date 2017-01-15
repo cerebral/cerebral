@@ -32,8 +32,8 @@ function getRepo (repoName) {
   return get
 }
 
-function setStarsSum ({state}) {
-  state.set('starsSum',
+function setStarsCount ({state}) {
+  state.set('starsCount',
     state.get('repos.cerebral.stargazers_count') +
     state.get('repos.addressbar.stargazers_count')
   )
@@ -46,7 +46,7 @@ const controller = Controller({
     subTitle: 'Working on my state management',
     toast: null,
     repos: {},
-    starsSum: 0
+    starsCount: 0
   },
   signals: {
     buttonClicked: [
@@ -61,8 +61,8 @@ const controller = Controller({
           error: []
         }
       ],
-      setStarsSum,
-      ...showToast(string`The repos has a total star count of ${state`starsSum`}`, 4000, 'success')
+      setStarsCount,
+      ...showToast(string`The repos has a total star count of ${state`starsCount`}`, 4000, 'success')
     ]
   },
   providers: [

@@ -1,12 +1,13 @@
-import {Computed} from 'cerebral'
-import visibleTodosRefs from './visibleTodosRefs'
+import {compute} from 'cerebral'
+import computeVisibleTodosRefs from './visibleTodosRefs'
 import {state} from 'cerebral/tags'
 
-export default Computed({
-  visibleTodosRefs: visibleTodosRefs,
-  todos: state`app.todos.**`
-}, props => {
-  return props.visibleTodosRefs.filter((ref) => {
-    return !props.todos[ref].completed
-  }).length === 0 && props.visibleTodosRefs.length !== 0
-})
+export default compute(
+  computeVisibleTodosRefs,
+  state`app.todos.**`,
+  (visibleTodosRefs, todos) => {
+    return visibleTodosRefs.filter((ref) => {
+      return !todos[ref].completed
+    }).length === 0 && visibleTodosRefs.length !== 0
+  }
+)

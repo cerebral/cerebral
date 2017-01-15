@@ -16,10 +16,7 @@ class Devtools {
     preventExternalMutations: true,
     verifyStrictRender: true,
     preventInputPropReplacement: false,
-    bigComponentsWarning: {
-      state: 5,
-      signals: 5
-    },
+    bigComponentsWarning: 10,
     remoteDebugger: null,
     multipleApps: true,
     allowedTypes: []
@@ -500,13 +497,13 @@ class Devtools {
 
     if (prevDeps) {
       for (const depsKey in prevDeps) {
-        const debuggerComponents = this.debuggerComponentsMap[prevDeps[depsKey]]
+        const debuggerComponents = this.debuggerComponentsMap[depsKey]
 
         for (let x = 0; x < debuggerComponents.length; x++) {
           if (debuggerComponents[x].id === component.componentDetailsId) {
             debuggerComponents.splice(x, 1)
             if (debuggerComponents.length === 0) {
-              delete this.debuggerComponentsMap[prevDeps[depsKey]]
+              delete this.debuggerComponentsMap[depsKey]
             }
             break
           }
@@ -516,9 +513,9 @@ class Devtools {
 
     if (nextDeps) {
       for (const depsKey in nextDeps) {
-        this.debuggerComponentsMap[nextDeps[depsKey]] = (
-          this.debuggerComponentsMap[nextDeps[depsKey]]
-            ? this.debuggerComponentsMap[nextDeps[depsKey]].concat(componentDetails)
+        this.debuggerComponentsMap[depsKey] = (
+          this.debuggerComponentsMap[depsKey]
+            ? this.debuggerComponentsMap[depsKey].concat(componentDetails)
             : [componentDetails]
         )
       }
