@@ -2,7 +2,7 @@ import DependencyStore from './DependencyStore'
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders} from './utils'
+import {ensurePath, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -24,13 +24,21 @@ class Controller extends EventEmitter {
     this.componentDependencyStore = new DependencyStore()
     this.options = options
     this.flush = this.flush.bind(this)
-    this.devtools = devtools
-    this.model = new Model({}, this.devtools)
+
+    // Only allow devtools in development
+    if (process.env.NODE_ENV !== 'production') {
+      this.devtools = devtools
+      this.model = new Model({}, this.devtools)
+    } else {
+      this.model = new Model({})
+    }
+
     this.module = new Module(this, [], {
       state,
       signals,
       modules
     })
+
     this.router = router ? router(this) : null
 
     const allProviders = [
@@ -41,11 +49,11 @@ class Controller extends EventEmitter {
         this.router.provider
       ] : []
     ).concat((
-      this.devtools ? [
-        DebuggerProvider()
+      process.env.NODE_ENV !== 'production' ? [
+        this.devtools ? DebuggerProvider() : undefined
       ] : []
     )).concat((
-      isDeveloping() ? [
+      process.env.NODE_ENV !== 'production' ? [
         VerifyInputProvider
       ] : []
     )).concat(
@@ -71,21 +79,16 @@ class Controller extends EventEmitter {
       throw error
     })
 
-    if (this.devtools) {
-      this.devtools.init(this)
-    } else if (
-      isDeveloping() &&
-      typeof navigator !== 'undefined' &&
-      /Chrome/.test(navigator.userAgent)
-    ) {
-      console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
-    }
-
-    if (
-      isDeveloping() &&
-      this.options.strictRender
-    ) {
-      console.info('We are just notifying you that STRICT RENDER is on')
+    if (process.env.NODE_ENV !== 'production') {
+      if (this.devtools) {
+        this.devtools.init(this)
+      } else if (typeof navigator !== 'undefined' &&
+                 /Chrome/.test(navigator.userAgent)) {
+        console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
+      }
+      if (this.options.strictRender) {
+        console.info('We are just notifying you that STRICT RENDER is on')
+      }
     }
 
     if (this.router) this.router.init()
@@ -134,8 +137,10 @@ class Controller extends EventEmitter {
       componentsToRender = this.componentDependencyStore.getAllUniqueEntities()
     } else if (this.options.strictRender) {
       componentsToRender = this.componentDependencyStore.getStrictUniqueEntities(changes)
-      if (this.devtools && this.devtools.verifyStrictRender) {
-        verifyStrictRender(changes, this.componentDependencyStore.map)
+      if (process.env.NODE_ENV !== 'production') {
+        if (this.devtools && this.devtools.verifyStrictRender) {
+          verifyStrictRender(changes, this.componentDependencyStore.map)
+        }
       }
     } else {
       componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
@@ -143,15 +148,19 @@ class Controller extends EventEmitter {
 
     const start = Date.now()
     componentsToRender.forEach((component) => {
-      if (this.devtools) {
-        this.devtools.updateComponentsMap(component)
+      if (process.env.NODE_ENV !== 'production') {
+        if (this.devtools) {
+          this.devtools.updateComponentsMap(component)
+        }
       }
       component._update(force)
     })
     const end = Date.now()
 
-    if (this.devtools && componentsToRender.length) {
-      this.devtools.sendComponentsMap(componentsToRender, changes, start, end)
+    if (process.env.NODE_ENV !== 'production') {
+      if (this.devtools && componentsToRender.length) {
+        this.devtools.sendComponentsMap(componentsToRender, changes, start, end)
+      }
     }
   }
   /*
@@ -171,23 +180,25 @@ class Controller extends EventEmitter {
     payload passed in. The payload will be checkd
   */
   runSignal (name, signal, payload = {}) {
-    if (this.devtools && (!isObject(payload) || !isSerializable(payload))) {
-      console.warn(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`, payload)
-      payload = {}
-    }
+    if (process.env.NODE_ENV !== 'production') {
+      if (this.devtools && (!isObject(payload) || !isSerializable(payload))) {
+        console.warn(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`, payload)
+        payload = {}
+      }
 
-    if (this.devtools) {
-      payload = Object.keys(payload).reduce((currentPayload, key) => {
-        if (!isSerializable(payload, this.devtools.allowedTypes)) {
-          console.warn(`You passed an invalid payload to signal "${name}", on key "${key}". Only serializable values like Object, Array, String, Number and Boolean can be passed in. Also these special value types:`, this.devtools.allowedTypes)
+      if (this.devtools) {
+        payload = Object.keys(payload).reduce((currentPayload, key) => {
+          if (!isSerializable(payload, this.devtools.allowedTypes)) {
+            console.warn(`You passed an invalid payload to signal "${name}", on key "${key}". Only serializable values like Object, Array, String, Number and Boolean can be passed in. Also these special value types:`, this.devtools.allowedTypes)
+
+            return currentPayload
+          }
+
+          currentPayload[key] = forceSerializable(payload[key])
 
           return currentPayload
-        }
-
-        currentPayload[key] = forceSerializable(payload[key])
-
-        return currentPayload
-      }, {})
+        }, {})
+      }
     }
 
     this.runTree(name, signal, payload)
