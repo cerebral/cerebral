@@ -17,7 +17,7 @@ export default connect({
           className='new-todo'
           autoComplete='off'
           placeholder='What needs to be done?'
-          value={title}
+          value={title || ''}
           onChange={(e) => titleChanged({ title: e.target.value })}
         />
       </form>
