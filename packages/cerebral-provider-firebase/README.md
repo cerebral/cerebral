@@ -237,10 +237,12 @@ When you also want to know when your queried data updates you have the following
 *action*
 ```js
 function someAction({ firebase }) {
-  firebase.onValue('someKey.foo', 'someModule.fooUpdated');
+  firebase.onValue('someKey.foo', 'someModule.fooUpdated',  {
+    payload: {}, // Merged with the payload passed on new data
+  });
 }
 ```
-This will immediately grab the value and trigger the signal passed. Any other updates to the value will trigger the same signal.
+This will **NOT** immediately grab the value and trigger the signal passed, the first event is discarded for more predictable behaviour. To grab existing value, just use `value`.
 
 To stop listening for updates to the value:
 ```js
