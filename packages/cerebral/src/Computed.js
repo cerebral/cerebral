@@ -105,7 +105,7 @@ export class Computed {
     }
 
     if (this.isDirty) {
-      const paths = typeof this.paths === 'function' ? this.paths(this.passedProps) : this.paths;
+      const paths = typeof this.paths === 'function' ? this.paths(this.passedProps) : this.paths
       const computedProps = Object.assign(
         {},
         this.passedProps,
