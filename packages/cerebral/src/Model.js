@@ -136,8 +136,9 @@ class Model {
     ) {
       throwError(`You are passing a non serializable value into the state tree on path ${path.join('.')}`)
     }
-
-    return forceSerializable(value)
+    if (this.devtools) {
+      forceSerializable(value)
+    }
   }
   verifyValues (values, path) {
     if (this.devtools) {
