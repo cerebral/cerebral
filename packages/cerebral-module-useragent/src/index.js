@@ -38,8 +38,8 @@ export default (userOptions = {}) => {
 
   return ({controller, path}) => {
     controller.on('initialized', () => {
-      const offlineChanged = controller.getSignal(`${path.join('.')}.offlineChanged`)
-      const windowChanged = controller.getSignal(`${path.join('.')}.windowChanged`)
+      const offlineChanged = controller.getSignal(`${path}.offlineChanged`)
+      const windowChanged = controller.getSignal(`${path}.windowChanged`)
 
       if (options.offline !== false) {
         network.on('confirmed-up', () => { offlineChanged({offline: false}) })
