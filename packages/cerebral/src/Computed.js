@@ -105,16 +105,17 @@ export class Computed {
     }
 
     if (this.isDirty) {
+      const paths = typeof this.paths === 'function' ? this.paths(this.passedProps) : this.paths;
       const computedProps = Object.assign(
         {},
         this.passedProps,
-        Object.keys(this.paths).reduce((currentProps, depsMapKey) => {
-          if (this.paths[depsMapKey] instanceof Computed) {
-            currentProps[depsMapKey] = this.paths[depsMapKey].getValue(model)
-          } else if (typeof this.paths[depsMapKey] === 'string') {
-            currentProps[depsMapKey] = model.get(ensurePath(cleanPath(this.paths[depsMapKey])))
+        Object.keys(paths).reduce((currentProps, depsMapKey) => {
+          if (paths[depsMapKey] instanceof Computed) {
+            currentProps[depsMapKey] = paths[depsMapKey].getValue(model)
+          } else if (typeof paths[depsMapKey] === 'string') {
+            currentProps[depsMapKey] = model.get(ensurePath(cleanPath(paths[depsMapKey])))
           } else {
-            currentProps[depsMapKey] = this.paths[depsMapKey].getValue(this.createTagGetters(model))
+            currentProps[depsMapKey] = paths[depsMapKey].getValue(this.createTagGetters(model))
           }
 
           return currentProps
