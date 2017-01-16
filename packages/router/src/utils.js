@@ -1,36 +1,43 @@
-function isObject (obj) {
-  return typeof obj === 'object' && !Array.isArray(obj) && obj !== null
-}
-
 export function flattenConfig (config, prev = '') {
-  return Object.keys(config).reduce((flattened, key) => {
-    if (isObject(config[key])) {
-      return Object.assign(flattened, flattenConfig(config[key], prev + key))
+  return config.reduce((flattened, {path, signal, map, routes}) => {
+    if (Array.isArray(routes)) {
+      return Object.assign(flattened, flattenConfig(routes, prev + path))
     }
 
-    flattened[prev + key] = config[key]
+    const currentPath = prev + path
+    const stateMapping = Object.keys(map || {}).filter((key) => map[key].type === 'state')
+    const propsMapping = Object.keys(map || {}).filter((key) => map[key].type === 'props')
+
+    if (propsMapping.length && !signal) {
+      throw new Error(`Cerebral router - route ${currentPath} has props mappings but no signal was defined.`)
+    }
+
+    flattened[currentPath] = {signal, map, stateMapping, propsMapping}
 
     return flattened
   }, {})
 }
 
-export function getRoutableSignals (config, controller) {
+export function getRoutesBySignal (config) {
   return Object.keys(config).reduce((routableSignals, route) => {
-    const signal = controller.getSignal(config[route])
+    const {signal: signalName} = config[route]
 
-    if (!signal) {
-      throw new Error(`Cerebral router - The signal ${config[route]} for the route ${route} does not exist.`)
+    if (!signalName) {
+      return routableSignals
     }
 
-    if (routableSignals[config[route]]) {
-      throw new Error(`Cerebral router - The signal ${config[route]} has already been bound to route ${route}. Create a new signal and reuse actions instead if needed.`)
+    if (routableSignals[signalName]) {
+      throw new Error(`Cerebral router - The signal ${signalName} has already been bound to route ${route}. Create a new signal and reuse actions instead if needed.`)
     }
 
-    routableSignals[config[route]] = {
-      route: route,
-      signal: signal
-    }
+    routableSignals[signalName] = route
 
     return routableSignals
   }, {})
+}
+
+export function getPath (object, path) {
+  return path.split('.').reduce((currentPath, key) => {
+    return currentPath ? currentPath[key] : undefined
+  }, object)
 }
