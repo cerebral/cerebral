@@ -124,7 +124,7 @@ The biggest change to Cerebral 2.x is the operators. You can read more about the
 npm install cerebral-operators --save
 ```
 
-The new operators now uses tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
+The new operators now use tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
 
 ```js
 import {
@@ -174,7 +174,7 @@ const controller = Controller({
 One note when using signals is that the **immediate** option is gone. This keeps the api cleaner.
 
 ### Actions
-Since cerebral 2.x is using **function-tree** under the hood we have other, more powerful options then before. The input, state is the same but output is gone. You can just return an object from the action that will be available in the input for the next action. You can also return a **path** that is a new concept in Cerebral 2.x and outdates output. **path** is used to determine the execution path for your chain. You do no longer have services as an argument in the context, use providers instead.
+Since cerebral 2.x is using **function-tree** under the hood we have other, more powerful options than before. The input, state is the same but output is gone. You can just return an object from the action that will be available in the input for the next action. You can also return a **path** that is a new concept in Cerebral 2.x and outdates output. **path** is used to determine the execution path for your chain. You do no longer have services as an argument in the context, use providers instead.
 
 #### 1.x
 ```js
@@ -183,7 +183,7 @@ function myAction({input, state, output, services}) {
 }
 ```
 
-In 2.x you have the following. Instead of services you hook up providers that superseeds services.
+In 2.x you have the following. Instead of services you hook up providers that supersedes services.
 
 ```js
 function myAction({input, state, path /*, myProvider, otherProvider */ }) {
@@ -290,7 +290,7 @@ connect({
 
 ### Providers (outdates services)
 
-In 1.x you could add services that would be available to you in the actions. Typically you would do something like this in 1.x
+In 1.x you could add services that would be available to you in the actions. Typically, you would do something like this in 1.x
 
 ```js
 import someExternalApi from 'some-external-api'
@@ -427,7 +427,7 @@ export default connect({
 )
 ```
 
-In 1.x you would first connect state, then siganls as seperate arguments in connect. In Cerebral 2.x these are combined, tags are used to differentiate between state, signals and props.
+In 1.x you would first connect state, then signals as separate arguments in connect. In Cerebral 2.x these are combined, tags are used to differentiate between state, signals and props.
 
 ```js
 // 2.x
