@@ -51,7 +51,7 @@ function createDummyController (state = {}, signals = {}) {
       get: getState
     },
     getSignal (signal) {
-      return signals[signal] || () => {}
+      return signals[signal] || (() => {})
     }
   }
 }

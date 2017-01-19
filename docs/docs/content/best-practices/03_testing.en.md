@@ -17,16 +17,23 @@ import {StateContainer} from 'cerebral/react'
 import Foo from './Foo'
 
 describe('<Foo />', () => {
-  it('allows us to set props', () => {
+  it('allows us to set props and invoke signals', () => {
     const state = {
       foo: 'bar'
     }
+    const signals = {
+      'form.submitted': (input) => {
+        // should be called when form is submitted
+        // assert input is as expected
+      }
+    }
     const wrapper = mount(
-      <StateContainer state={state}>
+      <StateContainer state={state} signals={signals}>
         <Foo />
       </StateContainer>
     )
     expect(wrapper.find('.foo')).to.have.length(1)
+    wrapper.find('.submit-button').simulate('click')
   })
 })
 ```
