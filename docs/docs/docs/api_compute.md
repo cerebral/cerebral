@@ -1,7 +1,7 @@
 # Compute
 Normally you use state directly from the state tree, but sometimes you need to compute values. Typically filtering lists, grabbing the projects of a user or other derived state.
 
-Cerebral allows you to compute state and they can be used everywhere. Let us look at the signature:
+Cerebral allows you to compute state that can be used in multiple contexts. Let us look at the signature:
 
 ```js
 import {compute} from 'cerebral'
