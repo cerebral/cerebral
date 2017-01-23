@@ -8,7 +8,7 @@ import {state} from 'cerebral/tags'
 
 export default compute(
   state`items.limit`,
-  state`item.list`,
+  state`items.list`,
   (limit, list) => {
     return items.filter((item, index) => index < limit)    
   }
