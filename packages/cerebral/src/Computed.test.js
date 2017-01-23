@@ -82,6 +82,31 @@ describe('Computed', () => {
       assert.deepEqual(value, {foo: 'bar'})
       assert.equal(computed.getValue(model), value)
     })
+
+    it('should calculate only once', () => {
+      const controller = Controller({
+        state: {
+          foo: 'foo',
+          foobar: 'foobar'
+        }
+      })
+      let counter = 0
+      const model = controller.model
+      const computed = Computed({
+        foo: 'foo'
+      }, ({foo}) => {
+        counter++
+        return {
+          foo
+        }
+      })
+      computed.getValue(model)
+      model.set(['foobar'], 'foobar2')
+      controller.flush()
+      computed.getValue(model)
+      assert.equal(counter, 1)
+    })
+
     it('should bust cache when path updates', () => {
       const controller = Controller({
         state: {
