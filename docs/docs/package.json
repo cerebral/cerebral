@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-watch builder/dev --presets es2015,react --watch docs pages css scripts",
-    "build": "babel-node builder/build --presets es2015,react",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel-node builder/build --presets es2015,react"
   },
   "author": "",
   "license": "ISC",
