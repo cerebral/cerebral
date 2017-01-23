@@ -93,4 +93,24 @@ export default class Tag {
       return currentPath + string + (valueTemplate || '')
     }, '')
   }
+  /*
+    Produces a string representation of the tag
+  */
+  toString () {
+    return this.type + '`' + this.pathToString() + '`'
+  }
+  /*
+    Produces a string representation of the path
+  */
+  pathToString () {
+    return this.strings.reduce((currentPath, string, idx) => {
+      const valueTemplate = this.values[idx]
+
+      if (valueTemplate instanceof Tag) {
+        return currentPath + string + '${' + valueTemplate.toString() + '}'
+      }
+
+      return currentPath + string + (valueTemplate || '')
+    }, '')
+  }
 }

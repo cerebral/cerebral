@@ -9,7 +9,9 @@ export default function (target, ...args) {
     state.splice(resolveArg.path(target), ...spliceArgs)
   }
 
-  splice.displayName = 'operator.splice'
+  splice.displayName = `operator.splice(${String(target)}, ${args.map((arg) => {
+    return String(arg)
+  }).join(',')}}`
 
   return splice
 }

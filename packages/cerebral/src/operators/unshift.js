@@ -7,7 +7,7 @@ export default function (target, value) {
     state.unshift(resolveArg.path(target), resolveArg.value(value))
   }
 
-  unshift.displayName = 'operator.unshift'
+  unshift.displayName = `operator.unshift(${String(target)}, ${String(value)})`
 
   return unshift
 }

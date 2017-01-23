@@ -7,7 +7,7 @@ export default function (target, value) {
     state.concat(resolveArg.path(target), resolveArg.value(value))
   }
 
-  concat.displayName = 'operator.concat'
+  concat.displayName = `operator.concat(${String(target)}, ${String(value)})`
 
   return concat
 }

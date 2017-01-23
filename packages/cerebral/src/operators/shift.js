@@ -7,7 +7,7 @@ export default function (target) {
     state.shift(resolveArg.path(target))
   }
 
-  shift.displayName = 'operator.shift'
+  shift.displayName = `operator.shift(${String(target)}`
 
   return shift
 }
