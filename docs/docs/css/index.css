@@ -1,0 +1,46 @@
+.index-container {
+  background-color: #00a1c9;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.index-top {
+  flex: 3;
+  margin: 20px 0;
+}
+
+.index-bottom {
+  flex: 1;
+  margin: 20px 0;
+}
+
+.index-title {
+  font-size: 100px;
+  font-weight: 700;
+  color: rgba(255,255,255, 0.5);
+}
+
+.index-subtitle {
+  font-size: 42px;
+  font-weight: 500;
+  color: rgba(255,255,255, 0.25);
+}
+
+.index-motto {
+  font-size: 32px;
+  font-weight: 400;
+  color: #FFF;
+}
+
+.logo {
+  background: url("/images/cerebral.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: inline-block;
+  width: 75%;
+  height: 75%;
+}
