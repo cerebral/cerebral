@@ -1,23 +1,27 @@
 {
-  "name": "@cerebral/docs",
-  "version": "0.0.0",
-  "private": "true",
+  "name": "cerebral-docs",
+  "version": "1.0.0",
+  "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "mark serve",
-    "build": "NODE_ENV=build mark build && cp -R public/* dist/"
+    "start": "babel-watch builder/dev --presets es2015,react --watch docs pages css scripts",
+    "build": "babel-node builder/build --presets es2015,react",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Alexey Gurianov <gurianov@gmail.com>",
+  "author": "",
   "license": "ISC",
-  "dependencies": {
-    "autoprefixer": "^6.3.7",
-    "bem-components": "^3.0.0",
-    "cssnano": "^3.7.3",
-    "entities": "^1.1.1",
-    "gh-pages": "^0.11.0",
-    "mad-mark": "^2.2.4",
-    "postcss-url": "^5.1.2",
-    "prismjs": "^1.5.1",
-    "sharps": "^3.0.2"
+  "devDependencies": {
+    "babel-cli": "^6.22.2",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.22.0",
+    "babel-watch": "^2.0.5",
+    "express": "^4.14.0",
+    "fs-extra": "^2.0.0",
+    "markdown-to-react-components": "^0.2.3",
+    "prismjs": "^1.6.0",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "string-template": "^1.0.0",
+    "yargs": "^6.6.0"
   }
 }
