@@ -1,7 +1,11 @@
 {
   "title": "Cerebral Docs",
   "scripts": {
-    "docs": ["https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js", "search"]
+    "docs": [
+      "https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js",
+      "search",
+      "scroll-detect"
+    ]
   },
   "css": {
     "*": [

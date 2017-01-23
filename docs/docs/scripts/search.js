@@ -35,7 +35,7 @@
     const searchResult = document.querySelector('#search-result')
 
     searchResult.innerHTML = ''
-    results.forEach(function (result) {
+    results.splice(0, 5).forEach(function (result) {
       const resultEl = document.createElement('a')
 
       resultEl.className = 'docs-search-result-item'

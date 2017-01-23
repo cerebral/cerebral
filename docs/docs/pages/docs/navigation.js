@@ -6,7 +6,8 @@ function Navigation (props) {
     return Object.keys(props.docs).map(function (sectionKey, index) {
       return (
         <li key={index} className={`docs-navigation-item${props.sectionName === sectionKey ? ' active' : ''}`}>
-          {sectionKey}
+          <span>{sectionKey}</span>
+          <div className='underline' />
           <div className='docs-navigation-subItems'>
             {Object.keys(props.docs[sectionKey]).map(function (subSectionKey, index) {
               return (
@@ -26,7 +27,7 @@ function Navigation (props) {
   }
 
   return (
-    <div className='docs-navigation'>
+    <div id='navigation' className='docs-navigation'>
       <ul className='docs-navigation-menu'>
         {renderMenu()}
       </ul>

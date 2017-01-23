@@ -35,8 +35,11 @@
   display: flex;
   justify-content: center;
   align-items: stretch;
+  padding: 0 50px;
+  background-color: #FFF;
+  box-shadow: none;
+  transition: box-shadow 0.25s;
   height: 40px;
-  background-color: #00a1c9;
   position: fixed;
   width: 100%;
   z-index: 10;
@@ -54,45 +57,54 @@
 
 .docs-navigation-item {
   position: relative;
-  padding: 0 25px;
   line-height: 40px;
-  color: #FFF;
+  color: #333;
   cursor: pointer;
-  border-right: 1px solid #0086b3;
-  background-color: #0099cc;
+}
+
+.docs-navigation-item > span {
+  padding: 0 25px;
 }
 
 .docs-navigation-item:hover {
-  background-color: #0086b3;
+
 }
 
-.docs-navigation-item.active {
-  text-decoration: underline;
+.docs-navigation-item.active .underline {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: #00a1c9;
+  height: 2px;
+  display: none;
 }
+
+.docs-navigation-item.active .underline {
+  display: block;
+}
+
 
 .docs-navigation-item .docs-navigation-subItems {
   display: none;
   position: absolute;
+  top: 40px;
   left: 0;
   width: 250px;
   color: #333;
   background-color: #FFF;
-  border: 1px solid #0086b3;
   border-top: 0;
 }
 
 .docs-navigation-item:hover .docs-navigation-subItems {
   display: block;
+  padding: 10px;
+  box-shadow: 0px 9px 10px rgba(0,0,0,0.1);
+  line-height: 25px;
 }
 
 .docs-navigation-item .docs-navigation-subItems .docs-navigation-subItem {
   display: block;
-  background-color: #FAFAFA;
   padding: 0 10px;
-}
-.docs-navigation-item .docs-navigation-subItems .docs-navigation-subItem:hover {
-  background-color: #0086b3;
-  color: #FFF;
 }
 
 .docs-navigation-item .docs-navigation-subItems .docs-navigation-subItem.active {
@@ -170,7 +182,9 @@
 
 .docs-search input {
   outline: none;
-  border: 0;
+  border: 1px solid #EAEAEA;
+  border-radius: 3px;
+  color: #666;
   margin: 5px;
   text-indent: 5px;
   font-size: 16px;
@@ -178,35 +192,24 @@
 
 .docs-search-result {
   position: absolute;
-  top: 36px;
+  top: 40px;
   left: 4px;
   width: 400px;
   display: none;
   background-color: #FFF;
-  border: 1px solid #00a1c9;
-  border-top: 0;
+  box-shadow: 0px 9px 10px rgba(0,0,0,0.1);
+  line-height: 25px;
 }
 
 .docs-search-result-item {
   display: block;
-  background-color: #FAFAFA;
   padding: 0 10px;
   padding: 5px 10px;
-}
-
-
-.docs-search-result-item:hover {
-  background-color: #0086b3;
-  color: #FFF;
 }
 
 .docs-search-result-item span {
   color: #333;
   font-size: 14px;
-}
-
-.docs-search-result-item:hover span {
-  color: rgba(255,255,255,0.7);
 }
 
 .docs-footer {
