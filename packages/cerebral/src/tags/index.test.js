@@ -72,4 +72,8 @@ describe('Tags', () => {
     assert.equal(tags[1].getPath(getters), 'bar')
     assert.equal(tags[1].getValue(getters), 'baz')
   })
+  it('should have string representation', () => {
+    const tag = state`foo.${state`bar`}`
+    assert.equal(tag.toString(), 'state`foo.${state`bar`}`')// eslint-disable-line
+  })
 })

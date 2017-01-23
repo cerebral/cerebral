@@ -7,7 +7,7 @@ export default function (target) {
     state.pop(resolveArg.path(target))
   }
 
-  pop.displayName = 'operator.pop'
+  pop.displayName = `operator.pop(${String(target)}`
 
   return pop
 }

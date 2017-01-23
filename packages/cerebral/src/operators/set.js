@@ -19,7 +19,7 @@ export default function (target, value) {
     }
   }
 
-  set.displayName = 'operator.set'
+  set.displayName = `operator.set(${String(target)}, ${String(value)})`
 
   return set
 }
