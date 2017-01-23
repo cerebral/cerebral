@@ -1,0 +1,51 @@
+html, body {
+  height: 100%;
+  background-color: #FFF;
+  margin: 0;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  color: #333;
+}
+
+#app {
+  height: 100%;
+}
+
+.button {
+  box-sizing: border-box;
+  background-color: #007299;
+  padding: 10px 15px;
+  border-radius: 3px;
+  height: 50px;
+  line-height: 30px;
+  font-size: 22px;
+  color: #FFF;
+  text-decoration: none;
+  margin: 0 10px;
+  min-width: 150px;
+  display: inline-block;
+}
+
+.button:hover {
+  background-color: #0086b3;
+}
+
+a {
+  text-decoration: none;
+  color: #0086b3;
+  cursor: pointer;
+}
+
+a:hover {
+  color: #004c66;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  padding-top: 60px;
+  margin-top: 0;
+  font-weight: normal;
+  color: #333;
+}
+
+h4, h5, h6 {
+  font-weight: bold;
+}
