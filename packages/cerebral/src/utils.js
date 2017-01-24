@@ -200,7 +200,7 @@ export function getWithPath (obj) {
   return (path) => {
     return path.split('.').reduce((currentValue, key, index) => {
       if (index > 0 && currentValue === undefined) {
-        throw new Error(`You are extracting with path "${path}", but it is not valid for this object`)
+        throwError(`You are extracting with path "${path}", but it is not valid for this object`)
       }
 
       return currentValue[key]
@@ -246,7 +246,7 @@ export function createResolver (getters) {
         })
       }
 
-      throw new Error('You are extracting a path from an argument that is not a Tag')
+      throwError('You are extracting a path from an argument that is not a Tag')
     }
   }
 }
