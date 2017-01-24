@@ -1,5 +1,5 @@
 import DependencyStore from './DependencyStore'
-import FunctionTree from 'function-tree'
+import {FunctionTree} from 'function-tree'
 import Module from './Module'
 import Model from './Model'
 import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders} from './utils'
@@ -8,7 +8,6 @@ import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
 import ResolveArgProvider from './providers/ResolveArg'
-import EventEmitter from 'eventemitter3'
 import {dependencyStore as computedDependencyStore} from './Computed'
 
 /*
@@ -17,7 +16,7 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   The controller creates the function tree that will run all signals,
   based on top level providers and providers defined in modules
 */
-class Controller extends EventEmitter {
+class Controller extends FunctionTree {
   constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
     super()
     this.computedDependencyStore = computedDependencyStore
@@ -33,7 +32,7 @@ class Controller extends EventEmitter {
     })
     this.router = router ? router(this) : null
 
-    const allProviders = [
+    this.contextProviders = [
       ControllerProvider(this),
       ResolveArgProvider()
     ].concat(
@@ -54,20 +53,19 @@ class Controller extends EventEmitter {
       providers.concat(getProviders(this.module))
     )
 
-    this.runTree = new FunctionTree(allProviders)
-    this.runTree.on('asyncFunction', (execution, funcDetails) => {
+    this.on('asyncFunction', (execution, funcDetails) => {
       if (!funcDetails.isParallel) {
         this.flush()
       }
     })
-    this.runTree.on('parallelStart', () => this.flush())
-    this.runTree.on('parallelProgress', (execution, currentPayload, functionsResolving) => {
+    this.on('parallelStart', () => this.flush())
+    this.on('parallelProgress', (execution, currentPayload, functionsResolving) => {
       if (functionsResolving === 1) {
         this.flush()
       }
     })
-    this.runTree.on('end', () => this.flush())
-    this.runTree.on('error', (error) => {
+    this.on('end', () => this.flush())
+    this.on('error', (error) => {
       throw error
     })
 
