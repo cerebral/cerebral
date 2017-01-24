@@ -1,6 +1,6 @@
-import {dependencyMatch} from './utils'
+import {dependencyMatch, getWithPath} from './utils'
 
-class StateTracker {
+class DependencyTracker {
   constructor (computed) {
     this.propsTrackMap = {}
     this.stateTrackMap = {}
@@ -8,11 +8,12 @@ class StateTracker {
     this.value = null
   }
 
-  run (stateGetter, propsGetter) {
+  run (stateGetter, props) {
     const newStateTrackMap = {}
     const newPropsTrackMap = {}
     const stateTrackMap = this.stateTrackMap
     const propsTrackMap = this.propsTrackMap
+    const propsGetter = getWithPath(props)
     let hasChanged = false
 
     this.value = this.computed.getValue({
@@ -46,4 +47,4 @@ class StateTracker {
   }
 }
 
-export default StateTracker
+export default DependencyTracker

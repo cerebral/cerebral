@@ -1,6 +1,5 @@
 import Tag from '../tags/Tag'
 import {Compute} from '../Compute'
-import {getWithPath} from '../utils'
 
 function ResolveProviderFactory () {
   function isTag (arg, ...types) {
@@ -24,7 +23,7 @@ function ResolveProviderFactory () {
         if (arg instanceof Tag || arg instanceof Compute) {
           return arg.getValue({
             state: context.state.get,
-            input: getWithPath(context.input),
+            input: context.input,
             signal: context.controller.getSignal.bind(context.controller)
           })
         }
@@ -35,7 +34,7 @@ function ResolveProviderFactory () {
         if (arg instanceof Tag) {
           return arg.getPath({
             state: context.state.get,
-            input: getWithPath(context.input)
+            input: context.input
           })
         }
 

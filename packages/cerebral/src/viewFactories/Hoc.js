@@ -1,6 +1,6 @@
 import DependencyTracker from '../DependencyTracker'
 import {Compute} from '../Compute'
-import {getChangedProps, throwError, isObject, getWithPath} from './../utils'
+import {getChangedProps, throwError, isObject} from './../utils'
 
 export default (View) => {
   class BaseComponent extends View.Component {
@@ -17,7 +17,7 @@ export default (View) => {
       this.dependencyTrackers = Object.keys(dependencies).reduce((currentDependencyTrackers, dependencyKey) => {
         if (dependencies[dependencyKey] instanceof Compute) {
           currentDependencyTrackers[dependencyKey] = new DependencyTracker(dependencies[dependencyKey])
-          currentDependencyTrackers[dependencyKey].run(this.stateGetter, getWithPath(props))
+          currentDependencyTrackers[dependencyKey].run(this.stateGetter, props)
         }
 
         return currentDependencyTrackers
@@ -141,7 +141,7 @@ export default (View) => {
     createTagGetters (props) {
       return {
         state: this.stateGetter,
-        props: getWithPath(props),
+        props: props,
         signal: this.signalGetter
       }
     }
@@ -206,7 +206,7 @@ export default (View) => {
     updateDependencyTrackers (stateChanges, propsChanges, props) {
       const hasChanged = Object.keys(this.dependencyTrackers).reduce((hasChanged, key) => {
         if (this.dependencyTrackers[key].match(stateChanges, propsChanges)) {
-          this.dependencyTrackers[key].run(this.stateGetter, getWithPath(props))
+          this.dependencyTrackers[key].run(this.stateGetter, props)
 
           return true
         }

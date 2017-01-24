@@ -42,7 +42,7 @@ export default class Tag {
     }
 
     if (this.options.hasValue) {
-      return getters[this.type](this.getPath(getters))
+      return typeof getters[this.type] === 'function' ? getters[this.type](this.getPath(getters)) : this.extractValueWithPath(getters[this.type], this.getPath(getters))
     } else {
       return this.getPath(getters)
     }
@@ -60,6 +60,18 @@ export default class Tag {
 
       return currentPaths
     }, [])
+  }
+  /*
+    Extracts value from object using a path
+  */
+  extractValueWithPath (obj, path) {
+    return path.split('.').reduce((currentValue, key, index) => {
+      if (index > 0 && currentValue === undefined) {
+        throw new Error(`A tag is extracting with path "${path}", but it is not valid`)
+      }
+
+      return currentValue[key]
+    }, obj)
   }
   /*
     Populates nested tags in the tags path
