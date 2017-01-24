@@ -7,7 +7,7 @@ import Input from './Input'
 export default connect(
   {
     t: translations,
-    signIn: state`user.$signIn.**`
+    signIn: state`user.$signIn`
   },
   {
     anonClick: signal`user.signInAnonClicked`,

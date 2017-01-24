@@ -1,4 +1,4 @@
-import {Computed} from 'cerebral'
+import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
 import visibleKeys from '../common/Collection/computed/visibleKeys'
 import paths from '../common/Collection/paths'
@@ -6,15 +6,14 @@ import paths from '../common/Collection/paths'
 const projectsPath = paths('projects').collectionPath
 const clientsPath = paths('clients').collectionPath
 
-export default Computed(
-  {
-    visibleProjectKeys: visibleKeys('projects'),
-    projects: state`${projectsPath}.**`,
-    clients: state`${clientsPath}.**`
-  },
-  ({visibleProjectKeys, projects, clients}) => {
+export default compute(
+  visibleKeys('projects'),
+  state`${projectsPath}`,
+  state`${clientsPath}`,
+  (visibleProjectKeys, projects, clients) => {
     const clientList = {}
     const result = []
+
     visibleProjectKeys.forEach(key => {
       const project = projects[key]
       if (!project) {
@@ -44,6 +43,7 @@ export default Computed(
         return a.name <= b.name ? -1 : 0
       }
     })
+
     return result
   }
 )

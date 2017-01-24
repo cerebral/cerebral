@@ -1,6 +1,6 @@
-function connect (HOC, dependencies, injectedProps, passedComponent) {
+function connect (HOC, dependencies, mergeProps, passedComponent) {
   let component = passedComponent
-  let props = injectedProps
+  let props = mergeProps
 
   if (arguments.length === 3) {
     component = props

@@ -2,7 +2,7 @@ import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
 
 export default compute(
-  state`app.todos.**`,
+  state`app.todos`,
   state`app.filter`,
   (todos, filter) => {
     return Object.keys(todos).filter((ref) => {

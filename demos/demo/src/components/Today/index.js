@@ -7,7 +7,7 @@ import Date from '../Date'
 
 export default connect(
   {
-    projects: state`projects.all.**`,
+    projects: state`projects.all`,
     tasksByDay
   },
   function Tasks ({projects, tasksByDay}) {

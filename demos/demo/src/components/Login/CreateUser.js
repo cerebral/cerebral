@@ -9,7 +9,7 @@ export default connect(
     buttonClick: signal`user.createUserClicked`,
     enterPress: signal`user.createUserEnterPressed`,
     fieldChange: signal`user.fieldChanged`,
-    signIn: state`user.$signIn.**`,
+    signIn: state`user.$signIn`,
     t: translations
   },
   function Login ({buttonClick, enterPress, fieldChange, signIn, t}) {

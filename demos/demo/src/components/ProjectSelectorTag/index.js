@@ -5,7 +5,7 @@ import ProjectSelector from '../ProjectSelector'
 
 export default connect(
   {
-    item: state`projects.all.${props`itemKey`}.**`,
+    item: state`projects.all.${props`itemKey`}`,
     onClick: signal`projects.projectTagClicked`,
     showSelector: state`projects.$showProjectSelector`
   },
