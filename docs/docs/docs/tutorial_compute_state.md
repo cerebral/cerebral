@@ -22,7 +22,7 @@ In Cerebral we can automatically compute state by using **compute**. It is basic
 import {compute} from 'cerebral'
 
 export default compute(function starsCount (get) {
-  const repos = get.state('repos.**')
+  const repos = get.state('repos')
 
   return Object.keys(repos).reduce((currentCount, repoKey) => {
     return currentCount + repos[repoKey].stargazers_count
