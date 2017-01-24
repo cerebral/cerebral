@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {compute} from './'
-import {state} from './tags'
+import {state, props} from './tags'
 import assert from 'assert'
 
 describe('Compute', () => {
@@ -11,16 +11,16 @@ describe('Compute', () => {
     assert.equal(computed.getValue(), 'foo')
   })
   it('should pass get into function', () => {
-    const computed = compute(({props}) => {
-      return props()
+    const computed = compute((get) => {
+      return get(state`foo`)
     })
     assert.equal(computed.getValue({
-      props () { return 'foo' }
+      state () { return 'foo' }
     }), 'foo')
   })
   it('should pass previous args into functions', () => {
-    const computed = compute('foo', (foo, {props}) => {
-      return foo + props()
+    const computed = compute('foo', (foo, get) => {
+      return foo + get(props`foo`)
     })
     assert.equal(computed.getValue({
       props () { return 'foo' }
