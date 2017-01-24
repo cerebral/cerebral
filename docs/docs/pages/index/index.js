@@ -11,7 +11,7 @@ function Index (props) {
       <div className='index-bottom'>
         <a className='button' href='/todomvc'>demo</a>
         <a className='button' href='/docs/install_cerebral.html'>install</a>
-        <a className='button' href='/docs/api'>api</a>
+        <a className='button' href='/docs/api_controller.html'>api</a>
       </div>
     </div>
   )
