@@ -87,7 +87,7 @@ function callNextPath (response, path, defaultPath) {
     : path[defaultPath](response)
 }
 
-export function processResponse(httpAction, path) {
+export function processResponse (httpAction, path) {
   return httpAction
     .then((response) => callNextPath(response, path, 'success'))
     .catch((response) => {
