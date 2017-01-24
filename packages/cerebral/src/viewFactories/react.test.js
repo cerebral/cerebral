@@ -578,8 +578,8 @@ describe('React', () => {
           }
         }
         const TestComponent = connect({
-          foo: compute(({props}) => {
-            return props('foo') + 'baz'
+          foo: compute((get) => {
+            return get(props`foo`) + 'baz'
           })
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
@@ -603,8 +603,8 @@ describe('React', () => {
           }
         }
         const TestComponent = connect({
-          foo: compute(({state}) => {
-            return state('foo')
+          foo: compute((get) => {
+            return get(state`foo`)
           })
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
@@ -631,8 +631,8 @@ describe('React', () => {
           }
         }
         const TestComponent = connect({
-          foo: compute(({state}) => {
-            return state('foo')
+          foo: compute((get) => {
+            return get(state`foo`)
           })
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
@@ -668,10 +668,10 @@ describe('React', () => {
           }
         }
         const TestComponent = connect({
-          projects: compute(({state}) => {
-            const projects = state('user.projects')
+          projects: compute((get) => {
+            const projects = get(state`user.projects`)
 
-            return projects.map((projectKey) => state(`projects.${projectKey}`))
+            return projects.map((projectKey) => get(state`projects.${projectKey}`))
           })
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
@@ -706,10 +706,10 @@ describe('React', () => {
           }
         }
         const TestComponent = connect({
-          projects: compute(({state}) => {
-            const projects = state('user.projects')
+          projects: compute((get) => {
+            const projects = get(state`user.projects`)
 
-            return projects.map((projectKey) => state(`projects.${projectKey}.**`))
+            return projects.map((projectKey) => get(state`projects.${projectKey}.**`))
           })
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
