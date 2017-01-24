@@ -1,4 +1,5 @@
 import {Compute} from '../Compute'
+import {throwError} from '../utils'
 
 /*
   Creates tag for targetting things with a path in Cerebral
@@ -24,7 +25,7 @@ export default class Tag {
   */
   getPath (getters) {
     if (!getters) {
-      throw new Error('You can not grab the path from a Tag without getters')
+      throwError('You can not grab the path from a Tag without getters')
     }
 
     return this.populatePath(getters)
@@ -34,11 +35,11 @@ export default class Tag {
   */
   getValue (getters) {
     if (!getters) {
-      throw new Error('You can not grab a value from a Tag without getters')
+      throwError('You can not grab a value from a Tag without getters')
     }
 
     if (this.options.hasValue && !getters[this.type]) {
-      throw new Error(`Tag of type ${this.type.toUpperCase()} can not be used in this context`)
+      throwError(`Tag of type ${this.type.toUpperCase()} can not be used in this context`)
     }
 
     if (this.options.hasValue) {
@@ -67,7 +68,7 @@ export default class Tag {
   extractValueWithPath (obj, path) {
     return path.split('.').reduce((currentValue, key, index) => {
       if (index > 0 && currentValue === undefined) {
-        throw new Error(`A tag is extracting with path "${path}", but it is not valid`)
+        throwError(`A tag is extracting with path "${path}", but it is not valid`)
       }
 
       return currentValue[key]
