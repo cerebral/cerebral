@@ -7,7 +7,7 @@ import syntaxHighlight from '../../helpers/syntaxHighlight'
 import styles from './styles'
 
 export default connect({
-  form: state`${props`currentView`}.form.**`,
+  form: state`${props`currentView`}.form`,
   showPanel: state`app.settings.showErrors`
 },
   function PrettyPrint ({form, showPanel}) {

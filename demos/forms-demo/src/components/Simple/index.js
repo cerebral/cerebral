@@ -7,8 +7,8 @@ import Input from '../Fields/Input'
 import {isValidForm} from 'cerebral-forms'
 
 export default connect({
-  form: state`simple.form.**`,
-  settings: state`app.settings.**`,
+  form: state`simple.form`,
+  settings: state`app.settings`,
   onSubmitted: signal`simple.onSubmitted`,
   onReset: signal`simple.onReset`
 },

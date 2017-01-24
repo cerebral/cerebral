@@ -6,7 +6,7 @@ import translations from '../../common/computed/translations'
 export default connect(
   {
     // autoFocus
-    clients: state`clients.all.**`,
+    clients: state`clients.all`,
     // field
     // placeholderKey
     value: state`projects.$draft.${props`field`}`,

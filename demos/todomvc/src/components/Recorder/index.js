@@ -3,7 +3,7 @@ import { connect } from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  recorder: state`recorder.*`,
+  recorder: state`recorder`,
   recordClicked: signal`recorder.recordClicked`,
   playClicked: signal`recorder.playClicked`,
   stopClicked: signal`recorder.stopClicked`,

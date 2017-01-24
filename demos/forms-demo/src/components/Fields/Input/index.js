@@ -5,8 +5,8 @@ import {css} from 'aphrodite'
 import styles from './styles'
 
 export default connect({
-  field: state`${props`path`}.**`,
-  settings: state`app.settings.**`,
+  field: state`${props`path`}`,
+  settings: state`app.settings`,
   fieldChanged: signal`simple.fieldChanged`
 },
   function Input ({name, field, path, settings, fieldChanged}) {

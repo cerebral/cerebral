@@ -4,7 +4,7 @@ import {state} from 'cerebral/tags'
 
 export default compute(
   computeVisibleTodosRefs,
-  state`app.todos.**`,
+  state`app.todos`,
   (visibleTodosRefs, todos) => {
     return visibleTodosRefs.filter((ref) => {
       return !todos[ref].completed
