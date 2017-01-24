@@ -137,31 +137,6 @@ describe('React', () => {
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
-    it('should warn when not defining child interest on objects', () => {
-      const controller = Controller({
-        devtools: {init () {}, send () {}, updateComponentsMap () {}},
-        state: {
-          foo: {}
-        }
-      })
-      const TestComponent = connect({
-        foo: state`foo`
-      }, function MyComp (props) {
-        return (
-          <div>{props.foo.bar}</div>
-        )
-      })
-      const originalWarn = console.warn
-      console.warn = (message) => {
-        assert.equal(message, 'The value extracted from path foo in component MyComp is not showing interest in children using * or **. Cerebral renders strictly, please adjust or turn off this warning in options.')
-        console.warn = originalWarn
-      }
-      TestUtils.renderIntoDocument((
-        <Container controller={controller}>
-          <TestComponent />
-        </Container>
-      ))
-    })
     it('should be able to extract signals', () => {
       const controller = Controller({
         state: {
@@ -413,16 +388,16 @@ describe('React', () => {
         component.callSignal()
         assert.equal(renderCount, 1)
       })
-      it('should not update when child path changes', () => {
+      it('should be able to override immediate child interest', () => {
         let renderCount = 0
         const controller = Controller({
           state: {
-            foo: {
+            foo: [{
               bar: 'baz'
-            }
+            }]
           },
           signals: {
-            methodCalled: [({state}) => state.set('foo.bar', 'baz2')]
+            methodCalled: [({state}) => state.set('foo.0.bar', 'baz2')]
           }
         })
         class TestComponentClass extends React.Component {
@@ -432,44 +407,7 @@ describe('React', () => {
           render () {
             renderCount++
             return (
-              <div>{this.props.foo.bar}</div>
-            )
-          }
-        }
-        const TestComponent = connect({
-          foo: state`foo`,
-          methodCalled: signal`methodCalled`
-        }, TestComponentClass)
-        const tree = TestUtils.renderIntoDocument((
-          <Container controller={controller}>
-            <TestComponent />
-          </Container>
-        ))
-        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
-        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
-        component.callSignal()
-        assert.equal(renderCount, 1)
-      })
-      it('should update when immediate child interest defined', () => {
-        let renderCount = 0
-        const controller = Controller({
-          state: {
-            foo: {
-              bar: 'baz'
-            }
-          },
-          signals: {
-            methodCalled: [({state}) => state.set('foo.bar', 'baz2')]
-          }
-        })
-        class TestComponentClass extends React.Component {
-          callSignal () {
-            this.props.methodCalled()
-          }
-          render () {
-            renderCount++
-            return (
-              <div>{this.props.foo.bar}</div>
+              <div>{this.props.foo[0].bar}</div>
             )
           }
         }
@@ -485,9 +423,9 @@ describe('React', () => {
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
         const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
         component.callSignal()
-        assert.equal(renderCount, 2)
+        assert.equal(renderCount, 1)
       })
-      it('should update when nested children interest defined', () => {
+      it('should by default update when nested children update', () => {
         let renderCount = 0
         const controller = Controller({
           state: {
@@ -513,7 +451,46 @@ describe('React', () => {
           }
         }
         const TestComponent = connect({
-          foo: state`foo.**`,
+          foo: state`foo`,
+          methodCalled: signal`methodCalled`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'value')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(renderCount, 2)
+      })
+      it('should by default update when nested children update using COMPUTE', () => {
+        let renderCount = 0
+        const controller = Controller({
+          state: {
+            foo: {
+              bar: {
+                baz: 'value'
+              }
+            }
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo.bar.baz', 'value2')]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo.bar.baz}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: compute(state`foo`),
           methodCalled: signal`methodCalled`
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
@@ -709,7 +686,7 @@ describe('React', () => {
           projects: compute((get) => {
             const projects = get(state`user.projects`)
 
-            return projects.map((projectKey) => get(state`projects.${projectKey}.**`))
+            return projects.map((projectKey) => get(state`projects.${projectKey}`))
           })
         }, TestComponentClass)
         const tree = TestUtils.renderIntoDocument((
