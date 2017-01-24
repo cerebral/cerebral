@@ -7,7 +7,7 @@ export default function (target, value) {
     state.push(resolveArg.path(target), resolveArg.value(value))
   }
 
-  push.displayName = `operator.push(${String(target)}`
+  push.displayName = `operator.push(${String(target)})`
 
   return push
 }

@@ -11,7 +11,7 @@ function whenFactory (...args) {
 
   when.displayName = `operator.when(${args.map((arg) => {
     return String(arg)
-  }).join(',')}}`
+  }).join(',')})`
 
   return when
 }

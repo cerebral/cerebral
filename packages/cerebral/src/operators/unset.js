@@ -7,7 +7,7 @@ export default function (target) {
     state.unset(resolveArg.path(target))
   }
 
-  unset.displayName = `operator.unset(${String(target)}`
+  unset.displayName = `operator.unset(${String(target)})`
 
   return unset
 }

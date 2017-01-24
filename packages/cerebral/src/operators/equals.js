@@ -9,7 +9,7 @@ function equalsFactory (target) {
     return path[targetValue] ? path[targetValue]() : path.otherwise()
   }
 
-  equals.displayName = `operator.equals(${String(target)}`
+  equals.displayName = `operator.equals(${String(target)})`
 
   return equals
 }
