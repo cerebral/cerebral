@@ -258,4 +258,26 @@ describe('Http Provider', () => {
       data: 1
     })
   })
+  it('should call status code paths', (done) => {
+    mock.get('/items/201', (req, res) => {
+      return res.status(201).header('Content-Type', 'application/json')
+    })
+
+    let responseCount = 0
+    const controller = Controller({
+      providers: [HttpProvider()],
+      signals: {
+        test: [
+          httpGet('/items/201'), {
+            '201': [() => { responseCount++ }]
+          },
+          () => {
+            assert.equal(responseCount, 1)
+            done()
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+  })
 })
