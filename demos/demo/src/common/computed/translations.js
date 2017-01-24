@@ -1,12 +1,10 @@
-import {Computed} from 'cerebral'
+import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
 import * as TRANSLATIONS from '../translations'
 
-export default Computed(
-  {
-    lang: state`user.lang`
-  },
-  function translations ({lang}) {
+export default compute(
+  state`user.lang`,
+  function translations (lang) {
     return TRANSLATIONS[lang] || TRANSLATIONS.en
   }
 )

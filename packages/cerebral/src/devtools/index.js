@@ -28,7 +28,7 @@ class Devtools {
     this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
     this.verifyStrictRender = typeof options.verifyStrictRender === 'undefined' ? true : options.verifyStrictRender
     this.preventInputPropReplacement = options.preventInputPropReplacement || false
-    this.bigComponentsWarning = options.bigComponentsWarning || {state: 5, signals: 5}
+    this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
     this.multipleApps = typeof options.multipleApps === 'undefined' ? true : options.multipleApps
     this.backlog = []

@@ -35,8 +35,7 @@ class Controller extends FunctionTree {
     }
 
     this.contextProviders = [
-      ControllerProvider(this),
-      ResolveProvider()
+      ControllerProvider(this)
     ].concat(
       this.router ? [
         this.router.provider
@@ -50,7 +49,8 @@ class Controller extends FunctionTree {
         VerifyInputProvider
       ] : []
     )).concat(
-      StateProvider()
+      StateProvider(),
+      ResolveProvider()
     ).concat(
       providers.concat(getProviders(this.module))
     )

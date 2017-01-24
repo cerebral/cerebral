@@ -4,7 +4,7 @@ import { connect } from 'cerebral/react'
 import {state, signal, props} from 'cerebral/tags'
 
 export default connect({
-  todo: state`app.todos.${props`todoRef`}.*`,
+  todo: state`app.todos.${props`todoRef`}`,
   todoDoubleClicked: signal`app.todoDoubleClicked`,
   newTitleChanged: signal`app.todoNewTitleChanged`,
   newTitleSubmitted: signal`app.todoNewTitleSubmitted`,

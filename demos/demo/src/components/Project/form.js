@@ -9,9 +9,9 @@ import Textarea from '../Textarea'
 
 export default connect(
   {
-    clients: state`clients.all.**`,
+    clients: state`clients.all`,
     discardClick: signal`projects.discardClicked`,
-    item: state`projects.$draft.**`,
+    item: state`projects.$draft`,
     saveClick: signal`projects.saveClicked`,
     t: translations
   },
