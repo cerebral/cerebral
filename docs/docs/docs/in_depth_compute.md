@@ -113,12 +113,12 @@ You would define **User** as:
 function User (passedUserKey) {
   return compute(
     passedUserKey,
-    (userKey, {state}) => {
-      const user = state(`users.${userKey}.**`)
+    (userKey, get) => {
+      const user = state(`users.${userKey}`)
 
       return {
         ...user,
-        projects: user.projectIds.map((id) => state(`projects.${id}.**`))
+        projects: user.projectIds.map((id) => get(state`projects.${id}`))
       }
     }
   )
@@ -133,8 +133,8 @@ But you could split this up. You could keep the **User** as:
 function User (passedUserKey) {
   return compute(
     passedUserKey,
-    (userKey, {state}) => {
-      return state(`users.${userKey}.**`)
+    (userKey, get) => {
+      return get(state`users.${userKey}`)
     }
   )
 }
@@ -146,7 +146,7 @@ And rather add a new compute to grab the projects:
 compute((user, {state}) => {
   return {
     ...user,
-    projects: user.projectIds.map((id) => state(`projects.${id}.**`))
+    projects: user.projectIds.map((id) => state(`projects.${id}`))
   }
 })
 ```

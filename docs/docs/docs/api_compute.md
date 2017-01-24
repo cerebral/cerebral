@@ -53,39 +53,40 @@ state`${computedFoo}.bar`
 ```
 
 ## Getting data
-Compute can grab data related to where it is run. For example in **connect** you have access to both state and properties of the component. In a signal you would have access to state and the input to the signal.
+Compute can manually grab data related to where it is run. For example in **connect** you have access to both state and properties of the component. In a signal you would have access to state and the input to the signal. You do this by combining the **get** argument with a related tag:
 
 ```js
 import {compute} from 'cerebral'
+import {state, props} from 'cerebral/tags'
 
 export default compute((get) => {
-  return get.state('foo') + get.props('bar')
+  return get(state`foo`) + get(props`bar`)
 })
 ```
 
 Cerebral now knows what paths this computed is interested in and can optimize its need to run again to produce a changed value.
 
 ## Composing
-What makes compute very powerful is its ability to compose tags and other compute.
+What makes compute very powerful is its ability to compose tags and other compute. Any tags you pass as arguments will be passed in as a value to the next function in line. The last argument of the function is always the **get** function.
 
 ```js
 import {compute} from 'cerebral'
-import {props} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 
-const computedItem = compute(
-  props`itemKey`,
-  (itemKey, get) => {
-    return get.state(`items.${itemKey}`)
+const computedItemUsers = compute(
+  state`items.${props`itemKey`}`),
+  (item, get) => {
+    return item.userIds.map((userId) => get(state`users.${userId}`))
   }
 )
 
 // In connect
 connect({
-  item: computedItem
+  users: computedItemUsers
 })
 ```
 
-It uses the *itemKey* property from the component to grab the actual item. You can also compose multiple compute together.
+It uses the *itemKey* property from the component to grab the actual item. Then it grab each user based on the userIds of the item. You can also compose multiple compute together.
 
 ```js
 connect({
@@ -107,7 +108,7 @@ It is possible to combine tags and functions as many times as you would like:
 compute(
   state`currentItemKey`,
   (currentItemKey, get) => {
-    return get.state(`item.${currentItemKey}`)
+    return get(state`item.${currentItemKey}`)
   },
   state`isAwesome`,
   (item, isAwesome) => {
