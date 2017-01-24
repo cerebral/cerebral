@@ -32,7 +32,7 @@ export default (View) => {
     */
     componentWillMount () {
       if (!this.context.cerebral.controller) {
-        throw new Error('Can not find Cerebral controller, did you remember to use the Container component? Read more at: https://cerebral.github.io/api/05_connect.html')
+        throwError('Can not find controller, did you remember to use the Container component? Read more at: https://cerebral.github.io/api/05_connect.html')
       }
 
       this.context.cerebral.registerComponent(this, Object.assign(
@@ -74,9 +74,7 @@ export default (View) => {
       A getter for StateTracker and tags to grab state from Cerebral
     */
     stateGetter (path) {
-      const value = this.context.cerebral.controller.getState(path)
-
-      return value
+      return this.context.cerebral.controller.getState(path)
     }
     /*
       A getter for tags to grab signals from Cerebral
@@ -263,11 +261,11 @@ export default (View) => {
 
   return function HOC (dependencies, mergeProps, Component) {
     if (typeof dependencies === 'function') {
-      throw new Error('You can not use a function to define dependencies. Use tags or a function on the specific property you want to dynamically create')
+      throwError('You can not use a function to define dependencies. Use tags or a function on the specific property you want to dynamically create')
     }
 
     if (!dependencies) {
-      throw new Error('There is no reason to connect a component that has no dependencies')
+      throwError('There is no reason to connect a component that has no dependencies')
     }
 
     class CerebralComponent extends BaseComponent {
