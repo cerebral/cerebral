@@ -1,6 +1,6 @@
 import DependencyTracker from '../DependencyTracker'
 import {Compute} from '../Compute'
-import {getChangedProps, throwError, isObject, ensureStrictPath} from './../utils'
+import {getChangedProps, throwError, ensureStrictPath, createResolver} from './../utils'
 
 export default (View) => {
   class BaseComponent extends View.Component {
@@ -66,7 +66,7 @@ export default (View) => {
       this._isUnmounting = true
       this.context.cerebral.unregisterComponent(this, Object.assign(
         {},
-        this.dependencyTrackersMaps.state,
+        this.dependencyTrackersDependencyMaps.state,
         this.tagsDependencyMap
       ))
     }
@@ -75,15 +75,6 @@ export default (View) => {
     */
     stateGetter (path) {
       const value = this.context.cerebral.controller.getState(path)
-
-      if (
-        this.context.cerebral.controller.devtools &&
-        !this.context.cerebral.controller.options.preventDependencyWarning &&
-        isObject(value) &&
-        path.indexOf('*') === -1
-      ) {
-        console.warn(`The value extracted from path ${path} in component ${this._displayName} is not showing interest in children using * or **. Cerebral renders strictly, please adjust or turn off this warning in options.`)
-      }
 
       return value
     }
@@ -186,7 +177,7 @@ export default (View) => {
       }
 
       if (this.mergeProps) {
-        return this.mergeProps(dependenciesProps, props)
+        return this.mergeProps(dependenciesProps, props, createResolver(this.createTagGetters(props)))
       }
 
       return Object.assign({}, props, dependenciesProps)

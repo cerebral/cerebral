@@ -293,10 +293,12 @@ describe('React', () => {
       const TestComponent = connect({
         foo: state`foo`,
         fooSignal: signal`foo`
-      }, (depsProps, ownProps) => {
+      }, (depsProps, ownProps, resolve) => {
         assert.equal(depsProps.foo, 'bar')
         assert.equal(typeof depsProps.fooSignal, 'function')
         assert.deepEqual(ownProps, {mip: 'mop'})
+        assert.equal(resolve.path(state`foo`), 'foo')
+        assert.equal(resolve.value(state`foo`), 'bar')
 
         return {bar: depsProps.foo + ownProps.mip}
       }, (props) => {

@@ -1,3 +1,6 @@
+import Tag from './tags/Tag'
+import {Compute} from './Compute'
+
 export function getChangedProps (propsA, propsB) {
   const propsAKeys = Object.keys(propsA)
   const propsBKeys = Object.keys(propsB)
@@ -211,6 +214,41 @@ export function ensureStrictPath (path, value) {
   }
 
   return path
+}
+
+export function createResolver (getters) {
+  return {
+    isTag (arg, ...types) {
+      if (!(arg instanceof Tag)) {
+        return false
+      }
+
+      if (types.length) {
+        return types.reduce((isType, type) => {
+          return isType || type === arg.type
+        }, false)
+      }
+
+      return true
+    },
+    value (arg) {
+      if (arg instanceof Tag || arg instanceof Compute) {
+        return arg.getValue(getters)
+      }
+
+      return arg
+    },
+    path (arg) {
+      if (arg instanceof Tag) {
+        return arg.getPath({
+          state: getters.state.get,
+          input: getters.input
+        })
+      }
+
+      throw new Error('You are extracting a path from an argument that is not a Tag')
+    }
+  }
 }
 
 export const noop = () => {}
