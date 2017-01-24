@@ -1,6 +1,6 @@
 import DependencyTracker from '../DependencyTracker'
 import {Compute} from '../Compute'
-import {getChangedProps, throwError, isObject} from './../utils'
+import {getChangedProps, throwError, isObject, ensureStrictPath} from './../utils'
 
 export default (View) => {
   class BaseComponent extends View.Component {
@@ -127,8 +127,9 @@ export default (View) => {
         return this.dependencies[propKey].getTags(getters).reduce((updatedCurrentDepsMap, tag) => {
           if (tag.options.isStateDependency) {
             const path = tag.getPath(getters)
+            const strictPath = ensureStrictPath(path, this.stateGetter(path))
 
-            updatedCurrentDepsMap[path] = true
+            updatedCurrentDepsMap[strictPath] = true
           }
 
           return updatedCurrentDepsMap
@@ -166,15 +167,6 @@ export default (View) => {
             const path = tag.getPath(getters)
 
             currentProps[key] = this.stateGetter(path)
-
-            if (
-              this.context.cerebral.controller.devtools &&
-              !this.context.cerebral.controller.options.preventDependencyWarning &&
-              isObject(currentProps[key]) &&
-              path.indexOf('*') === -1
-            ) {
-              console.warn(`The connected property ${key} in component ${this._displayName} is not showing interest in children using * or **. You can turn off this warning in options.`)
-            }
           } else if (tag.type === 'signal' || tag.type === 'props') {
             currentProps[key] = tag.getValue(getters)
           }

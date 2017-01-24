@@ -205,4 +205,12 @@ export function getWithPath (obj) {
   }
 }
 
+export function ensureStrictPath (path, value) {
+  if (isObject(value) && path.indexOf('*') === -1) {
+    return `${path}.**`
+  }
+
+  return path
+}
+
 export const noop = () => {}
