@@ -6,6 +6,8 @@ import Mutation from './Mutation'
 import Service from './Service'
 
 function Action ({action, execution, children, onMutationClick, onActionClick}) {
+  const error = execution && execution.error
+
   function getActionName () {
     var regex = /\(([^()]+)\)/
     var match = regex.exec(action.name)
@@ -16,11 +18,12 @@ function Action ({action, execution, children, onMutationClick, onActionClick}) 
   }
 
   function getLineNumber () {
-    const variable = action.error.name === 'TypeError' && action.error.message.match(/'(.*?)'/) ? action.error.message.match(/'(.*?)'/)[1] : action.error.message.split(' ')[0]
-    const lines = action.error.stack.split('\n')
+    const variable = error.name === 'TypeError' && error.message.match(/'(.*?)'/) ? error.message.match(/'(.*?)'/)[1] : error.message.split(' ')[0]
+    const lines = error.func.split('\n')
+
     return lines.reduce((lineNumber, line, index) => {
       if (lineNumber === -1 && line.indexOf(variable) >= 0) {
-        return index + 1
+        return index + 2
       }
       return lineNumber
     }, -1)
@@ -36,23 +39,28 @@ function Action ({action, execution, children, onMutationClick, onActionClick}) 
     )
   }
 
+  function renderCode () {
+    return error.func.split('\n').map((line) => line.replace(/\t/, '')).join('\n')
+  }
+
   return (
-    <div className={action.error ? 'action action-actionError' : 'action'}>
+    <div className={error ? 'action action-actionError' : 'action'}>
       <div
-        className={action.error ? 'action-actionErrorHeader' : 'action-actionHeader'}
+        className={error ? 'action-actionErrorHeader' : 'action-actionHeader'}
         onClick={() => onActionClick(action)}>
-        {action.error ? <i className='icon icon-warning' /> : null}
+        {error ? <i className='icon icon-warning' /> : null}
         {action.isAsync ? <i className='icon icon-asyncAction' /> : null}
         {renderActionTitle()}
       </div>
-      {action.error ? (
+      {error ? (
         <div className='action-error'>
-          <strong>{action.error.name}</strong> : {action.error.message}
+          <strong>{error.name}</strong> : {error.message}
           <pre data-line={getLineNumber()}>
-            <code className='language-javascript' dangerouslySetInnerHTML={{__html: action.error.stack.split('\n').filter((line) => line.trim() !== '').join('\n')}} /></pre>
+            <code className='language-javascript' dangerouslySetInnerHTML={{__html: renderCode()}} />
+          </pre>
         </div>
       ) : null}
-      {!action.error && execution ? (
+      {!error && execution ? (
         <div>
           <div className='action-actionInput'>
             <div className='action-inputLabel'>Input:</div>
