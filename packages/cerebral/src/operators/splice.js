@@ -11,7 +11,7 @@ export default function (target, ...args) {
 
   splice.displayName = `operator.splice(${String(target)}, ${args.map((arg) => {
     return String(arg)
-  }).join(',')}}`
+  }).join(',')})`
 
   return splice
 }

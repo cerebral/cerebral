@@ -9,7 +9,7 @@ export default function (target) {
     state.set(path, !state.get(path))
   }
 
-  toggle.displayName = `operator.toggle(${String(target)}`
+  toggle.displayName = `operator.toggle(${String(target)})`
 
   return toggle
 }

@@ -19,7 +19,7 @@ export default function (target, ...values) {
 
   merge.displayName = `operator.merge(${String(target)}, ${values.map((value) => {
     return String(value)
-  }).join(',')}}`
+  }).join(',')})`
 
   return merge
 }
