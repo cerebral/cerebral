@@ -61,8 +61,10 @@
     document.querySelector('#search-result').style.display = 'none'
   })
 
-  document.querySelector('#search-docs').addEventListener('keypress', function (event) {
+  document.querySelector('#search-docs').addEventListener('keyup', function (event) {
     if (event.target.value.length < 3) {
+      document.querySelector('#search-result').style.display = 'none'
+
       return
     }
 
