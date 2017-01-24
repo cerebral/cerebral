@@ -6,13 +6,16 @@ export class Compute {
     this.value = null
   }
   getValue (get) {
+    const computeGet = function (tag) {
+      return tag.getValue(get)
+    }
     const result = this.args.reduce((details, arg, index) => {
       if (arg instanceof Compute || arg instanceof Tag) {
         details.results.push(arg.getValue(get))
 
         return details
       } else if (typeof arg === 'function') {
-        details.results.push(arg(...details.results.slice(details.previousFuncIndex, index), get))
+        details.results.push(arg(...details.results.slice(details.previousFuncIndex, index), computeGet))
         details.previousFuncIndex = index
 
         return details
