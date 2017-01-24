@@ -123,7 +123,7 @@ export default connect({
 
 This component will only render when exactly **app.isLoading** changes. It will not change if there is a change to path: **app** or **app.isLoading.foo**.
 
-With **strict mode** you can specify child path interest. So for example a component showing a list can render when some nested path has a change:
+With **strict mode** Cerebral automatically adds interest in child paths on objects and arrays. So for example a component showing a list renders when some nested path has a change:
 
 ```js
 import React from 'react'
@@ -131,7 +131,8 @@ import {connect} from 'cerebral/react'
 import {state} from 'cerebral/tags'
 
 export default connect({
-  list: state`app.list.**`
+  list: state`app.list`
+  // Is actually: list: state`app.list.**`
 },
   function App(props) {
     props.list
@@ -139,7 +140,7 @@ export default connect({
 )
 ```
 
-Or sometimes you are only interested in the immediate child paths. For example when you base your list of a map (object), you only want to rerender when keys are added/removed from the map:
+Sometimes you want to optimize as the list is only interested in changes to the keys of an object or items in the array. For example when you have a list of users, you only want to rerender the list itself when keys are added/removed from the map:
 
 ```js
 import React from 'react'
@@ -155,7 +156,6 @@ export default connect({
 )
 ```
 
-There are two **gotchas** with strict mode though:
+There is one **gotchas** with strict mode though:
 
-1. Lets say you point to path **app.isLoading** in a component. If you change out **app** path, the component will not render. This throws an error and tell you to not replace the **app** path or change the component dependency to be **app** instead
-2. You might forget to add the asterix to show child interest on objects and arrays. No worries though, the devtools shows a warning when you forget
+Lets say you point to path **app.isLoading** in a component. If you change out **app** path, the component will not render. This throws an error and tell you to not replace the **app** path or change the component dependency to be **app** instead
