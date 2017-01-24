@@ -1,4 +1,4 @@
-import {dependencyMatch, getWithPath} from './utils'
+import {dependencyMatch, getWithPath, ensureStrictPath} from './utils'
 
 class DependencyTracker {
   constructor (computed) {
@@ -18,11 +18,14 @@ class DependencyTracker {
 
     this.value = this.computed.getValue({
       state (path) {
-        newStateTrackMap[path] = true
+        const value = stateGetter(path)
+        const strictPath = ensureStrictPath(path, value)
 
-        if (!stateTrackMap[path]) hasChanged = true
+        newStateTrackMap[strictPath] = true
 
-        return stateGetter(path)
+        if (!stateTrackMap[strictPath]) hasChanged = true
+
+        return value
       },
       props (path) {
         newPropsTrackMap[path] = true
