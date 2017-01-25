@@ -1,4 +1,5 @@
 import 'prismjs'
+import 'prismjs/plugins/line-highlight/prism-line-highlight'
 import './common/icons.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
