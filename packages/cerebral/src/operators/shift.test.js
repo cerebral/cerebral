@@ -19,7 +19,7 @@ describe('operator.shift', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['b', 'c']})
   })
-  it('should throw on bad argument', () => {
+  it('should throw on bad argument', (done) => {
     const controller = Controller({
       state: {
       },
@@ -30,8 +30,12 @@ describe('operator.shift', () => {
       }
     })
 
-    assert.throws(() => {
-      controller.getSignal('test')()
-    }, /operator.shift/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

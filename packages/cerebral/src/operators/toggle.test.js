@@ -36,7 +36,7 @@ describe('operator.toggle', () => {
     controller.getSignal('test')({ref: 'one'})
     assert.deepEqual(controller.getState(), {todos: {one: false, two: false}})
   })
-  it('should throw on bad argument', () => {
+  it('should throw on bad argument', (done) => {
     const controller = Controller({
       state: {
       },
@@ -47,8 +47,12 @@ describe('operator.toggle', () => {
       }
     })
 
-    assert.throws(() => {
-      controller.getSignal('test')()
-    }, /operator.toggle/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })
