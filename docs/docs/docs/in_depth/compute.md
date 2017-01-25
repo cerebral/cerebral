@@ -103,14 +103,14 @@ If you want to bring in a user and its related projects you can define a compute
 
 ```js
 connect({
-  user: User(props`userKey`)
+  user: user(props`userKey`)
 })
 ```
 
-You would define **User** as:
+You would define **user** as:
 
 ```js
-function User (passedUserKey) {
+function user (passedUserKey) {
   return compute(
     passedUserKey,
     (userKey, get) => {
@@ -127,10 +127,10 @@ function User (passedUserKey) {
 
 Now your component depends on the user and any changes to its children. It also depends on each specific project of the user and any changes to their children.
 
-But you could split this up. You could keep the **User** as:
+But you could split this up. You could keep the **user** as:
 
 ```js
-function User (passedUserKey) {
+function user (passedUserKey) {
   return compute(
     passedUserKey,
     (userKey, get) => {
@@ -143,25 +143,25 @@ function User (passedUserKey) {
 And rather add a new compute to grab the projects:
 
 ```js
-compute((user, {state}) => {
+const userProjects = compute((user, get) => {
   return {
     ...user,
-    projects: user.projectIds.map((id) => state(`projects.${id}`))
+    projects: user.projectIds.map((id) => get(state`projects.${id}`)
   }
 })
 ```
 
-And then you could choose what to grab in different components.
+And then you can choose what to grab in different components.
 
 ```js
 // I only want the user
 connect({
-  user: User(props`userKey`)
+  user: user(props`userKey`)
 })
 // I want the user with projects
 connect({
-  user: compute(User(props`userKey`), userProjects)
+  user: compute(user(props`userKey`), userProjects)
 })
 ```
 
-So compute can do a lot of stuff. It is up to the project and your preferences what makes sense. Maybe you just use simple computed, or maybe you take it up a notch and compose. Or maybe you do not even need computed and just use tags.
+So compute is a very powerful tool. It is up to the project and your preferences to use what makes most sense. Maybe you just need to use a simple computed, or maybe you need to take it up a notch and compose. Or maybe you do not even need compute at all and can just use tags.
