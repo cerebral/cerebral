@@ -40,7 +40,7 @@
 
       resultEl.className = 'docs-search-result-item'
       resultEl.innerHTML = `<span>${result.section}</span> - ${result.title}`
-      resultEl.href = `/docs/${result.subSection}.html`
+      resultEl.href = `/docs/${result.section}/${result.subSection}.html`
       searchResult.appendChild(resultEl)
     })
     searchResult.style.display = 'block'

@@ -4,7 +4,6 @@ const app = express()
 const extractMarkdownFiles = require('./extractMarkdownFiles')
 const extractPages = require('./extractPages')
 const render = require('./render')
-const config = require('../config.json')
 const {readFile, readScript, extractRawText} = require('./utils')
 
 Promise.all([
@@ -17,16 +16,10 @@ Promise.all([
 
     app.use('/images', express.static('images'))
 
-    app.get('/docs/*', function (req, res) {
-      const docName = path.basename(req.params[0], '.html')
+    app.get('/docs/:sectionName*', function (req, res) {
+      const docName = req.params[0] ? path.basename(req.params[0], '.html') : 'index'
       const Page = pages.docs
-      const sectionName = Object.keys(config.docs).reduce(function (currentSection, sectionKey) {
-        if (currentSection) {
-          return currentSection
-        }
-
-        return config.docs[sectionKey].indexOf(docName) === -1 ? null : sectionKey
-      }, null)
+      const sectionName = req.params.sectionName
 
       render({
         pageName: 'docs',
