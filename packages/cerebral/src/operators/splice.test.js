@@ -33,7 +33,7 @@ describe('operator.splice', () => {
     controller.getSignal('test')({idx: 2, x: 'one', y: 'two'})
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'one', 'two', 'd']})
   })
-  it('should throw on bad argument', () => {
+  it('should throw on bad argument', (done) => {
     const controller = Controller({
       state: {
       },
@@ -44,8 +44,12 @@ describe('operator.splice', () => {
       }
     })
 
-    assert.throws(() => {
-      controller.getSignal('test')()
-    }, /operator.splice/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

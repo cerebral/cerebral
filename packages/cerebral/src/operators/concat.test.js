@@ -34,7 +34,7 @@ describe('operator.concat', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['one', 'two', 'three'], list2: ['two', 'three']})
   })
-  it('should throw on bad argument', () => {
+  it('should throw on bad argument', (done) => {
     const controller = Controller({
       state: {
         list: ['one']
@@ -46,8 +46,12 @@ describe('operator.concat', () => {
       }
     })
 
-    assert.throws(() => {
-      controller.getSignal('test')()
-    }, /operator.concat/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

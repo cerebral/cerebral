@@ -43,7 +43,7 @@ describe('operator.merge', () => {
       largo: 'Largo Winch'
     }})
   })
-  it('should throw on bad argument', () => {
+  it('should throw on bad argument', (done) => {
     const controller = Controller({
       state: {
       },
@@ -54,9 +54,13 @@ describe('operator.merge', () => {
       }
     })
 
-    assert.throws(() => {
-      controller.getSignal('test')()
-    }, /operator.merge/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
   it('should create object if no value', () => {
     const controller = Controller({
