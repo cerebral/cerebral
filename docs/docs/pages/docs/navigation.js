@@ -13,8 +13,8 @@ function Navigation (props) {
               return (
                 <a
                   key={index}
-                  className={`docs-navigation-subItem${props.docName === subSectionKey ? ' active' : ''}`}
-                  href={`/docs/${subSectionKey}.html`}
+                  className={`docs-navigation-subItem${props.sectionName === sectionKey && props.docName === subSectionKey ? ' active' : ''}`}
+                  href={`/docs/${sectionKey}/${subSectionKey}.html`}
                 >
                   {props.docs[sectionKey][subSectionKey].toc[0].title}
                 </a>
