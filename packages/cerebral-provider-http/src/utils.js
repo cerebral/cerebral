@@ -80,3 +80,21 @@ export function parseHeaders (rawHeaders) {
     return parsedHeaders
   }, {})
 }
+
+function callNextPath (response, path, defaultPath) {
+  return path['' + response.status]
+    ? path['' + response.status](response)
+    : path[defaultPath](response)
+}
+
+export function processResponse (httpAction, path) {
+  return httpAction
+    .then((response) => callNextPath(response, path, 'success'))
+    .catch((response) => {
+      if (response.isAborted) {
+        return path.abort(response)
+      }
+
+      return callNextPath(response, path, 'error')
+    })
+}

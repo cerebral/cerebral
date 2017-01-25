@@ -1,4 +1,5 @@
 const path = require('path')
+const webpack = require('webpack')
 const config = {
   entry: './src/index',
   module: {
@@ -14,6 +15,13 @@ const config = {
       loader: 'url-loader?limit=100000'
     }]
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+      }
+    })
+  ],
   output: {
     path: path.resolve('chromeExtension', 'build'),
     filename: 'bundle.js'

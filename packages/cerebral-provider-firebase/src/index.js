@@ -22,6 +22,7 @@ import signInWithEmailAndPassword from './signInWithEmailAndPassword'
 import signOutService from './signOut'
 import signInWithFacebook from './signInWithFacebook'
 import signInWithGoogle from './signInWithGoogle'
+import signInWithGithub from './signInWithGithub'
 import deleteUser from './deleteUser'
 import sendPasswordResetEmail from './sendPasswordResetEmail'
 
@@ -36,6 +37,7 @@ export {default as signInAnonymously} from './factories/signInAnonymously'
 export {default as signInWithEmailAndPassword} from './factories/signInWithEmailAndPassword'
 export {default as signInWithFacebook} from './factories/signInWithFacebook'
 export {default as signInWithGoogle} from './factories/signInWithGoogle'
+export {default as signInWithGithub} from './factories/signInWithGithub'
 export {default as signOut} from './factories/signOut'
 export {default as task} from './factories/task'
 export {default as value} from './factories/value'
@@ -62,6 +64,7 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         signInAnonymously: signInAnonymouslyService,
         signInWithFacebook: signInWithFacebook,
         signInWithGoogle: signInWithGoogle,
+        signInWithGithub: signInWithGithub,
         off: stopListening,
         onChildAdded: createOnChildAdded(context.controller),
         onChildRemoved: createOnChildRemoved(context.controller),

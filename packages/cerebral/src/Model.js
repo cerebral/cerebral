@@ -57,11 +57,9 @@ class Model {
   flush () {
     const changes = this.changedPaths.reduce((allChanges, path) => {
       path.reduce((currentChanges, key, index) => {
-        if (index === path.length - 1 && !currentChanges[key]) {
-          currentChanges[key] = true
-        } else if (currentChanges[key] === true) {
-          currentChanges[key] = {}
-        } else if (!currentChanges[key]) {
+        if (index === path.length - 1) {
+          currentChanges[key] = currentChanges[key] === true || !currentChanges[key] ? true : currentChanges[key]
+        } else if (!currentChanges[key] || currentChanges[key] === true) {
           currentChanges[key] = {}
         }
 
@@ -136,8 +134,9 @@ class Model {
     ) {
       throwError(`You are passing a non serializable value into the state tree on path ${path.join('.')}`)
     }
-
-    return forceSerializable(value)
+    if (this.devtools) {
+      forceSerializable(value)
+    }
   }
   verifyValues (values, path) {
     if (this.devtools) {

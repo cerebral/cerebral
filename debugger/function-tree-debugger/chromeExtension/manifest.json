@@ -1,7 +1,7 @@
 {
-    "name": "Cerebral2 Debugger",
+    "name": "Function Tree debugger",
     "version": "0.9",
-    "description": "A debugger for Cerebral 2",
+    "description": "A debugger for function tree",
     "devtools_page": "devtools.html",
     "content_scripts": [
         {

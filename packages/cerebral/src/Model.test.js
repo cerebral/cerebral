@@ -32,6 +32,16 @@ describe('Model', () => {
     model.set(['foo', 'bar'], 'value2')
     assert.deepEqual(model.flush(), {foo: {bar: true}})
   })
+  it('should flush same path changes correctly', () => {
+    const model = new Model({
+      foo: {
+        bar: 'value'
+      }
+    })
+    model.set(['foo', 'bar'], 'value2')
+    model.set(['foo', 'bar'], 'value3')
+    assert.deepEqual(model.flush(), {foo: {bar: true}})
+  })
 
   describe('SET', () => {
     it('should be able to set state', () => {
@@ -222,6 +232,13 @@ describe('Model', () => {
     })
   })
   describe('Serializable', () => {
+    it('should make value forceSerializable when devtools are attached', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, {allowedTypes: [Date]})
+      model.set(['foo'], new Date())
+      assert.equal(model.state.foo.toJSON(), '[Date]')
+    })
     it('should throw error if value inserted is not serializable', () => {
       const model = new Model({
         foo: 'bar'

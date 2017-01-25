@@ -4,13 +4,13 @@ title: From 1.x to 2.x
 
 ## From 1.x to 2.x
 
-To migrate from 1.x to 2.x you need to take the following under consideration.
+When migrating from 1.x to 2.x you need to take the following under consideration.
 
-- There are no models left to choose from. Cerebral comes with one model.
-- Services is removed in favor of function-tree/providers
+- There are no models left to choose from. Cerebral now comes with one model.
+- Services have been removed in favor of function-tree/providers.
 
 ### Controller
-Instead of choosing your model and connect to the *Controller* as in 1.x as shown below
+Instead of choosing your model and connecting to the *Controller* as in 1.x as shown below
 
 ```js
 import {Controller} from 'cerebral'
@@ -23,13 +23,15 @@ const controller = Controller(Model({
 export default controller
 ```
 
-You would simple do the following in 2.x
+You would simply do the following in 2.x
 
 ```js
 import {Controller} from 'cerebral'
 
 const controller = Controller({
-  // You can add some initial state here if you want
+  state: {
+    // You can add some initial state here if you want
+  }
 })
 
 export default controller
@@ -38,7 +40,7 @@ export default controller
 ``` controller.getSignals() ``` is removed from 2.x so favor ``` controller.getSignal('some.signal') ``` instead.
 
 ### Modules
-In 1.x you would have done something like this.
+In 1.x you would have done something like this
 
 ```js
 import {Controller} from 'cerebral'
@@ -57,7 +59,7 @@ controller.addModules({
 export default controller
 ```
 
-In 2.x it's a simpler process.
+In 2.x the modules are defined along with the controller
 
 ```js
 import {Controller} from 'cerebral'
@@ -75,7 +77,9 @@ const controller = Controller({
 export default controller
 ```
 
-In 1.x you would create your own module like this.
+Sub-modules can be defined by each module in the same way (see below).
+
+In 1.x you would create your own module like this
 
 ```js
 // 1.x
@@ -93,7 +97,7 @@ export default module => {
 }
 ```
 
-addState, addSignals has been removed, so in 2.x you simple return an object.
+addState, addSignals have been removed, so in 2.x you simply return an object
 
 ```js
 // 2.x
@@ -104,6 +108,9 @@ export default {
     isSaving: false,
     error: null
   },
+  modules: {
+    subModule: SubModule()
+  },
   signals: {
     newItemTitleSubmitted: submitNewItemTitle
   }
@@ -111,27 +118,27 @@ export default {
 ```
 
 ### Operators
-The biggest change to Cerebral 2.x is the operators. You can read more about them in the Operators docs. They have become very powerful and you can create your own operators. Operators in Cerebral 2.x has been moved into core Cerebral. You can still use the old operators if you want by installing them as usual via npm.
+The biggest change to Cerebral 2.x is the operators. You can read more about them in the Operators docs. They have become very powerful and you can create your own operators. Operators in Cerebral 2.x has been moved into core Cerebral. You can still use the old operators if you want by installing them via npm.
 
 ```js
 npm install cerebral-operators --save
 ```
 
-The new operators now uses tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
+The new operators now use tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
 
 ```js
 import {
-  state,
-  input,
-  set
+  set // other operators include: wait, when, equals, debounce, push, pop, shift, toggle, unset, splice
 } from 'cerebral/operators'
+import {
+  state,
+  input
+} from 'cerebral/tags'
 
 export default [
   set(state`foo.bar`, input`bar`)
 ]
-
 ```
-
 
 ### Signals
 You handle signals mostly the same way as in 1.x. You can describe signals in a module or in the controller directly.
@@ -141,21 +148,25 @@ You handle signals mostly the same way as in 1.x. You can describe signals in a 
 import {Controller} from 'cerebral'
 import Model from 'cerebral-model-immutable'
 import doSomething from './chains/doSomething'
+import updateField from './chains/updateField'
 
 const controller = Controller(Model({}))
 
 controller.addSignals({
-  buttonClicked: doSomething
+  buttonClicked: doSomething,
+  fieldChanged: { immediate: true, chain: updateField }
 })
 ```
 #### 2.x
 ```js
 import {Controller} from 'cerebral'
 import doSomething from './chains/doSomething'
+import updateField from './chains/updateField'
 
 const controller = Controller({
   signals: {
-    buttonClicked: doSomething
+    buttonClicked: doSomething,
+    fieldChanged: updateField
   }
 })
 ```
@@ -163,7 +174,7 @@ const controller = Controller({
 One note when using signals is that the **immediate** option is gone. This keeps the api cleaner.
 
 ### Actions
-Since cerebral 2.x is using **function-tree** under the hood we have other, more powerful options then before. The input, state is the same but output is gone. You can just return an object from the action that will be available in the input for the next action. You can also return a **path** that is a new concept in Cerebral 2.x and outdates output. **path** is used to determine the execution path for your chain. You do no longer have services as an argument in the context put rather providers instead.
+Since cerebral 2.x is using **function-tree** under the hood we have other, more powerful options than before. The input, state is the same but output is gone. You can just return an object from the action that will be available in the input for the next action. You can also return a **path** that is a new concept in Cerebral 2.x and outdates output. **path** is used to determine the execution path for your chain. You do no longer have services as an argument in the context, use providers instead.
 
 #### 1.x
 ```js
@@ -172,15 +183,15 @@ function myAction({input, state, output, services}) {
 }
 ```
 
-In 2.x you have the following. Instead of services you hook up providers that superseeds services.
+In 2.x you have the following. Instead of services you hook up providers that supersedes services.
 
 ```js
-function myAction({input, state, path}) {
+function myAction({input, state, path /*, myProvider, otherProvider */ }) {
 
 }
 ```
 
-When you wanted to output to paths in 1.x you would do something like this.
+When you wanted to output to paths in 1.x you would do something like this
 ```js
 function myAction({state, output}) {
   if (state.get('app.isAwesome')) {
@@ -217,15 +228,26 @@ function myAction({state, path}) {
 When doing async operations you would do something like this in 1.x
 
 ```js
-function myAction({services}) {
-  // do something async
+function myAction({output}) {
+  setTimeout(() => {
+    output({ /* optional output */ }) // or output.pathName({ /* optional output */ })
+  }, 1000)
 }
 
 myAction.async = true
-
 ```
 
-In Cerebral 2 you can leave that out and just resolve or reject a promise.
+In Cerebral 2 you you must resolve or reject a returned promise.
+
+```js
+function myAction({path}) {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({ /* optional output */ }) // or resolve(path.pathName({ /* optional output */ }))
+    }, 1000)
+  })
+}
+```
 
 In 1.x you could set a path that wasn't defined yet in the state tree. Let's say your state looked like this.
 
@@ -268,7 +290,7 @@ connect({
 
 ### Providers (outdates services)
 
-In 1.x you could add services that would be available to you in the actions. Typically you would do something like this in 1.x
+In 1.x you could add services that would be available to you in the actions. Typically, you would do something like this in 1.x
 
 ```js
 import someExternalApi from 'some-external-api'
@@ -303,6 +325,21 @@ const controller = Controller({
       axios
     })
   ]
+})
+```
+
+or manually
+
+```js
+import {Controller} from 'cerebral'
+
+const controller = Controller({
+  provider(context) {
+    context.myProvider = {
+      doSomething() {}
+    }
+    return context
+  }
 })
 ```
 
@@ -354,8 +391,8 @@ render(
 The same is true when connecting Cerebral to your component. In 1.x you would import it like this.
 
 ```js
-import React from 'react';
-import {connect} from 'cerebral-view-react';
+import React from 'react'
+import {connect} from 'cerebral-view-react'
 
 export default connect({
   isLoading: 'app.isLoading'
@@ -373,11 +410,12 @@ export default connect({
 In 2.x you would have to use a different import.
 
 ```js
-import React from 'react';
-import {connect} from 'cerebral/react';
+import React from 'react'
+import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
 
 export default connect({
-  isLoading: 'app.isLoading'
+  isLoading: state`app.isLoading`
 },
   function App(props) {
     return (
@@ -389,17 +427,18 @@ export default connect({
 )
 ```
 
-In 1.x you had all signals in props. In Cerebral 2.x we favor to be explicit about what signals you need.
+In 1.x you would first connect state, then signals as separate arguments in connect. In Cerebral 2.x these are combined, tags are used to differentiate between state, signals and props.
 
 ```js
 // 2.x
-import React from 'react';
-import {connect} from 'cerebral/react';
+import React from 'react'
+import {connect} from 'cerebral/react'
+import {props, state, signal} from 'cerebral/tags'
 
 export default connect({
-  isLoading: 'app.isLoading'
-}, {
-  someSignal: 'app.someSignal'
+  isLoading: state`app.isLoading`,
+  item: state`items.${props`itemId`}`,
+  someSignal: signal`app.someSignal`
 }.
   function App(props) {
     return (
@@ -411,7 +450,7 @@ export default connect({
 )
 ```
 
-As you can see the second argument to connect is the signals. If you don't need signals in the Component the second argument should be the Component. If you really want all signals in props as in 1.x you can set this as an option in the controller.
+If you really want all signals in props as in 1.x you can set this as an option in the controller.
 
 ```js
 // 2.x
@@ -428,7 +467,7 @@ const controller = Controller({
 
 
 ###  Model
-The following functions is removed from Cerebral 2.x when using state inside an action
+The following functions have been removed from Cerebral 2.x when using state inside an action
 
 - logModel
 - export

@@ -31,7 +31,7 @@ export function goTo (url) {
 }
 
 export default function Router (options = {}) {
-  options.mapper = urlMapper({query: options.query})
+  options.mapper = options.mapper || urlMapper({query: options.query})
 
   return (controller) => {
     if (!options.mapper || typeof options.mapper.map !== 'function') {

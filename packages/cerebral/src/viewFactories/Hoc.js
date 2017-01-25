@@ -71,7 +71,7 @@ export default (View) => {
           }
 
           if (typeof this.evaluatedPaths[pathKey] === 'string') {
-            console.warn(`Defining state dependencies on components (${Component.displayName}) with strings is DEPRECATED. Use the STATE TAG instead`)
+            console.warn(`Defining state dependencies on components (${Component.displayName || Component.name}) with strings is DEPRECATED. Use the STATE TAG instead`)
             currentDepsMap[pathKey] = this.evaluatedPaths[pathKey]
           } else {
             const getters = this.createTagGetters()

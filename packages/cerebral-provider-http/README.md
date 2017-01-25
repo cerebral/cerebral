@@ -161,6 +161,19 @@ export default [
 ]
 ```
 
+To check the response for a specific http status code, simply use the code for the path name and it will be called when the response code matches.
+
+```js
+export default [
+  httpPut('/items/1', { title: 'updated' }), {
+    '201': [],
+    success: [], // all other success codes will call this path
+    '401': [],
+    error: [] // all other error codes will call this path
+  }
+]
+```
+
 ### Response
 
 ```js
