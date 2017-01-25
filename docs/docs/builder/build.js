@@ -32,7 +32,7 @@ function renderDocs (docs, pages) {
       })
         .then(function (view) {
           return {
-            fileName: `docs/${docName}`,
+            fileName: `docs/${sectionName}/${docName}`,
             content: view
           }
         })
@@ -59,6 +59,14 @@ Promise.all([
         return emptyDir('dist')
           .then(function () {
             return emptyDir('dist/docs')
+              .then(function () {
+                return Promise.all(Object.keys(docs).map(function (sectionDir) {
+                  return emptyDir(`dist/docs/${sectionDir}`)
+                }))
+              })
+          })
+          .then(function () {
+            return
           })
           .then(function () {
             return renders.map(function (render) {

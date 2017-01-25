@@ -1,3 +1,4 @@
+const path = require('path')
 const MTRC = require('markdown-to-react-components')
 const {readFile} = require('./utils')
 const config = require('../config.json')
@@ -13,8 +14,10 @@ module.exports = function () {
     .then(function (fileContents) {
       return sections.reduce(function (contentTree, dir, index) {
         contentTree[dir] = config.docs[dir].reduce(function (subContent, contentName, subIndex) {
-          subContent[contentName] = MTRC(fileContents[index][subIndex])
-          subContent[contentName].raw = fileContents[index][subIndex]
+          const key = path.basename(contentName)
+
+          subContent[key] = MTRC(fileContents[index][subIndex])
+          subContent[key].raw = fileContents[index][subIndex]
 
           return subContent
         }, {})
