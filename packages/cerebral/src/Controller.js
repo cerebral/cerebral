@@ -71,7 +71,14 @@ class Controller extends FunctionTree {
 
     if (this.devtools) {
       this.devtools.init(this)
-    } else if (
+    } else {
+      this.on('error', (error) => {
+        throw error
+      })
+    }
+
+    if (
+      this.devtools &&
       isDeveloping() &&
       typeof navigator !== 'undefined' &&
       /Chrome/.test(navigator.userAgent)

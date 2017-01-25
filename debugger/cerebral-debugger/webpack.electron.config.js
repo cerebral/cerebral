@@ -2,7 +2,13 @@ const webpack = require('webpack')
 const webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
 const path = require('path')
 
-const plugins = []
+const plugins = [
+  new webpack.DefinePlugin({
+    'process.env': {
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+    }
+  })
+]
 if (process.env.NODE_ENV !== 'production') {
   plugins.push(new webpack.HotModuleReplacementPlugin())
 }

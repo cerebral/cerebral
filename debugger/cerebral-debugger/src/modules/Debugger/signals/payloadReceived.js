@@ -9,15 +9,19 @@ import updateComponentsMap from '../actions/updateComponentsMap'
 import updateRenders from '../actions/updateRenders'
 import runRecordedMutation from '../actions/runRecordedMutation'
 import updateActionOutput from '../actions/updateActionOutput'
+import updateActionError from '../actions/updateActionError'
+import parseAndRunMessages from '../actions/parseAndRunMessages'
 
 export default [
   switchType, {
     init: [setInitialPayload],
+    bulk: [parseAndRunMessages],
     executionStart: [addSignal],
     execution: [updateSignal, runMutation],
     executionFunctionEnd: [updateActionOutput],
     executionPathStart: [updateSignalPath],
     executionEnd: [endSignalExecution],
+    executionFunctionError: [updateActionError],
     components: [updateComponentsMap, updateRenders],
     recorderMutation: [runRecordedMutation]
   }
