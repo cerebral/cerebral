@@ -1,0 +1,34 @@
+exports[`Transform tags to constructor calls should allow imported variable to be renamed 1`] = `
+"import { Tag as _Tag } from \'cerebral/tags\';
+
+state => new _Tag(\'state\', {
+      \'isStateDependency\': true
+}, [\'hello.\', \'\'], [new _Tag(\'state\', {
+      \'isStateDependency\': true
+}, [\'world\'], [])]);"
+`;
+
+exports[`Transform tags to constructor calls should ignore default imports 1`] = `
+"
+import state from \'cerebral/tags\';
+state.hello.world;"
+`;
+
+exports[`Transform tags to constructor calls should ignore variable when shadowed 1`] = `
+"import { Tag as _Tag } from \'cerebral/tags\';
+
+state => state.notChanged();"
+`;
+
+exports[`Transform tags to constructor calls should throw when import is not allowed 1`] = `"unknown: The Tag \"wrongImport\" can\'t be imported"`;
+
+exports[`Transform tags to constructor calls should transforms simple proxies 1`] = `
+"import { Tag as _Tag } from \'cerebral/tags\';
+
+const otherTag = () => {};
+otherTag\`hello.world\`;
+
+new _Tag(\'state\', {
+      \'isStateDependency\': true
+}, [\'hello.world\'], []);"
+`;
