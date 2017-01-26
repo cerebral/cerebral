@@ -4,7 +4,7 @@
   "description": "Babel plugin that convertes proxy access to cerebral tagged templates.",
   "main": "dist/index.js",
   "scripts": {
-		"test": "jest",
+    "test": "jest",
     "test:watch": "npm test -- --watch",
     "build": "BABEL_ENV=production babel -d dist ./*.js",
     "coverage": "npm test -- --coverage",
@@ -15,12 +15,7 @@
   "repository": "https://github.com/cerebral/cerebral/babel/babel-plugin-cerebral-proxy-tags",
   "devDependencies": {
     "@cerebral/monorepo": "0.0.1",
-    "babel-cli": "^6.2.0",
-    "babel-core": "^6.22.1",
-    "babel-jest": "^18.0.0",
-    "babel-preset-es2015": "^6.1.18",
-    "cerebral": "^2.0.0-b",
-    "jest": "^18.1.0"
+    "cerebral": "^2.0.0-b"
   },
   "files": [
     "dist"
