@@ -19,7 +19,7 @@ export default [
 ]
 ```
 
-You can write the same like showen bellow and it will get transpiled automatically.
+You can write the same like shown below and it will get transpiled automatically.
 
 ```js
 import {set} from 'cerebral/operators'
