@@ -13,7 +13,7 @@ export default function getUser () {
             user.accessToken = result.credential.accessToken
           }
           resolve({
-            user: user,
+            user: firebase.auth().currentUser ? user : null,
             isRedirected: true
           })
         } else {
