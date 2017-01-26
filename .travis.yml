@@ -28,7 +28,7 @@ after_success:
     # TODO: check changed path to decide if npm publish necessary
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
     lerna bootstrap;
-    lerna publish -c --npm-tag next --yes;
+    lerna publish -c --npm-tag next --yes --exact;
     npm run deploy &>/dev/null;
     # lerna run build:electron --concurrency 1;
     # lerna run build:chromeExtension --concurrency 1;

@@ -8,4 +8,4 @@ To install Cerebral you need to use the Node Package Manager. NPM is part of [No
 
 To install Cerebral Alpha you have to explicitly install Cerebral and its dependency:
 
-`npm install cerebral@next function-tree@next --save --save-exact`
+`npm install cerebral@next --save`
