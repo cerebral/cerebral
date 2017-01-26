@@ -1,4 +1,4 @@
-babel-plugin-cerebral-proxy-tags [![Build Status](https://travis-ci.org/FWeinb/babel-plugin-cerebral-proxy-tags.svg?branch=master)](https://travis-ci.org/FWeinb/babel-plugin-cerebral-proxy-tags) [![codecov](https://codecov.io/gh/FWeinb/babel-plugin-cerebral-proxy-tags/branch/master/graph/badge.svg)](https://codecov.io/gh/FWeinb/babel-plugin-cerebral-proxy-tags)
+babel-plugin-cerebral-proxy-tags
 =========================
 
 In Cerebral v2 tags are a way to target input, state, props or signals. They are
