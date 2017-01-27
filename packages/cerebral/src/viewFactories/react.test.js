@@ -505,9 +505,9 @@ describe('React', () => {
         component.callSignal()
         assert.equal(renderCount, 2)
       })
-      it('should throw error with devtools when replacing path, causing render not to happen', (done) => {
+      it.only('should throw error with devtools when replacing path, causing render not to happen', () => {
         const controller = Controller({
-          devtools: {verifyStrictRender: true, init () {}, send () {}, updateComponentsMap () {}},
+          devtools: {verifyStrictRender: true, init () {}, send () {}, updateComponentsMap () {}, sendExecutionData () {}},
           state: {
             foo: {
               bar: 'baz'
@@ -538,12 +538,10 @@ describe('React', () => {
         ))
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
         const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
-        controller.removeListener('error')
-        controller.once('error', (error) => {
-          assert.ok(error)
-          done()
-        })
-        component.callSignal()
+
+        assert.throws(() => {
+          component.callSignal()
+        }, /Render warning/)
       })
     })
     describe('Compute', () => {
