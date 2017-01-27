@@ -1,4 +1,5 @@
-import {set, state, input} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 
 export default (path) => {
   return [
