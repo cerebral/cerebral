@@ -8,7 +8,7 @@ notifications:
   email: false
 before_script:
 - npm prune
-- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-router)'
+- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-router|babel-*)'
 after_success:
 - |
   echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
