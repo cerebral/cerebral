@@ -240,10 +240,7 @@ export function createResolver (getters) {
     },
     path (arg) {
       if (arg instanceof Tag) {
-        return arg.getPath({
-          state: getters.state.get,
-          input: getters.input
-        })
+        return arg.getPath(getters)
       }
 
       throwError('You are extracting a path from an argument that is not a Tag')
