@@ -239,6 +239,7 @@ export default (View) => {
 
       const prevDependencyTrackersDependencyMaps = this.dependencyTrackersDependencyMaps
       const hasChangedDependencyTrackers = this.updateDependencyTrackers(stateChanges, {}, this.props)
+      this.dependencyTrackersDependencyMaps = hasChangedDependencyTrackers ? this.getDependencyTrackersDependencyMaps(this.props) : this.dependencyTrackersDependencyMaps
 
       if (hasChangedDependencyTrackers) {
         const prevDepsMap = Object.assign(

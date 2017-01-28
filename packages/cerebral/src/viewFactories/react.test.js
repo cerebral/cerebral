@@ -505,7 +505,7 @@ describe('React', () => {
         component.callSignal()
         assert.equal(renderCount, 2)
       })
-      it.only('should throw error with devtools when replacing path, causing render not to happen', () => {
+      it('should throw error with devtools when replacing path, causing render not to happen', () => {
         const controller = Controller({
           devtools: {verifyStrictRender: true, init () {}, send () {}, updateComponentsMap () {}, sendExecutionData () {}},
           state: {
@@ -620,6 +620,41 @@ describe('React', () => {
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
         controller.getSignal('changeState')()
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+      })
+      it('should update dependency map when compute is rerun', () => {
+        const controller = Controller({
+          state: {
+            map: {}
+          },
+          signals: {
+            changeState: [({state}) => state.set('map.1', {awesome: true})],
+            changeState2: [({state}) => state.set('map.1.awesome', false)]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            return (
+              <div>{this.props.foo.length}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: compute(state`map.*`, (map, get) => {
+            return Object.keys(map).filter((key) => {
+              return get(state`map.${key}.awesome`)
+            })
+          })
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, '0')
+        controller.getSignal('changeState')()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, '1')
+        controller.getSignal('changeState2')()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, '0')
       })
       it('should handle complex state changes', () => {
         const controller = Controller({

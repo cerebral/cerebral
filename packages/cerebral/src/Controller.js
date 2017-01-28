@@ -80,7 +80,7 @@ class Controller extends FunctionTree {
     }
 
     if (
-      this.devtools &&
+      !this.devtools &&
       isDeveloping() &&
       typeof navigator !== 'undefined' &&
       /Chrome/.test(navigator.userAgent)
