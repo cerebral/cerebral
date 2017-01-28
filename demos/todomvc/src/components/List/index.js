@@ -6,11 +6,11 @@ import isAllChecked from '../../computed/isAllChecked'
 import visibleTodosRefs from '../../computed/visibleTodosRefs'
 
 export default connect({
-  isAllChecked: isAllChecked,
-  todoRefs: visibleTodosRefs,
+  isAllChecked,
+  visibleTodosRefs,
   toggleAllChanged: signal`app.toggleAllChanged`
 },
-  function List ({ isAllChecked, todoRefs, toggleAllChanged }) {
+  function List ({ isAllChecked, visibleTodosRefs, toggleAllChanged }) {
     return (
       <section className='main'>
         <input
@@ -22,7 +22,7 @@ export default connect({
           Mark all as complete
         </label>
         <ul className='todo-list'>
-          {todoRefs.map(ref => <Todo key={ref} todoRef={ref} />)}
+          {visibleTodosRefs.map(ref => <Todo key={ref} todoRef={ref} />)}
         </ul>
       </section>
     )
