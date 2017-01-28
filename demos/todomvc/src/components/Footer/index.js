@@ -6,57 +6,40 @@ import cn from 'classnames'
 
 export default connect({
   filter: state`app.filter`,
-  counts: counts,
+  counts,
   filterClicked: signal`app.filterClicked`,
   clearCompletedClicked: signal`app.clearCompletedClicked`
 },
-  function Footer ({ filter, counts, filterClicked, clearCompletedClicked }) {
-    let countLabel = 'item left'
-    if (counts.remainingCount === 0 || counts.remainingCount > 1) {
-      countLabel = 'items left'
-    }
-
+  ({ filter, counts, filterClicked, clearCompletedClicked }) => ({
+    filter,
+    remainingCount: counts.remaining,
+    completedCount: counts.completed,
+    countLabel: (counts.remaining === 0 || counts.remaining > 1) ? 'items left' : 'item left',
+    filterClicked,
+    clearCompletedClicked
+  }),
+  function Footer ({ filter, remainingCount, completedCount, countLabel, filterClicked, clearCompletedClicked }) {
     return (
       <footer className='footer'>
-        <span className='todo-count'><strong>{counts.remainingCount} {countLabel}</strong></span>
+        <span className='todo-count'><strong>{remainingCount} {countLabel}</strong></span>
         <ul className='filters'>
-          <li>
-            <a
-              onClick={() => filterClicked({
-                filter: 'all'
-              })}
-              className={cn({ selected: filter === 'all' })}
-            >
-              All
-            </a>
-          </li>
-          <li>
-            <a
-              onClick={() => filterClicked({
-                filter: 'active'
-              })}
-              className={cn({ selected: filter === 'active' })}
-            >
-              Active
-            </a>
-          </li>
-          <li>
-            <a
-              onClick={() => filterClicked({
-                filter: 'completed'
-              })}
-              className={cn({ selected: filter === 'completed' })}
-            >
-              Completed
-            </a>
-          </li>
+          {['All', 'Active', 'Completed'].map(filterName => (
+            <li key={filterName}>
+              <a
+                onClick={() => filterClicked({ filter: filterName.toLowerCase() })}
+                className={cn({ selected: filter === filterName.toLowerCase() })}
+              >
+                {filterName}
+              </a>
+            </li>
+          ))}
         </ul>
         {
-          counts.completedCount
-            ? <button className='clear-completed' onClick={() => clearCompletedClicked()}>
-              Clear completed ({counts.completedCount})
+          !!completedCount && (
+            <button className='clear-completed' onClick={() => clearCompletedClicked()}>
+              Clear completed ({completedCount})
             </button>
-          : null
+          )
         }
       </footer>
     )
