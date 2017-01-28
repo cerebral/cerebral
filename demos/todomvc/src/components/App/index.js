@@ -6,6 +6,11 @@ import TodosList from '../List'
 import TodosFooter from '../Footer'
 import Recorder from '../Recorder'
 import visibleTodosRefs from '../../computed/visibleTodosRefs'
+import isAllChecked from '../../computed/isAllChecked'
+
+const AllChecked = connect({
+  isAllChecked
+}, ({isAllChecked}) => <span>isAllChecked: {String(isAllChecked)}</span>)
 
 export default connect({
   todos: state`app.todos`,
@@ -16,6 +21,7 @@ export default connect({
     return (
       <div id='todoapp-wrapper'>
         <Recorder />
+        <AllChecked />
         <section className='todoapp'>
           <header className='header'>
             <h1>todos</h1>
