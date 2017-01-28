@@ -1,13 +1,12 @@
 import {compute} from 'cerebral'
-import computeVisibleTodosRefs from './visibleTodosRefs'
 import {state} from 'cerebral/tags'
+import computeVisibleTodosRefs from './visibleTodosRefs'
 
 export default compute(
   computeVisibleTodosRefs,
-  state`app.todos`,
-  (visibleTodosRefs, todos) => {
+  (visibleTodosRefs, get) => {
     return visibleTodosRefs.filter((ref) => {
-      return !todos[ref].completed
+      return !get(state`app.todos.${ref}.completed`)
     }).length === 0 && visibleTodosRefs.length !== 0
   }
 )

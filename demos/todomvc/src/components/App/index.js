@@ -5,14 +5,18 @@ import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 import Recorder from '../Recorder'
-import visibleTodosRefs from '../../computed/visibleTodosRefs'
+import counts from '../../computed/counts'
 
 export default connect({
-  todos: state`app.todos`,
   isSaving: state`app.isSaving`,
-  visibleTodosRefs: visibleTodosRefs
+  counts
 },
-  function App (props) {
+  ({ isSaving, counts }) => ({
+    isSaving,
+    hasVisibleTodos: !!counts.visible,
+    hasTodos: !!counts.total
+  }),
+  function App ({ isSaving, hasVisibleTodos, hasTodos }) {
     return (
       <div id='todoapp-wrapper'>
         <Recorder />
@@ -22,8 +26,8 @@ export default connect({
             <NewTodoForm />
           </header>
 
-          {props.visibleTodosRefs.length ? <TodosList /> : null}
-          {Object.keys(props.todos).length ? <TodosFooter /> : null}
+          {hasVisibleTodos && <TodosList />}
+          {hasTodos && <TodosFooter />}
         </section>
         <footer className='info'>
           <p>
