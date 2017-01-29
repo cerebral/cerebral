@@ -170,16 +170,18 @@ class Model {
   merge (path, ...values) {
     this.verifyValues(values, path)
 
-    // Create object if no present
-    if (!this.get(path)) {
-      this.set(path, {})
-    }
-
     const value = Object.assign(...values)
 
-    // We want this to behave like setting multiple keys
-    for (let prop in value) {
-      this.set(path.concat(prop), value[prop])
+    // If we already have an object we make it behave
+    // like multiple sets, indicating a change to very key.
+    // If no value it should indicate that we are setting
+    // a new object
+    if (this.get(path)) {
+      for (let prop in value) {
+        this.set(path.concat(prop), value[prop])
+      }
+    } else {
+      this.set(path, value)
     }
   }
   pop (path) {
