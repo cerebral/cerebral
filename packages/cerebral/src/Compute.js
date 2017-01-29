@@ -10,8 +10,20 @@ export class Compute {
       return tag.getValue(get)
     }
     const result = this.args.reduce((details, arg, index) => {
-      if (arg instanceof Compute || arg instanceof Tag) {
+      if (arg instanceof Compute) {
         details.results.push(arg.getValue(get))
+
+        return details
+      } else if (arg instanceof Tag) {
+        const path = arg.getPath(get)
+
+        if (path.indexOf('.*') > 0) {
+          const value = arg.getValue(get)
+
+          details.results.push(value ? Object.keys(value) : [])
+        } else {
+          details.results.push(arg.getValue(get))
+        }
 
         return details
       } else if (typeof arg === 'function') {

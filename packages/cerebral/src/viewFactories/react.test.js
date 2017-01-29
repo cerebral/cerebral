@@ -409,7 +409,7 @@ describe('React', () => {
           render () {
             renderCount++
             return (
-              <div>{this.props.foo[0].bar}</div>
+              <div>{this.props.foo[0]}</div>
             )
           }
         }
@@ -422,7 +422,7 @@ describe('React', () => {
             <TestComponent />
           </Container>
         ))
-        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, '0')
         const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
         component.callSignal()
         assert.equal(renderCount, 1)
@@ -640,7 +640,7 @@ describe('React', () => {
         }
         const TestComponent = connect({
           foo: compute(state`map.*`, (map, get) => {
-            return Object.keys(map).filter((key) => {
+            return map.filter((key) => {
               return get(state`map.${key}.awesome`)
             })
           })
