@@ -4,8 +4,8 @@ import {state} from 'cerebral/tags'
 export default compute(
   state`app.todos.*`,
   state`app.filter`,
-  (todos, filter, get) => {
-    return Object.keys(todos).filter((ref) => {
+  (todosRefs, filter, get) => {
+    return todosRefs.filter((ref) => {
       const completed = get(state`app.todos.${ref}.completed`)
 
       return (

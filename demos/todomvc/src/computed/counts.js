@@ -5,8 +5,8 @@ import computeVisibleTodosRefs from './visibleTodosRefs'
 export default compute(
   state`app.todos.*`,
   computeVisibleTodosRefs,
-  (todos, visible, get) => {
-    return Object.keys(todos).reduce((counts, ref) => {
+  (todosRefs, visible, get) => {
+    return todosRefs.reduce((counts, ref) => {
       if (get(state`app.todos.${ref}.completed`)) {
         counts.completed++
       } else {
