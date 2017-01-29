@@ -137,6 +137,40 @@ describe('React', () => {
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
+    it('should render only ones where multiple state matches', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar',
+          bar: 'foo'
+        },
+        signals: {
+          test: [({state}) => {
+            state.set('foo', 'bar2')
+            state.set('bar', 'foo2')
+          }]
+        }
+      })
+      let renderCount = 0
+      const TestComponent = connect({
+        foo: state`foo`,
+        bar: state`bar`
+      }, (props) => {
+        renderCount++
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      assert.equal(renderCount, 1)
+      controller.getSignal('test')()
+      assert.equal(renderCount, 2)
+    })
     it('should be able to extract signals', () => {
       const controller = Controller({
         state: {
