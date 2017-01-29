@@ -74,7 +74,13 @@ class DependencyStore {
     the model flush method.
   */
   getUniqueEntities (changesMap) {
-    return dependencyMatch(changesMap, this.map)
+    return dependencyMatch(changesMap, this.map).reduce((unique, entity) => {
+      if (unique.indexOf(entity) === -1) {
+        return unique.concat(entity)
+      }
+
+      return unique
+    }, [])
   }
 }
 
