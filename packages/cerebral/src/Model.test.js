@@ -69,7 +69,7 @@ describe('Model', () => {
       model.merge(['foo'], {valB: 'bar'})
       assert.deepEqual(model.get(), {foo: {valA: 'foo', valB: 'bar'}})
     })
-    it('should flush changes to merged keys as well', () => {
+    it('should flush changes to merged keys when object exists', () => {
       const model = new Model({
         foo: {
           valA: 'foo'
@@ -77,6 +77,13 @@ describe('Model', () => {
       })
       model.merge(['foo'], {valB: 'bar'})
       assert.deepEqual(model.flush(), {foo: {valB: true}})
+    })
+    it('should flush change on object only if no existing object', () => {
+      const model = new Model({
+        foo: null
+      })
+      model.merge(['foo'], {valB: 'bar'})
+      assert.deepEqual(model.flush(), {foo: true})
     })
   })
   describe('POP', () => {
