@@ -1,5 +1,5 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno'
 
 import Inspector from '../../../../Inspector'
 

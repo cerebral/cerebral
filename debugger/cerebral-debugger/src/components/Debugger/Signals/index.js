@@ -1,7 +1,8 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno'
 import classNames from 'classnames'
-import {connect} from 'cerebral/react'
+import {connect} from 'cerebral/inferno'
+import {state, signal} from 'cerebral/tags'
 import signalsList from '../../../common/computed/signalsList'
 import connector from 'connector'
 
@@ -9,15 +10,14 @@ import List from './List'
 import Signal from './Signal'
 
 export default connect({
-  currentPage: 'debugger.currentPage',
+  currentPage: state`debugger.currentPage`,
   signalsList: signalsList,
-  useragent: 'useragent.**',
-  currentSignalExecutionId: 'debugger.currentSignalExecutionId',
-  isExecuting: 'debugger.isExecuting'
-}, {
-  resetClicked: 'debugger.resetClicked'
+  useragent: state`useragent`,
+  currentSignalExecutionId: state`debugger.currentSignalExecutionId`,
+  isExecuting: state`debugger.isExecuting`,
+  resetClicked: signal`debugger.resetClicked`
 },
-  class Signals extends React.Component {
+  class Signals extends Inferno.Component {
     constructor (props) {
       super(props)
       this.state = {copiedSignals: null}
@@ -62,7 +62,7 @@ export default connect({
             </button>
           </div>
           <div className='signals-signal'>
-            <Signal currentSignalExecutionId={currentSignalExecutionId} />
+            <Signal />
           </div>
           {
             this.state.copiedSignals

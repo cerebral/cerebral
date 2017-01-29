@@ -1,10 +1,9 @@
 import 'prismjs'
 import 'prismjs/plugins/line-highlight/prism-line-highlight'
 import './common/icons.css'
-import React from 'react'
-import ReactDOM from 'react-dom'
+import Inferno from 'inferno'
 import {Controller} from 'cerebral'
-import {Container} from 'cerebral/react'
+import {Container} from 'cerebral/inferno'
 import UserAgent from 'cerebral-module-useragent'
 import Devtools from 'cerebral/devtools'
 import DebuggerModule from './modules/Debugger'
@@ -35,7 +34,7 @@ connector.connect(() => {
           })
         }
       })
-      ReactDOM.render((
+      Inferno.render((
         <Container controller={currentController} style={{height: '100%'}}>
           <Debugger />
         </Container>

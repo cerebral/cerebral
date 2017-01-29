@@ -1,24 +1,21 @@
 import './styles.css'
-import React from 'react'
-import {connect} from 'cerebral/react'
+import Inferno from 'inferno'
+import {connect} from 'cerebral/inferno'
+import {state, signal} from 'cerebral/tags'
 import {nameToColors} from '../../../../common/utils'
 import classnames from 'classnames'
 import signalsList from '../../../../common/computed/signalsList'
 import connector from 'connector'
 
 export default connect({
-  debugger: 'debugger.*',
+  debugger: state`debugger`,
   signalsList: signalsList,
-  isExecuting: 'debugger.isExecuting'
-}, {
-  signalClicked: 'debugger.signalClicked',
-  signalDoubleClicked: 'debugger.signalDoubleClicked'
+  isExecuting: state`debugger.isExecuting`,
+  signalClicked: signal`debugger.signalClicked`,
+  signalDoubleClicked: signal`debugger.signalDoubleClicked`
 },
-  class SignalsList extends React.Component {
+  class SignalsList extends Inferno.Component {
     onSignalClick (event, signal, index) {
-      if (event.nativeEvent.detail > 1) {
-        return
-      }
       this.props.signalClicked({
         executionId: signal.executionId,
         groupId: signal.groupId

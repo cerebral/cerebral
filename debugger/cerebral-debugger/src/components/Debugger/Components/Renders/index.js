@@ -1,5 +1,5 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno'
 
 function getTime (date) {
   const hours = String(date.getHours()).length === 2 ? date.getHours() : '0' + date.getHours()

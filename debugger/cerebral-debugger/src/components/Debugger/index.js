@@ -1,16 +1,16 @@
 import './styles.css'
-import React from 'react'
-import {connect} from 'cerebral/react'
-
+import Inferno from 'inferno'
+import {connect} from 'cerebral/inferno'
+import {state} from 'cerebral/tags'
 import Toolbar from './Toolbar'
 import Signals from './Signals'
 import Components from './Components'
 import Model from './Model'
 
 export default connect({
-  currentPage: 'debugger.currentPage',
-  settings: 'debugger.settings',
-  mutationsError: 'debugger.mutationsError'
+  currentPage: state`debugger.currentPage`,
+  settings: state`debugger.settings`,
+  mutationsError: state`debugger.mutationsError`
 },
   function Debugger (props) {
     if (props.settings.disableDebugger) {

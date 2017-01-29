@@ -1,5 +1,6 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno'
+
 import {
   isObject,
   isArray,
@@ -62,10 +63,7 @@ function renderType (value, hasNext, path, propertyKey, highlightPath, modelChan
   )
 }
 
-class ObjectValue extends React.Component {
-  static contextTypes = {
-    options: React.PropTypes.object.isRequired
-  }
+class ObjectValue extends Inferno.Component {
   constructor (props, context) {
     super(props)
     const numberOfKeys = Object.keys(props.value).length
@@ -156,10 +154,7 @@ class ObjectValue extends React.Component {
   }
 }
 
-class ArrayValue extends React.Component {
-  static contextTypes = {
-    options: React.PropTypes.object.isRequired
-  }
+class ArrayValue extends Inferno.Component {
   constructor (props, context) {
     super(props)
     const numberOfItems = props.value.length
@@ -237,10 +232,7 @@ class ArrayValue extends React.Component {
   }
 }
 
-class Value extends React.Component {
-  static contextTypes = {
-    options: React.PropTypes.object.isRequired
-  }
+class Value extends Inferno.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -311,10 +303,7 @@ class Value extends React.Component {
   }
 }
 
-class Inspector extends React.Component {
-  static childContextTypes = {
-    options: React.PropTypes.object.isRequired
-  }
+class Inspector extends Inferno.Component {
   getChildContext () {
     return {
       options: {

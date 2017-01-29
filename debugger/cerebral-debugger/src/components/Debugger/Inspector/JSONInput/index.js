@@ -1,13 +1,13 @@
 import './styles.css'
-import React from 'react'
-import {connect} from 'cerebral/react'
+import Inferno from 'inferno'
+import {connect} from 'cerebral/inferno'
 import {
   isObject,
   isArray
 } from '../../../../common/utils'
 
 export default connect({},
-  class JSONInput extends React.Component {
+  class JSONInput extends Inferno.Component {
     constructor (props) {
       super(props)
       this.state = {

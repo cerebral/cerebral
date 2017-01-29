@@ -1,13 +1,13 @@
 import './styles.css'
-import React from 'react'
-import {connect} from 'cerebral/react'
-
+import Inferno from 'inferno'
+import {connect} from 'cerebral/inferno'
+import {state} from 'cerebral/tags'
 import StatePaths from './StatePaths'
 import Renders from './Renders'
 
 export default connect({
-  map: 'debugger.componentsMap.**',
-  renders: 'debugger.renders.**'
+  map: state`debugger.componentsMap`,
+  renders: state`debugger.renders`
 },
   function Components (props) {
     return (

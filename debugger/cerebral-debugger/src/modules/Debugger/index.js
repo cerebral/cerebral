@@ -6,6 +6,7 @@ import signalDoubleClicked from './signals/signalDoubleClicked'
 import mutationClicked from './signals/mutationClicked'
 import resetClicked from './signals/resetClicked'
 import modelClicked from './signals/modelClicked'
+import searchValueChanged from './signals/searchValueChanged'
 
 export default {
   state: {
@@ -23,10 +24,12 @@ export default {
     currentMutationPath: null,
     componentsMap: {},
     renders: [],
-    mutationsError: false
+    mutationsError: false,
+    searchValue: ''
   },
   signals: {
     pageChanged,
+    searchValueChanged,
     signalClicked,
     payloadReceived,
     modelChanged,

@@ -1,7 +1,7 @@
 import computedSignalsList from '../../../common/computed/signalsList'
 
-function addSignal ({input, state}) {
-  const signalsList = state.compute(computedSignalsList)
+function addSignal ({input, state, resolve}) {
+  const signalsList = resolve.value(computedSignalsList)
   const execution = input.data.execution
   const prevSignal = signalsList[signalsList.length - 1]
   const newSignal = {
@@ -18,6 +18,7 @@ function addSignal ({input, state}) {
 
   const currentSignalExecutionId = state.get('debugger.currentSignalExecutionId')
   if (!signalsList.length || currentSignalExecutionId === signalsList[0].executionId) {
+    console.log('Setting it!', execution.executionId);
     state.set('debugger.currentSignalExecutionId', execution.executionId)
     state.set('debugger.currentRememberedSignalExecutionId', execution.executionId)
   }

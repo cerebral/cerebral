@@ -1,10 +1,9 @@
-import {Computed} from 'cerebral'
+import {compute} from 'cerebral'
+import {state} from 'cerebral/tags'
 
-export default Computed({
-  signals: 'debugger.signals.**'
-}, props => {
-  const signals = props.signals
-
+export default compute(
+  state`debugger.signals`,
+  (signals) => {
   return Object.keys(signals)
     .sort((keyA, keyB) => {
       if (signals[keyA].datetime > signals[keyB].datetime) {
