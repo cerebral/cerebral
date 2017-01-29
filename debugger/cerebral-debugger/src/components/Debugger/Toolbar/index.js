@@ -43,6 +43,7 @@ export default connect({
               <li className="toolbar-search">
                 <input
                     type="text"
+                    placeholder="Search path..."
                     value={this.props.searchValue}
                     onInput={(event) => this.props.searchValueChanged({value: event.target.value})}/>
               </li>

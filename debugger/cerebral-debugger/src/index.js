@@ -22,9 +22,6 @@ connector.connect(() => {
       document.body.removeChild(document.querySelector('#error'))
       currentController = Controller({
         devtools: process.env.NODE_ENV === 'production' ? null : Devtools(),
-        options: {
-          strictRender: true
-        },
         modules: {
           debugger: DebuggerModule,
           useragent: UserAgent({

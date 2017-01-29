@@ -45,6 +45,12 @@
   border-right: 1px solid #DDD;
 }
 
+.toolbar-search input {
+  height: 25px;
+  padding: 0 5px;
+  outline: none;
+}
+
 .toolbar-tab:hover {
   background-color: #FAFAFA;
   color: #333;

@@ -11,6 +11,7 @@ export default connect({
   debugger: state`debugger`,
   signalsList: signalsList,
   isExecuting: state`debugger.isExecuting`,
+  searchValue: state`debugger.searchValue`,
   signalClicked: signal`debugger.signalClicked`,
   signalDoubleClicked: signal`debugger.signalDoubleClicked`
 },
@@ -80,6 +81,10 @@ export default connect({
     }
     render () {
       const signals = this.props.signalsList
+
+      if (this.props.searchValue) {
+        console.log('woop');
+      }
 
       return (
         <ul className='list'>
