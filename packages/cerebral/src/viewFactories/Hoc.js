@@ -154,8 +154,13 @@ export default (View) => {
 
           if (tag.type === 'state') {
             const path = tag.getPath(getters)
+            const value = this.stateGetter(path)
 
-            currentProps[key] = this.stateGetter(path)
+            if (path.indexOf('.*') > 0) {
+              currentProps[key] = value ? Object.keys(value) : []
+            } else {
+              currentProps[key] = value
+            }
           } else if (tag.type === 'signal' || tag.type === 'props') {
             currentProps[key] = tag.getValue(getters)
           }
