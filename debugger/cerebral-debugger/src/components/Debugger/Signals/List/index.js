@@ -1,24 +1,22 @@
 import './styles.css'
-import React from 'react'
-import {connect} from 'cerebral/react'
+import Inferno from 'inferno'
+import {connect} from 'cerebral/inferno'
+import {state, signal} from 'cerebral/tags'
 import {nameToColors} from '../../../../common/utils'
 import classnames from 'classnames'
 import signalsList from '../../../../common/computed/signalsList'
 import connector from 'connector'
 
 export default connect({
-  debugger: 'debugger.*',
+  debugger: state`debugger`,
   signalsList: signalsList,
-  isExecuting: 'debugger.isExecuting'
-}, {
-  signalClicked: 'debugger.signalClicked',
-  signalDoubleClicked: 'debugger.signalDoubleClicked'
+  isExecuting: state`debugger.isExecuting`,
+  searchValue: state`debugger.searchValue`,
+  signalClicked: signal`debugger.signalClicked`,
+  signalDoubleClicked: signal`debugger.signalDoubleClicked`
 },
-  class SignalsList extends React.Component {
+  class SignalsList extends Inferno.Component {
     onSignalClick (event, signal, index) {
-      if (event.nativeEvent.detail > 1) {
-        return
-      }
       this.props.signalClicked({
         executionId: signal.executionId,
         groupId: signal.groupId
@@ -33,6 +31,27 @@ export default connect({
       })
       connector.sendEvent('remember', signal.executionId)
     }
+    hasSearchContent (signal) {
+      return Object.keys(signal.functionsRun).reduce((hasSearchContent, key) => {
+        const data = signal.functionsRun[key].data
+
+        if (hasSearchContent) {
+          return hasSearchContent
+        }
+
+        return (data || []).reduce((currentHasSearchContent, dataItem) => {
+          if (currentHasSearchContent) {
+            return currentHasSearchContent
+          }
+
+          if (dataItem.type === 'mutation' && dataItem.args[0].join('.').indexOf(this.props.searchValue) >= 0) {
+            return true
+          }
+
+          return false
+        }, hasSearchContent)
+      }, false)
+    }
     renderSignal (signal, index) {
       const prevSignal = this.props.signalsList[index - 1]
       const currentSignalExecutionId = this.props.debugger.currentSignalExecutionId
@@ -44,11 +63,19 @@ export default connect({
         backgroundColor: hex
       }
       const isActive = currentSignalExecutionId === signal.executionId
+      const hasSearchContent = (
+        this.props.searchValue &&
+        this.hasSearchContent(signal)
+      )
+
       const className = classnames({
         'list-item': true,
         'list-activeItem': isActive,
         'list-grouped': signal.isGrouped,
         pulse: signal.isExecuting
+      })
+      const indicatorClassname = classnames('list-indicator', {
+        'list-fadedItem': hasSearchContent === false
       })
       const isInOpenGroup = this.props.debugger.expandedSignalGroups.indexOf(signal.groupId) !== -1
 
@@ -76,7 +103,7 @@ export default connect({
           className={className}
           key={index}>
           {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className='list-remembered' /> : null}
-          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className='list-indicator' style={signalStyle} />}
+          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className={indicatorClassname} style={signalStyle} />}
           <span className='list-name'>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
         </li>
       )
