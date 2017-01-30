@@ -96,6 +96,11 @@ class ObjectValue extends Inferno.Component {
       })
     }
   }
+  componentDidUpdate (prevProps) {
+    if (String(this.props.highlightPath) === String(this.props.path)) {
+      document.querySelector('#model').scrollTop = this.node.offsetTop - 100
+    }
+  }
   onExpandClick (event) {
     event.stopPropagation()
     this.setState({isCollapsed: false})
@@ -126,7 +131,7 @@ class ObjectValue extends Inferno.Component {
 
     if (this.state.isCollapsed) {
       return (
-        <div className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'} onClick={this.onExpandClick}>
+        <div ref={(node) => { this.node = node }} className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'} onClick={this.onExpandClick}>
           {this.props.propertyKey ? this.props.propertyKey + ': ' : null}
           <strong>{'{ '}</strong>{this.renderKeys(Object.keys(value))}<strong>{' }'}</strong>
           {hasNext ? ',' : null}
@@ -135,7 +140,7 @@ class ObjectValue extends Inferno.Component {
     } else if (this.props.propertyKey) {
       const keys = Object.keys(value)
       return (
-        <div className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'}>
+        <div ref={(node) => { this.node = node }} className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'}>
           <div onClick={this.onCollapseClick}>{this.props.propertyKey}: <strong>{'{ '}</strong></div>
           {keys.map((key, index) => this.renderProperty(key, value[key], index, index < keys.length - 1, this.props.path))}
           <div><strong>{' }'}</strong>{hasNext ? ',' : null}</div>
@@ -144,7 +149,7 @@ class ObjectValue extends Inferno.Component {
     } else {
       const keys = Object.keys(value)
       return (
-        <div className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'}>
+        <div ref={(node) => { this.node = node }} className={isExactHighlightPath ? 'inspector-object inspector-highlight' : 'inspector-object'}>
           <div onClick={this.onCollapseClick}><strong>{'{ '}</strong></div>
           {keys.map((key, index) => this.renderProperty(key, value[key], index, index < keys.length - 1, this.props.path, this.props.highlightPath))}
           <div><strong>{' }'}</strong>{hasNext ? ',' : null}</div>
@@ -182,6 +187,11 @@ class ArrayValue extends Inferno.Component {
       })
     }
   }
+  componentDidUpdate () {
+    if (String(this.props.highlightPath) === String(this.props.path)) {
+      document.querySelector('#model').scrollTop = this.node.offsetTop - 100
+    }
+  }
   onExpandClick (event) {
     event.stopPropagation()
     this.setState({isCollapsed: false})
@@ -214,7 +224,7 @@ class ArrayValue extends Inferno.Component {
       )
     } else if (this.props.propertyKey) {
       return (
-        <div className={isExactHighlightPath ? 'inspector-array inspector-highlight' : 'inspector-array'}>
+        <div ref={(node) => { this.node = node }} className={isExactHighlightPath ? 'inspector-array inspector-highlight' : 'inspector-array'}>
           <div onClick={this.onCollapseClick}>{this.props.propertyKey}: <strong>{'[ '}</strong></div>
           {value.map((item, index) => this.renderItem(item, index, index < value.length - 1, this.props.path))}
           <div><strong>{' ]'}</strong>{hasNext ? ',' : null}</div>
@@ -222,7 +232,7 @@ class ArrayValue extends Inferno.Component {
       )
     } else {
       return (
-        <div className={isExactHighlightPath ? 'inspector-array inspector-highlight' : 'inspector-array'}>
+        <div ref={(node) => { this.node = node }} className={isExactHighlightPath ? 'inspector-array inspector-highlight' : 'inspector-array'}>
           <div onClick={this.onCollapseClick}><strong>{'[ '}</strong></div>
           {value.map((item, index) => this.renderItem(item, index, index < value.length - 1, this.props.path))}
           <div><strong>{' ]'}</strong>{hasNext ? ',' : null}</div>
@@ -243,6 +253,11 @@ class Value extends Inferno.Component {
     this.onSubmit = this.onSubmit.bind(this)
     this.onBlur = this.onBlur.bind(this)
     this.onClick = this.onClick.bind(this)
+  }
+  componentDidUpdate () {
+    if (String(this.props.highlightPath) === String(this.props.path)) {
+      document.querySelector('#model').scrollTop = this.node.offsetTop - 100
+    }
   }
   onClick () {
     this.setState({
@@ -296,7 +311,7 @@ class Value extends Inferno.Component {
     if (isBoolean(this.props.value)) className = 'inspector-boolean'
     if (isNull(this.props.value)) className = 'inspector-null'
     return (
-      <div className={className}>
+      <div ref={(node) => { this.node = node }} className={className}>
         {this.renderValue(this.props.value, this.props.hasNext)}
       </div>
     )

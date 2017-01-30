@@ -7,6 +7,7 @@ import mutationClicked from './signals/mutationClicked'
 import resetClicked from './signals/resetClicked'
 import modelClicked from './signals/modelClicked'
 import searchValueChanged from './signals/searchValueChanged'
+import escPressed from './signals/escPressed'
 
 export default {
   state: {
@@ -29,6 +30,7 @@ export default {
   },
   signals: {
     pageChanged,
+    escPressed,
     searchValueChanged,
     signalClicked,
     payloadReceived,

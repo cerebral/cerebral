@@ -2,7 +2,7 @@
 import './styles.css'
 import Inferno from 'inferno'
 import {connect} from 'cerebral/inferno'
-import {state, props, signal} from 'cerebral/tags'
+import {state, signal} from 'cerebral/tags'
 import connector from 'connector'
 
 import Action from './Action'
@@ -16,7 +16,7 @@ export default connect({
 },
   class Signal extends Inferno.Component {
     constructor (props) {
-      super(props)
+      super()
       this.renderAction = this.renderAction.bind(this)
       this.onMutationClick = this.onMutationClick.bind(this)
       this.onActionClick = this.onActionClick.bind(this)
@@ -85,12 +85,7 @@ export default connect({
       })
     }
     actionHasSearchContent (action) {
-      const data = (
-        this.props.signal.functionsRun[action.functionIndex] ?
-          this.props.signal.functionsRun[action.functionIndex].data
-        :
-          null
-      )
+      const data = this.props.signal.functionsRun[action.functionIndex] ? this.props.signal.functionsRun[action.functionIndex].data : null
 
       return (data || []).reduce((currentHasSearchContent, dataItem) => {
         if (currentHasSearchContent) {

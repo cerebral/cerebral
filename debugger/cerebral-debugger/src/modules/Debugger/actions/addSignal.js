@@ -19,8 +19,8 @@ function addSignal ({input, state, resolve}) {
   const currentSignalExecutionId = state.get('debugger.currentSignalExecutionId')
   if (!signalsList.length || currentSignalExecutionId === signalsList[0].executionId) {
     state.set('debugger.currentSignalExecutionId', execution.executionId)
-    state.set('debugger.currentRememberedSignalExecutionId', execution.executionId)
   }
+  state.set('debugger.currentRememberedSignalExecutionId', execution.executionId)
 }
 
 export default addSignal

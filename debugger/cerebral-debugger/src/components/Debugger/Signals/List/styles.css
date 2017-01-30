@@ -31,7 +31,7 @@
 }
 
 .list-fadedItem {
-  opacity: 0.25;
+  opacity: 0.1;
 }
 
 .list-activeItem span:nth-of-type(1) {

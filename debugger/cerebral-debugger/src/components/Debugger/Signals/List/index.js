@@ -32,8 +32,6 @@ export default connect({
       connector.sendEvent('remember', signal.executionId)
     }
     hasSearchContent (signal) {
-      const value = this.props.searchValue
-
       return Object.keys(signal.functionsRun).reduce((hasSearchContent, key) => {
         const data = signal.functionsRun[key].data
 
@@ -74,8 +72,10 @@ export default connect({
         'list-item': true,
         'list-activeItem': isActive,
         'list-grouped': signal.isGrouped,
-        'list-fadedItem': hasSearchContent === false,
         pulse: signal.isExecuting
+      })
+      const indicatorClassname = classnames('list-indicator', {
+        'list-fadedItem': hasSearchContent === false
       })
       const isInOpenGroup = this.props.debugger.expandedSignalGroups.indexOf(signal.groupId) !== -1
 
@@ -103,7 +103,7 @@ export default connect({
           className={className}
           key={index}>
           {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className='list-remembered' /> : null}
-          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className='list-indicator' style={signalStyle} />}
+          {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className={indicatorClassname} style={signalStyle} />}
           <span className='list-name'>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
         </li>
       )

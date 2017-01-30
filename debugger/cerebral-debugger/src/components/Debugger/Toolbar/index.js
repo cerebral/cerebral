@@ -40,12 +40,12 @@ export default connect({
                 onClick={() => this.props.pageChanged({page: 'model'})}>
                 <i className='icon icon-model' /> STATE-TREE
               </li>
-              <li className="toolbar-search">
+              <li className='toolbar-search'>
                 <input
-                    type="text"
-                    placeholder="Search path..."
-                    value={this.props.searchValue}
-                    onInput={(event) => this.props.searchValueChanged({value: event.target.value})}/>
+                  type='text'
+                  placeholder='Search path...'
+                  value={this.props.searchValue}
+                  onInput={(event) => this.props.searchValueChanged({value: event.target.value})} />
               </li>
               <li className='toolbar-rightItem'>
                 {this.props.executingSignalsCount ? 'executing' : 'idle'}
