@@ -9,7 +9,9 @@ function whenFactory (...args) {
     return isTrue ? path.true() : path.false()
   }
 
-  when.displayName = `operator.when(${args.map((arg) => {
+  when.displayName = `operator.when(${args.filter((arg) => {
+    return typeof arg !== 'function'
+  }).map((arg) => {
     return String(arg)
   }).join(',')})`
 
