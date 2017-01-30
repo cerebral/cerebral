@@ -315,6 +315,34 @@ describe('React', () => {
       ))
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar1mip')
     })
+    it('should update tags', () => {
+      const controller = Controller({
+        state: {
+          list: {
+            0: 'foo',
+            1: 'bar'
+          },
+          currentItem: '0'
+        },
+        signals: {
+          test: [({state}) => { state.set('currentItem', '1') }]
+        }
+      })
+      const TestComponent = connect({
+        foo: state`list.${state`currentItem`}`
+      },
+      ({foo}) => {
+        return <div>{foo}</div>
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'foo')
+      controller.getSignal('test')()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
     it('should be able to adjust props with function', () => {
       const controller = Controller({
         state: {

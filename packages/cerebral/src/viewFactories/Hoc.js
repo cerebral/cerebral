@@ -209,9 +209,27 @@ export default (View) => {
       on props changed
     */
     _updateFromProps (propsChanges, props) {
+      this._update(props, this.updateDependencyTrackers({}, propsChanges, props))
+    }
+    /*
+      Called by Container when the components state dependencies
+      has changed. In this scenario we need to run any dependencyTrackers
+      that matches the state changes. There is no need to update the tags
+      as their declared state deps can not change
+    */
+    _updateFromState (stateChanges) {
+      if (this._isUnmounting) {
+        return
+      }
+
+      this._update(this.props, this.updateDependencyTrackers(stateChanges, {}, this.props))
+    }
+    /*
+      Run update, re-evaluating the tags and computed, if neccessary
+    */
+    _update (props, hasChangedDependencyTrackers) {
       const prevDependencyTrackersDependencyMaps = this.dependencyTrackersDependencyMaps
       const previousTagsDependencyMap = this.tagsDependencyMap
-      const hasChangedDependencyTrackers = this.updateDependencyTrackers({}, propsChanges, props)
 
       this.tagsDependencyMap = this.getTagsDependencyMap(props)
       this.dependencyTrackersDependencyMaps = hasChangedDependencyTrackers ? this.getDependencyTrackersDependencyMaps(props) : this.dependencyTrackersDependencyMaps
@@ -228,38 +246,6 @@ export default (View) => {
       )
 
       this.context.cerebral.updateComponent(this, prevDepsMap, nextDepsMap)
-
-      this.forceUpdate()
-    }
-    /*
-      Called by Container when the components state dependencies
-      has changed. In this scenario we need to run any dependencyTrackers
-      that matches the state changes. There is no need to update the tags
-      as their declared state deps can not change
-    */
-    _updateFromState (stateChanges) {
-      if (this._isUnmounting) {
-        return
-      }
-
-      const prevDependencyTrackersDependencyMaps = this.dependencyTrackersDependencyMaps
-      const hasChangedDependencyTrackers = this.updateDependencyTrackers(stateChanges, {}, this.props)
-      this.dependencyTrackersDependencyMaps = hasChangedDependencyTrackers ? this.getDependencyTrackersDependencyMaps(this.props) : this.dependencyTrackersDependencyMaps
-
-      if (hasChangedDependencyTrackers) {
-        const prevDepsMap = Object.assign(
-          {},
-          prevDependencyTrackersDependencyMaps.state,
-          this.tagsDependencyMap
-        )
-        const nextDepsMap = Object.assign(
-          {},
-          this.dependencyTrackersDependencyMaps.state,
-          this.tagsDependencyMap
-        )
-
-        this.context.cerebral.updateComponent(this, prevDepsMap, nextDepsMap)
-      }
 
       this.forceUpdate()
     }
