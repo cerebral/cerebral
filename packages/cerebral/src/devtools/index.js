@@ -16,10 +16,7 @@ class Devtools {
     preventExternalMutations: true,
     verifyStrictRender: true,
     preventInputPropReplacement: false,
-    bigComponentsWarning: {
-      state: 5,
-      signals: 5
-    },
+    bigComponentsWarning: 10,
     remoteDebugger: null,
     multipleApps: true,
     allowedTypes: []
@@ -31,7 +28,7 @@ class Devtools {
     this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
     this.verifyStrictRender = typeof options.verifyStrictRender === 'undefined' ? true : options.verifyStrictRender
     this.preventInputPropReplacement = options.preventInputPropReplacement || false
-    this.bigComponentsWarning = options.bigComponentsWarning || {state: 5, signals: 5}
+    this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
     this.multipleApps = typeof options.multipleApps === 'undefined' ? true : options.multipleApps
     this.backlog = []
@@ -213,9 +210,7 @@ class Devtools {
       document.addEventListener(visibilityChange, () => {
         if (!document[hidden]) {
           this.isResettingDebugger = true
-          this.backlog.forEach((message) => {
-            this.sendMessage(message)
-          })
+          this.sendBulkMessage(this.backlog)
           this.isResettingDebugger = false
         }
       }, false)
@@ -257,7 +252,7 @@ class Devtools {
     called again
   */
   watchExecution () {
-    this.controller.runTree.on('start', (execution) => {
+    this.controller.on('start', (execution) => {
       const message = JSON.stringify({
         type: 'executionStart',
         data: {
@@ -276,7 +271,7 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('end', (execution) => {
+    this.controller.on('end', (execution) => {
       const message = JSON.stringify({
         type: 'executionEnd',
         data: {
@@ -293,7 +288,7 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('pathStart', (path, execution, funcDetails) => {
+    this.controller.on('pathStart', (path, execution, funcDetails) => {
       const message = JSON.stringify({
         type: 'executionPathStart',
         data: {
@@ -311,7 +306,7 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('functionStart', (execution, funcDetails, payload) => {
+    this.controller.on('functionStart', (execution, funcDetails, payload) => {
       const message = JSON.stringify({
         type: 'execution',
         data: {
@@ -330,7 +325,7 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('functionEnd', (execution, funcDetails, payload, result) => {
+    this.controller.on('functionEnd', (execution, funcDetails, payload, result) => {
       if (!result || (result instanceof Path && !result.payload)) {
         return
       }
@@ -352,6 +347,46 @@ class Devtools {
         this.backlog.push(message)
       }
     })
+    this.controller.on('error', (error, execution, funcDetails) => {
+      const message = JSON.stringify({
+        type: 'executionFunctionError',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+              func: funcDetails.function.toString()
+            }
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        this.sendMessage(message)
+      } else {
+        this.backlog.push(message)
+      }
+
+      throw error
+    })
+  }
+  /*
+    Sends multiple message in one batch to debugger, causing debugger
+    also to synchronously run all updates before rendering
+  */
+  sendBulkMessage (messages) {
+    const message = JSON.stringify({
+      type: 'bulk',
+      version: this.VERSION,
+      data: {
+        messages
+      }
+    })
+
+    this.sendMessage(message)
   }
   /*
     Send initial model. If model has already been stringified we reuse it. Any
@@ -369,9 +404,7 @@ class Devtools {
 
     this.isResettingDebugger = true
     this.sendMessage(message)
-    this.backlog.forEach((backlogItem) => {
-      this.sendMessage(backlogItem)
-    })
+    this.sendBulkMessage(this.backlog)
     this.isResettingDebugger = false
 
     if (!this.multipleApps) {
@@ -464,13 +497,13 @@ class Devtools {
 
     if (prevDeps) {
       for (const depsKey in prevDeps) {
-        const debuggerComponents = this.debuggerComponentsMap[prevDeps[depsKey]]
+        const debuggerComponents = this.debuggerComponentsMap[depsKey]
 
         for (let x = 0; x < debuggerComponents.length; x++) {
           if (debuggerComponents[x].id === component.componentDetailsId) {
             debuggerComponents.splice(x, 1)
             if (debuggerComponents.length === 0) {
-              delete this.debuggerComponentsMap[prevDeps[depsKey]]
+              delete this.debuggerComponentsMap[depsKey]
             }
             break
           }
@@ -480,9 +513,9 @@ class Devtools {
 
     if (nextDeps) {
       for (const depsKey in nextDeps) {
-        this.debuggerComponentsMap[nextDeps[depsKey]] = (
-          this.debuggerComponentsMap[nextDeps[depsKey]]
-            ? this.debuggerComponentsMap[nextDeps[depsKey]].concat(componentDetails)
+        this.debuggerComponentsMap[depsKey] = (
+          this.debuggerComponentsMap[depsKey]
+            ? this.debuggerComponentsMap[depsKey].concat(componentDetails)
             : [componentDetails]
         )
       }

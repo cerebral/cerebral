@@ -192,7 +192,7 @@ describe('validate', () => {
       assert.equal(controller.getState('form.lastName.errorMessage'), null)
       assert.equal(controller.getState('form.age.errorMessage'), 'Must be numeric')
     })
-    it('should throw an error if dependsOn field path is not correct', () => {
+    it('should throw an error if dependsOn field path is not correct', (done) => {
       const controller = Controller({
         state: {
           form: form({
@@ -214,7 +214,12 @@ describe('validate', () => {
           ]
         }
       })
-      assert.throws(() => { controller.getSignal('fieldChanged')({value: 'Ben'}) }, Error, 'Error: The path form.someField used with "dependsOn" on field form.firstName is not correct, please check it')
+      controller.removeListener('error')
+      controller.once('error', (error) => {
+        assert(error)
+        done()
+      })
+      controller.getSignal('fieldChanged')({value: 'Ben'})
     })
     it('should show correct errorMessages', () => {
       const controller = Controller({

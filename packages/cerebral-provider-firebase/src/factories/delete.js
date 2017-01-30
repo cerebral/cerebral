@@ -1,6 +1,6 @@
 function deleteFactory (deletePath, file) {
-  function deleteOp ({firebase, path, resolveArg}) {
-    return firebase.delete(resolveArg.value(deletePath), resolveArg.value(file))
+  function deleteOp ({firebase, path, resolve}) {
+    return firebase.delete(resolve.value(deletePath), resolve.value(file))
       .then(path.success)
       .catch(path.error)
   }

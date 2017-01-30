@@ -10,9 +10,6 @@ import checkout from './modules/checkout'
 import App from './components/App'
 
 const controller = Controller({
-  options: {
-    strictRender: true
-  },
   router: Router({
     routes: {
       '/': 'app.routed',

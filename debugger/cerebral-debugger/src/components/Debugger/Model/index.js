@@ -1,29 +1,29 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno'
 import classNames from 'classnames'
-import {connect} from 'cerebral/react'
-
+import {connect} from 'cerebral/inferno'
+import {state, signal} from 'cerebral/tags'
 import Inspector from '../Inspector'
 
 export default connect({
-  currentPage: 'debugger.currentPage',
-  useragent: 'useragent.**',
-  model: 'debugger.model.**',
-  path: 'debugger.currentMutationPath'
-}, {
-  modelChanged: 'debugger.modelChanged',
-  modelClicked: 'debugger.modelClicked'
+  currentPage: state`debugger.currentPage`,
+  useragent: state`useragent`,
+  model: state`debugger.model`,
+  path: state`debugger.currentMutationPath`,
+  searchValue: state`debugger.searchValue`,
+  modelChanged: signal`debugger.modelChanged`,
+  modelClicked: signal`debugger.modelClicked`
 },
-  class Model extends React.Component {
+  class Model extends Inferno.Component {
     render () {
       return (
         <div className={classNames('model-wrapper', this.props.className)}>
-          <div className='model' onClick={() => this.props.modelClicked()}>
+          <div id='model' className='model' onClick={() => this.props.modelClicked()}>
             <Inspector
               value={this.props.model}
               expanded
               canEdit
-              path={this.props.path}
+              path={this.props.searchValue ? this.props.searchValue.split('.') : this.props.path}
               modelChanged={this.props.modelChanged}
             />
           </div>

@@ -1,21 +1,26 @@
-import {Computed} from 'cerebral'
+import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
+import computeVisibleTodosRefs from './visibleTodosRefs'
 
-export default Computed({
-  todos: state`app.todos.**`
-}, props => {
-  return Object.keys(props.todos).reduce((counts, ref) => {
-    let todo = props.todos[ref]
+export default compute(
+  state`app.todos.*`,
+  computeVisibleTodosRefs,
+  (todos, visible, get) => {
+    return Object.keys(todos).reduce((counts, ref) => {
+      if (get(state`app.todos.${ref}.completed`)) {
+        counts.completed++
+      } else {
+        counts.remaining++
+      }
 
-    if (todo.completed) {
-      counts.completedCount++
-    } else if (!todo.completed) {
-      counts.remainingCount++
-    }
+      counts.total++
 
-    return counts
-  }, {
-    completedCount: 0,
-    remainingCount: 0
-  })
-})
+      return counts
+    }, {
+      completed: 0,
+      remaining: 0,
+      total: 0,
+      visible: visible.length
+    })
+  }
+)

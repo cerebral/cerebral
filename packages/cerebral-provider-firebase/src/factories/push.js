@@ -1,6 +1,6 @@
 function pushFactory (pushPath, value) {
-  function push ({firebase, path, resolveArg}) {
-    return firebase.push(resolveArg.value(pushPath), resolveArg.value(value))
+  function push ({firebase, path, resolve}) {
+    return firebase.push(resolve.value(pushPath), resolve.value(value))
       .then(path.success)
       .catch(path.error)
   }

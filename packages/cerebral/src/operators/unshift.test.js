@@ -33,7 +33,7 @@ describe('operator.unshift', () => {
     controller.getSignal('test')({value: 'x'})
     assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
   })
-  it('should throw on bad argument', () => {
+  it('should throw on bad argument', (done) => {
     const controller = Controller({
       state: {
       },
@@ -44,8 +44,12 @@ describe('operator.unshift', () => {
       }
     })
 
-    assert.throws(() => {
-      controller.getSignal('test')()
-    }, /operator.unshift/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

@@ -92,7 +92,7 @@ describe('operator.set', () => {
     controller.getSignal('test')()
     assert.equal(controller.getState().foo, 'bar2')
   })
-  it('should throw on bad argument', () => {
+  it('should throw on bad argument', (done) => {
     const controller = Controller({
       state: {
       },
@@ -102,8 +102,12 @@ describe('operator.set', () => {
         ]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('test')()
-    }, /operator.set/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

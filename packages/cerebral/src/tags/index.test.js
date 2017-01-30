@@ -3,11 +3,6 @@ import {state, input} from './'
 import assert from 'assert'
 
 describe('Tags', () => {
-  it('should return value using object and path', () => {
-    const tag = state`foo.bar`
-    const stateObject = {foo: {bar: 'baz'}}
-    assert.equal(tag.getValue({state: stateObject}), 'baz')
-  })
   it('should return value using function and path', () => {
     const tag = state`foo.bar`
     const stateFunc = (path) => {

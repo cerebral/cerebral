@@ -164,7 +164,7 @@ describe('Controller', () => {
       flushCount++
       originFlush.apply(this, args)
     }
-    controller.runTree.once('end', () => {
+    controller.once('end', () => {
       assert.equal(flushCount, 4)
       done()
     })
@@ -220,7 +220,7 @@ describe('Controller', () => {
       flushCount++
       originFlush.apply(this, args)
     }
-    controller.runTree.once('end', () => {
+    controller.once('end', () => {
       assert.equal(flushCount, 4)
       done()
     })

@@ -1,3 +1,6 @@
+import {Compute} from '../Compute'
+import {throwError} from '../utils'
+
 /*
   Creates tag for targetting things with a path in Cerebral
 */
@@ -22,7 +25,7 @@ export default class Tag {
   */
   getPath (getters) {
     if (!getters) {
-      throw new Error('You can not grab the path from a Tag without getters')
+      throwError('You can not grab the path from a Tag without getters')
     }
 
     return this.populatePath(getters)
@@ -32,11 +35,11 @@ export default class Tag {
   */
   getValue (getters) {
     if (!getters) {
-      throw new Error('You can not grab a value from a Tag without getters')
+      throwError('You can not grab a value from a Tag without getters')
     }
 
     if (this.options.hasValue && !getters[this.type]) {
-      throw new Error(`Tag of type ${this.type.toUpperCase()} can not be used in this context`)
+      throwError(`Tag of type ${this.type.toUpperCase()} can not be used in this context`)
     }
 
     if (this.options.hasValue) {
@@ -44,18 +47,6 @@ export default class Tag {
     } else {
       return this.getPath(getters)
     }
-  }
-  /*
-    Extracts value from object using a path
-  */
-  extractValueWithPath (obj, path) {
-    return path.split('.').reduce((currentValue, key, index) => {
-      if (index > 0 && currentValue === undefined) {
-        throw new Error(`A tag is extracting with path "${path}", but it is not valid`)
-      }
-
-      return currentValue[key]
-    }, obj)
   }
   /*
     Grab nested tags from the tags current path
@@ -72,13 +63,25 @@ export default class Tag {
     }, [])
   }
   /*
+    Extracts value from object using a path
+  */
+  extractValueWithPath (obj, path) {
+    return path.split('.').reduce((currentValue, key, index) => {
+      if (index > 0 && currentValue === undefined) {
+        throwError(`A tag is extracting with path "${path}", but it is not valid`)
+      }
+
+      return currentValue[key]
+    }, obj)
+  }
+  /*
     Populates nested tags in the tags path
   */
   populatePath (getters) {
     return this.strings.reduce((currentPath, string, idx) => {
       const valueTemplate = this.values[idx]
 
-      if (valueTemplate instanceof Tag) {
+      if (valueTemplate instanceof Tag || valueTemplate instanceof Compute) {
         return currentPath + string + valueTemplate.getValue(getters)
       }
 

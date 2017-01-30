@@ -1,5 +1,5 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno' // eslint-disable-line
 
 function getTime (date) {
   const hours = String(date.getHours()).length === 2 ? date.getHours() : '0' + date.getHours()
@@ -40,7 +40,11 @@ export default function Renders (props) {
   return (
     <div className='renders-wrapper'>
       <div className='renders-renderWrapper'>
-        {props.renders.map((render, index) => {
+        {props.renders.filter((render) => {
+          return props.filter ? extractPaths(render.changes || {}).reduce((hasPath, path) => {
+            return hasPath || path.indexOf(props.filter) >= 0
+          }, false) : true
+        }).map((render, index) => {
           const date = new Date(render.start)
 
           return (

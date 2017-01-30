@@ -1,15 +1,13 @@
 import DependencyStore from './DependencyStore'
-import FunctionTree from 'function-tree'
+import {FunctionTree} from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders, cleanPath} from './utils'
 import VerifyInputProvider from './providers/VerifyInput'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
-import ResolveArgProvider from './providers/ResolveArg'
-import EventEmitter from 'eventemitter3'
-import {dependencyStore as computedDependencyStore} from './Computed'
+import ResolveProvider from './providers/Resolve'
 
 /*
   The controller is where everything is attached. The devtools
@@ -17,10 +15,9 @@ import {dependencyStore as computedDependencyStore} from './Computed'
   The controller creates the function tree that will run all signals,
   based on top level providers and providers defined in modules
 */
-class Controller extends EventEmitter {
+class Controller extends FunctionTree {
   constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
     super()
-    this.computedDependencyStore = computedDependencyStore
     this.componentDependencyStore = new DependencyStore()
     this.options = options
     this.flush = this.flush.bind(this)
@@ -33,9 +30,12 @@ class Controller extends EventEmitter {
     })
     this.router = router ? router(this) : null
 
-    const allProviders = [
-      ControllerProvider(this),
-      ResolveArgProvider()
+    if (options.strictRender) {
+      console.warn('DEPRECATION - No need to use strictRender option anymore, it is the only render mode now')
+    }
+
+    this.contextProviders = [
+      ControllerProvider(this)
     ].concat(
       this.router ? [
         this.router.provider
@@ -49,43 +49,43 @@ class Controller extends EventEmitter {
         VerifyInputProvider
       ] : []
     )).concat(
-      StateProvider()
+      StateProvider(),
+      ResolveProvider()
     ).concat(
       providers.concat(getProviders(this.module))
     )
 
-    this.runTree = new FunctionTree(allProviders)
-    this.runTree.on('asyncFunction', (execution, funcDetails) => {
+    this.on('asyncFunction', (execution, funcDetails) => {
       if (!funcDetails.isParallel) {
         this.flush()
       }
     })
-    this.runTree.on('parallelStart', () => this.flush())
-    this.runTree.on('parallelProgress', (execution, currentPayload, functionsResolving) => {
+    this.on('parallelStart', () => this.flush())
+    this.on('parallelProgress', (execution, currentPayload, functionsResolving) => {
       if (functionsResolving === 1) {
         this.flush()
       }
     })
-    this.runTree.on('end', () => this.flush())
-    this.runTree.on('error', (error) => {
+    this.on('end', () => this.flush())
+    this.on('error', (error) => {
       throw error
     })
 
     if (this.devtools) {
       this.devtools.init(this)
-    } else if (
+    } else {
+      this.on('error', (error) => {
+        throw error
+      })
+    }
+
+    if (
+      !this.devtools &&
       isDeveloping() &&
       typeof navigator !== 'undefined' &&
       /Chrome/.test(navigator.userAgent)
     ) {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
-    }
-
-    if (
-      isDeveloping() &&
-      this.options.strictRender
-    ) {
-      console.info('We are just notifying you that STRICT RENDER is on')
     }
 
     if (this.router) this.router.init()
@@ -94,7 +94,7 @@ class Controller extends EventEmitter {
     this.emit('initialized')
   }
   /*
-    Whenever computeds and components needs to be updated, this method
+    Whenever components needs to be updated, this method
     can be called
   */
   flush (force) {
@@ -104,41 +104,19 @@ class Controller extends EventEmitter {
       return
     }
 
-    this.updateComputeds(changes, force)
     this.updateComponents(changes, force)
     this.emit('flush', changes, Boolean(force))
   }
-  updateComputeds (changes, force) {
-    let computedsAboutToBecomeDirty
-
-    if (force) {
-      computedsAboutToBecomeDirty = this.computedDependencyStore.getAllUniqueEntities()
-    } else if (this.options.strictRender) {
-      computedsAboutToBecomeDirty = this.computedDependencyStore.getStrictUniqueEntities(changes)
-    } else {
-      computedsAboutToBecomeDirty = this.computedDependencyStore.getUniqueEntities(changes)
-    }
-
-    computedsAboutToBecomeDirty.forEach((computed) => {
-      computed.flag()
-    })
-  }
-  /*
-    On "flush" use changes to extract affected components
-    from dependency store and render them
-  */
   updateComponents (changes, force) {
     let componentsToRender = []
 
     if (force) {
       componentsToRender = this.componentDependencyStore.getAllUniqueEntities()
-    } else if (this.options.strictRender) {
-      componentsToRender = this.componentDependencyStore.getStrictUniqueEntities(changes)
+    } else {
+      componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
       if (this.devtools && this.devtools.verifyStrictRender) {
         verifyStrictRender(changes, this.componentDependencyStore.map)
       }
-    } else {
-      componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
     }
 
     const start = Date.now()
@@ -146,7 +124,7 @@ class Controller extends EventEmitter {
       if (this.devtools) {
         this.devtools.updateComponentsMap(component)
       }
-      component._update(force)
+      component._updateFromState(changes)
     })
     const end = Date.now()
 
@@ -164,7 +142,7 @@ class Controller extends EventEmitter {
     Method called by view to grab state
   */
   getState (path) {
-    return this.model.get(ensurePath(path))
+    return this.model.get(ensurePath(cleanPath(path)))
   }
   /*
     Uses function tree to run the array and optional
@@ -209,9 +187,7 @@ class Controller extends EventEmitter {
       throwError(`There is no signal at path "${path}"`)
     }
 
-    return function (payload) {
-      this.runSignal(path, signal, payload)
-    }.bind(this)
+    return signal
   }
 }
 
