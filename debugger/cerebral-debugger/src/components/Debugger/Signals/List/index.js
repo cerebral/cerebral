@@ -31,6 +31,29 @@ export default connect({
       })
       connector.sendEvent('remember', signal.executionId)
     }
+    hasSearchContent (signal) {
+      const value = this.props.searchValue
+
+      return Object.keys(signal.functionsRun).reduce((hasSearchContent, key) => {
+        const data = signal.functionsRun[key].data
+
+        if (hasSearchContent) {
+          return hasSearchContent
+        }
+
+        return (data || []).reduce((currentHasSearchContent, dataItem) => {
+          if (currentHasSearchContent) {
+            return currentHasSearchContent
+          }
+
+          if (dataItem.type === 'mutation' && dataItem.args[0].join('.').indexOf(this.props.searchValue) >= 0) {
+            return true
+          }
+
+          return false
+        }, hasSearchContent)
+      }, false)
+    }
     renderSignal (signal, index) {
       const prevSignal = this.props.signalsList[index - 1]
       const currentSignalExecutionId = this.props.debugger.currentSignalExecutionId
@@ -42,10 +65,16 @@ export default connect({
         backgroundColor: hex
       }
       const isActive = currentSignalExecutionId === signal.executionId
+      const hasSearchContent = (
+        this.props.searchValue &&
+        this.hasSearchContent(signal)
+      )
+
       const className = classnames({
         'list-item': true,
         'list-activeItem': isActive,
         'list-grouped': signal.isGrouped,
+        'list-fadedItem': hasSearchContent === false,
         pulse: signal.isExecuting
       })
       const isInOpenGroup = this.props.debugger.expandedSignalGroups.indexOf(signal.groupId) !== -1
@@ -81,10 +110,6 @@ export default connect({
     }
     render () {
       const signals = this.props.signalsList
-
-      if (this.props.searchValue) {
-        console.log('woop');
-      }
 
       return (
         <ul className='list'>

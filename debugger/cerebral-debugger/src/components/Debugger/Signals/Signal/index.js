@@ -11,6 +11,7 @@ export default connect({
   currentPage: state`debugger.currentPage`,
   useragent: state`useragent`,
   signal: state`debugger.signals.${state`debugger.currentSignalExecutionId`}`,
+  searchValue: state`debugger.searchValue`,
   mutationClicked: signal`debugger.mutationClicked`
 },
   class Signal extends Inferno.Component {
@@ -83,6 +84,26 @@ export default connect({
         )
       })
     }
+    actionHasSearchContent (action) {
+      const data = (
+        this.props.signal.functionsRun[action.functionIndex] ?
+          this.props.signal.functionsRun[action.functionIndex].data
+        :
+          null
+      )
+
+      return (data || []).reduce((currentHasSearchContent, dataItem) => {
+        if (currentHasSearchContent) {
+          return currentHasSearchContent
+        }
+
+        if (dataItem.type === 'mutation' && dataItem.args[0].join('.').indexOf(this.props.searchValue) >= 0) {
+          return true
+        }
+
+        return false
+      }, false)
+    }
     renderAction (action, index) {
       if (Array.isArray(action)) {
         return (
@@ -93,10 +114,15 @@ export default connect({
           </div>
         )
       }
+      const hasSearchContent = (
+        this.props.searchValue &&
+        this.actionHasSearchContent(action)
+      )
 
       return (
         <Action
           action={action}
+          faded={hasSearchContent === false}
           execution={this.props.signal.functionsRun[action.functionIndex]}
           key={index}
           onMutationClick={this.onMutationClick}

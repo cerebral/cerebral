@@ -44,7 +44,9 @@ export default function StatePaths (props) {
             >
               <div className='statePaths-pathName'>{componentsWithStatePaths[key].name}</div>
               <div className='statePaths-components'>
-                {componentsWithStatePaths[key].paths.join(', ')}
+                {componentsWithStatePaths[key].paths.map((path) => (
+                  <div>{path}</div>
+                ))}
               </div>
             </div>
           )
