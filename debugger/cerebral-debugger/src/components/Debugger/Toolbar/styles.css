@@ -33,6 +33,24 @@
   border-right: 1px solid #DDD;
 }
 
+.toolbar-search {
+  float: left;
+  font-size: 12px;
+  height: 39px;
+  color: #999;
+  line-height: 40px;
+  background-color: #EEE;
+  min-width: 150px;
+  text-align: center;
+  border-right: 1px solid #DDD;
+}
+
+.toolbar-search input {
+  height: 25px;
+  padding: 0 5px;
+  outline: none;
+}
+
 .toolbar-tab:hover {
   background-color: #FAFAFA;
   color: #333;

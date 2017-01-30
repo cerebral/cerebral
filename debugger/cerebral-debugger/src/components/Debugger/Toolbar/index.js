@@ -1,17 +1,19 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno'
 import classNames from 'classnames'
-import {connect} from 'cerebral/react'
+import {connect} from 'cerebral/inferno'
+import {state, signal} from 'cerebral/tags'
 import signalsList from '../../../common/computed/signalsList'
 
 export default connect({
-  currentPage: 'debugger.currentPage',
-  executingSignalsCount: 'debugger.executingSignalsCount',
-  appSignals: signalsList
-}, {
-  pageChanged: 'debugger.pageChanged'
+  currentPage: state`debugger.currentPage`,
+  executingSignalsCount: state`debugger.executingSignalsCount`,
+  searchValue: state`debugger.searchValue`,
+  appSignals: signalsList,
+  pageChanged: signal`debugger.pageChanged`,
+  searchValueChanged: signal`debugger.searchValueChanged`
 },
-  class Toolbar extends React.Component {
+  class Toolbar extends Inferno.Component {
     constructor (props) {
       super(props)
       this.state = {
@@ -37,6 +39,13 @@ export default connect({
                 className={classNames('toolbar-tabOnSmall', 'toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'model'})}
                 onClick={() => this.props.pageChanged({page: 'model'})}>
                 <i className='icon icon-model' /> STATE-TREE
+              </li>
+              <li className='toolbar-search'>
+                <input
+                  type='text'
+                  placeholder='Search path...'
+                  value={this.props.searchValue}
+                  onInput={(event) => this.props.searchValueChanged({value: event.target.value})} />
               </li>
               <li className='toolbar-rightItem'>
                 {this.props.executingSignalsCount ? 'executing' : 'idle'}

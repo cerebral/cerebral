@@ -1,8 +1,19 @@
 import './styles.css'
-import React from 'react'
+import Inferno from 'inferno' // eslint-disable-line
 
 export default function StatePaths (props) {
-  let uniqueComponents = []
+  const componentsWithStatePaths = Object.keys(props.map).reduce((components, stateKey) => {
+    const statePathComponents = props.map[stateKey]
+
+    return statePathComponents.reduce((allComponents, component) => {
+      if (!allComponents[component.id]) {
+        allComponents[component.id] = {name: component.name, paths: []}
+      }
+      allComponents[component.id].paths.push(stateKey)
+
+      return allComponents
+    }, components)
+  }, {})
 
   return (
     <div className='statePaths-wrapper'>
@@ -14,15 +25,13 @@ export default function StatePaths (props) {
           <div className='statePaths-pathName'>
             {Object.keys(props.map).length} <small>active state paths</small>
           </div>
-          <div className='statePaths-components'>
-            {Object.keys(props.map).reduce((count, key) => {
-              const components = props.map[key].filter(component => uniqueComponents.indexOf(component) === -1)
-              uniqueComponents = uniqueComponents.concat(components)
-              return count + components.length
-            }, 0)} {' '} <small>registered components</small>
-          </div>
+          <div className='statePaths-components'><span>{Object.keys(componentsWithStatePaths).length} <small>registered components</small></span></div>
         </div>
-        {Object.keys(props.map).map(key => {
+        {Object.keys(componentsWithStatePaths).filter((key) => {
+          return props.filter ? componentsWithStatePaths[key].paths.reduce((hasPath, path) => {
+            return hasPath || path.indexOf(props.filter) >= 0
+          }, false) : true
+        }).map((key) => {
           return (
             <div
               key={key}
@@ -31,11 +40,11 @@ export default function StatePaths (props) {
                 mapPath: key
               })}
             >
-              <div className='statePaths-pathName'>{key}</div>
+              <div className='statePaths-pathName'>{componentsWithStatePaths[key].name}</div>
               <div className='statePaths-components'>
-                {props.map[key].map((component) => {
-                  return component.name
-                }).join(', ')}
+                {componentsWithStatePaths[key].paths.map((path) => (
+                  <div>{path}</div>
+                ))}
               </div>
             </div>
           )

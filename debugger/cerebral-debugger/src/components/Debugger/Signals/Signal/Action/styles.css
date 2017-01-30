@@ -2,6 +2,10 @@
   font-size: 10px;
 }
 
+.action-faded {
+  opacity: 0.25;
+}
+
 .action:not(:last-child) {
   margin-bottom: 10px;
 }
