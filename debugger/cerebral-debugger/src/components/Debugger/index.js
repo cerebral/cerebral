@@ -10,7 +10,9 @@ import Model from './Model'
 export default connect({
   currentPage: state`debugger.currentPage`,
   settings: state`debugger.settings`,
+  isSmall: state`useragent.media.small`,
   mutationsError: state`debugger.mutationsError`,
+  isCatchingUp: state`debugger.isCatchingUp`,
   escPressed: signal`debugger.escPressed`
 },
   class Debugger extends Inferno.Component {
@@ -21,7 +23,73 @@ export default connect({
         }
       })
     }
+    renderLayout () {
+      if (this.props.isSmall) {
+        switch (this.props.currentPage) {
+          case 'signals':
+            return (
+              <div className='debugger-content'>
+                <Signals />
+              </div>
+            )
+          case 'components':
+            return (
+              <div className='debugger-content'>
+                <Components />
+              </div>
+            )
+          case 'model':
+            return (
+              <div className='debugger-content'>
+                <Model />
+              </div>
+            )
+          default:
+            return null
+        }
+      } else {
+        switch (this.props.currentPage) {
+          case 'signals':
+            return (
+              <div className='debugger-content'>
+                <Signals />
+                <Model />
+              </div>
+            )
+          case 'components':
+            return (
+              <div className='debugger-content'>
+                <Components />
+              </div>
+            )
+          case 'model':
+            return (
+              <div className='debugger-content'>
+                <Signals />
+                <Model />
+              </div>
+            )
+          default:
+            return null
+        }
+      }
+    }
     render () {
+      if (this.props.isCatchingUp) {
+        return (
+          <div className='debugger'>
+            <div className='debugger-toolbar'>
+              <Toolbar />
+            </div>
+            <div className='debugger-disabled'>
+              <img src='logo.png' width='200' role='presentation' />
+              <h1>Loading...</h1>
+              <h3>Catching up with app state</h3>
+            </div>
+          </div>
+        )
+      }
+
       if (this.props.settings.disableDebugger) {
         return (
           <div className='debugger'>
@@ -50,23 +118,7 @@ export default connect({
               <Toolbar />
             </div>
           }
-          <div className='debugger-content'>
-            {
-              this.props.currentPage === 'signals'
-                ? <Signals className={this.props.currentPage !== 'signals' ? 'debugger-hiddenOnSmall' : null} />
-                : null
-            }
-            {
-              this.props.currentPage === 'components'
-                ? <Components className={this.props.currentPage !== 'components' ? 'debugger-hiddenOnSmall' : null} />
-                : null
-            }
-            {
-              this.props.currentPage !== 'components'
-                ? <Model className={this.props.currentPage !== 'model' ? 'debugger-hiddenOnSmall' : null} />
-                : null
-            }
-          </div>
+          {this.renderLayout()}
         </div>
       )
     }
