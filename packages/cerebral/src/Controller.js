@@ -67,15 +67,23 @@ class Controller extends FunctionTree {
       }
     })
     this.on('end', () => this.flush())
-    this.on('error', (error) => {
-      throw error
-    })
 
     if (this.devtools) {
       this.devtools.init(this)
+      this.on('error', function throwErrorCallback (error) {
+        if (Array.isArray(this._events.error) && this._events.error.length > 2) {
+          this.removeListener('error', throwErrorCallback)
+        } else {
+          throw error
+        }
+      })
     } else {
-      this.on('error', (error) => {
-        throw error
+      this.on('error', function throwErrorCallback (error) {
+        if (Array.isArray(this._events.error) && this._events.error.length > 1) {
+          this.removeListener('error', throwErrorCallback)
+        } else {
+          throw error
+        }
       })
     }
 
