@@ -9,6 +9,7 @@ export default connect({
   currentPage: state`debugger.currentPage`,
   executingSignalsCount: state`debugger.executingSignalsCount`,
   searchValue: state`debugger.searchValue`,
+  isSmall: state`useragent.media.small`,
   appSignals: signalsList,
   pageChanged: signal`debugger.pageChanged`,
   searchValueChanged: signal`debugger.searchValueChanged`
@@ -26,7 +27,7 @@ export default connect({
           <li className='toolbar-item'>
             <ul className='toolbar-tabs'>
               <li
-                className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'signals'})}
+                className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'signals' || !this.props.isSmall && this.props.currentPage === 'model'})}
                 onClick={() => this.props.pageChanged({page: 'signals'})}>
                 <i className='icon icon-signals' /> CONTROLLER
               </li>

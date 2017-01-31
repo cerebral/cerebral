@@ -1,6 +1,5 @@
 import './styles.css'
 import Inferno from 'inferno'
-import classNames from 'classnames'
 import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
 import signalsList from '../../../common/computed/signalsList'
@@ -45,7 +44,7 @@ export default connect({
       const currentSignalExecutionId = this.props.currentSignalExecutionId
 
       return (
-        <div className={classNames('signals', this.props.className)}>
+        <div className='signals'>
           <div className='signals-list'>
             <List />
             <button

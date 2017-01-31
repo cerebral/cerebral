@@ -1,6 +1,5 @@
 import './styles.css'
 import Inferno from 'inferno'
-import classNames from 'classnames'
 import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
 import Inspector from '../Inspector'
@@ -17,7 +16,7 @@ export default connect({
   class Model extends Inferno.Component {
     render () {
       return (
-        <div className={classNames('model-wrapper', this.props.className)}>
+        <div className='model-wrapper'>
           <div id='model' className='model' onClick={() => this.props.modelClicked()}>
             <Inspector
               value={this.props.model}
