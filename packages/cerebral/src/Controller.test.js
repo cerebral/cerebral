@@ -226,4 +226,29 @@ describe('Controller', () => {
     })
     controller.getSignal('test')()
   })
+  it('should remove default error listener when overriden', (done) => {
+    const controller = new Controller({
+      signals: {
+        test: [() => { foo.bar = 'baz' }] // eslint-disable-line
+      }
+    })
+    controller.on('error', () => {
+      assert(true)
+      done()
+    })
+    controller.getSignal('test')()
+  })
+  it('should remove default error listener when overriden using devtools', (done) => {
+    const controller = new Controller({
+      devtools: {init (ctrl) { ctrl.on('error', () => {}) }},
+      signals: {
+        test: [() => { foo.bar = 'baz' }] // eslint-disable-line
+      }
+    })
+    controller.on('error', () => {
+      assert(true)
+      done()
+    })
+    controller.getSignal('test')()
+  })
 })

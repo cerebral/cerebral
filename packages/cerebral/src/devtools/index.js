@@ -369,8 +369,6 @@ class Devtools {
       } else {
         this.backlog.push(message)
       }
-
-      throw error
     })
   }
   /*
