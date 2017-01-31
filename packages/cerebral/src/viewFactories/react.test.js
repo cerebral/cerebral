@@ -528,6 +528,44 @@ describe('React', () => {
         component.callSignal()
         assert.equal(renderCount, 2)
       })
+      it('should by default update when nested children update with array', () => {
+        let renderCount = 0
+        const controller = Controller({
+          state: {
+            foo: [{
+              bar: 'value'
+            }]
+          },
+          signals: {
+            methodCalled: [({state}) => state.set('foo.0.bar', 'value2')]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          callSignal () {
+            this.props.methodCalled()
+          }
+          render () {
+            renderCount++
+            return (
+              <div>{this.props.foo[0].bar}</div>
+            )
+          }
+        }
+        const TestComponent = connect({
+          foo: state`foo`,
+          methodCalled: signal`methodCalled`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'value')
+        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+        component.callSignal()
+        assert.equal(renderCount, 2)
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'value2')
+      })
       it('should by default update when nested children update using COMPUTE', () => {
         let renderCount = 0
         const controller = Controller({
