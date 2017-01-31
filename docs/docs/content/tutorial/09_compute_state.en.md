@@ -50,11 +50,11 @@ import starsSum from './computeds/starsSum'
     [
       ...showToast('Loading data for repos...', 2000),
       getRepo('cerebral'), {
-        success: [set(state`repos.cerebral`, input`result`)],
+        success: [set(state`repos.cerebral`, input`data`)],
         error: []
       },
       getRepo('cerebral-debugger'), {
-        success: [set(state`repos.cerebral-debugger`, input`result`)],
+        success: [set(state`repos.cerebral-debugger`, input`data`)],
         error: []
       }
     ],
@@ -102,4 +102,4 @@ Thats it for now regarding *Computeds*. Of course summarizing some numbers is pr
 
 But now it has only been Cerebral stuff, what if you want to use other libraries in your action flow? Well, refill your coffee or open up another drink and enjoy the next chapter introducing **providers**.
 
-**Want to dive deeper?** - [Go in depth](../in-depth/11_computed.html), or move on with the tutorial
+**Want to dive deeper?** - [Go in depth](../in-depth/12_computed.html), or move on with the tutorial

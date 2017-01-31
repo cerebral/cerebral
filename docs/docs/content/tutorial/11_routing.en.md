@@ -142,4 +142,4 @@ As you can see, defining *routes* is as easy as linking them to *signals*. Now g
 
 Go to your browsers addressbar and enter an invalid route like: localhost/#/*foo* and press Enter. Now check the console! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error.
 
-**Want to dive deeper?** - [Go in depth](../in-depth/12_routing.html), or move on with the tutorial
+**Want to dive deeper?** - [Go in depth](../in-depth/13_routing.html), or move on with the tutorial
