@@ -53,9 +53,3 @@
   padding: 50px;
   text-align: center;
 }
-
-@media (max-width: 1270px) {
-    .debugger-hiddenOnSmall {
-        display: none !important;
-    }
-}

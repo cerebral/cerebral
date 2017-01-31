@@ -26,7 +26,8 @@ export default {
     componentsMap: {},
     renders: [],
     mutationsError: false,
-    searchValue: ''
+    searchValue: '',
+    isCatchingUp: false
   },
   signals: {
     pageChanged,
