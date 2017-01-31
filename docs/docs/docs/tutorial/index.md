@@ -19,7 +19,7 @@ Then go to directory **cerebral/docs/tutorial** and run the command:
 ## Step 3 (Alpha note)
 During the alpha you also need to do the following after the install:
 
-`npm install cerebral@next function-tree@next cerebral-provider-http@next cerebral-router@next`
+`npm install cerebral@next function-tree@next cerebral-provider-http@next cerebral-router@next --save --save-exact`
 
 This may take a little while and does **not** mean that Cerebral is a huge download. In fact Cerebral as a production build is very small compared to other popular frameworks.
 
