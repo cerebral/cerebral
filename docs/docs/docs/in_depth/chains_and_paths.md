@@ -51,7 +51,7 @@ export default [
 Cerebral will now run this as one signal, first running *actionA*, then whatever is expressed in *chainA* and then run *actionB* last.
 
 ## Paths
-Chain can also express execution paths. For example:
+Chains can also express execution paths. For example:
 
 ```js
 import actionA from '../actions/actionA'
