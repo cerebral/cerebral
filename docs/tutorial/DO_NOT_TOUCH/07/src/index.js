@@ -8,10 +8,9 @@ import HttpProvider from 'cerebral-provider-http'
 import {set, wait} from 'cerebral/operators'
 import {state, input} from 'cerebral/tags'
 
-function showToast (message, ms, type = null) {
+function showToast (message, ms) {
   return [
-    set(state`toast`, {type}),
-    set(state`toast.message`, message),
+    set(state`toast`, message),
     wait(ms),
     set(state`toast`, null)
   ]

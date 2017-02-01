@@ -40,8 +40,9 @@ import {state, input} from 'cerebral/tags'
 ```
 
 ## Passing a payload
-Now we just need to change our button click to actually pass a message (*src/components/App/index.js*):
+Now we just need to change our button click to actually pass a message:
 
+*src/components/App/index.js*
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
@@ -79,4 +80,4 @@ Now we are ready to test drive our changes. Click the button and you should see 
 
 - Add another custom action which transforms the input value to Uppercase. You may override existing properties on the input or create a new one
 
-**Want to dive deeper?** - [Go in depth](../in-depth/06_actions.html), or move on with the tutorial
+**Want to dive deeper?** - [Go in depth](../in_depth/actions.md), or move on with the tutorial

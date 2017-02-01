@@ -7,8 +7,8 @@ import Toast from '../Toast'
 export default connect({
   title: state`title`,
   subTitle: state`subTitle`,
-  starsCount: starsCount,
-  buttonClicked: signal`buttonClicked`
+  buttonClicked: signal`buttonClicked`,
+  starsCount: starsCount
 },
   function App (props) {
     return (

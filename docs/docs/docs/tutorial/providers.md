@@ -8,10 +8,14 @@ A provider basically adds itself to the context object of our actions. Let us ch
 ```js
 ...
 function getRepoFactory(repoName) {
-  function getRepo({http, path}) {
+  function getRepo({http}) {
     return http.get(`/repos/cerebral/${repoName}`)
-      .then(response => path.success({data: response.result}))
-      .catch(error => path.error({data: error.result}))
+      .then((response) => {
+        return {[repoName]: response.result}
+      })
+      .catch((error) => {
+        return {error: error.result}
+      })
   }
 
   return getRepo
@@ -22,7 +26,7 @@ function getRepoFactory(repoName) {
 ## Adding a provider
 What needs to be done? Well not too much. Just add the provider in your controller in *./src/index.js*
 
-Thats how it looks right now:
+This is how it looks right now:
 ```js
 ...
 import HttpProvider from 'cerebral-provider-http'
@@ -37,10 +41,10 @@ import HttpProvider from 'cerebral-provider-http'
 
 What are the **benefits** of using a provider in this way? Well we have decoupled the dependency of the HTTP tool in all our actions, meaning that when testing actions we can just pass in a resolved or rejected promise as **http.get** to simulate a response. As well the **Debugger** can now track and visualize the execution of providers.
 
-Just keep in mind that you could use any library as an provider, we've just used http-provider here because it is very lightweight and has some additional benefits when http-requests need to report back progress and the likes (because it also uses Cerebral-Signals for doing that). Let us add another one. Why not provide additional logging functionality to our actions? Let us use [js-logger](https://github.com/jonnyreeves/js-logger) one.
+Just keep in mind that you could use any library as an provider, we've just used http-provider here because it is very lightweight and has some additional benefits when http-requests need to report back progress and the likes (because it also uses Cerebral-Signals for doing that). Let us add another one. Why not provide additional logging functionality to our actions? Let us use [js-logger](https://github.com/jonnyreeves/js-logger).
 
 ## Adding a 3rd party provider
-We have already installed the library using npm. So it was sitting there and waiting and now the time is ready to use it! Because we add a 3rd-party provider we need to wrap it up into a so called *ContextProvider* to get the benefits mentioned above.
+We have already installed the library using npm. Because we add a 3rd-party provider we need to wrap it up into a so called *ContextProvider* to get the benefits mentioned above.
 
 So please add the following imports to your *./src/index.js*
 ```js
@@ -69,16 +73,19 @@ Now we are ready to register it to our controller:
 Now we have the logger in place so let us use it to track request times:
 ```js
 function getRepoFactory(repoName) {
-  function getRepo({logger, http, path}) {
+  function getRepo({logger, http}) {
     logger.time(`request ${repoName}`)
+
     return http.get(`/repos/cerebral/${repoName}`)
       .then(response => {
         logger.timeEnd(`request ${repoName}`)
-        return path.success({data: response.result})
+
+        return {[repoName]: response.result}
       })
       .catch(error => {
         logger.timeEnd(`request ${repoName}`)
-        return path.error({data: error.result})
+
+        return {error: error.result}
       })
   }
 
@@ -89,4 +96,4 @@ function getRepoFactory(repoName) {
 Now run your code and check the console after doing a request do a server.
 Thats it! You have just successfully integrated another provider!
 
-**Want to dive deeper?** - [Go in depth](../in-depth/07_providers.html), or move on with the tutorial
+**Want to dive deeper?** - [Go in depth](../in_depth/providers.md), or move on with the tutorial

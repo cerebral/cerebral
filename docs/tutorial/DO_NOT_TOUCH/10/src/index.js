@@ -5,14 +5,20 @@ import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
-import {set, debounce} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {set, when, debounce} from 'cerebral/operators'
+import {state, input, string} from 'cerebral/tags'
+import starsCount from './computeds/starsCount'
 
 const toastDebounce = debounce.shared()
-function showToast (message, ms, type = null) {
+function showToast (message, ms) {
+  if (!ms) {
+    return [
+      set(state`toast`, message)
+    ]
+  }
+
   return [
-    set(state`toast`, {type}),
-    set(state`toast.message`, message),
+    set(state`toast`, message),
     toastDebounce(ms), {
       continue: [
         set(state`toast`, null)
@@ -23,10 +29,14 @@ function showToast (message, ms, type = null) {
 }
 
 function getRepo (repoName) {
-  function get ({http, path}) {
+  function get ({http}) {
     return http.get(`/repos/cerebral/${repoName}`)
-      .then(response => path.success({data: response.result}))
-      .catch(error => path.error({data: error.result}))
+      .then((response) => {
+        return {[repoName]: response.result}
+      })
+      .catch((error) => {
+        return {error: error.result}
+      })
   }
 
   return get
@@ -42,18 +52,21 @@ const controller = Controller({
   },
   signals: {
     buttonClicked: [
+      ...showToast(string`Loading data for repos`),
       [
-        ...showToast('Loading data for repos...', 2000),
-        getRepo('cerebral'), {
-          success: [set(state`repos.cerebral`, input`data`)],
-          error: []
-        },
-        getRepo('addressbar'), {
-          success: [set(state`repos.addressbar`, input`data`)],
-          error: []
-        }
+        getRepo('cerebral'),
+        getRepo('addressbar')
       ],
-      ...showToast('Repos loaded', 2000, 'success')
+      when(input`error`), {
+        true: [
+          ...showToast(string`Error: ${input`error`}`, 5000)
+        ],
+        false: [
+          set(state`repos.cerebral`, input`cerebral`),
+          set(state`repos.addressbar`, input`addressbar`),
+          ...showToast(string`The repos have ${starsCount} stars`, 5000)
+        ]
+      }
     ]
   },
   providers: [

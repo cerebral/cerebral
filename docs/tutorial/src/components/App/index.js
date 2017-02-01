@@ -2,12 +2,14 @@ import React from 'react'
 import {connect} from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
 import Toast from '../Toast'
+import starsCount from '../../computeds/starsCount'
 
 export default connect({
   title: state`app.title`,
   subTitle: state`app.subTitle`,
   repos: state`repos.list`,
   activeTab: state`app.activeTab`,
+  starsCount,
   homeRouted: signal`home.routed`,
   reposRouted: signal`repos.routed`
 },
@@ -33,7 +35,8 @@ export default connect({
           </div>
           <br />
           <div className={'c-tabs__tab' + (props.activeTab === 'home' ? 'c-tabs__tab--active' : '')}>
-            <h5>Home page content</h5>
+            <h5>Current start count</h5>
+            <h1>{props.starsCount}</h1>
           </div>
           <div className={'c-tabs__tab' + (props.activeTab === 'repos' ? 'c-tabs__tab--active' : '')}>
             <ul>

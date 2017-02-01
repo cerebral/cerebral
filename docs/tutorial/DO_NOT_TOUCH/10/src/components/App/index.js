@@ -1,12 +1,14 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
+import starsCount from '../../computeds/starsCount'
 import Toast from '../Toast'
 
 export default connect({
   title: state`title`,
   subTitle: state`subTitle`,
-  buttonClicked: signal`buttonClicked`
+  buttonClicked: signal`buttonClicked`,
+  starsCount: starsCount
 },
   function App (props) {
     return (
@@ -17,7 +19,7 @@ export default connect({
           className='c-button c-button--info c-button--block'
           onClick={() => props.buttonClicked()}
         >
-          Get repos
+          Update star count ({props.starsCount})
         </button>
         <Toast />
       </div>

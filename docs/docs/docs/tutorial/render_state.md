@@ -62,7 +62,7 @@ connect({
 )
 ```
 
-Cause it just looks nicer. It is also very nice to read the dependencies of your component first and then what the component does with those dependencies.
+Writing out the arguments on multiple lines and with indentation just makes it read better. It is also very nice to read the dependencies of your component first and then what the component does with those dependencies.
 
 ## Challenge
 
@@ -71,4 +71,4 @@ It's time for your first challenge!
 - Add another state to the store called *subTitle*
 - Connect *subTitle* to the App component and display it in a *H3* element
 
-**Want to dive deeper?** - [Go in depth](../in-depth/10_connect.html), or move on with the tutorial
+**Want to dive deeper?** - [Go in depth](../in_depth/connect.md), or move on with the tutorial

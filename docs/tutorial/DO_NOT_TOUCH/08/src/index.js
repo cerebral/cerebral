@@ -9,10 +9,9 @@ import {set, debounce} from 'cerebral/operators'
 import {state, input, string} from 'cerebral/tags'
 
 const toastDebounce = debounce.shared()
-function showToast (message, ms, type = null) {
+function showToast (message, ms) {
   return [
-    set(state`toast`, {type}),
-    set(state`toast.message`, message),
+    set(state`toast`, message),
     toastDebounce(ms), {
       continue: [
         set(state`toast`, null)
@@ -25,8 +24,12 @@ function showToast (message, ms, type = null) {
 function getRepo (repoName) {
   function get ({http, path}) {
     return http.get(`/repos/cerebral/${repoName}`)
-      .then(response => path.success({data: response.result}))
-      .catch(error => path.error({data: error.result}))
+      .then((response) => {
+        return path.success({data: response.result})
+      })
+      .catch((error) => {
+        return path.error({data: error.result})
+      })
   }
 
   return get
@@ -62,7 +65,7 @@ const controller = Controller({
         }
       ],
       setStarsCount,
-      ...showToast(string`The repos has a total star count of ${state`starsCount`}`, 4000, 'success')
+      ...showToast(string`The repos has a total star count of ${state`starsCount`}`, 4000)
     ]
   },
   providers: [

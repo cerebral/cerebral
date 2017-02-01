@@ -2,7 +2,7 @@
 
 **Load up chapter 04** - [Preview](04)
 
-A signal can trigger an array of functions. This array we call a **chain** and the functions we call **actions**. For now we have seen it trigger a function that changes the **subTitle** path. In this chapter we have added a **Toast** component which displays any message set on its related state.
+A signal can trigger an array of functions. This array we call a **chain** and the functions we call **actions**. For now we have seen it trigger a function that changes the **subTitle** path and in this chapter we have added a **Toast** component which displays any message set on its related state.
 
 Creating a function for any kind of state change will be tedious. That is why Cerebral has **operators**. These operators are just functions that returns an action for you. There is an operator for every kind of state change and also other operators, which will we see an example of now.
 

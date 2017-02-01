@@ -96,18 +96,21 @@ And update the signals as well:
   ],
   reposRouted: [
     set(state`activeTab`, 'repos'),
+    ...showToast(string`Loading data for repo: ${input`repo`}`),
     [
-      ...showToast('Loading data for repos...', 2000),
-      getRepo('cerebral'), {
-        success: [set(state`repos.cerebral`, input`data`)],
-        error: []
-      },
-      getRepo('addressbar'), {
-        success: [set(state`repos.addressbar`, input`data`)],
-        error: []
-      }
+      getRepo('cerebral'),
+      getRepo('addressbar')
     ],
-    ...showToast('Repos loaded', 2000, 'success')
+    when(input`error`), {
+      true: [
+        ...showToast(string`Error: ${input`error`}`, 5000)
+      ],
+      false: [
+        set(state`repos.cerebral`, input`cerebral`),
+        set(state`repos.addressbar`, input`addressbar`),
+        ...showToast(string`The repos have ${starsCount} stars`, 5000)    
+      ]
+    }
   ]
 }
 ...
@@ -151,6 +154,6 @@ As you can see, defining *routes* is as easy as linking them to *signals*. Now g
 
 ## Challenge
 
-Go to your browsers addressbar and enter an invalid route like: localhost/#/*foo* and press Enter. Now check the console! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error.
+Go to your browsers addressbar and enter an invalid route like: localhost/#/*foo* and press Enter. Now check the console! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error. You probably need some more docs on the router to make this work.
 
-**Want to dive deeper?** - [Go in depth](../in-depth/12_routing.html), or move on with the tutorial
+**Want to dive deeper?** - [Go in depth](../in_depth/routing.md), or move on with the tutorial

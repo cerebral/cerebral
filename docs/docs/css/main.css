@@ -27,6 +27,7 @@ html, body {
 
 .button:hover {
   background-color: #0086b3;
+  color: #FFF;
 }
 
 a {
@@ -46,6 +47,10 @@ h1, h2, h3, h4, h5, h6 {
   color: #333;
 }
 
-h4, h5, h6 {
+h2 {
+  color: #0086b3;
+}
+
+h3, h4, h5, h6 {
   font-weight: bold;
 }

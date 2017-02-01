@@ -19,7 +19,7 @@ Then go to directory **cerebral/docs/tutorial** and run the command:
 ## Step 3 (Alpha note)
 During the alpha you also need to do the following after the install:
 
-`npm install cerebral@next function-tree@next cerebral-provider-http@next cerebral-router@next --save --save-exact`
+`npm install cerebral@next cerebral-provider-http@next cerebral-router@next --save --save-exact`
 
 This may take a little while and does **not** mean that Cerebral is a huge download. In fact Cerebral as a production build is very small compared to other popular frameworks.
 
@@ -33,7 +33,7 @@ Our Goal now is to go through some concepts and show off the features of Cerebra
 - **Providers**
 - **Routing**
 
-They are all explained in depth in the [In depth](../in-depth/01_the-architecture.html) section.
+They are all explained in depth in the [In depth](../in depth) section.
 
 ## How does this tutorial work?
 To start the tutorial, run:
@@ -44,7 +44,7 @@ This fires up the actual development server. Go to your browser and *localhost:3
 
 For beginners in web development we have the following advice: Just follow the tutorial, don't get too much distracted by advanced concepts. Learning new things takes some iterations and often it is more helpful to try to build something yourself. Please head over to our [discord chat](https://discord.gg/0kIweV4bd2bwwsvH) and we are more than happy to help you out.
 
-### Structure and bootstrapping
+## Structure and bootstrapping
 
 ```
 .
@@ -69,10 +69,10 @@ For beginners in web development we have the following advice: Just follow the t
 ├── package.json
 ├── ...
 ```
-#### The components - folder
+### The components - folder
 Currently holds App, a React component which is responsible for the title you are seeing. There will be more components in here as we move on in the tutorial.
 
-#### The index.html - file
+### The index.html - file
 ```html
 <!doctype html>
 <html lang="en">
@@ -89,9 +89,9 @@ Currently holds App, a React component which is responsible for the title you ar
 </html>
 
 ```
-Nothing special as you can see, though you might wonder where the magic actually starts? This file is actually a template file used by [Webpack](https://webpack.github.io/), the tool the builds your application. It will automatically inject your application into this HTML file when the development server starts.
+Nothing special as you can see, though you might wonder where the magic actually starts? This file is actually a template file used by [Webpack](https://webpack.js.org/), the tool the builds your application. It will automatically inject your application into this HTML file when the development server starts.
 
-#### The index.js - file
+### The index.js - file
 ```js
 import React from 'react'
 import {render} from 'react-dom'
@@ -116,7 +116,7 @@ This the entry point of your application and this is where we bring it all toget
 2. We instantiate a Cerebral controller and the **Devtools** which will give us a lot of insight into our running application
 3. We render the application using React by exposing the **controller** through a **Container** wrapper
 
-If you are not familiar with [JSX](https://facebook.github.io/react/docs/jsx-in-depth.html), the syntax that looks like HTML, it can be explained briefly as "some sugar over normal JavaScript". This is **not** html in JavaScript, it is pure JavaScript, it just allows you to define the UI with familiar syntax. You might think this is "icky", but trust us... UIs has become a lot more complex over the years and we need the power of JavaScript to describe and manage them!
+If you are not familiar with [JSX](https://facebook.github.io/react/docs/jsx-in-depth.md), the syntax that looks like HTML, it can be explained briefly as "some sugar over normal JavaScript". This is **not** html in JavaScript, it is pure JavaScript, it just allows you to define the UI with familiar syntax. You might think this is "icky", but trust us... UIs has become a lot more complex over the years and we need the power of JavaScript to describe and manage them!
 
-### Installing the debugger
-Please install either the standalone or chrome extension debugger, following [these instructions](../get-started/02_debugger.html)
+## Installing the debugger
+Please install either the standalone or chrome extension debugger, following [these instructions](../install/index.html#debugger)
