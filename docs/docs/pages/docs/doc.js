@@ -4,7 +4,7 @@ function Doc (props) {
   return (
     <div className='docs-doc'>
       <div className='docs-doc-edit'>
-        <a href={`https://github.com/cerebral/cerebral/edit/master/docs/docs/${props.docName}.md`} target='_new'>Edit on Github</a>
+        <a href={`https://github.com/cerebral/cerebral/tree/master/docs/docs/docs/${props.sectionName}/${props.docName}.md`} target='_new'>Edit on Github</a>
       </div>
       <div className='docs-doc-content'>
         <div style={{backgroundColor: '#DD4A68', color: '#fff', margin: '10px', padding: '5px 10px', borderRadius: '3px'}}>
