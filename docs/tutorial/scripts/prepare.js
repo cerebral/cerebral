@@ -11,19 +11,11 @@ function prepare (part) {
     return currentHasSrc
   }, false)
 
-  if (hasSrc) {
-    ls(paths.src).forEach(function (file) {
-      if (file !== 'index.js') {
-        rm('-rf', path.join(paths.src, file))
-      }
-    })
-  } else {
+  if (!hasSrc) {
     mkdir(paths.src)
   }
 
-  ls(path.join(paths.parts, part, 'src')).forEach(function (file) {
-    cp('-R', path.join(paths.parts, part, 'src', file), paths.src)
-  })
+  cp('-R', path.join(paths.parts, part, 'src', '*'), paths.src)
   cp(paths.partsIndex, paths.public)
   sed('-i', '%N%', part, paths.publicIndex)
 }
