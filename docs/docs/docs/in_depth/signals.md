@@ -52,4 +52,4 @@ connect({
 )
 ```
 
-The payload passed to a signal is typically the core value types of JavaScript. Object, Array, String, Number or Boolean. It is also possible to pass in some special value types, like files. For a full list of supported value types, check the [state API documentation](../api/02_state.html).
+The payload passed to a signal is typically the core value types of JavaScript. Object, Array, String, Number or Boolean. It is also possible to pass in some special value types, like files. For a full list of supported value types, check the [state API documentation](../api/state.md).

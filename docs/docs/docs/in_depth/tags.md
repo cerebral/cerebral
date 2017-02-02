@@ -33,9 +33,9 @@ import {Tag} from 'cerebral/tags'
 
 function someFactory(statePath) {
   function someAction ({state, input, resolve}) {
-    const isTag = resolve.isTag(statePath, 'state') // true/false
+    const isTag = resolve.isTag(statePath, 'state') // true
     const path = resolve.path(statePath) // "foo.bar"
-    const value = resolve.value(statePath) // The value on path "foo.bar" in state tree
+    const value = resolve.value(statePath) // Value on "foo.bar" in state tree
   }
 
   return someAction
@@ -43,15 +43,15 @@ function someFactory(statePath) {
 ```
 
 ## Action factories with tags
-You can easily create your own action factories and use the tags. Here showing the implementation of a **set**
+You can easily create your own action factories and use the tags. Here showing a simple implementation of a **set**
 
 ```js
 import {Tag} from 'cerebral/tags'
 
 function setFactory(target, value) {
   function set({state, input, resolve}) {
-    if (!resolve.isTag(target, 'state', 'input')  ) {
-      throw new Error('You have to use STATE or INPUT tag as set target')
+    if (!resolve.isTag(target, 'state')  ) {
+      throw new Error('You have to use STATE as set target')
     }
 
     // resolve.value will return tag value, computed value or plain value
@@ -62,13 +62,22 @@ function setFactory(target, value) {
 }
 ```
 
-Custom operators often wants to extract paths, though not necessarily related to state or input. That is why we have the tag **string**.
+Custom operators often wants to extract paths, though not necessarily related to state or input. That is why we have the tag **string**. It will always return the evaluated string, also when using **value**.
 
 ```js
 import {string} from 'cerebral/tags'
 import showMessage from '../factories/showMessage'
 import starsCount from '../computeds/starsCount'
-[
+
+function showMessage (message) {
+  function showMessageAction ({state, resolve}) {
+    state.set('message', resolve.value(message))
+  }
+
+  return showMessageAction
+}
+
+export default [
   showMessage(string`There are ${starsCount} left`)
 ]
 ```

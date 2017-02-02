@@ -54,7 +54,7 @@ function actionB ({input}) {
 }
 ```
 
-So returning an object from actions extends the input for later actions to handle.
+So returning an object from actions, either directly or from a promise, extends the input for later actions to handle.
 
 ### State
 To change the state of your application you use the state API. It is available to every action.
@@ -106,7 +106,7 @@ function someAction ({controller}) {}
 ```
 
 ### Execution
-You have access to function trees execution as well. This holds information about the current execution, mostly used by the devtools to inform the debugger.
+You have access to function tree execution as well. This holds information about the current execution, mostly used by the devtools to inform the debugger.
 
 ```js
 function someAction ({execution}) {}

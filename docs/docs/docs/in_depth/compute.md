@@ -62,10 +62,10 @@ export default connect({
 )
 ```
 
-The computed values are automatically cached.
+The computed, if connected to a component, will only run again if any of its state or props dependencies has changed. When computed is used in signals and actions they will always evaluate the value.
 
 ### Relational data
-A challenge using a single state tree is handling relational data. Since data is typically stored in multiple places you need to bring them together. For example a user with projects. In Cerebral we favor storing data as objects due to advantages in lookups and optimistically creating new items. Let us look at an example of a state tree:
+A challenge using a single state tree is handling relational data. Since data is typically stored in multiple places you need to bring them together. For example a user with projects. In Cerebral we favor storing data as objects due to advantages of lookups and optimistically creating new items. Let us look at an example of a state tree:
 
 ```js
 {
@@ -86,7 +86,7 @@ A challenge using a single state tree is handling relational data. Since data is
 }
 ```
 
-We want to display a user with its related projects. Now... what to think of now is that even though projects relate to users it is not always the case that we want to show this data together. Maybe we only want to show data related to the user itself, or only the project. That is why we express this relationship when we bring the data into the component. So for example, only showing the user:
+We want to display a user with its related projects. What to think of now is that even though projects relate to users it is not always the case that we want to show this data together. Maybe we only want to show data related to the user itself, or only the project. That is why we express this relationship when we bring the data into the component. So for example, only showing the user:
 
 ```js
 // Only a user
@@ -114,7 +114,7 @@ function user (passedUserKey) {
   return compute(
     passedUserKey,
     (userKey, get) => {
-      const user = state(`users.${userKey}`)
+      const user = get(state`users.${userKey}`)
 
       return {
         ...user,
