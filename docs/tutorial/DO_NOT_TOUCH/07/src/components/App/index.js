@@ -15,9 +15,11 @@ export default connect({
         <h3>{props.subTitle}</h3>
         <button
           className='c-button c-button--info c-button--block'
-          onClick={() => props.buttonClicked({
-            message: 'Toast me!'
-          })}
+          onClick={() => {
+            props.buttonClicked({
+              message: 'Toast me!'
+            })
+          }}
         >
           Update state
         </button>

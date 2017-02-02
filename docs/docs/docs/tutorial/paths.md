@@ -10,19 +10,21 @@ So let us build that scenario introducing *cerebral-http-provider*. *cerebral-ht
 To handle any kind of diverging execution in a signal we can use the concept of **paths**. A simple signal using paths and a sample async action named *getData* could look like this:
 
 ```js
-{
-  submitClicked:[
-    getData, {
-      success:[
-        processResults,
-        showSuccessMessage
-      ],
-      error: [
-        showErrorMessage
-      ]
-    }
-  ]
-}
+Controller({
+  signals: {
+    submitClicked:[
+      getData, {
+        success:[
+          processResults,
+          showSuccessMessage
+        ],
+        error: [
+          showErrorMessage
+        ]
+      }
+    ]
+  }
+})
 ```
 
 Where *success* and *error* are our **paths**.
@@ -37,19 +39,31 @@ import {state, input, string} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
-     ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
-     getRepo, {
-       success: [
-          ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
-       ],
-       error: [
-         ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
-      }
+    ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+    getRepo, {
+      success: [
+        ...showToast(
+          string`
+            How cool is that. ${input`repo`}
+            has ${input`data.subscribers_count`}
+            subscribers and ${input`data.stargazers_count`}
+            stars!
+          `, 5000)
+      ],
+      error: [
+        ...showToast(
+          string`
+            Ooops something went wrong: ${input`data.message`}
+          `, 5000)
+      ]
+    }
   ]
 }
 ```
 
 As you can see you can configure as many and whatever paths you like. Just add an object after an action and the action will know about possible paths to execute.
+
+Also notice here that we plan our signal before implementing. Typically working in a team you would actually define the signal first and later implement the actions. It is the flow that is important to get right.
 
 The **getRepo** action can look like this:
 
@@ -57,8 +71,12 @@ The **getRepo** action can look like this:
 ...
 function getRepo({input, http, path}) {
   return http.get(`/repos/cerebral/${input.repo}`)
-    .then(response => path.success({data: response.result}))
-    .catch(error => path.error({data: error.result}))
+    .then((response) => {
+      return path.success({data: response.result})
+    })
+    .catch((error) => {
+      return path.error({data: error.result})
+    })
 }
 
 const controller = Controller(...)
@@ -71,9 +89,9 @@ The path **success** and **error** are now available inside the action because w
 ...
 <button
   className="c-button c-button--info c-button--block"
-  onClick={() => props.buttonClicked({
-    repo: 'cerebral'
-  })}
+  onClick={() => {
+    props.buttonClicked({repo: 'cerebral'})
+  }}
 >
 ...
 ```
@@ -90,17 +108,27 @@ Replace your signal with the following snippet:
       ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
       getRepo, {
         success: [
-           ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
+           ...showToast(
+             string`
+               How cool is that. ${input`repo`}
+               has ${input`data.subscribers_count`}
+               subscribers and ${input`data.stargazers_count`}
+               stars!
+             `, 5000, 'success')
         ],
         error: [
-          ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
-       }  
+          ...showToast(
+            string`
+              Ooops something went wrong: ${input`data.message`}
+            `, 5000, 'error')
+        ]
+     }
     ]
   ]
 }
 ```
 
-What is happening here? Did you spot the additional **[** and **]**? Well whenever Cerebral encounters an Array in a Array  **[action1,[action2,action3],action4]** it will start the actions within that array in parallel, so after action1 finishes action2 and action3 are executed right after each other, even though they run promises. After action2 and action3 finish, action4 will be executed.
+What is happening here? Did you spot the additional **[** and **]**? Well whenever Cerebral encounters an Array in a Array  **[action1, [action2, action3], action4]** it will start the actions within that array in parallel, so after action1 finishes action2 and action3 are executed right after each other, even though they return promises. After action2 and action3 finish, action4 will be executed.
 
 We got even more flow control now, telling Cerebral to execute actions/operators in parallel by using JS arrays, and objects to diverge execution. By reading the signals you get a good understanding what the application will do. And don't forget, you do not even have to look at code to understand this, the debugger reflects parallel execution, state changes and even **paths** chosen.
 
@@ -128,20 +156,6 @@ function showToast (message, ms, type = null) {
   ]
 }
 ...
-{
-  buttonClicked: [
-    [
-      ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
-      getRepo, {
-        success: [
-        ...showToast(string`How cool is that. ${input`repo`} has ${input`data.subscribers_count`} subscribers and ${input`data.stargazers_count`} stars!`, 5000, 'success')
-        ],
-        error: [
-          ...showToast(string`Ooops something went wrong: ${input`data.message`}`, 5000, 'error')]
-      }
-    ]
-  ]
-}
 ```
 
 Congratulations! Now you know how to control your flow using **paths**. And if you need **parallel actions/operators**, well just add another array **[]** to the chain. You have even gotten insight into very complex control flow using **debounce**.
@@ -150,4 +164,4 @@ Congratulations! Now you know how to control your flow using **paths**. And if y
 
 We would like you to run two getRepo(...) requests. One to *cerebral/cerebral* and one to *cerebral/addressbar*. So it is a good idea to make *getRepo* a factory instead. On their successes they should insert their data into the state tree.
 
-**Want to dive deeper?** - [Go in depth](../in-depth/05_chains-and-paths.html), or move on with the tutorial
+**Want to dive deeper?** - [Go in depth](../in_depth/chains_and_paths.md), or move on with the tutorial

@@ -5,28 +5,32 @@
 Until now we have mostly used synchronous actions inside our **signals** and the flow was therefore straightforward. Example:
 
 ```js
-{
-  somethingHappened:[
-    action1,
-    action2
-  ]
-}
+Controller({
+  signals: {
+    somethingHappened:[
+      action1,
+      action2
+    ]
+  }
+})
 ```
 Because action2 appears after action1, action1 finishes before action2 starts. Clear enough. But now what happens when action1 executes asynchronously?
 
 We already have an example of this in our code. The **wait** operator runs asynchronously. It runs for 4 seconds before the toast message is reset.
 
 ```js
-{
-  buttonClicked:[
-    set(state`toast`, input`message`),
-    wait(4000),
-    set(state`toast`, null)
-  ]
-}
+Controller({
+  signals: {
+    buttonClicked:[
+      set(state`toast`, input`message`),
+      wait(4000),
+      set(state`toast`, null)
+    ]
+  }
+})
 ```
 
-The signal executes with the same behavior, it waits for an action to resolve before moving to the next.
+The signal executes with the same behavior, it waits for an action to resolve before moving to the next. So how does Cerebral know that **wait** is an asynchronous action? Well, the action returns a promise. That means all actions returning a promise is considered an *async action*.
 
 ## Creating factories
 Let us look at how **wait** is defined:
@@ -65,11 +69,13 @@ const controller = Controller(...)
 
 We need to adjust *src/index.js*:
 ```js
-{
-  buttonClicked: [
-    ...showToast(input`message`, 1000)
-  ]
-}
+Controller({
+  signals: {
+    buttonClicked: [
+      ...showToast(input`message`, 1000)
+    ]
+  }
+})
 ```
 
 Since **showToast** returns an array we use the [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) to merge into our existing chain.

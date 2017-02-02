@@ -3,6 +3,12 @@ import {state} from 'cerebral/tags'
 
 const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
+  if (!ms) {
+    return [
+      merge(state`app.toast`, {type, message})
+    ]
+  }
+
   if (ms) {
     return [
       merge(state`app.toast`, {type, message}),
@@ -14,10 +20,6 @@ function showToast (message, ms, type = null) {
       }
     ]
   }
-
-  return [
-    merge(state`app.toast`, {type, message})
-  ]
 }
 
 export default showToast

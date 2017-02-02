@@ -17,68 +17,67 @@
   },
   "docs": {
     "install": [
-      "install/index",
-      "install/debugger",
-      "install/boilerplate",
-      "install/tools",
-      "install/function_tree"
+      "index",
+      "boilerplate",
+      "tools",
+      "function_tree"
     ],
     "tutorial": [
-      "tutorial/index",
-      "tutorial/define_state",
-      "tutorial/render_state",
-      "tutorial/update_state",
-      "tutorial/chains",
-      "tutorial/actions",
-      "tutorial/async_actions",
-      "tutorial/paths",
-      "tutorial/compute_state",
-      "tutorial/providers",
-      "tutorial/routing",
-      "tutorial/modules"
+      "index",
+      "define_state",
+      "render_state",
+      "update_state",
+      "chains",
+      "actions",
+      "async_actions",
+      "paths",
+      "compute_state",
+      "providers",
+      "routing",
+      "modules"
     ],
-    "in depth": [
-      "in_depth/index",
-      "in_depth/controller",
-      "in_depth/state",
-      "in_depth/signals",
-      "in_depth/chains_and_paths",
-      "in_depth/actions",
-      "in_depth/providers",
-      "in_depth/tags",
-      "in_depth/operators",
-      "in_depth/factories",
-      "in_depth/connect",
-      "in_depth/compute",
-      "in_depth/routing"
+    "in_depth": [
+      "index",
+      "controller",
+      "state",
+      "signals",
+      "chains_and_paths",
+      "actions",
+      "providers",
+      "tags",
+      "operators",
+      "factories",
+      "connect",
+      "compute",
+      "routing"
     ],
-    "best practices": [
-      "best_practices/index",
-      "best_practices/constants",
-      "best_practices/testing",
-      "best_practices/load_initial_data",
-      "best_practices/storing_server_data",
-      "best_practices/lists",
-      "best_practices/modals",
-      "best_practices/feedback_messages",
-      "best_practices/popups",
-      "best_practices/long_running_side_effects",
-      "best_practices/server_side"
+    "best_practices": [
+      "index",
+      "constants",
+      "testing",
+      "load_initial_data",
+      "storing_server_data",
+      "lists",
+      "modals",
+      "feedback_messages",
+      "popups",
+      "long_running_side_effects",
+      "server_side"
     ],
     "migration": [
-      "migration/index"
+      "index"
     ],
     "api": [
-      "api/index",
-      "api/state",
-      "api/signals",
-      "api/tags",
-      "api/connect",
-      "api/modules",
-      "api/operators",
-      "api/providers",
-      "api/compute",
-      "api/router"
+      "index",
+      "state",
+      "signals",
+      "tags",
+      "connect",
+      "modules",
+      "operators",
+      "providers",
+      "compute",
+      "router"
     ]
   }
 }

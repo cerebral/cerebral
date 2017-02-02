@@ -12,8 +12,8 @@ export default connect({
 
     return (
       <div className='c-alerts c-alerts--bottomright'>
-        <div className={`c-alert ${props.toast.type ? 'c-alert--' + props.toast.type : ''}`}>
-          {props.toast.message}
+        <div className='c-alert'>
+          {props.toast}
         </div>
       </div>
     )

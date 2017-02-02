@@ -1,11 +1,15 @@
-function getRepo (repoName) {
-  function get ({http, path}) {
+function getRepoFactory (repoName) {
+  function getRepo ({http}) {
     return http.get(`/repos/cerebral/${repoName}`)
-      .then(response => path.success({data: response.result}))
-      .catch(error => path.error({data: error.result}))
+      .then((response) => {
+        return {[repoName]: response.result}
+      })
+      .catch((error) => {
+        return {error: error.result}
+      })
   }
 
-  return get
+  return getRepo
 }
 
-export default getRepo
+export default getRepoFactory

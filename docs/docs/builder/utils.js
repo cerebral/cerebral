@@ -3,6 +3,9 @@ const path = require('path')
 const babel = require('babel-core')
 
 module.exports = {
+  fileExistsSync (path) {
+    return fs.statSync(path).isFile()
+  },
   readDir (dirPath) {
     return new Promise(function (resolve, reject) {
       fs.readdir(path.resolve(dirPath), function (error, dirs) {
