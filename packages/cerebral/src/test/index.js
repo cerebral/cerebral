@@ -1,41 +1,47 @@
+import Path from 'function-tree/lib/Path'
 import {Controller} from '..'
 
 export function runCompute (compute, fixtures = {}) {
-  let result
+  let response
   const controller = Controller({
     state: fixtures.state || {},
     signals: {
       test: [
         ({ resolve }) => {
-          result = resolve.value(compute) // remove when we have resolve.compute
-          // result = resolve.compute(compute, fixtures.props)
+          response = resolve.value(compute) // remove when we have resolve.compute
+          // response = resolve.compute(compute, fixtures.props)
         }
       ]
     }
   })
   controller.getSignal('test')(fixtures.input)
-  return result
+  return response
+}
+
+export function runSignal (signal, fixtures = {}) {
+  return new Promise((resolve, reject) => {
+    const controller = Controller(Object.assign({}, fixtures, {signals: {signal}}))
+    const response = {controller}
+    controller.on('functionStart', function (execution, funcDetails, payload) {
+      response[funcDetails.name] = {input: payload}
+    })
+    controller.on('functionEnd', function (execution, funcDetails, payload, result) {
+      if (!result || (result instanceof Path && !result.payload)) {
+        return
+      }
+      if (response[funcDetails.name]) {
+        response[funcDetails.name].output = result instanceof Path ? result.payload : result
+      }
+    })
+    controller.on('error', reject)
+    controller.on('end', () => {
+      response.state = controller.getState()
+      resolve(response)
+    })
+    controller.getSignal('signal')(fixtures.input)
+  })
 }
 
 export function runAction (action, fixtures = {}) {
-  return new Promise((resolve, reject) => {
-    let output
-    const controller = Controller(Object.assign({}, fixtures, {
-      signals: {
-        test: [
-          (args) => {
-            output = action(args)
-            return output
-          }
-        ]
-      }
-    }))
-    controller.getSignal('test')(fixtures.input)
-    if (output && output.then) {
-      output.then((output) => resolve({output, controller}))
-      output.catch((output) => reject({output, controller}))
-    } else {
-      resolve({output, controller})
-    }
-  })
+  return runSignal([action], fixtures)
 }

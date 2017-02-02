@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import {compute} from '..'
 import {state, input} from '../tags'
-import {runCompute, runAction} from '.'
+import {runCompute, runAction, runSignal} from '.'
 import assert from 'assert'
 
 describe('test helpers', () => {
@@ -22,26 +22,54 @@ describe('test helpers', () => {
 
   describe('runAction', () => {
     it('should test an action that gets state', () => {
-      const testAction = ({state}) => state.get('foo')
+      const testAction = function testAction ({state}) {
+        return {foo: state.get('foo')}
+      }
       return runAction(testAction, {state: {foo: 'bar'}})
-        .then(({output}) => assert.equal(output, 'bar'))
+        .then(({testAction}) => assert.equal(testAction.output.foo, 'bar'))
     })
     it('should test an action that gets input', () => {
-      const testAction = ({input}) => input.foo
+      const testAction = function testAction ({input}) {
+        return {foo: input.foo}
+      }
       return runAction(testAction, {input: {foo: 'bar'}})
-        .then(({output}) => assert.equal(output, 'bar'))
+        .then(({testAction}) => assert.equal(testAction.output.foo, 'bar'))
     })
     it('should test an action that sets state', () => {
-      const testAction = ({state}) => state.set('foo', 'baz')
+      const testAction = function testAction ({state}) {
+        state.set('foo', 'baz')
+      }
       return runAction(testAction, {state: {foo: 'bar'}})
-        .then(({controller}) => assert.equal(controller.getState('foo'), 'baz'))
+        .then(({state}) => assert.equal(state.foo, 'baz'))
     })
     it('should test async actions', () => {
-      const testAction = () => new Promise((resolve) => {
-        setTimeout(() => resolve('foo'), 1)
-      })
+      const testAction = function testAction () {
+        return new Promise((resolve) => {
+          setTimeout(() => resolve({foo: 'bar'}), 1)
+        })
+      }
       return runAction(testAction)
-        .then(({output}) => assert.equal(output, 'foo'))
+        .then(({testAction}) => assert.equal(testAction.output.foo, 'bar'))
+    })
+  })
+
+  describe('runSignal', () => {
+    it('should test a signal', () => {
+      const testSignal = [
+        function action1 ({input}) {
+          return {bar: 'bar'}
+        },
+        function action2 ({input}) {
+          return {baz: 'baz'}
+        }
+      ]
+      return runSignal(testSignal, {input: {foo: 'foo'}})
+        .then(({action1, action2}) => {
+          assert.equal(action1.input.foo, 'foo')
+          assert.equal(action1.output.bar, 'bar')
+          assert.equal(action2.input.bar, 'bar')
+          assert.equal(action2.output.baz, 'baz')
+        })
     })
   })
 })
