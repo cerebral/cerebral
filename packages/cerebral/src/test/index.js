@@ -16,3 +16,26 @@ export function runCompute (compute, fixtures = {}) {
   controller.getSignal('test')(fixtures.input)
   return result
 }
+
+export function runAction (action, fixtures = {}) {
+  return new Promise((resolve, reject) => {
+    let output
+    const controller = Controller(Object.assign({}, fixtures, {
+      signals: {
+        test: [
+          (args) => {
+            output = action(args)
+            return output
+          }
+        ]
+      }
+    }))
+    controller.getSignal('test')(fixtures.input)
+    if (output && output.then) {
+      output.then((output) => resolve({output, controller}))
+      output.catch((output) => reject({output, controller}))
+    } else {
+      resolve({output, controller})
+    }
+  })
+}
