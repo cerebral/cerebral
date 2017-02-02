@@ -1,6 +1,6 @@
 import {Controller} from '..'
 
-export function runCompute(compute, fixtures = {}) {
+export function runCompute (compute, fixtures = {}) {
   let result
   const controller = Controller({
     state: fixtures.state || {},

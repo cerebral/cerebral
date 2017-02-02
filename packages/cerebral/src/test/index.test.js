@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {compute} from '..'
-import {state, props, input} from '../tags'
+import {state, input} from '../tags'
 import {runCompute} from '.'
 import assert from 'assert'
 
