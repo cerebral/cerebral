@@ -238,6 +238,13 @@ export function createResolver (getters) {
 
       return arg
     },
+    compute (arg, props = {}) {
+      if (arg instanceof Compute) {
+        return arg.getValue(Object.assign({}, getters, { props }))
+      }
+
+      return arg
+    },
     path (arg) {
       if (arg instanceof Tag) {
         return arg.getPath(getters)
