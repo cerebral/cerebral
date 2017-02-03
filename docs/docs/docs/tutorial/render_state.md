@@ -2,8 +2,8 @@
 
 **Load up chapter 02** - [Preview](02)
 
-Now lets get that state displayed in our application.
-First of all we need to tell our component (App) to **connect** to the state.
+Now let's get that state displayed in our application.
+First of all, we need to tell our component (App) to **connect** to the state.
 
 So please change the *src/components/App/index.js* to:
 
@@ -29,7 +29,7 @@ And voilà, your application should now display the title state. And this is the
 
 We used something called a **tag** to define our state dependency. If you are unfamiliar with [template literals and template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) in JavaScript, you should read about them or just accept their awesome power :)
 
-But our application does not do much. We have to introduce the concept of change. With the debugger we can actually force a change to our state and make the UI update. Click the title state in the debugger, change it and hit enter. You will see the application display your changed state.
+But our application does not do much. We have to introduce the concept of change. With the debugger, we can actually force a change to our state and make the UI update. Click the title state in the debugger, change it and hit enter. You will see the application display your changed state.
 
 Thanks to...
 ```js

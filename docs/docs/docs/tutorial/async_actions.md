@@ -2,7 +2,7 @@
 
 **Load up chapter 06** - [Preview](06)
 
-Until now we have mostly used synchronous actions inside our **signals** and the flow was therefore straightforward. Example:
+Until now we have mostly used synchronous actions inside our **signals** and the flow was, therefore, straightforward. Example:
 
 ```js
 Controller({
@@ -80,4 +80,4 @@ Controller({
 
 Since **showToast** returns an array we use the [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) to merge into our existing chain.
 
-Congratulations! You have successfully mastered the power of factories. But there are couple of more concepts that will help you define state changes, jump over to the next chapter to find out more.
+Congratulations! You have successfully mastered the power of factories. But there are a couple of more concepts that will help you define state changes, jump over to the next chapter to find out more.
