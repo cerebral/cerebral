@@ -2,8 +2,8 @@
 import Controller from '../Controller'
 import assert from 'assert'
 
-describe('VerifyInput', () => {
-  it('should throw when invalid input', () => {
+describe('VerifyProps', () => {
+  it('should throw when invalid props', () => {
     const controller = new Controller({
       state: {
         foo: 'bar'

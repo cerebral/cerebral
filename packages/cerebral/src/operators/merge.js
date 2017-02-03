@@ -1,5 +1,5 @@
 export default function (target, ...values) {
-  function merge ({state, input, resolve}) {
+  function merge ({state, resolve}) {
     if (!resolve.isTag(target, 'state')) {
       throw new Error('Cerebral operator.merge: You have to use the STATE TAG as first argument')
     }

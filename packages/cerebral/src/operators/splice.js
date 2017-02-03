@@ -1,5 +1,5 @@
 export default function (target, ...args) {
-  function splice ({state, input, resolve}) {
+  function splice ({state, resolve}) {
     if (!resolve.isTag(target, 'state')) {
       throw new Error('Cerebral operator.splice: You have to use the STATE TAG as first argument')
     }

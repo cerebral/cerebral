@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {string, input} from 'cerebral/tags'
+import {string, props} from 'cerebral/tags'
 import HttpProvider, {httpGet, httpPost, httpPut, httpPatch, httpDelete} from './'
 import assert from 'assert'
 import mock from 'xhr-mock'
@@ -24,8 +24,8 @@ describe('Http Provider', () => {
               .then(path.success)
           }, {
             success: [
-              ({input}) => {
-                assert.deepEqual(input, {
+              ({props}) => {
+                assert.deepEqual(props, {
                   result: {foo: 'bar'},
                   status: 200,
                   headers: {'content-type': 'application/json'}
@@ -197,19 +197,19 @@ describe('Http Provider', () => {
       providers: [HttpProvider()],
       signals: {
         test: [
-          httpGet(string`/items/${input`itemId`}`), {
+          httpGet(string`/items/${props`itemId`}`), {
             success: [() => { responseCount++ }]
           },
-          httpPost(string`/items/${input`itemId`}`), {
+          httpPost(string`/items/${props`itemId`}`), {
             success: [() => { responseCount++ }]
           },
-          httpPut(string`/items/${input`itemId`}`), {
+          httpPut(string`/items/${props`itemId`}`), {
             success: [() => { responseCount++ }]
           },
-          httpPatch(string`/items/${input`itemId`}`), {
+          httpPatch(string`/items/${props`itemId`}`), {
             success: [() => { responseCount++ }]
           },
-          httpDelete(string`/items/${input`itemId`}`), {
+          httpDelete(string`/items/${props`itemId`}`), {
             success: [() => { responseCount++ }]
           },
           () => {
@@ -223,7 +223,7 @@ describe('Http Provider', () => {
       itemId: 1
     })
   })
-  it('should allow factories to accept tags in input data', (done) => {
+  it('should allow factories to accept tags in props data', (done) => {
     const mockResponse = (req, res) => {
       assert.equal(req.body(), JSON.stringify({data: 1}))
       return res
@@ -239,13 +239,13 @@ describe('Http Provider', () => {
       providers: [HttpProvider()],
       signals: {
         test: [
-          httpPost('/test', { data: input`data` }), {
+          httpPost('/test', { data: props`data` }), {
             success: []
           },
-          httpPut('/test', { data: input`data` }), {
+          httpPut('/test', { data: props`data` }), {
             success: []
           },
-          httpPatch('/test', { data: input`data` }), {
+          httpPatch('/test', { data: props`data` }), {
             success: []
           },
           () => {

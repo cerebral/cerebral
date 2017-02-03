@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {shift} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.shift', () => {
   it('should shift value in model', () => {
@@ -25,7 +25,7 @@ describe('operator.shift', () => {
       },
       signals: {
         test: [
-          shift(input`list`, 'bar')
+          shift(props`list`, 'bar')
         ]
       }
     })

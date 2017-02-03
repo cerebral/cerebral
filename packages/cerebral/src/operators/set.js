@@ -1,13 +1,13 @@
 export default function (target, value) {
-  function set ({state, input, resolve}) {
-    if (!resolve.isTag(target, 'state', 'input')) {
-      throw new Error('Cerebral operator.set: You have to use the STATE or INPUT TAG as first argument')
+  function set ({state, props, resolve}) {
+    if (!resolve.isTag(target, 'state', 'props')) {
+      throw new Error('Cerebral operator.set: You have to use the STATE or PROPS TAG as first argument')
     }
 
     if (target.type === 'state') {
       state.set(resolve.path(target), resolve.value(value))
     } else {
-      const result = Object.assign({}, input)
+      const result = Object.assign({}, props)
       const parts = resolve.path(target).split('.')
       const key = parts.pop()
       const targetObj = parts.reduce((target, key) => {

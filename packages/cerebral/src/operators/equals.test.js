@@ -2,10 +2,10 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {equals} from './'
-import {state, input} from '../tags'
+import {state, props} from '../tags'
 
 describe('operator.equals', () => {
-  it('should go down path based on input', () => {
+  it('should go down path based on props', () => {
     let count = 0
     const controller = Controller({
       state: {
@@ -13,7 +13,7 @@ describe('operator.equals', () => {
       },
       signals: {
         test: [
-          equals(input`foo`), {
+          equals(props`foo`), {
             bar: [() => { count++ }],
             otherwise: []
           }

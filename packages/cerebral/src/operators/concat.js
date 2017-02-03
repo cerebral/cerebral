@@ -1,5 +1,5 @@
 export default function (target, value) {
-  function concat ({state, input, resolve}) {
+  function concat ({state, resolve}) {
     if (!resolve.isTag(target, 'state')) {
       throw new Error('Cerebral operator.concat: You have to use the STATE TAG as first argument')
     }

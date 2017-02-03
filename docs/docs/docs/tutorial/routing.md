@@ -96,18 +96,18 @@ And update the signals as well:
   ],
   reposRouted: [
     set(state`activeTab`, 'repos'),
-    ...showToast(string`Loading data for repo: ${input`repo`}`),
+    ...showToast(string`Loading data for repo: ${props`repo`}`),
     [
       getRepo('cerebral'),
       getRepo('addressbar')
     ],
-    when(input`error`), {
+    when(props`error`), {
       true: [
-        ...showToast(string`Error: ${input`error`}`, 5000)
+        ...showToast(string`Error: ${props`error`}`, 5000)
       ],
       false: [
-        set(state`repos.cerebral`, input`cerebral`),
-        set(state`repos.addressbar`, input`addressbar`),
+        set(state`repos.cerebral`, props`cerebral`),
+        set(state`repos.addressbar`, props`addressbar`),
         ...showToast(string`The repos have ${starsCount} stars`, 5000)    
       ]
     }

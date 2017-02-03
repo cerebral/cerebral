@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 import {form, resetForm, changeField} from '..'
 import assert from 'assert'
 
@@ -29,7 +29,7 @@ describe('resetForm', () => {
     const controller = Controller({
       signals: {
         reset: [
-          resetForm(state`${input`form`}`)
+          resetForm(state`${props`form`}`)
         ],
         changeField
       },
@@ -51,7 +51,7 @@ describe('resetForm', () => {
     const controller = Controller({
       signals: {
         reset: [
-          resetForm(state`${input`form`}`)
+          resetForm(state`${props`form`}`)
         ],
         changeField
       },
@@ -78,7 +78,7 @@ describe('resetForm', () => {
     const controller = Controller({
       signals: {
         reset: [
-          resetForm(state`${input`form`}`, input`initialValues`)
+          resetForm(state`${props`form`}`, props`initialValues`)
         ],
         changeField
       },

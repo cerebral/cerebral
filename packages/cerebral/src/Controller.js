@@ -3,11 +3,12 @@ import {FunctionTree} from 'function-tree'
 import Module from './Module'
 import Model from './Model'
 import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders, cleanPath} from './utils'
-import VerifyInputProvider from './providers/VerifyInput'
+import VerifyPropsProvider from './providers/VerifyProps'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
 import ResolveProvider from './providers/Resolve'
+import PropsProvider from './providers/Props'
 
 /*
   The controller is where everything is attached. The devtools
@@ -35,6 +36,7 @@ class Controller extends FunctionTree {
     }
 
     this.contextProviders = [
+      PropsProvider(),
       ControllerProvider(this)
     ].concat(
       this.router ? [
@@ -46,7 +48,7 @@ class Controller extends FunctionTree {
       ] : []
     )).concat((
       isDeveloping() ? [
-        VerifyInputProvider
+        VerifyPropsProvider
       ] : []
     )).concat(
       StateProvider(),

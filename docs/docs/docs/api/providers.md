@@ -26,13 +26,13 @@ Look at the **community tools** for other providers that can be used, or create 
 
 ## Creating a provider
 
-An example of a provider is the built in **InputProvider** of function-tree.
+An example of a provider is the **PropsProvider**.
 
 It looks something like this:
 
 ```js
-function InputProvider(context, functionDetails, payload) {
-  context.input = payload
+function PropsProvider(context, functionDetails, payload) {
+  context.props = payload
 
   return context
 }
@@ -44,7 +44,7 @@ The providers are called by **function-tree** with some arguments.
 - **functionDetails** gives information about the function (action) that will run
 - **payload** the current payload of the execution (signal)
 
-You can create a standalone provider simply by defining a function like the **InputProvider** in the first example. But you can also define a provider on a module. This allows you to combine providers and signals.
+You can create a standalone provider simply by defining a function like the **PropsProvider** in the first example. But you can also define a provider on a module. This allows you to combine providers and signals.
 
 ```js
 export default (module) => {
@@ -92,7 +92,7 @@ function MyProvider(context) {
   context.execution // Information on the function tree execution
   context.controller // The Cerebral controller
   context.debugger // If devtools is added, you can send messages to the debugger
-  context.input // Current payload
+  context.props // Current payload
   context.path // If any paths are defined after the action to be executed
 
   return context

@@ -1,5 +1,5 @@
 function putFactory (putPath, file, options = {}) {
-  function put ({firebase, input, state, path, resolve}) {
+  function put ({firebase, props, state, path, resolve}) {
     const evaluatedOptions = Object.keys(options).reduce((currentEvaluatedOptions, key) => {
       const option = options[key]
 
@@ -10,8 +10,8 @@ function putFactory (putPath, file, options = {}) {
 
         if (option.type === 'signal') {
           currentEvaluatedOptions[key] = (progress) => {
-            // We call progress signal with same 'input' context
-            resolve.value(option)(Object.assign({}, input, progress))
+            // We call progress signal with same 'props' context
+            resolve.value(option)(Object.assign({}, props, progress))
           }
         } else {
           currentEvaluatedOptions[key] = (progress) => {

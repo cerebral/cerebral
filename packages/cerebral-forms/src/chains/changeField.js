@@ -1,8 +1,8 @@
 import {set} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 import validateField from '../factories/validateField'
 
 export default [
-  set(state`${input`field`}.value`, input`value`),
-  validateField(state`${input`field`}`)
+  set(state`${props`field`}.value`, props`value`),
+  validateField(state`${props`field`}`)
 ]

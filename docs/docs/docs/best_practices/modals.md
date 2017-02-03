@@ -88,7 +88,7 @@ So let us increase complexity here. What if our modal was a modal to show a user
 
 ```js
 import {set} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 
 export default {
   state: {
@@ -100,7 +100,7 @@ export default {
   signals: {
     userModalOpened: [
       set(state`app.showUserModal`, true),
-      set(state`app.currentUserKey`, input`userKey`)
+      set(state`app.currentUserKey`, props`userKey`)
     ],
     userModalClosed: [
       set(state`app.showUserModal`, false)
@@ -141,7 +141,7 @@ What is good about this approach is that you can very easily handle grabbing mor
 
 ```js
 import {when, set} from 'cerebral/operators'
-import {state, input, string} from 'cerebral/tags'
+import {state, props, string} from 'cerebral/tags'
 import {httpGet} from 'cerebral-provider-http'
 
 export default {
@@ -155,12 +155,12 @@ export default {
   signals: {
     userModalOpened: [
       set(state`app.showUserModal`, true),
-      set(state`app.currentUserKey`, input`userKey`),
+      set(state`app.currentUserKey`, props`userKey`),
       set(state`app.isLoadingProjects`, true),
-      set(input`userId`, state`app.users.${input`userKey`}.id`),
-      httpGet(string`/users/${input`userId`}/projects`), {
+      set(props`userId`, state`app.users.${props`userKey`}.id`),
+      httpGet(string`/users/${props`userId`}/projects`), {
         success: [
-          set(state`app.users.${input`userKey`}.projects`, input`result`)
+          set(state`app.users.${props`userKey`}.projects`, props`result`)
         ],
         error: []
       },
@@ -180,7 +180,7 @@ So what if we display the user to edit it? Well, we have to take into account th
 
 ```js
 import {when, set} from 'cerebral/operators'
-import {state, input, string} from 'cerebral/tags'
+import {state, props, string} from 'cerebral/tags'
 import {httpPatch} from 'cerebral-provider-http'
 
 export default {
@@ -199,13 +199,13 @@ export default {
   signals: {
     userModalOpened: [
       set(state`app.userModal.show`, true),
-      set(state`app.userModal.fields.firstName`, state`users.${input`userKey`}.firstName`),
-      set(state`app.userModal.fields.lastName`, state`users.${input`userKey`}.lastName`)
+      set(state`app.userModal.fields.firstName`, state`users.${props`userKey`}.firstName`),
+      set(state`app.userModal.fields.lastName`, state`users.${props`userKey`}.lastName`)
     ],
     userModalClosed: [
-      set(input`userId`, state`app.users.${input`userKey`}.id`),
+      set(props`userId`, state`app.users.${props`userKey`}.id`),
       set(state`isSavingUser`, true),
-      httpPatch(string`/users/${input`userId`}`, state`userModal.fields`), {
+      httpPatch(string`/users/${props`userId`}`, state`userModal.fields`), {
         success: [
           set(state`isSavingUser`, false),
           set(state`app.userModal.show`, false)

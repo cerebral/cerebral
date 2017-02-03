@@ -15,7 +15,7 @@ class Devtools {
     storeMutations: true,
     preventExternalMutations: true,
     verifyStrictRender: true,
-    preventInputPropReplacement: false,
+    preventPropsReplacement: false,
     bigComponentsWarning: 10,
     remoteDebugger: null,
     multipleApps: true,
@@ -27,7 +27,7 @@ class Devtools {
     this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
     this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
     this.verifyStrictRender = typeof options.verifyStrictRender === 'undefined' ? true : options.verifyStrictRender
-    this.preventInputPropReplacement = options.preventInputPropReplacement || false
+    this.preventPropsReplacement = options.preventPropsReplacement || false
     this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
     this.multipleApps = typeof options.multipleApps === 'undefined' ? true : options.multipleApps

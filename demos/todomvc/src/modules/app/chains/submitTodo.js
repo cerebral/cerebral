@@ -1,5 +1,5 @@
 import {merge, set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 
 import createTodo from '../actions/createTodo'
 import postTodo from '../actions/postTodo'
@@ -10,15 +10,15 @@ export default [
   set(state`app.isSaving`, true),
   postTodo, {
     success: [
-      merge(state`app.todos.${input`ref`}`, {
-        id: input`id`,
+      merge(state`app.todos.${props`ref`}`, {
+        id: props`id`,
         $isSaving: false
       })
     ],
     error: [
-      merge(state`app.todos.${input`ref`}`, {
+      merge(state`app.todos.${props`ref`}`, {
         $isSaving: false,
-        $error: input`error`
+        $error: props`error`
       })
     ]
   },

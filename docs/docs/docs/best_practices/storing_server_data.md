@@ -44,8 +44,8 @@ So which one should you choose? Well, both! Use objects to structure data in the
 When this data is received you want to convert it to an object:
 
 ```js
-function setUsers({input, state}) {
-  const users = input.result.reduce((usersMap, user) => {
+function setUsers({props, state}) {
+  const users = props.result.reduce((usersMap, user) => {
     usersMap[user.id] = user
 
     return usersMap
@@ -155,8 +155,8 @@ But we can get other benefits from this as well. Instead of using the user ID as
 ```js
 import uuid from 'uuid'
 
-function setUsers({input, state}) {
-  const users = input.result.reduce((usersMap, user) => {
+function setUsers({props, state}) {
+  const users = props.result.reduce((usersMap, user) => {
     usersMap[uuid.v4()] = user
 
     return usersMap
@@ -170,12 +170,12 @@ Everything works exactly the same, but now we have a client specific reference t
 ```js
 import uuid from 'uuid'
 
-function addUser({input, state, output}) {
+function addUser({props, state, output}) {
   const newUserKey = uuid.v4()
 
   state.set(`app.users.${newUserKey}`, {
     id: null,
-    name: input.name
+    name: props.name
   })
 
   return {newUserKey}

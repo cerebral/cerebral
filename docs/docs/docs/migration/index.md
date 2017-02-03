@@ -123,18 +123,15 @@ npm install cerebral-operators --save
 The new operators now use tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
 
 ```js
-import {
-  set // other operators include: wait, when, equals, debounce, push, pop, shift, toggle, unset, splice
-} from 'cerebral/operators'
-import {
-  state,
-  input
-} from 'cerebral/tags'
+import {set} from 'cerebral/operators'
+import {state, props} from 'cerebral/tags'
 
 export default [
-  set(state`foo.bar`, input`bar`)
+  set(state`foo.bar`, props`bar`)
 ]
 ```
+
+Other operators include: wait, when, equals, debounce, push, pop, shift, toggle, unset, splice
 
 ## Signals
 You handle signals mostly the same way as in 1.x. You can describe signals in a module or in the controller directly.
@@ -170,11 +167,11 @@ const controller = Controller({
 One note when using signals is that the **immediate** option is gone. This keeps the api cleaner.
 
 ## Actions
-Since cerebral 2.x is using **function-tree** under the hood we have other, more powerful options than before. The input, state is the same but output is gone. You can just return an object from the action that will be available in the input for the next action. You can also return a **path** that is a new concept in Cerebral 2.x and outdates output. **path** is used to determine the execution path for your chain. You do no longer have services as an argument in the context, use providers instead.
+Since cerebral 2.x is using **function-tree** under the hood we have other, more powerful options than before. The state is the same, but output is gone and input is renamed to props. You can just return an object from the action that will be available in the props for the next action. You can also return a **path** that is a new concept in Cerebral 2.x and outdates output. **path** is used to determine the execution path for your chain. You do no longer have services as an argument in the context, use providers instead.
 
 ### 1.x
 ```js
-function myAction({input, state, output, services}) {
+function myAction({props, state, output, services}) {
 
 }
 ```
@@ -182,7 +179,7 @@ function myAction({input, state, output, services}) {
 In 2.x you have the following. Instead of services you hook up providers that supersedes services.
 
 ```js
-function myAction({input, state, path /*, myProvider, otherProvider */ }) {
+function myAction({props, state, path /*, myProvider, otherProvider */ }) {
 
 }
 ```
@@ -211,7 +208,7 @@ function myAction({state, path}) {
 }
 ```
 
-If you don't want to take another path in the execution tree you could return a new object that would be available in the input object.
+If you don't want to take another path in the execution tree you could return a new object that would be available in the props object.
 
 ```js
 function myAction({state, path}) {

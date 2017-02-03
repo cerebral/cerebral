@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 import {form, isValidForm, changeField} from '..'
 import assert from 'assert'
 
@@ -39,7 +39,7 @@ describe('isValidForm', () => {
     const controller = Controller({
       signals: {
         isValidForm: [
-          isValidForm(state`${input`form`}`), {
+          isValidForm(state`${props`form`}`), {
             true: [() => validCount++],
             false: [() => invalidCount++]
           }
