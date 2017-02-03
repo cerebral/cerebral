@@ -26,14 +26,14 @@ describe('test helpers', () => {
         return {foo: state.get('foo')}
       }
       return runAction(testAction, {state: {foo: 'bar'}})
-        .then(({testAction}) => assert.equal(testAction.output.foo, 'bar'))
+        .then(({output}) => assert.equal(output.foo, 'bar'))
     })
     it('should test an action that gets input', () => {
       const testAction = function testAction ({input}) {
         return {foo: input.foo}
       }
       return runAction(testAction, {input: {foo: 'bar'}})
-        .then(({testAction}) => assert.equal(testAction.output.foo, 'bar'))
+        .then(({output}) => assert.equal(output.foo, 'bar'))
     })
     it('should test an action that sets state', () => {
       const testAction = function testAction ({state}) {
@@ -49,12 +49,12 @@ describe('test helpers', () => {
         })
       }
       return runAction(testAction)
-        .then(({testAction}) => assert.equal(testAction.output.foo, 'bar'))
+        .then(({output}) => assert.equal(output.foo, 'bar'))
     })
   })
 
   describe('runSignal', () => {
-    it('should test a signal', () => {
+    it('should test a signal with named actions', () => {
       const testSignal = [
         function action1 ({input}) {
           return {bar: 'bar'}
@@ -63,12 +63,29 @@ describe('test helpers', () => {
           return {baz: 'baz'}
         }
       ]
-      return runSignal(testSignal, {input: {foo: 'foo'}})
+      return runSignal(testSignal, {input: {foo: 'foo'}}, {recordActions: 'byName'})
         .then(({action1, action2}) => {
           assert.equal(action1.input.foo, 'foo')
           assert.equal(action1.output.bar, 'bar')
           assert.equal(action2.input.bar, 'bar')
           assert.equal(action2.output.baz, 'baz')
+        })
+    })
+    it('should test a signal with indexed actions', () => {
+      const testSignal = [
+        function action1 ({input}) {
+          return {bar: 'bar'}
+        },
+        function action2 ({input}) {
+          return {baz: 'baz'}
+        }
+      ]
+      return runSignal(testSignal, {input: {foo: 'foo'}}, {recordActions: true})
+        .then((response) => {
+          assert.equal(response[0].input.foo, 'foo')
+          assert.equal(response[0].output.bar, 'bar')
+          assert.equal(response[1].input.bar, 'bar')
+          assert.equal(response[1].output.baz, 'baz')
         })
     })
   })

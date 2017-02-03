@@ -17,21 +17,36 @@ export function runCompute (compute, fixtures = {}) {
   return response
 }
 
-export function runSignal (signal, fixtures = {}) {
+export function runSignal (signal, fixtures = {}, options = {}) {
   return new Promise((resolve, reject) => {
+    const recordActions = options.recordActions && options.recordActions === 'byName' ? 'name' : 'functionIndex'
     const controller = Controller(Object.assign({}, fixtures, {signals: {signal}}))
     const response = {controller}
-    controller.on('functionStart', function (execution, funcDetails, payload) {
-      response[funcDetails.name] = {input: payload}
-    })
-    controller.on('functionEnd', function (execution, funcDetails, payload, result) {
-      if (!result || (result instanceof Path && !result.payload)) {
-        return
-      }
-      if (response[funcDetails.name]) {
-        response[funcDetails.name].output = result instanceof Path ? result.payload : result
-      }
-    })
+    if (recordActions) {
+      controller.on('functionStart', function (execution, funcDetails, payload) {
+        if (options.singleAction) {
+          response.input = payload
+        } else {
+          if (response[funcDetails[recordActions]]) {
+            console.warn(`Cerebral[runSignal]: signal contains actions with duplicate names ('${funcDetails[recordActions]}')`)
+          }
+          response[funcDetails[recordActions]] = {input: payload}
+        }
+      })
+      controller.on('functionEnd', function (execution, funcDetails, payload, result) {
+        if (!result || (result instanceof Path && !result.payload)) {
+          return
+        }
+        if (options.singleAction || response[funcDetails[recordActions]]) {
+          const output = result instanceof Path ? result.payload : result
+          if (options.singleAction) {
+            response.output = output
+          } else {
+            response[funcDetails[recordActions]].output = output
+          }
+        }
+      })
+    }
     controller.on('error', reject)
     controller.on('end', () => {
       response.state = controller.getState()
@@ -42,5 +57,5 @@ export function runSignal (signal, fixtures = {}) {
 }
 
 export function runAction (action, fixtures = {}) {
-  return runSignal([action], fixtures)
+  return runSignal([action], fixtures, {recordActions: true, singleAction: true})
 }
