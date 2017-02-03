@@ -8,7 +8,7 @@ You might be more familiar with frameworks where state is described with classes
 
 There is no "right way" to do this, but using a single state tree and store all the state of our application in that tree gives you the ability to read, write and explore all the state of your application coherently. This approach also gives other benefits not possible with the class approach.
 
-To define the initial state of the application all we need to do is to is add it to our **Controller** in *src/index.js*
+To define the initial state of the application all we need to do is to add it to our **Controller** in *src/index.js*
 
 ```js
 ...
