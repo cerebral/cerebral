@@ -18,17 +18,21 @@ function prepare (part) {
 
   // remove only source files that do not exist on "parts" folder
   let partsFiles = []
-  find(path.join(paths.parts, part, 'src')).forEach(function (file) {
-    const filePathPartial = file.replace(path.join(paths.parts, part, 'src'), '')
+  const partPath = path.join(paths.parts, part, 'src').replace(/\\/g, '\/')
+  find(partPath).forEach(function (file) {
+    const filePathPartial = file.replace(partPath, '')
     if (filePathPartial.length > 0) {
-      partsFiles.push(filePathPartial)
+      partsFiles.push({
+        partialPath: filePathPartial,
+        fullPath: file
+      })
     }
   })
 
   let srcFiles = []
-  let srcFilesFullName = []
-  find(paths.src).forEach(function (file) {
-    const filePathPartial = file.replace(paths.src, '')
+  const sourcePath = paths.src.replace(/\\/g, '\/')
+  find(sourcePath).forEach(function (file) {
+    const filePathPartial = file.replace(sourcePath, '')
     if (filePathPartial.length > 0) {
       srcFiles.push({
         partialPath: filePathPartial,
@@ -37,8 +41,9 @@ function prepare (part) {
     }
   })
 
+
   const strangeFilesToDelete = srcFiles.filter((srcFileObj) => {
-    const srcFileExists = partsFiles.find(partFile => partFile === srcFileObj.partialPath)
+    const srcFileExists = partsFiles.find(partFile => partFile.partialPath === srcFileObj.partialPath)
     return !srcFileExists
   })
 
