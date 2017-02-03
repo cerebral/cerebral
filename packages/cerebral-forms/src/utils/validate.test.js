@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
 import {set} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 import {form, validateField, validateForm} from '..'
 import assert from 'assert'
 
@@ -96,7 +96,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.name.value`, input`value`),
+            set(state`form.name.value`, props`value`),
             validateField('form.name')
           ]
         }
@@ -122,7 +122,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.firstName.value`, input`value`),
+            set(state`form.firstName.value`, props`value`),
             validateField('form.firstName')
           ]
         }
@@ -156,9 +156,9 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.firstName.value`, input`firstName`),
-            set(state`form.lastName.value`, input`lastName`),
-            set(state`form.age.value`, input`age`),
+            set(state`form.firstName.value`, props`firstName`),
+            set(state`form.lastName.value`, props`lastName`),
+            set(state`form.age.value`, props`age`),
             validateField('form.firstName'),
             validateField('form.lastName'),
             validateField('form.age')
@@ -209,7 +209,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.firstName.value`, input`value`),
+            set(state`form.firstName.value`, props`value`),
             validateField('form.firstName')
           ]
         }
@@ -244,8 +244,8 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.password.value`, input`value1`),
-            set(state`form.confirmPassword.value`, input`value2`),
+            set(state`form.password.value`, props`value1`),
+            set(state`form.confirmPassword.value`, props`value2`),
             validateField('form.password'),
             validateField('form.confirmPassword')
           ]
@@ -280,7 +280,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.name.value`, input`value`)
+            set(state`form.name.value`, props`value`)
           ],
           formSubmitted: [
             validateForm('form')

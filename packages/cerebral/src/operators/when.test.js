@@ -2,15 +2,15 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {when} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.when', () => {
-  it('should check truthy value of input', () => {
+  it('should check truthy value of props', () => {
     let count = 0
     const controller = Controller({
       signals: {
         test: [
-          when(input`foo`), {
+          when(props`foo`), {
             true: [() => { count++ }],
             false: []
           }
@@ -38,13 +38,13 @@ describe('operator.when', () => {
     controller.getSignal('test')()
     assert.equal(count, 1)
   })
-  it('should check truthy input using function', () => {
+  it('should check truthy props using function', () => {
     let accepted = 0
     let discarded = 0
     const controller = Controller({
       signals: {
         test: [
-          when(input`value`, (value) => Boolean(value.length)), {
+          when(props`value`, (value) => Boolean(value.length)), {
             true: [
               () => { accepted++ }
             ],
@@ -91,7 +91,7 @@ describe('operator.when', () => {
       },
       signals: {
         test: [
-          when(state`foo`, input`bar`, (foo, bar) => foo === bar), {
+          when(state`foo`, props`bar`, (foo, bar) => foo === bar), {
             true: [
               () => { results.push('true') }
             ],
@@ -111,7 +111,7 @@ describe('operator.when', () => {
     const controller = Controller({
       signals: {
         test: [
-          when(input`foo`, 'bar', (foo, bar) => foo === bar), {
+          when(props`foo`, 'bar', (foo, bar) => foo === bar), {
             true: [
               () => { results.push('true') }
             ],

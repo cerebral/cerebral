@@ -1,6 +1,6 @@
 import {set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 
 export default [
-  set(state`app.filter`, input`filter`)
+  set(state`app.filter`, props`filter`)
 ]

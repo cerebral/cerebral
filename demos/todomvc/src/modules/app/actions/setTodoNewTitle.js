@@ -1,5 +1,5 @@
-function setTodoNewTitle ({input, state}) {
-  state.set(`app.todos.${input.ref}.$newTitle`, input.title)
+function setTodoNewTitle ({props, state}) {
+  state.set(`app.todos.${props.ref}.$newTitle`, props.title)
 }
 
 export default setTodoNewTitle

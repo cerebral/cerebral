@@ -53,7 +53,7 @@ state`${computedFoo}.bar`
 ```
 
 ## Getting data
-Compute can manually grab data related to where it is run. For example in **connect** you have access to both state and properties of the component. In a signal you would have access to state and the input to the signal. You do this by combining the **get** argument with a related tag:
+Compute can manually grab data related to where it is run. For example in **connect** you have access to both state and properties of the component. In a signal you would have access to state and the props to the signal. You do this by combining the **get** argument with a related tag:
 
 ```js
 import {compute} from 'cerebral'

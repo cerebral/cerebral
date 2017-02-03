@@ -6,7 +6,7 @@ import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
 import {set, debounce} from 'cerebral/operators'
-import {state, input, string} from 'cerebral/tags'
+import {state, props, string} from 'cerebral/tags'
 
 const toastDebounce = debounce.shared()
 function showToast (message, ms) {
@@ -56,11 +56,11 @@ const controller = Controller({
       [
         ...showToast('Loading data for repos', 2000),
         getRepo('cerebral'), {
-          success: [set(state`repos.cerebral`, input`data`)],
+          success: [set(state`repos.cerebral`, props`data`)],
           error: []
         },
         getRepo('addressbar'), {
-          success: [set(state`repos.addressbar`, input`data`)],
+          success: [set(state`repos.addressbar`, props`data`)],
           error: []
         }
       ],

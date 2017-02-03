@@ -22,16 +22,16 @@ A convention is to attach chains to signals. These chains typically have their o
 ```js
 import getData from '../actions/getData'
 import {set} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 
 export default [
   set(state`isLoading`, true),
   getData, {
     success: [
-      set(state`data`, input`result`)
+      set(state`data`, props`result`)
     ],
     error: [
-      set(state`error`, input`error`)
+      set(state`error`, props`error`)
     ]
   },
   set(state`isLoading`, false)

@@ -6,7 +6,7 @@ import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
 import {set, when, debounce} from 'cerebral/operators'
-import {state, input, string} from 'cerebral/tags'
+import {state, props, string} from 'cerebral/tags'
 import starsCount from './computeds/starsCount'
 
 const toastDebounce = debounce.shared()
@@ -57,13 +57,13 @@ const controller = Controller({
         getRepo('cerebral'),
         getRepo('addressbar')
       ],
-      when(input`error`), {
+      when(props`error`), {
         true: [
-          ...showToast(string`Error: ${input`error`}`, 5000)
+          ...showToast(string`Error: ${props`error`}`, 5000)
         ],
         false: [
-          set(state`repos.cerebral`, input`cerebral`),
-          set(state`repos.addressbar`, input`addressbar`),
+          set(state`repos.cerebral`, props`cerebral`),
+          set(state`repos.addressbar`, props`addressbar`),
           ...showToast(string`The repos have ${starsCount} stars`, 5000)
         ]
       }

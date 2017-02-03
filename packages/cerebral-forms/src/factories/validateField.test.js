@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 import {form, validateField, changeField} from '..'
 import assert from 'assert'
 
@@ -31,7 +31,7 @@ describe('validateField', () => {
     const controller = Controller({
       signals: {
         validateField: [
-          validateField(state`${input`field`}`)
+          validateField(state`${props`field`}`)
         ],
         changeField
       },

@@ -6,7 +6,7 @@ import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import HttpProvider from 'cerebral-provider-http'
 import {set, wait} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 
 function showToast (message, ms) {
   return [
@@ -25,7 +25,7 @@ const controller = Controller({
   },
   signals: {
     buttonClicked: [
-      ...showToast(input`message`, 4000)
+      ...showToast(props`message`, 4000)
     ]
   },
   providers: [

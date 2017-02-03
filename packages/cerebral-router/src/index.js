@@ -82,9 +82,9 @@ export default function Router (options = {}) {
       const signal = signals[execution.name]
       if (signal) {
         const route = signal.route
-        const input = payload
+        const props = payload
 
-        addressbar.value = options.baseUrl + options.mapper.stringify(route, input)
+        addressbar.value = options.baseUrl + options.mapper.stringify(route, props)
       }
     }
 

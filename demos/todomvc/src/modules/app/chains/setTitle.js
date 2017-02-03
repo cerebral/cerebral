@@ -1,6 +1,6 @@
 import {set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 
 export default [
-  set(state`app.newTodoTitle`, input`title`)
+  set(state`app.newTodoTitle`, props`title`)
 ]
