@@ -1,6 +1,6 @@
 /* eslint-env mocha */
 import {compute} from '..'
-import {state, input} from '../tags'
+import {state, input, props} from '../tags'
 import {runCompute, runAction, runSignal} from '.'
 import assert from 'assert'
 
@@ -14,10 +14,10 @@ describe('test helpers', () => {
       const testCompute = compute(input`foo`, (foo) => foo)
       assert.equal(runCompute(testCompute, {input: {foo: 'bar'}}), 'bar')
     })
-    // it('should test a compute that gets props', () => {
-    //   const testCompute = compute(props`foo`, (foo) => foo)
-    //   assert.equal(runCompute(testCompute, {props: {foo: 'bar'}}), 'bar')
-    // })
+    it('should test a compute that gets props', () => {
+      const testCompute = compute(props`foo`, (foo) => foo)
+      assert.equal(runCompute(testCompute, {props: {foo: 'bar'}}), 'bar')
+    })
   })
 
   describe('runAction', () => {

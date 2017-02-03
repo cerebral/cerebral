@@ -8,8 +8,7 @@ export function runCompute (compute, fixtures = {}) {
     signals: {
       test: [
         ({ resolve }) => {
-          response = resolve.value(compute) // remove when we have resolve.compute
-          // response = resolve.compute(compute, fixtures.props)
+          response = resolve.compute(compute, fixtures.props)
         }
       ]
     }
