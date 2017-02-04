@@ -231,9 +231,9 @@ export function createResolver (getters) {
 
       return true
     },
-    value (arg) {
+    value (arg, overrideProps) {
       if (arg instanceof Tag || arg instanceof Compute) {
-        return arg.getValue(getters)
+        return arg.getValue(overrideProps ? Object.assign({}, getters, {props: overrideProps}) : getters)
       }
 
       return arg
