@@ -8,12 +8,12 @@ export function runCompute (compute, fixtures = {}) {
     signals: {
       test: [
         ({ resolve }) => {
-          response = resolve.compute(compute, fixtures.props)
+          response = resolve.value(compute, fixtures.props)
         }
       ]
     }
   })
-  controller.getSignal('test')(fixtures.input)
+  controller.getSignal('test')(fixtures.props)
   return response
 }
 
@@ -25,12 +25,12 @@ export function runSignal (signal, fixtures = {}, options = {}) {
     if (recordActions) {
       controller.on('functionStart', function (execution, funcDetails, payload) {
         if (options.singleAction) {
-          response.input = payload
+          response.props = payload
         } else {
           if (response[funcDetails[recordActions]]) {
             console.warn(`Cerebral[runSignal]: signal contains actions with duplicate names ('${funcDetails[recordActions]}')`)
           }
-          response[funcDetails[recordActions]] = {input: payload}
+          response[funcDetails[recordActions]] = {props: payload}
         }
       })
       controller.on('functionEnd', function (execution, funcDetails, payload, result) {
@@ -52,7 +52,7 @@ export function runSignal (signal, fixtures = {}, options = {}) {
       response.state = controller.getState()
       resolve(response)
     })
-    controller.getSignal('signal')(fixtures.input)
+    controller.getSignal('signal')(fixtures.props)
   })
 }
 
