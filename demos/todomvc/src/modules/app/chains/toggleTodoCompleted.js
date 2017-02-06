@@ -1,6 +1,6 @@
 import {toggle} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 
 export default [
-  toggle(state`app.todos.${input`ref`}.completed`)
+  toggle(state`app.todos.${props`ref`}.completed`)
 ]

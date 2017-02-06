@@ -5,7 +5,7 @@ import App from './components/App'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import {set, wait} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 
 function showToast (message, ms) {
   return [
@@ -24,7 +24,7 @@ const controller = Controller({
   },
   signals: {
     buttonClicked: [
-      ...showToast(input`message`, 1000)
+      ...showToast(props`message`, 1000)
     ]
   }
 })

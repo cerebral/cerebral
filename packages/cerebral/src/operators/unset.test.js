@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {unset} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.unset', () => {
   it('should unset value in model', () => {
@@ -26,7 +26,7 @@ describe('operator.unset', () => {
       },
       signals: {
         test: [
-          unset(input`foo`)
+          unset(props`foo`)
         ]
       }
     })

@@ -1,7 +1,7 @@
 import runValidation from '../utils/runValidation'
 
 export default function validateFormFactory (formPath) {
-  function validateForm ({state, input, resolve}) {
+  function validateForm ({state, props, resolve}) {
     function validate (path, form) {
       Object.keys(form).forEach(function (key) {
         if (form[key] === Object(form[key])) {

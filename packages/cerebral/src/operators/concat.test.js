@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {concat} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.concat', () => {
   it('should concat literal array in model', () => {
@@ -41,7 +41,7 @@ describe('operator.concat', () => {
       },
       signals: {
         test: [
-          concat(input`list`, ['two'])
+          concat(props`list`, ['two'])
         ]
       }
     })

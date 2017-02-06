@@ -39,7 +39,7 @@ signal({
 })
 ```
 
-This payload is brought into the signal execution and acts as the **input** of the signal. Typically you will not trigger signals manually this way, but rather from within a component.
+This payload is brought into the signal execution and acts as the **props** of the signal. Typically you will not trigger signals manually this way, but rather from within a component.
 
 ```js
 connect({

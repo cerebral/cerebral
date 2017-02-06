@@ -2,37 +2,37 @@
 
 **Load up chapter 05** - [Preview](05)
 
-Signals can take an input-object which can be further processed by its actions.
+Signals can take an props-object which can be further processed by its actions.
 
 Let us say you have a user input which should get written to state.
 As we now know, the only correct way to write to state is to use **signals** with **actions**.
 
-Just like we grabbed the **state** from the context of an action, we can also grab the input. This input object can be populated when a signal triggers and it can also be extended by actions. Any object returned from an action will be merged into the current input and passed to the next action.
+Just like we grabbed the **state** from the context of an action, we can also grab the props. This props object can be populated when a signal triggers and it can also be extended by actions. Any object returned from an action will be merged into the current props and passed to the next action.
 
 ## Create an action
-Let us create a new action that will take an input to the signal and add some exclamation marks.
+Let us create a new action that will take a prop from the signal and add some exclamation marks.
 
 ```js
-function shoutIt ({input}) {
+function shoutIt ({props}) {
   return {
-    message: `${input.message}!!!`
+    message: `${props.message}!!!`
   }
 }
 ```
 
-As you can see we grabbed the input just like we grabbed the state. The object we return from the action will be merged with the existing input. That means we are overriding the **message** with exclamation marks.
+As you can see we grabbed the props just like we grabbed the state. The object we return from the action will be merged with the existing props. That means we are overriding the **message** with exclamation marks.
 
-On our first **set** operator we rather now use a tag, *input*, to define that we want to set the message from the input.
+On our first **set** operator we rather now use a tag, *props*, to define that we want to set the message from the props.
 
 ```js
 ...
 import {set, wait} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
     shoutIt,
-    set(state`toast`, input`message`),
+    set(state`toast`, props`message`),
     wait(4000),
     set(state`toast`, null)
   ]  
@@ -74,10 +74,10 @@ export default connect({
 )
 ```
 
-Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Please keep an eye on the **debugger**. You can track how the flow of the input between the actions as they execute. Keep in mind that the result object from an action will be merged with the input and handed over to the next action. You might just as well used a different property for the shouted message.
+Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Please keep an eye on the **debugger**. You can track how the flow of the props between the actions as they execute. Keep in mind that the result object from an action will be merged with the props and handed over to the next action. You might just as well used a different property for the shouted message.
 
 ## Challenge
 
-- Add another custom action which transforms the input value to Uppercase. You may override existing properties on the input or create a new one
+- Add another custom action which transforms the props value to Uppercase. You may override existing properties on the props or create a new one
 
 **Want to dive deeper?** - [Go in depth](../in_depth/actions.md), or move on with the tutorial

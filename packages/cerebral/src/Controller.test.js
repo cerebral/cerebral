@@ -118,7 +118,7 @@ describe('Controller', () => {
     const controller = new Controller({
       devtools: {init () {}},
       signals: {
-        foo: [({input}) => assert.equal(JSON.stringify(input), '{"date":"[Date]"}')]
+        foo: [({props}) => assert.equal(JSON.stringify(props), '{"date":"[Date]"}')]
       }
     })
     controller.getSignal('foo')({
@@ -130,7 +130,7 @@ describe('Controller', () => {
       devtools: {init () {}},
       signals: {
         foo: [
-          ({input}) => assert.deepEqual(input, {})
+          ({props}) => assert.deepEqual(props, {})
         ]
       }
     })

@@ -1,5 +1,6 @@
 /* eslint-env mocha */
 import {compute} from './'
+import Controller from './Controller'
 import {state, props} from './tags'
 import assert from 'assert'
 
@@ -52,5 +53,25 @@ describe('Compute', () => {
       return foobar + 'baz'
     })
     assert.equal(computed.getValue(), 'foobarbaz')
+  })
+  it('should be able to resolve in actions and override props', () => {
+    const computed = compute(props`path`, (path, get) => {
+      return get(state`${path}`)
+    })
+    const controller = Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        test: [({resolve}) => {
+          assert.equal(resolve.value(computed, {
+            path: 'foo'
+          }), 'bar')
+        }]
+      }
+    })
+    controller.getSignal('test')({
+      path: 'bar'
+    })
   })
 })

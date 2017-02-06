@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {splice} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.splice', () => {
   it('should splice value in model', () => {
@@ -19,14 +19,14 @@ describe('operator.splice', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['a', 'x', 'y', 'd']})
   })
-  it('should splice value from input in model', () => {
+  it('should splice value from props in model', () => {
     const controller = Controller({
       state: {
         list: ['a', 'b', 'c', 'd']
       },
       signals: {
         test: [
-          splice(state`list`, input`idx`, 1, input`x`, input`y`)
+          splice(state`list`, props`idx`, 1, props`x`, props`y`)
         ]
       }
     })
@@ -39,7 +39,7 @@ describe('operator.splice', () => {
       },
       signals: {
         test: [
-          splice(input`list`, 1, 1, 'bar')
+          splice(props`list`, 1, 1, 'bar')
         ]
       }
     })

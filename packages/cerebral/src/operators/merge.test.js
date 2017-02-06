@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {merge} from './'
-import {state, input} from '../tags'
+import {state, props} from '../tags'
 
 describe('operator.merge', () => {
   it('should merge value in model', () => {
@@ -24,7 +24,7 @@ describe('operator.merge', () => {
       largo: 'Largo Winch'
     }})
   })
-  it('should merge value from input in model', () => {
+  it('should merge value from props in model', () => {
     const controller = Controller({
       state: {
         users: {
@@ -33,7 +33,7 @@ describe('operator.merge', () => {
       },
       signals: {
         test: [
-          merge(state`users`, input`value`)
+          merge(state`users`, props`value`)
         ]
       }
     })
@@ -49,7 +49,7 @@ describe('operator.merge', () => {
       },
       signals: {
         test: [
-          merge(input`users`, {joe: 'Joe'})
+          merge(props`users`, {joe: 'Joe'})
         ]
       }
     })
@@ -81,8 +81,8 @@ describe('operator.merge', () => {
       },
       signals: {
         test: [
-          merge(state`users`, {joe: 'Joe'}, input`extend`, {
-            bob: input`bob`
+          merge(state`users`, {joe: 'Joe'}, props`extend`, {
+            bob: props`bob`
           })
         ]
       }

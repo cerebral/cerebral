@@ -4,13 +4,12 @@ Tags allows you to target things in Cerebral. They are based on [template litera
 ```js
 state`items.${state`currentItemKey`}`
 
-state`items.${input`itemKey`}`
+state`items.${props`itemKey`}`
 ```
 
 This allows you to express signals and component dependencies a lot more effectively. There are 5 tags in Cerebral.
 
 - **state** - Used in signals and connect to target state
-- **input** - Used in signals to target input
-- **props** - Used in connect to target component props
+- **props** - Used in signals to target payload and in connect to target component props
 - **signal** - Used in signals and connect to target a signal
 - **string** - Used in signals to evaluate a composed string

@@ -51,8 +51,8 @@ const controller = Controller({
     // Warnings when strict render path usage is wrong
     verifyStrictRender: true,
 
-    // Throw error when overwriting existing input property
-    preventInputPropReplacement: false,
+    // Throw error when overwriting existing props property
+    preventPropsReplacement: false,
 
     // Turn off the warning of not pointing to children of
     // objects/arrays when declearing state dependencies

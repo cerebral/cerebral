@@ -1,6 +1,6 @@
 import uuid from 'uuid'
 
-function createTodo ({input, state}) {
+function createTodo ({state}) {
   const ref = uuid.v4()
   const todo = {
     $isSaving: true,

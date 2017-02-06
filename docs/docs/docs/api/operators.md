@@ -3,7 +3,7 @@ You can call operators to create actions for you. These actions will help you ch
 
 ## State operators
 
-The methods for changing state within actions is also available as operators. All state operators support using both **state** and **input** tags as values.
+The methods for changing state within actions is also available as operators. All state operators support using both **state** and **props** tags as values.
 
 All operators are imported as members of the 'cerebral/operators' module. For example, this imports **state** and **set**:
 
@@ -25,9 +25,9 @@ concat(state`some.list`, ['foo', 'bar'])
 Merge objects into existing value. If no value exists, an empty object will be created. Merge supports using operator tags on key values:
 
 ```js
-merge(state`clients.$draft`, input`newDraft`, {
+merge(state`clients.$draft`, props`newDraft`, {
   foo: 'bar',
-  bar: input`baz`
+  bar: props`baz`
 })
 ```
 
@@ -49,11 +49,11 @@ push(state`some.list`, 'foo')
 
 ### set
 
-Set a target value in the state or input.
+Set a target value in the state or props.
 
 ```js
 set(state`foo.bar`, true),
-set(input`foo`, true)
+set(props`foo`, true)
 ```
 
 ### shift
@@ -85,7 +85,7 @@ toggle(state`user.$toolbar`)
 Unset key from object.
 
 ```js
-unset(state`clients.all.${input`key`}`)
+unset(state`clients.all.${props`key`}`)
 ```
 
 ### unshift
@@ -225,15 +225,15 @@ When used with a truth function, the `when` operator supports more then a single
 
 ```js
 import {when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 
 export default [
-  when(state`clients.$draft.key`, input`key`,
+  when(state`clients.$draft.key`, props`key`,
     (draftKey, updatedKey) => draftKey === updatedKey
   ), {
     true: [
       // Another person edited client, reset form to new value
-      set(state`clients.$draft`, input`value`)
+      set(state`clients.$draft`, props`value`)
     ],
     false: []
   }
