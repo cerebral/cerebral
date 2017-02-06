@@ -6,13 +6,13 @@ export function flattenConfig (config, prev = '') {
 
     const currentPath = prev + path
     const stateMapping = Object.keys(map || {}).filter((key) => map[key].type === 'state')
-    const inputMapping = Object.keys(map || {}).filter((key) => map[key].type === 'input')
+    const propsMapping = Object.keys(map || {}).filter((key) => map[key].type === 'props')
 
-    if (inputMapping.length && !signal) {
-      throw new Error(`Cerebral router - route ${currentPath} has input mappings but no signal was defined.`)
+    if (propsMapping.length && !signal) {
+      throw new Error(`Cerebral router - route ${currentPath} has props mappings but no signal was defined.`)
     }
 
-    flattened[currentPath] = {signal, map, stateMapping, inputMapping}
+    flattened[currentPath] = {signal, map, stateMapping, propsMapping}
 
     return flattened
   }, {})
