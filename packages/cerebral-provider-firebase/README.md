@@ -616,7 +616,7 @@ export default [
 Use `delete` to remove an uploaded file. Specify the containing folder and filename.
 
 ```js
-import {input, state} from 'cerebral/tags'
+import {input, state, string} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase'
 
 // we expect input.file to contain a file provided by
