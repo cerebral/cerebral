@@ -52,7 +52,7 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {input} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {set} from 'cerebral-provider-firebase'
 
 export default [
@@ -80,7 +80,7 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {input} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {update} from 'cerebral-provider-firebase'
 
 export default [
@@ -110,7 +110,7 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {push} from 'cerebral-provider-firebase'
 
 export default [
@@ -135,7 +135,7 @@ function someAction({ firebase, path}) {
 
 *factory*
 ```javascript
-import {input, toString} from 'cerebral/operators'
+import {input, toString} from 'cerebral/tags'
 import {remove} from 'cerebral-provider-firebase'
 
 export default [
@@ -179,7 +179,7 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {input, toString} from 'cerebral/operators'
+import {input, toString} from 'cerebral/tags'
 import {transaction} from 'cerebral-provider-firebase'
 
 function transactionFunction(currentData){
@@ -218,7 +218,7 @@ The result will be available as `{ key: 'foo', value: 'bar' }`. Or `{ error: 'er
 
 *factory*
 ```javascript
-import {input, toString} from 'cerebral/operators'
+import {input, toString} from 'cerebral/tags'
 import {value} from 'cerebral-provider-firebase'
 
 export default [
@@ -289,7 +289,7 @@ function someAction({ firebase }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {onChildAdded} from 'cerebral-provider-firebase'
 
 export default [
@@ -379,7 +379,7 @@ This will add a task at `queue/tasks`. There is no output from a resolved task, 
 
 *factory*
 ```javascript
-import {state, input} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 import {task} from 'cerebral-provider-firebase'
 
 export default [
@@ -460,7 +460,7 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase'
 
 export default [
@@ -488,7 +488,7 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {input} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {signInWithEmailAndPassword} from 'cerebral-provider-firebase'
 
 export default [
@@ -516,7 +516,7 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {signInWithFacebook} from 'cerebral-provider-firebase'
 
 export default [
@@ -545,7 +545,7 @@ function someAction({ firebase, path }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {signOut} from 'cerebral-provider-firebase'
 
 export default [
@@ -569,7 +569,7 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {sendPasswordResetEmail} from 'cerebral-provider-firebase'
 
 export default [
@@ -593,7 +593,7 @@ Note that `put` expects a folder as first argument and will use the name of the 
 On success, the input contains an `url` and the `filename`.
 
 ```js
-import {input, signal, state, string} from 'cerebral/operators'
+import {input, signal, state, string} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase'
 
 // we expect input.file to contain a file provided by
@@ -616,7 +616,7 @@ export default [
 Use `delete` to remove an uploaded file. Specify the containing folder and filename.
 
 ```js
-import {input, state} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase'
 
 // we expect input.file to contain a file provided by
