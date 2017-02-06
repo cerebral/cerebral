@@ -39,12 +39,12 @@ import HttpProvider from 'cerebral-provider-http'
 ...
 ```
 
-What are the **benefits** of using a provider in this way? Well we have decoupled the dependency of the HTTP tool in all our actions, meaning that when testing actions we can just pass in a resolved or rejected promise as **http.get** to simulate a response. As well the **Debugger** can now track and visualize the execution of providers.
+What are the **benefits** of using a provider in this way? Well, we have decoupled the dependency of the HTTP tool in all our actions, meaning that when testing actions we can just pass in a resolved or rejected promise as **http.get** to simulate a response. As well the **Debugger** can now track and visualize the execution of providers.
 
-Just keep in mind that you could use any library as an provider, we've just used http-provider here because it is very lightweight and has some additional benefits when http-requests need to report back progress and the likes (because it also uses Cerebral-Signals for doing that). Let us add another one. Why not provide additional logging functionality to our actions? Let us use [js-logger](https://github.com/jonnyreeves/js-logger).
+Just keep in mind that you could use any library as a provider, we've just used http-provider here because it is very lightweight and has some additional benefits when http-requests need to report back progress and the likes (because it also uses Cerebral-Signals for doing that). Let us add another one. Why not provide additional logging functionality to our actions? Let us use [js-logger](https://github.com/jonnyreeves/js-logger).
 
 ## Adding a 3rd party provider
-We have already installed the library using npm. Because we add a 3rd-party provider we need to wrap it up into a so called *ContextProvider* to get the benefits mentioned above.
+We have already installed the library using npm. Because we add a 3rd-party provider we need to wrap it up into a so-called *ContextProvider* to get the benefits mentioned above.
 
 So please add the following imports to your *./src/index.js*
 ```js
@@ -94,6 +94,6 @@ function getRepoFactory(repoName) {
 ```
 
 Now run your code and check the console after doing a request do a server.
-Thats it! You have just successfully integrated another provider!
+That's it! You have just successfully integrated another provider!
 
 **Want to dive deeper?** - [Go in depth](../in_depth/providers.md), or move on with the tutorial

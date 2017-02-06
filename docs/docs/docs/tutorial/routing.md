@@ -83,7 +83,7 @@ We also need to add new state in *./src/index.js*:
   subTitle: 'Working on my state management',
   toast: null,
   repos: {},
-  activeTab: 'home'  
+  activeTab: 'home'
 }
 ...
 ```
@@ -115,16 +115,16 @@ And update the signals as well:
 }
 ...
 ```
-Now you can testdrive your changes. You should see the first tab activated. Now go to debugger and change *activeTab* state to 'repos' and you will see the second tab. If you click the tabs you will actually trigger the signals which appears in the debugger. Nice! But what has this to do with Routing?
+Now you can test-drive your changes. You should see the first tab activated. Now go to the debugger and change *activeTab* state to 'repos' and you will see the second tab. If you click the tabs you will actually trigger the signals which appear in the debugger. Nice! But what has this to do with Routing?
 
 ## Introducing the router
-Traditional routers is a wrapper around your components and they manipulate what components to display based on the url. That is not how routing works in Cerebral. In Cerebral you connect urls to signals. So:
+Traditional routers is a wrapper around your components and they manipulate what components to display based on the URL. That is not how routing works in Cerebral. In Cerebral you connect URLs to signals. So:
 
-1. A url is hit or changed
+1. A URL is hit or changed
 2. The respective signal is triggered putting your application in the correct state
 3. The components now renders based on the state of the application
 
-This is a really good thing because most route changes requires quite a few state changes and side effects, like server requests, to be run. This is exactly what signals do so well.
+This is a really good thing because most route changes require quite a few state changes and side effects, like server requests, to be run. This is exactly what signals do so well.
 
 Let us introduce **cerebral-router** to our project by adding an import to the top of our *./src/index.js*:
 
@@ -150,7 +150,7 @@ const controller = Controller({
 ...
 ```
 
-As you can see, defining *routes* is as easy as linking them to *signals*. Now go to your browsers addressbar and enter *localhost/#/repos* and voilà the reposRouted signal gets called. And it also works the other way around. When you now click your tabs the url will also update!
+As you can see, defining *routes* is as easy as linking them to *signals*. Now go to your browser's addressbar and enter *localhost/#/repos* and voilà the reposRouted signal gets called. And it also works the other way around. When you now click your tabs the URL will also update!
 
 ## Challenge
 

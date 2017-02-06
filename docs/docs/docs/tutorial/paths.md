@@ -128,14 +128,14 @@ Replace your signal with the following snippet:
 }
 ```
 
-What is happening here? Did you spot the additional **[** and **]**? Well whenever Cerebral encounters an Array in a Array  **[action1, [action2, action3], action4]** it will start the actions within that array in parallel, so after action1 finishes action2 and action3 are executed right after each other, even though they return promises. After action2 and action3 finish, action4 will be executed.
+What is happening here? Did you spot the additional **[** and **]**? Well whenever Cerebral encounters an Array in an Array  **[action1, [action2, action3], action4]** it will start the actions within that array in parallel, so after action1 finishes action2 and action3 are executed right after each other, even though they return promises. After action2 and action3 finish, action4 will be executed.
 
-We got even more flow control now, telling Cerebral to execute actions/operators in parallel by using JS arrays, and objects to diverge execution. By reading the signals you get a good understanding what the application will do. And don't forget, you do not even have to look at code to understand this, the debugger reflects parallel execution, state changes and even **paths** chosen.
+We got, even more, flow control now, telling Cerebral to execute actions/operators in parallel by using JS arrays, and objects to diverge execution. By reading the signals you get a good understanding what the application will do. And don't forget, you do not even have to look at the code to understand this, the debugger reflects parallel execution, state changes, and even **paths** chosen.
 
 ## Handling time
-But... there is an other issue here. Did you notice that these **showToast** action factories does not cancel each other out? So the initial 2 second wait might close the toast where it was supposed to hold for 5 seconds after a success?
+But... there is an other issue here. Did you notice that these **showToast** action factories do not cancel each other out? So the initial 2 second wait might close the toast where it was supposed to hold for 5 seconds after a success?
 
-Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. Simply said it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behaviour to be shared across them. Whenever any *showToast* is called, we want the existing pending toast timer to be discarded. This just ensures whenever we display a toast it will stay there for the time set, unless a new toast is triggered.
+Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. Simply said it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behavior to be shared across them. Whenever any *showToast* is called, we want the existing pending toast timer to be discarded. This just ensures whenever we display a toast it will stay there for the time set unless a new toast is triggered.
 
 ```js
 ...
@@ -162,6 +162,6 @@ Congratulations! Now you know how to control your flow using **paths**. And if y
 
 ## Challenge
 
-We would like you to run two getRepo(...) requests. One to *cerebral/cerebral* and one to *cerebral/addressbar*. So it is a good idea to make *getRepo* a factory instead. On their successes they should insert their data into the state tree.
+We would like you to run two getRepo(...) requests. One to *cerebral/cerebral* and one to *cerebral/addressbar*. So it is a good idea to make *getRepo* a factory instead. On their successes, they should insert their data into the state tree.
 
 **Want to dive deeper?** - [Go in depth](../in_depth/chains_and_paths.md), or move on with the tutorial
