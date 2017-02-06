@@ -179,7 +179,6 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {input, string} from 'cerebral/tags'
 import {transaction} from 'cerebral-provider-firebase'
 
 function transactionFunction(currentData){
@@ -218,7 +217,6 @@ The result will be available as `{ key: 'foo', value: 'bar' }`. Or `{ error: 'er
 
 *factory*
 ```javascript
-import {input, string} from 'cerebral/tags'
 import {value} from 'cerebral-provider-firebase'
 
 export default [
@@ -545,7 +543,6 @@ function someAction({ firebase, path }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/tags'
 import {signOut} from 'cerebral-provider-firebase'
 
 export default [
