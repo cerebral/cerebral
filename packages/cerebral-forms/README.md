@@ -200,7 +200,7 @@ export default connect({
 An **action** factory you can use to validate any field in any chain.
 
 ```js
-import {input} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {validateField} from 'cerebral-forms'
 
 export default [
@@ -217,7 +217,7 @@ export default [
 An **action** factory you can use to validate a whole form.
 
 ```js
-import {input} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {validateForm} from 'cerebral-forms'
 
 export default [
@@ -240,7 +240,7 @@ export default [
 An **action** factory you can use to reset any form from any chain. It will replace current value with the initial or default value defined. And revalidate.
 
 ```js
-import {input} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {resetForm} from 'cerebral-forms'
 
 export default [
@@ -339,7 +339,7 @@ export default connect({
 You can also use this function inside a chain:
 
 ```js
-import {input} from 'cerebral/operators'
+import {input} from 'cerebral/tags'
 import {isValidForm} from 'cerebral-forms'
 
 export default [
