@@ -56,8 +56,8 @@ Now we can implement our signals and their corresponding action chains in our **
 
 *src/modules/navbar/index.js*
 ```js
-import {input, set} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import {set} from 'cerebral/operators'
+import {input, state} from 'cerebral/tags'
 import pollMessageCounts from './actions/pollMessageCounts'
 
 export default {
