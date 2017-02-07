@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {toggle} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.toggle', () => {
   it('should toggle state', () => {
@@ -19,7 +19,7 @@ describe('operator.toggle', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {foo: false})
   })
-  it('should toggle state with input', () => {
+  it('should toggle state with props', () => {
     const controller = Controller({
       state: {
         todos: {
@@ -29,7 +29,7 @@ describe('operator.toggle', () => {
       },
       signals: {
         test: [
-          toggle(state`todos.${input`ref`}`)
+          toggle(state`todos.${props`ref`}`)
         ]
       }
     })
@@ -42,7 +42,7 @@ describe('operator.toggle', () => {
       },
       signals: {
         test: [
-          toggle(input`foo`)
+          toggle(props`foo`)
         ]
       }
     })

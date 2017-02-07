@@ -191,7 +191,10 @@ describe('Controller', () => {
       }
     })
     controller.on('flush', (changes) => {
-      assert.deepEqual(changes, {foo: true})
+      assert.deepEqual(changes, [{
+        path: ['foo'],
+        forceChildPathUpdates: true
+      }])
       done()
     })
     controller.getSignal('test')()

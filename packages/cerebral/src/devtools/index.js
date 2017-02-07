@@ -14,7 +14,6 @@ class Devtools {
   constructor (options = {
     storeMutations: true,
     preventExternalMutations: true,
-    verifyStrictRender: true,
     preventPropsReplacement: false,
     bigComponentsWarning: 10,
     remoteDebugger: null,
@@ -26,7 +25,6 @@ class Devtools {
     this.debuggerComponentDetailsId = 1
     this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
     this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
-    this.verifyStrictRender = typeof options.verifyStrictRender === 'undefined' ? true : options.verifyStrictRender
     this.preventPropsReplacement = options.preventPropsReplacement || false
     this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null

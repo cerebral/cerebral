@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import {state, input} from './'
+import {state, props} from './'
 import assert from 'assert'
 
 describe('Tags', () => {
@@ -23,26 +23,26 @@ describe('Tags', () => {
     })
   })
   it('should throw when invalid tag is composed', () => {
-    const tag = state`foo.${input`foo`}`
+    const tag = state`foo.${props`foo`}`
     const stateObject = {foo: 'bar'}
     assert.throws(() => {
       tag.getValue({state: stateObject})
     })
   })
   it('should throw when invalid path is used', () => {
-    const tag = input`foo.bar`
-    const inputObject = {}
+    const tag = props`foo.bar`
+    const propsObject = {}
     assert.throws(() => {
-      tag.getValue({input: inputObject})
+      tag.getValue({props: propsObject})
     })
   })
   it('should NOT throw on undefined value', () => {
-    const tagA = input`foo.bar`
-    const tagB = input`baz`
-    const inputObject = {foo: {}}
+    const tagA = props`foo.bar`
+    const tagB = props`baz`
+    const propsObject = {foo: {}}
     assert.doesNotThrow(() => {
-      tagA.getValue({input: inputObject})
-      tagB.getValue({input: inputObject})
+      tagA.getValue({props: propsObject})
+      tagB.getValue({props: propsObject})
     })
   })
   it('should return path', () => {

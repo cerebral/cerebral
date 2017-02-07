@@ -183,16 +183,18 @@ describe('Recorder', () => {
     controller.getSignal('update')()
     controller.getSignal('stop')()
     controller.once('flush', (changes) => {
-      assert.deepEqual(changes, {
-        foo: true
-      })
+      assert.deepEqual(changes, [{
+        path: ['foo'],
+        forceChildPathUpdates: true
+      }])
     })
     controller.getSignal('play')()
     timeout.tick()
     controller.once('flush', (changes) => {
-      assert.deepEqual(changes, {
-        foo: true
-      })
+      assert.deepEqual(changes, [{
+        path: ['foo'],
+        forceChildPathUpdates: true
+      }])
       controller.getSignal('stop')()
       done()
     })

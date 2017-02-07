@@ -30,7 +30,10 @@ describe('Model', () => {
       }
     })
     model.set(['foo', 'bar'], 'value2')
-    assert.deepEqual(model.flush(), {foo: {bar: true}})
+    assert.deepEqual(model.flush(), [{
+      path: ['foo', 'bar'],
+      forceChildPathUpdates: true
+    }])
   })
   it('should flush same path changes correctly', () => {
     const model = new Model({
@@ -40,7 +43,13 @@ describe('Model', () => {
     })
     model.set(['foo', 'bar'], 'value2')
     model.set(['foo', 'bar'], 'value3')
-    assert.deepEqual(model.flush(), {foo: {bar: true}})
+    assert.deepEqual(model.flush(), [{
+      path: ['foo', 'bar'],
+      forceChildPathUpdates: true
+    }, {
+      path: ['foo', 'bar'],
+      forceChildPathUpdates: true
+    }])
   })
 
   describe('SET', () => {
@@ -76,14 +85,20 @@ describe('Model', () => {
         }
       })
       model.merge(['foo'], {valB: 'bar'})
-      assert.deepEqual(model.flush(), {foo: {valB: true}})
+      assert.deepEqual(model.flush(), [{
+        path: ['foo', 'valB'],
+        forceChildPathUpdates: true
+      }])
     })
     it('should flush change on object only if no existing object', () => {
       const model = new Model({
         foo: null
       })
       model.merge(['foo'], {valB: 'bar'})
-      assert.deepEqual(model.flush(), {foo: true})
+      assert.deepEqual(model.flush(), [{
+        path: ['foo'],
+        forceChildPathUpdates: true
+      }])
     })
   })
   describe('POP', () => {
@@ -137,7 +152,10 @@ describe('Model', () => {
         }
       })
       model.unset(['foo', 'bar'])
-      assert.deepEqual(model.flush(), {foo: {bar: true}})
+      assert.deepEqual(model.flush(), [{
+        path: ['foo', 'bar'],
+        forceChildPathUpdates: true
+      }])
     })
   })
   describe('CONCAT', () => {

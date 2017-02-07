@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {pop} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.pop', () => {
   it('should pop value from model', () => {
@@ -25,7 +25,7 @@ describe('operator.pop', () => {
       },
       signals: {
         test: [
-          pop(input`list`)
+          pop(props`list`)
         ]
       }
     })

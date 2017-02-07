@@ -1,5 +1,5 @@
 export default function (target, value) {
-  function unshift ({state, input, resolve}) {
+  function unshift ({state, resolve}) {
     if (!resolve.isTag(target, 'state')) {
       throw new Error('Cerebral operator.unshift: You have to use the STATE TAG as first argument')
     }

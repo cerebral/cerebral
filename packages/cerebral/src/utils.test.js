@@ -32,61 +32,69 @@ describe('utils', () => {
   })
   describe('dependencyMatch', () => {
     it('should match dependencies', () => {
-      assert.equal(utils.dependencyMatch({
-        foo: true
-      }, {
-        foo: true
+      assert.equal(utils.dependencyMatch([{
+        path: ['foo']
+      }], {
+        foo: {}
       }).length, 1)
-      assert.equal(utils.dependencyMatch({}, {
-        foo: true
+      assert.equal(utils.dependencyMatch([], {
+        foo: {}
       }).length, 0)
     })
     it('should match nested dependencies', () => {
-      assert.ok(utils.dependencyMatch({
+      assert.ok(utils.dependencyMatch([{
+        path: ['foo', 'bar']
+      }], {
         foo: {
-          bar: true
+          children: {
+            bar: {}
+          }
         }
-      }, {
-        'foo.bar': true
       }).length, 1)
     })
     it('should match child interest dependencies', () => {
-      assert.equal(utils.dependencyMatch({
-        foo: {
-          bar: true
-        }
-      }, {
-        'foo': true
+      assert.equal(utils.dependencyMatch([{
+        path: ['foo', 'bar']
+      }], {
+        'foo': {}
       }).length, 0)
-      assert.equal(utils.dependencyMatch({
+      assert.equal(utils.dependencyMatch([{
+        path: ['foo', 'bar']
+      }], {
         foo: {
-          bar: true
+          children: {
+            '*': {}
+          }
         }
-      }, {
-        'foo.*': true
       }).length, 1)
-      assert.equal(utils.dependencyMatch({
+      assert.equal(utils.dependencyMatch([{
+        path: ['foo', 'bar']
+      }], {
         foo: {
-          bar: true
+          children: {
+            '**': {}
+          }
         }
-      }, {
-        'foo.**': true
       }).length, 1)
     })
     it('should match exact paths', () => {
-      assert.equal(utils.dependencyMatch({
+      assert.equal(utils.dependencyMatch([{
+        path: ['foo', 'bar']
+      }], {
         foo: {
-          bar: true
+          children: {
+            bar: {}
+          }
         }
-      }, {
-        'foo.bar': true
       }).length, 1)
-      assert.equal(utils.dependencyMatch({
+      assert.equal(utils.dependencyMatch([{
+        path: ['foo', 'bar']
+      }], {
         foo: {
-          bar: true
+          children: {
+            barbar: {}
+          }
         }
-      }, {
-        'foo.barbar': true
       }).length, 0)
     })
   })
