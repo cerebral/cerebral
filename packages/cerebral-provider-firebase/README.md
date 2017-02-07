@@ -616,8 +616,6 @@ Use `delete` to remove an uploaded file. Specify the containing folder and filen
 import {props, state, string} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase'
 
-// we expect props.file to contain a file provided by
-// a user in an <input type='file' />
 export default [
   firebase.delete(
     string`posts.all.${props`postId`}`,
