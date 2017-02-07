@@ -28,13 +28,13 @@ If you want to force Cerebral to support other types as well, you can do that wi
 The only way to get state in your application is by connecting it to a component or grabbing it in an action.
 
 ```js
-function someAction({state}) {
+function someAction({state, resolve}) {
   // Get all state
   const allState = state.get()
   // Get by path
   const stateAtSomePath = state.get('some.path')
   // Get computed state by passing in a computed
-  const computedState = state.compute(someComputed)
+  const computedState = resolve.value(someComputed)
 }
 ```
 
