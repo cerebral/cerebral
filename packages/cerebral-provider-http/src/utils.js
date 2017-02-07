@@ -43,7 +43,7 @@ export function urlEncode (obj, prefix) {
   for (var p in obj) {
     if (obj.hasOwnProperty(p)) {
       var k = prefix ? prefix + '[' + p + ']' : p
-      var v = obj[p]
+      var v = obj[p] instanceof Date ? obj[p].toISOString() : obj[p]
 
       str.push(typeof v === 'object'
         ? urlEncode(v, k)
