@@ -31,10 +31,19 @@ This approach allows you to pass down state wherever you want and ensure the com
 
 ## Computes
 
-The `runCompute` test helper accepts a `compute` and `state` arguments and returns the compute output.
+The `runCompute` test helper accepts a `compute` and `fixtures` arguments and returns the compute output.
 
 ```js
 var result = runCompute(compute, state)
+```
+
+The optional `fixture` argument should be an object that contains any of the following:
+
+```js
+{
+  state: {}, // test state
+  props: {}  // props passed to the computed
+}
 ```
 
 ### Example
