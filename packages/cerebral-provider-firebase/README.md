@@ -52,11 +52,11 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {input} from 'cerebral/operators'
+import {props} from 'cerebral/tags'
 import {set} from 'cerebral-provider-firebase'
 
 export default [
-  set('foo.bar', input`foo`), {
+  set('foo.bar', props`foo`), {
     success: [],
     error: []
   }
@@ -80,13 +80,13 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {input} from 'cerebral/operators'
+import {props} from 'cerebral/tags'
 import {update} from 'cerebral-provider-firebase'
 
 export default [
   update({
-    'foo.bar': input`bar`,
-    'foo.baz': input`baz`
+    'foo.bar': props`bar`,
+    'foo.baz': props`baz`
   }), {
     success: [],
     error: []
@@ -110,7 +110,7 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {push} from 'cerebral-provider-firebase'
 
 export default [
@@ -135,11 +135,11 @@ function someAction({ firebase, path}) {
 
 *factory*
 ```javascript
-import {input, toString} from 'cerebral/operators'
+import {props, string} from 'cerebral/tags'
 import {remove} from 'cerebral-provider-firebase'
 
 export default [
-  remove(toString`users.${input`userKey`}`), {
+  remove(string`users.${props`userKey`}`), {
     success: [],
     error: []
   }
@@ -179,7 +179,6 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {input, toString} from 'cerebral/operators'
 import {transaction} from 'cerebral-provider-firebase'
 
 function transactionFunction(currentData){
@@ -218,7 +217,6 @@ The result will be available as `{ key: 'foo', value: 'bar' }`. Or `{ error: 'er
 
 *factory*
 ```javascript
-import {input, toString} from 'cerebral/operators'
 import {value} from 'cerebral-provider-firebase'
 
 export default [
@@ -289,7 +287,7 @@ function someAction({ firebase }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {onChildAdded} from 'cerebral-provider-firebase'
 
 export default [
@@ -379,13 +377,13 @@ This will add a task at `queue/tasks`. There is no output from a resolved task, 
 
 *factory*
 ```javascript
-import {state, input} from 'cerebral/operators'
+import {state, props} from 'cerebral/tags'
 import {task} from 'cerebral-provider-firebase'
 
 export default [
   task('some_task', {
     uid: state`user.uid`,
-    data: input`data`
+    data: props`data`
   }), {
     success: [],
     error: []
@@ -460,7 +458,7 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase'
 
 export default [
@@ -488,11 +486,11 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {input} from 'cerebral/operators'
+import {props} from 'cerebral/tags'
 import {signInWithEmailAndPassword} from 'cerebral-provider-firebase'
 
 export default [
-  signInWithEmailAndPassword(input`email`, input`password`), {
+  signInWithEmailAndPassword(props`email`, props`password`), {
     success: [],
     error: []
   }
@@ -516,7 +514,7 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {signInWithFacebook} from 'cerebral-provider-firebase'
 
 export default [
@@ -545,7 +543,6 @@ function someAction({ firebase, path }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
 import {signOut} from 'cerebral-provider-firebase'
 
 export default [
@@ -569,7 +566,7 @@ function someAction({ firebase, path, state }) {
 
 *factory*
 ```javascript
-import {state} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 import {sendPasswordResetEmail} from 'cerebral-provider-firebase'
 
 export default [
@@ -590,21 +587,21 @@ The options expect a progress field that can be either a signal (that will be ca
 
 Note that `put` expects a folder as first argument and will use the name of the provided file. If you want to control the filename, add this in the options. In this case, make sure to respect file type and extension...
 
-On success, the input contains an `url` and the `filename`.
+On success, `props` contains an `url` and the `filename`.
 
 ```js
-import {input, signal, state, string} from 'cerebral/operators'
+import {props, signal, state, string} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase'
 
-// we expect input.file to contain a file provided by
+// we expect props.file to contain a file provided by
 // a user in an <input type='file' />
 export default [
-  put(string`posts.all.${input`postId`}`, input`file`, {
+  put(string`posts.all.${props`postId`}`, props`file`, {
     progress: signal`gallery.progress`
   }), {
     success: [
-      set(state`posts.all.${input`postId`}.imageUrl`, input`url`),
-      set(state`posts.all.${input`postId`}.imageName`, input`filename`),
+      set(state`posts.all.${props`postId`}.imageUrl`, props`url`),
+      set(state`posts.all.${props`postId`}.imageName`, props`filename`),
     ],
     error: []
   }
@@ -616,15 +613,13 @@ export default [
 Use `delete` to remove an uploaded file. Specify the containing folder and filename.
 
 ```js
-import {input, state} from 'cerebral/operators'
+import {props, state, string} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase'
 
-// we expect input.file to contain a file provided by
-// a user in an <input type='file' />
 export default [
   firebase.delete(
-    string`posts.all.${input`postId`}`,
-    state`posts.all.${input`postId`}.imageName`
+    string`posts.all.${props`postId`}`,
+    state`posts.all.${props`postId`}.imageName`
   ), {
     success: [],
     error: []
