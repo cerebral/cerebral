@@ -279,7 +279,7 @@ export default connect({
         <div>
           <h4>Please choose a file.</h4>
           <div>
-            <input type="" onChange={(event) => this.onFilesChange(event)}/><br/><br/>
+            <input type="file" onChange={(event) => this.onFilesChange(event)}/><br/><br/>
             <button disabled={this.filesToUpload.length === 0} onClick={() => this.upload()}>Upload</button>
           </div>
         </div>  
