@@ -879,6 +879,39 @@ describe('React', () => {
         controller.getSignal('changeState')()
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, 'baz2')
       })
+      it('should handle props composition updating value', () => {
+        const controller = Controller({
+          state: {
+            field: {
+              value: ''
+            }
+          },
+          signals: {
+            changeState: [({state}) => {
+              state.set('field.value', 'foo')
+              state.merge('field', {mip: 'mop'})
+            }]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            return (
+              <h1>{this.props.field.value}</h1>
+            )
+          }
+        }
+        const TestComponent = connect({
+          field: state`${props`path`}`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent path='field' />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, '')
+        controller.getSignal('changeState')()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, 'foo')
+      })
     })
   })
 })

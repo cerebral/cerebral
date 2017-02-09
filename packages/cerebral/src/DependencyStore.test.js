@@ -51,69 +51,80 @@ describe('DependencyStore', () => {
     depsStore.addEntity(componentB, {'foo': true})
     assert.deepEqual(depsStore.getAllUniqueEntities(), [componentA, componentB])
   })
-  describe('strict', () => {
-    it('should STRICTLY return components matching normal deps', () => {
+  describe.only('dependency matching', () => {
+    it('should return exact matches', () => {
       const depsStore = new DependencyStore()
       const component = {}
       depsStore.addEntity(component, {'foo': true})
       assert.deepEqual(depsStore.getUniqueEntities([{
         path: ['foo']
       }]), [component])
-      assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo', 'bar']
-      }]), [])
     })
-    it('should STRICTLY return components matching immediate deps', () => {
+    it('should return matches on immediate and all interest', () => {
+      const depsStore = new DependencyStore()
+      const component = {}
+      depsStore.addEntity(component, {'foo.*': true, 'foo.**': true})
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo']
+      }]), [component])
+    })
+    it('should return matches on immediate', () => {
       const depsStore = new DependencyStore()
       const component = {}
       depsStore.addEntity(component, {'foo.*': true})
       assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo']
+        path: ['foo', '0']
       }]), [component])
       assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo', 'bar']
-      }]), [component])
-      assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo', 'bar', 'mip']
+        path: ['foo', '0', 'bar']
       }]), [])
     })
-    it('should STRICTLY return components matching nested deps', () => {
+    it('should return matches on all', () => {
       const depsStore = new DependencyStore()
       const component = {}
       depsStore.addEntity(component, {'foo.**': true})
       assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo']
+        path: ['foo', '0']
       }]), [component])
       assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo', 'bar']
-      }]), [component])
-      assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo', 'bar', 'mip']
+        path: ['foo', '0', 'bar']
       }]), [component])
     })
-    it('should STRICTLY return components matching deep deps', () => {
+    it('should return matches on all forceChildPathUpdates', () => {
       const depsStore = new DependencyStore()
       const component = {}
       depsStore.addEntity(component, {'foo.bar.baz': true})
       assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
         path: ['foo']
-      }]), [])
+      }]), [component])
       assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
         path: ['foo', 'bar']
-      }]), [])
-      assert.deepEqual(depsStore.getUniqueEntities([{
-        path: ['foo', 'bar', 'baz']
       }]), [component])
     })
-    it('should STRICTLY return unique components', () => {
+    it('should return matches on all forceChildPathUpdates with interest', () => {
       const depsStore = new DependencyStore()
       const component = {}
-      depsStore.addEntity(component, {'foo': 'foo', 'bar': 'bar'})
+      depsStore.addEntity(component, {'foo.bar.*': true, 'foo.bar.**': true})
       assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
         path: ['foo']
-      }, {
-        path: ['bar']
       }]), [component])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
+        path: ['foo', 'bar']
+      }]), [component])
+    })
+    it('should handle not having interest conflicts', () => {
+      const depsStore = new DependencyStore()
+      const componentA = {}
+      const componentB = {}
+      depsStore.addEntity(componentA, {'foo.bar.**': true})
+      depsStore.addEntity(componentB, {'foo.bar.baz': true})
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo', 'bar', 'baz']
+      }]), [componentA, componentB])
     })
   })
 })

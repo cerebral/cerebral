@@ -152,36 +152,41 @@ export function dependencyMatch (changes, dependencyMap) {
         break
       }
 
-      if (pathKeyIndex === changes[changeIndex].path.length - 1) {
-        if (currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]) {
-          currentMatches.push(currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]])
+      if (currentDependencyMapLevel['**']) {
+        currentMatches.push(currentDependencyMapLevel['**'])
+      }
 
-          if (currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children) {
+      if (pathKeyIndex === changes[changeIndex].path.length - 1) {
+        const dependency = currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]
+        if (dependency) {
+          currentMatches.push(dependency)
+
+          if (dependency.children) {
             if (changes[changeIndex].forceChildPathUpdates) {
-              currentMatches = currentMatches.concat(extractAllChildMatches(currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children))
+              currentMatches = currentMatches.concat(extractAllChildMatches(dependency.children))
             } else {
-              if (currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children['*']) {
-                currentMatches.push(currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children['*'])
+              if (dependency.children['**']) {
+                currentMatches.push(dependency.children['**'])
               }
-              if (currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children['**']) {
-                currentMatches.push(currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children['**'])
+
+              if (dependency.children['*']) {
+                currentMatches.push(dependency.children['*'])
               }
             }
           }
         }
+
         if (currentDependencyMapLevel['*']) {
           currentMatches.push(currentDependencyMapLevel['*'])
         }
-        if (currentDependencyMapLevel['**']) {
-          currentMatches.push(currentDependencyMapLevel['**'])
-        }
-      } else if (currentDependencyMapLevel['**']) {
-        currentMatches.push(currentDependencyMapLevel['**'])
-      } else if (currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]) {
-        currentDependencyMapLevel = currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children
-      } else {
-        currentDependencyMapLevel = null
       }
+
+      if (!currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]) {
+        currentDependencyMapLevel = null
+        break
+      }
+
+      currentDependencyMapLevel = currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children
     }
   }
 

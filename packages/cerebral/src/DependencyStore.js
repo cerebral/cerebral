@@ -86,9 +86,8 @@ class DependencyStore {
             }
           }
         }
-        if (children[childKey].entities) {
-          return traverseChildren(children[childKey].children)
-        }
+
+        return traverseChildren(children[childKey].children)
       }
     }
 
