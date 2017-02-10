@@ -51,7 +51,7 @@ describe('DependencyStore', () => {
     depsStore.addEntity(componentB, {'foo': true})
     assert.deepEqual(depsStore.getAllUniqueEntities(), [componentA, componentB])
   })
-  describe.only('dependency matching', () => {
+  describe('dependency matching', () => {
     it('should return exact matches', () => {
       const depsStore = new DependencyStore()
       const component = {}

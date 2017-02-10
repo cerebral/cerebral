@@ -3,6 +3,11 @@ export {default as when} from './when'
 export {default as wait} from './wait'
 export {default as equals} from './equals'
 
+export {default as state} from './state'
+export {default as input} from './input'
+export {default as string} from './string'
+export {default as signal} from './signal'
+
 export {default as concat} from './concat'
 export {default as merge} from './merge'
 export {default as pop} from './pop'
