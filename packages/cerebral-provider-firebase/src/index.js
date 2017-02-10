@@ -25,6 +25,7 @@ import signInWithGoogle from './signInWithGoogle'
 import signInWithGithub from './signInWithGithub'
 import deleteUser from './deleteUser'
 import sendPasswordResetEmail from './sendPasswordResetEmail'
+import linkWithGithub from './linkWithGithub'
 
 export {default as createUserWithEmailAndPassword} from './factories/createUserWithEmailAndPassword'
 export {default as getUser} from './factories/getUser'
@@ -50,6 +51,7 @@ export {default as remove} from './factories/remove'
 export {default as transaction} from './factories/transaction'
 export {default as deleteUser} from './factories/deleteUser'
 export {default as sendPasswordResetEmail} from './factories/sendPasswordResetEmail'
+export {default as linkWithGithub} from './factories/linkWithGithub'
 
 export default function FirebaseProviderFactory (options = { payload: {} }) {
   firebase.initializeApp(options.config)
@@ -73,6 +75,7 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         value,
         push,
         put,
+        linkWithGithub,
         delete: deleteOp,
         update,
         set,
