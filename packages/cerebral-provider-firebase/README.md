@@ -527,7 +527,39 @@ export default [
 ]
 ```
 Similar you can sign in with Google or GitHub.
-Just use `signInWithGoogle` or `signInWithGithub` instead `signInWithFacebook`.
+Just use `signInWithGoogle` or `signInWithGithub` instead of `signInWithFacebook`.
+
+#### Link with Facebook, Google or GitHub
+Link an anonymous account with Facebook. Resolves to `{user: {}}`, or redirects.
+
+*action*
+```js
+function someAction({ firebase, path, state }) {
+  return firebase.linkWithFacebook({
+    redirect: false, // Use popup or redirect. Redirect typically for mobile
+    scopes: [] // Facebook scopes to access
+  })
+    .then(path.success)
+    .catch(path.error);
+}
+```
+
+*factory*
+```javascript
+import {state} from 'cerebral/tags'
+import {linkWithFacebook} from 'cerebral-provider-firebase'
+
+export default [
+  linkWithFacebook({
+    redirect: state`useragent.media.small`
+  }), {
+    success: [],
+    error: []
+  }
+]
+```
+Similar you can sign in with Google or GitHub.
+Just use `linkWithGoogle` or `linkWithGithub` instead of `linkWithFacebook`.
 
 #### Sign out
 Sign out user. **getUser** will now not resolve a user anymore.
