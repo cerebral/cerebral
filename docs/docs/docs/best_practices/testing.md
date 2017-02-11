@@ -29,81 +29,163 @@ describe('<Foo />', () => {
 
 This approach allows you to pass down state wherever you want and ensure the components render as expected.
 
-## Actions
-Actions are just functions. You just have to give them what they operate on. It is just like testing pure functions.
+## Computes
 
-Given the action:
+The `runCompute` test helper accepts a `compute` and `fixtures` arguments and returns the compute output.
+
 ```js
-function someAction({state, axios, path}) {
-  return axios.get(`/user/${state.get('user.id')}`)
-    .then((response) => path.success({user: response.data}))
-    .catch((error) => path.error({error: error.response.data}))
+var result = runCompute(compute, state)
+```
+
+The optional `fixture` argument should be an object that contains any of the following:
+
+```js
+{
+  state: {}, // test state
+  props: {}  // props passed to the computed
 }
 ```
 
-You can test it like:
+### Example
 
 ```js
-import sinon from 'sinon'
-import assert from 'assert'
+import {compute} from 'cerebral'
+import {props, state} from 'cerebral/tags'
+import {runCompute} from 'cerebral/test'
 
-describe('Something', () => {
-  it('should return object with user', (done) => {
-    const mockedContext = {
-      axios: {get: Promise.resolve({data: {name: 'Arne'}})},
-      path: {success: sinon.spy()},
-      state: {get() {}}
-    }
-    someAction(mockedContext).then((result) => {
-      assert.ok(mockedContext.path.success.called)
-      assert.deepEqual(result, {user: {name: 'Arne'}})
-    })
+import Multiply from './Multiply'
+
+it('should multiply by the specified number', () => {
+  const multiply = Multiply(state`number`, props`number`)
+  const result = runCompute(multiply, {
+    state: { number: 5 },
+    props: { number: 2 }
   })
+  assert.equal(result, 10)
+})
+```
+
+## Actions
+
+The `runAction` test helper accepts a `action` and `fixture` arguments and returns a promise.
+
+```js
+runAction(action, fixture).then((result) => {})
+```
+
+The optional `fixture` argument should be an object that contains any of the following:
+
+```js
+{
+  state: {}, // test state
+  props: {}, // props passed to the action
+  // any other options that can be passed to the
+  // cerebral controller, including router, providers...
+}
+```
+
+The `result` object passed when the promise resolves contains `state`, `controller`, `props` and `output` properties.
+
+```
+{
+  state,
+  controller,
+  props: {
+    // props data received by action
+  },
+  output: {
+    // action output data
+  }
+}
+```
+
+### Example
+
+```js
+import {compute} from 'cerebral'
+import {state} from 'cerebral/tags'
+import {runAction} from 'cerebral/test'
+
+import Increment from './Increment'
+
+it('should increment numbers in state', () => {
+  const increment = Increment(state`number`)
+
+  return runAction(increment, { state: { number: 1 } })
+    .then(({state}) => assert.equal(state.number, 2))
 })
 ```
 
 ## Signals
-To test signals you need to mock the context for all running actions. Since signals are defined decoupled from what is running them, you can define a new controller where you mock out whatever does side effects.
+
+The `runSignal` test helper accepts a `signal` (chain of actions) and `fixture` arguments and returns a promise.
 
 ```js
-import sinon from 'sinon'
-import assert from 'assert'
-import {Controller} from 'cerebral'
-import someChain from '../src/chains/someChain'
+runSignal(signal, fixture. options).then((result) => {})
+```
 
-describe('Something', () => {
-  it('should get data', (done) => {
-    const controller = Controller({
-      state: {
-        isLoading: false,
-        user: null
-      },
-      signals: {
-        testRun: someChain
-      },
-      providers: [
-        function (context) {
-          context.axios = {
-            get() {
-              assert.ok(controller.getState('isLoading'))
+The optional `fixture` argument should be an object that contains any of the following:
 
-              return Promise.resolve({data: {name: 'Arne'}})
-            }
-          }
+```js
+{
+  state: {}, // test state
+  props: {}, // props passed to the signal
+  // any other options that can be passed to the
+  // cerebral controller, including router, providers...
+}
+```
 
-          return context
-        }
-      ]
+The optional `options` argument contain the the following options:
+
+`recordActions: true|false|'byName'`
+
+When `recordActions: true` is specified each action will record its props/output against its index within the signal action chain. When `recordActions: 'byName'` is specified each action will record its output against an named property in the result.
+
+The `result` object passed when the promise resolves contains `state`, `controller` and an object for each named action in the signal chain with the same name as the actions with `props` and `output` properties.
+
+```
+{
+  state,
+  controller,
+  '2': {
+    props: {
+      // props data
+    },
+    output: {
+      // action output data
+    }
+  },
+  '1': {
+    props: {
+      // props data
+    },
+    output: {
+      // action output data
+    }
+  }
+}
+```
+
+### Example
+
+```js
+import {compute} from 'cerebral'
+import {state} from 'cerebral/tags'
+import {runSignal} from 'cerebral/test'
+
+// the buttonClicked signal has two actions: validateForm and updateIsValid
+import buttonClicked from './buttonClick'
+
+it('should handle button clicks', () => {
+  const fixture = {
+    state: { isValid: false },
+    props: { buttonName: 'submit' }
+  }
+  return runSignal(buttonClicked, fixture, {recordActions: 'byName'})
+    .then(({validateForm, updateIsValid, state}) => {
+      assert.equal(validateForm.props.buttonName, 'submit')
+      assert.equal(updateIsValid.props.isValid, true)
+      assert.equal(state.isValid, true)
     })
-
-    controller.on('signalEnd', () => {
-      assert.deepEqual(controller.getState(), {
-        isLoading: false,
-        user: {name: 'Arne'}
-      })
-      done()
-    })
-    controller.getSignal('testRun')()
-  })
 })
 ```
