@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {set} from './'
-import {input, state, string} from '../tags'
+import {props, state, string} from '../tags'
 
 describe('operator.set', () => {
   it('should set value to model', () => {
@@ -19,28 +19,28 @@ describe('operator.set', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
   })
-  it('should set value to input', () => {
+  it('should set value to props', () => {
     const controller = Controller({
       signals: {
         test: [
-          set(input`foo`, 'bar'),
-          ({input}) => {
-            assert.equal(input.foo, 'bar')
+          set(props`foo`, 'bar'),
+          ({props}) => {
+            assert.equal(props.foo, 'bar')
           }
         ]
       }
     })
     controller.getSignal('test')()
   })
-  it('should set deep value to input', () => {
+  it('should set deep value to props', () => {
     const controller = Controller({
       signals: {
         test: [
-          set(input`foo`, {bing: 'bor'}),
-          set(input`foo.bar`, 'baz'),
-          ({input}) => {
-            assert.equal(input.foo.bar, 'baz')
-            assert.equal(input.foo.bing, 'bor')
+          set(props`foo`, {bing: 'bor'}),
+          set(props`foo.bar`, 'baz'),
+          ({props}) => {
+            assert.equal(props.foo.bar, 'baz')
+            assert.equal(props.foo.bing, 'bor')
           }
         ]
       }
@@ -61,14 +61,14 @@ describe('operator.set', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {foo: {bar: 'baz'}})
   })
-  it('should set value to model from input', () => {
+  it('should set value to model from props', () => {
     const controller = Controller({
       state: {
         foo: 'bar'
       },
       signals: {
         test: [
-          set(state`foo`, input`value`)
+          set(state`foo`, props`value`)
         ]
       }
     })

@@ -4,21 +4,21 @@ import {Compute} from './Compute'
 export function getChangedProps (propsA, propsB) {
   const propsAKeys = Object.keys(propsA)
   const propsBKeys = Object.keys(propsB)
-  const changedProps = {}
+  const changedProps = []
 
   for (let i = 0; i < propsAKeys.length; i++) {
     if (propsA[propsAKeys[i]] !== propsB[propsAKeys[i]]) {
-      changedProps[propsAKeys[i]] = true
+      changedProps.push({path: [propsAKeys[i]]})
     }
   }
 
   for (let i = 0; i < propsBKeys.length; i++) {
     if (propsA[propsBKeys[i]] !== propsB[propsBKeys[i]]) {
-      changedProps[propsBKeys[i]] = true
+      changedProps.push({path: [propsBKeys[i]]})
     }
   }
 
-  return Object.keys(changedProps).length ? changedProps : null
+  return changedProps
 }
 
 export function cleanPath (path) {
@@ -93,24 +93,6 @@ export function isDebuggerEnv () {
   )
 }
 
-export function verifyStrictRender (changes, dependencyMap) {
-  let currentPathKey = []
-  for (let path in dependencyMap) {
-    const pathArray = cleanPath(path).split('.')
-    let currentChangeKey = pathArray.shift()
-    let currentChangePath = changes
-    currentPathKey.push(currentChangeKey)
-    while (currentChangePath) {
-      if (currentChangePath[currentChangeKey] === true && pathArray.length !== 0) {
-        throwError(`Render warning! The path "${path}" is being replaced by "${currentPathKey.join('.')}". Change "${path}" to "${currentPathKey.join('.')}" or do not replace the path`)
-      }
-      currentPathKey.push(currentChangeKey)
-      currentChangePath = currentChangePath[pathArray.shift()]
-    }
-    currentPathKey.length = 0
-  }
-}
-
 export function debounce (func, wait) {
   let timeout
 
@@ -150,46 +132,61 @@ export function getProviders (module) {
   )
 }
 
-export function dependencyMatch (changes, dependencyMap, currentKey = '') {
+function extractAllChildMatches (children) {
+  return Object.keys(children).reduce((matches, key) => {
+    if (children[key].children) {
+      return matches.concat(children[key]).concat(extractAllChildMatches(children[key].children))
+    }
+
+    return matches.concat(children[key])
+  }, [])
+}
+
+export function dependencyMatch (changes, dependencyMap) {
   let currentMatches = []
 
-  for (const key in changes) {
-    const pathKey = currentKey ? currentKey + '.' + key : key
+  for (let changeIndex = 0; changeIndex < changes.length; changeIndex++) {
+    let currentDependencyMapLevel = dependencyMap
+    for (let pathKeyIndex = 0; pathKeyIndex < changes[changeIndex].path.length; pathKeyIndex++) {
+      if (!currentDependencyMapLevel) {
+        break
+      }
 
-    let matches = []
-    if (changes[key] === true) {
-      if (dependencyMap[pathKey]) {
-        matches = matches.concat(dependencyMap[pathKey])
+      if (currentDependencyMapLevel['**']) {
+        currentMatches.push(currentDependencyMapLevel['**'])
       }
-      if (dependencyMap[pathKey + '.*']) {
-        matches = matches.concat(dependencyMap[pathKey + '.*'])
-      }
-      if (dependencyMap[pathKey + '.**']) {
-        matches = matches.concat(dependencyMap[pathKey + '.**'])
-      }
-    } else {
-      if (dependencyMap[pathKey + '.*']) {
-        const immediateKeys = Object.keys(changes[key])
-        for (let z = 0; z < immediateKeys.length; z++) {
-          if (changes[key][immediateKeys[z]] === true) {
-            matches = matches.concat(dependencyMap[pathKey + '.*'])
-            break
+
+      if (pathKeyIndex === changes[changeIndex].path.length - 1) {
+        const dependency = currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]
+        if (dependency) {
+          currentMatches.push(dependency)
+
+          if (dependency.children) {
+            if (changes[changeIndex].forceChildPathUpdates) {
+              currentMatches = currentMatches.concat(extractAllChildMatches(dependency.children))
+            } else {
+              if (dependency.children['**']) {
+                currentMatches.push(dependency.children['**'])
+              }
+
+              if (dependency.children['*']) {
+                currentMatches.push(dependency.children['*'])
+              }
+            }
           }
         }
-      }
-      if (dependencyMap[pathKey + '.**']) {
-        matches = matches.concat(dependencyMap[pathKey + '.**'])
-      }
-    }
 
-    for (let y = 0; y < matches.length; y++) {
-      if (currentMatches.indexOf(matches[y]) === -1) {
-        currentMatches.push(matches[y])
+        if (currentDependencyMapLevel['*']) {
+          currentMatches.push(currentDependencyMapLevel['*'])
+        }
       }
-    }
 
-    if (changes[key] !== true) {
-      currentMatches = currentMatches.concat(dependencyMatch(changes[key], dependencyMap, pathKey))
+      if (!currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]) {
+        currentDependencyMapLevel = null
+        break
+      }
+
+      currentDependencyMapLevel = currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children
     }
   }
 

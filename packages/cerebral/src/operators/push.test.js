@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {push} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.push', () => {
   it('should push value in model', () => {
@@ -19,14 +19,14 @@ describe('operator.push', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
   })
-  it('should push value from input in model', () => {
+  it('should push value from props in model', () => {
     const controller = Controller({
       state: {
         list: ['a', 'b']
       },
       signals: {
         test: [
-          push(state`list`, input`value`)
+          push(state`list`, props`value`)
         ]
       }
     })
@@ -39,7 +39,7 @@ describe('operator.push', () => {
       },
       signals: {
         test: [
-          push(input`list`, 'bar')
+          push(props`list`, 'bar')
         ]
       }
     })

@@ -2,7 +2,7 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {unshift} from './'
-import {input, state} from '../tags'
+import {props, state} from '../tags'
 
 describe('operator.unshift', () => {
   it('should unshift value in model', () => {
@@ -19,14 +19,14 @@ describe('operator.unshift', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
   })
-  it('should unshift value from input in model', () => {
+  it('should unshift value from props in model', () => {
     const controller = Controller({
       state: {
         list: ['a', 'b']
       },
       signals: {
         test: [
-          unshift(state`list`, input`value`)
+          unshift(state`list`, props`value`)
         ]
       }
     })
@@ -39,7 +39,7 @@ describe('operator.unshift', () => {
       },
       signals: {
         test: [
-          unshift(input`list`, 'bar')
+          unshift(props`list`, 'bar')
         ]
       }
     })

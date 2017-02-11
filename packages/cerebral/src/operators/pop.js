@@ -1,5 +1,5 @@
 export default function (target) {
-  function pop ({state, input, resolve}) {
+  function pop ({state, resolve}) {
     if (!resolve.isTag(target, 'state')) {
       throw new Error('Cerebral operator.pop: You have to use the STATE TAG as first argument')
     }

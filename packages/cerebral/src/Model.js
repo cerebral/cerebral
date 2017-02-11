@@ -51,23 +51,10 @@ class Model {
     return object
   }
   /*
-    Converts an array of paths changed to a change object that
-    will be traversed by the dependency store
+    Returns array of changes
   */
   flush () {
-    const changes = this.changedPaths.reduce((allChanges, path) => {
-      path.reduce((currentChanges, key, index) => {
-        if (index === path.length - 1) {
-          currentChanges[key] = currentChanges[key] === true || !currentChanges[key] ? true : currentChanges[key]
-        } else if (!currentChanges[key] || currentChanges[key] === true) {
-          currentChanges[key] = {}
-        }
-
-        return currentChanges[key]
-      }, allChanges)
-
-      return allChanges
-    }, {})
+    const changes = this.changedPaths.slice()
 
     this.changedPaths = []
 
@@ -79,23 +66,29 @@ class Model {
     actually changed. Complex objects always causes a flush due to
     for example array sorting
   */
-  updateIn (path, cb) {
+  updateIn (path, cb, forceChildPathUpdates = false) {
     if (this.preventExternalMutations) {
-      this.updateInFrozen(path, cb)
+      this.updateInFrozen(path, cb, forceChildPathUpdates)
 
       return
     }
 
     if (!path.length) {
-      this.state = cb(this.state)
+      cb(this.state, this, 'state')
+
+      return
     }
 
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
-        const newValue = cb(currentState[key])
-        if (currentState[key] !== newValue || isComplexObject(currentState[key]) && isComplexObject(newValue)) {
-          currentState[key] = newValue
-          this.changedPaths.push(path)
+        const currentValue = currentState[key]
+
+        cb(currentState[key], currentState, key)
+        if (currentState[key] !== currentValue || isComplexObject(currentState[key]) && isComplexObject(currentValue)) {
+          this.changedPaths.push({
+            path,
+            forceChildPathUpdates
+          })
         }
       } else if (!currentState[key]) {
         throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.splice(0, path.length - 1).join('.')}" exist?`)
@@ -108,16 +101,25 @@ class Model {
     Unfreezes on the way down. When done freezes state. It is optimized
     to not go down already frozen paths
   */
-  updateInFrozen (path, cb) {
+  updateInFrozen (path, cb, forceChildPathUpdates) {
     if (!path.length) {
-      this.state = this.freezeObject(cb(this.unfreezeObject(this.state)))
+      cb(this.state, this, 'state')
     }
 
-    this.changedPaths.push(path)
     this.state = this.unfreezeObject(this.state)
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
-        currentState[key] = cb(this.unfreezeObject(currentState[key]))
+        currentState[key] = this.unfreezeObject(currentState[key])
+
+        const currentValue = currentState[key]
+        cb(currentState[key], currentState, key)
+
+        if (currentState[key] !== currentValue || isComplexObject(currentState[key]) && isComplexObject(currentValue)) {
+          this.changedPaths.push({
+            path,
+            forceChildPathUpdates
+          })
+        }
       } else if (!currentState[key]) {
         throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.splice(0, path.length - 1).join('.')}" exist?`)
       } else {
@@ -157,14 +159,14 @@ class Model {
   }
   set (path, value) {
     this.verifyValue(value, path)
-    this.updateIn(path, () => {
-      return value
-    })
+    this.updateIn(path, (_, parent, key) => {
+      parent[key] = value
+    }, true)
   }
   push (path, value) {
     this.verifyValue(value, path)
     this.updateIn(path, (array) => {
-      return array.concat(value)
+      array.push(value)
     })
   }
   merge (path, ...values) {
@@ -187,47 +189,34 @@ class Model {
   pop (path) {
     this.updateIn(path, (array) => {
       array.pop()
-
-      return array
     })
   }
   shift (path) {
     this.updateIn(path, (array) => {
       array.shift()
-
-      return array
     })
   }
   unshift (path, value) {
     this.verifyValue(value, path)
     this.updateIn(path, (array) => {
       array.unshift(value)
-
-      return array
     })
   }
   splice (path, ...args) {
     this.verifyValues(args, path)
     this.updateIn(path, (array) => {
       array.splice(...args)
-
-      return array
     })
   }
   unset (path) {
-    this.changedPaths.push(path.slice())
-    const key = path.pop()
-
-    this.updateIn(path, (obj) => {
-      delete obj[key]
-
-      return obj
-    })
+    this.updateIn(path, (_, parent, key) => {
+      delete parent[key]
+    }, true)
   }
   concat (path, value) {
     this.verifyValue(value, path)
-    this.updateIn(path, (array) => {
-      return array.concat(value)
+    this.updateIn(path, (array, parent, key) => {
+      parent[key] = array.concat(value)
     })
   }
 }

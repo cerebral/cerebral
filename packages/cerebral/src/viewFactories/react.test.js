@@ -226,6 +226,40 @@ describe('React', () => {
       component.callSignal()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
     })
+    it('should rerender on parent dep replacement', () => {
+      const controller = Controller({
+        state: {
+          foo: {
+            bar: 'baz'
+          }
+        },
+        signals: {
+          methodCalled: [({state}) => state.set('foo', {bar: 'baz2'})]
+        }
+      })
+      class TestComponentClass extends React.Component {
+        callSignal () {
+          this.props.methodCalled()
+        }
+        render () {
+          return (
+            <div>{this.props.foo}</div>
+          )
+        }
+      }
+      const TestComponent = connect({
+        foo: state`foo.bar`,
+        methodCalled: signal`methodCalled`
+      }, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+      component.callSignal()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz2')
+    })
     it('should only rerender affected components', () => {
       let renderCount = 0
       const controller = Controller({
@@ -415,7 +449,7 @@ describe('React', () => {
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
     })
     describe('STRICT render update', () => {
-      it('should not update when parent path changes', () => {
+      it('should update when parent path changes', () => {
         let renderCount = 0
         const controller = Controller({
           state: {
@@ -450,7 +484,8 @@ describe('React', () => {
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
         const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
         component.callSignal()
-        assert.equal(renderCount, 1)
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, '')
+        assert.equal(renderCount, 2)
       })
       it('should be able to override immediate child interest', () => {
         let renderCount = 0
@@ -604,44 +639,6 @@ describe('React', () => {
         const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
         component.callSignal()
         assert.equal(renderCount, 2)
-      })
-      it('should throw error with devtools when replacing path, causing render not to happen', () => {
-        const controller = Controller({
-          devtools: {verifyStrictRender: true, init () {}, send () {}, updateComponentsMap () {}, sendExecutionData () {}},
-          state: {
-            foo: {
-              bar: 'baz'
-            }
-          },
-          signals: {
-            methodCalled: [({state}) => state.set('foo', 'bar')]
-          }
-        })
-        class TestComponentClass extends React.Component {
-          callSignal () {
-            this.props.methodCalled()
-          }
-          render () {
-            return (
-              <div>{this.props.foo}</div>
-            )
-          }
-        }
-        const TestComponent = connect({
-          foo: state`foo.bar`,
-          methodCalled: signal`methodCalled`
-        }, TestComponentClass)
-        const tree = TestUtils.renderIntoDocument((
-          <Container controller={controller}>
-            <TestComponent />
-          </Container>
-        ))
-        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
-        const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
-
-        assert.throws(() => {
-          component.callSignal()
-        }, /Render warning/)
       })
     })
     describe('Compute', () => {
@@ -881,6 +878,39 @@ describe('React', () => {
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, 'baz')
         controller.getSignal('changeState')()
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, 'baz2')
+      })
+      it('should handle props composition updating value', () => {
+        const controller = Controller({
+          state: {
+            field: {
+              value: ''
+            }
+          },
+          signals: {
+            changeState: [({state}) => {
+              state.set('field.value', 'foo')
+              state.merge('field', {mip: 'mop'})
+            }]
+          }
+        })
+        class TestComponentClass extends React.Component {
+          render () {
+            return (
+              <h1>{this.props.field.value}</h1>
+            )
+          }
+        }
+        const TestComponent = connect({
+          field: state`${props`path`}`
+        }, TestComponentClass)
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent path='field' />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, '')
+        controller.getSignal('changeState')()
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, 'foo')
       })
     })
   })

@@ -4,6 +4,8 @@ class DependencyTracker {
   constructor (computed) {
     this.propsTrackMap = {}
     this.stateTrackMap = {}
+    this.propsTrackFlatMap = {}
+    this.stateTrackFlatMap = {}
     this.computed = computed
     this.value = null
   }
@@ -11,8 +13,10 @@ class DependencyTracker {
   run (stateGetter, props) {
     const newStateTrackMap = {}
     const newPropsTrackMap = {}
-    const stateTrackMap = this.stateTrackMap
-    const propsTrackMap = this.propsTrackMap
+    const newPropsTrackFlatMap = {}
+    const newStateTrackFlatMap = {}
+    const stateTrackFlatMap = this.stateTrackFlatMap
+    const propsTrackFlatMap = this.propsTrackFlatMap
     const propsGetter = getWithPath(props)
     let hasChanged = false
 
@@ -20,17 +24,44 @@ class DependencyTracker {
       state (path) {
         const value = stateGetter(path)
         const strictPath = ensureStrictPath(path, value)
+        const strictPathArray = strictPath.split('.')
 
-        newStateTrackMap[strictPath] = true
+        newStateTrackFlatMap[strictPath] = true
 
-        if (!stateTrackMap[strictPath]) hasChanged = true
+        if (!stateTrackFlatMap[strictPath]) hasChanged = true
+
+        strictPathArray.reduce((currentNewStateTrackMapLevel, key, index) => {
+          if (!currentNewStateTrackMapLevel[key]) {
+            currentNewStateTrackMapLevel[key] = {}
+          }
+
+          if (index < strictPathArray.length - 1) {
+            currentNewStateTrackMapLevel[key].children = currentNewStateTrackMapLevel[key].children || {}
+          }
+
+          return currentNewStateTrackMapLevel[key].children
+        }, newStateTrackMap)
 
         return value
       },
       props (path) {
-        newPropsTrackMap[path] = true
+        const pathArray = path.split('.')
+        newPropsTrackFlatMap[path] = true
 
-        if (!propsTrackMap[path]) hasChanged = true
+        if (!propsTrackFlatMap[path]) hasChanged = true
+
+        pathArray.reduce((currentNewPropsTrackMapLevel, key, index) => {
+          if (!currentNewPropsTrackMapLevel[key]) {
+            hasChanged = true
+            currentNewPropsTrackMapLevel[key] = {}
+          }
+
+          if (index < pathArray.length - 1) {
+            currentNewPropsTrackMapLevel[key].children = currentNewPropsTrackMapLevel[key].children || {}
+          }
+
+          return currentNewPropsTrackMapLevel[key].children
+        }, newPropsTrackMap)
 
         return propsGetter(path)
       }
@@ -38,6 +69,8 @@ class DependencyTracker {
 
     this.stateTrackMap = newStateTrackMap
     this.propsTrackMap = newPropsTrackMap
+    this.stateTrackFlatMap = newStateTrackFlatMap
+    this.propsTrackFlatMap = newPropsTrackFlatMap
 
     return hasChanged
   }

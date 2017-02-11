@@ -55,7 +55,7 @@ export default (View) => {
     */
     componentWillReceiveProps (nextProps) {
       const propsChanges = getChangedProps(this.props, nextProps)
-      if (propsChanges) {
+      if (propsChanges.length) {
         this._updateFromProps(propsChanges, nextProps)
       }
     }
@@ -89,8 +89,8 @@ export default (View) => {
     getDependencyTrackersDependencyMaps (props) {
       return Object.keys(this.dependencies).reduce((currentDepsMaps, propKey) => {
         if (this.dependencyTrackers[propKey]) {
-          currentDepsMaps.state = Object.assign(currentDepsMaps.state, this.dependencyTrackers[propKey].stateTrackMap)
-          currentDepsMaps.props = Object.assign(currentDepsMaps.props, this.dependencyTrackers[propKey].propsTrackMap)
+          currentDepsMaps.state = Object.assign(currentDepsMaps.state, this.dependencyTrackers[propKey].stateTrackFlatMap)
+          currentDepsMaps.props = Object.assign(currentDepsMaps.props, this.dependencyTrackers[propKey].propsTrackFlatMap)
 
           return currentDepsMaps
         }
@@ -265,6 +265,9 @@ export default (View) => {
         super(dependencies, mergeProps, props, context)
         this._displayName = Component.displayName || Component.name
         this._hasWarnedBigComponent = false
+      }
+      toJSON () {
+        return this._displayName
       }
       render () {
         return View.createElement(Component, this.getProps())

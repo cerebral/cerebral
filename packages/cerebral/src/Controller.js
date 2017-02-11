@@ -2,7 +2,7 @@ import DependencyStore from './DependencyStore'
 import {FunctionTree} from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable, verifyStrictRender, forceSerializable, isObject, getProviders, cleanPath} from './utils'
+import {ensurePath, isDeveloping, throwError, isSerializable, forceSerializable, isObject, getProviders, cleanPath} from './utils'
 import VerifyPropsProvider from './providers/VerifyProps'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -124,9 +124,6 @@ class Controller extends FunctionTree {
       componentsToRender = this.componentDependencyStore.getAllUniqueEntities()
     } else {
       componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
-      if (this.devtools && this.devtools.verifyStrictRender) {
-        verifyStrictRender(changes, this.componentDependencyStore.map)
-      }
     }
 
     const start = Date.now()

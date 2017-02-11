@@ -8,95 +8,123 @@ describe('DependencyStore', () => {
     const component = {}
     depsStore.addEntity(component, {'foo': 'foo', 'bar': 'bar'})
 
-    assert.deepEqual(depsStore.map, {foo: [component], bar: [component]})
+    assert.deepEqual(depsStore.map, {
+      foo: {
+        entities: [component]
+      },
+      bar: {
+        entities: [component]
+      }
+    })
   })
   it('should remove components', () => {
     const depsStore = new DependencyStore()
     const component = {}
     depsStore.addEntity(component, {'foo': 'foo'})
-    assert.deepEqual(depsStore.map, {foo: [component]})
-    depsStore.removeEntity(component, {'foo': 'foo'})
-    assert.deepEqual(depsStore.map, {foo: []})
+    assert.deepEqual(depsStore.map, {foo: {
+      entities: [component]
+    }})
+    depsStore.removeEntity(component, {'foo': true})
+    assert.deepEqual(depsStore.map, {foo: {}})
   })
   it('should update components', () => {
     const depsStore = new DependencyStore()
     const component = {}
-    depsStore.addEntity(component, {'foo': 'foo'})
-    assert.deepEqual(depsStore.map, {foo: [component]})
-    depsStore.removeEntity(component, {'foo': 'foo'})
-    depsStore.addEntity(component, {'bar': 'bar'})
-    assert.deepEqual(depsStore.map, {foo: [], bar: [component]})
+    depsStore.addEntity(component, {'foo': true})
+    assert.deepEqual(depsStore.map, {foo: {
+      entities: [component]
+    }})
+    depsStore.removeEntity(component, {'foo': true})
+    depsStore.addEntity(component, {'bar': true})
+    assert.deepEqual(depsStore.map, {
+      foo: {},
+      bar: {
+        entities: [component]
+      }
+    })
   })
   it('should return all unique components', () => {
     const depsStore = new DependencyStore()
     const componentA = {}
     const componentB = {}
-    depsStore.addEntity(componentA, {'foo': 'foo', 'bar': 'bar'})
-    depsStore.addEntity(componentB, {'foo': 'foo'})
+    depsStore.addEntity(componentA, {'foo': true, 'bar': true})
+    depsStore.addEntity(componentB, {'foo': true})
     assert.deepEqual(depsStore.getAllUniqueEntities(), [componentA, componentB])
   })
-  describe('strict', () => {
-    it('should STRICTLY return components matching normal deps', () => {
+  describe('dependency matching', () => {
+    it('should return exact matches', () => {
       const depsStore = new DependencyStore()
       const component = {}
-      depsStore.addEntity(component, {'foo': 'foo'})
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: true
-      }), [component])
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: {bar: true}
-      }), [])
+      depsStore.addEntity(component, {'foo': true})
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo']
+      }]), [component])
     })
-    it('should STRICTLY return components matching immediate deps', () => {
+    it('should return matches on immediate and all interest', () => {
+      const depsStore = new DependencyStore()
+      const component = {}
+      depsStore.addEntity(component, {'foo.*': true, 'foo.**': true})
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo']
+      }]), [component])
+    })
+    it('should return matches on immediate', () => {
       const depsStore = new DependencyStore()
       const component = {}
       depsStore.addEntity(component, {'foo.*': true})
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: true
-      }), [component])
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: {bar: true}
-      }), [component])
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: {bar: {mip: true}}
-      }), [])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo', '0']
+      }]), [component])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo', '0', 'bar']
+      }]), [])
     })
-    it('should STRICTLY return components matching nested deps', () => {
+    it('should return matches on all', () => {
       const depsStore = new DependencyStore()
       const component = {}
       depsStore.addEntity(component, {'foo.**': true})
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: true
-      }), [component])
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: {bar: true}
-      }), [component])
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: {bar: {mip: true}}
-      }), [component])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo', '0']
+      }]), [component])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo', '0', 'bar']
+      }]), [component])
     })
-    it('should STRICTLY return components matching deep deps', () => {
+    it('should return matches on all forceChildPathUpdates', () => {
       const depsStore = new DependencyStore()
       const component = {}
       depsStore.addEntity(component, {'foo.bar.baz': true})
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: true
-      }), [])
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: {bar: true}
-      }), [])
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: {bar: {baz: true}}
-      }), [component])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
+        path: ['foo']
+      }]), [component])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
+        path: ['foo', 'bar']
+      }]), [component])
     })
-    it('should STRICTLY return unique components', () => {
+    it('should return matches on all forceChildPathUpdates with interest', () => {
       const depsStore = new DependencyStore()
       const component = {}
-      depsStore.addEntity(component, {'foo': 'foo', 'bar': 'bar'})
-      assert.deepEqual(depsStore.getUniqueEntities({
-        foo: true,
-        bar: true
-      }), [component])
+      depsStore.addEntity(component, {'foo.bar.*': true, 'foo.bar.**': true})
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
+        path: ['foo']
+      }]), [component])
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        forceChildPathUpdates: true,
+        path: ['foo', 'bar']
+      }]), [component])
+    })
+    it('should handle not having interest conflicts', () => {
+      const depsStore = new DependencyStore()
+      const componentA = {}
+      const componentB = {}
+      depsStore.addEntity(componentA, {'foo.bar.**': true})
+      depsStore.addEntity(componentB, {'foo.bar.baz': true})
+      assert.deepEqual(depsStore.getUniqueEntities([{
+        path: ['foo', 'bar', 'baz']
+      }]), [componentA, componentB])
     })
   })
 })
