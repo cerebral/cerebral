@@ -69,7 +69,7 @@ As opposed to the set() method, update() can be use to selectively update only t
 *action*
 ```javascript
 function someAction({firebase, path}) {
-  return firebase.update({
+  return firebase.update('some.path', {
     'foo': 'bar',
     'items.item1.isAwesome': true
   })
@@ -84,7 +84,7 @@ import {props} from 'cerebral/tags'
 import {update} from 'cerebral-provider-firebase'
 
 export default [
-  update({
+  update('some.path', {
     'foo.bar': props`bar`,
     'foo.baz': props`baz`
   }), {
