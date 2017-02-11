@@ -74,7 +74,7 @@ import {compute} from 'cerebral'
 import {state, props} from 'cerebral/tags'
 
 const computedItemUsers = compute(
-  state`items.${props`itemKey`}`),
+  state`items.${props`itemKey`}`,
   (item, get) => {
     return item.userIds.map((userId) => get(state`users.${userId}`))
   }
