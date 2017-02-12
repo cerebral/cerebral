@@ -8,22 +8,14 @@ function getTime (date) {
   return hours + ':' + minutes + ':' + seconds
 }
 
-function extractPaths (paths) {
-  const allPaths = []
-  function traverse (currentPaths, pathArray) {
-    Object.keys(currentPaths).forEach(key => {
-      pathArray.push(key)
-      if (currentPaths[key] === true) {
-        allPaths.push(pathArray.join('.'))
-      } else {
-        traverse(currentPaths[key], pathArray)
-      }
-      pathArray.pop()
-    })
+function extractPaths (changes) {
+  if (!changes) {
+    return []
   }
-  traverse(paths, [])
 
-  return allPaths
+  return changes.reduce((paths, change) => {
+    return paths.concat(change.path.join('.'))
+  }, [])
 }
 
 function unique (array) {
@@ -41,7 +33,7 @@ export default function Renders (props) {
     <div className='renders-wrapper'>
       <div className='renders-renderWrapper'>
         {props.renders.filter((render) => {
-          return props.filter ? extractPaths(render.changes || {}).reduce((hasPath, path) => {
+          return props.filter ? extractPaths(render.changes).reduce((hasPath, path) => {
             return hasPath || path.indexOf(props.filter) >= 0
           }, false) : true
         }).map((render, index) => {
@@ -56,7 +48,7 @@ export default function Renders (props) {
                 <div className='renders-paths'>
                   <div className='renders-pathsHeader'><small>Paths changed</small></div>
                   <div className='renders-pathsList'>
-                    {extractPaths(render.changes || {}).map((path, index) => {
+                    {extractPaths(render.changes).map((path, index) => {
                       return (
                         <div className='renders-path' key={index}>
                           <strong>{path}</strong>

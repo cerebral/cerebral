@@ -93,18 +93,14 @@ export function isDebuggerEnv () {
   )
 }
 
-export function debounce (func, wait) {
-  let timeout
-
+export function delay (func, wait) {
   return function (...args) {
     const context = this
     const later = () => {
-      timeout = null
       func.apply(context, args)
     }
 
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
+    setTimeout(later, wait)
   }
 }
 
