@@ -1,5 +1,5 @@
 /* global CustomEvent WebSocket File FileList Blob */
-import {debounce} from '../utils'
+import {delay} from '../utils'
 import Path from 'function-tree/lib/Path'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
@@ -44,7 +44,7 @@ class Devtools {
       .concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)
-    this.sendComponentsMap = debounce(this.sendComponentsMap, 50)
+    this.sendComponentsMap = delay(this.sendComponentsMap, 50)
   }
   /*
     To remember state Cerebral stores the initial model as stringified
@@ -485,9 +485,14 @@ class Devtools {
   updateComponentsMap (component, nextDeps, prevDeps) {
     const componentDetails = {
       name: this.extractComponentName(component),
-      renderCount: component.renderCount ? component.renderCount + 1 : 1,
+      renderCount: component.renderCount || 0,
       id: component.componentDetailsId || this.debuggerComponentDetailsId++
     }
+
+    if (arguments.length === 1) {
+      componentDetails.renderCount++
+    }
+
     component.componentDetailsId = componentDetails.id
     component.renderCount = componentDetails.renderCount
 

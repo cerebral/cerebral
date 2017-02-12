@@ -7,7 +7,7 @@ export default function StatePaths (props) {
 
     return statePathComponents.reduce((allComponents, component) => {
       if (!allComponents[component.id]) {
-        allComponents[component.id] = {name: component.name, paths: []}
+        allComponents[component.id] = {name: component.name, paths: [], renderCount: component.renderCount}
       }
       allComponents[component.id].paths.push(stateKey)
 
@@ -40,7 +40,9 @@ export default function StatePaths (props) {
                 mapPath: key
               })}
             >
-              <div className='statePaths-pathName'>{componentsWithStatePaths[key].name}</div>
+              <div className='statePaths-pathName'>
+                {componentsWithStatePaths[key].name} {componentsWithStatePaths[key].renderCount === 0 ? null : <small>({componentsWithStatePaths[key].renderCount})</small>}
+              </div>
               <div className='statePaths-components'>
                 {componentsWithStatePaths[key].paths.map((path) => (
                   <div>{path}</div>
