@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import {compute} from '..'
 import {state, props} from '../tags'
-import {runCompute, runAction, runSignal} from '.'
+import {runCompute, runAction, runSignal, RunSignal} from '.'
 import assert from 'assert'
 
 describe('test helpers', () => {
@@ -83,6 +83,27 @@ describe('test helpers', () => {
           assert.equal(response[1].props.bar, 'bar')
           assert.equal(response[1].output.baz, 'baz')
         })
+    })
+  })
+
+  describe('RunSignal factory', () => {
+    it('should create a runSignal helper that can be used many times', () => {
+      const runSignal = RunSignal({
+        modules: {
+          test: {
+            state: {foo: 0},
+            signals: {
+              baz: [({state}) => state.set('test.foo', state.get('test.foo') + 1)]
+            }
+          }
+        }
+      })
+      return runSignal('test.baz').then(({state}) => {
+        assert.equal(state.test.foo, 1)
+        return runSignal('test.baz').then(({state}) => {
+          assert.equal(state.test.foo, 2)
+        })
+      })
     })
   })
 })

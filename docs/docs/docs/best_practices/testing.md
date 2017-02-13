@@ -49,7 +49,6 @@ The optional `fixture` argument should be an object that contains any of the fol
 ### Example
 
 ```js
-import {compute} from 'cerebral'
 import {props, state} from 'cerebral/tags'
 import {runCompute} from 'cerebral/test'
 
@@ -102,7 +101,6 @@ The `result` object passed when the promise resolves contains `state`, `controll
 ### Example
 
 ```js
-import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
 import {runAction} from 'cerebral/test'
 
@@ -118,7 +116,9 @@ it('should increment numbers in state', () => {
 
 ## Signals
 
-The `runSignal` test helper accepts a `signal` (chain of actions) and `fixture` arguments and returns a promise.
+### runSignal
+
+The `runSignal` test helper accepts a `signal` (chain of actions or signal name) and `fixture` arguments and returns a promise. `runSignal` is designed to be called one time, to test calling multiple signals in a single test see the `RunSignal` factory below.
 
 ```js
 runSignal(signal, fixture. options).then((result) => {})
@@ -131,9 +131,11 @@ The optional `fixture` argument should be an object that contains any of the fol
   state: {}, // test state
   props: {}, // props passed to the signal
   // any other options that can be passed to the
-  // cerebral controller, including router, providers...
+  // cerebral controller, including signals, modules, router, providers...
 }
 ```
+
+If the `signal` argument is passed as a string, then the signal must be defined within the fixtures.
 
 The optional `options` argument contain the the following options:
 
@@ -166,11 +168,9 @@ The `result` object passed when the promise resolves contains `state`, `controll
 }
 ```
 
-### Example
+#### Example
 
 ```js
-import {compute} from 'cerebral'
-import {state} from 'cerebral/tags'
 import {runSignal} from 'cerebral/test'
 
 // the buttonClicked signal has two actions: validateForm and updateIsValid
@@ -187,5 +187,34 @@ it('should handle button clicks', () => {
       assert.equal(updateIsValid.props.isValid, true)
       assert.equal(state.isValid, true)
     })
+})
+```
+
+### RunSignal factory
+
+The `RunSignal` factory is similar to run signal except that it will return a runSignal function that can be called many times without reseting the controller in between.
+
+```js
+const runSignal = Run(fixture. options)
+runSignal(signal, props).then((result) => {})
+```
+
+#### Example
+
+```js
+import {RunSignal} from 'cerebral/test'
+
+it('should accumulate a count', () => {
+  const runMathSignal = RunSignal({
+    modules: {
+      math: math()
+    }
+  })
+  return runMathSignal('math.plusOne').then(({state}) => {
+    assert.equal(state.math.count, 1)
+    return runMathSignal('math.plusTwo').then(({state}) => {
+      assert.equal(state.math.count, 3)
+    })
+  })
 })
 ```
