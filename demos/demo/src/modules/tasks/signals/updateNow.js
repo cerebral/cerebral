@@ -1,5 +1,5 @@
 import {debounce, set, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import setNow from '../actions/setNow'
 
 const triggerAgain = ({controller}) => {
@@ -9,7 +9,7 @@ const triggerAgain = ({controller}) => {
 
 export default [
   setNow,
-  set(state`tasks.$now`, input`now`),
+  set(state`tasks.$now`, props`now`),
   debounce(1000), {
     continue: [
       when(state`tasks.$now`, state`tasks.$nowHidden`,

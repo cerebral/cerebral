@@ -1,5 +1,5 @@
 import {debounce, set, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import paths from '../../../common/Collection/paths'
 
 import updateDraft from '../../../common/Collection/signals/updateDraft'
@@ -17,8 +17,8 @@ const updateDraftFactory = (moduleName) => {
         // are made.
         debounce(1000), {
           continue: [
-            set(input`key`, state`${draftPath}.key`),
-            set(input`value`, state`${draftPath}`),
+            set(props`key`, state`${draftPath}.key`),
+            set(props`value`, state`${draftPath}`),
             ...save(moduleName), {
               success: [],
               error: []

@@ -1,5 +1,5 @@
 import {set, unset, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import getUser from '../user/actions/getUser'
 import firebaseInit from './signals/firebaseInit'
 
@@ -17,7 +17,7 @@ export default {
           getUser, {
             success: [
               set(state`user.$loggedIn`, true),
-              set(state`user.$currentUser`, input`user`),
+              set(state`user.$currentUser`, props`user`),
               ...firebaseInit
             ],
             error: [
@@ -35,7 +35,7 @@ export default {
       set(state`app.$selectedView`, 'Today')
     ],
     langOptionClicked: [
-      set(state`user.lang`, input`lang`),
+      set(state`user.lang`, props`lang`),
       unset(state`app.$showLangSelector`)
     ],
     langSelectorClicked: [

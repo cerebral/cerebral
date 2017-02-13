@@ -1,6 +1,6 @@
-function removeClient ({input, firebase, state, path}) {
+function removeClient ({props, firebase, state, path}) {
   const uid = state.get('user.$currentUser.uid')
-  return firebase.remove(`clients.${uid}.${input.ref}`)
+  return firebase.remove(`clients.${uid}.${props.ref}`)
     .then(path.success)
     .catch(path.error)
 }

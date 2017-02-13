@@ -1,5 +1,5 @@
 import {set, unset, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import paths from '../../../common/Collection/paths'
 import {isRunning} from '../helpers'
 import updateNow from './updateNow'
@@ -7,7 +7,7 @@ import updateNow from './updateNow'
 const {draftPath} = paths('tasks')
 
 export default [
-  when(input`visible`), {
+  when(props`visible`), {
     true: [
       unset(state`tasks.$nowHidden`),
       // becomes visible again

@@ -1,5 +1,5 @@
 import {set, when} from 'cerebral/operators'
-import {input, state, string} from 'cerebral/tags'
+import {props, state, string} from 'cerebral/tags'
 
 export default function paths (moduleName) {
   return {
@@ -9,20 +9,20 @@ export default function paths (moduleName) {
     errorPath: `app.$error`,
     dynamicPaths: [
       set(
-        input`remoteCollectionPath`, string`${state`user.$currentUser.uid`}.${moduleName}`
+        props`remoteCollectionPath`, string`${state`user.$currentUser.uid`}.${moduleName}`
       ),
-      when(input`key`), {
+      when(props`key`), {
         true: [
           set(
-            input`itemPath`, string`${moduleName}.all.${input`key`}`
+            props`itemPath`, string`${moduleName}.all.${props`key`}`
           ),
           set(
-            input`remoteItemPath`,
-            string`${input`remoteCollectionPath`}.${input`key`}`
+            props`remoteItemPath`,
+            string`${props`remoteCollectionPath`}.${props`key`}`
           ),
           set(
-            input`remoteItemImagePath`,
-            string`${input`remoteItemPath`}.image`
+            props`remoteItemImagePath`,
+            string`${props`remoteItemPath`}.image`
           )
         ],
         false: []

@@ -1,5 +1,5 @@
 import {set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import paths from '../paths'
 
 export default function (moduleName) {
@@ -7,6 +7,6 @@ export default function (moduleName) {
 
   return [
     ...dynamicPaths,
-    set(state`${input`itemPath`}.$imageProgress`, input`progress`)
+    set(state`${props`itemPath`}.$imageProgress`, props`progress`)
   ]
 }

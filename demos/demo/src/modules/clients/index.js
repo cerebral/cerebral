@@ -1,5 +1,5 @@
 import {set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import Collection from '../../common/Collection'
 
 const collection = Collection('clients', {
@@ -27,7 +27,7 @@ export default {
     formValueChanged: collection.updateDraft,
     penClicked: collection.edit,
     phoneClicked: [
-      set(state`clients.$phone`, input`phone`)
+      set(state`clients.$phone`, props`phone`)
     ],
     removed: collection.removed,
     routed: [

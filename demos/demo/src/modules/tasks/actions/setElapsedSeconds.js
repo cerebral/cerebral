@@ -2,8 +2,8 @@ import {Tag} from 'cerebral/tags'
 import {elapsedSeconds as computeElapsedSeconds} from '../../../helpers/dateTime'
 
 export default function setElapsedSeconds (startedAtTag, endedAtTag) {
-  function elapsedSeconds ({state, input}) {
-    const getters = {state: state.get, input}
+  function elapsedSeconds ({state, props}) {
+    const getters = {state: state.get, props}
     const startedAt = startedAtTag instanceof Tag
       ? startedAtTag.getValue(getters) : startedAtTag
     const endedAt = endedAtTag instanceof Tag
