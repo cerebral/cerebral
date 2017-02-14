@@ -10,7 +10,7 @@ export default compute(
   state`items.limit`,
   state`items.list`,
   (limit, list) => {
-    return items.filter((item, index) => index < limit)    
+    return list.filter((item, index) => index < limit)
   }
 )
 ```
@@ -40,9 +40,9 @@ import {state} from 'cerebral/tags'
 export default function (passedLimit) {
   return compute(
     passedLimit,
-    state`items.limit`,
+    state`items.list`,
     (limit, list) => {
-      return items.filter((item, index) => index < limit)    
+      return list.filter((item, index) => index < limit)
     }
   )
 }
