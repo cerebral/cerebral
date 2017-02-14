@@ -71,7 +71,7 @@ export default class Tag {
         throwError(`A tag is extracting with path "${path}", but it is not valid`)
       }
 
-      return ''==key ? currentValue : currentValue[key];
+      return (key === '') ? currentValue : currentValue[key]
     }, obj)
   }
   /*
