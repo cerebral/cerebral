@@ -5,15 +5,13 @@ import {state, signal} from 'cerebral/tags'
 import {nameToColors} from '../../../../common/utils'
 import classnames from 'classnames'
 import signalsList from '../../../../common/computed/signalsList'
-import connector from 'connector'
 
 export default connect({
   debugger: state`debugger`,
   signalsList: signalsList,
   isExecuting: state`debugger.isExecuting`,
   searchValue: state`debugger.searchValue`,
-  signalClicked: signal`debugger.signalClicked`,
-  signalDoubleClicked: signal`debugger.signalDoubleClicked`
+  signalClicked: signal`debugger.signalClicked`
 },
   class SignalsList extends Inferno.Component {
     onSignalClick (event, signal, index) {
@@ -21,15 +19,6 @@ export default connect({
         executionId: signal.executionId,
         groupId: signal.groupId
       })
-    }
-    onSignalDoubleClick (signal) {
-      if (this.props.debugger.isExecuting) {
-        return
-      }
-      this.props.signalDoubleClicked({
-        executionId: signal.executionId
-      })
-      connector.sendEvent('remember', signal.executionId)
     }
     hasSearchContent (signal) {
       return Object.keys(signal.functionsRun).reduce((hasSearchContent, key) => {
@@ -99,10 +88,8 @@ export default connect({
       return (
         <li
           onClick={(event) => this.onSignalClick(event, signal, index)}
-          onDoubleClick={() => this.onSignalDoubleClick(signal, index)}
           className={className}
           key={index}>
-          {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className='list-remembered' /> : null}
           {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className={indicatorClassname} style={signalStyle} />}
           <span className='list-name'>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
         </li>

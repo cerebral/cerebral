@@ -4,6 +4,7 @@ import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
 import Toolbar from './Toolbar'
 import Signals from './Signals'
+import Mutations from './Mutations'
 import Components from './Components'
 import Model from './Model'
 
@@ -38,6 +39,12 @@ export default connect({
                 <Components />
               </div>
             )
+          case 'timeTravel':
+            return (
+              <div className='debugger-content'>
+                <Mutations />
+              </div>
+            )
           case 'model':
             return (
               <div className='debugger-content'>
@@ -60,6 +67,13 @@ export default connect({
             return (
               <div className='debugger-content'>
                 <Components />
+              </div>
+            )
+          case 'mutations':
+            return (
+              <div className='debugger-content'>
+                <Mutations />
+                <Model />
               </div>
             )
           case 'model':

@@ -1,0 +1,75 @@
+.mutations {
+  flex: 1.25;
+  display: flex;
+  padding: 10px;
+  overflow: hidden;
+  font-size: 10px;
+}
+
+.mutations .list {
+  background-color: #FFF;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  margin: 0;
+  padding: 0;
+  border: 1px solid #DDD;
+  width: 100%;
+  list-style-type: none;
+  height: 100%;
+  overflow-y: scroll;
+}
+
+.mutations .list-item {
+  position: relative;
+  display: flex;
+  padding-left: 15px;
+  cursor: pointer;
+  min-height: 30px;
+  line-height: 30px;
+  border-bottom: 1px solid #DDD;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mutations .list-item:hover {
+  background-color: #FAFAFA;
+}
+
+.mutations .list-remembered {
+  position: absolute;
+  left: 7.5px;
+  top: 50%;
+  margin-top: -2.5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: #999;
+}
+
+.mutations .list-item.faded {
+  opacity: 0.5;
+}
+
+.mutations .list-item .mutation {
+  flex: 3;
+}
+
+.mutations .list-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  background-color: #4285f4;
+}
+
+.mutations .signal-name {
+  flex: 0 0 150px;
+  font-size: 12px;
+  text-overflow: ellipsis;
+}
+
+.mutations .mutation {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}

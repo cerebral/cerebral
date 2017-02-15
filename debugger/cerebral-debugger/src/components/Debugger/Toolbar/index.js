@@ -32,6 +32,11 @@ export default connect({
                 <i className='icon icon-signals' /> CONTROLLER
               </li>
               <li
+                className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'mutations'})}
+                onClick={() => this.props.pageChanged({page: 'mutations'})}>
+                <i className='icon icon-mutation' /> MUTATIONS
+              </li>
+              <li
                 className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'components'})}
                 onClick={() => this.props.pageChanged({page: 'components'})}>
                 <i className='icon icon-components' /> COMPONENTS
