@@ -53,5 +53,3 @@ render((
     <App />
   </Container>
 ), document.querySelector('#root'))
-
-// Visibility API

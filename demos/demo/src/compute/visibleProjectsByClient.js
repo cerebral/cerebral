@@ -1,6 +1,6 @@
 import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
-import visibleKeys from '../common/Collection/computed/visibleKeys'
+import visibleKeys from '../common/Collection/compute/visibleKeys'
 import paths from '../common/Collection/paths'
 
 const projectsPath = paths('projects').collectionPath

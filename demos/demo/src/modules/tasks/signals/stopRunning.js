@@ -4,8 +4,8 @@ import save from '../../../common/Collection/signals/save'
 import makeRef from '../../../common/Collection/actions/makeRef'
 import paths from '../../../common/Collection/paths'
 
-import setElapsedSeconds from '../actions/setElapsedSeconds'
-import setNow from '../actions/setNow'
+import elapsedSeconds from '../compute/elapsedSeconds'
+import now from '../compute/now'
 
 const moduleName = 'tasks'
 const {collectionPath, draftPath, errorPath} = paths(moduleName)
@@ -16,11 +16,11 @@ export default [
 
   // Prepare new task to be saved
   set(props`value`, state`${draftPath}`),
-  setNow,
+  set(props`now`, now),
   set(props`value.endedAt`, props`now`),
   unset(state`tasks.$now`),
-  setElapsedSeconds(props`value.startedAt`, props`value.endedAt`),
-  set(props`value.elapsed`, props`elapsedSeconds`),
+  set(props`value.elapsed`, elapsedSeconds(props`value.startedAt`, props`value.endedAt`)),
+  // FIXME: same here...
   makeRef,
   set(props`key`, props`ref`),
   ...save(moduleName), {

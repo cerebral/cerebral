@@ -1,15 +1,13 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {signal, state} from 'cerebral/tags'
-import translations from '../../common/computed/translations'
+import translations from '../../common/compute/translations'
 import Input from './Input'
 
 export default connect(
   {
     t: translations,
-    signIn: state`user.$signIn`
-  },
-  {
+    signIn: state`user.$signIn`,
     anonClick: signal`user.signInAnonClicked`,
     buttonClick: signal`user.signInClicked`,
     enterPress: signal`user.signInEnterPressed`,

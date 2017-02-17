@@ -1,5 +1,5 @@
 import {signal, state} from 'cerebral/tags'
-import visibleKeys from '../computed/visibleKeys'
+import visibleKeys from '../compute/visibleKeys'
 import paths from '../paths'
 
 export default function connectProps (moduleName, extraprops) {

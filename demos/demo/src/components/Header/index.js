@@ -2,7 +2,7 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {signal, state} from 'cerebral/tags'
-import translations from '../../common/computed/translations'
+import translations from '../../common/compute/translations'
 
 import LangSelector from '../LangSelector'
 

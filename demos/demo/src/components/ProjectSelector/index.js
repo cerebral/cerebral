@@ -1,7 +1,7 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {signal, state} from 'cerebral/tags'
-import visibleProjectsByClient from '../../computed/visibleProjectsByClient'
+import visibleProjectsByClient from '../../compute/visibleProjectsByClient'
 
 export default connect(
   {
