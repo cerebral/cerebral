@@ -24,7 +24,7 @@ export default function createOnChildChanged (controller) {
             return payload
           }, initialPayload)
         }
-        controller.getSignal(signal)(payload)
+        signal(payload)
       }
     )
   }

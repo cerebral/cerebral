@@ -19,7 +19,7 @@ export default function createOnValue (controller) {
 
         const payload = Object.assign({value: data.val()}, options.payload || {})
 
-        controller.getSignal(signal)(payload)
+        signal(payload)
       }
     )
   }

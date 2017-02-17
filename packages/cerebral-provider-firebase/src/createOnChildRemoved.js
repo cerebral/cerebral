@@ -11,7 +11,7 @@ export default function createOnChildRemoved (controller) {
       'child_removed',
       signal,
       (data) => {
-        controller.getSignal(signal)(Object.assign({
+        signal(Object.assign({
           key: data.key
         }, options.payload))
       }

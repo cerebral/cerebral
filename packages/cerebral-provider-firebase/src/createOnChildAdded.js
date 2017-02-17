@@ -24,7 +24,7 @@ export default function createOnChildAdded (controller) {
             return payload
           }, initialPayload)
         }
-        controller.getSignal(signal)(payload)
+        signal(payload)
       }
     )
   }
