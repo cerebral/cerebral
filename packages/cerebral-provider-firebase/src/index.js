@@ -4,10 +4,10 @@ import {
 } from './helpers'
 import signInAnonymouslyService from './signInAnonymously'
 import getUserService from './getUser'
-import createOnChildAdded from './createOnChildAdded'
-import createOnChildRemoved from './createOnChildRemoved'
-import createOnChildChanged from './createOnChildChanged'
-import createOnValue from './createOnValue'
+import onChildAdded from './onChildAdded'
+import onChildRemoved from './onChildRemoved'
+import onChildChanged from './onChildChanged'
+import onValue from './onValue'
 import createTask from './createTask'
 import value from './value'
 import push from './push'
@@ -71,10 +71,10 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         signInWithGoogle: signInWithGoogle,
         signInWithGithub: signInWithGithub,
         off: stopListening,
-        onChildAdded: createOnChildAdded(context.controller),
-        onChildRemoved: createOnChildRemoved(context.controller),
-        onChildChanged: createOnChildChanged(context.controller),
-        onValue: createOnValue(context.controller),
+        onChildAdded,
+        onChildRemoved,
+        onChildChanged,
+        onValue,
         value,
         push,
         put,
