@@ -1,5 +1,5 @@
-function endSignalExecution ({input, state}) {
-  const execution = input.data.execution
+function endSignalExecution ({props, state}) {
+  const execution = props.data.execution
   const signalPath = `debugger.signals.${execution.executionId}`
 
   state.set(`${signalPath}.isExecuting`, false)

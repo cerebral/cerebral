@@ -1,15 +1,10 @@
-function remember ({input, state}) {
+function remember ({props, state}) {
   state.set('debugger.model', state.get('debugger.initialModel'))
-  state.set('debugger.currentRememberedSignalExecutionId', input.executionId)
+  state.set('debugger.currentRememberedMutationIndex', props.index)
   const mutations = state.get('debugger.mutations')
-  let lastMutationIndex
-  for (lastMutationIndex = mutations.length - 1; lastMutationIndex >= 0; lastMutationIndex--) {
-    if (mutations[lastMutationIndex].executionId === input.executionId) {
-      break
-    }
-  }
+  let lastMutationIndex = props.index
 
-  for (let x = 0; x <= lastMutationIndex; x++) {
+  for (let x = mutations.length - 1; x >= lastMutationIndex; x--) {
     const mutation = mutations[x].data
     const args = mutation.args.slice()
     const path = args.shift()

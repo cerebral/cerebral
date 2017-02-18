@@ -1,5 +1,5 @@
-function switchType ({input, path}) {
-  return path[input.type]()
+function switchType ({props, path}) {
+  return path[props.type]()
 }
 
 export default switchType

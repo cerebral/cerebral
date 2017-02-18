@@ -11,11 +11,12 @@ import runRecordedMutation from '../actions/runRecordedMutation'
 import updateActionOutput from '../actions/updateActionOutput'
 import updateActionError from '../actions/updateActionError'
 import parseAndRunMessages from '../actions/parseAndRunMessages'
+import clean from '../actions/clean'
 
 export default [
   switchType, {
-    init: [setInitialPayload],
-    bulk: [parseAndRunMessages],
+    init: [clean, setInitialPayload],
+    bulk: [clean, parseAndRunMessages],
     executionStart: [addSignal],
     execution: [updateSignal, runMutation],
     executionFunctionEnd: [updateActionOutput],

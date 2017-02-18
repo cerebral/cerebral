@@ -31,7 +31,6 @@ class Devtools {
     this.multipleApps = typeof options.multipleApps === 'undefined' ? true : options.multipleApps
     this.backlog = []
     this.mutations = []
-    this.latestExecutionId = null
     this.initialModelString = null
     this.isConnected = false
     this.controller = null
@@ -58,32 +57,24 @@ class Devtools {
     It will also replace the "runTree" method of the controller to
     prevent any new signals firing off when in "remember state"
   */
-  remember (executionId) {
+  remember (index) {
     this.controller.model.state = JSON.parse(this.initialModelString)
-    let lastMutationIndex
 
-    if (executionId === this.latestExecutionId) {
+    if (index === 0) {
       this.controller.runTree = this.originalRunTreeFunction
-      lastMutationIndex = this.mutations.length - 1
     } else {
-      for (lastMutationIndex = this.mutations.length - 1; lastMutationIndex >= 0; lastMutationIndex--) {
-        if (this.mutations[lastMutationIndex].executionId === executionId) {
-          break
-        }
-      }
-
       this.controller.runTree = (name) => {
         console.warn(`The signal "${name}" fired while debugger is remembering state, it was ignored`)
       }
     }
 
-    for (let x = 0; x <= lastMutationIndex; x++) {
+    for (let x = 0; x < this.mutations.length - index; x++) {
       const mutation = JSON.parse(this.mutations[x].data)
-
       this.controller.model[mutation.method](...mutation.args)
     }
 
     this.controller.flush(true)
+    this.controller.emit('remember', JSON.parse(this.mutations[index].data).datetime)
   }
   /*
 

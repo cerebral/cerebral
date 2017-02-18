@@ -87,7 +87,9 @@ class DependencyStore {
           }
         }
 
-        return traverseChildren(children[childKey].children)
+        if (children[childKey].children) {
+          traverseChildren(children[childKey].children)
+        }
       }
     }
 

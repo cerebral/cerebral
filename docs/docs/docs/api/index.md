@@ -139,3 +139,10 @@ Triggered whenever Cerebral executes actions in parallel.
 ```js
 controller.on('parallelEnd', (execution, payload, functionsExecutedCount) => {})
 ```
+
+### remember
+Triggered whenever Cerebral travels back in time. Passes the timestamp it travelled to.
+
+```js
+controller.on('remember', (datetime) => {})
+```

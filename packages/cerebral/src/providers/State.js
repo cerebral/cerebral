@@ -50,6 +50,7 @@ function StateProviderFactory () {
             const path = ensurePath(argsCopy.shift())
 
             context.debugger.send({
+              datetime: Date.now(),
               type: 'mutation',
               color: '#333',
               method: methodKey,
