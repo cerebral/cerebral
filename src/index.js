@@ -97,7 +97,6 @@ var Controller = function (Model) {
     } else {
       externalContextProviders.__cerebral_global__.push(provider)
     }
-    externalContextProviders[scope || '__cerebral_global__'].push(provider)
   }
 
   controller.on('flush', Computed.updateCache)
