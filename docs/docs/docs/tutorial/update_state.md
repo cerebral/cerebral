@@ -1,13 +1,13 @@
 # Update state
 
-**Load up chapter 03** - [Preview](03)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBGyGo09NxQfRWSNOb)
 
 Defining state and user interfaces is more about describing how something should look, rather than how it should update. Updates are the tricky part, this is where we usually introduce complexity in our applications.
 
 Cerebral allows you to describe updates the same way you describe state and user interfaces, in a declarative manner. We call them **signals** and they will help you handle complexity both in code and in your head.
 
 ## Adding a signal
-Let us add a signal to our Controller in **src/index.js**:
+Let us add a signal to our Controller in **controller.js**:
 
 ```js
 ...
@@ -86,5 +86,3 @@ export default connect({
 Now click it and take a look at the debugger. You will see the debugger list the execution of the signal, with information about what happened. This is also a tool the Cerebral debugger provides to give you insight into your application. Very handy for example when you need to dig into a **complex application** after not touching it for a long time, introduce a new team member to the application or debug complex execution flows.
 
 So changing the *subTitle* is kind of a silly state change on a button click. Let's introduce a very simple "Toast"-Component. It has already been added for you on the next chapter.
-
-**Want to dive deeper?** - [Go in depth](../in_depth/signals.md), or move on with the tutorial

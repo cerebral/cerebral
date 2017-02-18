@@ -1,6 +1,6 @@
 # Async actions
 
-**Load up chapter 06** - [Preview](06)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBPZwKFDQKkAcUqRte)
 
 Until now we have mostly used synchronous actions inside our **signals** and the flow was, therefore, straightforward. Example:
 
@@ -22,7 +22,7 @@ We already have an example of this in our code. The **wait** operator runs async
 Controller({
   signals: {
     buttonClicked:[
-      set(state`toast`, input`message`),
+      set(state`toast`, props`message`),
       wait(4000),
       set(state`toast`, null)
     ]
@@ -72,7 +72,7 @@ We need to adjust *src/index.js*:
 Controller({
   signals: {
     buttonClicked: [
-      ...showToast(input`message`, 1000)
+      ...showToast(props`message`, 1000)
     ]
   }
 })

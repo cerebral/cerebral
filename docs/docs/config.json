@@ -4,7 +4,8 @@
     "docs": [
       "https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js",
       "search",
-      "scroll-detect"
+      "scroll-detect",
+      "mobile"
     ]
   },
   "css": {
@@ -16,11 +17,11 @@
     "docs": ["docs"]
   },
   "docs": {
-    "install": [
+    "get_going": [
       "index",
-      "boilerplate",
-      "tools",
-      "function_tree"
+      "debugger",
+      "the_architecture",
+      "counter"
     ],
     "tutorial": [
       "index",
@@ -32,52 +33,37 @@
       "async_actions",
       "paths",
       "compute_state",
-      "providers",
       "routing",
       "modules"
     ],
-    "in_depth": [
+    "how_to": [
       "index",
-      "controller",
-      "state",
       "signals",
-      "chains_and_paths",
       "actions",
+      "chains_and_paths",
       "providers",
-      "tags",
-      "operators",
       "factories",
       "connect",
       "compute",
-      "routing"
-    ],
-    "best_practices": [
-      "index",
-      "constants",
-      "testing",
-      "load_initial_data",
-      "storing_server_data",
-      "lists",
-      "modals",
-      "feedback_messages",
-      "popups",
-      "long_running_side_effects",
-      "server_side"
+      "organize",
+      "test"
     ],
     "migration": [
       "index"
     ],
     "api": [
       "index",
+      "devtools",
+      "context",
       "state",
-      "signals",
       "tags",
+      "container",
       "connect",
       "modules",
       "operators",
       "providers",
       "compute",
-      "router"
+      "statecontainer"
     ]
   }
 }

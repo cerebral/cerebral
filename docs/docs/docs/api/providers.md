@@ -94,6 +94,8 @@ function MyProvider(context) {
   context.debugger // If devtools is added, you can send messages to the debugger
   context.props // Current payload
   context.path // If any paths are defined after the action to be executed
+  context.state // The state API
+  context.resolve // Resolve values and tag paths
 
   return context
 }

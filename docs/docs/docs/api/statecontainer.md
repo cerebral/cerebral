@@ -1,4 +1,4 @@
-# Server side
+# StateContainer
 
 "Can I use Cerebral on the server?". Yes, technically you can, but you actually should not. Cerebral is a framework for building applications with user interfaces. Running code related to talking to a server on the server does not really make sense. What does make sense though is pre-rendering and handle complex flows on server side logic.
 

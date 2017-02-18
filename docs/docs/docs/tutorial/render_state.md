@@ -1,11 +1,11 @@
 # Render state
 
-**Load up chapter 02** - [Preview](02)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBDYEXCVwtPoaMAXgJ)
 
 Now let's get that state displayed in our application.
 First of all, we need to tell our component (App) to **connect** to the state.
 
-So please change the *src/components/App/index.js* to:
+So please change *App.js* to:
 
 ```js
 import React from 'react'
@@ -15,10 +15,10 @@ import {state} from 'cerebral/tags'
 export default connect({
   title: state`title`
 },
-  function App (props) {
+  function App ({title}) {
     return (
-      <div className="o-container o-container--medium">
-        <h1>{props.title}</h1>
+      <div>
+        <h1>{title}</h1>
       </div>
     )
   }
@@ -41,7 +41,7 @@ connect({
 
 Congratulations, you have now created application state and exposed it to a component. You have now gained the power of translating the state of the application into something a user can understand. You will notice with Cerebral that this is a very clear separation. You define your application state in Cerebral and you use components to translate this state into a user interface.
 
-## The signature
+## The component signature
 Let us quickly talk about the syntax before moving on. The signature of connect most commonly uses two arguments:
 
 **connect(dependencies, Component)**
@@ -52,10 +52,10 @@ We usually write this out as:
 connect({
   title: state`title`
 },
-  function App (props) {
+  function App ({title}) {
     return (
-      <div className="o-container o-container--medium">
-        <h1>{props.title}</h1>
+      <div>
+        <h1>{title}</h1>
       </div>
     )
   }
@@ -71,4 +71,4 @@ It's time for your first challenge!
 - Add another state to the store called *subTitle*
 - Connect *subTitle* to the App component and display it in a *H3* element
 
-**Want to dive deeper?** - [Go in depth](../in_depth/connect.md), or move on with the tutorial
+If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

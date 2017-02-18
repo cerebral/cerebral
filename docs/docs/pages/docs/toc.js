@@ -24,7 +24,16 @@ function TOC (props) {
     <div className='docs-toc'>
       <div className='docs-toc-content'>
         <div><strong>Table of contents</strong></div>
-        {renderToc(props.toc)}
+        <ul>
+          {Object.keys(props.sections).map((sectionKey, index) => {
+            return (
+              <li key={index} className={sectionKey === props.docName ? 'active' : null}>
+                <a href={index === 0 ? `/docs/${props.sectionName}/index.html` : `/docs/${props.sectionName}/${sectionKey}.html`}>{props.sections[sectionKey].toc[0].title}</a>
+                {sectionKey === props.docName ? renderToc(props.sections[sectionKey].toc[0].children) : null}
+              </li>
+            )
+          })}
+        </ul>
       </div>
     </div>
   )

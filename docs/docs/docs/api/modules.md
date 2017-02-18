@@ -9,7 +9,9 @@ export default {
   // Define module signals, namespaced by module path
   signals: {},
   // Define submodules, namespaced by module path
-  modules: {}
+  modules: {},
+  // Add a global provider when module instantiates
+  provider(context, functionDetails, payload) {}
 }
 ```
 
@@ -24,7 +26,8 @@ export default (module) => {
   return {
     state: {},
     signals: {},
-    modules: {}
+    modules: {},
+    provider(context, functionDetails, payload) {}
   }
 }
 ```

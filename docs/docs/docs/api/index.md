@@ -13,6 +13,8 @@ const controller = Controller({
   // Defines the top level modules
   modules: {}
 })
+
+export default controller
 ```
 
 ## Errors
@@ -62,6 +64,13 @@ controller.runSignal('someSignal', [actionA, actionB], {foo: 'bar'})
 ```
 
 ## Events
+
+### initialized
+Triggers when Cerebral controller has initialized.
+
+```js
+controller.on('initialized', () => {})
+```
 
 ### flush
 Triggered whenever Cerebral flushes out changes to the UI. Passes a map of changes.

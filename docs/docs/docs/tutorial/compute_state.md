@@ -1,6 +1,6 @@
 # Compute state
 
-**Load up chapter 08** - [Preview](08)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBaa45GzVJFOxU69Gp)
 
 In our application we want to sum up the number of stars. We have already implemented a naive approach, which we are going to refactor. We created an action which adds the count together:
 
@@ -34,7 +34,7 @@ export default compute(
 
 We depend on our repos state. Then we just count the stars and return it. When the compute is used with a component it will automatically track whatever dependencies it has and only runs when any of those dependencies change. You can use computed for even more granular control of the state and even component props dependencies, but you can read more about that later.
 
-Let us finish this example. To do so please create a new folder named *./src/computeds* and save a file named *starsCount.js* containing the snippet we just looked at. Then we would like to use our computed both in the signal and we also want to show the count in our component.
+Let us finish this example. To do so please create a new file named *starsCount.js* containing the snippet we just looked at. Then we would like to use our computed both in the signal and we also want to show the count in our component.
 
 ## Replacing with computed
 Let us remove the **setStarsCount** action and refactor our signal to rather grab the repos first and then we update the state in one go. This just to show you different strategies.
@@ -51,18 +51,18 @@ import starsCount from './computeds/starsCount'
 ...
 {
   buttonClicked: [
-    ...showToast(string`Loading data for repo: ${input`repo`}`),
+    ...showToast(string`Loading data for repo: ${props`repo`}`),
     [
       getRepo('cerebral'),
       getRepo('addressbar')
     ],
-    when(input`error`), {
+    when(props`error`), {
       true: [
-        ...showToast(string`Error: ${input`error`}`, 5000)
+        ...showToast(string`Error: ${props`error`}`, 5000)
       ],
       false: [
-        set(state`repos.cerebral`, input`cerebral`),
-        set(state`repos.addressbar`, input`addressbar`),
+        set(state`repos.cerebral`, props`cerebral`),
+        set(state`repos.addressbar`, props`addressbar`),
         ...showToast(string`The repos have ${starsCount} stars`, 5000)
       ]
     }
@@ -86,16 +86,13 @@ export default connect({
   buttonClicked: signal`buttonClicked`,
   starsCount
 },
-  function App (props) {
+  function App ({title, subTitle, buttonClicked, starsCount}) {
     return (
-      <div className="o-container o-container--medium">
-        <h1>{props.title}</h1>
-        <h3>{props.subTitle}</h3>
-        <button
-          className="c-button c-button--info c-button--block"
-          onClick={() => props.buttonClicked()}
-        >
-          Update star count ({props.starsCount})
+      <div>
+        <h1>{title}</h1>
+        <h3>{subTitle}</h3>
+        <button onClick={() => buttonClicked()}>
+          Update star count ({starsCount})
         </button>
         <Toast />
       </div>
@@ -105,6 +102,6 @@ export default connect({
 ```
 Thats it for now regarding *Compute*. Of course summarizing some numbers is pretty simple stuff, but you can compute anything.
 
-But now it has only been Cerebral stuff, what if you want to use other libraries in your action flow? Well, refill your coffee or open up another drink and enjoy the next chapter introducing **providers**.
+But now it has only been Cerebral stuff, what if you want to use other libraries in your action flow? Well, refill your coffee or open up another drink and enjoy the next chapter introducing **the router**.
 
-**Want to dive deeper?** - [Go in depth](../in_depth/compute.md), or move on with the tutorial
+If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

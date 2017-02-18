@@ -1,14 +1,5 @@
-# Actions
+# Context
 
-A signal runs actions and actions are actually just functions.
-
-```js
-function iAmAnAction () {}
-```
-
-That means you do not need any API to define an action. This makes actions highly testable.
-
-## The context
 When actions run they are passed a context. This context is created by Cerebral for every action run.
 
 ```js
@@ -17,9 +8,9 @@ function iAmAnAction (context) {}
 
 The context is populated by Cerebral and you can configure this by creating **providers**. By default Cerebral adds the following providers on the context.
 
-### Input
+## Props
 
-When you trigger a signal you can pass it a payload. This payload is the starting point of the input to the signal. Given the signal:
+When you trigger a signal you can pass it a payload. This payload is the starting point of the props to the signal. Given the signal:
 
 ```js
 [
@@ -56,7 +47,7 @@ function actionB ({input}) {
 
 So returning an object from actions, either directly or from a promise, extends the input for later actions to handle.
 
-### State
+## State
 To change the state of your application you use the state API. It is available to every action.
 
 ```js
@@ -80,7 +71,7 @@ This is the one core concept of Cerebral that gives all its power. This simple a
 2. Track mutations so that it can inform components depending on the changes
 3. Only allow mutations through the API, and nowhere else in the application (using freezing during development)
 
-### Path
+## Path
 The path on the context is only available if there is actually expressed a path after the action in question:
 
 ```js
@@ -98,14 +89,43 @@ export default [
 
 In this scenario only *actionB* has the path on its context. As explained in **Chains and paths**, the path allows you to diverge execution of the signal.
 
-### Controller
+## Resolve
+When you ramp up your game with Cerebral you will most certainly take more advantage of **tags** and **computed** in your actions, typically related to action factories. To resolve an argument passed to a factory you can use resolve:
+
+```js
+function someActionFactory(someArgument) {
+  function someAction ({resolve}) {
+    // The argument can be anything, even plain values
+    const value = resolve.value(someArgument)
+  }
+
+  return someAction
+}
+```
+
+You can also use resolve to check the value type and extract for example the path of tags:
+
+```js
+function someActionFactory(someArgument) {
+  function someAction ({resolve}) {
+    if (resolve.isTag(someArgument)) {
+      const path = resolve.path(someArgument)
+    }
+  }
+
+  return someAction
+}
+```
+
+
+## Controller
 You have access to the controller instance on the context:
 
 ```js
 function someAction ({controller}) {}
 ```
 
-### Execution
+## Execution
 You have access to function tree execution as well. This holds information about the current execution, mostly used by the devtools to inform the debugger.
 
 ```js

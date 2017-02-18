@@ -1,4 +1,4 @@
-# Factories
+# Create factories
 Function factories is a common term in programming. It is basically a function that returns a function:
 
 ```js
