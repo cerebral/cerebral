@@ -1,8 +1,8 @@
 import computedSignalsList from '../../../common/computed/signalsList'
 
-function addSignal ({input, state, resolve}) {
+function addSignal ({props, state, resolve}) {
   const signalsList = resolve.value(computedSignalsList)
-  const execution = input.data.execution
+  const execution = props.data.execution
   const prevSignal = signalsList[signalsList.length - 1]
   const newSignal = {
     name: execution.name,
@@ -20,7 +20,6 @@ function addSignal ({input, state, resolve}) {
   if (!signalsList.length || currentSignalExecutionId === signalsList[0].executionId) {
     state.set('debugger.currentSignalExecutionId', execution.executionId)
   }
-  state.set('debugger.currentRememberedSignalExecutionId', execution.executionId)
 }
 
 export default addSignal

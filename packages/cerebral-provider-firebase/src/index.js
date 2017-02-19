@@ -26,6 +26,7 @@ import signInWithGithub from './signInWithGithub'
 import deleteUser from './deleteUser'
 import sendPasswordResetEmail from './sendPasswordResetEmail'
 import linkWithGithub from './linkWithGithub'
+import {setOnDisconnect, cancelOnDisconnect} from './onDisconnect'
 
 export {default as createUserWithEmailAndPassword} from './factories/createUserWithEmailAndPassword'
 export {default as getUser} from './factories/getUser'
@@ -52,6 +53,8 @@ export {default as transaction} from './factories/transaction'
 export {default as deleteUser} from './factories/deleteUser'
 export {default as sendPasswordResetEmail} from './factories/sendPasswordResetEmail'
 export {default as linkWithGithub} from './factories/linkWithGithub'
+export {default as setOnDisconnect} from './factories/setOnDisconnect'
+export {default as cancelOnDisconnect} from './factories/cancelOnDisconnect'
 
 export default function FirebaseProviderFactory (options = { payload: {} }) {
   firebase.initializeApp(options.config)
@@ -86,7 +89,9 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         signInWithEmailAndPassword,
         signOut: signOutService,
         deleteUser,
-        sendPasswordResetEmail
+        sendPasswordResetEmail,
+        setOnDisconnect,
+        cancelOnDisconnect
       }
     }
 

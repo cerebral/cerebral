@@ -1,5 +1,5 @@
-function updateSignal ({input, state}) {
-  const execution = input.data.execution
+function updateSignal ({props, state}) {
+  const execution = props.data.execution
   const signalPath = `debugger.signals.${execution.executionId}`
   const signal = state.get(signalPath)
 
@@ -12,8 +12,9 @@ function updateSignal ({input, state}) {
     })
   }
   if (execution.data && execution.data.type === 'mutation') {
-    state.push('debugger.mutations', {
+    state.unshift('debugger.mutations', {
       executionId: execution.executionId,
+      signalName: signal.name,
       data: execution.data
     })
   }

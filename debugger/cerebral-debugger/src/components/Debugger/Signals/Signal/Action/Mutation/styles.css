@@ -1,7 +1,8 @@
 .mutation {
   margin-left: 2px;
-  margin: 3px 0;
   display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .mutation i {

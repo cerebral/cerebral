@@ -609,6 +609,48 @@ export default [
 ]
 ```
 
+## On disconnect
+
+### setOnDisconnect
+Sets a value when Firebase detects user has disconnected.
+
+*action*
+```js
+function someAction({ firebase, state }) {
+  firebase.setOnDisconnect(`activeUsers.${state.get('app.user.uid')}`, 'someValue')
+}
+```
+
+*factory*
+```javascript
+import {state} from 'cerebral/tags'
+import {setOnDisconnect} from 'cerebral-provider-firebase'
+
+export default [
+  setOnDisconnect(string`activeUsers.${state`app.user.uid`}`, null)
+]
+```
+
+### cancelOnDisconnect
+Cancel setting a value when Firebase detects disconnect.
+
+*action*
+```js
+function someAction({ firebase, state }) {
+  firebase.cancelOnDisconnect()
+}
+```
+
+*factory*
+```javascript
+import {state} from 'cerebral/tags'
+import {cancelOnDisconnect} from 'cerebral-provider-firebase'
+
+export default [
+  cancelOnDisconnect()
+]
+```
+
 ### File Storage
 
 #### put

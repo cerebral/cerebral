@@ -3,6 +3,7 @@ function reset ({state}) {
     isExecuting: false,
     currentPage: 'signals',
     lastMutationCount: 0,
+    executingSignalsCount: 0,
     currentSignalExecutionId: null,
     currentRememberedSignalExecutionId: null,
     expandedSignalGroups: [],

@@ -1,5 +1,5 @@
-function updateComponentsMap ({ input, state }) {
-  state.set('debugger.componentsMap', input.data.map)
+function updateComponentsMap ({ props, state }) {
+  state.set('debugger.componentsMap', props.data.map)
 }
 
 export default updateComponentsMap

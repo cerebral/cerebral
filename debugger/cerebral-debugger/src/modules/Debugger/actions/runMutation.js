@@ -1,5 +1,5 @@
-function runMutation ({input, state}) {
-  const execution = input.data.execution
+function runMutation ({props, state}) {
+  const execution = props.data.execution
   const data = execution.data
 
   if (data && data.type === 'mutation') {

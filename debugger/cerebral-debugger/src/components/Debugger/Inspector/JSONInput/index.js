@@ -19,7 +19,7 @@ export default connect({},
       this.onSubmit = this.onSubmit.bind(this)
     }
     componentDidMount (prevProps, prevState) {
-      this.refs.input.select()
+      this.input.select()
     }
     onChange (event) {
       let value = event.target.value
@@ -57,13 +57,13 @@ export default connect({},
       return (
         <form style={{display: 'inline'}} onSubmit={this.onSubmit}>
           <input
-            ref='input'
+            ref={(node) => { this.input = node }}
             type='Text'
             autoFocus
             onKeyDown={(event) => { event.keyCode === 27 && this.onBlur() }}
             className={this.state.isValid ? 'JSONinput-input' : 'JSONinput-input JSONinput-invalidInput'}
             value={String(this.state.value)}
-            onChange={this.onChange}
+            onInput={this.onChange}
             onBlur={() => this.onBlur()}
             />
         </form>
