@@ -35,12 +35,13 @@
 
 .docs-navigation {
   display: flex;
+  box-sizing: border-box;
   justify-content: center;
   align-items: stretch;
   padding: 0 50px;
   background-color: #FFF;
-  box-shadow: none;
-  transition: box-shadow 0.25s;
+  background-color: #FAFAFA;
+  box-shadow: 0px 5px 10px rgba(0,0,0,0.05);
   height: 40px;
   position: fixed;
   width: 100%;
@@ -67,6 +68,8 @@
   padding: 0 25px;
   color: #333;
   cursor: pointer;
+  display: block;
+  height: 100%;
 }
 
 .docs-navigation-item:hover {
@@ -114,6 +117,37 @@
   text-decoration: underline;
 }
 
+.docs-icons {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.docs-icon {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #333;
+  margin-left: 20px;
+}
+
+.docs-icon-github {
+  background-image: url(/images/github.png);
+  background-size: contain;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
+.docs-icon-discord {
+  background-image: url(/images/discord.png);
+  background-size: contain;
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
+
 .docs-content {
   position: relative;
   display: flex;
@@ -150,11 +184,16 @@
   flex: 1;
   min-width: 100px;
   max-width: 300px;
-  padding: 20px 40px;
+  padding: 0 40px;
+  box-sizing: border-box;
 }
 
 .docs-toc-content {
+  padding: 20px 0;
   position: fixed;
+  height: calc(100vh - 40px);
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .docs-toc-content ul {
