@@ -1,5 +1,5 @@
-import {merge} from 'cerebral/operators';
-import {state, input} from 'cerebral/tags';
+import {merge} from 'cerebral/operators'
+import {state, input} from 'cerebral/tags'
 
 export default (path) => {
   return [
