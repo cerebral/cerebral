@@ -39,11 +39,27 @@ Let us finish this example. To do so please create a new file named *starsCount.
 ## Replacing with computed
 Let us remove the **setStarsCount** action and refactor our signal to rather grab the repos first and then we update the state in one go. This just to show you different strategies.
 
-The first thing to notice is that our *getRepo* action factories no longer return paths, they just return values. So either they return a result using the repo name as the key, or they will set an error.
+The first thing we need to do is refactor our *getRepo* action factories to no longer return paths, just values. So either they return a result using the repo name as the key, or they will set an error.
 
-We also use the *when* operator to figure out if we indeed have an error, diverging execution to show an error message. If that is not the case, we update our state tree on show the message.
+```js
+...
+function getRepo (repoName) {
+  function get ({http}) {
+    return http.get(`/repos/cerebral/${repoName}`)
+      .then((response) => {
+        return {[repoName]: response.result}
+      })
+      .catch((error) => {
+        return {error: error.result}
+      })
+  }
 
-Note here that we also updated the *toast* to allow no time to passed in, causing it to stick.
+  return get
+}
+...
+```
+
+Then we change how our signal looks:
 
 ```js
 ...
@@ -51,16 +67,16 @@ import starsCount from './computeds/starsCount'
 ...
 {
   buttonClicked: [
-    ...showToast(string`Loading data for repo: ${props`repo`}`),
+    ...showToast(string`Loading data for repos...`),
     [
       getRepo('cerebral'),
       getRepo('addressbar')
     ],
     when(props`error`), {
-      true: [
+      'true': [
         ...showToast(string`Error: ${props`error`}`, 5000)
       ],
-      false: [
+      'false': [
         set(state`repos.cerebral`, props`cerebral`),
         set(state`repos.addressbar`, props`addressbar`),
         ...showToast(string`The repos have ${starsCount} stars`, 5000)
@@ -71,14 +87,20 @@ import starsCount from './computeds/starsCount'
 ...
 ```
 
+We also use the *when* operator to figure out if we indeed have an error, diverging execution to show an error message. If that is not the case, we update our state tree on show the message.
+
+Note here that we also updated the *toast* to allow no time to passed in, causing it to stick.
+
+
+
 You can use computeds with other computeds, directly in tags, with operators, in actions and in components. Lets update our **App** component:
 
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
-import starsCount from '../../computeds/starsCount'
-import Toast from '../Toast'
+import starsCount from '.starsCount'
+import Toast from './Toast'
 
 export default connect({
   title: state`title`,
@@ -90,7 +112,7 @@ export default connect({
     return (
       <div>
         <h1>{title}</h1>
-        <h3>{subTitle}</h3>
+        <h2>{subTitle}</h2>
         <button onClick={() => buttonClicked()}>
           Update star count ({starsCount})
         </button>

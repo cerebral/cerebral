@@ -84,15 +84,12 @@ const controller = Controller(...)
 
 The path **success** and **error** are now available inside the action because we defined those paths after the action in the chain. Last, but not least, we need to pass in a **repo** property on our button click:
 
-*src/components/App/index.js*
+*App.js*
 ```js
 ...
-<button
-  className="c-button c-button--info c-button--block"
-  onClick={() => {
-    props.buttonClicked({repo: 'cerebral'})
-  }}
->
+<button onClick={() => buttonClicked({repo: 'cerebral'})>
+  Update state
+</button>
 ...
 ```
 

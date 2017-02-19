@@ -19,15 +19,16 @@ export default connect({
     return (
       <div>
         <h1>{title}</h1>
+        <h2>Render state</h2>
       </div>
     )
   }
 )
 ```
 
-And voilà, your application should now display the title state. And this is the essence of creating web applications. We define state and how that state should be displayed in the user interface.
+And voilà, your application should now look exactly the same, only getting the title from the state tree. And this is the essence of creating web applications. We define state and how that state should be displayed in the user interface.
 
-We used something called a **tag** to define our state dependency. If you are unfamiliar with [template literals and template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) in JavaScript, you should read about them or just accept their awesome power :)
+We used something called a **tag** to define our state dependency. If you are unfamiliar with [template literals and template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) in JavaScript, you can read about them or just accept their awesome power :)
 
 But our application does not do much. We have to introduce the concept of change. With the debugger, we can actually force a change to our state and make the UI update. Click the title state in the debugger, change it and hit enter. You will see the application display your changed state.
 
@@ -56,6 +57,7 @@ connect({
     return (
       <div>
         <h1>{title}</h1>
+        <h2>Render state</h2>
       </div>
     )
   }
@@ -69,6 +71,6 @@ Writing out the arguments on multiple lines and with indentation just makes it r
 It's time for your first challenge!
 
 - Add another state to the store called *subTitle*
-- Connect *subTitle* to the App component and display it in a *H3* element
+- Connect *subTitle* to the App component and replace the content of the H2 with that state
 
 If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

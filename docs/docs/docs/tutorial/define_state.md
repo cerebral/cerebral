@@ -16,7 +16,7 @@ const controller = Controller({
     remoteDebugger: '127.0.0.1:8585'
   }),
   state: {
-    title: 'Hello from Cerebral!'
+    title: 'Cerebral Tutorial'
   }
 })
 

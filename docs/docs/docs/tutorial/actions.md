@@ -7,7 +7,7 @@ Signals can take a props-object which can be further processed by its actions.
 Let us say you have a user input which should get written to state.
 As we now know, the only correct way to write to state is to use **signals** with **actions**.
 
-Just like we grabbed the **state** from the context of an action, we can also grab the props. This props object can be populated when a signal triggers and it can also be extended by actions. Any object returned from an action will be merged into the current props and passed to the next action.
+Just like we grabbed the **state** from the context of an action, we can also grab the **props**. This props object can be populated when a signal triggers and it can also be extended by actions. Any object returned from an action will be merged into the current props and passed to the next action.
 
 ## Create an action
 Let us create a new action that will take a prop from the signal and add some exclamation marks.
