@@ -1,17 +1,17 @@
-function setCurrentExecutionId ({input, state}) {
+function setCurrentExecutionId ({props, state}) {
   const expandedSignalGroups = state.get('debugger.expandedSignalGroups')
   const currentSignalExecutionId = state.get('debugger.currentSignalExecutionId')
 
-  state.set('debugger.currentSignalExecutionId', input.executionId)
+  state.set('debugger.currentSignalExecutionId', props.executionId)
 
-  if (currentSignalExecutionId !== input.executionId) {
+  if (currentSignalExecutionId !== props.executionId) {
     return
   }
 
-  if (input.groupId && expandedSignalGroups.indexOf(input.groupId) === -1) {
-    state.push('debugger.expandedSignalGroups', input.groupId)
-  } else if (input.groupId) {
-    state.splice('debugger.expandedSignalGroups', expandedSignalGroups.indexOf(input.groupId), 1)
+  if (props.groupId && expandedSignalGroups.indexOf(props.groupId) === -1) {
+    state.push('debugger.expandedSignalGroups', props.groupId)
+  } else if (props.groupId) {
+    state.splice('debugger.expandedSignalGroups', expandedSignalGroups.indexOf(props.groupId), 1)
   }
 }
 

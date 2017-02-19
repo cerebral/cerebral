@@ -1,13 +1,13 @@
 # Actions
 
-**Load up chapter 05** - [Preview](05)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBPZwKFDQKkAcUqRte)
 
-Signals can take an props-object which can be further processed by its actions.
+Signals can take a props-object which can be further processed by its actions.
 
 Let us say you have a user input which should get written to state.
 As we now know, the only correct way to write to state is to use **signals** with **actions**.
 
-Just like we grabbed the **state** from the context of an action, we can also grab the props. This props object can be populated when a signal triggers and it can also be extended by actions. Any object returned from an action will be merged into the current props and passed to the next action.
+Just like we grabbed the **state** from the context of an action, we can also grab the **props**. This props object can be populated when a signal triggers and it can also be extended by actions. Any object returned from an action will be merged into the current props and passed to the next action.
 
 ## Create an action
 Let us create a new action that will take a prop from the signal and add some exclamation marks.
@@ -42,7 +42,7 @@ import {state, props} from 'cerebral/tags'
 ## Passing a payload
 Now we just need to change our button click to actually pass a message:
 
-*src/components/App/index.js*
+*App.js*
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
@@ -54,17 +54,14 @@ export default connect({
   subTitle: state`subTitle`,
   buttonClicked: signal`buttonClicked`
 },
-  function App (props) {
+  function App ({title, subTitle, buttonClicked}) {
     return (
-      <div className="o-container o-container--medium">
-        <h1>{props.title}</h1>
-        <h3>{props.subTitle}</h3>
-        <button
-          className="c-button c-button--info c-button--block"
-          onClick={() => props.buttonClicked({
-            message: 'Please shout me'
-          })}
-        >
+      <div>
+        <h1>{title}</h1>
+        <h3>{subTitle}</h3>
+        <button onClick={() => buttonClicked({
+          message: 'Please shout me'
+        })}>
           Update state
         </button>
         <Toast />
@@ -80,4 +77,4 @@ Now we are ready to test drive our changes. Click the button and you should see 
 
 - Add another custom action which transforms the props value to Uppercase. You may override existing properties on the props or create a new one
 
-**Want to dive deeper?** - [Go in depth](../in_depth/actions.md), or move on with the tutorial
+If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

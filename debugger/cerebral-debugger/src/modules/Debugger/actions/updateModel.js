@@ -1,5 +1,5 @@
-function updateModel ({input, state}) {
-  state.set(['debugger', 'model'].concat(input.path).join('.'), input.value)
+function updateModel ({props, state}) {
+  state.set(['debugger', 'model'].concat(props.path).join('.'), props.value)
 }
 
 export default updateModel

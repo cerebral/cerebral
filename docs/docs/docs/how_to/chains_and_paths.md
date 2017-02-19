@@ -1,4 +1,4 @@
-# Chains and paths
+# Use chains and paths
 
 When you trigger a signal it will run a chain of actions. We express this chain as an array and reference whatever actions we want to run:
 

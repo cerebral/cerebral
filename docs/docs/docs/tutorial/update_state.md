@@ -1,13 +1,13 @@
 # Update state
 
-**Load up chapter 03** - [Preview](03)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBGyGo09NxQfRWSNOb)
 
 Defining state and user interfaces is more about describing how something should look, rather than how it should update. Updates are the tricky part, this is where we usually introduce complexity in our applications.
 
 Cerebral allows you to describe updates the same way you describe state and user interfaces, in a declarative manner. We call them **signals** and they will help you handle complexity both in code and in your head.
 
 ## Adding a signal
-Let us add a signal to our Controller in **src/index.js**:
+Let us add a signal to our Controller in **controller.js**:
 
 ```js
 ...
@@ -41,7 +41,7 @@ function updateSubtitle ({state}) {
 ```
 
 ## Trigger the change
-Please take a closer look at *./src/components/App/index.js*:
+Please take a closer look at *App.js*:
 
 ```js
 ...
@@ -56,7 +56,7 @@ As you can see the App-Component depends on **subTitle**. That means it will ren
 
 To trigger the signal we need to wire up a click-handler on a button and add our signal **buttonClicked** to the **connect(..)** method:
 
-*./src/components/App/index.js*
+*App.js*
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
@@ -67,15 +67,12 @@ export default connect({
   subTitle: state`subTitle`,
   buttonClicked: signal`buttonClicked`
 },
-  function App (props) {
+  function App ({title, subTitle, buttonClicked}) {
     return (
-      <div className="o-container o-container--medium">
-        <h1>{props.title}</h1>
-        <h3>{props.subTitle}</h3>
-        <button
-          className="c-button c-button--info c-button--block"
-          onClick={() => props.buttonClicked()}
-        >
+      <div>
+        <h1>{title}</h1>
+        <h2>{subTitle}</h2>
+        <button onClick={() => buttonClicked()}>
           Update state
         </button>
       </div>
@@ -87,4 +84,4 @@ Now click it and take a look at the debugger. You will see the debugger list the
 
 So changing the *subTitle* is kind of a silly state change on a button click. Let's introduce a very simple "Toast"-Component. It has already been added for you on the next chapter.
 
-**Want to dive deeper?** - [Go in depth](../in_depth/signals.md), or move on with the tutorial
+If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

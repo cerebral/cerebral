@@ -1,4 +1,4 @@
-# Signals
+# Run signals
 
 The signals of Cerebral are named in past tense. So typically you would name a signal **inputChanged** or **mounted**. You call a signal just like you would call a function, the difference is that you start a function tree execution.
 
@@ -14,7 +14,7 @@ export default [
 ]
 ```
 
-To trigger a signal you can grab it from the controller:
+To run a signal you can grab it from the controller:
 
 ```js
 import {Controller} from 'controller'

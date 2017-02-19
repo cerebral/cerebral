@@ -10,7 +10,7 @@ function Index (props) {
       </div>
       <div className='index-bottom'>
         <a className='button' href='/todomvc'>demo</a>
-        <a className='button' href='/docs/install'>install</a>
+        <a className='button' href='/docs/get_going'>install</a>
         <a className='button' href='/docs/api'>api</a>
       </div>
     </div>

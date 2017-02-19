@@ -18,8 +18,8 @@
   "author": "Christian Alfoni",
   "dependencies": {
     "babel-plugin-inferno": "^1.7.0",
-    "cerebral": "^2.0.0-b-alpha.c5da9d99",
-    "cerebral-module-useragent": "^1.0.0-b-alpha.c5da9d99",
+    "cerebral": "2.0.0-b-alpha.1c722af3",
+    "cerebral-module-useragent": "1.0.0-b-alpha.1c722af3",
     "classnames": "^2.2.5",
     "color": "^0.11.4",
     "electron-default-menu": "^1.0.0",

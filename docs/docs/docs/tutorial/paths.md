@@ -1,6 +1,6 @@
 # Paths
 
-**Load up chapter 07** - [Preview](07)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBUBNJyrfqL3c6VHkr)
 
 In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows (which is just another chain of actions and operators) depending on the result of the previous action.
 
@@ -35,25 +35,25 @@ Let us implement something similar. We are going to grab information about githu
 ```js
 ...
 import {set, wait} from 'cerebral/operators'
-import {state, input, string} from 'cerebral/tags'
+import {state, props, string} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
-    ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+    ...showToast(string`Loading data for repo: ${props`repo`}`, 2000),
     getRepo, {
       success: [
         ...showToast(
           string`
-            How cool is that. ${input`repo`}
-            has ${input`data.subscribers_count`}
-            subscribers and ${input`data.stargazers_count`}
+            How cool is that. ${props`repo`}
+            has ${props`data.subscribers_count`}
+            subscribers and ${props`data.stargazers_count`}
             stars!
           `, 5000)
       ],
       error: [
         ...showToast(
           string`
-            Ooops something went wrong: ${input`data.message`}
+            Ooops something went wrong: ${props`data.message`}
           `, 5000)
       ]
     }
@@ -69,8 +69,8 @@ The **getRepo** action can look like this:
 
 ```js
 ...
-function getRepo({input, http, path}) {
-  return http.get(`/repos/cerebral/${input.repo}`)
+function getRepo({props, http, path}) {
+  return http.get(`/repos/cerebral/${props.repo}`)
     .then((response) => {
       return path.success({data: response.result})
     })
@@ -84,15 +84,12 @@ const controller = Controller(...)
 
 The path **success** and **error** are now available inside the action because we defined those paths after the action in the chain. Last, but not least, we need to pass in a **repo** property on our button click:
 
-*src/components/App/index.js*
+*App.js*
 ```js
 ...
-<button
-  className="c-button c-button--info c-button--block"
-  onClick={() => {
-    props.buttonClicked({repo: 'cerebral'})
-  }}
->
+<button onClick={() => buttonClicked({repo: 'cerebral'})>
+  Update state
+</button>
 ...
 ```
 
@@ -105,21 +102,21 @@ Replace your signal with the following snippet:
 {
   buttonClicked: [
     [
-      ...showToast(string`Loading data for repo: ${input`repo`}`, 2000),
+      ...showToast(string`Loading data for repo: ${props`repo`}`, 2000),
       getRepo, {
         success: [
            ...showToast(
              string`
-               How cool is that. ${input`repo`}
-               has ${input`data.subscribers_count`}
-               subscribers and ${input`data.stargazers_count`}
+               How cool is that. ${props`repo`}
+               has ${props`data.subscribers_count`}
+               subscribers and ${props`data.stargazers_count`}
                stars!
              `, 5000, 'success')
         ],
         error: [
           ...showToast(
             string`
-              Ooops something went wrong: ${input`data.message`}
+              Ooops something went wrong: ${props`data.message`}
             `, 5000, 'error')
         ]
      }
@@ -140,7 +137,7 @@ Instead of using **wait**, we can use **debounce**. It is difficult to wrap your
 ```js
 ...
 import {set, merge, debounce} from 'cerebral/operators'
-import {state, input, string} from 'cerebral/tags'
+import {state, props, string} from 'cerebral/tags'
 ...
 const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
@@ -164,4 +161,4 @@ Congratulations! Now you know how to control your flow using **paths**. And if y
 
 We would like you to run two getRepo(...) requests. One to *cerebral/cerebral* and one to *cerebral/addressbar*. So it is a good idea to make *getRepo* a factory instead. On their successes, they should insert their data into the state tree.
 
-**Want to dive deeper?** - [Go in depth](../in_depth/chains_and_paths.md), or move on with the tutorial
+If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

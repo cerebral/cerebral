@@ -1,5 +1,4 @@
 html, body {
-  height: 100%;
   background-color: #FFF;
   margin: 0;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
@@ -7,7 +6,7 @@ html, body {
 }
 
 #app {
-  height: 100%;
+
 }
 
 .button {
@@ -48,7 +47,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h2 {
-  color: #0086b3;
+  text-transform: uppercase;
 }
 
 h3, h4, h5, h6 {

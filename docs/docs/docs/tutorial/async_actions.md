@@ -1,6 +1,6 @@
 # Async actions
 
-**Load up chapter 06** - [Preview](06)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBPZwKFDQKkAcUqRte)
 
 Until now we have mostly used synchronous actions inside our **signals** and the flow was, therefore, straightforward. Example:
 
@@ -22,7 +22,7 @@ We already have an example of this in our code. The **wait** operator runs async
 Controller({
   signals: {
     buttonClicked:[
-      set(state`toast`, input`message`),
+      set(state`toast`, props`message`),
       wait(4000),
       set(state`toast`, null)
     ]
@@ -67,12 +67,13 @@ function showToast(message, ms) {
 const controller = Controller(...)
 ```
 
-We need to adjust *src/index.js*:
+We need to adjust the signal as well:
 ```js
 Controller({
   signals: {
     buttonClicked: [
-      ...showToast(input`message`, 1000)
+      shoutIt,
+      ...showToast(props`message`, 1000)
     ]
   }
 })
@@ -81,3 +82,5 @@ Controller({
 Since **showToast** returns an array we use the [spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_operator) to merge into our existing chain.
 
 Congratulations! You have successfully mastered the power of factories. But there are a couple of more concepts that will help you define state changes, jump over to the next chapter to find out more.
+
+If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

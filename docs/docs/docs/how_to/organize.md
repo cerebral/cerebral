@@ -1,8 +1,32 @@
-# Organizing
+# Organize
 
 Cerebral uses a concept called **modules** to organize application code. These allow you to wrap state and signals into a namespace without isolating them. Any action run in a signal can change any state in the application.
 
-Typically the file structure for modules looks like this. We call it the **chains pattern**. This is where a signal points to one or multiple chains when they are defined:
+Typically the file structure for modules looks like this. We call it the **signals pattern**. Every signal has its own file.
+
+```js
+/modules
+  /home
+    /actions
+    /signals
+    index.js
+main.js
+```
+
+The **index.js** file is where you define the module. It is just an object where you can define state, signals and optionally sub modules.
+
+```js
+import somethingHappened from './signals/somethingHappened'
+
+export default {
+  state: {},
+  signals: {
+    somethingHappened
+  }
+}
+```
+
+You might rather want to follow the **chains** pattern, which looks like this:
 
 ```js
 /modules
@@ -23,28 +47,7 @@ export default {
 }
 ```
 
-The **signals** pattern looks like this:
-
-```js
-/modules
-  /home
-    /actions
-    /signals
-    index.js
-main.js
-```
-
-```js
-import somethingHappened from './signals/somethingHappened'
-
-export default {
-  signals: {
-    somethingHappened
-  }
-}
-```
-
-There is no "correct way" to do this, do what makes sense to you and your team.
+In this case you rather composes your signals together inside the module definition.
 
 
 In the **main.js** file, the module is added to the controller:
@@ -60,22 +63,7 @@ const controller = Controller({
 })
 ```
 
-Any signal and state defined inside the *home* module will live on the namespace chosen during controller instantiation. In the example above, this is: **home**.
-
-The *modules/home/index.js* typically looks like this:
-
-```js
-import updateLatestPosts from './chains/updateLatestPosts'
-
-export default {
-  state: {
-    latestPosts: []
-  },
-  signals: {
-    mounted: updateLatestPosts
-  }
-}
-```
+Any signal and state defined inside the *home* module will live on the namespace chosen during controller instantiation.
 
 And this is how an application scales: by defining modules and submodules. Actions or chains that are common are often placed in a folder called **common**:
 

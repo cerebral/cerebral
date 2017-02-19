@@ -61,11 +61,12 @@
   position: relative;
   line-height: 40px;
   color: #333;
-  cursor: pointer;
 }
 
-.docs-navigation-item > span {
+.docs-navigation-item > a {
   padding: 0 25px;
+  color: #333;
+  cursor: pointer;
 }
 
 .docs-navigation-item:hover {
@@ -114,9 +115,11 @@
 }
 
 .docs-content {
+  position: relative;
   display: flex;
   line-height: 26px;
   font-size: 16px;
+  padding: 0 20px;
   color: #444;
   text-align: justify;
 }
@@ -128,7 +131,7 @@
 
 .docs-doc-edit {
   position: absolute;
-  left: 690px;
+  right: 0;
   top: 60px;
 }
 
@@ -136,6 +139,7 @@
   max-width: 800px;
   min-height: calc(100vh - 210px);
   padding-bottom: 60px;
+  position: relative;
 }
 
 .docs-doc-content li {
@@ -146,7 +150,7 @@
   flex: 1;
   min-width: 100px;
   max-width: 300px;
-  padding: 50px;
+  padding: 20px 40px;
 }
 
 .docs-toc-content {
@@ -155,12 +159,32 @@
 
 .docs-toc-content ul {
   font-size: 14px;
-  padding-left: 20px;
+  padding-left: 5px;
   margin: 0;
+  list-style-type: none;
+}
+
+.docs-toc-content ul ul {
+  font-size: 12px;
+  line-height: 18px;
 }
 
 .docs-toc-content a {
   padding-left: 0;
+  color: #333;
+}
+
+.docs-toc-content ul ul ul a {
+  color: #666;
+}
+
+
+.docs-toc-content a:hover {
+  color: #0086b3;
+}
+
+.docs-toc-content .active > a {
+  font-weight: bold;
 }
 
 .docs-toc-content > ul {
@@ -242,4 +266,106 @@
 
 .docs-footer-column a:hover {
   color: rgba(255,255,255,0.8);
+}
+
+.docs-navigation-title.mobile {
+  color: #FFF;
+  font-size: 24px;
+  flex: 1;
+  text-align: center;
+  padding-right: 40px;
+  text-transform: uppercase;
+}
+
+.docs-navigation-hamburger {
+  flex: 0 0 40px;
+  color: #FFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  height: 50px;
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 1000px) {
+  .docs-toc, .docs-search, .docs-doc-edit, .docs-navigation, .docs-navigation-menu {
+    display: none;
+  }
+
+  .mobile, .docs-content, .docs-navigation.mobile .docs-toc {
+    display: block;
+  }
+
+  .docs-container pre > code {
+    white-space: inherit;
+  }
+
+  .docs-navigation {
+    padding: 0;
+    height: 50px;
+    background-color: #0086b3;
+    display: flex;
+    align-items: center;
+  }
+
+  .docs-navigation-float {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translate3d(0, 0, 0);
+    height: 100%;
+    overflow-y: scroll;
+    background-color: #FFF;
+    width: 90%;
+    box-shadow: 0px 9px 10px rgba(0,0,0,0.1);
+  }
+
+  .docs-navigation-menu.mobile {
+    color: #333;
+  }
+
+  .docs-navigation-float.mobile .docs-toc {
+    padding: 10px 0;
+    height: auto;
+    display: block;
+  }
+  .docs-navigation-menu.mobile .docs-toc-content {
+    position: relative;
+  }
+
+  .docs-navigation-menu.mobile .docs-toc-content > div {
+    display: none;
+  }
+
+  .docs-navigation-menu.mobile .docs-toc ul {
+    font-size: 16px;
+    line-height: 32px;
+  }
+
+  .docs-navigation-item {
+    line-height: 18px;
+    padding: 20px;
+  }
+
+  .docs-navigation-item > a {
+    flex: 1;
+    color: #0086b3;
+    text-transform: uppercase;
+    padding: 0;
+  }
+
+  .docs-footer {
+    flex-direction: column;
+    align-items: center;
+    height: auto;
+  }
+
+  .docs-footer-column {
+    min-width: 200px;
+  }
 }

@@ -1,6 +1,6 @@
-function runRecordedMutation ({input, state}) {
-  const args = input.data.args
-  const path = ['debugger', 'model'].concat(input.data.path).join('.')
+function runRecordedMutation ({props, state}) {
+  const args = props.data.args
+  const path = ['debugger', 'model'].concat(props.data.path).join('.')
 
   state.set.apply(null, [path, ...args])
 }

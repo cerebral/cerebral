@@ -2,6 +2,8 @@
 Tags allows you to target things in Cerebral. They are based on [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals). They can be used by **operators**, **connect** and **compute**. Some of them can also be used with other Cerebral modules. The great thing about tags is their composability. For example:
 
 ```js
+import {state, props} from 'cerebral/tags'
+
 state`items.${state`currentItemKey`}`
 
 state`items.${props`itemKey`}`
