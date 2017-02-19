@@ -1,72 +1,83 @@
 # Routing
 
-**Load up chapter 10** - [Preview](10)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBeIDJoRv0PQlF7uWU)
 
 Now that our tutorial UI gets more complex it is a good idea to separate it a little bit. We want a home tab and a repos tab. Our two repos should load when we click the repos tab or hit the url directly.
 
 ## Adding some tabs
-Let us introduce the tabs first. We will just shove everything into our one component. Normally you would split this up into multiple components of course. You would probably also use JavaScript to map over a list of tabs or something similar, but let us be explicit now. Please change *./src/components/App/index.js* to:
+Let us introduce the tabs first. We will just shove everything into our one component. Normally you would split this up into multiple components of course. You would probably also use JavaScript to map over a list of tabs or something similar, but let us be explicit now. Please change *App.js* to:
 
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
-import Toast from '../Toast'
+import Toast from './Toast'
 
 export default connect({
   title: state`title`,
   subTitle: state`subTitle`,
   repos: state`repos`,
   activeTab: state`activeTab`,
-  homeRouted: signal`homeRouted`,
-  reposRouted: signal`reposRouted`
+  homeClicked: signal`homeClicked`,
+  reposClicked: signal`reposClicked`
 },
-  function App (props) {
+  function App ({
+    title,
+    subTitle,
+    repos,
+    activeTab,
+    homeClicked,
+    reposClicked
+  }) {
     return (
-      <div className="o-container o-container--medium">
-        <h1>{props.title}</h1>
-        <h3>{props.subTitle}</h3>
-        <div className="c-tabs">
-          <div className="c-tabs__headings">
+      <div>
+        <h1>{title}</h1>
+        <h2>{subTitle}</h2>
+        <div>
+          <div className='tabs'>
             <div
-              onClick={(event) => props.homeRouted()}
-              className={`c-tab-heading ${
-                props.activeTab === 'home' ? 'c-tab-heading--active' : ''
+              onClick={() => homeClicked()}
+              className={`tab ${
+                activeTab === 'home' ? 'tab-active' : ''
               }`}
             >
               Home
             </div>
             <div
-              onClick={(event) => props.reposRouted()}
-              className={`c-tab-heading ${
-                props.activeTab === 'repos' ? 'c-tab-heading--active' : ''
+              onClick={() => reposClicked()}
+              className={`tab ${
+                activeTab === 'repos' ? 'tab-active' : ''
               }`}
             >
               Repos
             </div>
           </div>
           <br />
-          <div className={`c-tabs__tab ${
-            props.activeTab === 'home' ? 'c-tabs__tab--active' : ''
-          }`}>
-            <h5>Home page content</h5>
-          </div>
-          <div className={`c-tabs__tab ${
-            props.activeTab === 'repos' ? 'c-tabs__tab--active' : ''
-          }`}>
-            <ul>
-              {Object.keys(props.repos).map((repoKey, index) => {
-                const name = props.repos[repoKey].name
-                const count = props.repos[repoKey].stargazers_count
+          {
+            activeTab === 'home' ? (
+              <div>
+                Some awesome home page content
+              </div>   
+            ) : null
+          }
+          {
+            activeTab === 'repos' ? (
+              <div>
+                <ul>
+                  {Object.keys(repos).map((repoKey, index) => {
+                    const name = repos[repoKey].name
+                    const count = repos[repoKey].stargazers_count
 
-                return (
-                  <li key={index}>
-                    {name} ({count})
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
+                    return (
+                      <li key={index}>
+                        {name} ({count})
+                      </li>
+                    )
+                  })}
+               </ul>
+              </div>   
+            ) : null
+          }
         </div>
         <Toast />
       </div>
@@ -75,7 +86,7 @@ export default connect({
 )
 ```
 
-We also need to add new state in *./src/index.js*:
+We also need to add new state in *main.js*:
 ```js
 ...
 {
@@ -91,10 +102,10 @@ And update the signals as well:
 ```js
 ...
 {
-  homeRouted: [
+  homeClicked: [
     set(state`activeTab`, 'home')
   ],
-  reposRouted: [
+  reposClicked: [
     set(state`activeTab`, 'repos'),
     ...showToast(string`Loading data for repo: ${props`repo`}`),
     [
@@ -102,13 +113,13 @@ And update the signals as well:
       getRepo('addressbar')
     ],
     when(props`error`), {
-      true: [
-        ...showToast(string`Error: ${props`error`}`, 5000)
+      'true': [
+        ...showToast(string`Error: ${props`error`}`, 5000, 'error')
       ],
-      false: [
+      'false': [
         set(state`repos.cerebral`, props`cerebral`),
         set(state`repos.addressbar`, props`addressbar`),
-        ...showToast(string`The repos have ${starsCount} stars`, 5000)    
+        ...showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
       ]
     }
   ]
@@ -137,23 +148,23 @@ And go ahead by doing the router config as follows inside the controller:
 ```js
 ...
 const controller = Controller({
-  devtools: Devtools(),
-  router: Router({
-    routes: {
-      '/': 'homeRouted',
-      '/repos': 'reposRouted'
-    },
-    onlyHash: true // Use hash urls
-  })
+  ...
+  modules: {
+    router: Router({
+      routes: [
+        {path: '/', signal: 'homeClicked'},
+        {path: '/repos', signal: 'reposClicked'}
+      ],
+      onlyHash: true
+    })
+  },
   ...
 })
 ...
 ```
 
-As you can see, defining *routes* is as easy as linking them to *signals*. Now go to your browser's addressbar and enter *localhost/#/repos* and voilà the reposRouted signal gets called. And it also works the other way around. When you now click your tabs the URL will also update!
+As you can see, defining *routes* is as easy as linking them to *signals*. When you save and load up the BIN again you can go to the addressbar and change the url to **/#/repos**. You will now see the signal triggers and the repos content is shown. This is exactly what happens when you click the tab as well.
 
 ## Challenge
 
-Go to your browsers addressbar and enter an invalid route like: localhost/#/*foo* and press Enter. Now check the console! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error. You probably need some more docs on the router to make this work.
-
-**Want to dive deeper?** - [Go in depth](../in_depth/routing.md), or move on with the tutorial
+Go to your browsers addressbar and enter an invalid route like: localhost/#/*foo* and press Enter. Now check the log! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error. You probably need to read some more docs on the router to make this work.

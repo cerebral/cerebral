@@ -38,7 +38,7 @@ With a single state tree we can point to parts of the state using paths (the fir
 Cerebral does not look at the updates in your application as "value updates", but as "path updates". This allows Cerebral to make optimizations not possible in other frameworks:
 
 1. There is no need for immutability in Cerebral because a change to a path means that any component depending on that path should render (no value comparison). In applications with large data structures immutability has a high cost. There is no need to hack objects and arrays to observe changes to them either. There is nothing special about the state you put into Cerebrals state tree
-2. Since there is no value comparison in Cerebral it uses what we call **strict render**. Traditionally if you change an item in an array, also the array itself has a change. This means that the component handling the array will render whenever an item needs to render. This does not happen in Cerebral
+2. Since there is no value comparison in Cerebral it uses what we call **strict render**. This allows us to do render optimizations not possible with other solutions. For example you can say that a component depending on a list is only interested in added/removed items of the list or if the list itself is being replaced
 
 ## Render state
 Since Cerebral stores all the state of the application in a single state tree we need a way to expose that state to the components. In some frameworks this is done by passing the whole model or collection of models/stores from the top of the application and down from one component to the next. This can become very tedious and fragile as all nested components completely depend on their parent. In Cerebral the state of the application is directly connected to each component:

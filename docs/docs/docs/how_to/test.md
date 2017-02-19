@@ -1,4 +1,4 @@
-# Testing
+# Test
 
 Cerebral makes it easy to test your application components and business logic.
 
