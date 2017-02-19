@@ -1,10 +1,12 @@
 {
   "title": "Cerebral Docs",
   "scripts": {
+    "index": [
+      "redirectFrontPage"
+    ],
     "docs": [
       "https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js",
       "search",
-      "scroll-detect",
       "mobile"
     ]
   },
@@ -17,10 +19,12 @@
     "docs": ["docs"]
   },
   "docs": {
-    "get_going": [
+    "get_started": [
       "index",
       "debugger",
       "the_architecture",
+      "demos",
+      "articles_and_videos",
       "counter"
     ],
     "tutorial": [

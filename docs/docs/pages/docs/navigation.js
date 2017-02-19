@@ -19,6 +19,16 @@ function Navigation (props) {
         {renderMenu()}
       </ul>
       <Search />
+      <div className='docs-icons'>
+        <a href='https://github.com/cerebral/cerebral' className='docs-icon' target='_new'>
+          <div className='docs-icon-github' />
+          github repo
+        </a>
+        <a href='https://discord.gg/0kIweV4bd2bwwsvH' className='docs-icon' target='_new'>
+          <div className='docs-icon-discord' />
+          chat
+        </a>
+      </div>
     </div>
   )
 }
