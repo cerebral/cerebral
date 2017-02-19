@@ -9,7 +9,7 @@ function Navigation (props) {
           return (
             <li key={index} className={`docs-navigation-item${props.sectionName === sectionKey ? ' active' : ''} mobile`}>
               <a href={`/docs/${sectionKey}`}>{sectionKey.replace('_', ' ')}</a>
-              {props.sectionName === sectionKey ? <TOC docName={props.docName} sectionName={props.sectionName} sections={props.docs[props.sectionName]} /> : null}
+              {props.sectionName === sectionKey ? <TOC docName={props.docName} sectionName={props.sectionName} sections={props.docs[props.sectionName]} /> : null}
             </li>
           )
         })}
@@ -19,7 +19,7 @@ function Navigation (props) {
 
   return (
     <div id='navigation-mobile' className='docs-navigation mobile'>
-      <div id="hamburger" className='docs-navigation-hamburger'>
+      <div id='hamburger' className='docs-navigation-hamburger'>
         &#9776;
       </div>
       <div className='docs-navigation-title mobile'>

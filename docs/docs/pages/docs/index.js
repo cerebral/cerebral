@@ -13,7 +13,7 @@ function Docs (props) {
       <Navigation docs={props.docs} sectionName={props.sectionName} docName={props.docName} />
       <NavigationMobile docs={props.docs} sectionName={props.sectionName} docName={props.docName} />
       <div className='docs-content'>
-        <TOC docName={props.docName} sectionName={props.sectionName} sections={props.docs[props.sectionName]} />
+        <TOC docName={props.docName} sectionName={props.sectionName} sections={props.docs[props.sectionName]} />
         <Doc doc={doc.tree} docName={props.docName} sectionName={props.sectionName} />
       </div>
       <Footer />
