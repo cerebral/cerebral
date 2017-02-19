@@ -1,5 +1,5 @@
 import React from 'react'
-import TOC from './Toc'
+import TOC from './toc'
 
 function Navigation (props) {
   function renderMenu () {
