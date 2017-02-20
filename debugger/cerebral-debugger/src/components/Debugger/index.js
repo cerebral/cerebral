@@ -39,7 +39,7 @@ export default connect({
                 <Components />
               </div>
             )
-          case 'timeTravel':
+          case 'mutations':
             return (
               <div className='debugger-content'>
                 <Mutations />
