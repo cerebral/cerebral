@@ -5,7 +5,7 @@
 Now that our tutorial UI gets more complex it is a good idea to separate it a little bit. We want a home tab and a repos tab. Our two repos should load when we click the repos tab or hit the url directly.
 
 ## Adding some tabs
-Let us introduce the tabs first. We will just shove everything into our one component. Normally you would split this up into multiple components of course. You would probably also use JavaScript to map over a list of tabs or something similar, but let us be explicit now. Please change *main.js* to:
+Let us introduce the tabs first. We will just shove everything into our one component. Normally you would split this up into multiple components of course. You would probably also use JavaScript to map over a list of tabs or something similar, but let us be explicit now. Please change *App.js* to:
 
 ```js
 import React from 'react'
@@ -137,7 +137,7 @@ Traditional routers is a wrapper around your components and they manipulate what
 
 This is a really good thing because most route changes require quite a few state changes and side effects, like server requests, to be run. This is exactly what signals do so well.
 
-Let us introduce **cerebral-router** to our project by adding an import to the top of our *./App.js*:
+Let us introduce **cerebral-router** to our project by adding an import to the top of our *./main.js*:
 
 ```js
 import Router from 'cerebral-router'
