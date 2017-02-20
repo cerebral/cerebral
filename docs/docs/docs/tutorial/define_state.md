@@ -2,11 +2,11 @@
 
 **Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdACuVE1vrPicewg7fm)
 
-All interactive user interfaces need **state** in one way or another. Cerebral stores this state in something we call a **state tree**. You might be more familiar with frameworks where the state is described with classes, either multiple model classes and/or components. In Cerebral you do not put the state into multiple models or components. The state is not wrapped in classes either. You have this one state tree where you insert plain values. Objects, arrays, strings, numbers and boolean.
+All interactive user interfaces need **state** in one way or another. Cerebral stores this state in something that we call a **state tree**. You might be more familiar with frameworks where application state is described using classes, either multiple model classes and/or components. In Cerebral you do not put application state into multiple models or components. Your application state  isn't wrapped in any form of class either. As a developer you have access to a single state tree where you insert plain values; objects, arrays, strings, numbers and booleans.
 
-To define the initial state of the application all we need to do is to add it to our **Controller** in *src/index.js*
+To define the initial state of any application all we need to do is to add it to our **Controller** in *controller.js*
 
-*controller.js*
+
 ```js
 import {Controller} from 'cerebral'
 import Devtools from 'cerebral/devtools'
