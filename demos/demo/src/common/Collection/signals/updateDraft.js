@@ -1,5 +1,5 @@
 import {set, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import paths from '../paths'
 
 const MAX_IMAGE_SIZE = 100 * 1024
@@ -14,9 +14,9 @@ const checkImageSize = (key, value) => {
 export default function (moduleName) {
   const {draftPath, errorPath} = paths(moduleName)
   return [
-    when(input`key`, input`value`, checkImageSize), {
+    when(props`key`, props`value`, checkImageSize), {
       true: [
-        set(state`${draftPath}.${input`key`}`, input`value`)
+        set(state`${draftPath}.${props`key`}`, props`value`)
       ],
       false: [
         set(state`${errorPath}`, 'image exceeds maximum size of 100 KB')

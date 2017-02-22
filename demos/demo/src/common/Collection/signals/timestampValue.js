@@ -1,5 +1,5 @@
 export default [
-  function timestampValue ({input: {value}}) {
+  function timestampValue ({props: {value}}) {
     return {value: Object.assign(
         {},
         {created_at: {'.sv': 'timestamp'}},

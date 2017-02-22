@@ -1,5 +1,5 @@
 import {set, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import paths from '../paths'
 
 export default function (moduleName) {
@@ -8,13 +8,13 @@ export default function (moduleName) {
   return [
     ...dynamicPaths,
 
-    set(state`${input`itemPath`}`, input`value`),
+    set(state`${props`itemPath`}`, props`value`),
 
-    when(state`${draftPath}.key`, input`key`,
+    when(state`${draftPath}.key`, props`key`,
       (draftKey, updatedKey) => draftKey === updatedKey
     ), {
       true: [
-        set(state`${draftPath}`, input`value`)
+        set(state`${draftPath}`, props`value`)
       ],
       false: []
     }

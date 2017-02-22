@@ -1,5 +1,5 @@
 import {merge, set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import makeRef from '../actions/makeRef'
 import paths from '../paths'
 
@@ -10,7 +10,7 @@ export default function (moduleName) {
     set(state`${draftPath}`, {}),
     makeRef,
     merge(state`${draftPath}`, {
-      key: input`ref`,
+      key: props`ref`,
       name: state`${filterPath}`
     })
   ]

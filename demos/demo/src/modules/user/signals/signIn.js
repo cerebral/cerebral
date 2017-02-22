@@ -1,5 +1,5 @@
 import {set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import {isValidForm} from 'cerebral-forms'
 import signIn from '../actions/signIn'
 import firebaseInit from '../../app/signals/firebaseInit'
@@ -12,13 +12,13 @@ const signInWithFirebase = [
           set(state`user.$loggedIn`, true),
           set(state`user.$signIn.email.value`, ''),
           set(state`user.$signIn.password.value`, ''),
-          set(state`user.$currentUser`, input`user`),
+          set(state`user.$currentUser`, props`user`),
           set(state`user.$signIn.error`, ''),
           ...firebaseInit
         ],
         error: [
           set(state`user.$signIn.password.value`, ''),
-          set(state`user.$signIn.error`, input`error`)
+          set(state`user.$signIn.error`, props`error`)
         ]
       }
     ],

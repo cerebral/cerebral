@@ -3,8 +3,8 @@ import {connect} from 'cerebral/react'
 import {signal} from 'cerebral/tags'
 import ProjectSelectorTag from '../ProjectSelectorTag'
 import {displayTaskDuration, isRunning} from '../../modules/tasks/helpers'
-import runningTask from '../../computed/runningTask'
-import translations from '../../common/computed/translations'
+import runningTask from '../../compute/runningTask'
+import translations from '../../common/compute/translations'
 
 export default connect(
   {

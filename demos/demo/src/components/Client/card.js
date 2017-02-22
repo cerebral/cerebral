@@ -8,7 +8,7 @@ import Phone from '../Phone'
 
 export default connect(
   {
-    item: state`clients.all.${props`itemKey`}.*`,
+    item: state`clients.all.${props`itemKey`}`,
     penClick: signal`clients.penClicked`,
     trashClick: signal`clients.trashClicked`
   },

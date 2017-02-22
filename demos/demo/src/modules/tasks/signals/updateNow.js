@@ -1,6 +1,6 @@
 import {debounce, set, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
-import setNow from '../actions/setNow'
+import {state} from 'cerebral/tags'
+import now from '../compute/now'
 
 const triggerAgain = ({controller}) => {
   // We have to use setTimeout to not trigger signal in signal
@@ -8,8 +8,7 @@ const triggerAgain = ({controller}) => {
 }
 
 export default [
-  setNow,
-  set(state`tasks.$now`, input`now`),
+  set(state`tasks.$now`, now),
   debounce(1000), {
     continue: [
       when(state`tasks.$now`, state`tasks.$nowHidden`,

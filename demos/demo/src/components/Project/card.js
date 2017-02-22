@@ -1,14 +1,15 @@
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {signal} from 'cerebral/tags'
-import projectWithDetails from '../../computed/projectWithDetails'
+import projectWithDetails from '../../compute/projectWithDetails'
 import {displayElapsed} from '../../helpers/dateTime'
 
-export default connect({
-  item: projectWithDetails,
-  penClick: signal`projects.penClicked`,
-  trashClick: signal`projects.trashClicked`
-},
+export default connect(
+  {
+    item: projectWithDetails,
+    penClick: signal`projects.penClicked`,
+    trashClick: signal`projects.trashClicked`
+  },
   function ProjectCard ({item, itemKey, penClick, trashClick}) {
     return (
       <div className='card'>

@@ -1,11 +1,11 @@
 import {set, unset} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import save from '../../../common/Collection/signals/save'
 import makeRef from '../../../common/Collection/actions/makeRef'
 import paths from '../../../common/Collection/paths'
 
-import setElapsedSeconds from '../actions/setElapsedSeconds'
-import setNow from '../actions/setNow'
+import elapsedSeconds from '../compute/elapsedSeconds'
+import now from '../compute/now'
 
 const moduleName = 'tasks'
 const {collectionPath, draftPath, errorPath} = paths(moduleName)
@@ -15,14 +15,14 @@ export default [
   unset(state`${collectionPath}.running`),
 
   // Prepare new task to be saved
-  set(input`value`, state`${draftPath}`),
-  setNow,
-  set(input`value.endedAt`, input`now`),
+  set(props`value`, state`${draftPath}`),
+  set(props`now`, now),
+  set(props`value.endedAt`, props`now`),
   unset(state`tasks.$now`),
-  setElapsedSeconds(input`value.startedAt`, input`value.endedAt`),
-  set(input`value.elapsed`, input`elapsedSeconds`),
+  set(props`value.elapsed`, elapsedSeconds(props`value.startedAt`, props`value.endedAt`)),
+  // FIXME: same here...
   makeRef,
-  set(input`key`, input`ref`),
+  set(props`key`, props`ref`),
   ...save(moduleName), {
     success: [
       // Saved new task, now update 'running'
@@ -30,17 +30,17 @@ export default [
       unset(state`${draftPath}.startedAt`),
       unset(state`${draftPath}.endedAt`),
       unset(state`${draftPath}.elapsed`),
-      set(input`value`, state`${draftPath}`),
-      set(input`key`, 'running'),
+      set(props`value`, state`${draftPath}`),
+      set(props`key`, 'running'),
       ...save(moduleName), {
         success: [],
         error: [
-          set(state`${errorPath}`, input`error`)
+          set(state`${errorPath}`, props`error`)
         ]
       }
     ],
     error: [
-      set(state`${errorPath}`, input`error`)
+      set(state`${errorPath}`, props`error`)
     ]
   }
 ]

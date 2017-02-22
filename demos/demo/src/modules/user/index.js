@@ -1,5 +1,5 @@
 import {set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import {form, changeField} from 'cerebral-forms'
 import createUser from './signals/createUser'
 import signIn from './signals/signIn'
@@ -39,7 +39,7 @@ export default {
     signInEnterPressed: signIn,
     signOutClicked: signOut,
     loginTabClicked: [
-      set(state`user.$loginTab`, input`value`)
+      set(state`user.$loginTab`, props`value`)
     ]
   }
 }

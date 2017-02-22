@@ -1,5 +1,5 @@
 import {set, when} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import * as firebase from 'cerebral-provider-firebase'
 import paths from '../paths'
 
@@ -7,18 +7,18 @@ export default function (moduleName) {
   const {dynamicPaths, errorPath} = paths(moduleName)
   return [
     ...dynamicPaths,
-    set(input`filename`, state`${input`itemPath`}.imageName`),
-    firebase.remove(input`remoteItemPath`), {
+    set(props`filename`, state`${props`itemPath`}.imageName`),
+    firebase.remove(props`remoteItemPath`), {
       success: [
-        when(input`filename`), {
+        when(props`filename`), {
           true: [
             firebase.delete(
-              input`remoteItemImagePath`,
-              input`filename`
+              props`remoteItemImagePath`,
+              props`filename`
             ), {
               success: [],
               error: [
-                set(state`${errorPath}`, input`error`)
+                set(state`${errorPath}`, props`error`)
               ]
             }
           ],
@@ -26,7 +26,7 @@ export default function (moduleName) {
         }
       ],
       error: [
-        set(state`${errorPath}`, input`error`)
+        set(state`${errorPath}`, props`error`)
       ]
     }
   ]

@@ -1,5 +1,5 @@
 import {set} from 'cerebral/operators'
-import {input, state} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
 import {set as setRemote} from 'cerebral-provider-firebase'
 import firebaseInit from '../../app/signals/firebaseInit'
 import paths from '../../../common/Collection/paths'
@@ -14,31 +14,31 @@ const createFirebaseUser = [
       set(state`${signInPath}.validationErrors`, {}),
       set(state`${signInPath}.error`, ''),
       set(state`user.$loggedIn`, true),
-      set(state`user.$currentUser`, input`user`),
+      set(state`user.$currentUser`, props`user`),
       // Create initial state for user
-      set(input`value`, {
+      set(props`value`, {
         created_at: {'.sv': 'timestamp'},
         updated_at: {'.sv': 'timestamp'}
       }),
-      set(input`value.email`, input`user.email`),
+      set(props`value.email`, props`user.email`),
       ...dynamicPaths,
-      setRemote(input`remoteCollectionPath`, input`value`), {
+      setRemote(props`remoteCollectionPath`, props`value`), {
         success: [],
         error: [
-          set(state`${signInPath}.error`, input`error`)
+          set(state`${signInPath}.error`, props`error`)
         ]
       },
       ...firebaseInit
     ],
     invalid: [
-      set(state`${signInPath}.validationErrors`, input`validationErrors`),
+      set(state`${signInPath}.validationErrors`, props`validationErrors`),
       set(state`${signInPath}.error`, '')
     ],
     error: [
       set(state`${signInPath}.email.value`, ''),
       set(state`${signInPath}.password.value`, ''),
       set(state`${signInPath}.validationErrors`, {}),
-      set(state`${signInPath}.error`, input`error`)
+      set(state`${signInPath}.error`, props`error`)
     ]
   }
 ]
