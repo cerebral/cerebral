@@ -137,7 +137,7 @@ Traditional routers is a wrapper around your components and they manipulate what
 
 This is a really good thing because most route changes require quite a few state changes and side effects, like server requests, to be run. This is exactly what signals do so well.
 
-Let us introduce **cerebral-router** to our project by adding an import to the top of our *./src/index.js*:
+Let us introduce **cerebral-router** to our project by adding an import to the top of our *./main.js*:
 
 ```js
 import Router from 'cerebral-router'

@@ -7,7 +7,7 @@ Defining state and user interfaces is more about describing how something should
 Cerebral allows you to describe updates the same way you describe state and user interfaces, in a declarative manner. We call them **signals** and they will help you handle complexity both in code and in your head.
 
 ## Adding a signal
-Let us add a signal to our Controller in **controller.js**:
+Let us add a signal to our **Controller** in *controller.js*:
 
 ```js
 ...
