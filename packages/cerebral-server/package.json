@@ -1,0 +1,22 @@
+{
+  "name": "cerebral-server",
+  "version": "0.0.1",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "babel-jest": "^19.0.0",
+    "babel-polyfill": "^6.23.0",
+    "cerebral": "next",
+    "html5-websocket": "^1.0.0",
+    "jest": "^19.0.2"
+  },
+  "dependencies": {
+    "function-tree": "next",
+    "reconnecting-websocket": "^3.0.3",
+    "uuid": "^3.0.1",
+    "ws": "^2.1.0"
+  }
+}
