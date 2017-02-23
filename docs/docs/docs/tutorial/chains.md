@@ -1,6 +1,6 @@
 # Chains
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBHyLJDefteJy0s821)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBHyLJDefteJy0s821)
 
 A signal can trigger an array of functions. This array we call a **chain** and the functions we call **actions**. For now, we have seen it trigger a function that changes the **subTitle** path and in this chapter, we have added a **Toast** component which displays any message set on its related state.
 

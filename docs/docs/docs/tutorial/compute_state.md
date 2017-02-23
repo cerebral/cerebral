@@ -1,6 +1,6 @@
 # Compute state
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBaa45GzVJFOxU69Gp)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBaa45GzVJFOxU69Gp)
 
 In our application we want to sum up the number of stars. We have already implemented a naive approach, which we are going to refactor. We created an action which adds the count together:
 

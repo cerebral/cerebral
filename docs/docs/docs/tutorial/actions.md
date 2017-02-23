@@ -1,6 +1,6 @@
 # Actions
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBPZwKFDQKkAcUqRte)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBPZwKFDQKkAcUqRte)
 
 Signals can take a props-object which can then be accessed or processed by any subsequent action.
 

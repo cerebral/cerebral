@@ -1,6 +1,6 @@
 # Paths
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBUBNJyrfqL3c6VHkr)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBUBNJyrfqL3c6VHkr)
 
 In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows (which is just another chain of actions and operators) depending on the result of the previous action.
 

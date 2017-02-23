@@ -1,6 +1,6 @@
 # Async actions
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBPZwKFDQKkAcUqRte)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBPZwKFDQKkAcUqRte)
 
 Until now we have mostly used synchronous actions inside our **signals** and the flow was, therefore, straightforward. Example:
 

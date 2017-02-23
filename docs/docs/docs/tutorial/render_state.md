@@ -1,6 +1,6 @@
 # Render state
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdBDYEXCVwtPoaMAXgJ)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBDYEXCVwtPoaMAXgJ)
 
 Now let's get that state displayed in our application.
 First of all, we need to tell our component (App) to **connect** to the state.

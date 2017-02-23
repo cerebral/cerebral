@@ -2,7 +2,7 @@
 
 Glad you are still with us! Hopefully you have enjoyed our journey so far and hopefully you still have a sip left of your coffee or drink. It's time for cleaning up.
 
-But before we begin you can have a look at [the solution over here](https://webpackbin-prod.firebaseapp.com/#/bins/-KdLD809oZId6qs7c9P7). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
+But before we begin you can have a look at [the solution over here](https://webpackbin-prod.firebaseapp.com/bins/-KdLD809oZId6qs7c9P7). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
 
 `npm install`
 

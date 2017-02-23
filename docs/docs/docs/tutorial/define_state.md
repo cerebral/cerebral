@@ -1,6 +1,6 @@
 # Define State
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/#/bins/-KdACuVE1vrPicewg7fm)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdACuVE1vrPicewg7fm)
 
 All interactive user interfaces need **state** in one way or another. Cerebral stores this state in something that we call a **state tree**. You might be more familiar with frameworks where application state is described using classes, either multiple model classes and/or components. In Cerebral you do not put application state into multiple models or components. Your application state  isn't wrapped in any form of class either. As a developer you have access to a single state tree where you insert plain values; objects, arrays, strings, numbers and booleans.
 
