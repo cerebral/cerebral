@@ -1,4 +1,4 @@
-# Cerebral
+# Cerebral Server
 Run cerebral signals on both client and nodejs server.
 
 ## Server Setup
@@ -8,6 +8,7 @@ From your nodejs app you need to create a CerebralServer and then bind it to any
 ```js
 import http from 'http';
 import CerebralServer from 'cerebral-server';
+import Devtools from 'cerebral/devtools';
 
 const cerebralServer = CerebralServer({
   signals: {
@@ -19,13 +20,18 @@ const cerebralServer = CerebralServer({
       context.mongo = mongo; // 🤦
       return context;
     }
-  ]
+  ],
+  devtools: process.env.NODE_ENV === 'production' ? null : Devtools({ remoteDebugger: 'localhost:8585' })
 });
 
 const server = http.createServer();
 cerebralServer.bind({ server });
 server.listen(3000)
 ```
+
+### Debugging
+
+If you configure devtools for remote debuggingj in the same way as you do for a cerebral controller (as in the above example) then the siganls and actions will be displayed in the regular standalone cerebral debugger.
 
 ### Server Actions
 

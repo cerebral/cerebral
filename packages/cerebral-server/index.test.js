@@ -3,6 +3,7 @@ import html5Websocket from 'html5-websocket';
 import { RunSignal } from 'cerebral/test';
 import CerebralServer from '.';
 import Client from './client';
+import Devtools from 'cerebral/devtools';
 
 describe('cerebral-server', () => {
   let cerebralServer;
@@ -15,7 +16,7 @@ describe('cerebral-server', () => {
     cerebralServer = CerebralServer({
       signals: {
         getServerFoo: [
-          ({ props, foo, returnToClient }) => {
+          function getServerFoo({ props, foo, returnToClient }) {
             if (props.clientId && props.correlationId) {
               returnToClient(props.clientId, props.correlationId, { foo });
             } else {
@@ -24,7 +25,7 @@ describe('cerebral-server', () => {
           }
         ],
         getFooFromClient: [
-          ({ props, getClientSignal, foo }) => {
+          function getFooFromClient({ props, getClientSignal, foo }) {
             return getClientSignal(props.clientId, 'getClientFoo')({ say: 'please' }).then(({ foo }) => {
               answer = foo;
             });
@@ -36,7 +37,8 @@ describe('cerebral-server', () => {
           context.foo = 'server bar';
           return context;
         }
-      ]
+      ],
+      devtools: process.env.NODE_ENV === 'production' ? null : Devtools({ remoteDebugger: 'localhost:8585' })
     });
     const server = http.createServer();
     cerebralServer.bind({ server, perMessageDeflate: false });

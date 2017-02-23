@@ -1,4 +1,5 @@
 const FunctionTree = require('function-tree').default;
+const DebuggerProvider = require('cerebral/lib/providers/Debugger').default;
 const WebSocket = require('ws');
 const uuid = require('uuid/v1');
 const EventEmitter = require('events');
@@ -8,7 +9,7 @@ const propsProvider = context => {
   return context;
 };
 
-module.exports = function CerebralServer({ signals = {}, providers = [] }) {
+module.exports = function CerebralServer({ signals = {}, providers = [], devtools }) {
   const eventEmitter = new EventEmitter();
   const clients = {};
   let clientTimeout = 30 * 1000;
@@ -53,7 +54,33 @@ module.exports = function CerebralServer({ signals = {}, providers = [] }) {
       return null;
     }
     return props => new Promise((resolve, reject) => {
-      const execute = FunctionTree([propsProvider, getSignalProviders, ...providers]);
+      const execute = FunctionTree([
+        propsProvider,
+        getSignalProviders,
+        ...providers,
+        ...(devtools
+          ? [
+              context => {
+                context.controller = execute;
+                return context;
+              },
+              DebuggerProvider()
+            ]
+          : [])
+      ]);
+      if (devtools) {
+        global.WebSocket = require('html5-websocket');
+        execute.devtools = devtools;
+        execute.model = { get: () => ({}) };
+        devtools.init(execute);
+        execute.on('error', function throwErrorCallback(error) {
+          if (Array.isArray(execute._events.error) && execute._events.error.length > 2) {
+            execute.removeListener('error', throwErrorCallback);
+          } else {
+            throw error;
+          }
+        });
+      }
       execute.on('end', resolve);
       execute.on('error', reject);
       execute(signal, tree, props);
