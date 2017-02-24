@@ -132,7 +132,7 @@ export default function HttpProviderFactory (passedOptions) {
           options.url = moduleOptions.baseUrl + url
 
           return new FileUpload(options).send(files)
-       }
+        }
       }
     }
 
