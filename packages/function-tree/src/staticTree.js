@@ -9,7 +9,7 @@ function getFunctionName (fn) {
 }
 
 function isPaths (item) {
-  return item && !Array.isArray(item) && typeof item === 'object'
+  return item && !Array.isArray(item) && typeof item === 'object' && !(item instanceof All)
 }
 
 function analyze (functions, item, isParallel) {

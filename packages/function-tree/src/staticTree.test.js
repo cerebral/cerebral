@@ -109,4 +109,28 @@ describe('StaticTree', () => {
     assert.equal(tree[0].items[1].isParallel, true)
     assert.ok(tree[0].items[1].function)
   })
+  it.only('should not identify parallel execution as outputs', () => {
+    const tree = staticTree([
+      function someFunc () {
+
+      },
+      new All([
+        function a () {},
+        function b () {}
+      ])
+    ])
+
+    assert.equal(tree.length, 2)
+    assert.equal(tree[0].name, 'someFunc')
+    assert.equal(tree[0].functionIndex, 0)
+    assert.equal(tree[0].isParallel, false)
+
+    assert.equal(tree[1]._isAll, true)
+    assert.equal(tree[1].items[0].name, 'a')
+    assert.equal(tree[1].items[0].functionIndex, 1)
+    assert.equal(tree[1].items[0].isParallel, true)
+    assert.equal(tree[1].items[1].name, 'b')
+    assert.equal(tree[1].items[1].functionIndex, 2)
+    assert.equal(tree[1].items[1].isParallel, true)
+  })
 })

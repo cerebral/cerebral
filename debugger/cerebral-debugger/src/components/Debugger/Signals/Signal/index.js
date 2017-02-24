@@ -100,11 +100,11 @@ export default connect({
       }, false)
     }
     renderAction (action, index) {
-      if (Array.isArray(action)) {
+      if (action._isAll) {
         return (
           <div className='signal-asyncHeader' key={index}>
             <div className='signal-async'>
-              {action.map(this.renderAction)}
+              {action.items.map(this.renderAction)}
             </div>
           </div>
         )
