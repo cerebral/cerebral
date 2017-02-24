@@ -1,9 +1,8 @@
 import request from './request'
 import {urlEncode, mergeWith, createResponse} from './utils'
 import FileUpload from './fileUpload'
-import DEFAULT_OPTIONS from './DEFAULT_OPTIONS'
 
-export { default as FileUpload } from './fileUpload'
+import DEFAULT_OPTIONS from './DEFAULT_OPTIONS'
 
 import {
   httpGet as httpGetFactory,
@@ -129,11 +128,11 @@ export default function HttpProviderFactory (passedOptions) {
             requests[url].xhr.abort()
           })
         },
-        fileUpload (options = {}) {
-          options.url = moduleOptions.baseUrl + options.url
+        uploadFile (url, files, options = {}) {
+          options.url = moduleOptions.baseUrl + url
 
-          return new FileUpload(options)
-        }
+          return new FileUpload(options).send(files)
+       }
       }
     }
 

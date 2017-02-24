@@ -16,7 +16,7 @@ function parseResponse (xhr) {
 
 export default function (options) {
   if (!options.url) {
-    console.warn('upload-controller: options must contain url')
+    console.warn('upload-controller: you must provide a url')
     return
   }
   this.isAborted = false
