@@ -1,4 +1,4 @@
-import All from './All'
+import {Sequence, Parallel, Race} from './primitives'
 
 function getFunctionName (fn) {
   let ret = fn.toString()
@@ -9,30 +9,36 @@ function getFunctionName (fn) {
 }
 
 function isPaths (item) {
-  return item && !Array.isArray(item) && typeof item === 'object' && !(item instanceof All)
+  return (
+    item &&
+    !Array.isArray(item) &&
+    typeof item === 'object' &&
+    !(item instanceof Sequence) &&
+    !(item instanceof Parallel) &&
+    !(item instanceof Race)
+  )
 }
 
 function analyze (functions, item, isParallel) {
-  if (item instanceof All) {
-    const allInstance = item.toJSON()
+  if (item instanceof Parallel || item instanceof Sequence) {
+    const instance = item.toJSON()
 
-    return Object.assign(allInstance, {
-      items: analyze(functions, allInstance.items, true)
+    return Object.assign(instance, {
+      items: analyze(functions, instance.items, item instanceof Parallel).items
     })
   } else if (Array.isArray(item)) {
-    return item.reduce((allItems, subItem, index) => {
-      if (subItem instanceof All) {
-        const allInstance = subItem.toJSON()
+    return new Sequence(...item.reduce((allItems, subItem, index) => {
+      if (subItem instanceof Parallel || subItem instanceof Sequence) {
+        const instance = subItem.toJSON()
 
-        return allItems.concat(Object.assign(allInstance, {
-          items: analyze(functions, allInstance.items, true)
+        return allItems.concat(Object.assign(instance, {
+          items: analyze(functions, instance.items, subItem instanceof Parallel).items
         }))
       } else if (typeof subItem === 'function') {
         const funcDetails = {
           name: subItem.displayName || getFunctionName(subItem),
           functionIndex: functions.push(subItem) - 1,
-          function: subItem,
-          isParallel: Boolean(isParallel)
+          function: subItem
         }
         const nextItem = item[index + 1]
 
@@ -50,11 +56,13 @@ function analyze (functions, item, isParallel) {
       } else if (isPaths(subItem)) {
         return allItems
       } else if (Array.isArray(subItem)) {
-        return allItems.concat(analyze(functions, subItem))
+        const items = analyze(functions, subItem)
+
+        return allItems.concat(items)
       } else {
         throw new Error('function-tree - Unexpected entry in tree')
       }
-    }, [])
+    }, [])).toJSON()
   } else {
     throw new Error('function-tree - Unexpected entry in tree')
   }
@@ -62,7 +70,6 @@ function analyze (functions, item, isParallel) {
 
 export default (tree) => {
   const functions = []
-  const analyzedTree = analyze(functions, typeof tree === 'function' ? [tree] : tree)
 
-  return Array.isArray(analyzedTree) ? analyzedTree : [analyzedTree]
+  return analyze(functions, typeof tree === 'function' ? [tree] : tree)
 }

@@ -6,7 +6,7 @@ import InputProvider from './providers/Input'
 import PathProvider from './providers/Path'
 import Path from './Path'
 import Abort from './Abort'
-import All from './All'
+import {Sequence, Parallel} from './primitives'
 
 /*
   Need to create a unique ID for each execution to identify it
@@ -160,8 +160,12 @@ class FunctionTreeExecution extends EventEmitter {
   }
 }
 
+export function each (...items) {
+  return new Sequence(...items)
+}
+
 export function all (...items) {
-  return new All(items)
+  return new Parallel(...items)
 }
 
 export class FunctionTree extends EventEmitter {
@@ -191,6 +195,8 @@ export class FunctionTree extends EventEmitter {
       if (typeof arg === 'string') {
         name = arg
       } else if (Array.isArray(arg)) {
+        tree = arg
+      } else if (!tree && typeof arg === 'function') {
         tree = arg
       } else if (typeof arg === 'function') {
         cb = arg

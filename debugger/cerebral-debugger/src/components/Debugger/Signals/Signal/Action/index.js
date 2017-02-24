@@ -70,7 +70,7 @@ function Action ({action, faded, execution, children, onMutationClick, onActionC
         <div>
           <div className={faded ? 'action-faded' : null}>
             <div className='action-actionInput'>
-              <div className='action-inputLabel'>Input:</div>
+              <div className='action-inputLabel'>props:</div>
               <div className='action-inputValue'><Inspector value={execution.payload} /></div>
             </div>
             <div className='action-mutations'>
@@ -81,7 +81,7 @@ function Action ({action, faded, execution, children, onMutationClick, onActionC
             </div>
             {execution.output ? (
               <div className='action-actionInput'>
-                <div className='action-inputLabel'>Output:</div>
+                <div className='action-inputLabel'>output:</div>
                 <div className='action-inputValue'><Inspector value={execution.output} /></div>
               </div>
             ) : null}

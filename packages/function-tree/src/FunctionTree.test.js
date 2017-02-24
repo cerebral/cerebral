@@ -118,7 +118,6 @@ describe('FunctionTree', () => {
     execute.once('functionEnd', function (execution, functionDetails, payload) {
       assert.ok(execution.id)
       assert.equal(functionDetails.functionIndex, 0)
-      assert.equal(functionDetails.isParallel, false)
       assert.deepEqual(payload, {foo: 'bar'})
     })
     execute([
@@ -131,7 +130,7 @@ describe('FunctionTree', () => {
     const execute = FunctionTree()
 
     execute.once('functionStart', function (execution, functionDetails) {
-      assert.equal(functionDetails.isParallel, true)
+      assert.ok(true)
     })
     execute([
       all(
@@ -339,6 +338,38 @@ describe('FunctionTree', () => {
 
     execute.once('end', () => {
       assert.deepEqual(results, ['B', 'A'])
+      done()
+    })
+
+    execute(tree)
+  })
+  it('should run grouped functions sequencially inside parallel', (done) => {
+    const results = []
+    function funcA () {
+      return Promise.resolve().then(() => { results.push('A') })
+    }
+    function funcB () {
+      results.push('B')
+    }
+    const group = [
+      function funC () {
+        return Promise.resolve().then(() => { results.push('C') })
+      },
+      function funcD () {
+        results.push('D')
+      }
+    ]
+    const execute = FunctionTree([])
+    const tree = [
+      all(
+        funcA,
+        funcB,
+        group
+      )
+    ]
+
+    execute.once('end', () => {
+      assert.deepEqual(results, ['B', 'A', 'C', 'D'])
       done()
     })
 

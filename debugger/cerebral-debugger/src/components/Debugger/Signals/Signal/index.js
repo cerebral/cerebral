@@ -100,11 +100,27 @@ export default connect({
       }, false)
     }
     renderAction (action, index) {
-      if (action._isAll) {
+      if (action._functionTreePrimitive && action.type === 'parallel') {
         return (
-          <div className='signal-asyncHeader' key={index}>
-            <div className='signal-async'>
-              {action.items.map(this.renderAction)}
+          <div>
+            <span className='signal-groupName'><strong>all</strong>{action.name ? ': ' + action.name : null}</span>
+            <div className='signal-groupHeader' key={index}>
+              <div className='signal-group'>
+                {action.items.map(this.renderAction)}
+              </div>
+            </div>
+          </div>
+        )
+      }
+
+      if (action._functionTreePrimitive && action.type === 'sequence') {
+        return (
+          <div>
+            <span className='signal-groupName'><strong>each</strong>{action.name ? ': ' + action.name : null}</span>
+            <div className='signal-groupHeader' key={index}>
+              <div className='signal-group'>
+                {action.items.map(this.renderAction)}
+              </div>
             </div>
           </div>
         )
@@ -135,7 +151,7 @@ export default connect({
         <div className='signal'>
           <h3 className='signal-title'>{this.props.signal.name}</h3>
           <div className='signal-chain'>
-            {this.props.signal.staticTree.map((action, index) => this.renderAction(action, index))}
+            {this.props.signal.staticTree.items.map((action, index) => this.renderAction(action, index))}
           </div>
         </div>
       )
