@@ -1,4 +1,4 @@
-# Define state
+# State
 
 Cerebral uses a single state tree to store all the state of your application. It is just a single object:
 
@@ -17,17 +17,27 @@ You will normally store other objects, arrays, strings, booleans and numbers in 
 
 State can be defined at the top level in the controller and/or in modules. State is defined as plain JavaScript value types. Objects, arrays, strings, numbers and booleans. This means that the state is serializable. There are no classes or other abstractions around state. This is an important choice in Cerebral that makes it possible to track changes to update the UI, store state on server/local storage and passing state information to the debugger.
 
+## Tutorial
+
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdACuVE1vrPicewg7fm)
+
+To define the initial state of any application all we need to do is to add it to our **Controller** in *controller.js*
+
+
 ```js
 import {Controller} from 'cerebral'
+import Devtools from 'cerebral/devtools'
 
 const controller = Controller({
+  devtools: Devtools({
+    remoteDebugger: '127.0.0.1:8585'
+  }),
   state: {
-    foo: 'bar',
-    items: [{
-      name: 'foo'
-    }, {
-      name: 'bar'
-    }]
+    title: 'Cerebral Tutorial'
   }
 })
+
+export default controller
 ```
+
+When you save your bin and look at the state tree you will see the state added. If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

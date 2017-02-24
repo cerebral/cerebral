@@ -17,7 +17,7 @@
     "babel-watch": "^2.0.5",
     "express": "^4.14.0",
     "fs-extra": "^2.0.0",
-    "markdown-to-react-components": "^0.2.3",
+    "markdown-to-react-components": "https://github.com/christianalfoni/markdown-to-react-components.git",
     "prismjs": "^1.6.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",

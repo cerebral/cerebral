@@ -27,30 +27,24 @@
       "articles_and_videos",
       "counter"
     ],
-    "tutorial": [
+    "developer_guide": [
       "index",
-      "define_state",
-      "render_state",
-      "update_state",
-      "chains",
-      "actions",
-      "async_actions",
-      "paths",
-      "compute_state",
-      "routing",
-      "modules"
-    ],
-    "how_to": [
-      "index",
+      "state",
+      "connect",
       "signals",
       "actions",
-      "chains_and_paths",
-      "providers",
+      "operators",
       "factories",
-      "connect",
+      "paths",
       "compute",
+      "routing",
       "organize",
+      "providers",
       "test"
+    ],
+    "tools": [
+      "index",
+      "firebase"
     ],
     "migration": [
       "index"
