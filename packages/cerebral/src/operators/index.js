@@ -1,3 +1,5 @@
+export {default as all} from './all'
+
 export {default as debounce} from './debounce'
 export {default as when} from './when'
 export {default as wait} from './wait'

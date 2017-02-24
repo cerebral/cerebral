@@ -6,6 +6,7 @@ import InputProvider from './providers/Input'
 import PathProvider from './providers/Path'
 import Path from './Path'
 import Abort from './Abort'
+import All from './All'
 
 /*
   Need to create a unique ID for each execution to identify it
@@ -157,6 +158,10 @@ class FunctionTreeExecution extends EventEmitter {
       return newContext
     }, {})
   }
+}
+
+export function all (...items) {
+  return new All(items)
 }
 
 export class FunctionTree extends EventEmitter {

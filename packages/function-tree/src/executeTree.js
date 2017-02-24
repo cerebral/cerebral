@@ -35,10 +35,12 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
       }
       nextBranch(payload)
     } else if (Array.isArray(currentItem)) {
-      const itemLength = currentItem.length
+      runBranch(currentItem, 0, payload, prevPayload)
+    } else if (currentItem._isAll) {
+      const itemLength = currentItem.items.length
       parallelStart(payload, itemLength)
-      currentItem.reduce((payloads, action, index) => {
-        resolveFunctionResult(action, payload, prevPayload, processFunctionOutput(action, (payload) => {
+      currentItem.items.reduce((payloads, func, index) => {
+        resolveFunctionResult(func, payload, prevPayload, processFunctionOutput(func, (payload) => {
           payloads.push(payload)
           if (payloads.length === itemLength) {
             parallelEnd(payload, itemLength)

@@ -1,3 +1,5 @@
+import All from './All'
+
 function getFunctionName (fn) {
   let ret = fn.toString()
   ret = ret.substr('function '.length)
@@ -6,45 +8,53 @@ function getFunctionName (fn) {
   return ret
 }
 
-function traverse (functions, item, isChain, isParallel) {
-  if (Array.isArray(item) && typeof isChain === 'boolean') {
-    item = item.slice()
-    return item.map((subItem, index) => {
-      if (typeof subItem === 'function') {
-        let nextSubItem = item[index + 1]
-        if (!Array.isArray(nextSubItem) && typeof nextSubItem === 'object') {
-          item.splice(index + 1, 1)
-          return traverse(functions, subItem, nextSubItem, !isChain)
-        } else {
-          return traverse(functions, subItem, null, !isChain)
-        }
-      } else if (Array.isArray(item) && isChain) {
-        return traverse(functions, subItem, false, !isChain)
-      }
-      throw new Error('Signal Tree - Unexpected entry in signal chain')
-    }).filter((func) => {
-      return !!func
-    })
-  } else if (typeof item === 'function') {
-    const func = item
-    const outputs = isChain
-    const funcDetails = {
-      name: func.displayName || getFunctionName(func),
-      functionIndex: functions.push(func) - 1,
-      function: func,
-      isParallel: isParallel
-    }
-    if (outputs) {
-      funcDetails.outputs = {}
-      Object.keys(outputs).forEach((key) => {
-        if (func.outputs && !~func.outputs.indexOf(key)) {
-          throw new Error(`function-tree - Outputs object doesn't match list of possible outputs defined for function.`)
-        }
-        funcDetails.outputs[key] = traverse(functions, outputs[key], true)
-      })
-    }
+function isPaths (item) {
+  return item && !Array.isArray(item) && typeof item === 'object'
+}
 
-    return funcDetails
+function analyze (functions, item, isParallel) {
+  if (item instanceof All) {
+    const allInstance = item.toJSON()
+
+    return Object.assign(allInstance, {
+      items: analyze(functions, allInstance.items, true)
+    })
+  } else if (Array.isArray(item)) {
+    return item.reduce((allItems, subItem, index) => {
+      if (subItem instanceof All) {
+        const allInstance = subItem.toJSON()
+
+        return allItems.concat(Object.assign(allInstance, {
+          items: analyze(functions, allInstance.items, true)
+        }))
+      } else if (typeof subItem === 'function') {
+        const funcDetails = {
+          name: subItem.displayName || getFunctionName(subItem),
+          functionIndex: functions.push(subItem) - 1,
+          function: subItem,
+          isParallel: Boolean(isParallel)
+        }
+        const nextItem = item[index + 1]
+
+        if (isPaths(nextItem)) {
+          funcDetails.outputs = {}
+          Object.keys(nextItem).forEach((key) => {
+            if (subItem.outputs && !~subItem.outputs.indexOf(key)) {
+              throw new Error(`function-tree - Outputs object doesn't match list of possible outputs defined for function.`)
+            }
+            funcDetails.outputs[key] = analyze(functions, typeof nextItem[key] === 'function' ? [nextItem[key]] : nextItem[key])
+          })
+        }
+
+        return allItems.concat(funcDetails)
+      } else if (isPaths(subItem)) {
+        return allItems
+      } else if (Array.isArray(subItem)) {
+        return allItems.concat(analyze(functions, subItem))
+      } else {
+        throw new Error('function-tree - Unexpected entry in tree')
+      }
+    }, [])
   } else {
     throw new Error('function-tree - Unexpected entry in tree')
   }
@@ -52,6 +62,7 @@ function traverse (functions, item, isChain, isParallel) {
 
 export default (tree) => {
   const functions = []
+  const analyzedTree = analyze(functions, typeof tree === 'function' ? [tree] : tree)
 
-  return traverse(functions, tree, true)
+  return Array.isArray(analyzedTree) ? analyzedTree : [analyzedTree]
 }

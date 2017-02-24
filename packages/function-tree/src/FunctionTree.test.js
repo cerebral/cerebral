@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import FunctionTree from './'
+import FunctionTree, {all} from './'
 import assert from 'assert'
 
 describe('FunctionTree', () => {
@@ -134,10 +134,10 @@ describe('FunctionTree', () => {
       assert.equal(functionDetails.isParallel, true)
     })
     execute([
-      [
+      all(
         () => {},
         () => {}
-      ]
+      )
     ])
   })
   it('should pass final payload on end event', () => {
@@ -320,5 +320,28 @@ describe('FunctionTree', () => {
     execute(tree, {
       foo: 'bar'
     })
+  })
+  it('should run functions in parallel', (done) => {
+    const results = []
+    function funcA () {
+      return Promise.resolve().then(() => { results.push('A') })
+    }
+    function funcB () {
+      results.push('B')
+    }
+    const execute = FunctionTree([])
+    const tree = [
+      all(
+        funcA,
+        funcB
+      )
+    ]
+
+    execute.once('end', () => {
+      assert.deepEqual(results, ['B', 'A'])
+      done()
+    })
+
+    execute(tree)
   })
 })
