@@ -4,11 +4,38 @@ import FileUpload from './fileUpload'
 import DEFAULT_OPTIONS from './DEFAULT_OPTIONS'
 
 export { default as FileUpload } from './fileUpload'
-export { default as httpGet } from './factories/httpGet'
-export { default as httpPost } from './factories/httpPost'
-export { default as httpPut } from './factories/httpPut'
-export { default as httpPatch } from './factories/httpPatch'
-export { default as httpDelete } from './factories/httpDelete'
+
+import {httpGet as httpGetFactory} from './operators'
+import {httpPost as httpPostFactory} from './operators'
+import {httpPut as httpPutFactory} from './operators'
+import {httpPatch as httpPatchFactory} from './operators'
+import {httpDelete as httpGeDeletectory} from './operators'
+
+export httpGet (...args) {
+  console.warn('DEPRECATED....')
+  return httpGetFactory(...args)
+}
+
+export httpPost (...args) {
+  console.warn('DEPRECATED....')
+  return httpPostFactory(...args)
+}
+
+export httpPut (...args) {
+  console.warn('DEPRECATED....')
+  return httpPutFactory(...args)
+}
+
+export httpPatch (...args) {
+  console.warn('DEPRECATED....')
+  return httpPatchFactory(...args)
+}
+
+export httpDelete (...args) {
+  console.warn('DEPRECATED....')
+  return httpDeleteFactory(...args)
+}
+
 
 export default function HttpProviderFactory (passedOptions) {
   let moduleOptions = mergeWith({}, DEFAULT_OPTIONS)
