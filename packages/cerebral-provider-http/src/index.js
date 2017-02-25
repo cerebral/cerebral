@@ -12,27 +12,27 @@ import {
   httpDelete as httpDeleteFactory} from './operators'
 
 export function httpGet (...args) {
-  console.warn('DEPRECATED....')
+  console.warn('Deprecation Warning: Importing directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
   return httpGetFactory(...args)
 }
 
 export function httpPost (...args) {
-  console.warn('DEPRECATED....')
+  console.warn('Deprecation Warning: Importing directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
   return httpPostFactory(...args)
 }
 
 export function httpPut (...args) {
-  console.warn('DEPRECATED....')
+  console.warn('Deprecation Warning: Importing directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
   return httpPutFactory(...args)
 }
 
 export function httpPatch (...args) {
-  console.warn('DEPRECATED....')
+  console.warn('Deprecation Warning: Importing directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
   return httpPatchFactory(...args)
 }
 
 export function httpDelete (...args) {
-  console.warn('DEPRECATED....')
+  console.warn('Deprecation Warning: Importing directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
   return httpDeleteFactory(...args)
 }
 
