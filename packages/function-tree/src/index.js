@@ -2,7 +2,7 @@ import EventEmitter from 'eventemitter3'
 import executeTree from './executeTree'
 import createStaticTree from './staticTree'
 import ExecutionProvider from './providers/Execution'
-import InputProvider from './providers/Input'
+import PropsProvider from './providers/Props'
 import PathProvider from './providers/Path'
 import Path from './Path'
 import Abort from './Abort'
@@ -142,7 +142,7 @@ class FunctionTreeExecution extends EventEmitter {
   createContext (funcDetails, payload, prevPayload) {
     return [
       ExecutionProvider(this, Abort),
-      InputProvider(),
+      PropsProvider(),
       PathProvider()
     ].concat(this.functionTree.contextProviders).reduce(function (currentContext, contextProvider) {
       var newContext = (

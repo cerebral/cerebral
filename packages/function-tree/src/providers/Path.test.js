@@ -65,8 +65,8 @@ describe('PathProvider', () => {
         return path.foo({foo: 'bar'})
       }, {
         foo: [
-          ({input}) => {
-            assert.deepEqual(input, {foo: 'bar'})
+          ({props}) => {
+            assert.deepEqual(props, {foo: 'bar'})
             done()
           }
         ],
@@ -83,8 +83,8 @@ describe('PathProvider', () => {
       })
     }
 
-    function actionB ({input}) {
-      assert.deepEqual(input, {foo: 'bar'})
+    function actionB ({props}) {
+      assert.deepEqual(props, {foo: 'bar'})
     }
 
     const execute = FunctionTree()
