@@ -1,4 +1,4 @@
-/* global CustomEvent WebSocket File FileList Blob */
+/* global CustomEvent WebSocket File FileList Blob ImageData */
 import {delay} from '../utils'
 import Path from 'function-tree/lib/Path'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
