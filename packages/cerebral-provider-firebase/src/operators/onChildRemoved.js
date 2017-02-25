@@ -2,7 +2,7 @@ import {convertObjectWithTemplates} from './utils'
 
 function onChildRemovedFactory (path, signal, options = {}) {
   function onChildRemoved ({firebase, resolve}) {
-    firebase.onChildRemoved(resolve.value(path), resolve.value(signal), convertObjectWithTemplates(options, resolve))
+    firebase.onChildRemoved(resolve.value(path), resolve.path(signal), convertObjectWithTemplates(options, resolve))
   }
 
   return onChildRemoved

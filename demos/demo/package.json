@@ -21,8 +21,8 @@
     "cerebral-router": "^1.0.0-b",
     "cerebral-provider-firebase": "^1.0.0-b",
     "js-joda": "^1.1.13",
-    "react": "^15.3.2",
-    "react-dom": "^15.3.2",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "uuid": "^2.0.3"
   },
   "scripts": {
