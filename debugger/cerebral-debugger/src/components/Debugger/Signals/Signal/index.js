@@ -102,7 +102,7 @@ export default connect({
     renderAction (action, index) {
       if (action._functionTreePrimitive) {
         return (
-          <div>
+          <div key={index}>
             <span className='signal-groupName'><strong>{action.type}</strong>{action.name ? ': ' + action.name : null}</span>
             <div className='signal-groupHeader' key={index}>
               <div className='signal-group'>

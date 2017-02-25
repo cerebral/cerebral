@@ -84,11 +84,14 @@ export default connect(props => ({
       })
     }
     renderAction (action, index) {
-      if (Array.isArray(action)) {
+      if (action._functionTreePrimitive) {
         return (
-          <div className='signal-asyncHeader' key={index}>
-            <div className='signal-async'>
-              {action.map(this.renderAction)}
+          <div key={index}>
+            <span className='signal-groupName'><strong>{action.type}</strong>{action.name ? ': ' + action.name : null}</span>
+            <div className='signal-groupHeader' key={index}>
+              <div className='signal-group'>
+                {action.items.map(this.renderAction)}
+              </div>
             </div>
           </div>
         )
@@ -114,7 +117,7 @@ export default connect(props => ({
         <div className='signal'>
           <h3 className='signal-title'>{this.props.signal.name}</h3>
           <div className='signal-chain'>
-            {this.props.signal.staticTree.map((action, index) => this.renderAction(action, index))}
+            {this.props.signal.staticTree.items.map((action, index) => this.renderAction(action, index))}
           </div>
         </div>
       )

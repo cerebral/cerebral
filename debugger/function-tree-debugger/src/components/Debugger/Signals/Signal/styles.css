@@ -20,12 +20,12 @@
   padding: 10px;
 }
 
-.signal-asyncHeader {
+.signal-groupHeader {
   display: flex;
   align-items: flex-start;
 }
 
-.signal-asyncHeader > i {
+.signal-groupHeader > i {
   top: 0;
   font-size: 20px;
 }
@@ -36,6 +36,14 @@
   border-left: 5px solid #DDD;
   border-bottom: 1px solid #DDD;
   border-right: 1px solid #DDD;
+  border-radius: 2px;
+  padding: 5px;
+  margin-bottom: 10px;
+}
+
+.signal-group {
+  flex: 1;
+  border: 1px solid #DDD;
   border-radius: 2px;
   padding: 5px;
   margin-bottom: 10px;
@@ -67,4 +75,16 @@
 
 .signal-outputPath {
   flex: 1;
+}
+
+.signal-groupName {
+  font-size: 10px;
+  color: #777;
+  margin-left: 10px;
+  border: 1px solid #DDD;
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+  padding: 3px 10px;
+  background-color: #DDD;
+  display: inline-block;
 }
