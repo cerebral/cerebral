@@ -100,10 +100,10 @@ export default connect({
       }, false)
     }
     renderAction (action, index) {
-      if (action._functionTreePrimitive && action.type === 'parallel') {
+      if (action._functionTreePrimitive) {
         return (
           <div>
-            <span className='signal-groupName'><strong>all</strong>{action.name ? ': ' + action.name : null}</span>
+            <span className='signal-groupName'><strong>{action.type}</strong>{action.name ? ': ' + action.name : null}</span>
             <div className='signal-groupHeader' key={index}>
               <div className='signal-group'>
                 {action.items.map(this.renderAction)}
@@ -113,18 +113,6 @@ export default connect({
         )
       }
 
-      if (action._functionTreePrimitive && action.type === 'sequence') {
-        return (
-          <div>
-            <span className='signal-groupName'><strong>each</strong>{action.name ? ': ' + action.name : null}</span>
-            <div className='signal-groupHeader' key={index}>
-              <div className='signal-group'>
-                {action.items.map(this.renderAction)}
-              </div>
-            </div>
-          </div>
-        )
-      }
       const hasSearchContent = (
         this.props.searchValue &&
         this.actionHasSearchContent(action)

@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {all, debounce} from './'
+import {debounce} from './'
+import {parallel} from '../'
 
 describe('operator.debounce', () => {
   it('should debounce execution', (done) => {
@@ -31,7 +32,7 @@ describe('operator.debounce', () => {
     const controller = Controller({
       signals: {
         test: [
-          all(
+          parallel(
             debounce(50), {
               continue: [
                 () => {

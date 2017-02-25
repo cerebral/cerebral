@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import FunctionTree, {all} from './'
+import FunctionTree, {parallel} from './'
 import assert from 'assert'
 
 describe('FunctionTree', () => {
@@ -133,7 +133,7 @@ describe('FunctionTree', () => {
       assert.ok(true)
     })
     execute([
-      all(
+      parallel(
         () => {},
         () => {}
       )
@@ -330,7 +330,7 @@ describe('FunctionTree', () => {
     }
     const execute = FunctionTree([])
     const tree = [
-      all(
+      parallel(
         funcA,
         funcB
       )
@@ -361,7 +361,7 @@ describe('FunctionTree', () => {
     ]
     const execute = FunctionTree([])
     const tree = [
-      all(
+      parallel(
         funcA,
         funcB,
         group

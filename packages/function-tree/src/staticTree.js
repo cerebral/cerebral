@@ -1,4 +1,4 @@
-import {Sequence, Parallel, Race} from './primitives'
+import {Sequence, Parallel} from './primitives'
 
 function getFunctionName (fn) {
   let ret = fn.toString()
@@ -14,8 +14,7 @@ function isPaths (item) {
     !Array.isArray(item) &&
     typeof item === 'object' &&
     !(item instanceof Sequence) &&
-    !(item instanceof Parallel) &&
-    !(item instanceof Race)
+    !(item instanceof Parallel)
   )
 }
 

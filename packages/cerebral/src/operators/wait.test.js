@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {all, wait} from './'
+import {wait} from './'
+import {parallel} from '../'
 
 describe('operator.wait', () => {
   it('should hold execution for set time', (done) => {
@@ -24,7 +25,7 @@ describe('operator.wait', () => {
     const controller = Controller({
       signals: {
         test: [
-          all(
+          parallel(
             wait(100), {
               continue: [
                 () => {
