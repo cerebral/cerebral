@@ -41,7 +41,7 @@ import {state, props} from 'cerebral/tags'
 export default compute(
   state`user.id`,
   (userId, get) => {
-    return get(state`projects.${user.id}`).length > get(props`limit`)
+    return get(state`projects.${userId}`).length > get(props`limit`)
   }  
 )
 ```
