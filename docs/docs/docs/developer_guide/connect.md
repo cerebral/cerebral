@@ -27,7 +27,7 @@ export default connect({
 )
 ```
 
-...the component will be registered to the **Container** which is used to expose the controller. The *Container* actually has a register of all connected components in your application. This information is passed to the debugger and whenever Cerebral flushes out changes made to different state paths, the *Container* will figure out what components should render.
+...the component will be registered to the root **Container** component which is used to expose the controller. The *Container* actually has a register of all connected components in your application. This information is passed to the debugger and whenever Cerebral flushes out changes made to different state paths, the *Container* will figure out what components should render.
 
 All connected components are automatically optimized, meaning that they will only render if a parent component passes a changed prop or the *Container* tells it to render.
 
