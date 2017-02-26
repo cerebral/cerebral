@@ -91,7 +91,7 @@ export default connect({
           className={className}
           key={index}>
           {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className={indicatorClassname} style={signalStyle} />}
-          <span className='list-name'>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
+          <span className='list-name'>{name} <small>{(!prevSignal || prevSignal.groupId !== signal.groupId) && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
         </li>
       )
     }
