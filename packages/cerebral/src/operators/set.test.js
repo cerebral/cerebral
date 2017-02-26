@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {set} from './'
+import {set, push} from './'
 import {props, state, string} from '../tags'
 
 describe('operator.set', () => {
@@ -108,6 +108,52 @@ describe('operator.set', () => {
       done()
     })
 
+    controller.getSignal('test')()
+  })
+  it('should copy plain object', () => {
+    const controller = Controller({
+      state: {
+        foo: {}
+      },
+      signals: {
+        test: [
+          set(state`foo`, {}),
+          set(state`foo.${props`key`}`, 'bar')
+        ]
+      }
+    })
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), {'key1': 'bar'})
+    })
+    controller.getSignal('test')({
+      key: 'key1'
+    })
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), {'key2': 'bar'})
+    })
+    controller.getSignal('test')({
+      key: 'key2'
+    })
+  })
+  it('should copy array object', () => {
+    const controller = Controller({
+      state: {
+        foo: []
+      },
+      signals: {
+        test: [
+          set(state`foo`, []),
+          push(state`foo`, 'bar')
+        ]
+      }
+    })
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), ['bar'])
+    })
+    controller.getSignal('test')()
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), ['bar'])
+    })
     controller.getSignal('test')()
   })
 })
