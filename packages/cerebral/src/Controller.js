@@ -196,6 +196,78 @@ class Controller extends FunctionTree {
 
     return signal
   }
+  /*
+
+  */
+  addModule (path, module) {
+    const pathArray = path.split('.')
+    const moduleKey = pathArray.pop()
+
+    const parentModule = pathArray.reduce((currentModule, key) => {
+      if(!currentModule){
+        throwError(`The path "${pathArray.join('.')}" is invalid, can not add module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
+      }
+      return currentModule.modules[key]
+    }, this)
+
+    parentModule.modules[moduleKey] = module
+
+    if(module.state){
+      this.model.set(pathArray, module.state)
+    }
+
+    if (module.provider) {
+      this.contextProviders.push(provider)
+    }
+
+    this.flush()
+  }
+
+  removeModule (path) {
+    if(!path){
+      console.warn('Controller.removeModule requires a Module Path')
+      return null
+    }
+
+    const pathArray = path.split('.')
+    const moduleKey = pathArray.pop()
+
+    const parentModule = pathArray.reduce((currentModule, key) => {
+      if(!currentModule){
+        throwError(`The path "${pathArray.join('.')}" is invalid, can not remove module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
+      }
+      return currentModule.modules[key]
+    }, this)
+
+    delete parentModule.modules[moduleKey]
+
+    this.model.unset(pathArray)
+
+    if (module.provider) {
+      this.contextProviders.splice(this.contextProviders.indexOf(module.provider), 1)
+    }
+    
+    this.flush()
+  }
+
+  getModule (path) {
+    if(!path){
+      console.warn('Controller.getModule requires a Module Path')
+      return null
+    }
+    const pathArray = path.split('.')
+    const moduleKey = pathArray.pop()
+
+    const parentModule = pathArray.reduce((currentModule, key) => {
+      return currentModule.modules[key]
+    }, this)
+
+    return parentModule.modules[moduleKey]
+  }
+
+  getModules () {
+    return this.modules
+  }
 }
 
 export default function (...args) {
