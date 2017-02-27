@@ -196,35 +196,34 @@ class Controller extends FunctionTree {
 
     return signal
   }
-  /*
 
-  */
   addModule (path, module) {
     const pathArray = path.split('.')
     const moduleKey = pathArray.pop()
 
     const parentModule = pathArray.reduce((currentModule, key) => {
-      if(!currentModule){
+      if (!currentModule) {
         throwError(`The path "${pathArray.join('.')}" is invalid, can not add module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
       }
+      console.log(currentModule.modules[key])
       return currentModule.modules[key]
     }, this)
 
-    parentModule.modules[moduleKey] = module
+    parentModule.module.modules[moduleKey] = module
 
-    if(module.state){
+    if (module.state) {
       this.model.set(pathArray, module.state)
     }
 
     if (module.provider) {
-      this.contextProviders.push(provider)
+      this.contextProviders.push(module.provider)
     }
 
     this.flush()
   }
 
   removeModule (path) {
-    if(!path){
+    if (!path) {
       console.warn('Controller.removeModule requires a Module Path')
       return null
     }
@@ -233,25 +232,25 @@ class Controller extends FunctionTree {
     const moduleKey = pathArray.pop()
 
     const parentModule = pathArray.reduce((currentModule, key) => {
-      if(!currentModule){
+      if (!currentModule) {
         throwError(`The path "${pathArray.join('.')}" is invalid, can not remove module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
       }
       return currentModule.modules[key]
     }, this)
 
-    delete parentModule.modules[moduleKey]
+    delete parentModule.module.modules[moduleKey]
 
     this.model.unset(pathArray)
 
     if (module.provider) {
       this.contextProviders.splice(this.contextProviders.indexOf(module.provider), 1)
     }
-    
+
     this.flush()
   }
 
   getModule (path) {
-    if(!path){
+    if (!path) {
       console.warn('Controller.getModule requires a Module Path')
       return null
     }
@@ -262,11 +261,11 @@ class Controller extends FunctionTree {
       return currentModule.modules[key]
     }, this)
 
-    return parentModule.modules[moduleKey]
+    return parentModule.module.modules[moduleKey]
   }
 
   getModules () {
-    return this.modules
+    return this.module.modules
   }
 }
 

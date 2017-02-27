@@ -254,4 +254,63 @@ describe('Controller', () => {
     })
     controller.getSignal('test')()
   })
+  it('should expose method to getModules', () => {
+    const controller = new Controller({
+      modules: {
+        foo: {
+          modules: {},
+          signals: {},
+          state: {}
+        }
+      }
+    })
+    assert.deepEqual(controller.getModules(), {
+      foo: {
+        modules: {},
+        signals: {},
+        state: {}
+      }
+    })
+  })
+  it('should expose method to getModule using path', () => {
+    const controller = new Controller({
+      modules: {
+        foo: {
+          modules: {},
+          signals: {},
+          state: {}
+        }
+      }
+    })
+    assert.deepEqual(controller.getModule('foo'), {
+      modules: {},
+      signals: {},
+      state: {}
+    })
+  })
+  it('should expose method to removeModule using path', () => {
+    const controller = new Controller({
+      modules: {
+        foo: {
+          modules: {},
+          signals: {},
+          state: {}
+        }
+      }
+    })
+    controller.removeModule('foo')
+    assert.deepEqual(controller.getModule('foo', undefined))
+  })
+  it('should expose method to addModule using path', () => {
+    const controller = new Controller({
+      state: {}
+    })
+    const module = {
+      modules: {},
+      signals: {},
+      state: {}
+    }
+    controller.addModule('foo', module)
+    assert.deepEqual(controller.getModule('foo'), module)
+  })
 })
