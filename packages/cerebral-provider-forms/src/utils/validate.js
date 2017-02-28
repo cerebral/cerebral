@@ -3,7 +3,7 @@ import rules from '../rules.js'
 export default function validate (form, value, validationRules) {
   const initialValidation = {
     isValid: true,
-    failedRuleIndex: null
+    failedRule: null
   }
 
   if (!validationRules) {
@@ -15,53 +15,32 @@ export default function validate (form, value, validationRules) {
       return result
     }
 
-    let validation
+    const ruleArray = validationRule instanceof RegExp ? ['regexp'] : validationRule.split(/:(.+)?/)
+    const ruleKey = ruleArray[0]
+    const rule = rules[ruleKey] || function () {
+      throw new Error(`Rule ${ruleKey} is not found`)
+    }
+    let arg
 
-    // Convert string to object form
-    if (typeof validationRule === 'string') {
-      const args = validationRule.split(/:(.+)?/)
-
-      validation = {}
-
-      if (args[1]) {
-        try {
-          validation[args[0]] = JSON.parse(args[1])
-        } catch (e) {
-          validation[args[0]] = args[1]
-        }
-      } else {
-        validation[args[0]] = undefined
+    if (validationRule instanceof RegExp) {
+      arg = validationRule
+    } else if (typeof ruleArray[1] !== 'undefined') {
+      try {
+        arg = JSON.parse(ruleArray[1])
+      } catch (e) {
+        arg = ruleArray[1]
       }
     } else {
-      validation = validationRule
+      arg = undefined
     }
 
-    const isValidResult = Object.keys(validation).reduce((currentIsValidResult, key) => {
-      if (!currentIsValidResult.isValid) {
-        return currentIsValidResult
-      }
-
-      const rule = rules[key] || function () {
-        throw new Error(`Rule ${key} is not found`)
-      }
-
-      return {
-        isValid: rule(value, form, validation[key]),
-        key,
-        value,
-        args: validation[key]
-      }
-    }, {
-      isValid: true,
-      value: null,
-      key: null,
-      args: null
-    })
-
     return {
-      isValid: isValidResult.isValid,
-      failedRuleIndex: index,
-      errorMessage: rules._errorMessages[isValidResult.key] ? rules._errorMessages[isValidResult.key](isValidResult.value, isValidResult.args) : null
+      isValid: rule(value, form, arg),
+      failedRule: {
+        name: ruleKey,
+        arg
+      },
+      errorMessage: rules._errorMessages[ruleKey] ? rules._errorMessages[ruleKey](value, arg) : null
     }
   }, initialValidation)
 }

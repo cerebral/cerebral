@@ -53,7 +53,8 @@ describe('form', () => {
             assert.equal(form.name.requiredMessage, null)
             assert.equal(form.name.hasValue, true)
             assert.equal(form.name.isPristine, true)
-            assert.equal(form.name.failedRuleIndex, 0)
+            assert.equal(form.name.failedRule.name, 'minLength')
+            assert.equal(form.name.failedRule.arg, 4)
           }
         ]
       }
@@ -208,32 +209,8 @@ describe('form', () => {
             ({forms}) => {
               const form = forms.get('form')
               assert.equal(form.isValid, false)
-              assert.equal(form.name.failedRuleIndex, 1)
-            }
-          ]
-        }
-      })
-      controller.getSignal('test')()
-    })
-    it('should validate with combined rules', () => {
-      const controller = Controller({
-        providers: [FormsProvider()],
-        state: {
-          form: {
-            name: {
-              value: 'Ben',
-              validationRules: [{
-                minLength: 2,
-                isNumeric: true
-              }]
-            }
-          }
-        },
-        signals: {
-          test: [
-            ({forms}) => {
-              const form = forms.get('form')
-              assert.equal(form.isValid, false)
+              assert.equal(form.name.failedRule.name, 'isNumeric')
+              assert.equal(form.name.failedRule.arg, undefined)
             }
           ]
         }
@@ -279,6 +256,28 @@ describe('form', () => {
             ({forms}) => {
               const form = forms.get('form')
               assert.equal(form.isValid, false)
+            }
+          ]
+        }
+      })
+      controller.getSignal('test')()
+    })
+    it('should validate using regexp', () => {
+      const controller = Controller({
+        providers: [FormsProvider()],
+        state: {
+          form: {
+            someField: {
+              value: 'foo',
+              isValueRules: [/foo/]
+            }
+          }
+        },
+        signals: {
+          test: [
+            ({forms}) => {
+              const form = forms.get('form')
+              assert.equal(form.isValid, true)
             }
           ]
         }

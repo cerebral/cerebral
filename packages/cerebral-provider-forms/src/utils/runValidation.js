@@ -13,7 +13,7 @@ export default function runValidation (field, form) {
   const validationResult = {
     isValid,
     hasValue: checkHasValue(form, field.value, isValueRules),
-    failedRuleIndex: result.failedRuleIndex
+    failedRule: result.failedRule
   }
 
   if (result.errorMessage) {
