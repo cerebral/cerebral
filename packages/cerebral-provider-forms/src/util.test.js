@@ -13,11 +13,6 @@ describe('utils', () => {
     assert.equal(hasValue, false)
   })
 
-  it('should accept object validationRules', () => {
-    const hasValue = checkHasValue(null, ' ', [{isValue: true}])
-    assert.equal(hasValue, true)
-  })
-
   it('should throw error for undefined validationRule', () => {
     assert.throws(() => { checkHasValue(null, ' ', ['someValidationRule']) }, Error, 'Rule someValidationRule is not found')
   })
