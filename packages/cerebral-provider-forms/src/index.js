@@ -7,10 +7,16 @@ export {default as form} from './form'
 export {default as rules} from './rules'
 
 function FormsProvider (options = {}) {
-  let cachedProvider = null
+  if (options.rules) {
+    Object.assign(rules, options.rules)
+  }
 
-  function createProvider (context) {
-    return {
+  if (options.errorMessages) {
+    rules._errorMessages = options.errorMessages
+  }
+
+  return (context) => {
+    context.forms = {
       get (path) {
         return context.resolve.value(form(state`${path}`))
       },
@@ -26,18 +32,6 @@ function FormsProvider (options = {}) {
         Object.assign(rules._errorMessages, errormessages)
       }
     }
-  }
-
-  if (options.rules) {
-    Object.assign(rules, options.rules)
-  }
-
-  if (options.errorMessages) {
-    rules._errorMessages = options.errorMessages
-  }
-
-  return (context) => {
-    context.forms = cachedProvider = cachedProvider || createProvider(context)
 
     if (context.debugger) {
       context.debugger.wrapProvider('forms')
