@@ -200,19 +200,17 @@ class Controller extends FunctionTree {
   addModule (path, module) {
     const pathArray = path.split('.')
     const moduleKey = pathArray.pop()
-
     const parentModule = pathArray.reduce((currentModule, key) => {
       if (!currentModule) {
         throwError(`The path "${pathArray.join('.')}" is invalid, can not add module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
       }
-      console.log(currentModule.modules[key])
       return currentModule.modules[key]
     }, this)
 
     parentModule.module.modules[moduleKey] = module
 
     if (module.state) {
-      this.model.set(pathArray, module.state)
+      this.model.set(path.split('.'), module.state)
     }
 
     if (module.provider) {
@@ -238,35 +236,19 @@ class Controller extends FunctionTree {
       return currentModule.modules[key]
     }, this)
 
-    delete parentModule.module.modules[moduleKey]
-
-    this.model.unset(pathArray)
+    const module = parentModule.module.modules[moduleKey]
 
     if (module.provider) {
       this.contextProviders.splice(this.contextProviders.indexOf(module.provider), 1)
     }
 
+    delete parentModule.module.modules[moduleKey]
+
+    this.model.unset(path.split('.'))
+
     this.flush()
   }
 
-  getModule (path) {
-    if (!path) {
-      console.warn('Controller.getModule requires a Module Path')
-      return null
-    }
-    const pathArray = path.split('.')
-    const moduleKey = pathArray.pop()
-
-    const parentModule = pathArray.reduce((currentModule, key) => {
-      return currentModule.modules[key]
-    }, this)
-
-    return parentModule.module.modules[moduleKey]
-  }
-
-  getModules () {
-    return this.module.modules
-  }
 }
 
 export default function (...args) {
