@@ -1,15 +1,13 @@
 # cerebral-provider-firebase
 
-## Install
-`npm install cerebral-provider-firebase`
+## install
+`npm install cerebral-provider-firebase@next --save --save-next`
 
-## Description
+## description
 The Firebase provider is a Cerebral friendly wrapper around the Firebase client. By default the Firebase client is heavily event based, even just getting some value, handling authentication etc. This is useful in some types of apps, but Cerebral has a very straight forward way of thinking about side effects. You will find that a lot of the API exposed by the Firebase client is simplified!
 
 
-## API
-
-### instantiate
+## instantiate
 
 ```javascript
 import {Controller} from 'cerebral'
@@ -40,7 +38,7 @@ const controller = Controller({
 
 - All factories supports template tags, allowing you to dynamically create paths and points to values
 
-### set
+## set
 Write data to this database location. This will overwrite any data at this location and all child locations. Passing **null** for the new value is equivalent to calling remove(); all data at this location or any child location will be deleted.
 
 *action*
@@ -65,7 +63,7 @@ export default [
 ]
 ```
 
-### update
+## update
 As opposed to the set() method, update() can be use to selectively update only the referenced properties at the current location (instead of replacing all the child properties at the current location).
 
 *action*
@@ -96,7 +94,7 @@ export default [
 ]
 ```
 
-### push
+## push
 Generates a new child location using a unique key and returns its reference from the action. An example being `{key: "-KWKImT_t3SLmkJ4s3-w"}`.
 
 *action*
@@ -123,7 +121,7 @@ export default [
 ]
 ```
 
-### remove
+## remove
 Remove the data at this database location.
 
 *action*
@@ -148,7 +146,7 @@ export default [
 ]
 ```
 
-### transaction
+## transaction
 Atomically modifies the data at the provided location.
 
 Unlike a normal set(), which just overwrites the data regardless of its previous value, transaction() is used to modify the existing value to a new value, ensuring there are no conflicts with other clients writing to the same location at the same time.
@@ -203,7 +201,7 @@ Note: Modifying data with set() will cancel any pending transactions at that loc
 
 Note: When using transactions with Security and Firebase Rules in place, be aware that a client needs .read access in addition to .write access in order to perform a transaction. This is because the client-side nature of transactions requires the client to read the data in order to transactionally update it.
 
-### value
+## value
 
 *action*
 ```js
@@ -227,7 +225,7 @@ export default [
 ]
 ```
 
-### onValue
+## onValue
 
 *action*
 ```js
@@ -255,7 +253,7 @@ export default [
 ]
 ```
 
-### onChildAdded
+## onChildAdded
 
 *action*
 ```js
@@ -295,7 +293,7 @@ export default [
 ]
 ```
 
-### onChildRemoved
+## onChildRemoved
 
 *action*
 ```js
@@ -325,7 +323,7 @@ export default [
 ]
 ```
 
-### onChildChanged
+## onChildChanged
 
 *action*
 ```js
@@ -355,7 +353,7 @@ export default [
 ]
 ```
 
-### task
+## task
 If you are using the [firebase-queue](https://github.com/firebase/firebase-queue) and need to create tasks, you can do that with:
 
 *action*
@@ -388,7 +386,7 @@ export default [
 ]
 ```
 
-### getUser
+## getUser
 Will resolve to `{user: {}}` if user exists. If user was redirected from Facebook/Google etc. as part of first sign in, this method will handle the confirmed registration of the user.
 
 *action*
@@ -412,7 +410,7 @@ export default [
 ]
 ```
 
-### signInAnonymously
+## signInAnonymously
 This login will method will resolve to existing anonymous or create a new one for you. Resolves to `{user: {}}`.
 
 *action*
@@ -436,7 +434,7 @@ export default [
 ]
 ```
 
-### createUserWithEmailAndPassword
+## createUserWithEmailAndPassword
 Register a new user with email and password. Resolves to `{user: {}}`.
 
 *action*
@@ -464,7 +462,7 @@ export default [
 ]
 ```
 
-### signInWithEmailAndPassword
+## signInWithEmailAndPassword
 Sign in a user with email and password. Resolves to `{user: {}}`.
 
 *action*
@@ -492,7 +490,7 @@ export default [
 ]
 ```
 
-### signInWith{PROVIDER}
+## signInWith{PROVIDER}
 Sign in a user with Facebook, Google or Github. Resolves to `{user: {}}`, or redirects.
 
 *action*
@@ -524,7 +522,7 @@ export default [
 Similar you can sign in with Google or GitHub.
 Just use `signInWithGoogle` or `signInWithGithub` instead of `signInWithFacebook`.
 
-### linkWithFacebook{PROVIDER}
+## linkWithFacebook{PROVIDER}
 Link an anonymous account with Facebook, Google or Github. Resolves to `{user: {}}`, or redirects.
 
 *action*
@@ -556,7 +554,7 @@ export default [
 Similar you can sign in with Google or GitHub.
 Just use `linkWithGoogle` or `linkWithGithub` instead of `linkWithFacebook`.
 
-### signOut
+## signOut
 Sign out user. **getUser** will now not resolve a user anymore.
 
 *action*
@@ -580,7 +578,7 @@ export default [
 ]
 ```
 
-### sendPasswordResetEmail
+## sendPasswordResetEmail
 
 *action*
 ```js
@@ -604,7 +602,7 @@ export default [
 ]
 ```
 
-### setOnDisconnect
+## setOnDisconnect
 Sets a value when Firebase detects user has disconnected.
 
 *action*
@@ -624,7 +622,7 @@ export default [
 ]
 ```
 
-### cancelOnDisconnect
+## cancelOnDisconnect
 Cancel setting a value when Firebase detects disconnect.
 
 *action*
@@ -644,7 +642,7 @@ export default [
 ]
 ```
 
-### put
+## put
 
 Upload a new file at the given location. Please note that the file is **not** stored inside the realtime database but into Google Cloud Storage (please consult filrebase documentation). This means that you need to take care of storage security as well.
 
@@ -673,7 +671,7 @@ export default [
 ]
 ```
 
-### delete
+## delete
 
 Use `delete` to remove an uploaded file. Specify the containing folder and filename.
 
