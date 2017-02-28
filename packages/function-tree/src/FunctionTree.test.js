@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import FunctionTree, {parallel} from './'
+import FunctionTree, {sequence, parallel} from './'
 import assert from 'assert'
 
 describe('FunctionTree', () => {
@@ -18,6 +18,15 @@ describe('FunctionTree', () => {
         assert.ok(true)
       }
     ])
+  })
+  it('should run sequences', () => {
+    const execute = FunctionTree()
+
+    execute(sequence(
+      () => {
+        assert.ok(true)
+      }
+    ))
   })
   it('should pass arguments to context creator and run it for each action', () => {
     const execute = FunctionTree([

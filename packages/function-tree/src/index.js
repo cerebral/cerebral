@@ -194,7 +194,7 @@ export class FunctionTree extends EventEmitter {
     args.forEach((arg) => {
       if (typeof arg === 'string') {
         name = arg
-      } else if (Array.isArray(arg)) {
+      } else if (Array.isArray(arg) || arg instanceof Sequence || arg instanceof Parallel) {
         tree = arg
       } else if (!tree && typeof arg === 'function') {
         tree = arg
