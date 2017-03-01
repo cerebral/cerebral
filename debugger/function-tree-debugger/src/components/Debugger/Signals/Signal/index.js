@@ -67,6 +67,7 @@ export default connect(props => ({
         )
         const style = isOutput ? null : {opacity: 0.3}
         const isExpanded = this.state.expandedOutputs[action.functionIndex] && this.state.expandedOutputs[action.functionIndex][output]
+        const outputs = action.outputs[output]._functionTreePrimitive ? action.outputs[output].items : action.outputs[output]
 
         return (
           <div className='signal-output' style={style} key={index}>
@@ -77,7 +78,7 @@ export default connect(props => ({
             )}
             <div className='signal-outputPath' onClick={(event) => this.toggleOutput(event, action, output)}>
               <div className={isOutput ? 'signal-outputName executed' : 'signal-outputName'}>{output}</div>
-              {isOutput || isExpanded ? action.outputs[output].map(this.renderAction) : null}
+              {isOutput || isExpanded ? outputs.map(this.renderAction) : null}
             </div>
           </div>
         )
