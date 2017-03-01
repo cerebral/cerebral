@@ -203,6 +203,16 @@ export default (View) => {
       return hasChanged
     }
     /*
+      Forces update of all computed
+    */
+    forceUpdateDependencyTrackers () {
+      Object.keys(this.dependencyTrackers).forEach((key) => {
+        this.dependencyTrackers[key].run(this.stateGetter, this.props)
+      })
+
+      return true
+    }
+    /*
       Called by component when props are passed from parent and they
       have changed. In this situation both tags and depndency trackers might
       be affected. Tags are just updated and dependency trackers are matched
@@ -217,12 +227,12 @@ export default (View) => {
       that matches the state changes. There is no need to update the tags
       as their declared state deps can not change
     */
-    _updateFromState (stateChanges) {
+    _updateFromState (stateChanges, force) {
       if (this._isUnmounting) {
         return
       }
 
-      this._update(this.props, this.updateDependencyTrackers(stateChanges, {}, this.props))
+      this._update(this.props, force ? this.forceUpdateDependencyTrackers() : this.updateDependencyTrackers(stateChanges, {}, this.props))
     }
     /*
       Run update, re-evaluating the tags and computed, if neccessary
