@@ -24,6 +24,39 @@ describe('formToJSON', () => {
       }
     })
   })
+  it('should return nested form array with only it\'s values', () => {
+    assert.deepEqual(formToJSON({
+      name: {
+        value: 'Ben'
+      },
+      age: {
+        value: 14
+      },
+      addresses: [
+        {
+          delivery: {
+            value: 'Some address'
+          }
+        },
+        {
+          delivery: {
+            value: 'Another address'
+          }
+        }
+      ]
+    }), {
+      name: 'Ben',
+      age: 14,
+      addresses: [
+        {
+          delivery: 'Some address'
+        },
+        {
+          delivery: 'Another address'
+        }
+      ]
+    })
+  })
   it('should return values for array of forms', () => {
     assert.deepEqual(formToJSON([
       {
