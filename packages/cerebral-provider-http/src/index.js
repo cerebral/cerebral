@@ -1,14 +1,40 @@
 import request from './request'
 import {urlEncode, mergeWith, createResponse} from './utils'
 import FileUpload from './fileUpload'
+
 import DEFAULT_OPTIONS from './DEFAULT_OPTIONS'
 
-export { default as FileUpload } from './fileUpload'
-export { default as httpGet } from './factories/httpGet'
-export { default as httpPost } from './factories/httpPost'
-export { default as httpPut } from './factories/httpPut'
-export { default as httpPatch } from './factories/httpPatch'
-export { default as httpDelete } from './factories/httpDelete'
+import {
+  httpGet as httpGetFactory,
+  httpPost as httpPostFactory,
+  httpPut as httpPutFactory,
+  httpPatch as httpPatchFactory,
+  httpDelete as httpDeleteFactory} from './operators'
+
+export function httpGet (...args) {
+  console.warn('Deprecation Warning: Importing httpGet directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
+  return httpGetFactory(...args)
+}
+
+export function httpPost (...args) {
+  console.warn('Deprecation Warning: Importing httpPost directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
+  return httpPostFactory(...args)
+}
+
+export function httpPut (...args) {
+  console.warn('Deprecation Warning: Importing httpPut directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
+  return httpPutFactory(...args)
+}
+
+export function httpPatch (...args) {
+  console.warn('Deprecation Warning: Importing httpPatch directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
+  return httpPatchFactory(...args)
+}
+
+export function httpDelete (...args) {
+  console.warn('Deprecation Warning: Importing httpDelete directly from cerebral-provider-http is now deprecated. Use cerebral-provider-http/operators')
+  return httpDeleteFactory(...args)
+}
 
 export default function HttpProviderFactory (passedOptions) {
   let moduleOptions = mergeWith({}, DEFAULT_OPTIONS)
@@ -103,9 +129,15 @@ export default function HttpProviderFactory (passedOptions) {
           })
         },
         fileUpload (options = {}) {
+          console.warn('Deprecation Warning: fileUpload method is now deprecated. Use uploadFile instead')
           options.url = moduleOptions.baseUrl + options.url
 
           return new FileUpload(options)
+        },
+        uploadFile (url, files, options = {}) {
+          options.url = moduleOptions.baseUrl + url
+
+          return new FileUpload(options).send(files)
         }
       }
     }
