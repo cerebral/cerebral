@@ -1,6 +1,6 @@
 import {set} from 'cerebral/operators'
 import {props, state} from 'cerebral/tags'
-import {set as setRemote} from 'cerebral-provider-firebase'
+import * as firebase from 'cerebral-provider-firebase/operators'
 import firebaseInit from '../../app/signals/firebaseInit'
 import paths from '../../../common/Collection/paths'
 
@@ -22,7 +22,7 @@ const createFirebaseUser = [
       }),
       set(props`value.email`, props`user.email`),
       ...dynamicPaths,
-      setRemote(props`remoteCollectionPath`, props`value`), {
+      firebase.set(props`remoteCollectionPath`, props`value`), {
         success: [],
         error: [
           set(state`${signInPath}.error`, props`error`)

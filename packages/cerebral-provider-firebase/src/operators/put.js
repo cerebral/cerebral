@@ -4,7 +4,7 @@ function putFactory (putPath, file, options = {}) {
       const option = options[key]
 
       if (key === 'progress') {
-        if (!(resolve.istag(option, 'state', 'signal'))) {
+        if (!(resolve.isTag(option, 'state', 'signal'))) {
           throw new Error('cerebral-module-firebase: The value for \'progress\' option should be either \'state\' or \'signal\' tag.')
         }
 
