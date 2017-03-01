@@ -3,7 +3,7 @@ import resetFormHelper from '../helpers/resetForm'
 function resetFormFactory (formPath) {
   function resetForm ({state, resolve}) {
     if (!resolve.isTag(formPath, 'state')) {
-      throw new Error('Cerebral Forms - isValidForm factory requires a STATE TAG')
+      throw new Error('Cerebral Forms - resetForm factory requires a STATE TAG')
     }
 
     const path = resolve.path(formPath)

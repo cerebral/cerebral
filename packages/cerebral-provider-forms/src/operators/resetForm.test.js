@@ -93,4 +93,24 @@ describe('resetForm', () => {
     })
     controller.getSignal('test')()
   })
+  it('should throw an error if formPath is not a STATE TAG', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
+      signals: {
+        test: [
+          resetForm('form')
+        ]
+      },
+      state: {
+        form: {
+          name: {
+            value: ''
+          }
+        }
+      }
+    })
+    assert.throws(() => {
+      controller.getSignal('test')()
+    }, Error, 'Cerebral Forms - resetForm factory requires a STATE TAG')
+  })
 })
