@@ -128,6 +128,12 @@ export default function HttpProviderFactory (passedOptions) {
             requests[url].xhr.abort()
           })
         },
+        fileUpload (options = {}) {
+          console.warn('Deprecation Warning: fileUpload method is now deprecated. Use uploadFile instead')
+          options.url = moduleOptions.baseUrl + options.url
+
+          return new FileUpload(options)
+        },
         uploadFile (url, files, options = {}) {
           options.url = moduleOptions.baseUrl + url
 
