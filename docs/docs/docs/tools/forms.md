@@ -159,7 +159,7 @@ function myAction ({forms}) {
 }
 ```
 
-### updateRules
+### updateErrorMessages
 Dynamically update global error messages:
 
 ```js
