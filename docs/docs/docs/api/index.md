@@ -64,7 +64,7 @@ controller.runSignal('someSignal', [actionA, actionB], {foo: 'bar'})
 ```
 
 ### addModule(path, module)
-Allows you to add modules to the controller
+Allows you to add modules to the controller after instantiation (lazy)
 
 ```js
 controller.addModule('someModule', module)
