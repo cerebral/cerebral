@@ -2,7 +2,6 @@ import {state} from 'cerebral/tags'
 import form from './form'
 import rules from './rules'
 import resetForm from './helpers/resetForm'
-
 export {default as form} from './form'
 export {default as rules} from './rules'
 
@@ -21,15 +20,13 @@ function FormsProvider (options = {}) {
         return context.resolve.value(form(state`${path}`))
       },
       reset (path) {
-        const pathValue = context.resolve.path(path)
-
-        context.state.set(pathValue, resetForm(context.state.get(pathValue)))
+        context.state.set(path, resetForm(context.state.get(path)))
       },
       updateRules (newRules) {
         Object.assign(rules, newRules)
       },
-      updateErrorMessages (errormessages) {
-        Object.assign(rules._errorMessages, errormessages)
+      updateErrorMessages (errorMessages) {
+        Object.assign(rules._errorMessages, errorMessages)
       }
     }
 
