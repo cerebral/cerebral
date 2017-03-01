@@ -137,4 +137,30 @@ describe('provider', () => {
     controller.getSignal('test')()
     rules._errorMessages = {}
   })
+  it('should be able to reset form', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
+      state: {
+        form: {
+          name: {
+            value: 'Be',
+            defaultValue: 'Ben',
+            validationRules: ['minLength:3']
+          }
+        }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            forms.reset('form')
+            const form = forms.get('form')
+            assert.equal(form.name.value, 'Ben')
+            assert.equal(form.name.isValid, true)
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+    rules._errorMessages = {}
+  })
 })
