@@ -73,7 +73,7 @@ export default [
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdBPZwKFDQKkAcUqRte)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBPZwKFDQKkAcUqRte)
 
 Let us look at how the **wait** operator is defined:
 
@@ -97,11 +97,11 @@ Let us create our own custom **showToast** factory. It will return a sequence of
 import {sequence} from 'cerebral'
 ...
 function showToast(message, ms) {
-  return sequence('showToast',
+  return sequence('showToast', [
     set(state`toast`, message),
     wait(ms),
     set(state`toast`, null)
-  )
+  ])
 }
 ...
 const controller = Controller(...)

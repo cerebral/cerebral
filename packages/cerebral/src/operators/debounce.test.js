@@ -32,7 +32,7 @@ describe('operator.debounce', () => {
     const controller = Controller({
       signals: {
         test: [
-          parallel(
+          parallel([
             debounce(50), {
               continue: [
                 () => {
@@ -43,7 +43,7 @@ describe('operator.debounce', () => {
               discard: [() => { result.push('discard') }]
             },
             () => { result.push('parallel') }
-          )
+          ])
         ]
       }
     })

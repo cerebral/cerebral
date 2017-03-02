@@ -22,11 +22,11 @@ describe('FunctionTree', () => {
   it('should run sequences', () => {
     const execute = FunctionTree()
 
-    execute(sequence(
+    execute(sequence([
       () => {
         assert.ok(true)
       }
-    ))
+    ]))
   })
   it('should pass arguments to context creator and run it for each action', () => {
     const execute = FunctionTree([
@@ -142,10 +142,10 @@ describe('FunctionTree', () => {
       assert.ok(true)
     })
     execute([
-      parallel(
+      parallel([
         () => {},
         () => {}
-      )
+      ])
     ])
   })
   it('should pass final payload on end event', () => {
@@ -339,10 +339,10 @@ describe('FunctionTree', () => {
     }
     const execute = FunctionTree([])
     const tree = [
-      parallel(
+      parallel([
         funcA,
         funcB
-      )
+      ])
     ]
 
     execute.once('end', () => {
@@ -370,11 +370,11 @@ describe('FunctionTree', () => {
     ]
     const execute = FunctionTree([])
     const tree = [
-      parallel(
+      parallel([
         funcA,
         funcB,
         group
-      )
+      ])
     ]
 
     execute.once('end', () => {

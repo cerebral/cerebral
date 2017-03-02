@@ -160,12 +160,12 @@ class FunctionTreeExecution extends EventEmitter {
   }
 }
 
-export function sequence (...items) {
-  return new Sequence(...items)
+export function sequence (...args) {
+  return new Sequence(...args)
 }
 
-export function parallel (...items) {
-  return new Parallel(...items)
+export function parallel (...args) {
+  return new Parallel(...args)
 }
 
 export class FunctionTree extends EventEmitter {

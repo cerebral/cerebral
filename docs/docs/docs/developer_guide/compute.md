@@ -121,7 +121,7 @@ Typically you get away with most things using Tags, but compute will help you wi
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdBaa45GzVJFOxU69Gp)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBaa45GzVJFOxU69Gp)
 
 In our application we want to sum up the number of stars. We have already implemented a naive approach, which we are going to refactor. We created an action which adds the count together:
 
@@ -189,10 +189,10 @@ import starsCount from './computeds/starsCount'
 {
   buttonClicked: [
     showToast(string`Loading data for repos...`),
-    parallel(
+    parallel([
       getRepo('cerebral'),
       getRepo('addressbar')
-    ),
+    ]),
     when(props`error`), {
       'true': showToast(string`Error: ${props`error`}`, 5000),
       'false': [

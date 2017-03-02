@@ -2,10 +2,14 @@ export class Sequence {
   constructor (...args) {
     if (typeof args[0] === 'string') {
       this.name = args[0]
-      this.items = args.slice(1)
+      this.items = args[1]
     } else {
       this.name = null
-      this.items = args
+      this.items = args[0]
+    }
+
+    if (!Array.isArray(this.items)) {
+      throw new Error('function-tree: You have not passed an array of functions to sequence')
     }
   }
   toJSON () {
@@ -22,10 +26,14 @@ export class Parallel {
   constructor (...args) {
     if (typeof args[0] === 'string') {
       this.name = args[0]
-      this.items = args.slice(1)
+      this.items = args[1]
     } else {
       this.name = null
-      this.items = args
+      this.items = args[0]
+    }
+
+    if (!Array.isArray(this.items)) {
+      throw new Error('function-tree: You have not passed an array of functions to parralel')
     }
   }
   toJSON () {

@@ -49,10 +49,10 @@ describe('StaticTree', () => {
   })
   it('should identify parallel execution', () => {
     const tree = staticTree([
-      new Parallel(
+      new Parallel([
         function a () {},
         function b () {}
-      )
+      ])
     ])
 
     assert.equal(tree._functionTreePrimitive, true)
@@ -67,10 +67,10 @@ describe('StaticTree', () => {
   })
   it('should identify parallel execution at root', () => {
     const tree = staticTree(
-      new Parallel(
+      new Parallel([
         function a () {},
         function b () {}
-      )
+      ])
     )
 
     assert.equal(tree._functionTreePrimitive, true)
@@ -87,10 +87,10 @@ describe('StaticTree', () => {
       function someFunc () {
 
       },
-      new Parallel(
+      new Parallel([
         function a () {},
         function b () {}
-      )
+      ])
     ])
 
     assert.equal(tree._functionTreePrimitive, true)
@@ -110,12 +110,12 @@ describe('StaticTree', () => {
       function someFunc () {
 
       },
-      new Parallel(
+      new Parallel([
         function a () {},
-        new Sequence(
+        new Sequence([
           function b () {}
-        )
-      )
+        ])
+      ])
     ])
 
     assert.equal(tree._functionTreePrimitive, true)

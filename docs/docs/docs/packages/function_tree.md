@@ -87,10 +87,10 @@ const sequence = require('function-tree').sequence
 function someFunction (context) {}
 function someOtherFunction (context) {}
 
-module.exports = sequence(
+module.exports = sequence([
   someFunction,
   someOtherFunction
-)
+])
 ```
 
 The first argument to **sequence** can be a string, which names the sequence. This will be shown in the debugger.
@@ -101,11 +101,10 @@ const sequence = require('function-tree').sequence
 function someFunction (context) {}
 function someOtherFunction (context) {}
 
-module.exports = sequence(
-  'My awesome sequence',
+module.exports = sequence('My awesome sequence', [
   someFunction,
   someOtherFunction
-)
+])
 ```
 
 ### parallel
@@ -115,10 +114,10 @@ const parallel = require('function-tree').parallel
 function someFunction (context) {}
 function someOtherFunction (context) {}
 
-module.exports = parallel(
+module.exports = parallel([
   someFunction,
   someOtherFunction
-)
+])
 ```
 
 Even though **someFunction** returns a Promise, **someOtherFunction** will be run immediately.

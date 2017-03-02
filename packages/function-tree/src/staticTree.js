@@ -26,7 +26,7 @@ function analyze (functions, item, isParallel) {
       items: analyze(functions, instance.items, item instanceof Parallel).items
     })
   } else if (Array.isArray(item)) {
-    return new Sequence(...item.reduce((allItems, subItem, index) => {
+    return new Sequence(item.reduce((allItems, subItem, index) => {
       if (subItem instanceof Parallel || subItem instanceof Sequence) {
         const instance = subItem.toJSON()
 

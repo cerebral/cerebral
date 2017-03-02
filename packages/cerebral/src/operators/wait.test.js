@@ -25,7 +25,7 @@ describe('operator.wait', () => {
     const controller = Controller({
       signals: {
         test: [
-          parallel(
+          parallel([
             wait(100), {
               continue: [
                 () => {
@@ -34,7 +34,7 @@ describe('operator.wait', () => {
                 }
               ]
             }
-          )
+          ])
         ]
       }
     })
