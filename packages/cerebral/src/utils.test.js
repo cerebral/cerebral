@@ -19,6 +19,9 @@ describe('utils', () => {
     it('should return true on plain objects', () => {
       assert.ok(utils.isSerializable({}))
     })
+    it('should return true on plain objects without prototype', () => {
+      assert.ok(utils.isSerializable(Object.create(null)))
+    })
     it('should return false on classes', () => {
       class Test {}
       assert.equal(utils.isSerializable(new Test()), false)
