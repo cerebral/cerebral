@@ -2,6 +2,10 @@ import {
   createStorageRef
 } from './helpers'
 
+/* options.progress expects a function which will receive
+ * details on the upload: { progress, bytesTransferred, totalBytes, state }
+ * progress is a %, state can be 'paused' or 'running'
+ */
 export default function put (path, file, options = {}) {
   const filename = options.filename || file.name
   const ref = createStorageRef(path).child(filename)

@@ -1,6 +1,6 @@
 import {set} from 'cerebral/operators'
 import {props} from 'cerebral/tags'
-import {set as setRemote} from 'cerebral-provider-firebase'
+import * as firebase from 'cerebral-provider-firebase/operators'
 import paths from '../paths'
 import timestampValue from './timestampValue'
 
@@ -12,7 +12,7 @@ export default function (moduleName) {
     set(props`value.key`, props`key`),
     ...timestampValue,
     ...dynamicPaths,
-    setRemote(props`remoteItemPath`, props`value`)
+    firebase.set(props`remoteItemPath`, props`value`)
     // This chain must be followed by {success: [], error: []}
   ]
 }

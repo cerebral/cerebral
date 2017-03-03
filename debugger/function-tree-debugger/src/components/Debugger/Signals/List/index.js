@@ -77,7 +77,7 @@ export default connect({
           key={index}>
           {signal.executionId === this.props.debugger.currentRememberedSignalExecutionId ? <div className='list-remembered' /> : null}
           {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className='list-indicator' style={signalStyle} />}
-          <span className='list-name'>{name} <small>{!prevSignal && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
+          <span className='list-name'>{name} <small>{(!prevSignal || prevSignal.groupId !== signal.groupId) && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
         </li>
       )
     }

@@ -170,8 +170,6 @@ class Model {
     })
   }
   merge (path, ...values) {
-    this.verifyValues(values, path)
-
     const value = Object.assign(...values)
 
     // If we already have an object we make it behave

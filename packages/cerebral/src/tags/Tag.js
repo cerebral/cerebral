@@ -38,12 +38,12 @@ export default class Tag {
       throwError('You can not grab a value from a Tag without getters')
     }
 
-    if (this.options.hasValue && !getters[this.type]) {
-      throwError(`Tag of type ${this.type.toUpperCase()} can not be used in this context`)
-    }
-
     if (this.options.hasValue) {
-      return typeof getters[this.type] === 'function' ? getters[this.type](this.getPath(getters)) : this.extractValueWithPath(getters[this.type], this.getPath(getters))
+      const getter = getters[this.type]
+      if (!getter) {
+        throwError(`Tag of type ${this.type.toUpperCase()} can not be used in this context`)
+      }
+      return typeof getter === 'function' ? getter(this.getPath(getters)) : this.extractValueWithPath(getter, this.getPath(getters))
     } else {
       return this.getPath(getters)
     }

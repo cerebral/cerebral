@@ -1,7 +1,6 @@
-// import {upload} from 'cerebral-provider-firebase'
 import {set, unset, when} from 'cerebral/operators'
 import {props, signal, state} from 'cerebral/tags'
-import * as firebase from 'cerebral-provider-firebase'
+import * as firebase from 'cerebral-provider-firebase/operators'
 import paths from '../paths'
 import save from './save'
 

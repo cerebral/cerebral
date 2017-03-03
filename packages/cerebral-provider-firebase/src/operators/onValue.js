@@ -1,6 +1,6 @@
 function onValueFactory (path, signal) {
   function onValue ({firebase, resolve}) {
-    firebase.onValue(resolve.value(path), resolve.value(signal))
+    firebase.onValue(resolve.value(path), resolve.path(signal))
   }
 
   return onValue

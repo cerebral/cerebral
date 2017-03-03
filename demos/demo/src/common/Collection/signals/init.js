@@ -1,6 +1,6 @@
 import {merge, set, when} from 'cerebral/operators'
 import {props, signal, state} from 'cerebral/tags'
-import {onChildAdded, onChildChanged, onChildRemoved, value} from 'cerebral-provider-firebase'
+import * as firebase from 'cerebral-provider-firebase/operators'
 import paths from '../paths'
 
 export default function init (moduleName, initState = {}) {
@@ -12,7 +12,7 @@ export default function init (moduleName, initState = {}) {
       // set props.timestamp before calling value
       return {timestamp: (new Date()).getTime()}
     },
-    value(props`remoteCollectionPath`), {
+    firebase.value(props`remoteCollectionPath`), {
       success: [
         // need to use 'merge' here to notify changes on default item keys
         merge(state`${collectionPath}`, initState),
@@ -23,7 +23,7 @@ export default function init (moduleName, initState = {}) {
           false: []
         },
         // start listening
-        onChildAdded(
+        firebase.onChildAdded(
           props`remoteCollectionPath`, signal`${moduleName}.updated`,
           {
             orderByChild: 'updated_at',
@@ -31,9 +31,9 @@ export default function init (moduleName, initState = {}) {
             startAt: props`timestamp`
           }
         ),
-        onChildChanged(
+        firebase.onChildChanged(
           props`remoteCollectionPath`, signal`${moduleName}.updated`),
-        onChildRemoved(
+        firebase.onChildRemoved(
           props`remoteCollectionPath`, signal`${moduleName}.removed`)
       ],
       error: [
