@@ -2,10 +2,11 @@ import EventEmitter from 'eventemitter3'
 import executeTree from './executeTree'
 import createStaticTree from './staticTree'
 import ExecutionProvider from './providers/Execution'
-import InputProvider from './providers/Input'
+import PropsProvider from './providers/Props'
 import PathProvider from './providers/Path'
 import Path from './Path'
 import Abort from './Abort'
+import {Sequence, Parallel} from './primitives'
 
 /*
   Need to create a unique ID for each execution to identify it
@@ -141,7 +142,7 @@ class FunctionTreeExecution extends EventEmitter {
   createContext (funcDetails, payload, prevPayload) {
     return [
       ExecutionProvider(this, Abort),
-      InputProvider(),
+      PropsProvider(),
       PathProvider()
     ].concat(this.functionTree.contextProviders).reduce(function (currentContext, contextProvider) {
       var newContext = (
@@ -157,6 +158,14 @@ class FunctionTreeExecution extends EventEmitter {
       return newContext
     }, {})
   }
+}
+
+export function sequence (...args) {
+  return new Sequence(...args)
+}
+
+export function parallel (...args) {
+  return new Parallel(...args)
 }
 
 export class FunctionTree extends EventEmitter {
@@ -185,7 +194,9 @@ export class FunctionTree extends EventEmitter {
     args.forEach((arg) => {
       if (typeof arg === 'string') {
         name = arg
-      } else if (Array.isArray(arg)) {
+      } else if (Array.isArray(arg) || arg instanceof Sequence || arg instanceof Parallel) {
+        tree = arg
+      } else if (!tree && typeof arg === 'function') {
         tree = arg
       } else if (typeof arg === 'function') {
         cb = arg

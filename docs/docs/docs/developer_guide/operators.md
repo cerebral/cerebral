@@ -1,5 +1,5 @@
 # Operators
-Creating an action for any kind of state change will be tedious. That is why Cerebral has **operators**. These operators are just functions that return an action for you. There is an operator for every kind of state change, but also other operators controlling time and execution paths.
+Creating an action for any kind of state change will be tedious. That is why Cerebral has **operators**. These operators are just functions that return an action for you. There is an operator for every kind of state change, but also other operators controlling time and execution paths. Also other packages in the Cerebral ecosystem has their own operators.
 
 ## State changes
 The most common operators you will use changes the state of your application.
@@ -62,9 +62,7 @@ import makeQueryRequest from '../chains/makeQueryRequest'
 export default [
   set(state`query`, props`query`),
   debounce(500), {
-    continue: [
-      ...makeQueryRequest
-    ],
+    continue: makeQueryRequest,
     discard: []
   }
 ]
@@ -94,11 +92,8 @@ As you can see **operators** are a powerful concept that allows you to describe 
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdBHyLJDefteJy0s821)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBHyLJDefteJy0s821)
 
-A signal can trigger an array of functions. This array we call a **chain** and the functions we call **actions**. For now, we have seen it trigger a function that changes the **subTitle** path and in this chapter, we have added a **Toast** component which displays any message set on its related state.
-
-### Refactor to operator
 Let us first change out our **updateSubtitle** action with an operator instead. Since we did a *set*, we change it out with the **set** operator. Operators also take advantage of the tags. In this case, the first argument uses a tag to target our state. The second argument could also have been a tag, but we hardcode a value instead.
 
 Now lets add a **wait** operator and another **set** to close our toast message after a few seconds. So go ahead and change our **buttonClicked** signal in *App.js* to execute 2 more actions:
@@ -119,4 +114,4 @@ import {state} from 'cerebral/tags'
 
 Now when we check again in the debugger you will see all the 3 actions executed when signal *buttonClicked* got triggered.
 
-Still speaking of the debugger did you notice the **Input: {}** in front of every action executed? Looks quite empty. Let us look at that in the next chapter! If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).
+Still speaking of the debugger did you notice the **props: {}** in front of every action executed? Looks quite empty. Let us look at that in the next chapter! If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

@@ -1,12 +1,22 @@
 # Signals
 
-The signals of Cerebral are named in past tense. So typically you would name a signal **inputChanged** or **mounted**. You call a signal just like you would call a function, the difference is that you start a function tree execution.
+The signals of Cerebral are named in past tense. So typically you would name a signal **inputChanged** or **mounted**. Going through this guide you will see what benefits this approach gives you. To trigger a signal you call it just like you would call a function, the difference is that you start a function tree execution.
 
-Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the arrays in a function-tree **chains**. These chains contains functions, we call them **actions**. So to sum up: *"signals are chains of actions"*.
+Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the functions in this tree **actions**.
+
+You can define this execution tree with a single action:
 
 ```js
-import actionA from '../actions/actionA'
-import actionB from '../actions/actionB'
+function myAction () {}
+
+export default myAction
+```
+
+Or you can group them together in a *sequence* using an array:
+
+```js
+function actionA () {}
+function actionB () {}
 
 export default [
   actionA,
@@ -14,21 +24,23 @@ export default [
 ]
 ```
 
-Cerebral runs one action after the other synchronously. When an action returns a promise it will hold until the promise resolves and then continue.
+In a sequence Cerebral runs one action after the other synchronously. When an action returns a promise it will hold until the promise resolves and then continue the sequence.
 
 ## Parallel execution
-You can also run these actions in parallel. You do that by grouping them in another array:
+You can also run these actions in parallel. You do that by using the **parallel** function:
 
 ```js
-import actionA from '../actions/actionA'
-import actionB from '../actions/actionB'
-import actionC from '../actions/actionC'
+import {parallel} from 'cerebral'
+
+function actionA () {}
+function actionB () {}
+function actionC () {}
 
 export default [
-  [
+  parallel([
     actionA,
     actionB
-  ],
+  ]),
   actionC
 ]
 ```
@@ -36,32 +48,33 @@ export default [
 If actionA returns a promise actionB will still be run instantly, meaning that they run in parallel. When both actionA and actionB is done, actionC is run.
 
 ## Composing
-Chains can be composed into an other chain by using the spread operator. This is a powerful concept that allows you to compose large pieces of logic into other parts of your application.
+Actions and a sequence of actions can be composed into other sequences of actions. This is a powerful concept that allows you to decouple a lot of your logic and compose it together wherever it is needed:
 
 ```js
-import actionA from '../actions/actionA'
-import actionB from '../actions/actionB'
-import chainA from '../chains/chainA'
+import otherActions from './otherActions'
+
+function actionA () {}
+function actionB () {}
 
 export default [
   actionA,
-  ...chainA,
+  otherActions,
   actionB
 ]
 ```
 
-Cerebral will now run this as one signal, first running *actionA*, then whatever is expressed in *chainA* and then run *actionB* last.
+Cerebral will now run this as one signal, first running *actionA*, then whatever is expressed in *otherActions* and then run *actionB* last. The debugger will even show otherActions as its own sequence of actions, meaning that composition is visualized in the debugger. If you want you could even name this otherActions sequence, giving even more debugging information.
 
 ## Running a signal
 To run a signal you can grab it from the controller:
 
 ```js
 import {Controller} from 'controller'
-import someChain from './chains/someChain'
+import someActions from './actions/someActions'
 
 const controller = Controller({
   signals: {
-    somethingHappened: someChain
+    somethingHappened: someActions
   }
 })
 
@@ -82,7 +95,6 @@ This payload is brought into the signal execution and acts as the **props** of t
 
 ```js
 connect({
-  foo: state`app.foo`,
   somethingHappened: signal`app.somethingHappened`
 },
   function MyComponent (props) {
@@ -94,7 +106,7 @@ connect({
 The payload passed to a signal is typically the core value types of JavaScript. Object, Array, String, Number or Boolean. It is also possible to pass in some special value types, like files. For a full list of supported value types, check the [state API documentation](../api/state.md).
 
 ## Tutorial
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdBGyGo09NxQfRWSNOb)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBGyGo09NxQfRWSNOb)
 
 Defining state and user interfaces is more about describing how something should look, rather than how it should update. Updates are the tricky part, this is where we usually introduce complexity in our applications.
 
@@ -118,13 +130,11 @@ const controller = Controller({
     subTitle: 'Working on my state management'
   },
   signals: {
-    buttonClicked: [
-      updateSubtitle
-    ]
+    buttonClicked: updateSubtitle
   }
 })
 ```
-We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". A signal is defined using an array containing functions. What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. We do this by pointing to our *subTitle* function, making it an item of the array. Normally you would define this function in a separate file. The **updateSubtitle** function is one of possibly multiple functions that will run when **buttonClicked** runs.
+We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. We do this by pointing to our *subTitle* function. Normally you would define this signal in a separate file.
 
 As you can see functions in a signal receives an argument, which we [destructure](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to grab the *state*. The argument itself is called the **context**. So **state** is on the **context**, as we can see here:
 

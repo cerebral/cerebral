@@ -1,24 +1,20 @@
 # Paths
-Chains can also express execution paths. For example:
+Signals can also express execution paths. For example:
 
 ```js
-import actionA from '../actions/actionA'
-import actionB from '../actions/actionB'
-import actionC from '../actions/actionC'
+function actionA () {}
+function actionB () {}
+function actionC () {}
 
 export default [
   actionA, {
-    foo: [
-      actionB
-    ],
-    bar: [
-      actionC
-    ]
+    foo: actionB,
+    bar: actionC
   }
 ]
 ```
 
-You can think of this as "if statements" in the chain. When a path is expressed after an action, the context of that action will have a **path** on its context. For example in this example:
+When an object is expressed after an action we call that object the paths of the action. The context of the action will have **path** available on its context. For example in this example:
 
 ```js
 function actionA ({path}) {
@@ -27,7 +23,7 @@ function actionA ({path}) {
 }
 ```
 
-When the action returns one of these paths, that path will be executed:
+When the action calls and returns one of these paths, that path will be executed:
 
 ```js
 function actionA ({path}) {
@@ -61,9 +57,9 @@ function actionA ({path}) {
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdBUBNJyrfqL3c6VHkr)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBUBNJyrfqL3c6VHkr)
 
-In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows (which is just another chain of actions and operators) depending on the result of the previous action.
+In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows depending on the result of the previous action.
 
 ### Http Provider
 So let us build that scenario introducing *cerebral-http-provider*. *cerebral-http-provider* is a simple http-provider which enables you to request data from servers. You could have used any other HTTP library if you wanted to. We have already added it as a configuration of the controller. The concept of **Providers** will be covered in more detail in the next chapter.
@@ -79,9 +75,7 @@ Controller({
           processResults,
           showSuccessMessage
         ],
-        error: [
-          showErrorMessage
-        ]
+        error: showErrorMessage
       }
     ]
   }
@@ -100,23 +94,23 @@ import {state, props, string} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
-    ...showToast(string`Loading data for repo: ${props`repo`}`, 2000),
+    showToast(string`Loading data for repo: ${props`repo`}`, 2000),
     getRepo, {
-      success: [
-        ...showToast(
-          string`
-            How cool is that. ${props`repo`}
-            has ${props`data.subscribers_count`}
-            subscribers and ${props`data.stargazers_count`}
-            stars!
-          `, 5000)
-      ],
-      error: [
-        ...showToast(
-          string`
-            Ooops something went wrong: ${props`data.message`}
-          `, 5000)
-      ]
+      success: showToast(
+        string`
+          How cool is that. ${props`repo`}
+          has ${props`data.subscribers_count`}
+          subscribers and ${props`data.stargazers_count`}
+          stars!
+        `,
+        5000
+      ),
+      error: showToast(
+        string`
+          Ooops something went wrong: ${props`data.message`}
+        `,
+        5000
+      )
     }
   ]
 }
@@ -132,68 +126,64 @@ The **getRepo** action can look like this:
 ...
 function getRepo({props, http, path}) {
   return http.get(`/repos/cerebral/${props.repo}`)
-    .then((response) => {
-      return path.success({data: response.result})
-    })
-    .catch((error) => {
-      return path.error({data: error.result})
-    })
+    .then(path.success)
+    .catch(path.error)
 }
 
 const controller = Controller(...)
 ```
 
-The path **success** and **error** are now available inside the action because we defined those paths after the action in the chain. Last, but not least, we need to pass in a **repo** property on our button click:
+The path **success** and **error** are now available inside the action because we defined those paths after the action in the chain. When either **.then** or **.catch** resolves it will call the path function and return it. Last, but not least, we need to pass in a **repo** property on our button click:
 
 *App.js*
 ```js
 ...
-<button onClick={() => buttonClicked({repo: 'cerebral'})>
+<button onClick={() => buttonClicked({repo: 'cerebral'})}>
   Update state
 </button>
 ...
 ```
 
 ### Parallel execution
-But there is an issue here. Did you notice that the message *Loading data for repo...* is blocking the execution for 2 seconds? It would be nice to indicate to Cerebral that actions can execute in parallel. Relax and take a sip from your coffee or beer, Cerebral has you covered!
+But there is an issue here. Did you notice that the message *Loading data for repo...* is blocking the execution for 2 seconds? It would be nice to indicate to Cerebral that actions can execute in parallel.
 
 Replace your signal with the following snippet:
 
 ```js
 {
-  buttonClicked: [
-    [
-      ...showToast(string`Loading data for repo: ${props`repo`}`, 2000),
-      getRepo, {
-        success: [
-           ...showToast(
-             string`
-               How cool is that. ${props`repo`}
-               has ${props`data.subscribers_count`}
-               subscribers and ${props`data.stargazers_count`}
-               stars!
-             `, 5000, 'success')
-        ],
-        error: [
-          ...showToast(
-            string`
-              Ooops something went wrong: ${props`data.message`}
-            `, 5000, 'error')
-        ]
-     }
-    ]
-  ]
+  buttonClicked: parallel([
+    showToast(string`Loading data for repo: ${props`repo`}`, 2000),
+    getRepo, {
+      success: showToast(
+        string`
+         How cool is that. ${props`repo`}
+         has ${props`data.subscribers_count`}
+         subscribers and ${props`data.stargazers_count`}
+         stars!
+        `,
+        5000,
+        'success'
+      ),
+      error: showToast(
+        string`
+          Ooops something went wrong: ${props`data.message`}
+        `,
+        5000,
+        'error'
+      )
+    }
+  ])
 }
 ```
 
-What is happening here? Did you spot the additional **[** and **]**? Well whenever Cerebral encounters an Array in an Array  **[action1, [action2, action3], action4]** it will start the actions within that array in parallel, so after action1 finishes action2 and action3 are executed right after each other, even though they return promises. After action2 and action3 finish, action4 will be executed.
+What is happening here? Did you spot the use of **parallel**? This is just like defining a sequence of actions only that they will run immediately, even though they return a Promise.
 
-We got, even more, flow control now, telling Cerebral to execute actions/operators in parallel by using JS arrays, and objects to diverge execution. By reading the signals you get a good understanding what the application will do. And don't forget, you do not even have to look at the code to understand this, the debugger reflects parallel execution, state changes, and even **paths** chosen.
+We got, even more, flow control now, telling Cerebral to execute actions/operators in parallel and objects to diverge execution. By reading the signals you get a good understanding what the application will do. And don't forget, you do not even have to look at the code to understand this, the debugger reflects parallel execution, state changes, and even **paths** chosen.
 
 ### Handling time
 But... there is an other issue here. Did you notice that these **showToast** action factories do not cancel each other out? So the initial 2 second wait might close the toast where it was supposed to hold for 5 seconds after a success?
 
-Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. Simply said it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behavior to be shared across them. Whenever any *showToast* is called, we want the existing pending toast timer to be discarded. This just ensures whenever we display a toast it will stay there for the time set unless a new toast is triggered.
+Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. Simply said it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behavior to be shared across them. Whenever **any** *showToast* is called, we want the existing pending toast timer to be discarded. We can do that by creating a shared debounce.
 
 ```js
 ...
@@ -216,7 +206,7 @@ function showToast (message, ms, type = null) {
 ...
 ```
 
-Congratulations! Now you know how to control your flow using **paths**. And if you need **parallel actions/operators**, well just add another array **[]** to the chain. You have even gotten insight into very complex control flow using **debounce**.
+Congratulations! Now you know how to control your flow using **paths**. And if you need **parallel actions/operators**, well just use the **parallel** function. You have even gotten insight into very complex control flow using **debounce**.
 
 ### Challenge
 

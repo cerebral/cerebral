@@ -1,6 +1,6 @@
 /* global CustomEvent */
 import WebSocket from 'ws'
-import Path from 'function-tree/lib/Path'
+import Path from '../Path'
 const VERSION = 'v1'
 
 class Devtools {

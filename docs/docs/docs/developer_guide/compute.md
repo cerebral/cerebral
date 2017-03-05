@@ -121,7 +121,7 @@ Typically you get away with most things using Tags, but compute will help you wi
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdBaa45GzVJFOxU69Gp)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBaa45GzVJFOxU69Gp)
 
 In our application we want to sum up the number of stars. We have already implemented a naive approach, which we are going to refactor. We created an action which adds the count together:
 
@@ -153,7 +153,7 @@ export default compute(
 )
 ```
 
-We depend on our repos state. Then we just count the stars and return it. When the compute is used with a component it will automatically track whatever dependencies it has and only runs when any of those dependencies change. You can use computed for even more granular control of the state and even component props dependencies, but you can read more about that later.
+We depend on our repos state. Then we just count the stars and return it. When the compute is used with a component it will automatically track whatever dependencies it has and only runs when any of those dependencies change.
 
 Let us finish this example. To do so please create a new file named *starsCount.js* containing the snippet we just looked at. Then we would like to use our computed both in the signal and we also want to show the count in our component.
 
@@ -170,8 +170,8 @@ function getRepo (repoName) {
       .then((response) => {
         return {[repoName]: response.result}
       })
-      .catch((error) => {
-        return {error: error.result}
+      .catch((response) => {
+        return {error: response.error}
       })
   }
 
@@ -188,19 +188,17 @@ import starsCount from './computeds/starsCount'
 ...
 {
   buttonClicked: [
-    ...showToast(string`Loading data for repos...`),
-    [
+    showToast(string`Loading data for repos...`),
+    parallel([
       getRepo('cerebral'),
       getRepo('addressbar')
-    ],
+    ]),
     when(props`error`), {
-      'true': [
-        ...showToast(string`Error: ${props`error`}`, 5000)
-      ],
+      'true': showToast(string`Error: ${props`error`}`, 5000),
       'false': [
         set(state`repos.cerebral`, props`cerebral`),
         set(state`repos.addressbar`, props`addressbar`),
-        ...showToast(string`The repos have ${starsCount} stars`, 5000)
+        showToast(string`The repos have ${starsCount} stars`, 5000)
       ]
     }
   ]
@@ -208,11 +206,9 @@ import starsCount from './computeds/starsCount'
 ...
 ```
 
-We also use the *when* operator to figure out if we indeed have an error, diverging execution to show an error message. If that is not the case, we update our state tree on show the message.
+We also use the *when* operator to figure out if we indeed have an error, diverging execution to show an error message. If that is not the case, we update our state tree and show the message.
 
 Note here that we also updated the *toast* to allow no time to passed in, causing it to stick.
-
-
 
 You can use computeds with other computeds, directly in tags, with operators, in actions and in components. Lets update our **App** component:
 

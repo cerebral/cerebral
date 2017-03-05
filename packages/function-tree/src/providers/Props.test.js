@@ -2,22 +2,22 @@
 import FunctionTree from '../'
 import assert from 'assert'
 
-describe('InputProvider', () => {
-  it('should have "input" on context', () => {
+describe('PropsProvider', () => {
+  it('should have "props" on context', () => {
     const execute = FunctionTree()
 
     execute([
-      ({input}) => {
-        assert.ok(input)
+      ({props}) => {
+        assert.ok(props)
       }
     ])
   })
-  it('should have initial payload on input', () => {
+  it('should have initial payload on props', () => {
     const execute = FunctionTree()
 
     execute([
-      ({input}) => {
-        assert.deepEqual(input, {
+      ({props}) => {
+        assert.deepEqual(props, {
           foo: 'bar'
         })
       }

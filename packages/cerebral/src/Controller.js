@@ -8,7 +8,6 @@ import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
 import ControllerProvider from './providers/Controller'
 import ResolveProvider from './providers/Resolve'
-import PropsProvider from './providers/Props'
 
 /*
   The controller is where everything is attached. The devtools
@@ -36,7 +35,6 @@ class Controller extends FunctionTree {
     }
 
     this.contextProviders = [
-      PropsProvider(),
       ControllerProvider(this)
     ].concat(
       this.router ? [

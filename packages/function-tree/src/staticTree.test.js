@@ -1,0 +1,133 @@
+/* eslint-env mocha */
+import staticTree from './staticTree'
+import {Sequence, Parallel} from './primitives'
+import assert from 'assert'
+
+describe('StaticTree', () => {
+  it('should create a static tree of an array', () => {
+    const tree = staticTree([
+      function test () {}
+    ])
+
+    assert.equal(tree.items.length, 1)
+    assert.equal(tree._functionTreePrimitive, true)
+    assert.equal(tree.type, 'sequence')
+    assert.equal(tree.items[0].name, 'test')
+    assert.equal(tree.items[0].functionIndex, 0)
+    assert.ok(tree.items[0].function)
+  })
+  it('should create a static tree of a function', () => {
+    const tree = staticTree(
+      function test () {}
+    )
+
+    assert.equal(tree._functionTreePrimitive, true)
+    assert.equal(tree.type, 'sequence')
+    assert.equal(tree.items.length, 1)
+    assert.equal(tree.items[0].name, 'test')
+    assert.equal(tree.items[0].functionIndex, 0)
+    assert.ok(tree.items[0].function)
+  })
+  it('should handle paths', () => {
+    const tree = staticTree([
+      function a () {}, {
+        foo: [
+          function b () {}
+        ]
+      }
+    ])
+
+    assert.equal(tree._functionTreePrimitive, true)
+    assert.equal(tree.type, 'sequence')
+    assert.equal(tree.items.length, 1)
+    assert.equal(tree.items[0].name, 'a')
+    assert.equal(tree.items[0].functionIndex, 0)
+    assert.ok(tree.items[0].function)
+    assert.equal(tree.items[0].outputs.foo.items[0].name, 'b')
+    assert.equal(tree.items[0].outputs.foo.items[0].functionIndex, 1)
+    assert.ok(tree.items[0].outputs.foo.items[0].function)
+  })
+  it('should identify parallel execution', () => {
+    const tree = staticTree([
+      new Parallel([
+        function a () {},
+        function b () {}
+      ])
+    ])
+
+    assert.equal(tree._functionTreePrimitive, true)
+    assert.equal(tree.type, 'sequence')
+    assert.equal(tree.items.length, 1)
+    assert.equal(tree.items[0].items[0].name, 'a')
+    assert.equal(tree.items[0].items[0].functionIndex, 0)
+    assert.ok(tree.items[0].items[0].function)
+    assert.equal(tree.items[0].items[1].name, 'b')
+    assert.equal(tree.items[0].items[1].functionIndex, 1)
+    assert.ok(tree.items[0].items[1].function)
+  })
+  it('should identify parallel execution at root', () => {
+    const tree = staticTree(
+      new Parallel([
+        function a () {},
+        function b () {}
+      ])
+    )
+
+    assert.equal(tree._functionTreePrimitive, true)
+    assert.equal(tree.type, 'parallel')
+    assert.equal(tree.items.length, 2)
+    assert.equal(tree.items[0].functionIndex, 0)
+    assert.ok(tree.items[0].function)
+    assert.equal(tree.items[1].name, 'b')
+    assert.equal(tree.items[1].functionIndex, 1)
+    assert.ok(tree.items[1].function)
+  })
+  it('should not identify parallel execution as outputs', () => {
+    const tree = staticTree([
+      function someFunc () {
+
+      },
+      new Parallel([
+        function a () {},
+        function b () {}
+      ])
+    ])
+
+    assert.equal(tree._functionTreePrimitive, true)
+    assert.equal(tree.type, 'sequence')
+    assert.equal(tree.items.length, 2)
+    assert.equal(tree.items[0].name, 'someFunc')
+    assert.equal(tree.items[0].functionIndex, 0)
+
+    assert.equal(tree.items[1]._functionTreePrimitive, true)
+    assert.equal(tree.items[1].items[0].name, 'a')
+    assert.equal(tree.items[1].items[0].functionIndex, 1)
+    assert.equal(tree.items[1].items[1].name, 'b')
+    assert.equal(tree.items[1].items[1].functionIndex, 2)
+  })
+  it('should allow sequence in parallel', () => {
+    const tree = staticTree([
+      function someFunc () {
+
+      },
+      new Parallel([
+        function a () {},
+        new Sequence([
+          function b () {}
+        ])
+      ])
+    ])
+
+    assert.equal(tree._functionTreePrimitive, true)
+    assert.equal(tree.type, 'sequence')
+    assert.equal(tree.items.length, 2)
+    assert.equal(tree.items[0].name, 'someFunc')
+    assert.equal(tree.items[0].functionIndex, 0)
+
+    assert.equal(tree.items[1]._functionTreePrimitive, true)
+    assert.equal(tree.items[1].items[0].name, 'a')
+    assert.equal(tree.items[1].items[0].functionIndex, 1)
+    assert.equal(tree.items[1].items[1].items[0].name, 'b')
+    assert.equal(tree.items[1].items[1].items[0].functionIndex, 2)
+  })
+})

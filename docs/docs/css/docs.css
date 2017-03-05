@@ -1,3 +1,10 @@
+img {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid #333;
+  border-radius: 3px;
+}
+
 .docs-container pre {
   background: #FFF;;
   padding: 0;

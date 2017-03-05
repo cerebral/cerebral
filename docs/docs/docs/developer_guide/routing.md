@@ -56,9 +56,7 @@ import {state} from 'cerebral/tags'
 
 export default {
   signals: {
-    routed: [
-      set(state`currentPage`, 'home')
-    ]
+    routed: set(state`currentPage`, 'home')
   }
 }
 ```
@@ -72,9 +70,7 @@ import {state} from 'cerebral/tags'
 
 export default {
   signals: {
-    routed: [
-      set(state`currentPage`, 'posts')
-    ]
+    routed: set(state`currentPage`, 'posts')
   }
 }
 ```
@@ -109,7 +105,7 @@ export default Connect({
 So this was simple page handling routing, but you can imagine that a route does not have to be a page change. It can be opening a modal, highlight some item or whatever. You are completely free to structure this. If some data fetching was needed before changing the page you would just put this in the signal.
 
 ## Tutorial
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com//bins/-KdBeIDJoRv0PQlF7uWU)
+**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBeIDJoRv0PQlF7uWU)
 
 Now that our tutorial UI gets more complex it is a good idea to separate it a little bit. We want a home tab and a repos tab. Our two repos should load when we click the repos tab or hit the url directly.
 
@@ -216,19 +212,17 @@ And update the signals as well:
   ],
   reposClicked: [
     set(state`activeTab`, 'repos'),
-    ...showToast(string`Loading data for repo: ${props`repo`}`),
-    [
+    showToast(string`Loading data for repo: ${props`repo`}`),
+    parallel([
       getRepo('cerebral'),
       getRepo('addressbar')
-    ],
+    ]),
     when(props`error`), {
-      'true': [
-        ...showToast(string`Error: ${props`error`}`, 5000, 'error')
-      ],
+      'true': showToast(string`Error: ${props`error`}`, 5000, 'error'),
       'false': [
         set(state`repos.cerebral`, props`cerebral`),
         set(state`repos.addressbar`, props`addressbar`),
-        ...showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
+        showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
       ]
     }
   ]
@@ -272,8 +266,8 @@ const controller = Controller({
 ...
 ```
 
-As you can see, defining *routes* is as easy as linking them to *signals*. When you save and load up the BIN again you can go to the addressbar and change the url to **//repos**. You will now see the signal triggers and the repos content is shown. This is exactly what happens when you click the tab as well.
+As you can see, defining *routes* is as easy as linking them to *signals*. When you save and load up the BIN again you can go to the addressbar and change the url to **/#/repos**. You will now see the signal triggers and the repos content is shown. This is exactly what happens when you click the tab as well.
 
 ### Challenge
 
-Go to your browsers addressbar and enter an invalid route like: localhost//*foo* and press Enter. Now check the log! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error. You probably need to read some more docs on the router to make this work.
+Go to your browsers addressbar and enter an invalid route like: */#/foo* and press Enter. Now check the log! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error. You probably need to read some more docs on the router to make this work.

@@ -26,29 +26,7 @@ export default {
 }
 ```
 
-You might rather want to follow the **chains** pattern, which looks like this:
-
-```js
-/modules
-  /home
-    /actions
-    /chains
-    index.js
-main.js
-```
-
-```js
-import doThis from './chains/doThis'
-
-export default {
-  signals: {
-    somethingHappened: doThis
-  }
-}
-```
-
-In this case you rather composes your signals together inside the module definition.
-
+You are free to structure however you want of course. Maybe you rather want to define signals directly in *index.js*, rather than have each one contained in a file.
 
 In the **main.js** file, the module is added to the controller:
 
@@ -65,16 +43,16 @@ const controller = Controller({
 
 Any signal and state defined inside the *home* module will live on the namespace chosen during controller instantiation.
 
-And this is how an application scales: by defining modules and submodules. Actions or chains that are common are often placed in a folder called **common**:
+And this is how an application scales: by defining modules and submodules. Actions and factories that are common are often placed in a folder called **common**:
 
 ```js
 /common
   /actions
-  /chains
+  /factories
 /modules
   /home
     /actions
-    /chains
+    /signals
     index.js
 main.js
 ```
@@ -89,11 +67,11 @@ A very important point in Cerebral is that your components do not affect the str
     index.js
 /common
   /actions
-  /chains
+  /factories
 /modules
   /home
     /actions
-    /chains
+    /signals
     index.js
 main.js
 ```
@@ -102,7 +80,7 @@ And this is it. You will never get in trouble creating a module because any acti
 
 ## Tutorial
 
-Before we begin you can have a look at [the solution over here](https://webpackbin-prod.firebaseapp.com//bins/-KdLD809oZId6qs7c9P7). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
+Before we begin you can have a look at [the solution over here](https://webpackbin-prod.firebaseapp.com/bins/-KdLD809oZId6qs7c9P7). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
 
 `npm install`
 
@@ -235,9 +213,7 @@ import {state} from 'cerebral/tags'
 const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
   if (!ms) {
-    return [
-      merge(state`app.toast`, {message, type})
-    ]
+    return merge(state`app.toast`, {message, type})
   }
 
   return [
@@ -275,9 +251,7 @@ export default {
 import {set} from 'cerebral/operators'
 import {state} from 'cerebral/tags'
 
-export default [
-  set(state`app.activeTab`, 'home')
-]
+export default set(state`app.activeTab`, 'home')
 ```
 
 As you can see any signal can point to any state. This allows you to organize your app in a way that makes sense without worrying about isolation. This is really important, because in complex applications isolation causes big challenges.
@@ -301,6 +275,7 @@ export default {
 
 *signals/clicked.js*
 ```js
+import {parallel} from 'cerebral'
 import {set, when} from 'cerebral/operators'
 import {state, props, string} from 'cerebral/tags'
 import getRepo from '../factories/getRepo'
@@ -309,19 +284,17 @@ import starsCount from '../../computed/starsCount'
 
 export default [
   set(state`app.activeTab`, 'repos'),
-  ...showToast(string`Loading data for repos...`),
-  [
+  showToast(string`Loading data for repos...`),
+  parallel([
     getRepo('cerebral'),
     getRepo('addressbar')
-  ],
+  ]),
   when(props`error`), {
-    'true': [
-      ...showToast(string`Error: ${props`error`}`, 5000, 'error')
-    ],
+    'true': showToast(string`Error: ${props`error`}`, 5000, 'error'),
     'false': [
       set(state`repos.list.cerebral`, props`cerebral`),
       set(state`repos.list.addressbar`, props`addressbar`),
-      ...showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
+      showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
     ]
   }
 ]
@@ -335,8 +308,8 @@ function getRepoFactory (repoName) {
       .then((response) => {
         return {[repoName]: response.result}
       })
-      .catch((error) => {
-        return {error: error.result}
+      .catch((response) => {
+        return {error: response.error}
       })
   }
 

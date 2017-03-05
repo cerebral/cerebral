@@ -23,8 +23,7 @@
       "index",
       "debugger",
       "the_architecture",
-      "demos",
-      "articles_and_videos",
+      "resources",
       "counter"
     ],
     "developer_guide": [
@@ -42,10 +41,11 @@
       "providers",
       "test"
     ],
-    "tools": [
+    "packages": [
       "index",
       "firebase",
-      "useragent"
+      "useragent",
+      "function_tree"
     ],
     "migration": [
       "index"

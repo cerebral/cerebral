@@ -67,6 +67,7 @@ export default connect(props => ({
         )
         const style = isOutput ? null : {opacity: 0.3}
         const isExpanded = this.state.expandedOutputs[action.functionIndex] && this.state.expandedOutputs[action.functionIndex][output]
+        const outputs = action.outputs[output]._functionTreePrimitive ? action.outputs[output].items : action.outputs[output]
 
         return (
           <div className='signal-output' style={style} key={index}>
@@ -77,18 +78,21 @@ export default connect(props => ({
             )}
             <div className='signal-outputPath' onClick={(event) => this.toggleOutput(event, action, output)}>
               <div className={isOutput ? 'signal-outputName executed' : 'signal-outputName'}>{output}</div>
-              {isOutput || isExpanded ? action.outputs[output].map(this.renderAction) : null}
+              {isOutput || isExpanded ? outputs.map(this.renderAction) : null}
             </div>
           </div>
         )
       })
     }
     renderAction (action, index) {
-      if (Array.isArray(action)) {
+      if (action._functionTreePrimitive) {
         return (
-          <div className='signal-asyncHeader' key={index}>
-            <div className='signal-async'>
-              {action.map(this.renderAction)}
+          <div key={index}>
+            <span className='signal-groupName'><strong>{action.type}</strong>{action.name ? ': ' + action.name : null}</span>
+            <div className='signal-groupHeader' key={index}>
+              <div className='signal-group'>
+                {action.items.map(this.renderAction)}
+              </div>
             </div>
           </div>
         )
@@ -114,7 +118,7 @@ export default connect(props => ({
         <div className='signal'>
           <h3 className='signal-title'>{this.props.signal.name}</h3>
           <div className='signal-chain'>
-            {this.props.signal.staticTree.map((action, index) => this.renderAction(action, index))}
+            {this.props.signal.staticTree.items.map((action, index) => this.renderAction(action, index))}
           </div>
         </div>
       )
