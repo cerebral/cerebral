@@ -1,4 +1,4 @@
-/* global CustomEvent WebSocket File FileList Blob */
+/* global CustomEvent WebSocket File FileList Blob ImageData */
 import {delay} from '../utils'
 import Path from 'function-tree/lib/Path'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
@@ -39,7 +39,7 @@ class Devtools {
     this.isResettingDebugger = false
     this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
     this.allowedTypes = []
-      .concat(this.isBrowserEnv ? [File, FileList, Blob] : [])
+      .concat(this.isBrowserEnv ? [File, FileList, Blob, ImageData] : [])
       .concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)
