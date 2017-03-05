@@ -254,4 +254,93 @@ describe('Controller', () => {
     })
     controller.getSignal('test')()
   })
+  it('should expose method to removeModule using path', () => {
+    const controller = new Controller({
+      modules: {
+        foo: {
+          modules: {},
+          signals: {},
+          state: {
+            bar: 'baz'
+          }
+        }
+      }
+    })
+    assert.ok(controller.module.modules['foo'])
+    controller.removeModule('foo')
+    assert.equal(controller.getState('foo'), undefined)
+  })
+  it('should expose method to addModule using path', () => {
+    const controller = new Controller({
+      state: {
+        test: true
+      }
+    })
+    const module = {
+      modules: {},
+      signals: {},
+      state: {bar: 'baz'}
+    }
+    controller.addModule('foo', module)
+    assert.ok(controller.module.modules['foo'])
+    assert.deepEqual(controller.module.modules, {foo: {
+      modules: {},
+      signals: {},
+      state: {
+        bar: 'baz'
+      }}})
+    assert.equal(controller.getState('foo.bar'), 'baz')
+  })
+  it('should add signals correctly when module added', () => {
+    const controller = new Controller({
+      modules: {}
+    })
+    const module = {
+      signals: {
+        bar: []
+      }
+    }
+    controller.addModule('foo', module)
+    assert.ok(controller.getSignal('foo.bar'))
+  })
+  it('should add correct state when adding module', () => {
+    const controller = new Controller({
+      state: {}
+    })
+    const module = {
+      modules: {},
+      signals: {},
+      state: {bar: 'baz'}
+    }
+    controller.addModule('foo', module)
+    assert.deepEqual(controller.getState('foo.bar'), 'baz')
+  })
+  it('should add provider to contextProviders when adding module', () => {
+    const controller = new Controller({
+      state: {}
+    })
+    const module = {
+      state: {bar: 'baz'},
+      provider () {}
+    }
+    const before = controller.contextProviders.length
+    controller.addModule('foo', module)
+    const after = controller.contextProviders.length
+    assert.equal(after, before + 1)
+  })
+  it('should remove provider from contextProviders when removing module', () => {
+    const controller = new Controller({
+      state: {},
+      modules: {
+        foo: {
+          state: {bar: 'baz'},
+          provider () {}
+        }
+      }
+    })
+    const before = controller.contextProviders.length
+    controller.removeModule('foo')
+    const after = controller.contextProviders.length
+    assert.equal(after, before - 1)
+  })
 })

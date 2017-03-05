@@ -63,6 +63,20 @@ Allows you to run an arbitrary function tree definition
 controller.runSignal('someSignal', [actionA, actionB], {foo: 'bar'})
 ```
 
+### addModule(path, module)
+Allows you to add modules to the controller after instantiation (lazy)
+
+```js
+controller.addModule('someModule', module)
+```
+
+### removeModule(path, module)
+Allows you to remove modules from the controller
+
+```js
+controller.removeModule('someModule')
+```
+
 ## Events
 
 ### initialized
