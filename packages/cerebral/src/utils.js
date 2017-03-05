@@ -49,7 +49,7 @@ export function isSerializable (value, additionalTypes = []) {
       (
         isObject(value) &&
         Object.prototype.toString.call(value) === '[object Object]' &&
-        value.constructor === Object
+        (value.constructor === Object || Object.getPrototypeOf(value) === null)
       ) ||
       typeof value === 'number' ||
       typeof value === 'string' ||
