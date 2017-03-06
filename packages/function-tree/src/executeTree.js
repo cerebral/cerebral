@@ -39,7 +39,7 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
       }
       nextBranch(payload)
     } else if (isPrimitive(currentItem, 'sequence')) {
-      runBranch(currentItem.items, 0, payload, prevPayload, nextBranch)
+      runBranch(currentItem.items, 0, payload, prevPayload, runNextItem)
     } else if (isPrimitive(currentItem, 'parallel')) {
       const itemLength = currentItem.items.length
       const payloads = []

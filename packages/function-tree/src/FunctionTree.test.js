@@ -384,4 +384,27 @@ describe('FunctionTree', () => {
 
     execute(tree)
   })
+  it('should run functions after sequence', (done) => {
+    let executedCount = 0
+    const execute = FunctionTree([])
+
+    function funcA () { executedCount++ }
+    function funcB () { executedCount++ }
+    function funcC () { executedCount++ }
+
+    const tree = [
+      [
+        funcA,
+        funcB
+      ],
+      funcC
+    ]
+
+    execute.once('end', () => {
+      assert.equal(executedCount, 3)
+      done()
+    })
+
+    execute(tree)
+  })
 })
