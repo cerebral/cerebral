@@ -18,7 +18,7 @@ Switch to the cerebral-todomvc directory in the Monorepo
 and start the dev-server:
 
 ```bash
-$ cd packages/cerebral-todomvc
+$ cd demos/todomvc
 $ npm start
 ```
 
