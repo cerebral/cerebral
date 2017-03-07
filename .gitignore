@@ -8,3 +8,6 @@ dist
 lib
 build
 *darwin-x64
+**/yarn.lock
+**/yarn-error.log
+!/yarn.lock

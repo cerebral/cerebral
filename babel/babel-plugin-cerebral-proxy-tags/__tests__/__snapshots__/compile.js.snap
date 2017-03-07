@@ -3,7 +3,7 @@ exports[`Transform proxies to template tags should allow access to variables 1`]
 import { state } from \'cerebral/tags\';
 const a = \'a\';
 const b = \'b\';
-state\`a.\${ a + b }\`;"
+state\`a.\${a + b}\`;"
 `;
 
 exports[`Transform proxies to template tags should allow for string access 1`] = `
@@ -15,13 +15,13 @@ state\`a.b\`;"
 exports[`Transform proxies to template tags should allow imported variable to be renamed 1`] = `
 "
 import { state as anotherName } from \'cerebral/tags\';
-state => anotherName\`hello.\${ anotherName\`world\` }\`;"
+state => anotherName\`hello.\${anotherName\`world\`}\`;"
 `;
 
 exports[`Transform proxies to template tags should allow nested tags should work 1`] = `
 "
 import { state } from \'cerebral/tags\';
-state\`hello.\${ state\`world\` }\`;"
+state\`hello.\${state\`world\`}\`;"
 `;
 
 exports[`Transform proxies to template tags should ignore default imports 1`] = `
@@ -45,7 +45,7 @@ state.hello.world;"
 exports[`Transform proxies to template tags should support expression in property accessor 1`] = `
 "
 import { state } from \'cerebral/tags\';
-state\`a.\${ 1 + 1 }\`;"
+state\`a.\${1 + 1}\`;"
 `;
 
 exports[`Transform proxies to template tags should throw when import is not allowed 1`] = `"unknown: The Tag \"wrongImport\" can\'t be imported"`;
