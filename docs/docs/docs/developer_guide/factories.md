@@ -73,7 +73,7 @@ export default [
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBPZwKFDQKkAcUqRte)
+**Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBPZwKFDQKkAcUqRte)
 
 Let us look at how the **wait** operator is defined:
 

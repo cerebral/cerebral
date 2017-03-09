@@ -2,9 +2,11 @@
 
 Cerebral has a powerful development tool. It knows about all the state in your application, all the state updates, side effects run, state paths currently active in your components and when they render. All the things Cerebral helps you with, it visualizes in the debugger.
 
+## Chrome extension
 The Cerebral debugger is a standalone application and a chrome extension. You can use both if you want, as the chrome extension is the fallback if the standalone debugger is not opened. You can install the chrome extension from [the google store](https://chrome.google.com/webstore/detail/cerebral2-debugger/ghoadjdodkgkbbmhhpbfhgikjgjelojc).
 
-The standalone debugger connects to your application through websockets. You will need to configure the **devtools** for this purpose (see below). Download and extract the zip for your target OS: [Mac](https://docs.google.com/uc?id=0B1pYKovu9UpybHRMRm9YZU10WUU&export=download), [Windows](https://docs.google.com/uc?id=0B1pYKovu9UpyU0lkU2UyWklMV28&export=download) or [Linux](https://docs.google.com/uc?id=0B1pYKovu9UpyWE85UWVHNFRCQkk&export=download)
+## Standalone
+The standalone debugger connects to your application through websockets and has a richer feature set. You can add multiple apps to it and if you are using function-tree on the server you can even merge execution data on client and the server. Download and extract the zip for your target OS: [Mac](https://docs.google.com/uc?id=0B1pYKovu9UpybHRMRm9YZU10WUU&export=download), [Windows](https://docs.google.com/uc?id=0B1pYKovu9UpyU0lkU2UyWklMV28&export=download) or [Linux](https://docs.google.com/uc?id=0B1pYKovu9UpyWE85UWVHNFRCQkk&export=download)
 
 You initialize the devtools by adding it to the controller.
 

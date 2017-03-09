@@ -106,7 +106,7 @@ connect({
 The payload passed to a signal is typically the core value types of JavaScript. Object, Array, String, Number or Boolean. It is also possible to pass in some special value types, like files. For a full list of supported value types, check the [state API documentation](../api/state.md).
 
 ## Tutorial
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBGyGo09NxQfRWSNOb)
+**Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBGyGo09NxQfRWSNOb)
 
 Defining state and user interfaces is more about describing how something should look, rather than how it should update. Updates are the tricky part, this is where we usually introduce complexity in our applications.
 

@@ -17,7 +17,7 @@ You will normally store other objects, arrays, strings, booleans and numbers in 
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdACuVE1vrPicewg7fm)
+**Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdACuVE1vrPicewg7fm)
 
 To define the initial state of any application all we need to do is to add it to our **Controller** in *controller.js*
 
