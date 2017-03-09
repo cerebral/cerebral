@@ -9,10 +9,10 @@ import modelClicked from './signals/modelClicked'
 import searchValueChanged from './signals/searchValueChanged'
 import escPressed from './signals/escPressed'
 
-export default {
+export default () => ({
   state: {
     settings: {},
-    initialModel: {},
+    initialModel: null,
     executingSignalsCount: 0,
     model: {},
     currentPage: 'signals',
@@ -20,14 +20,14 @@ export default {
     currentSignalExecutionId: null,
     currentRememberedMutationIndex: 0,
     signals: {},
+    executedBySignals: {},
     mutations: [],
     expandedSignalGroups: [],
     currentMutationPath: null,
     componentsMap: {},
     renders: [],
     mutationsError: false,
-    searchValue: '',
-    isCatchingUp: false
+    searchValue: ''
   },
   signals: {
     pageChanged,
@@ -41,4 +41,4 @@ export default {
     resetClicked,
     modelClicked
   }
-}
+})

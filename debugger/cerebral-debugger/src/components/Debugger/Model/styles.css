@@ -6,7 +6,7 @@
   box-sizing: border-box;
   padding: 10px;
   border: 1px solid #DDD;
-  height: calc(100vh - 60px);
+  height: calc(100vh - 101px);
   overflow-y: scroll;
 }
 

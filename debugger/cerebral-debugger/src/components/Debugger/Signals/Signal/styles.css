@@ -2,8 +2,19 @@
   background-color: #FFF;
   border-radius: 3px;
   border: 1px solid #DDD;
-  height: calc(100vh - 65px);
+  height: calc(100vh - 106px);
   overflow-y: scroll;
+}
+
+.executedBy {
+  height: auto;
+  box-shadow: 0 0 5px 2px rgba(0,0,0,0.05);
+  overflow: auto;
+}
+
+.executedByLine {
+  height: 3px;
+  border-bottom: 1px solid #DDD;
 }
 
 .clickable {

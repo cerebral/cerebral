@@ -1,8 +1,6 @@
 'use strict'
 const electron = require('electron')
 const WebSocketServer = require('ws').Server
-const defaultMenu = require('electron-default-menu')
-const storage = require('electron-json-storage')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
@@ -13,14 +11,12 @@ const url = require('url')
 let mainWindow
 
 function createWindow () {
-  const menu = defaultMenu(electron.app, electron.shell)
-  let currentClient
-  let wss
+  const clients = {}
 
-  mainWindow = new BrowserWindow({width: 800, height: 600})
+  mainWindow = new BrowserWindow({icon: path.resolve('icons', 'icon.png'), width: 800, height: 600})
   mainWindow.on('closed', function () { mainWindow = null })
   mainWindow.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
+    pathname: __dirname + '/index.html', // eslint-disable-line
     protocol: 'file:',
     slashes: true
   }))
@@ -30,52 +26,37 @@ function createWindow () {
   }
 
   electron.ipcMain.on('message', function (event, payload) {
-    if (!currentClient) {
+    if (!clients[payload.port] || !clients[payload.port].ws) {
       return
     }
-    currentClient.send(JSON.stringify(payload))
+    clients[payload.port].ws.send(JSON.stringify(payload))
   })
 
-  function initializeWebsocket () {
-    wss.on('connection', function (ws) {
-      ws.on('message', function (message) {
-        mainWindow.webContents.send('message', JSON.parse(message))
-      })
-      currentClient = ws
-    })
-  }
-
-  storage.get('selectedPort', (error, selectedPort) => {
-    if (error) {
-      throw error
+  electron.ipcMain.on('port:add', function (event, port) {
+    if (clients[port]) {
+      mainWindow.webContents.send('port:added', port)
+      return
     }
 
-    wss = new WebSocketServer({ port: typeof selectedPort === 'string' ? parseInt(selectedPort) : 8585 })
-    menu.splice(4, 0, {
-      label: 'Port',
-      submenu: [
-        '8585 (default)',
-        '8686',
-        '8787',
-        '8888',
-        '8989'
-      ].map((label) => {
-        return {
-          checked: label === selectedPort,
-          type: 'radio',
-          label,
-          click: (item, focusedWindow) => {
-            wss.close()
-            wss = new WebSocketServer({ port: parseInt(label) })
-            initializeWebsocket()
-            storage.set('selectedPort', label)
-          }
-        }
+    clients[port] = {
+      wss: new WebSocketServer({ port: Number(port) })
+    }
+    clients[port].wss.on('connection', function (ws) {
+      clients[port].ws = ws
+
+      ws.on('message', function (message) {
+        mainWindow.webContents.send('message', Object.assign(JSON.parse(message), {
+          port
+        }))
       })
     })
+    mainWindow.webContents.send('port:added', port)
+  })
 
-    electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate(menu))
-    initializeWebsocket()
+  electron.ipcMain.on('port:remove', function (event, port) {
+    clients[port].wss.close()
+
+    delete clients[port]
   })
 }
 

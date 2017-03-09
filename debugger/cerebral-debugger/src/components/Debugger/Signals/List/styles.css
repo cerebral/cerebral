@@ -7,7 +7,7 @@
   border: 1px solid #DDD;
   width: 100%;
   list-style-type: none;
-  height: calc(100vh - 115px);
+  height: calc(100vh - 156px);
   overflow-y: scroll;
 }
 

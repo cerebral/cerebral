@@ -4,6 +4,7 @@
   padding: 10px;
   overflow: hidden;
   font-size: 10px;
+    height: calc(100vh - 101px);
 }
 
 .mutations .list {

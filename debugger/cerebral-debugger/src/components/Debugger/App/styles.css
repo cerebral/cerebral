@@ -1,0 +1,55 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: "Helvetica Neue", Arial;
+  color: #333;
+  background-color: #FAFAFA;
+}
+
+.app-toolbar {
+  flex: 0 0 40px;
+  display: flex;
+}
+
+.app-mutationsError {
+  flex: 0 0 40px;
+  display: flex;
+  background-color: #eb1e1e;
+  align-items: center;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.app-mutationsError h1, .app-mutationsError h4 {
+  color: #FFF;
+  margin: 0;
+  opacity: 0.8;
+}
+
+.app-mutationsError h1 {
+  font-size: 22px;
+  margin-right: 10px;
+}
+
+.app-mutationsError h4 {
+  font-weight: normal;
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+}
+
+.app-loading {
+  text-align: center;
+}
+
+.app-loading h3 {
+  color: #333;
+}
+
+.app-disabled {
+  padding: 50px;
+  text-align: center;
+}
