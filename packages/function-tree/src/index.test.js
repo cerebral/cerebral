@@ -22,11 +22,7 @@ describe('FunctionTreeExecution', () => {
 
       runTree([
         ({execution}) => {
-          return new Promise((resolve) => {
-            setTimeout(() => {
-              resolve(execution.abort())
-            }, 1)
-          })
+          return Promise.resolve(execution.abort())
         },
         ({execution}) => {
           done(new Error('Should not continue execution.'))
