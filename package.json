@@ -46,7 +46,7 @@
     "cz-customizable": "^4.0.0",
     "cz-customizable-ghooks": "^1.5.0",
     "gh-pages": "^0.12.0",
-    "husky": "^0.12.0",
+    "husky": "^0.13.2",
     "inquirer": "^1.2.3",
     "istanbul-combine": "^0.3.0",
     "jest": "^18.1.0",
@@ -60,7 +60,7 @@
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-scripts": "0.9.4",
-    "shelljs": "^0.7.6",
+    "shelljs": "^0.7.7",
     "shx": "^0.2.2",
     "standard": "^8.6.0"
   },
