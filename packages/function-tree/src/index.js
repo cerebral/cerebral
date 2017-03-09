@@ -81,6 +81,9 @@ class FunctionTreeExecution extends EventEmitter {
       functionTree.emit('asyncFunction', execution, funcDetails, payload, result)
       result
         .then(function (result) {
+          if (result instanceof Abort) {
+            return functionTree.emit('abort', execution, funcDetails, payload)
+          }
           if (result instanceof Path) {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next(result.toJS())
