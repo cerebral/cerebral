@@ -17,7 +17,6 @@ class Devtools {
     preventPropsReplacement: false,
     bigComponentsWarning: 10,
     remoteDebugger: null,
-    multipleApps: true,
     allowedTypes: []
   }) {
     this.VERSION = VERSION
@@ -28,7 +27,6 @@ class Devtools {
     this.preventPropsReplacement = options.preventPropsReplacement || false
     this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
-    this.multipleApps = typeof options.multipleApps === 'undefined' ? true : options.multipleApps
     this.backlog = []
     this.mutations = []
     this.initialModelString = null
@@ -183,28 +181,6 @@ class Devtools {
       console.warn('The Cerebral devtools is running in a non browser environment. You have to add the remoteDebugger option')
     }
 
-    if (this.isBrowserEnv && this.multipleApps) {
-      let hidden, visibilityChange
-      if (typeof document.hidden !== 'undefined') {
-        hidden = 'hidden'
-        visibilityChange = 'visibilitychange'
-      } else if (typeof document.msHidden !== 'undefined') {
-        hidden = 'msHidden'
-        visibilityChange = 'msvisibilitychange'
-      } else if (typeof document.webkitHidden !== 'undefined') {
-        hidden = 'webkitHidden'
-        visibilityChange = 'webkitvisibilitychange'
-      }
-
-      document.addEventListener(visibilityChange, () => {
-        if (!document[hidden]) {
-          this.isResettingDebugger = true
-          this.sendBulkMessage(this.backlog)
-          this.isResettingDebugger = false
-        }
-      }, false)
-    }
-
     this.watchExecution()
   }
   /*
@@ -223,10 +199,6 @@ class Devtools {
     Sends message to chrome extension or remote debugger
   */
   sendMessage (stringifiedMessage) {
-    if (this.multipleApps && !this.isResettingDebugger) {
-      this.backlog.push(stringifiedMessage)
-    }
-
     if (this.remoteDebugger) {
       this.ws.send(stringifiedMessage)
     } else {
@@ -244,6 +216,7 @@ class Devtools {
     this.controller.on('start', (execution) => {
       const message = JSON.stringify({
         type: 'executionStart',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -263,6 +236,7 @@ class Devtools {
     this.controller.on('end', (execution) => {
       const message = JSON.stringify({
         type: 'executionEnd',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id
@@ -280,6 +254,7 @@ class Devtools {
     this.controller.on('pathStart', (path, execution, funcDetails) => {
       const message = JSON.stringify({
         type: 'executionPathStart',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -298,6 +273,7 @@ class Devtools {
     this.controller.on('functionStart', (execution, funcDetails, payload) => {
       const message = JSON.stringify({
         type: 'execution',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -321,6 +297,7 @@ class Devtools {
 
       const message = JSON.stringify({
         type: 'executionFunctionEnd',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -339,6 +316,7 @@ class Devtools {
     this.controller.on('error', (error, execution, funcDetails) => {
       const message = JSON.stringify({
         type: 'executionFunctionError',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -367,6 +345,7 @@ class Devtools {
   sendBulkMessage (messages) {
     const message = JSON.stringify({
       type: 'bulk',
+      source: 'c',
       version: this.VERSION,
       data: {
         messages
@@ -383,6 +362,7 @@ class Devtools {
     const initialModel = this.controller.model.get()
     const message = JSON.stringify({
       type: 'init',
+      source: 'c',
       version: this.VERSION,
       data: {
         initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
@@ -394,14 +374,13 @@ class Devtools {
     this.sendBulkMessage(this.backlog)
     this.isResettingDebugger = false
 
-    if (!this.multipleApps) {
-      this.backlog = []
-    }
+    this.backlog = []
 
     this.isConnected = true
 
     this.sendMessage(JSON.stringify({
       type: 'components',
+      source: 'c',
       data: {
         map: this.debuggerComponentsMap,
         render: {
@@ -443,6 +422,7 @@ class Devtools {
 
     return JSON.stringify({
       type: type,
+      source: 'c',
       version: this.VERSION,
       data: data
     }).replace(`"${PLACEHOLDER_DEBUGGING_DATA}"`, mutationString)
@@ -522,6 +502,7 @@ class Devtools {
   sendComponentsMap (componentsToRender, changes, start, end) {
     this.sendMessage(JSON.stringify({
       type: 'components',
+      source: 'c',
       data: {
         map: this.debuggerComponentsMap,
         render: {
