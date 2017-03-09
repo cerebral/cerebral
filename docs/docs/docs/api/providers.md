@@ -82,6 +82,31 @@ function someAction({myProvider}) {
 }
 ```
 
+A typical approach to creating a provider looks like this:
+
+```js
+function MyProvider (options = {}) {
+  let cachedProvider = null
+
+  function createProvider (context) {
+    return {
+      doSomething() {},
+      doSomethingElse() {}
+    }
+  }
+
+  return (context) => {
+    context.myProvider = cachedProvider = cachedProvider || createProvider(context)
+
+    if (context.debugger) {
+      context.debugger.wrapProvider('myProvider')
+    }
+
+    return context
+  }
+}
+```
+
 You should think twice when considering a provider though. Always favor signal composition and actions as those will always end up more readable and better visualized in the debugger. Providers are typically used for general enhancements, not application specific.
 
 ## Already on the context

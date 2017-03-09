@@ -105,7 +105,7 @@ export default Connect({
 So this was simple page handling routing, but you can imagine that a route does not have to be a page change. It can be opening a modal, highlight some item or whatever. You are completely free to structure this. If some data fetching was needed before changing the page you would just put this in the signal.
 
 ## Tutorial
-**Before you start,** [load this BIN on Webpackbin](https://webpackbin-prod.firebaseapp.com/bins/-KdBeIDJoRv0PQlF7uWU)
+**Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBeIDJoRv0PQlF7uWU)
 
 Now that our tutorial UI gets more complex it is a good idea to separate it a little bit. We want a home tab and a repos tab. Our two repos should load when we click the repos tab or hit the url directly.
 

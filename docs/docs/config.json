@@ -52,6 +52,8 @@
     ],
     "api": [
       "index",
+      "sequence",
+      "parallel",
       "devtools",
       "context",
       "state",
