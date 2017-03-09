@@ -1,4 +1,4 @@
-function switchType ({props, path}) {
+function switchType ({path, props}) {
   return path[props.type]()
 }
 

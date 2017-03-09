@@ -1,0 +1,50 @@
+.apps-bar {
+  background-color: #DADADA;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #DDD;
+}
+
+.apps-item {
+  position: relative;
+  padding: 5px 10px;
+  cursor: pointer;
+  height: 100%;
+  box-sizing: border-box;
+  color: #666;
+  display: flex;
+  align-items: center;
+}
+
+.apps-item-active {
+  font-weight: bold;
+}
+
+.apps-add {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.apps-item:hover {
+  color: #888;
+}
+
+.apps-item:hover .apps-remove {
+  display: block;
+}
+
+.apps-remove {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 14px;
+  font-family: verdana;
+  font-style: normal;
+  cursor: pointer;
+}
+
+.apps-remove:hover {
+  color: #333;
+}

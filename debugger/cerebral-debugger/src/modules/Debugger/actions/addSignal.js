@@ -11,14 +11,21 @@ function addSignal ({props, state, resolve}) {
     datetime: execution.datetime,
     staticTree: execution.staticTree,
     groupId: prevSignal && prevSignal.name === execution.name ? prevSignal.groupId : execution.name,
-    functionsRun: {}
+    functionsRun: {},
+    executedBy: execution.executedBy || null
   }
-  state.set(`debugger.signals.${execution.executionId}`, newSignal)
-  state.set('debugger.executingSignalsCount', state.get('debugger.executingSignalsCount') + 1)
 
-  const currentSignalExecutionId = state.get('debugger.currentSignalExecutionId')
-  if (!signalsList.length || currentSignalExecutionId === signalsList[0].executionId) {
-    state.set('debugger.currentSignalExecutionId', execution.executionId)
+  if (newSignal.executedBy) {
+    state.set(`debugger.executedBySignals.${execution.executionId}`, newSignal)
+    state.set(`debugger.signals.${newSignal.executedBy.id}.functionsRun.${newSignal.executedBy.functionIndex}.executedId`, execution.executionId)
+  } else {
+    state.set(`debugger.signals.${execution.executionId}`, newSignal)
+    state.set('debugger.executingSignalsCount', state.get('debugger.executingSignalsCount') + 1)
+
+    const currentSignalExecutionId = state.get('debugger.currentSignalExecutionId')
+    if (!signalsList.length || currentSignalExecutionId === signalsList[0].executionId) {
+      state.set('debugger.currentSignalExecutionId', execution.executionId)
+    }
   }
 }
 

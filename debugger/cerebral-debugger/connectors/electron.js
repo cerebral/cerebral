@@ -1,44 +1,42 @@
 import {ipcRenderer} from 'electron'
 
-let onChangeCallback
-let hasInitialized = false
-let backlog = []
+const addedPorts = []
 
 const connector = {
-  onEvent (cb) {
-    onChangeCallback = cb
-    if (backlog.length) {
-      backlog.forEach((message) => {
-        onChangeCallback(message)
-      })
-      backlog = []
-    }
-  },
-  sendEvent (eventName, payload = null) {
+  sendEvent (port, eventName, payload = null) {
     ipcRenderer.send('message', {
+      port,
       type: eventName,
       data: payload
     })
   },
-  connect (initCallback) {
-    ipcRenderer.on('message', (event, message) => {
-      if (message.type === 'ping') {
-        connector.sendEvent('pong')
-        return
-      }
+  addPort (port, eventCallback) {
+    if (addedPorts.indexOf(port) >= 0) {
+      return
+    }
 
-      if (hasInitialized && !onChangeCallback) {
-        backlog.push(message)
-      } else if (hasInitialized) {
-        onChangeCallback(message)
-      } else if (message.type === 'init') {
-        hasInitialized = true
-        backlog.push(message)
-        initCallback(message.version || 'v1')
+    addedPorts.push(port)
+    ipcRenderer.on('port:added', function onPortAdded (event, addedPort) {
+      if (addedPort === port) {
+        ipcRenderer.on('message', (event, message) => {
+          if (message.port !== port) {
+            return
+          }
+
+          if (message.type === 'ping') {
+            connector.sendEvent(port, 'pong')
+            return
+          }
+
+          eventCallback(message)
+        })
+        connector.sendEvent(port, 'ping')
       }
     })
-
-    connector.sendEvent('ping')
+    ipcRenderer.send('port:add', port)
+  },
+  removePort (port) {
+    ipcRenderer.send('port:remove', port)
   }
 }
 

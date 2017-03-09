@@ -3,11 +3,11 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>react-kickstart</title>
-    <meta name="description" content="just another react + webpack boilerplate">
+    <title>Cerebral Debugger</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
       html, body {
+        font-family: sans-serif;
         height: 100%;
         margin: 0;
         overflow: hidden;
@@ -20,20 +20,20 @@
         text-align: center;
       }
 
-      #error ul {
+      .requirementsList ul {
         text-align: left;
       }
 
-      #error li {
+      .requirementsList li {
         margin-bottom: 10px;
       }
 
-      #error .requirementsList {
+      .requirementsList {
         width: 400px;
         margin: 0 auto;
       }
 
-      #error a {
+      .requirementsList a {
         color: #00a1c9;
         text-decoration: none;
         cursor: pointer;
@@ -239,24 +239,9 @@
     </style>
   </head>
   <body>
-    <script>
-      const {shell} = require('electron')
-
-      function openWebsite() {
-        shell.openExternal('https://cerebral.github.io/get-started/02_debugger.html')
-      }
-    </script>
     <div id="error">
       <img src="./logo.png" width="200"/>
-      <h1>Requirements to run the debugger</h1>
-      <div class="requirementsList">
-        <ul>
-          <li>Run a Cerebral application with the devtools</li>
-          <li>Add the "remoteDebugger" option</li>
-          <li>You might need to refresh the application to connect</li>
-        </ul>
-        More information can be found <a onclick="openWebsite()">at the Cerebral website</a>
-      </div>
+      <h1>Loading...</h1>
     </div>
     <div id="root" style="height: 100%;"></div>
     <script>

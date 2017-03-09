@@ -1,140 +1,174 @@
 import './styles.css'
 import Inferno from 'inferno'
-import {connect} from 'cerebral/inferno'
-import {state, signal} from 'cerebral/tags'
-import Toolbar from './Toolbar'
-import Signals from './Signals'
-import Mutations from './Mutations'
-import Components from './Components'
-import Model from './Model'
+import jsonStorage from 'electron-json-storage'
+import connector from 'connector'
+import {Controller} from 'cerebral'
+import {Container} from 'cerebral/inferno'
+import UserAgent from 'cerebral-module-useragent'
+import DebuggerModule from '../../modules/Debugger'
 
-export default connect({
-  currentPage: state`debugger.currentPage`,
-  settings: state`debugger.settings`,
-  isSmall: state`useragent.media.small`,
-  mutationsError: state`debugger.mutationsError`,
-  isCatchingUp: state`debugger.isCatchingUp`,
-  escPressed: signal`debugger.escPressed`
-},
-  class Debugger extends Inferno.Component {
-    componentDidMount () {
-      document.body.addEventListener('keydown', (event) => {
-        if (event.keyCode === 27) {
-          this.props.escPressed()
-        }
+import AddApp from './AddApp'
+import App from './App'
+import Apps from './Apps'
+
+class Debugger extends Inferno.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isLoading: true,
+      apps: {},
+      currentApp: null,
+      showAddApp: false
+    }
+    this.addPort = this.addPort.bind(this)
+    this.addNewPort = this.addNewPort.bind(this)
+    this.cancelAddNewPort = this.cancelAddNewPort.bind(this)
+    this.changePort = this.changePort.bind(this)
+    this.removePort = this.removePort.bind(this)
+  }
+  componentDidMount () {
+    jsonStorage.get('apps', (err, storedApps) => {
+      if (err) {
+        return
+      }
+
+      const ports = Object.keys(storedApps)
+
+      this.setState({
+        apps: ports.reduce((apps, port) => {
+          apps[port] = Object.assign(storedApps[port], {
+            controller: Controller({
+              state: {
+                port,
+                type: storedApps[port].type
+              },
+              modules: {
+                debugger: DebuggerModule(),
+                useragent: UserAgent({
+                  media: {
+                    small: '(max-width: 1270px)'
+                  }
+                })
+              }
+            })
+          })
+
+          return apps
+        }, {}),
+        currentPort: ports[0] || null,
+        isLoading: false
       })
+    })
+  }
+  addPort (type, name, port) {
+    if (this.state.apps[port]) {
+      return false
     }
-    renderLayout () {
-      if (this.props.isSmall) {
-        switch (this.props.currentPage) {
-          case 'signals':
-            return (
-              <div className='debugger-content'>
-                <Signals />
-              </div>
-            )
-          case 'components':
-            return (
-              <div className='debugger-content'>
-                <Components />
-              </div>
-            )
-          case 'mutations':
-            return (
-              <div className='debugger-content'>
-                <Mutations />
-              </div>
-            )
-          case 'model':
-            return (
-              <div className='debugger-content'>
-                <Model />
-              </div>
-            )
-          default:
-            return null
-        }
-      } else {
-        switch (this.props.currentPage) {
-          case 'signals':
-            return (
-              <div className='debugger-content'>
-                <Signals />
-                <Model />
-              </div>
-            )
-          case 'components':
-            return (
-              <div className='debugger-content'>
-                <Components />
-              </div>
-            )
-          case 'mutations':
-            return (
-              <div className='debugger-content'>
-                <Mutations />
-                <Model />
-              </div>
-            )
-          case 'model':
-            return (
-              <div className='debugger-content'>
-                <Signals />
-                <Model />
-              </div>
-            )
-          default:
-            return null
-        }
-      }
-    }
-    render () {
-      if (this.props.isCatchingUp) {
-        return (
-          <div className='debugger'>
-            <div className='debugger-toolbar'>
-              <Toolbar />
-            </div>
-            <div className='debugger-disabled'>
-              <img src='logo.png' width='200' role='presentation' />
-              <h1>Loading...</h1>
-              <h3>Catching up with app state</h3>
-            </div>
-          </div>
-        )
-      }
 
-      if (this.props.settings.disableDebugger) {
-        return (
-          <div className='debugger'>
-            <div className='debugger-toolbar'>
-              <Toolbar />
-            </div>
-            <div className='debugger-disabled'>
-              <img src='logo.png' width='200' role='presentation' />
-              <h1>Disabled</h1>
-              <h3>Enable debugger and refresh</h3>
-            </div>
-          </div>
-        )
-      }
-      const mutationsError = this.props.mutationsError
-
-      return (
-        <div className='debugger'>
-          {
-            mutationsError
-            ? <div className='debugger-mutationsError'>
-              <h1>Ops!</h1>
-              <h4>Signal "{mutationsError.signalName}" causes an error doing <strong>{mutationsError.mutation.name}</strong>("{mutationsError.mutation.path.join('.')}", {JSON.stringify(mutationsError.mutation.args).replace(/^\[/, '').replace(/]$/, '')})</h4>
-            </div>
-            : <div className='debugger-toolbar'>
-              <Toolbar />
-            </div>
+    const apps = Object.assign(this.state.apps, {
+      [port]: {
+        name,
+        type,
+        controller: Controller({
+          state: {
+            port,
+            type
+          },
+          modules: {
+            debugger: DebuggerModule,
+            useragent: UserAgent({
+              media: {
+                small: '(max-width: 1270px)'
+              }
+            })
           }
-          {this.renderLayout()}
-        </div>
+        })
+      }
+    })
+
+    this.setState({
+      apps,
+      currentPort: port,
+      showAddApp: false
+    })
+
+    this.storeCurrentApps(apps)
+  }
+  storeCurrentApps (apps) {
+    jsonStorage.set('apps', Object.keys(apps).reduce((appsToStore, port) => {
+      appsToStore[port] = {
+        name: apps[port].name,
+        type: apps[port].type
+      }
+
+      return appsToStore
+    }, {}))
+  }
+  addNewPort () {
+    this.setState({
+      showAddApp: true
+    })
+  }
+  cancelAddNewPort () {
+    this.setState({
+      showAddApp: false
+    })
+  }
+  changePort (port) {
+    this.setState({
+      currentPort: port
+    })
+  }
+  removePort (portToRemove) {
+    const newApps = Object.keys(this.state.apps)
+      .filter((port) => port !== portToRemove)
+      .reduce((apps, remainingPort) => {
+        apps[remainingPort] = this.state.apps[remainingPort]
+
+        return apps
+      }, {})
+
+    this.setState({
+      apps: newApps,
+      currentPort: portToRemove === this.state.currentPort ? Object.keys(newApps)[0] : this.state.currentPort
+    })
+
+    connector.removePort(portToRemove)
+    this.storeCurrentApps(newApps)
+  }
+  render () {
+    if (this.state.isLoading) {
+      return null
+    }
+
+    if (this.state.showAddApp || !Object.keys(this.state.apps).length) {
+      return (
+        <AddApp
+          portsCount={Object.keys(this.state.apps).length}
+          addPort={this.addPort}
+          cancelAddNewPort={this.cancelAddNewPort}
+        />
       )
     }
+
+    const currentApp = this.state.currentPort ? this.state.apps[this.state.currentPort] : null
+
+    return (
+      <div>
+        <Apps
+          apps={this.state.apps}
+          currentPort={this.state.currentPort}
+          addNewPort={this.addNewPort}
+          cancelAddNewPort={this.cancelAddNewPort}
+          changePort={this.changePort}
+          removePort={this.removePort}
+        />
+        <Container key={this.state.currentPort} controller={currentApp.controller} style={{height: '100%'}}>
+          <App key={this.state.currentPort} />
+        </Container>
+      </div>
+    )
   }
-)
+}
+
+export default Debugger

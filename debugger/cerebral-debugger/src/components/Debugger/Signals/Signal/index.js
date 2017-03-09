@@ -4,6 +4,7 @@ import Inferno from 'inferno'
 import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
 import connector from 'connector'
+import classnames from 'classnames'
 
 import Action from './Action'
 
@@ -11,6 +12,7 @@ export default connect({
   currentPage: state`debugger.currentPage`,
   useragent: state`useragent`,
   signal: state`debugger.signals.${state`debugger.currentSignalExecutionId`}`,
+  executedBySignals: state`debugger.executedBySignals`,
   searchValue: state`debugger.searchValue`,
   mutationClicked: signal`debugger.mutationClicked`
 },
@@ -119,6 +121,10 @@ export default connect({
         this.actionHasSearchContent(action)
       )
 
+      const executedBySignal = (
+        this.props.signal.functionsRun[action.functionIndex] && this.props.signal.functionsRun[action.functionIndex].executedId
+      ) ? this.props.executedBySignals[this.props.signal.functionsRun[action.functionIndex].executedId] : null
+
       return (
         <Action
           action={action}
@@ -126,7 +132,23 @@ export default connect({
           execution={this.props.signal.functionsRun[action.functionIndex]}
           key={index}
           onMutationClick={this.onMutationClick}
-          onActionClick={this.onActionClick}>
+          onActionClick={this.onActionClick}
+          executed={executedBySignal ? (
+            <Signal
+              className={'executedBy'}
+              style={{
+                backgroundColor: '#FAFAFA'
+              }}
+              executedByColor='#EAEAEA'
+              signal={executedBySignal}
+              useragent={this.props.useragent}
+              currentPage={this.props.currentPage}
+              executedBySignals={this.props.executedBySignals}
+              searchValue={this.props.searchValue}
+              mutationClicked={() => {}}
+            />
+          ) : null}
+        >
           {action.outputs ? this.renderOutputs(action) : null}
         </Action>
       )
@@ -137,11 +159,13 @@ export default connect({
       }
 
       return (
-        <div className='signal'>
+        <div className={classnames('signal', this.props.className)} style={this.props.style}>
+          {this.props.executedByColor ? <div className='executedByLine' style={{backgroundColor: this.props.executedByColor}} /> : null}
           <h3 className='signal-title'>{this.props.signal.name}</h3>
           <div className='signal-chain'>
             {this.props.signal.staticTree.items.map((action, index) => this.renderAction(action, index))}
           </div>
+          {this.props.executedByColor ? <div className='executedByLine' style={{backgroundColor: this.props.executedByColor}} /> : null}
         </div>
       )
     }
