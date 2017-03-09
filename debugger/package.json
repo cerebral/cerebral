@@ -4,10 +4,9 @@
   "private": true,
   "main": "electron/main.js",
   "scripts": {
-    "start": "DEBUGGER_TARGET=electron NODE_ENV=development concurrently -k 'node ./electron/devServer.js' 'npm run electron'",
+    "start": "NODE_ENV=development concurrently -k 'node ./electron/devServer.js' 'npm run electron'",
     "electron": "electron .",
-    "build:chromeExtension": "NODE_ENV=production webpack --config webpack.chromeExtension.config",
-    "build:electron": "NODE_ENV=production webpack --config webpack.electron.config && npm run prepare:electron && npm run package:electron",
+    "build": "NODE_ENV=production webpack && npm run prepare:electron && npm run package:electron",
     "prepare:electron": "rimraf electron/dist electron/node_modules && node scripts/createElectronSymlink",
     "package:electron": "npm run package:electron:mac && npm run package:electron:win && npm run package:electron:linux",
     "package:electron:mac": "electron-packager ./electron CerebralDebugger --platform=darwin --icon=electron/icons/icon_mac.icns --out ./electron/dist",
@@ -19,7 +18,7 @@
   "dependencies": {
     "babel-plugin-inferno": "^1.7.0",
     "cerebral": "2.0.0-b-alpha.d6efd5f3",
-    "cerebral-module-useragent": "1.0.0-b-alpha.1c722af3",
+    "cerebral-module-useragent": "1.0.0-b-alpha.d6efd5f3",
     "classnames": "^2.2.5",
     "color": "^0.11.4",
     "electron-default-menu": "^1.0.0",
@@ -44,7 +43,6 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^1.16.2",
-    "webpack-hot-middleware": "^2.13.2",
-    "webpack-target-electron-renderer": "^0.4.0"
+    "webpack-hot-middleware": "^2.13.2"
   }
 }
