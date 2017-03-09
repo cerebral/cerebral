@@ -32,7 +32,7 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
   firebase.initializeApp(options.config)
 
   let cachedProvider = null
-  function FirebaseProvider (context) {
+  function FirebaseProvider (context, functionDetails) {
     if (cachedProvider) {
       context.firebase = cachedProvider
     } else {
@@ -56,7 +56,6 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         set,
         remove,
         transaction,
-        task: createTask(options),
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword,
         signOut: signOutService,
@@ -66,6 +65,8 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         cancelOnDisconnect
       }
     }
+
+    context.firebase.task = createTask(options, context.execution.id, functionDetails.functionIndex)
 
     if (context.debugger) {
       context.debugger.wrapProvider('firebase')

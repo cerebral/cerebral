@@ -102,15 +102,17 @@ class Devtools {
     }
   }
   watchExecution (tree) {
-    tree.on('start', (execution) => {
+    tree.on('start', (execution, payload) => {
       const message = JSON.stringify({
         type: 'executionStart',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
             name: execution.name,
             staticTree: execution.staticTree,
-            datetime: execution.datetime
+            datetime: execution.datetime,
+            executedBy: payload._execution ? payload._execution : null
           }
         }
       })
@@ -124,6 +126,7 @@ class Devtools {
     tree.on('end', (execution) => {
       const message = JSON.stringify({
         type: 'executionEnd',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id
@@ -141,6 +144,7 @@ class Devtools {
     tree.on('pathStart', (path, execution, funcDetails) => {
       const message = JSON.stringify({
         type: 'executionPathStart',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
@@ -159,6 +163,7 @@ class Devtools {
     tree.on('functionStart', (execution, funcDetails, payload) => {
       const message = this.safeStringify({
         type: 'execution',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
@@ -182,6 +187,7 @@ class Devtools {
 
       const message = this.safeStringify({
         type: 'executionFunctionEnd',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
@@ -197,10 +203,35 @@ class Devtools {
         this.backlog.push(message)
       }
     })
+    tree.on('error', (error, execution, funcDetails) => {
+      const message = JSON.stringify({
+        type: 'executionFunctionError',
+        source: 'ft',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+              func: funcDetails.function.toString()
+            }
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        this.sendMessage(message)
+      } else {
+        this.backlog.push(message)
+      }
+    })
   }
   sendInitial () {
     const message = JSON.stringify({
       type: 'init',
+      source: 'ft',
       version: this.VERSION
     })
 
@@ -232,6 +263,7 @@ class Devtools {
 
     return this.safeStringify({
       type: type,
+      source: 'ft',
       version: this.VERSION,
       data: data
     })
