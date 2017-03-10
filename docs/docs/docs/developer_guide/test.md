@@ -207,7 +207,7 @@ const value = cerebral.getState(path)
 import {CerebralTest} from 'cerebral/test'
 
 it('should accumulate a count', () => {
-  const cerebral = RunSignal({
+  const cerebral = CerebralTest({
     modules: {
       math: math()
     }
