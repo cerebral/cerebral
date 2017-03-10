@@ -204,7 +204,7 @@ class ArrayValue extends Inferno.Component {
     this.props.path.push(index)
     const arrayItem = (
       <div className='inspector-arrayItem' key={index}>
-        {renderType(item, hasNext, path.slice())}
+        {renderType(item, hasNext, path.slice(), null, this.props.highlightPath, this.props.modelChanged)}
       </div>
     )
     this.props.path.pop()
