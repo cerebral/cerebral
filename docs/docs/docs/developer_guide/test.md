@@ -212,7 +212,7 @@ it('should accumulate a count', () => {
       math: math()
     }
   })
-  cerebra.setState('math.count', 0)
+  cerebral.setState('math.count', 0)
   return cerebral.runSignal('math.plusOne').then(({state}) => {
     assert.equal(state.math.count, 1)
     return cerebral.runSignal('math.plusTwo').then(() => {
