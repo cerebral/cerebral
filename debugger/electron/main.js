@@ -29,7 +29,12 @@ function createWindow () {
     if (!clients[payload.port] || !clients[payload.port].ws) {
       return
     }
-    clients[payload.port].ws.send(JSON.stringify(payload))
+
+    if (payload.type === 'focusApp') {
+      mainWindow.webContents.send('port:focus', payload.port)
+    } else {
+      clients[payload.port].ws.send(JSON.stringify(payload))
+    }
   })
 
   electron.ipcMain.on('port:add', function (event, port) {
@@ -45,9 +50,15 @@ function createWindow () {
       clients[port].ws = ws
 
       ws.on('message', function (message) {
-        mainWindow.webContents.send('message', Object.assign(JSON.parse(message), {
-          port
-        }))
+        const parsedMessage = JSON.parse(message)
+
+        if (parsedMessage.type === 'focusApp') {
+          mainWindow.webContents.send('port:focus', port)
+        } else {
+          mainWindow.webContents.send('message', Object.assign(parsedMessage, {
+            port
+          }))
+        }
       })
     })
     mainWindow.webContents.send('port:added', port)

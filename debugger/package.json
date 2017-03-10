@@ -28,8 +28,6 @@
     "inferno-component": "^1.2.2",
     "inferno-create-element": "^1.2.2",
     "prismjs": "^1.5.1",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
     "ws": "^1.1.1"
   },
   "devDependencies": {
