@@ -48,12 +48,15 @@ You can even compose it into a Tag:
 ```js
 import computedFoo from '../computedFoo'
 import {state} from 'cerebral/tags'
+import {set} from 'cerebral/operators'
 
-state`${computedFoo}.bar`
+export default [
+  set(state`${computedFoo}.bar`, 'baz')
+]
 ```
 
 ## Getting data
-Compute can manually grab data related to where it is run. For example in **connect** you have access to both state and properties of the component. In a signal you would have access to state and the props to the signal. You do this by combining the **get** argument with a related tag:
+Compute can manually grab data related to where it is run. For example in **connect** you have access to both state and properties of the component. In a signal you would have access to state and the props to the signal. You access these manually by combining the **get** argument with a related tag:
 
 ```js
 import {compute} from 'cerebral'
@@ -145,7 +148,7 @@ import {state} from 'cerebral/tags'
 
 export default compute(
   state`repos`,
-  function starsCount (repos) {
+  (repos) => {
     return Object.keys(repos).reduce((currentCount, repoKey) => {
       return currentCount + repos[repoKey].stargazers_count
     }, 0)
@@ -240,7 +243,5 @@ export default connect({
 )
 ```
 Thats it for now regarding *Compute*. Of course summarizing some numbers is pretty simple stuff, but you can compute anything.
-
-But now it has only been Cerebral stuff, what if you want to use other libraries in your action flow? Well, refill your coffee or open up another drink and enjoy the next chapter introducing **the router**.
 
 If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

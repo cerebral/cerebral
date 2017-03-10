@@ -2,11 +2,13 @@
 
 Cerebral has a powerful development tool. It knows about all the state in your application, all the state updates, side effects run, state paths currently active in your components and when they render. All the things Cerebral helps you with, it visualizes in the debugger.
 
-## Chrome extension
-The Cerebral debugger is a standalone application and a chrome extension. You can use both if you want, as the chrome extension is the fallback if the standalone debugger is not opened. You can install the chrome extension from [the google store](https://chrome.google.com/webstore/detail/cerebral2-debugger/ghoadjdodkgkbbmhhpbfhgikjgjelojc).
+Because Cerebral can run on different environments and you might want to manage multiple apps, the debugger is a standalone application. This also opens up for further helpful tools beyond just debugging. It is an [Electron](https://electron.atom.io/) application that connects to your application through websockets. You can add multiple apps to it and if you are using function-tree on the server you can even merge execution data on client and the server.
 
-## Standalone
-The standalone debugger connects to your application through websockets and has a richer feature set. You can add multiple apps to it and if you are using function-tree on the server you can even merge execution data on client and the server. Download and extract the zip for your target OS: [Mac](https://docs.google.com/uc?id=0B1pYKovu9UpybHRMRm9YZU10WUU&export=download), [Windows](https://docs.google.com/uc?id=0B1pYKovu9UpyU0lkU2UyWklMV28&export=download) or [Linux](https://docs.google.com/uc?id=0B1pYKovu9UpyWE85UWVHNFRCQkk&export=download)
+Download and extract the zip for your target OS:
+
+- [Download debugger for MAC](https://docs.google.com/uc?id=0B1pYKovu9UpybHRMRm9YZU10WUU&export=download)
+- [Download debugger for WINDOWS](https://docs.google.com/uc?id=0B1pYKovu9UpyU0lkU2UyWklMV28&export=download)
+- [Download debugger for LINUX](https://docs.google.com/uc?id=0B1pYKovu9UpyWE85UWVHNFRCQkk&export=download)
 
 You initialize the devtools by adding it to the controller.
 
@@ -23,7 +25,8 @@ const controller = Controller({
       null
     :
       Devtools({
-        // If running standalone debugger
+        // If running standalone debugger. Some environments
+        // might require 127.0.0.1 or computer IP address
         remoteDebugger: 'localhost:8585'
       })
   )

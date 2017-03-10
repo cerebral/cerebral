@@ -25,7 +25,7 @@ function iAmAnAction ({http, path}) {
 ```
 
 ## Update props
-You update the props on the signal by returning an object form the action. This object will be merged with existing props.
+You update the props on the signal by returning an object from the action. This object will be merged with existing props.
 
 ```js
 function iAmAnAction () {
@@ -72,7 +72,14 @@ function shoutIt ({props}) {
 
 As you can see we grabbed the props just like we grabbed the state. The object we return from the action will be merged with the existing props. That means we are overriding the **message** with exclamation marks.
 
-On our first **set** operator we rather now use a tag, *props*, to define that we want to set the message from the props.
+We also add an action for setting the toast.
+
+```js
+function setToast ({state, props}) {
+  state.set('toast', props.message)
+}
+```
+
 
 ```js
 ...
@@ -82,9 +89,7 @@ import {state, props} from 'cerebral/tags'
 {
   buttonClicked: [
     shoutIt,
-    set(state`toast`, props`message`),
-    wait(4000),
-    set(state`toast`, null)
+    setToast
   ]  
 }
 ```
@@ -121,7 +126,7 @@ export default connect({
 )
 ```
 
-Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Take some time to open up the **debugger** and explore the changes you've made. You can track the flow of the props object as it is passed into the action *Input:{}* and after the action has excecuted *Output: {}*. Keep in mind that the object returned from an action will be merged with the props object and handed over to the next action. You could just as easily use a different property for the shouted message.
+Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Take some time to open up the **debugger** and explore the changes you've made. You can track the flow of the props object as it is passed into the action *props:{}* and after the action has excecuted *output: {}*. Keep in mind that the object returned from an action will be merged with the props object and handed over to the next action. You could just as easily use a different property for the shouted message.
 
 ### Challenge
 

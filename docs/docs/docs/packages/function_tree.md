@@ -4,11 +4,11 @@
 `npm install function-tree@next --save --save-exact`
 
 ## Description
-Function-tree is the what Cerebral extends to create its signal implementation. Basically a function-tree allows you to execute a tree of functions.
+Function-tree is the what Cerebral extends to create its signal implementation. Basically a function-tree allows you to execute a tree of functions. You can use the Cerebral debugger to debug function tree execution in any JS environment.
 
 Function-tree is somewhat in the same family as Rxjs and Promises. The main difference is that Rxjs and Promises  are based on value transformation. That means only the value returned from the previous function is available in the next. This works when you indeed want to transform values, but events in your application are rarely about value transformation, they are about running side effects and going through one of multiple execution paths. Function tree embraces the fact that most of what we do in application development is running side effects.
 
-Rxjs and Promises are also about execution control, but neither of them have declarative conditional execution paths, you have to write an *IF* or *SWITCH* statement. With function tree you are able to diverge the execution down paths just as declaratively as functions. This helps readability.
+Rxjs and Promises are also about execution control, but neither of them have declarative conditional execution paths, you have to write an *IF* or *SWITCH* statement or decouple streams. With function tree you are able to diverge the execution down paths just as declaratively as functions. This helps readability.
 
 ## API
 Function-tree is implemented with ES6 imports, meaning that on Node you will have to point to the specific exports, like **default**. Examples are given with Node environment.

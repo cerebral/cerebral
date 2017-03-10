@@ -8,7 +8,7 @@ The HTTP provider exposes the ability to do HTTP requests both in actions and di
 
 ```js
 import {set} from 'cerebral/operators'
-import {httpGet} from 'cerebral-provider-http'
+import {httpGet} from 'cerebral-provider-http/operators'
 import {state, props} from 'cerebral/tags'
 
 export default [
@@ -109,7 +109,7 @@ function someGetAction ({http}) {
 
 *factory*
 ```js
-import {httpGet} from 'cerebral-provider-http'
+import {httpGet} from 'cerebral-provider-http/operators'
 
 export default [
   httpGet('/items'), {
@@ -136,7 +136,7 @@ function somePostAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http'
+import {httpPost} from 'cerebral-provider-http/operators'
 import {props} from 'cerebral/tags'
 
 export default [
@@ -167,7 +167,7 @@ function somePutAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http'
+import {httpPost} from 'cerebral-provider-http/operators'
 
 export default [
   httpPut('/items', {
@@ -196,7 +196,7 @@ function somePatchAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http'
+import {httpPost} from 'cerebral-provider-http/operators'
 import {state, props, string} from 'cerebral/tags'
 
 export default [
@@ -224,7 +224,7 @@ function someDeleteAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http'
+import {httpPost} from 'cerebral-provider-http/operators'
 import {state} from 'cerebral/tags'
 
 export default [
