@@ -1,5 +1,4 @@
 const webpack = require('webpack')
-const webpackTargetElectronRenderer = require('webpack-target-electron-renderer')
 const path = require('path')
 
 const plugins = [
@@ -14,6 +13,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const config = {
+  target: 'electron-renderer',
   entry: (
     process.env.NODE_ENV === 'production' ? [] : ['webpack-hot-middleware/client?reload=true&path=http://localhost:9000/__webpack_hmr']
   ).concat([
@@ -39,12 +39,10 @@ const config = {
   },
   resolve: {
     alias: {
-      connector: path.resolve('connectors', 'electron.js')
+      connector: path.resolve('connector', 'index.js')
     }
   },
   plugins: plugins
 }
-
-config.target = webpackTargetElectronRenderer(config)
 
 module.exports = config
