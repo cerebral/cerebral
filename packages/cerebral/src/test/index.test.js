@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 import {compute} from '..'
 import {state, props} from '../tags'
-import {runCompute, runAction, runSignal, RunSignal} from '.'
+import {runCompute, runAction, runSignal, RunSignal, CerebralTest} from '.'
 import assert from 'assert'
 
 describe('test helpers', () => {
@@ -103,6 +103,45 @@ describe('test helpers', () => {
         return runSignal('test.baz').then(({state}) => {
           assert.equal(state.test.foo, 2)
         })
+      })
+    })
+  })
+
+  describe('CerebralTest factory', () => {
+    let cerebral
+
+    beforeEach(() => {
+      cerebral = CerebralTest({
+        modules: {
+          test: {
+            state: {foo: 0},
+            signals: {
+              baz: [({state}) => state.set('test.foo', state.get('test.foo') + 1)]
+            }
+          }
+        }
+      })
+    })
+
+    it('should create a cerebral helper', () => {
+      return cerebral.runSignal('test.baz').then(({state}) => {
+        assert.equal(state.test.foo, 1)
+        return cerebral.runSignal('test.baz').then(({state}) => {
+          assert.equal(state.test.foo, 2)
+        })
+      })
+    })
+
+    it('can set state', () => {
+      cerebral.setState('test.foo', 10)
+      return cerebral.runSignal('test.baz').then(({state}) => {
+        assert.equal(state.test.foo, 11)
+      })
+    })
+
+    it('can get state', () => {
+      return cerebral.runSignal('test.baz').then(() => {
+        assert.equal(cerebral.getState('test.foo'), 1)
       })
     })
   })

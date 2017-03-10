@@ -1,5 +1,6 @@
 import Path from 'function-tree/lib/Path'
 import {Controller} from '..'
+import {ensurePath, cleanPath} from '../utils'
 
 export function runCompute (compute, fixtures = {}) {
   let response
@@ -27,7 +28,7 @@ export function runSignal (signal, fixtures = {}, options = {}) {
       if (options.singleAction) {
         response.props = payload
       } else {
-        if (response[funcDetails[recordActions]]) {
+        if (!options.noDuplicateWarnings && response[funcDetails[recordActions]]) {
           console.warn(`Cerebral[runSignal]: signal contains actions with duplicate names ('${funcDetails[recordActions]}')`)
         }
         response[funcDetails[recordActions]] = {props: payload}
@@ -74,11 +75,26 @@ export function runSignal (signal, fixtures = {}, options = {}) {
   })
 }
 
-export function RunSignal (fixtures = {}, options = {}) {
+export function CerebralTest (fixtures = {}, options = {}) {
   const controller = Controller(Object.assign({}, fixtures))
-  return function (signal, props) {
-    return runSignal(signal, { props }, Object.assign({}, options, { controller }))
+  const model = controller.getModel()
+  return {
+    runSignal (signal, props) {
+      return runSignal(signal, { props }, Object.assign({}, options, {controller, noDuplicateWarnings: true}))
+    },
+    setState (path, value) {
+      model.set(ensurePath(cleanPath(path)), value)
+      model.flush()
+    },
+    getState (path) {
+      return model.get(ensurePath(cleanPath(path)))
+    }
   }
+}
+
+export function RunSignal (fixtures = {}, options = {}) {
+  console.log('RunSignal test helper is deprecated, please use CerebralTest')
+  return CerebralTest(fixtures, options).runSignal
 }
 
 export function runAction (action, fixtures = {}) {
