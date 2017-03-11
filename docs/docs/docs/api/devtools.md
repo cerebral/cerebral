@@ -21,9 +21,6 @@ const controller = Controller({
     // state dependencies or signals above the set number  
     bigComponentsWarning: 5,
 
-    // Will reset debugger to currently focused application
-    multipleApps: true,
-
     // In addition to basic JavaScript types Object, Array, String, Number
     // and Boolean, File, FileList and Blob is allowed to be stored in state
     // tree. You can add additional types if you know what you are doing :)
