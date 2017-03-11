@@ -21,10 +21,10 @@ after_success:
   fi
   if [[ $TRAVIS_BRANCH == 'master' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
     # TODO: parse commit message for instructions to skip tagging and publishing
-    git tag next -f;
-    git push auth --tags -f &>/dev/null;
-  fi
-  if [[ $TRAVIS_BRANCH == 'next' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
+    # git tag next -f;
+    # git push auth --tags -f &>/dev/null;
+  # fi
+  # if [[ $TRAVIS_BRANCH == 'next' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
     # TODO: check changed path to decide if npm publish necessary
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
     lerna bootstrap;
