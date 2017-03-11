@@ -99,15 +99,15 @@ import {state, props, string} from 'cerebral/tags'
       success: showToast(
         string`
           How cool is that. ${props`repo`}
-          has ${props`data.subscribers_count`}
-          subscribers and ${props`data.stargazers_count`}
+          has ${props`result.subscribers_count`}
+          subscribers and ${props`result.stargazers_count`}
           stars!
         `,
         5000
       ),
       error: showToast(
         string`
-          Ooops something went wrong: ${props`data.message`}
+          Ooops something went wrong: ${props`error`}
         `,
         5000
       )
@@ -192,16 +192,16 @@ import {state, props, string} from 'cerebral/tags'
 ...
 const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
-  return [
+  return sequence('showToast', [
     // We use merge as it supports evaluating tags in an object
-    merge(state`app.toast.message`, {type, message}),
+    merge(state`toast`, {type, message}),
     toastDebounce(ms), {
       continue: [
-        set(state`app.toast`, null)
+        set(state`toast`, null)
       ],
       discard: []
     }
-  ]
+  ])
 }
 ...
 ```

@@ -6,7 +6,7 @@ import Router from 'cerebral-router'
 
 const controller = Controller({
   router: Router({
-    routes: {}, // Route definitions
+    routes: [], // Route definitions
     query: false, // Query support
     onlyHash: false, // Use hash urls
     baseUrl: '/' // Only handle url changes on nested path
@@ -22,15 +22,15 @@ Let us create a small app:
 ```js
 import {Controller} from 'cerebral'
 import Router from 'cerebral-router'
-import HomeModule from './modules/Home'
-import PostsModule from './modules/Posts'
+import HomeModule from './modules/home'
+import PostsModule from './modules/posts'
 
 const controller = Controller({
   router: Router({
-    routes: {
-      '/': 'home.routed',
-      '/posts': 'posts.routed'
-    }
+    routes: [
+      {path: '/', signal: 'home.routed'},
+      {path: '/posts', signal: 'posts.routed'}
+    ]
   }),
   state: {
     currentPage: 'home'

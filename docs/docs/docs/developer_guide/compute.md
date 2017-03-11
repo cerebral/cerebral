@@ -187,7 +187,7 @@ Then we change how our signal looks:
 
 ```js
 ...
-import starsCount from './computeds/starsCount'
+import starsCount from './starsCount'
 ...
 {
   buttonClicked: [
@@ -201,7 +201,7 @@ import starsCount from './computeds/starsCount'
       'false': [
         set(state`repos.cerebral`, props`cerebral`),
         set(state`repos.addressbar`, props`addressbar`),
-        showToast(string`The repos have ${starsCount} stars`, 5000)
+        showToast(string`The repos have ${starsCount} stars`, 5000, 'success')
       ]
     }
   ]

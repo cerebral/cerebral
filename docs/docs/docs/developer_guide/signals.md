@@ -158,7 +158,7 @@ connect({
   ...
 )
 ```
-As you can see the App-Component depends on **subTitle**. That means it will render automatically whenever **subTitle** changes. Because our **updateSubtitle** function changes the path **subTitle**, Cerebral just knows which components need to update and thus there is no dirty checking or other value comparison needed.
+As you can see the App-Component depends on **subTitle**. That means it will render automatically whenever **subTitle** changes.
 
 To trigger the signal we need to wire up a click-handler on a button and add our signal **buttonClicked** to the **connect(..)** method:
 
