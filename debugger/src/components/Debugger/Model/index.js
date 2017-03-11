@@ -3,8 +3,10 @@ import Inferno from 'inferno'
 import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
 import Inspector from '../Inspector'
+import connector from 'connector'
 
 export default connect({
+  port: state`port`,
   currentPage: state`debugger.currentPage`,
   useragent: state`useragent`,
   model: state`debugger.model`,
@@ -14,6 +16,17 @@ export default connect({
   modelClicked: signal`debugger.modelClicked`
 },
   class Model extends Inferno.Component {
+    constructor (props) {
+      super(props)
+      this.onModelChange = this.onModelChange.bind(this)
+    }
+    onModelChange (payload) {
+      connector.sendEvent(this.props.port, 'changeModel', {
+        path: payload.path,
+        value: payload.value
+      })
+      this.props.modelChanged(payload)
+    }
     render () {
       return (
         <div className='model-wrapper'>
@@ -23,7 +36,7 @@ export default connect({
               expanded
               canEdit
               path={this.props.searchValue ? this.props.searchValue.split('.') : this.props.path}
-              modelChanged={this.props.modelChanged}
+              modelChanged={this.onModelChange}
             />
           </div>
         </div>
