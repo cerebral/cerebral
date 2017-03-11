@@ -59,6 +59,11 @@ class Debugger extends Inferno.Component {
         isLoading: false
       })
     })
+    connector.onPortFocus((port) => {
+      this.setState({
+        currentPort: port
+      })
+    })
   }
   addPort (type, name, port) {
     if (this.state.apps[port]) {

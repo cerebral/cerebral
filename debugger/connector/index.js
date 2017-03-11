@@ -35,6 +35,11 @@ const connector = {
     })
     ipcRenderer.send('port:add', port)
   },
+  onPortFocus (cb) {
+    ipcRenderer.on('port:focus', function onPortAdded (event, port) {
+      cb(port)
+    })
+  },
   removePort (port) {
     ipcRenderer.send('port:remove', port)
   }
