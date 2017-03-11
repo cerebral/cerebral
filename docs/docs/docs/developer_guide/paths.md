@@ -85,7 +85,7 @@ Controller({
 Where *success* and *error* are our **paths**.
 
 ### Grabbing a repo
-Let us implement something similar. We are going to grab information about github repos and display it in the toast:
+Let us implement something similar. We are going to grab information about github repos and display it in the toast. We introduce a new tag called **string**. It just evaluates the string, inserting any props or state you have defined in it:
 
 ```js
 ...
@@ -176,9 +176,9 @@ Replace your signal with the following snippet:
 }
 ```
 
-What is happening here? Did you spot the use of **parallel**? This is just like defining a sequence of actions only that they will run immediately, even though they return a Promise.
+What is happening here? Did you spot the use of **parallel**? This is just like defining a sequence of actions only that the next action will run immediately, even though the previous one returned a Promise.
 
-We got, even more, flow control now, telling Cerebral to execute actions/operators in parallel and objects to diverge execution. By reading the signals you get a good understanding what the application will do. And don't forget, you do not even have to look at the code to understand this, the debugger reflects parallel execution, state changes, and even **paths** chosen.
+We got even more flow control now, telling Cerebral to execute actions/operators in parallel and objects to diverge execution. By reading the signals you get a good understanding what the application will do. And don't forget, you do not even have to look at the code to understand this, the debugger reflects parallel execution, state changes, and even **paths** chosen.
 
 ### Handling time
 But... there is an other issue here. Did you notice that these **showToast** action factories do not cancel each other out? So the initial 2 second wait might close the toast where it was supposed to hold for 5 seconds after a success?

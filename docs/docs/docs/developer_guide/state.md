@@ -38,4 +38,4 @@ const controller = Controller({
 export default controller
 ```
 
-When you save your bin and look at the state tree you will see the state added. If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).
+When you save your bin and look at the state tree in the debugger you will see the state added. If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

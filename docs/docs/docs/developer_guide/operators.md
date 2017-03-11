@@ -94,9 +94,9 @@ As you can see **operators** are a powerful concept that allows you to describe 
 
 **Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBHyLJDefteJy0s821)
 
-Let us first change out our **updateSubtitle** action with an operator instead. Since we did a *set*, we change it out with the **set** operator. Operators also take advantage of the tags. In this case, the first argument uses a tag to target our state. The second argument could also have been a tag, but we hardcode a value instead.
+Let us first change out our actions with an operators instead. Since we did a *set*, we change it out with the **set** operator. Operators also take advantage of the tags. In this case, the first argument uses a tag to target our state. The second argument uses a tag to grab the message from the props passed into the signal.
 
-Now lets add a **wait** operator and another **set** to close our toast message after a few seconds. So go ahead and change our **buttonClicked** signal in *App.js* to execute 2 more actions:
+Now lets add a **wait** operator and another **set** to close our toast message after a few seconds. So go ahead and change our **buttonClicked** signal in *App.js* to:
 
 ```js
 ...
@@ -105,7 +105,7 @@ import {state} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
-    set(state`toast`, 'Button Clicked!'),
+    set(state`toast`, props`message`),
     wait(4000),
     set(state`toast`, null)
   ]

@@ -40,6 +40,10 @@ Cerebral does not look at the updates in your application as "value updates", bu
 1. There is no need for immutability in Cerebral because a change to a path means that any component depending on that path should render (no value comparison). In applications with large data structures immutability has a high cost. There is no need to hack objects and arrays to observe changes to them either. There is nothing special about the state you put into Cerebrals state tree
 2. Since there is no value comparison in Cerebral it uses what we call **strict render**. This allows us to do render optimizations not possible with other solutions. For example you can say that a component depending on a list is only interested in added/removed items of the list or if the list itself is being replaced
 
+### Visualize the entire app state
+When the state of the application is a single object we can use an object inspector to visualize the whole state of your application. With the Cerebral debugger it is easy to build a mental image of application state. You can even make changes directly to state to see how it affects the view layer.
+
+
 ## Render state
 Since Cerebral stores all the state of the application in a single state tree we need a way to expose that state to the components. In some frameworks this is done by passing the whole model or collection of models/stores from the top of the application and down from one component to the next. This can become very tedious and fragile as all nested components completely depend on their parent. In Cerebral the state of the application is directly connected to each component:
 
@@ -68,7 +72,7 @@ The point is, updating state can be a very complex flow of operations. This is o
 
 To handle everything from a simple toggle to very complex operations, Cerebral has the concept of **signals**. Signals allows you to compose functions together into a flow that is not only about the "happy path" but properly takes the actual paths of execution into account, them being errors or other reasons to diverge execution. You can define many different execution paths based on whatever you want (a status code, an error, some state, etc). This allows you to write decoupled code, while still bringing everything together in the form of a higher abstraction which greatly helps understanding how things relate to one another (in what order they will run, when they will run, etc). Under the hood, signals are based on [function-tree](https://github.com/cerebral/function-tree), a project that came out of the initial experimentations in the first version of Cerebral.
 
-Another powerful feature of **signals** (aka function-tree) is that there is a debugger that can track execution and understands when a signal triggers, what functions are run, what state is being updated and what other side effects are triggered.
+Another powerful feature of **signals** (aka function-tree) is that there is the debugger that can track execution and understands when a signal triggers, what functions are run, what state is being updated, what other side effects are triggered and even how these signals are composed together.
 
 ## Summary
 The architecture of Cerebral is driven by the goal to give you insight. The single state tree and the way state is connected to the components all support this vision. Creating a Cerebral application allows you and your team members to never question what actually happens when a page loads, a specific button is clicked, etc. Decoupling of state, components and state updates also makes it an overall better experience when scaling up an application as the components will be just a dumb layer that transforms a given state to a user interface.

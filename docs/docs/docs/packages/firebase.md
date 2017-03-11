@@ -55,7 +55,7 @@ function someAction({firebase, path}) {
 *factory*
 ```javascript
 import {props} from 'cerebral/tags'
-import {set} from 'cerebral-provider-firebase'
+import {set} from 'cerebral-provider-firebase/operators'
 
 export default [
   set('foo.bar', props`foo`), {
@@ -83,7 +83,7 @@ function someAction({firebase, path}) {
 *factory*
 ```javascript
 import {props} from 'cerebral/tags'
-import {update} from 'cerebral-provider-firebase'
+import {update} from 'cerebral-provider-firebase/operators'
 
 export default [
   update('some.path', {
@@ -113,7 +113,7 @@ function someAction({firebase, path}) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {push} from 'cerebral-provider-firebase'
+import {push} from 'cerebral-provider-firebase/operators'
 
 export default [
   push('users', state`newUser`), {
@@ -138,7 +138,7 @@ function someAction({ firebase, path}) {
 *factory*
 ```javascript
 import {props, string} from 'cerebral/tags'
-import {remove} from 'cerebral-provider-firebase'
+import {remove} from 'cerebral-provider-firebase/operators'
 
 export default [
   remove(string`users.${props`userKey`}`), {
@@ -181,7 +181,7 @@ function someAction({firebase, path}) {
 
 *factory*
 ```javascript
-import {transaction} from 'cerebral-provider-firebase'
+import {transaction} from 'cerebral-provider-firebase/operators'
 
 function transactionFunction(currentData){
   if (currentData === null) {
@@ -217,7 +217,7 @@ The result will be available as `{ key: 'foo', value: 'bar' }`. Or `{ error: 'er
 
 *factory*
 ```javascript
-import {value} from 'cerebral-provider-firebase'
+import {value} from 'cerebral-provider-firebase/operators'
 
 export default [
   value('foo.bar'), {
@@ -248,7 +248,7 @@ function someAction({ firebase }) {
 
 *factory*
 ```javascript
-import {onValue} from 'cerebral-provider-firebase'
+import {onValue} from 'cerebral-provider-firebase/operators'
 
 export default [
   onValue('foo.bar', 'some.signal')
@@ -285,7 +285,7 @@ function someAction({ firebase }) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {onChildAdded} from 'cerebral-provider-firebase'
+import {onChildAdded} from 'cerebral-provider-firebase/operators'
 
 export default [
   onChildAdded('foo.bar', 'some.signal', {
@@ -316,7 +316,7 @@ function someAction({ firebase }) {
 
 *factory*
 ```javascript
-import {onChildRemoved} from 'cerebral-provider-firebase'
+import {onChildRemoved} from 'cerebral-provider-firebase/operators'
 
 export default [
   onChildRemoved('foo.bar', 'some.signal', {
@@ -346,7 +346,7 @@ function someAction({ firebase }) {
 
 *factory*
 ```javascript
-import {onChildChanged} from 'cerebral-provider-firebase'
+import {onChildChanged} from 'cerebral-provider-firebase/operators'
 
 export default [
   onChildChanged('foo.bar', 'some.signal', {
@@ -375,7 +375,7 @@ This will add a task at `queue/tasks`. There is no output from a resolved task, 
 *factory*
 ```javascript
 import {state, props} from 'cerebral/tags'
-import {task} from 'cerebral-provider-firebase'
+import {task} from 'cerebral-provider-firebase/operators'
 
 export default [
   task('some_task', {
@@ -402,7 +402,7 @@ function someAction({ firebase, path }) {
 
 *factory*
 ```javascript
-import {getUser} from 'cerebral-provider-firebase'
+import {getUser} from 'cerebral-provider-firebase/operators'
 
 export default [
   getUser(), {
@@ -426,7 +426,7 @@ function someAction({ firebase, path }) {
 
 *factory*
 ```javascript
-import {signInAnonymously} from 'cerebral-provider-firebase'
+import {signInAnonymously} from 'cerebral-provider-firebase/operators'
 
 export default [
   signInAnonymously(), {
@@ -454,7 +454,7 @@ function someAction({ firebase, path, state }) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase'
+import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase/operators'
 
 export default [
   createUserWithEmailAndPassword(state`newUser.email`, state`newUser.password`), {
@@ -482,7 +482,7 @@ function someAction({ firebase, path, state }) {
 *factory*
 ```javascript
 import {props} from 'cerebral/tags'
-import {signInWithEmailAndPassword} from 'cerebral-provider-firebase'
+import {signInWithEmailAndPassword} from 'cerebral-provider-firebase/operators'
 
 export default [
   signInWithEmailAndPassword(props`email`, props`password`), {
@@ -510,7 +510,7 @@ function someAction({ firebase, path, state }) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {signInWithFacebook} from 'cerebral-provider-firebase'
+import {signInWithFacebook} from 'cerebral-provider-firebase/operators'
 
 export default [
   signInWithFacebook({
@@ -542,7 +542,7 @@ function someAction({ firebase, path, state }) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {linkWithFacebook} from 'cerebral-provider-firebase'
+import {linkWithFacebook} from 'cerebral-provider-firebase/operators'
 
 export default [
   linkWithFacebook({
@@ -570,7 +570,7 @@ function someAction({ firebase, path }) {
 
 *factory*
 ```javascript
-import {signOut} from 'cerebral-provider-firebase'
+import {signOut} from 'cerebral-provider-firebase/operators'
 
 export default [
   signOut(), {
@@ -594,7 +594,7 @@ function someAction({ firebase, path, state }) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {sendPasswordResetEmail} from 'cerebral-provider-firebase'
+import {sendPasswordResetEmail} from 'cerebral-provider-firebase/operators'
 
 export default [
   sendPasswordResetEmail(state`user.email`), {
@@ -617,7 +617,7 @@ function someAction({ firebase, state }) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {setOnDisconnect} from 'cerebral-provider-firebase'
+import {setOnDisconnect} from 'cerebral-provider-firebase/operators'
 
 export default [
   setOnDisconnect(string`activeUsers.${state`app.user.uid`}`, null)
@@ -637,7 +637,7 @@ function someAction({ firebase, state }) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {cancelOnDisconnect} from 'cerebral-provider-firebase'
+import {cancelOnDisconnect} from 'cerebral-provider-firebase/operators'
 
 export default [
   cancelOnDisconnect()
@@ -656,7 +656,7 @@ On success, `props` contains an `url` and the `filename`.
 
 ```js
 import {props, signal, state, string} from 'cerebral/tags'
-import {put} from 'cerebral-provider-firebase'
+import {put} from 'cerebral-provider-firebase/operators'
 
 // we expect props.file to contain a file provided by
 // a user in an <input type='file' />
@@ -679,7 +679,7 @@ Use `delete` to remove an uploaded file. Specify the containing folder and filen
 
 ```js
 import {props, state, string} from 'cerebral/tags'
-import {put} from 'cerebral-provider-firebase'
+import {put} from 'cerebral-provider-firebase/operators'
 
 export default [
   firebase.delete(
