@@ -31,11 +31,11 @@ export default connect({
           ))}
         </ul>
         {
-          counts.completed ? (
+          !!counts.completed && (
             <button className='clear-completed' onClick={() => clearCompletedClicked()}>
               Clear completed ({counts.completed})
             </button>
-          ) : null
+          )
         }
       </footer>
     )

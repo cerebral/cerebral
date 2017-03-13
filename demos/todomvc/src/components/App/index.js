@@ -17,8 +17,8 @@ export default connect({
             <NewTodoForm />
           </header>
 
-          {counts.visible ? <TodosList /> : null}
-          {counts.total ? <TodosFooter /> : null}
+          {!!counts.visible && <TodosList />}
+          {!!counts.total && <TodosFooter />}
         </section>
         <footer className='info'>
           <p>
