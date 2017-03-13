@@ -2,32 +2,28 @@ import React from 'react'
 import {connect} from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
 import counts from '../../computed/counts'
-import cn from 'classnames'
+import classnames from 'classnames'
+
+const filters = ['All', 'Active', 'Completed']
 
 export default connect({
-  filter: state`app.filter`,
+  filter: state`filter`,
   counts,
-  filterClicked: signal`app.filterClicked`,
-  clearCompletedClicked: signal`app.clearCompletedClicked`
+  filterClicked: signal`filterClicked`,
+  clearCompletedClicked: signal`clearCompletedClicked`
 },
-  ({ filter, counts, filterClicked, clearCompletedClicked }) => ({
-    filter,
-    remainingCount: counts.remaining,
-    completedCount: counts.completed,
-    countLabel: (counts.remaining === 0 || counts.remaining > 1) ? 'items left' : 'item left',
-    filterClicked,
-    clearCompletedClicked
-  }),
-  function Footer ({ filter, remainingCount, completedCount, countLabel, filterClicked, clearCompletedClicked }) {
+  function Footer ({filter, counts, filterClicked, clearCompletedClicked}) {
     return (
       <footer className='footer'>
-        <span className='todo-count'><strong>{remainingCount} {countLabel}</strong></span>
+        <span className='todo-count'>
+          <strong>{counts.remaining} {counts.remaining === 1 ? 'item' : 'items'} left</strong>
+        </span>
         <ul className='filters'>
-          {['All', 'Active', 'Completed'].map(filterName => (
+          {filters.map((filterName) => (
             <li key={filterName}>
               <a
                 onClick={() => filterClicked({ filter: filterName.toLowerCase() })}
-                className={cn({ selected: filter === filterName.toLowerCase() })}
+                className={classnames({ selected: filter === filterName.toLowerCase() })}
               >
                 {filterName}
               </a>
@@ -35,11 +31,11 @@ export default connect({
           ))}
         </ul>
         {
-          !!completedCount && (
+          counts.completed ? (
             <button className='clear-completed' onClick={() => clearCompletedClicked()}>
-              Clear completed ({completedCount})
+              Clear completed ({counts.completed})
             </button>
-          )
+          ) : null
         }
       </footer>
     )

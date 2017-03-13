@@ -1,20 +1,21 @@
 import React from 'react'
-import cn from 'classnames'
-import { connect } from 'cerebral/react'
+import classnames from 'classnames'
+import {connect} from 'cerebral/react'
 import {state, signal, props} from 'cerebral/tags'
 
 export default connect({
-  todo: state`app.todos.${props`todoRef`}`,
-  todoDoubleClicked: signal`app.todoDoubleClicked`,
-  newTitleChanged: signal`app.todoNewTitleChanged`,
-  newTitleSubmitted: signal`app.todoNewTitleSubmitted`,
-  toggleCompletedChanged: signal`app.toggleTodoCompletedChanged`,
-  removeTodoClicked: signal`app.removeTodoClicked`,
-  newTitleAborted: signal`app.todoNewTitleAborted`
+  todo: state`todos.${props`uid`}`,
+  todoDoubleClicked: signal`todoDoubleClicked`,
+  newTitleChanged: signal`todoNewTitleChanged`,
+  newTitleSubmitted: signal`todoNewTitleSubmitted`,
+  toggleCompletedChanged: signal`toggleTodoCompletedChanged`,
+  removeTodoClicked: signal`removeTodoClicked`,
+  newTitleAborted: signal`todoNewTitleAborted`
 },
   function Todo ({
-    todoRef,
-    todo: { completed, $isEditing, $isSaving, title, $newTitle },
+    uid,
+    isEditing,
+    todo,
     todoDoubleClicked,
     newTitleChanged,
     newTitleSubmitted,
@@ -23,43 +24,34 @@ export default connect({
     newTitleAborted
   }) {
     return (
-      <li className={cn({ completed, editing: $isEditing })}>
+      <li className={classnames({completed: todo.completed, editing: isEditing})}>
         <div className='view'>
-          {
-            $isSaving || (
-              <input
-                className='toggle'
-                type='checkbox'
-                disabled={$isSaving}
-                onChange={() => toggleCompletedChanged({ ref: todoRef })}
-                checked={completed}
-              />
-            )
-          }
-          <label onDoubleClick={() => $isSaving || todoDoubleClicked({ ref: todoRef })}>
-            {title} {$isSaving && <small>(saving)</small>}
+          <input
+            className='toggle'
+            type='checkbox'
+            onChange={() => toggleCompletedChanged({uid})}
+            checked={todo.completed}
+          />
+          <label onDoubleClick={() => todoDoubleClicked({uid})}>
+            {todo.title}
           </label>
-          {
-            $isSaving || (
-              <button
-                className='destroy'
-                onClick={() => removeTodoClicked({ ref: todoRef })}
-              />
-            )
-          }
+          <button
+            className='destroy'
+            onClick={() => removeTodoClicked({uid})}
+          />
         </div>
         {
-          $isEditing &&
+          isEditing &&
             <form onSubmit={(e) => {
               e.preventDefault()
-              newTitleSubmitted({ ref: todoRef })
+              newTitleSubmitted({uid})
             }}>
               <input
                 autoFocus
                 className='edit'
-                value={$newTitle || title}
-                onBlur={() => newTitleAborted({ ref: todoRef })}
-                onChange={(e) => newTitleChanged({ ref: todoRef, title: e.target.value })}
+                value={isEditing ? todo.editedTitle : todo.title}
+                onBlur={() => newTitleSubmitted({uid})}
+                onChange={(e) => newTitleChanged({uid, title: e.target.value})}
               />
             </form>
         }

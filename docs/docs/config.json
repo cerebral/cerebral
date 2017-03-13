@@ -24,7 +24,8 @@
       "debugger",
       "the_architecture",
       "resources",
-      "counter"
+      "counter",
+      "todomvc"
     ],
     "developer_guide": [
       "index",

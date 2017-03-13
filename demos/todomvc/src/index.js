@@ -10,7 +10,7 @@ import './styles.css'
 import App from './components/App'
 
 render((
-  <Container controller={controller} >
+  <Container controller={controller}>
     <App />
   </Container>
 ), document.querySelector('#root'))

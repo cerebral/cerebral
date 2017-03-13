@@ -1,33 +1,24 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import {connect} from 'cerebral/react'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
-import Recorder from '../Recorder'
-import counts from '../../computed/counts'
+import computedCounts from '../../computed/counts'
 
 export default connect({
-  isSaving: state`app.isSaving`,
-  counts
+  counts: computedCounts
 },
-  ({ isSaving, counts }) => ({
-    isSaving,
-    hasVisibleTodos: !!counts.visible,
-    hasTodos: !!counts.total
-  }),
-  function App ({ isSaving, hasVisibleTodos, hasTodos }) {
+  function App ({counts}) {
     return (
       <div id='todoapp-wrapper'>
-        <Recorder />
         <section className='todoapp'>
           <header className='header'>
             <h1>todos</h1>
             <NewTodoForm />
           </header>
 
-          {hasVisibleTodos && <TodosList />}
-          {hasTodos && <TodosFooter />}
+          {counts.visible ? <TodosList /> : null}
+          {counts.total ? <TodosFooter /> : null}
         </section>
         <footer className='info'>
           <p>
