@@ -18,6 +18,11 @@ import ResolveProvider from './providers/Resolve'
 class Controller extends FunctionTree {
   constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
     super()
+    const getSignal = this.getSignal
+
+    this.getSignal = () => {
+      throwError('You are grabbing a signal before controller has initialized, please wait for "initialized" event')
+    }
     this.componentDependencyStore = new DependencyStore()
     this.options = options
     this.flush = this.flush.bind(this)
@@ -96,9 +101,12 @@ class Controller extends FunctionTree {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
     }
 
+    this.getSignal = getSignal
+
     if (this.router) this.router.init()
 
     this.model.flush()
+
     this.emit('initialized')
   }
   /*

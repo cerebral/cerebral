@@ -49,7 +49,11 @@ export default function Router (options = {}) {
     }
     options.baseUrl = (options.baseUrl || '') + (options.onlyHash ? '#' : '')
 
-    const signals = getRoutableSignals(routesConfig, controller)
+    let signals = {}
+
+    controller.once('initialized', () => {
+      signals = getRoutableSignals(routesConfig, controller)
+    })
 
     function onUrlChange (event) {
       let url = event ? event.target.value : addressbar.value
@@ -91,9 +95,11 @@ export default function Router (options = {}) {
     function init () {
       addressbar.on('change', onUrlChange)
       controller.runTree.on('start', onSignalStart)
-      if (!options.preventAutostart) {
-        onUrlChange()
-      }
+      controller.once('initialized', () => {
+        if (!options.preventAutostart) {
+          onUrlChange()
+        }
+      })
     }
 
     const contextProvider = {

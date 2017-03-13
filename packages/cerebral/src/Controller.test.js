@@ -11,6 +11,22 @@ describe('Controller', () => {
     })
     assert.deepEqual(controller.getState(), {foo: 'bar'})
   })
+  it('should throw error when signals are grabbed before initialized', () => {
+    assert.throws(() => {
+      Controller({
+        signals: {
+          foo: []
+        },
+        modules: {
+          test ({controller}) {
+            controller.getSignal('foo')
+
+            return {}
+          }
+        }
+      })
+    }, /initialized/)
+  })
   it('should instantiate with signals defined', () => {
     const controller = new Controller({
       signals: {
