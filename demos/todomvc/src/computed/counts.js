@@ -1,13 +1,15 @@
 import {compute} from 'cerebral'
 import {state} from 'cerebral/tags'
-import computeVisibleTodosRefs from './visibleTodosRefs'
+import computedVisibleTodosUids from './visibleTodosUids'
 
 export default compute(
-  state`app.todos.*`,
-  computeVisibleTodosRefs,
-  (todosRefs, visible, get) => {
-    return todosRefs.reduce((counts, ref) => {
-      if (get(state`app.todos.${ref}.completed`)) {
+  state`todos`,
+  computedVisibleTodosUids,
+  (todos, visibleTodosUids, get) => {
+    const todosUids = Object.keys(todos)
+
+    return todosUids.reduce((counts, uid) => {
+      if (todos[uid].completed) {
         counts.completed++
       } else {
         counts.remaining++
@@ -19,8 +21,8 @@ export default compute(
     }, {
       completed: 0,
       remaining: 0,
-      total: 0,
-      visible: visible.length
+      total: Object.keys(todos).length,
+      visible: todosUids.length
     })
   }
 )
