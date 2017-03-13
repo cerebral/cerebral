@@ -51,7 +51,7 @@
     "istanbul-combine": "^0.3.0",
     "jest": "^18.1.0",
     "jsdom": "^9.9.1",
-    "lerna": "2.0.0-beta.38",
+    "lerna": "2.0.0-beta.37",
     "mocha": "^3.2.0",
     "mocha-jsdom": "^1.1.0",
     "npm-run-all": "^4.0.2",
