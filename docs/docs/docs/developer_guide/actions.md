@@ -83,15 +83,13 @@ function setToast ({state, props}) {
 
 ```js
 ...
-import {set, wait} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
-...
 {
   buttonClicked: [
     shoutIt,
     setToast
   ]  
 }
+...
 ```
 
 ### Passing a payload
