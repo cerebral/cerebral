@@ -30,11 +30,7 @@ function createWindow () {
       return
     }
 
-    if (payload.type === 'focusApp') {
-      mainWindow.webContents.send('port:focus', payload.port)
-    } else {
-      clients[payload.port].ws.send(JSON.stringify(payload))
-    }
+    clients[payload.port].ws.send(JSON.stringify(payload))
   })
 
   electron.ipcMain.on('port:add', function (event, port) {
