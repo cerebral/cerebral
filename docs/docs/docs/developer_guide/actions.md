@@ -52,6 +52,9 @@ function iAmAnAction () {
 
 **Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBPZwKFDQKkAcUqRte)
 
+If you run this bin right away you will see a message popping up after clicking the button.
+Now let us customize the existing **signal** by adding a custom **action** in between the sequence.
+
 Signals can take a props-object which can then be accessed or processed by any subsequent action.
 
 Let us say you have a user input which should get written to state.
@@ -60,7 +63,7 @@ As we now know, the correct way to write any state change is to use **signals** 
 Just like we are able to grab the **state** from the context of an action, we can also grab the **props**. This props object can be populated when a signal triggers and it can be further extended using actions. Any object returned from an action will be merged into the current props and passed to the next action.
 
 ### Create an action
-Let us create a new action that will take a prop from the signal and add some exclamation marks.
+Let us create a new action inside *controller.js* that will take a prop from the signal and add some exclamation marks.
 
 ```js
 function shoutIt ({props}) {
@@ -97,31 +100,13 @@ Now we just need to change our button click to actually pass a message:
 
 *App.js*
 ```js
-import React from 'react'
-import {connect} from 'cerebral/react'
-import {state, signal} from 'cerebral/tags'
-import Toast from './Toast'
-
-export default connect({
-  title: state`title`,
-  subTitle: state`subTitle`,
-  buttonClicked: signal`buttonClicked`
-},
-  function App ({title, subTitle, buttonClicked}) {
-    return (
-      <div>
-        <h1>{title}</h1>
-        <h3>{subTitle}</h3>
+        ...
         <button onClick={() => buttonClicked({
           message: 'Please shout me'
         })}>
           Update state
         </button>
-        <Toast />
-      </div>
-    )
-  }
-)
+        ...
 ```
 
 Now we are ready to test drive our changes. Click the button and you should see the toast message appear with three exclamation marks behind. Take some time to open up the **debugger** and explore the changes you've made. You can track the flow of the props object as it is passed into the action *props:{}* and after the action has excecuted *output: {}*. Keep in mind that the object returned from an action will be merged with the props object and handed over to the next action. You could just as easily use a different property for the shouted message.

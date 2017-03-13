@@ -31,7 +31,7 @@ function hasUserRoleFactory (role) {
 }
 ```
 
-So this factory can now be used in any chain:
+So this factory can now be used in any sequence:
 
 ```js
 import hasUserRole from '../factories/hasUserRole'
@@ -75,7 +75,8 @@ export default [
 
 **Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBPZwKFDQKkAcUqRte)
 
-Let us look at how the **wait** operator is defined:
+To see how **factories** are defined you may also check out the already existing code inside cerebral itself. 
+E.g. that is how the **wait** operator looks like:
 
 ```js
 function waitFactory (ms) {
@@ -89,7 +90,7 @@ function waitFactory (ms) {
 }
 ```
 
-We have just defined a **factory**. A function that returns an action. The action itself (wait) returns a promise. This promise is what tells the signal to hold its execution until it is resolved.
+You can see that a **factory** is just a function that returns another function which we call **action**. The action itself (wait) returns a promise. This promise is what tells the signal to hold its execution until it is resolved. Because **wait** is quite a common operation it's already included as an operator in the default
 
 Let us create our own custom **showToast** factory. It will return a sequence of actions. As you can see we have moved the operators we defined previously into this array, using the arguments passed into the factory. As an example we want to name this sequence of actions, so instead of using an array we rather use the **sequence** function. They are exactly the same, only the function allows us to pass in a name as the first argument:
 

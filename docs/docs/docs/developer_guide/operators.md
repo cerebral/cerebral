@@ -96,12 +96,12 @@ As you can see **operators** are a powerful concept that allows you to describe 
 
 Let us first change out our actions with an operators instead. Since we did a *set*, we change it out with the **set** operator. Operators also take advantage of the tags. In this case, the first argument uses a tag to target our state. The second argument uses a tag to grab the message from the props passed into the signal.
 
-Now lets add a **wait** operator and another **set** to close our toast message after a few seconds. So go ahead and change our **buttonClicked** signal in *App.js* to:
+Now lets add a **wait** operator and another **set** to close our toast message after a few seconds. So go ahead and change our **buttonClicked** signal in *controller.js* to:
 
 ```js
 ...
 import {set, wait} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import {state, props} from 'cerebral/tags'
 ...
 {
   buttonClicked: [
@@ -114,4 +114,4 @@ import {state} from 'cerebral/tags'
 
 Now when we check again in the debugger you will see all the 3 actions executed when signal *buttonClicked* got triggered.
 
-Still speaking of the debugger did you notice the **props: {}** in front of every action executed? Looks quite empty. Let us look at that in the next chapter! If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).
+If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).
