@@ -1,0 +1,11 @@
+{
+  "presets": ["es2015"],
+  "env": {
+    "production": {
+      "ignore": [
+        "**/*.test.js",
+        "**/testHelper.js"
+      ]
+    }
+  }
+}
