@@ -196,7 +196,6 @@ import {state, props, string} from 'cerebral/tags'
 const toastDebounce = debounce.shared()
 function showToast (message, ms) {
   return sequence('showToast', [
-    // We use merge as it supports evaluating tags in an object
     set(state`toast`, message),
     toastDebounce(ms), {
       continue: [
