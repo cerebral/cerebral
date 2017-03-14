@@ -278,7 +278,7 @@ You add validation rules on the field:
     validationRules: [/foo/]
   },
   field2: {
-    value: 'foo', // not valid
+    value: 'bar', // not valid
     validationRules: [/foo/]
   }
 }
