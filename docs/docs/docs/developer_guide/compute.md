@@ -140,7 +140,7 @@ function setStarsCount ({state}) {
 This is a perfectly okay approach for our simple scenario, but computing state like this can be tedious in large applications. We might want to use this state multiple places in our application and we want to make sure it is the same wherever we use it.
 
 ### Computing
-In Cerebral, we can automatically compute state by using **compute**. It is basically a function that takes any number of arguments to produce a value. Let us look at how it works with our scenario:
+In Cerebral, we can automatically compute state by using **compute**. It is basically a function that takes any number of arguments to produce a value. Let us look at how it works with our scenario. Please add another file called *starsCount.js* to the bin and copy the following snippet into it:
 
 ```js
 import {compute} from 'cerebral'
@@ -163,7 +163,7 @@ Let us finish this example. To do so please create a new file named *starsCount.
 ### Replacing with computed
 Let us remove the **setStarsCount** action and refactor our signal to rather grab the repos first and then we update the state in one go. This just to show you different strategies.
 
-The first thing we need to do is refactor our *getRepo* action factories to no longer return paths, just values. So either they return a result using the repo name as the key, or they will set an error.
+Check out the refactoring of our *getRepo* action. the factory no longer return paths, just values. So either they return a result using the repo name as the key, or they will set an error.
 
 ```js
 ...
@@ -183,7 +183,7 @@ function getRepo (repoName) {
 ...
 ```
 
-Then we change how our signal looks:
+We can change now the signal to look like:
 
 ```js
 ...
@@ -219,7 +219,7 @@ You can use computeds with other computeds, directly in tags, with operators, in
 import React from 'react'
 import {connect} from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
-import starsCount from '.starsCount'
+import starsCount from './starsCount'
 import Toast from './Toast'
 
 export default connect({

@@ -62,7 +62,7 @@ function actionA ({path}) {
 In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows depending on the result of the previous action.
 
 ### Http Provider
-So let us build that scenario introducing *cerebral-http-provider*. *cerebral-http-provider* is a simple http-provider which enables you to request data from servers. You could have used any other HTTP library if you wanted to. We have already added it as a configuration of the controller. The concept of **Providers** will be covered in more detail in the next chapter.
+So let us build that scenario introducing *cerebral-http-provider*. *cerebral-http-provider* is a simple http-provider which enables you to request data from servers. You could have used any other HTTP library if you wanted to. We have already added it as a configuration of the controller. The concept of **Providers** will be covered in more detail in one of the next chapters.
 
 To handle any kind of diverging execution in a signal we can use the concept of **paths**. A simple signal using paths and a sample async action named *getData* could look like this:
 
@@ -150,15 +150,18 @@ But there is an issue here. Did you notice that the message *Loading data for re
 Replace your signal with the following snippet:
 
 ```js
+...
+import {parallel, sequence} from 'cerebral'
+...
+
 {
   buttonClicked: parallel([
     showToast(string`Loading data for repo: ${props`repo`}`, 2000),
     getRepo, {
       success: showToast(
-        string`
-         How cool is that. ${props`repo`}
-         has ${props`data.subscribers_count`}
-         subscribers and ${props`data.stargazers_count`}
+        string`How cool is that. ${props`repo`}
+         has ${props`result.subscribers_count`}
+         subscribers and ${props`result.stargazers_count`}
          stars!
         `,
         5000,
@@ -166,7 +169,7 @@ Replace your signal with the following snippet:
       ),
       error: showToast(
         string`
-          Ooops something went wrong: ${props`data.message`}
+          Ooops something went wrong: ${props`result.message`}
         `,
         5000,
         'error'
@@ -191,10 +194,9 @@ import {set, merge, debounce} from 'cerebral/operators'
 import {state, props, string} from 'cerebral/tags'
 ...
 const toastDebounce = debounce.shared()
-function showToast (message, ms, type = null) {
+function showToast (message, ms) {
   return sequence('showToast', [
-    // We use merge as it supports evaluating tags in an object
-    merge(state`toast`, {type, message}),
+    set(state`toast`, message),
     toastDebounce(ms), {
       continue: [
         set(state`toast`, null)
