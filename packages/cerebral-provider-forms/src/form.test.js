@@ -169,6 +169,36 @@ describe('form', () => {
       }
     })
     controller.getSignal('test')()
+    it('should work with global props', () => {
+      const controller = Controller({
+        providers: [FormsProvider()],
+        state: {
+          form: {
+            name: {
+              value: 'Ben'
+            },
+            showErrors: false,
+            validationError: null,
+            isLoading: false
+          }
+        },
+        signals: {
+          test: [
+            ({forms}) => {
+              const form = forms.get('form')
+              assert.ok(form instanceof Form)
+              assert.ok(form.name instanceof Field)
+              assert.equal(form.name.value, 'Ben')
+              assert.equal(form.name.isValid, true)
+              assert.equal(form.showErrors, false)
+              assert.equal(form.validationError, null)
+              assert.equal(form.isLoading, false)
+            }
+          ]
+        }
+      })
+      controller.getSignal('test')()
+    })
   })
   describe('validate', () => {
     it('should validate using validationRules', () => {

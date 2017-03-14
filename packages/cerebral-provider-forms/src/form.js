@@ -5,10 +5,12 @@ import getInvalidFormFields from './helpers/getInvalidFormFields'
 
 function createFields (source, form) {
   return Object.keys(source).reduce((fields, key) => {
-    if ('value' in source[key]) {
-      fields[key] = new Field(source[key], form)
-    } else {
-      fields[key] = createFields(source[key], form)
+    if (source[key] === Object(source[key])) {
+      if ('value' in source[key]) {
+        fields[key] = new Field(source[key], form)
+      } else {
+        fields[key] = createFields(source[key], form)
+      }
     }
 
     return fields
