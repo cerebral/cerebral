@@ -80,7 +80,7 @@ And this is it. You will never get in trouble creating a module because any acti
 
 ## Tutorial
 
-Before we begin you can have a look at [the solution over here](https://www.webpackbin.com/bins/-KdLD809oZId6qs7c9P7). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
+Before we begin you can have a look at [the solution over here](https://www.webpackbin.com/bins/-KfDKApROapTmuhEF5_j). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
 
 `npm install`
 

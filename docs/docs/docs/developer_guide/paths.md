@@ -151,7 +151,7 @@ Replace your signal with the following snippet:
 
 ```js
 ...
-import {parallel, sequence} from 'cerebral'
+import {Controller, sequence, parallel} from 'cerebral'
 ...
 
 {
