@@ -28,6 +28,9 @@ function Navigation (props) {
           <div className='docs-icon-discord' />
           chat
         </a>
+        <a href='http://cerebral-website.herokuapp.com/' className='docs-icon' target='_new' style={{color: '#DD4A68'}}>
+          old website
+        </a>
       </div>
     </div>
   )
