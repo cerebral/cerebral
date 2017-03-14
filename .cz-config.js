@@ -33,6 +33,7 @@ module.exports = {
     {name: 'http'},
     {name: 'useragent'},
     {name: 'firebase'},
+    {name: 'firebase-admin'},
     {name: 'storage'},
     {name: 'website'},
     {name: 'tutorial'},

@@ -31,7 +31,6 @@ export default function ContextProvider (extendedContext) {
               obj[objKey] = (...args) => {
                 context.debugger.send({
                   method: `${key}.${objKey}`,
-                  color: context.debugger.getColor(key),
                   args
                 })
 
@@ -45,7 +44,6 @@ export default function ContextProvider (extendedContext) {
                 set (value) {
                   context.debugger.send({
                     method: key + '.' + objKey + ' =',
-                    color: context.debugger.getColor(key),
                     args: [value]
                   })
                   contextValue[objKey] = value
@@ -62,7 +60,6 @@ export default function ContextProvider (extendedContext) {
           context[key] = (...args) => {
             context.debugger.send({
               method: key,
-              color: context.debugger.getColor(key),
               args
             })
             return contextValue.apply(null, args)
