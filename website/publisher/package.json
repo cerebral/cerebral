@@ -4,8 +4,8 @@
   "private": "true",
   "scripts": {
     "clean": "shx rm -rf build && shx mkdir -p ./build",
-    "website:build": "cd ../docs && npm run build",
-    "website:copy": "shx cp -R ../docs/dist/* ./build",
+    "website:build": "cd ../builder && npm run build",
+    "website:copy": "shx cp -R ../builder/dist/* ./build",
     "website": "run-s website:*",
     "todomvc": "shx mkdir -p ./build/todomvc && shx cp -R ../../demos/todomvc/build/* ./build/todomvc",
     "demo": "shx mkdir -p ./build/demo && shx cp -R ../../demos/demo/build/* ./build/demo",

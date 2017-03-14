@@ -1,8 +1,86 @@
-# Modules
+# Organize
 
-Glad you are still with us! Hopefully you have enjoyed our journey so far and hopefully you still have a sip left of your coffee or drink. It's time for cleaning up.
+Cerebral uses a concept called **modules** to organize application code. These allow you to wrap state and signals into a namespace without isolating them. Any action run in a signal can change any state in the application.
 
-But before we begin you can have a look at [the solution over here](https://webpackbin-prod.firebaseapp.com/#/bins/-KdLD809oZId6qs7c9P7). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
+Typically the file structure for modules looks like this. We call it the **signals pattern**. Every signal has its own file.
+
+```js
+/modules
+  /home
+    /actions
+    /signals
+    index.js
+main.js
+```
+
+The **index.js** file is where you define the module. It is just an object where you can define state, signals and optionally sub modules.
+
+```js
+import somethingHappened from './signals/somethingHappened'
+
+export default {
+  state: {},
+  signals: {
+    somethingHappened
+  }
+}
+```
+
+You are free to structure however you want of course. Maybe you rather want to define signals directly in *index.js*, rather than have each one contained in a file.
+
+In the **main.js** file, the module is added to the controller:
+
+```js
+import {Controller} from 'cerebral'
+import home from './modules/home'
+
+const controller = Controller({
+  modules: {
+    home
+  }
+})
+```
+
+Any signal and state defined inside the *home* module will live on the namespace chosen during controller instantiation.
+
+And this is how an application scales: by defining modules and submodules. Actions and factories that are common are often placed in a folder called **common**:
+
+```js
+/common
+  /actions
+  /factories
+/modules
+  /home
+    /actions
+    /signals
+    index.js
+main.js
+```
+
+## Components
+
+A very important point in Cerebral is that your components do not affect the structure of the application state. Modules are defined in terms of what makes sense for state and signals. Sometimes this is similar to how components are structured, but more often it is not. This is why components usually live in their own **components** folder, separated from the modules:
+
+```js
+/components
+  /Home
+    index.js
+/common
+  /actions
+  /factories
+/modules
+  /home
+    /actions
+    /signals
+    index.js
+main.js
+```
+
+And this is it. You will never get in trouble creating a module because any action can change any state in your application. Modules are just a way to structure state and signals, not isolate them.
+
+## Tutorial
+
+Before we begin you can have a look at [the solution over here](https://www.webpackbin.com/bins/-KfDKApROapTmuhEF5_j). Click the **download** button, which downloads the project as a Webpack project, extract the contents to a folder on your computer and make sure that you have installed [Node JS](https://nodejs.org/en/). From the command line, run:
 
 `npm install`
 
@@ -12,7 +90,7 @@ Then you can run:
 
 Go to *localhost:3000* in your browser. Now you have a starting point for playing more with Cerebral and make the final adjustments yourself. A new Webpack loader called **CSS Modules** has been added and also the **classnames** tool is ready to be used. These two features allows you to refactor the CSS of the application in a scalable way.
 
-## Folder structure
+### Folder structure
 SO! Welcome to the world of **modules**. We will build the following structure:
 ```
 /src
@@ -55,7 +133,7 @@ SO! Welcome to the world of **modules**. We will build the following structure:
 
 Let us do this step by step.
 
-## main.js
+### main.js
 Our main file should just wire things together, meaning that it wires the controller with the view.
 
 ```js
@@ -72,7 +150,7 @@ render((
 ), document.querySelector('#app'))
 ```
 
-## controller.js
+### controller.js
 Our controller does the same kind of wiring. It wires the modules of our app to the controller and its configuration.
 
 ```js
@@ -110,7 +188,7 @@ const controller = Controller({
 
 Basically our state and signals has been removed and we rather import modules instead.
 
-## modules/app
+### modules/app
 The app module will take care of what tab is currently active, our titles and the toast.
 
 *index.js*
@@ -135,9 +213,7 @@ import {state} from 'cerebral/tags'
 const toastDebounce = debounce.shared()
 function showToast (message, ms, type = null) {
   if (!ms) {
-    return [
-      merge(state`app.toast`, {message, type})
-    ]
+    return merge(state`app.toast`, {message, type})
   }
 
   return [
@@ -156,7 +232,7 @@ export default showToast
 
 Note that the paths to the state has changed, since **toast** now is under the namespace **app**.
 
-## modules/home
+### modules/home
 The home module does not have any state, but it does have a signal related to being clicked.
 
 *index.js*
@@ -175,14 +251,12 @@ export default {
 import {set} from 'cerebral/operators'
 import {state} from 'cerebral/tags'
 
-export default [
-  set(state`app.activeTab`, 'home')
-]
+export default set(state`app.activeTab`, 'home')
 ```
 
 As you can see any signal can point to any state. This allows you to organize your app in a way that makes sense without worrying about isolation. This is really important, because in complex applications isolation causes big challenges.
 
-## modules/repos
+### modules/repos
 Our repos module holds the list of repos and also holds the signal for opening the repos tab.
 
 *index.js*
@@ -201,6 +275,7 @@ export default {
 
 *signals/clicked.js*
 ```js
+import {parallel} from 'cerebral'
 import {set, when} from 'cerebral/operators'
 import {state, props, string} from 'cerebral/tags'
 import getRepo from '../factories/getRepo'
@@ -209,19 +284,17 @@ import starsCount from '../../computed/starsCount'
 
 export default [
   set(state`app.activeTab`, 'repos'),
-  ...showToast(string`Loading data for repos...`),
-  [
+  showToast(string`Loading data for repos...`),
+  parallel([
     getRepo('cerebral'),
     getRepo('addressbar')
-  ],
+  ]),
   when(props`error`), {
-    'true': [
-      ...showToast(string`Error: ${props`error`}`, 5000, 'error')
-    ],
+    'true': showToast(string`Error: ${props`error`}`, 5000, 'error'),
     'false': [
       set(state`repos.list.cerebral`, props`cerebral`),
       set(state`repos.list.addressbar`, props`addressbar`),
-      ...showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
+      showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
     ]
   }
 ]
@@ -235,8 +308,8 @@ function getRepoFactory (repoName) {
       .then((response) => {
         return {[repoName]: response.result}
       })
-      .catch((error) => {
-        return {error: error.result}
+      .catch((response) => {
+        return {error: response.error}
       })
   }
 
@@ -248,7 +321,7 @@ export default getRepoFactory
 
 This is a good example of how Cerebral works. Note that there are no imports to this action factory. You just write out the logic of it, cause the context is decoupled from the actual logic.
 
-## components/App
+### components/App
 We also need to split up our components a bit. The app component is now cleaned up a bit and it is using **CSS Modules** and the **classnames** tool.
 
 *index.js*
@@ -336,7 +409,7 @@ Note here how css class names are actually being exported as a module to the com
 }
 ```
 
-## Finish the refactor
+### Finish the refactor
 We have shown you the idea of the refactor here and now you can finish it. You need to refactor the following:
 
 1. Home component and styles (if any)
