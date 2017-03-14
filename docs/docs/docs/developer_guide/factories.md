@@ -75,7 +75,7 @@ export default [
 
 **Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBPZwKFDQKkAcUqRte)
 
-To see how **factories** are defined you may also check out the already existing code inside cerebral itself. 
+To see how **factories** are defined you may also check out the already existing code inside cerebral itself.
 E.g. that is how the **wait** operator looks like:
 
 ```js
@@ -95,7 +95,7 @@ You can see that a **factory** is just a function that returns another function 
 Let us create our own custom **showToast** factory. It will return a sequence of actions. As you can see we have moved the operators we defined previously into this array, using the arguments passed into the factory. As an example we want to name this sequence of actions, so instead of using an array we rather use the **sequence** function. They are exactly the same, only the function allows us to pass in a name as the first argument:
 
 ```js
-import {sequence} from 'cerebral'
+import {Controller, sequence} from 'cerebral'
 ...
 function showToast(message, ms) {
   return sequence('showToast', [
