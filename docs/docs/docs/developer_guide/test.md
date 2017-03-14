@@ -190,30 +190,33 @@ it('should handle button clicks', () => {
 })
 ```
 
-### RunSignal factory
+### CerebralTest factory
 
-The `RunSignal` factory is similar to run signal except that it will return a runSignal function that can be called many times without resetting the controller in between.
+The `CerebralTest` factory returns runSignal, setState and getState functions that can be called many times without resetting the controller in between.
 
 ```js
-const runSignal = Run(fixture. options)
-runSignal(signal, props).then((result) => {})
+const cerebral = CerebralTest(fixture. options)
+cerebral.setState(path, value)
+cerebral.runSignal(signal, props).then((result) => {})
+const value = cerebral.getState(path)
 ```
 
 #### Example
 
 ```js
-import {RunSignal} from 'cerebral/test'
+import {CerebralTest} from 'cerebral/test'
 
 it('should accumulate a count', () => {
-  const runMathSignal = RunSignal({
+  const cerebral = CerebralTest({
     modules: {
       math: math()
     }
   })
-  return runMathSignal('math.plusOne').then(({state}) => {
+  cerebral.setState('math.count', 0)
+  return cerebral.runSignal('math.plusOne').then(({state}) => {
     assert.equal(state.math.count, 1)
-    return runMathSignal('math.plusTwo').then(({state}) => {
-      assert.equal(state.math.count, 3)
+    return cerebral.runSignal('math.plusTwo').then(() => {
+      assert.equal(cerebral.getState('math.count'), 3)
     })
   })
 })
