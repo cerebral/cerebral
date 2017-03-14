@@ -1,26 +1,23 @@
 {
-  "name": "cerebral-docs",
+  "name": "@cerebral/docs",
   "version": "1.0.0",
   "private": true,
   "description": "",
   "main": "index.js",
   "scripts": {
     "start": "babel-watch builder/dev --presets es2015,react --watch docs pages css scripts",
-    "build": "babel-node builder/build --presets es2015,react"
+    "build": "babel-node builder/build --presets es2015,react",
+    "prepublish": "ln -s ../../docs ./docs"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "babel-cli": "^6.22.2",
-    "babel-preset-es2015": "^6.22.0",
-    "babel-preset-react": "^6.22.0",
+    "@cerebral/monorepo": "0.0.1",
     "babel-watch": "^2.0.5",
     "express": "^4.14.0",
     "fs-extra": "^2.0.0",
     "markdown-to-react-components": "https://github.com/christianalfoni/markdown-to-react-components.git",
     "prismjs": "^1.6.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
     "string-template": "^1.0.0",
     "yargs": "^6.6.0"
   }

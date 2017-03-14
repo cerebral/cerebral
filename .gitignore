@@ -7,6 +7,7 @@ coverage
 dist
 lib
 build
+website/builder/docs
 *darwin-x64
 **/yarn.lock
 **/yarn-error.log
