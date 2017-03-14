@@ -8,7 +8,7 @@ notifications:
   email: false
 before_script:
 - npm prune
-- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-router|babel-*)'
+- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-provider-forms|cerebral-router|babel-*)'
 after_success:
 - |
   echo $TRAVIS_BRANCH; echo $TRAVIS_PULL_REQUEST;
@@ -30,11 +30,6 @@ after_success:
     lerna bootstrap;
     lerna publish -c --npm-tag next --yes --exact;
     npm run deploy &>/dev/null;
-    # lerna run build:electron --concurrency 1;
-    # lerna run build:chromeExtension --concurrency 1;
-    # for DIR in debugger/*/electron/dist/*; do
-      # zip -r `basename "$DIR"`.zip $DIR;
-    # done
   fi
 branches:
   except:

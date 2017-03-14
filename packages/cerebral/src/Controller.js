@@ -18,6 +18,11 @@ import ResolveProvider from './providers/Resolve'
 class Controller extends FunctionTree {
   constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
     super()
+    const getSignal = this.getSignal
+
+    this.getSignal = () => {
+      throwError('You are grabbing a signal before controller has initialized, please wait for "initialized" event')
+    }
     this.componentDependencyStore = new DependencyStore()
     this.options = options
     this.flush = this.flush.bind(this)
@@ -70,21 +75,6 @@ class Controller extends FunctionTree {
 
     if (this.devtools) {
       this.devtools.init(this)
-      this.on('error', function throwErrorCallback (error) {
-        if (Array.isArray(this._events.error) && this._events.error.length > 2) {
-          this.removeListener('error', throwErrorCallback)
-        } else {
-          throw error
-        }
-      })
-    } else {
-      this.on('error', function throwErrorCallback (error) {
-        if (Array.isArray(this._events.error) && this._events.error.length > 1) {
-          this.removeListener('error', throwErrorCallback)
-        } else {
-          throw error
-        }
-      })
     }
 
     if (
@@ -96,9 +86,12 @@ class Controller extends FunctionTree {
       console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
     }
 
+    this.getSignal = getSignal
+
     if (this.router) this.router.init()
 
     this.model.flush()
+
     this.emit('initialized')
   }
   /*
@@ -153,7 +146,7 @@ class Controller extends FunctionTree {
     Uses function tree to run the array and optional
     payload passed in. The payload will be checkd
   */
-  runSignal (name, signal, payload = {}) {
+  runSignal (name, signal, payload = {}, cb) {
     if (this.devtools && (!isObject(payload) || !isSerializable(payload))) {
       console.warn(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`, payload)
       payload = {}
@@ -173,7 +166,15 @@ class Controller extends FunctionTree {
       }, {})
     }
 
-    this.runTree(name, signal, payload)
+    if (this._events.error) {
+      this.runTree(name, signal, payload)
+    } else {
+      this.runTree(name, signal, payload, (err) => {
+        if (err) {
+          throw err
+        }
+      })
+    }
   }
   /*
     Returns a function which binds the name/path of signal,

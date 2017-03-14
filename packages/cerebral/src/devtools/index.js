@@ -37,7 +37,7 @@ class Devtools {
     this.isResettingDebugger = false
     this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
     this.allowedTypes = []
-      .concat(this.isBrowserEnv ? [File, FileList, Blob, ImageData] : [])
+      .concat(this.isBrowserEnv ? [File, FileList, Blob, ImageData, RegExp] : [])
       .concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)

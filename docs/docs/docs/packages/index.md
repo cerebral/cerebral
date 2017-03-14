@@ -1,9 +1,9 @@
 # cerebral-provider-http
 
-## Install
-`npm install cerebral-provider-http@next --save`
+## install
+`npm install cerebral-provider-http@next --save --save-exact`
 
-## Description
+## description
 The HTTP provider exposes the ability to do HTTP requests both in actions and directly in signals. It supports **cors** and file upload, with progress handling. It default to **json**, but you can configure it to whatever you want.
 
 ```js
@@ -25,9 +25,7 @@ export default [
 
 All factories of HTTP provider supports template tags.
 
-## API
-
-### instantiate
+## instantiate
 
 ```js
 import {Controller} from 'cerebral'
@@ -63,7 +61,7 @@ function updateDefaultHttpOptions({http}) {
 }
 ```
 
-### request
+## request
 
 ```js
 function someGetAction ({http}) {
@@ -94,7 +92,7 @@ function someGetAction ({http}) {
 }
 ```
 
-### get
+## get
 
 *action*
 ```js
@@ -121,7 +119,7 @@ export default [
 ]
 ```
 
-### post
+## post
 
 *action*
 ```js
@@ -152,7 +150,7 @@ export default [
 ]
 ```
 
-### put
+## put
 
 *action*
 ```js
@@ -181,7 +179,7 @@ export default [
 ]
 ```
 
-### patch
+## patch
 
 *action*
 ```js
@@ -209,7 +207,7 @@ export default [
 ]
 ```
 
-### delete
+## delete
 
 *action*
 ```js
@@ -237,11 +235,11 @@ export default [
 ]
 ```
 
-### uploadFile
+## uploadFile
 
 **COMING SOON**
 
-### response
+## response
 
 ```js
 function someGetAction ({http}) {
@@ -263,7 +261,7 @@ function someGetAction ({http}) {
 }
 ```
 
-### abort
+## abort
 You can abort any running request, causing the request to resolve as status code **0** and set an **isAborted** property on the response object.
 
 ```js
@@ -289,7 +287,7 @@ export default [
 ]
 ```
 
-### cors
+## cors
 Cors has been turned into a "black box" by jQuery. Cors is actually a very simple concept, but due to a lot of confusion of "Request not allowed", **cors** has been an option to help out. In HttpProvider we try to give you the insight to understand how cors actually works.
 
 Cors has nothing to do with the client. The only client configuration related to cors is the **withCredentials** option, which makes sure cookies are passed to the cross origin server. The only requirement for cors to work is that you pass the correct **Content-Type**. Now, this depends on the server in question. Some servers allows any content-type, others require a specific one. These are the typical ones:
