@@ -9,14 +9,12 @@ function Docs (props) {
 
   return (
     <div className='docs-container'>
+      <div className='beta'>beta</div>
       <Navigation docs={props.docs} sectionName={props.sectionName} docName={props.docName} />
       <NavigationMobile docs={props.docs} sectionName={props.sectionName} docName={props.docName} />
       <div className='docs-content'>
         <TOC docName={props.docName} sectionName={props.sectionName} sections={props.docs[props.sectionName]} />
         <Doc doc={doc.tree} docName={props.docName} sectionName={props.sectionName} />
-      </div>
-      <div style={{zIndex: 99, backgroundColor: '#DD4A68', color: '#fff', padding: '5px 10px', position: 'fixed', width: '100%', bottom: 0, left: 0}}>
-        Docs are still being written and might not be up to date with API
       </div>
     </div>
   )
