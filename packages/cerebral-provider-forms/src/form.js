@@ -61,6 +61,9 @@ export default function computedForm (formValueTag) {
   return compute(
     formValueTag,
     (formValue) => {
+      if (typeof formValue !== 'object') {
+        throw new Error('Cerebral Forms - Form requires a tag or compute that resolves to an object')
+      }
       return new Form(formValue)
     }
   )
