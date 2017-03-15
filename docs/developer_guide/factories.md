@@ -73,7 +73,7 @@ export default [
 
 ## Tutorial
 
-**Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBPZwKFDQKkAcUqRte)
+**Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KfHVlMgu-OTENr2fH2-)
 
 To see how **factories** are defined you may also check out the already existing code inside cerebral itself.
 E.g. that is how the **wait** operator looks like:

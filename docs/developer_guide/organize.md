@@ -28,7 +28,7 @@ export default {
 
 You are free to structure however you want of course. Maybe you rather want to define signals directly in *index.js*, rather than have each one contained in a file.
 
-In the **main.js** file, the module is added to the controller:
+In the **controller.js** file, the module is added to the controller:
 
 ```js
 import {Controller} from 'cerebral'
