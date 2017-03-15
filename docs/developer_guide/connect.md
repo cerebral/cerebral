@@ -15,7 +15,7 @@ import {connect} from 'cerebral/react'
 import {state} from 'cerebral/tags'
 
 export default connect({
-  foo: state`app.title`
+  title: state`title`
 },
   function MyComponent ({title}) {
     return (
@@ -39,7 +39,7 @@ import {connect} from 'cerebral/react'
 import {state} from 'cerebral/tags'
 
 export default connect({
-  foo: state`app.foo`
+  title: state`title`
 },
   class MyComponent extends React.Component {
     render () {
