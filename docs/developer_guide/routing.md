@@ -1,5 +1,5 @@
 # Routing
-Typically applications uses a router. To instantiate the Cerebral router you install it as a separate package and instantiate it as a module:
+Typically applications use a router. To instantiate the Cerebral router, install it as a separate package and instantiate it as a module:
 
 ```js
 import {Controller} from 'cerebral'
@@ -18,7 +18,7 @@ const controller = Controller({
 ```
 
 ## Defining routes
-Routes in Cerebral does not affect the components, they affect signals. The signals puts your application in a specific state and then your components decides what to render based on that state. So the router is completely decoupled from your components. This is a very good thing because a route can now translate to any kind of state changes and side effects.
+Routes in Cerebral do not affect the components, they affect signals. The signals put your application in a specific state and then your components decide what to render based on that state. So the router is completely decoupled from your components. This is a very good thing because a route can now translate to any kind of state changes and side effects.
 
 Let us create a small app:
 
@@ -75,7 +75,7 @@ export default {
 ```
 
 ## Render based on state
-So we do not render anything based on the route. We render based on state, like we do with everything else. A route never affects the components, it only affects your state.
+So we do not render anything based on the route. We render based on state, like we do with everything else. A route never affects the components, it only affects the state.
 
 *components/App/index.js*
 ```js
@@ -231,7 +231,7 @@ And update the signals as well:
 Now you can test-drive your changes. You should see the first tab activated. Now go to the debugger and change *activeTab* state to 'repos' and you will see the second tab. If you click the tabs you will actually trigger the signals which appear in the debugger. Nice! But what has this to do with Routing?
 
 ### Introducing the router
-Traditional routers is a wrapper around your components and they manipulate what components to display based on the URL. That is not how routing works in Cerebral. In Cerebral you connect URLs to signals. So:
+Traditional routers are a wrapper around your components and they manipulate what components to display based on the URL. That is not how routing works in Cerebral. In Cerebral you connect URLs to signals. So:
 
 1. A URL is hit or changed
 2. The respective signal is triggered putting your application in the correct state
@@ -265,8 +265,8 @@ const controller = Controller({
 ...
 ```
 
-As you can see, defining *routes* is as easy as linking them to *signals*. When you save and load up the BIN again you can go to the addressbar and change the url to **/#/repos**. You will now see the signal triggers and the repos content is shown. This is exactly what happens when you click the tab as well.
+As you can see, defining *routes* is as easy as linking them to *signals*. When you save and load up the BIN again you can go to the address bar and change the url to **/#/repos**. You will now see the signal triggers and the repos content is shown. This is exactly what happens when you click the tab as well.
 
 ### Challenge
 
-Go to your browsers addressbar and enter an invalid route like: */#/foo* and press Enter. Now check the log! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error. You probably need to read some more docs on the router to make this work.
+Go to your browsers address bar and enter an invalid route like: */#/foo* and press Enter. Now check the log! The challenge is to add another route which catches those *unknown* routes, runs a signal and display a toast with an error. You probably need to read some more docs on the router to make this work.
