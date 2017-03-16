@@ -11,6 +11,8 @@ function createFields (source, form) {
       } else {
         fields[key] = createFields(source[key], form)
       }
+    } else {
+      fields[key] = source[key]
     }
 
     return fields
