@@ -8,8 +8,8 @@ export default function ExecutionProvider (execution, Abort) {
         executeTree(execution.staticTree, execution.runFunction, payload, resolve)
       })
     }
-    context.execution.abort = () => {
-      return new Abort()
+    context.execution.abort = (payload) => {
+      return new Abort(payload)
     }
 
     return context
