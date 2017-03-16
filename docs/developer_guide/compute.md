@@ -1,5 +1,5 @@
 # Compute
-Normally you use state directly from the state tree, but sometimes you need to compute values. Typically filtering lists, grabbing the projects of a user or other derived state.
+Normally you use state directly from the state tree, but sometimes you need to compute values. Typically filtering lists, grabbing the projects of a user, or other derived state.
 
 Cerebral allows you to compute state that can be used in multiple contexts. Let us look at the signature:
 
@@ -89,7 +89,7 @@ connect({
 })
 ```
 
-It uses the *itemKey* property from the component to grab the actual item. Then it grab each user based on the userIds of the item. You can also compose multiple compute together.
+It uses the *itemKey* property from the component to grab the actual item. It then grabs each user based on the userIds of the item. You can also compose multiple compute together.
 
 ```js
 connect({
@@ -120,7 +120,7 @@ compute(
 )
 ```
 
-Typically you get away with most things using Tags, but compute will help you with any other scenario where more "umph" is needed.
+Typically you can get away with most things using Tags, but compute will help you with any other scenarios where more "umph" is needed.
 
 ## Tutorial
 
@@ -137,7 +137,7 @@ function setStarsCount ({state}) {
 }
 ```
 
-This is a perfectly okay approach for our simple scenario, but computing state like this can be tedious in large applications. We might want to use this state multiple places in our application and we want to make sure it is the same wherever we use it.
+This is a perfectly okay approach for our simple scenario, but computing state like this can be tedious in large applications. We might want to use this state multiple places in our application, and we want to make sure it is the same wherever we use it.
 
 ### Computing
 In Cerebral, we can automatically compute state by using **compute**. It is basically a function that takes any number of arguments to produce a value. Let us look at how it works with our scenario. Please add another file called *starsCount.js* to the bin and copy the following snippet into it:
@@ -158,12 +158,12 @@ export default compute(
 
 We depend on our repos state. Then we just count the stars and return it. When the compute is used with a component it will automatically track whatever dependencies it has and only runs when any of those dependencies change.
 
-Let us finish this example. To do so please create a new file named *starsCount.js* containing the snippet we just looked at. Then we would like to use our computed both in the signal and we also want to show the count in our component.
+Now we would like to use our computed in the signal, and we want to show the count in our component.
 
 ### Replacing with computed
-Let us remove the **setStarsCount** action and refactor our signal to rather grab the repos first and then we update the state in one go. This just to show you different strategies.
+Let us remove the **setStarsCount** action and refactor our signal to instead grab the repos first, then we update the state in one go. This just to show you different strategies.
 
-Check out the refactoring of our *getRepo* action. the factory no longer return paths, just values. So either they return a result using the repo name as the key, or they will set an error.
+Check out the refactoring of our *getRepo* action. The factory is no longer return paths, just values. So either they return a result using the repo name as the key, or they will set an error.
 
 ```js
 ...
@@ -209,9 +209,9 @@ import starsCount from './starsCount'
 ...
 ```
 
-We also use the *when* operator to figure out if we indeed have an error, diverging execution to show an error message. If that is not the case, we update our state tree and show the message.
+We also use the *when* operator to figure out if we indeed have an error, diverging execution to show an error message. Otherwise, we update our state tree and show the message.
 
-Note here that we also updated the *toast* to allow no time to passed in, causing it to stick.
+Note here that we also updated the *toast* to allow no time to be passed in, causing it to stick.
 
 You can use computeds with other computeds, directly in tags, with operators, in actions and in components. Lets update our **App** component:
 
