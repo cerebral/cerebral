@@ -8,7 +8,6 @@ import signalsList from '../../../common/computed/signalsList'
 export default connect({
   type: state`type`,
   currentPage: state`debugger.currentPage`,
-  executingSignalsCount: state`debugger.executingSignalsCount`,
   searchValue: state`debugger.searchValue`,
   isSmall: state`useragent.media.small`,
   appSignals: signalsList,
@@ -58,13 +57,6 @@ export default connect({
                   </li>
                 ] : null
               }
-              <li className='toolbar-rightItem'>
-                {this.props.executingSignalsCount ? 'executing' : 'idle'}
-                <div className={classNames('toolbar-led', {
-                  'toolbar-led--idle': !this.props.executingSignalsCount,
-                  'toolbar-led--executing': !!this.props.executingSignalsCount
-                })} />
-              </li>
             </ul>
           </li>
         </ul>

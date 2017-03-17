@@ -155,7 +155,7 @@ export default connect({
     }
     render () {
       if (!this.props.signal) {
-        return <span>No signal yet...</span>
+        return <span className='signal-empty'>No signals yet...</span>
       }
 
       return (

@@ -99,3 +99,12 @@
   background-color: #DDD;
   display: inline-block;
 }
+
+.signal-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: 32px;
+  color: #CCC;
+}
