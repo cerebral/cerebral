@@ -1,5 +1,5 @@
 export default class Abort {
-  constructor (payload) {
+  constructor (payload = {}) {
     this.payload = payload
   }
 }

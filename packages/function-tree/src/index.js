@@ -70,7 +70,7 @@ class FunctionTreeExecution extends EventEmitter {
     }
 
     if (result instanceof Abort) {
-      const finalPayload = Object.assign({}, payload, result ? result.payload : {})
+      const finalPayload = Object.assign({}, payload, result.payload)
       return functionTree.emit('abort', execution, funcDetails, finalPayload, result)
     }
 
@@ -83,7 +83,7 @@ class FunctionTreeExecution extends EventEmitter {
       result
         .then(function (result) {
           if (result instanceof Abort) {
-            const finalPayload = Object.assign({}, payload, result ? result.payload : {})
+            const finalPayload = Object.assign({}, payload, result.payload)
             return functionTree.emit('abort', execution, funcDetails, finalPayload, result)
           }
           if (result instanceof Path) {
