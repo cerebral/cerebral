@@ -23,8 +23,13 @@
 
 .signal-title {
   margin: 0;
-  padding: 10px 10px 0 10px;
-  font-size: 20px;
+  height: 30px;
+  padding: 0 10px 0 10px;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  background-color: #FAFAFA;
+  border-bottom: 1px solid #DDD;
 }
 
 .signal-chain {
@@ -61,7 +66,6 @@
 }
 
 .signal-output {
-  margin-top: 5px;
   display: flex;
   align-items: flex-start;
 }
@@ -71,17 +75,19 @@
   flex: 0 0 20px;
 }
 
+.signal-outputIcon {}
+
 .signal-outputName {
   height: 20px;
   line-height: 20px;
-  cursor: pointer;
+  cursor: default;
 }
 
 .signal-outputName.executed {
   font-size: 14px;
   font-weight: bold;
   color: #333;
-  cursor: default;
+  cursor: pointer;
 }
 
 .signal-outputPath {

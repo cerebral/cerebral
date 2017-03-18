@@ -54,8 +54,12 @@ export default connect({
         expandedOutputs[action.functionIndex] = {}
       }
 
+      if (!(output in expandedOutputs[action.functionIndex])) {
+        expandedOutputs[action.functionIndex][output] = true
+      }
+
       if (expandedOutputs[action.functionIndex][output]) {
-        delete expandedOutputs[action.functionIndex][output]
+        expandedOutputs[action.functionIndex][output] = false
       } else {
         expandedOutputs[action.functionIndex][output] = true
       }
@@ -68,20 +72,21 @@ export default connect({
           this.props.signal.functionsRun[action.functionIndex] &&
           this.props.signal.functionsRun[action.functionIndex].path === output
         )
-        const style = isOutput ? null : {opacity: 0.3}
-        const isExpanded = this.state.expandedOutputs[action.functionIndex] && this.state.expandedOutputs[action.functionIndex][output]
+        const style = isOutput ? {cursor: 'pointer'} : {opacity: 0.3, fontSize: '8px'}
+        let isExpanded = this.state.expandedOutputs[action.functionIndex] && this.state.expandedOutputs[action.functionIndex][output]
+        isExpanded = typeof isExpanded === 'undefined' ? true : isExpanded
         const outputs = action.outputs[output]._functionTreePrimitive ? action.outputs[output].items : action.outputs[output]
 
         return (
           <div className='signal-output' style={style} key={index}>
-            {isOutput || isExpanded ? (
-              <i className={`icon icon-down ${isOutput ? '' : 'clickable'}`} onClick={(event) => this.toggleOutput(event, action, output)} />
+            {isOutput && isExpanded ? (
+              <i className='icon signal-outputIcon icon-down' onClick={(event) => this.toggleOutput(event, action, output)} />
             ) : (
-              <i className={`icon icon-right ${isOutput ? '' : 'clickable'}`} onClick={(event) => this.toggleOutput(event, action, output)} />
+              <i className='icon signal-outputIcon icon-right' onClick={(event) => this.toggleOutput(event, action, output)} />
             )}
             <div className='signal-outputPath' onClick={(event) => this.toggleOutput(event, action, output)}>
               <div className={isOutput ? 'signal-outputName executed' : 'signal-outputName'}>{output}</div>
-              {isOutput || isExpanded ? outputs.map(this.renderAction) : null}
+              {isOutput && isExpanded ? outputs.map(this.renderAction) : null}
             </div>
           </div>
         )

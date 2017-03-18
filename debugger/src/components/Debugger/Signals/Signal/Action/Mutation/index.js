@@ -24,7 +24,6 @@ function Mutation ({mutation, onMutationClick}) {
 
   return (
     <div className='mutation'>
-      <i className='icon icon-mutation' />
       <span className='mutation-mutationName' style={mutationNameStyle}>{mutation.method}</span>
       <span className='mutation-mutationPath' onClick={() => onMutationClick(mutation.args[0])}>{mutation.args[0].join('.')}</span>
       <span className='mutation-mutationArgs'>
