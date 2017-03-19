@@ -10,7 +10,6 @@ function Service ({service}) {
 
   return (
     <div className='service'>
-      <i className='icon icon-service' />
       <span className='service-serviceName' style={serviceNameStyle}>{service.method}</span>
       <span className='service-serviceArgs'>
         {service.args.map((arg, index) => {

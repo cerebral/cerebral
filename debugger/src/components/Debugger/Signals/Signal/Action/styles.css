@@ -63,13 +63,17 @@
 }
 
 .action-actionTitle {
-  display: inline-block;
-  font-size: 16px;
+  font-size: 14px;
   height: 20px;
+  border-radius: 2px;
   line-height: 20px;
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
+}
+
+.action-actionName {
+  font-style: italic;
 }
 
 .action-actionTitle:hover {

@@ -32,7 +32,7 @@ function renderActionTitle (action) {
   const actionName = getActionName(action)
   return (
     <div className='action-actionTitle'>
-      {actionName.name}
+      <span className='action-actionName'>{actionName.name}</span>
       {actionName.params ? <span className='action-actionNameParams'>{actionName.params}</span> : null}
     </div>
   )
