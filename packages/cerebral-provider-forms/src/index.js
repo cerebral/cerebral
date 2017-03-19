@@ -24,7 +24,7 @@ function FormsProvider (options = {}) {
         context.state.set(path, resetForm(context.state.get(path)))
       },
       toJSON (path) {
-        context.state.set(path, formToJSON(context.state.get(path)))
+        return formToJSON(context.state.get(path))
       },
       updateRules (newRules) {
         Object.assign(rules, newRules)
