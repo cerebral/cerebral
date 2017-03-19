@@ -14,7 +14,7 @@ Promise.all([
     const docs = results[0]
     const pages = results[1]
 
-    app.use('/images', express.static('images'))
+    app.use('/', express.static('public'))
 
     app.get('/docs/:sectionName*', function (req, res) {
       const docName = req.params[0] ? path.basename(req.params[0], '.html') : 'index'
