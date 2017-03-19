@@ -178,8 +178,7 @@ describe('form', () => {
               value: 'Ben'
             },
             showErrors: false,
-            validationError: null,
-            isLoading: false
+            validationError: null
           }
         },
         signals: {
@@ -187,12 +186,8 @@ describe('form', () => {
             ({forms}) => {
               const form = forms.get('form')
               assert.ok(form instanceof Form)
-              assert.ok(form.name instanceof Field)
-              assert.equal(form.name.value, 'Ben')
-              assert.equal(form.name.isValid, true)
               assert.equal(form.showErrors, false)
               assert.equal(form.validationError, null)
-              assert.equal(form.isLoading, false)
             }
           ]
         }
