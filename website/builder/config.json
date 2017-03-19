@@ -48,7 +48,8 @@
       "useragent",
       "forms",
       "storage",
-      "function_tree"
+      "function_tree",
+      "firebase_admin"
     ],
     "migration": [
       "index"

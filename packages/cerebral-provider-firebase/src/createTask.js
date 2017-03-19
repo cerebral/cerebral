@@ -30,6 +30,6 @@ export default function createTask (options, executionId, functionIndex) {
             }
           })
         })
-    }).catch((error) => ({error: error.message}))
+    })
   }
 }
