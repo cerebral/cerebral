@@ -5,6 +5,14 @@ img {
   border-radius: 3px;
 }
 
+blockquote {
+  font-size: 42px;
+  text-align: center;
+  color: #333;
+  opacity: 0.5;
+  line-height: 42px;
+}
+
 .docs-container pre {
   background: #FFF;;
   padding: 0;

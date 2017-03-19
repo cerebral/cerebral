@@ -53,3 +53,15 @@ h2 {
 h3, h4, h5, h6 {
   font-weight: bold;
 }
+
+
+.beta {
+  position: fixed;
+  top: 10px;
+  left: -30px;
+  transform: rotate(-45deg);
+  background-color: #DD4A68;
+  color: #FFF;
+  padding: 5px 40px;
+  z-index: 99999;
+}
