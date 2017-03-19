@@ -81,7 +81,7 @@ Promise.all([
         return Promise.all([
           copyDir('css', 'dist'),
           copyDir('scripts', 'dist'),
-          copyDir('images', 'dist/images')
+          copyDir('public', 'dist')
         ])
       })
       .then(function () {
