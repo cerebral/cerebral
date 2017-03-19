@@ -38,27 +38,4 @@ describe('isValidForm', () => {
     controller.getSignal('isValidForm')()
     assert.equal(invalidCount, 1)
   })
-  it('should throw an error if formPath is not a STATE TAG', () => {
-    const controller = Controller({
-      providers: [FormsProvider()],
-      signals: {
-        isValidForm: [
-          isValidForm('form'), {
-            true: [],
-            false: []
-          }
-        ]
-      },
-      state: {
-        form: {
-          name: {
-            value: 'Ben'
-          }
-        }
-      }
-    })
-    assert.throws(() => {
-      controller.getSignal('isValidForm')()
-    }, Error, 'Cerebral Forms - isValidForm factory requires a STATE TAG')
-  })
 })
