@@ -39,17 +39,19 @@ export class Form {
   }
   _validate () {
     function validate (obj) {
-      return Object.keys(obj).reduce((isValid, field) => {
-        if (obj[field] instanceof Field) {
-          const isFieldValid = obj[field]._validate()
+      if (obj === Object(obj)) {
+        return Object.keys(obj).reduce((isValid, field) => {
+          if (obj[field] instanceof Field) {
+            const isFieldValid = obj[field]._validate()
 
-          return isValid ? isFieldValid : false
-        } else {
-          const areFieldsValid = validate(obj[field])
+            return isValid ? isFieldValid : false
+          } else {
+            const areFieldsValid = validate(obj[field])
 
-          return isValid ? areFieldsValid : false
-        }
-      }, true)
+            return isValid ? areFieldsValid : false
+          }
+        }, true)
+      }
     }
 
     return validate(this)
