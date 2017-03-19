@@ -105,6 +105,10 @@ export default connect({
     form.someField.failedRule.arg
     // If you have defined global error messages and field is invalid
     form.someField.errorMessage
+    // Get all invalid fields
+    form.getInvalidFields()
+    // Get all fields
+    form.getFields()
   }
 )
 ```

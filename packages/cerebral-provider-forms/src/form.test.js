@@ -309,5 +309,31 @@ describe('form', () => {
       })
       controller.getSignal('test')()
     })
+    it('should return all fields', () => {
+      const controller = Controller({
+        providers: [FormsProvider()],
+        state: {
+          form: {
+            someField: {
+              value: 'some field value'
+            },
+            otherField: {
+              value: 'some other field'
+            }
+          }
+        },
+        signals: {
+          test: [
+            ({forms}) => {
+              const form = forms.get('form')
+              let fields = form.getFields()
+              assert.equal(fields.someField.value, 'some field value')
+              assert.equal(Object.keys(fields).length, 2)
+            }
+          ]
+        }
+      })
+      controller.getSignal('test')()
+    })
   })
 })

@@ -2,6 +2,7 @@ import {compute} from 'cerebral'
 import runValidation from './utils/runValidation'
 import formToJSON from './helpers/formToJSON'
 import getInvalidFormFields from './helpers/getInvalidFormFields'
+import getFormFields from './helpers/getFormFields'
 
 function createFields (source, form) {
   return Object.keys(source).reduce((fields, key) => {
@@ -59,6 +60,10 @@ export class Form {
   getInvalidFields () {
     return getInvalidFormFields(this)
   }
+  getFields () {
+    return getFormFields(this)
+  }
+
 }
 
 export default function computedForm (formValueTag) {
