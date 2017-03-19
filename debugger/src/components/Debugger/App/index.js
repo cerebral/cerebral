@@ -1,5 +1,6 @@
 import './styles.css'
 import Inferno from 'inferno' // eslint-disable-line
+import classNames from 'classnames'
 import connector from 'connector'
 import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
@@ -13,6 +14,7 @@ export default connect({
   port: state`port`,
   type: state`type`,
   currentPage: state`debugger.currentPage`,
+  executingSignalsCount: state`debugger.executingSignalsCount`,
   settings: state`debugger.settings`,
   isSmall: state`useragent.media.small`,
   mutationsError: state`debugger.mutationsError`,
@@ -111,6 +113,13 @@ export default connect({
             </div>
           }
           {this.renderLayout()}
+          <div className='execution'>
+            {this.props.executingSignalsCount ? 'executing' : 'idle'}
+            <div className={classNames('execution-led', {
+              'execution-led--idle': !this.props.executingSignalsCount,
+              'execution-led--executing': !!this.props.executingSignalsCount
+            })} />
+          </div>
         </div>
       )
     }

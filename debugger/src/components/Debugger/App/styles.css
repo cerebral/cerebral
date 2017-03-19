@@ -53,3 +53,35 @@
   padding: 50px;
   text-align: center;
 }
+
+
+.execution {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 39px;
+  line-height: 40px;
+  margin: 0;
+  font-size: 12px;
+  top: 0;
+  right: 15px;
+  width: 100px;
+}
+
+.execution-led {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #333;
+  border-radius: 2px;
+  margin-left: 10px;
+}
+
+.execution-led--idle {
+  background-color: #78db27;
+}
+
+.execution-led--executing {
+  background-color: #dbb427;
+}

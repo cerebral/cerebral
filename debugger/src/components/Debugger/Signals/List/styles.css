@@ -69,3 +69,8 @@
   -webkit-touch-callout: none;
   -webkit-user-select: none;
 }
+
+.ft-indication {
+  font-weight: normal;
+  font-size: 10px;
+}

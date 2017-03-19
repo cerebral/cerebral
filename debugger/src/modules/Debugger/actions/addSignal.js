@@ -7,6 +7,7 @@ function addSignal ({props, state, resolve}) {
   const newSignal = {
     name: execution.name,
     executionId: execution.executionId,
+    source: props.source,
     isExecuting: true,
     datetime: execution.datetime,
     staticTree: execution.staticTree,

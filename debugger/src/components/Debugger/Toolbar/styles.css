@@ -63,33 +63,6 @@
   background-color: #FAFAFA;
 }
 
-.toolbar-rightItem {
-  float: right;
-  height: 39px;
-  line-height: 40px;
-  margin-right: 10px;
-  font-size: 12px;
-  display: flex;
-  align-items: center;
-}
-
-.toolbar-led {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  border: 1px solid #333;
-  border-radius: 2px;
-  margin-left: 10px;
-}
-
-.toolbar-led--idle {
-  background-color: #78db27;
-}
-
-.toolbar-led--executing {
-  background-color: #dbb427;
-}
-
 @media (min-width: 1270px) {
     .toolbar-tabOnSmall {
         display: none;

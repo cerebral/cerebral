@@ -7,6 +7,7 @@ import classnames from 'classnames'
 import signalsList from '../../../../common/computed/signalsList'
 
 export default connect({
+  type: state`type`,
   debugger: state`debugger`,
   signalsList: signalsList,
   isExecuting: state`debugger.isExecuting`,
@@ -91,7 +92,9 @@ export default connect({
           className={className}
           key={index}>
           {isInOpenGroup && prevSignal && prevSignal.groupId === signal.groupId ? null : <div className={indicatorClassname} style={signalStyle} />}
-          <span className='list-name'>{name} <small>{(!prevSignal || prevSignal.groupId !== signal.groupId) && groupCount > 1 ? ` (${groupCount})` : null}</small></span>
+          <span className='list-name'>
+            {name} <small>{(!prevSignal || prevSignal.groupId !== signal.groupId) && groupCount > 1 ? ` (${groupCount})` : null}</small> {this.props.type === 'cft' && signal.source === 'ft' ? <small className='ft-indication'>FT</small> : null}
+          </span>
         </li>
       )
     }
