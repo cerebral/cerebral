@@ -2,12 +2,12 @@
 
 > Welcome to the BETA
 
-The **Cerebral 2.0** project is now officially in Beta. It is already running in production on the [webpackbin](https://www.webpackbin.com) project and other non open source projects. Have fun looking through the docs and the tutorial, and please let us know if you need any help or have questions. Our community is hanging out on [Discord](https://discord.gg/0kIweV4bd2bwwsvH).
+The **Cerebral 2.0** project is now officially in Beta. It is already running in production on the [webpackbin](https://www.webpackbin.com) project and other non open source projects. A release article, comparing Cerebral to Mobx and Redux, can be [read here](http://www.christianalfoni.com/articles/2017_03_19_Cerebral-2). Have fun looking through the docs and the tutorial, and please let us know if you need any help or have questions. Our community is hanging out on [Discord](https://discord.gg/0kIweV4bd2bwwsvH).
 
 ## Install
 To install Cerebral you need to use the Node Package Manager. NPM is part of [Node](https://nodejs.org/en/), so please install that on your computer first. You should install Node version 5 or later. If you are not familiar with Node and/or Webpack it can be a good idea to start out with [the tutorial](/docs/developer_guide/index.html).
 
-To install Cerebral Alpha you have to explicitly install Cerebral and its dependency:
+To install Cerebral BETA you have to explicitly install Cerebral and its dependency:
 
 `npm install cerebral@next --save --save-exact`
 

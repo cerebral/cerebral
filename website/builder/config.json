@@ -40,7 +40,8 @@
       "routing",
       "organize",
       "providers",
-      "test"
+      "test",
+      "collaborate"
     ],
     "packages": [
       "index",

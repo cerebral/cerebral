@@ -122,6 +122,56 @@ compute(
 
 Typically you can get away with most things using Tags, but compute will help you with any other scenarios where more "umph" is needed.
 
+## Factory
+Typically you will create computed factories. Just think of compute as a function that is able to resolve tags and other computed. for example:
+
+```js
+import {compute} from 'cerebral'
+import {state, props} from 'cerebral/tags'
+
+export default (type) => {
+  return compute(
+    state`items`,
+    (items) => {
+      return items.filter(item => item.type === type)
+    }
+  )
+}
+```
+
+This could now be used as:
+
+```js
+connect({
+  filteredItems: filterCompute('typeA')
+})
+```
+
+But we could be smarter about this. By changing it out like:
+
+```js
+import {compute} from 'cerebral'
+import {state, props} from 'cerebral/tags'
+
+export default (typeValue) => {
+  return compute(
+    typeValue,
+    state`items`,
+    (type, items) => {
+      return items.filter(item => item.type === type)
+    }
+  )
+}
+```
+
+Now we evaluate the value passed in, meaning it could also be a tag:
+
+```js
+connect({
+  filteredItems: filterCompute(props`type`)
+})
+```
+
 ## Tutorial
 
 **Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBaa45GzVJFOxU69Gp)
