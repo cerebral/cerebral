@@ -28,7 +28,7 @@ after_success:
     lerna bootstrap;
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
     lerna publish -c --npm-tag next --yes --exact;
-    npm run ci &>/dev/null;
+    npm run ci;
     echo 'Website updated.'
   fi
 branches:
