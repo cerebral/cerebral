@@ -226,6 +226,8 @@ export class FunctionTree extends EventEmitter {
       cb && cb(error, execution, payload)
       setTimeout(() => {
         this.emit('error', error, execution, funcDetails, payload)
+
+        throw error
       })
     })
 

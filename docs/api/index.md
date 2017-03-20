@@ -18,7 +18,7 @@ export default controller
 ```
 
 ## Errors
-Cerebral knows about any errors that happen during a signal execution, synchronous and asynchronous. By default Cerebral just throws these errors to the console, but you can take control if you want to pass them to error tracking services etc.
+Cerebral knows about any errors that happen during a signal execution, synchronous and asynchronous. Cerebral throws these errors to the console, but you can intercept this if you want to pass errors to tracking services etc. The error will be thrown to console after your error handler(s) has run.
 
 ```js
 controller.on('error', function (error, execution, functionDetails) {})

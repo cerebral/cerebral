@@ -24,6 +24,7 @@
 .action-actionErrorHeader {
   background-color: #F44336;
   padding: 5px;
+  display: flex;
   color: #FAFAFA;
   background-color: #F44336;
 }
