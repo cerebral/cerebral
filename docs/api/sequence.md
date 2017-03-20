@@ -32,7 +32,6 @@ export default sequence('my sequence', [
 
 You can compose a sequence into existing sequence. The debugger will show this composition:
 ```js
-import {sequence} from 'cerebral'
 import someAction from '../actions/someAction'
 import someOtherSequence from './someOtherSequence'
 
