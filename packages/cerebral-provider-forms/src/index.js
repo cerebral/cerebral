@@ -2,6 +2,7 @@ import {state} from 'cerebral/tags'
 import form from './form'
 import rules from './rules'
 import resetForm from './helpers/resetForm'
+import formToJSON from './helpers/formToJSON'
 export {default as form} from './form'
 export {default as rules} from './rules'
 
@@ -21,6 +22,9 @@ function FormsProvider (options = {}) {
       },
       reset (path) {
         context.state.set(path, resetForm(context.state.get(path)))
+      },
+      toJSON (path) {
+        return formToJSON(context.state.get(path))
       },
       updateRules (newRules) {
         Object.assign(rules, newRules)

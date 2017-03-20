@@ -163,4 +163,26 @@ describe('provider', () => {
     controller.getSignal('test')()
     rules._errorMessages = {}
   })
+  it('should be able to convert to json', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
+      state: {
+        form: {
+          name: {
+            value: 'Be'
+          }
+        }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            assert.deepEqual(forms.toJSON('form'), {
+              name: 'Be'
+            })
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+  })
 })
