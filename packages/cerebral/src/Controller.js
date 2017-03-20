@@ -166,15 +166,7 @@ class Controller extends FunctionTree {
       }, {})
     }
 
-    if (this._events.error) {
-      this.runTree(name, signal, payload)
-    } else {
-      this.runTree(name, signal, payload, (err) => {
-        if (err) {
-          throw err
-        }
-      })
-    }
+    this.runTree(name, signal, payload)
   }
   /*
     Returns a function which binds the name/path of signal,
