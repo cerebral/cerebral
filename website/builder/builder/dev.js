@@ -6,6 +6,9 @@ const extractPages = require('./extractPages')
 const render = require('./render')
 const {readFile, readScript, extractRawText} = require('./utils')
 
+const host = process.env.HOST || 'localhost'
+const port = process.env.PORT || 3000
+
 Promise.all([
   extractMarkdownFiles(),
   extractPages()
@@ -74,7 +77,7 @@ Promise.all([
         })
     })
 
-    app.listen(3000, function () {
-      console.log('Running server on 3000')
+    app.listen(port, host, function () {
+      console.log(`Running server on ${host}:${port}`)
     })
   })
