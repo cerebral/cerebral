@@ -133,6 +133,7 @@ const controller = Controller({
     buttonClicked: updateSubtitle
   }
 })
+...
 ```
 We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. We do this by pointing to our *subTitle* function. Normally you would define this signal in a separate file.
 

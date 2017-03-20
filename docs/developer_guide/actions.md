@@ -83,6 +83,7 @@ function setToast ({state, props}) {
 }
 ```
 
+Then we wire those actions together in our buttonClicked-**signal**
 
 ```js
 ...
