@@ -45,11 +45,14 @@ blockquote {
 }
 
 .docs-container {
-  padding-top: 40px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .docs-navigation {
   display: flex;
+  flex: 0 0 auto;
   box-sizing: border-box;
   justify-content: center;
   align-items: stretch;
@@ -58,10 +61,7 @@ blockquote {
   background-color: #FAFAFA;
   box-shadow: 0px 5px 10px rgba(0,0,0,0.05);
   height: 40px;
-  position: fixed;
-  width: 100%;
   z-index: 10;
-  top: 0;
 }
 
 .docs-navigation-menu {
@@ -166,8 +166,9 @@ blockquote {
 }
 
 .docs-content {
-  position: relative;
   display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
   line-height: 26px;
   font-size: 16px;
   padding: 0 20px;
@@ -176,11 +177,16 @@ blockquote {
 }
 
 .docs-doc {
-  position: relative;
+  overflow-y: auto;
   flex: 4;
+}
+
+.docs-doc-content {
+  position: relative;
   max-width: 800px;
   min-height: calc(100vh - 210px);
   padding-bottom: 60px;
+  padding-left: 20px;
 }
 
 .docs-doc-edit {
@@ -195,6 +201,7 @@ blockquote {
 
 .docs-toc {
   flex: 1;
+  overflow-y: auto;
   min-width: 100px;
   max-width: 300px;
   padding: 0 40px;
@@ -203,9 +210,7 @@ blockquote {
 
 .docs-toc-content {
   padding: 20px 0;
-  position: fixed;
   height: calc(100vh - 40px);
-  overflow-y: auto;
   box-sizing: border-box;
 }
 
@@ -343,13 +348,26 @@ blockquote {
   display: none;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1240px) {
+  #navigation {
+    display: none;
+  }
+
   .docs-toc, .docs-search, .docs-doc-edit, .docs-navigation, .docs-navigation-menu {
     display: none;
   }
 
   .mobile, .docs-content, .docs-navigation.mobile .docs-toc {
     display: block;
+  }
+
+  .docs-content {
+    overflow-y: auto;
+  }
+
+  .docs-doc-content {
+    padding: 0;
+    margin: auto;
   }
 
   .docs-container pre > code {
@@ -371,14 +389,16 @@ blockquote {
     left: 0;
     transform: translate3d(0, 0, 0);
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: auto;
     background-color: #FFF;
     width: 90%;
     box-shadow: 0px 9px 10px rgba(0,0,0,0.1);
+    z-index: 10;
   }
 
   .docs-navigation-menu.mobile {
     color: #333;
+    padding: 10px;
   }
 
   .docs-navigation-float.mobile .docs-toc {
@@ -388,6 +408,8 @@ blockquote {
   }
   .docs-navigation-menu.mobile .docs-toc-content {
     position: relative;
+    height: auto;
+    padding: 0;
   }
 
   .docs-navigation-menu.mobile .docs-toc-content > div {
@@ -401,7 +423,7 @@ blockquote {
 
   .docs-navigation-item {
     line-height: 18px;
-    padding: 20px;
+    padding: 10px;
   }
 
   .docs-navigation-item > a {
