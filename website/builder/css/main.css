@@ -57,11 +57,26 @@ h3, h4, h5, h6 {
 
 .beta {
   position: fixed;
-  top: 10px;
-  left: -30px;
+  top: -10px;
+  left: -40px;
   transform: rotate(-45deg);
   background-color: #DD4A68;
   color: #FFF;
+  width: 75px;
   padding: 5px 40px;
   z-index: 99999;
+}
+
+@media (max-width: 1000px) {
+  .beta {
+    position: absolute;
+    top: 25px;
+    left: auto;
+    right: -70px;
+    transform: rotate(45deg);
+    background-color: #DD4A68;
+    color: #FFF;
+    padding: 5px 40px;
+    z-index: 99999;
+  }
 }
