@@ -15,7 +15,7 @@
     "coverage": "lerna run coverage --ignore @cerebral/monorepo",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "deploy": "cd docs/website && npm run ci"
+    "deploy": "cd website/publisher && npm run ci"
   },
   "bin": {
     "babel": "./node_modules/.bin/babel",
