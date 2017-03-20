@@ -342,6 +342,30 @@ describe('form', () => {
           form: {
             name: {
               value: 'Ben',
+              validationRules: ['minLength:3']
+            },
+            showErrors: false,
+            validationError: null
+          }
+        },
+        signals: {
+          test: [
+            ({forms}) => {
+              const form = forms.get('form')
+              assert.equal(form.isValid, true)
+            }
+          ]
+        }
+      })
+      controller.getSignal('test')()
+    })
+    it('should not validate with global props', () => {
+      const controller = Controller({
+        providers: [FormsProvider()],
+        state: {
+          form: {
+            name: {
+              value: 'Ben',
               validationRules: ['isNumeric']
             },
             showErrors: false,
