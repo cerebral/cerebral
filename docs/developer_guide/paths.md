@@ -187,7 +187,7 @@ We got even more flow control now, telling Cerebral to execute actions/operators
 ### Handling time
 But... there is an other issue here. Did you notice that these **showToast** action factories do not cancel each other out? So the initial 2 second wait might close the toast where it was supposed to hold for 5 seconds after a success?
 
-Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. Simply said it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behavior to be shared across them. Whenever **any** *showToast* is called, we want the existing pending toast timer to be discarded. We can do that by creating a shared debounce. So once agian, head over to *controller.js* and change it to:
+Instead of using **wait**, we can use **debounce**. It is difficult to wrap your head around debounce. Simply said it ensures that whenever we run **showToast**, any pending toast timer will be discarded. But that is not enough, cause we have multiple *showToast* in our signal. So we need this behavior to be shared across them. Whenever **any** *showToast* is called, we want the existing pending toast timer to be discarded. We can do that by creating a shared debounce. So once again, head over to *controller.js* and change it to:
 
 ```js
 ...
