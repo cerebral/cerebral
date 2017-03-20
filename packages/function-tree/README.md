@@ -443,55 +443,6 @@ const tree = [
 execute(tree, {foo: 'bar'})
 ```
 
-#### Debugger (optional provider)
-Download the [Chrome Extension](https://chrome.google.com/webstore/detail/function-tree-debugger/ppfbmcnapdgakfiocieggdgbhmlalgjp).
-
-```js
-import FunctionTree from 'function-tree'
-import {ContextProvider, DebuggerProvider} from 'function-tree/providers'
-import request from 'request'
-
-const execute = FunctionTree([
-  DebuggerProvider({
-    colors: {
-      request: 'red' // Set color of usage in debugger
-    }
-  }),
-  ContextProvider({
-    request
-  })
-])
-```
-
-When you execute trees you can name the execution:
-
-```js
-execute('thisHappened', someTree)
-```
-
-And that will be used in the debugger instead of execution id.
-
-#### NodeDebugger (optional provider)
-```js
-const FunctionTree = require('function-tree')
-const NodeDebuggerProvider = require('function-tree/providers/NodeDebugger')
-const ContextProvider = require('function-tree/providers/Context')
-const request = require('request')
-
-const execute = FunctionTree([
-  NodeDebuggerProvider({
-    colors: {
-      request: 'red' // Set color of usage in debugger
-    }
-  }),
-  ContextProvider({
-    request
-  })
-])
-```
-
-Colors supported are **red, green, yellow, blue, magenta, cyan, white, gray, bgBlack, bgRed, bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan and bgWhite**
-
 #### Events
 The execute function is also an event emitter.
 
