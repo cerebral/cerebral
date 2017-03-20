@@ -150,6 +150,7 @@ blockquote {
 .docs-icon-github {
   background-image: url(/images/github.png);
   background-size: contain;
+  background-repeat: no-repeat;
   width: 25px;
   height: 25px;
   margin-right: 5px;
@@ -158,6 +159,7 @@ blockquote {
 .docs-icon-discord {
   background-image: url(/images/discord.png);
   background-size: contain;
+  background-repeat: no-repeat;
   width: 25px;
   height: 25px;
   margin-right: 5px;
@@ -176,19 +178,15 @@ blockquote {
 .docs-doc {
   position: relative;
   flex: 4;
+  max-width: 800px;
+  min-height: calc(100vh - 210px);
+  padding-bottom: 60px;
 }
 
 .docs-doc-edit {
   position: absolute;
   right: 0;
   top: 60px;
-}
-
-.docs-doc-content {
-  max-width: 800px;
-  min-height: calc(100vh - 210px);
-  padding-bottom: 60px;
-  position: relative;
 }
 
 .docs-doc-content li {
@@ -254,7 +252,7 @@ blockquote {
 }
 
 .docs-search {
-  flex: 1;
+  flex: 0 1;
   display: flex;
   margin: 0 20px;
   position: relative;
