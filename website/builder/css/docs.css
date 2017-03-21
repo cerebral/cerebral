@@ -104,34 +104,6 @@ blockquote {
   display: block;
 }
 
-
-.docs-navigation-item .docs-navigation-subItems {
-  display: none;
-  position: absolute;
-  top: 40px;
-  left: 0;
-  width: 250px;
-  color: #333;
-  background-color: #FFF;
-  border-top: 0;
-}
-
-.docs-navigation-item:hover .docs-navigation-subItems {
-  display: block;
-  padding: 10px;
-  box-shadow: 0px 9px 10px rgba(0,0,0,0.1);
-  line-height: 25px;
-}
-
-.docs-navigation-item .docs-navigation-subItems .docs-navigation-subItem {
-  display: block;
-  padding: 0 10px;
-}
-
-.docs-navigation-item .docs-navigation-subItems .docs-navigation-subItem.active {
-  text-decoration: underline;
-}
-
 .docs-icons {
   flex: 1;
   display: flex;
@@ -210,7 +182,6 @@ blockquote {
 
 .docs-toc-content {
   padding: 20px 0;
-  height: calc(100vh - 40px);
   box-sizing: border-box;
 }
 
@@ -293,36 +264,6 @@ blockquote {
 .docs-search-result-item span {
   color: #333;
   font-size: 14px;
-}
-
-.docs-footer {
-  height: 150px;
-  background-color: #004a66;
-  display: flex;
-  justify-content: center;
-}
-
-.docs-footer-column {
-  flex: 1;
-  max-width: 250px;
-  padding: 30px;
-}
-
-.docs-footer-header {
-  color: #92dff0;
-  font-size: 12px;
-  margin-bottom: 10px;
-}
-
-.docs-footer-column a {
-  color: #FFF;
-  display: block;
-  margin-bottom: 7.5px;
-  font-weight: normal;
-}
-
-.docs-footer-column a:hover {
-  color: rgba(255,255,255,0.8);
 }
 
 .docs-navigation-title.mobile {
@@ -432,15 +373,5 @@ blockquote {
     color: #0086b3;
     text-transform: uppercase;
     padding: 0;
-  }
-
-  .docs-footer {
-    flex-direction: column;
-    align-items: center;
-    height: auto;
-  }
-
-  .docs-footer-column {
-    min-width: 200px;
   }
 }
