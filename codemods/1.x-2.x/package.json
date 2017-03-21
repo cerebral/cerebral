@@ -1,18 +1,14 @@
 {
-  "name": "cerebral-codemods",
+  "name": "@cerebral/codemods_1.x-2.x",
+  "private": true,
   "version": "1.0.0",
-  "description": "",
-  "main": ".#controller.js",
   "scripts": {
     "test": "jest"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "jest": "^16.0.2",
-    "jscodeshift": "^0.3.30"
-  },
+  "author": "Adam Hoddinott <adam.hoddinott@salespreso.com>",
+  "license": "MIT",
   "devDependencies": {
-    "babel-jest": "^16.0.0"
+    "@cerebral/monorepo": "0.0.1",
+    "jscodeshift": "^0.3.30"
   }
 }

@@ -5,14 +5,18 @@ branches of cerebral.
 
 ### Development
 
-Installing
+## Installing
+
+Run at the root of monorepo
 
 ```shell
-npm install
+lerna bootstrap --scope @cerebral/codemods
 ```
 
 For testing:
 
 ```shell
-npm run test
+npm test # at codemods root
+# or 
+lerna run test --scope @cerebral/codemods # at monorepo root
 ```
