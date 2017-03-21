@@ -271,18 +271,30 @@ blockquote {
   font-size: 24px;
   flex: 1;
   text-align: center;
-  padding-right: 40px;
+  padding-right: 50px;
   text-transform: uppercase;
 }
 
 .docs-navigation-hamburger {
-  flex: 0 0 40px;
-  color: #FFF;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  flex: 0 0 50px;
   height: 50px;
+  cursor: pointer;
+}
+.docs-navigation-hamburger:before {
+  content: "";
+  width: 40%;
+  height: 30%;
+  background: linear-gradient(
+    to bottom,
+    white, white 20%,
+    transparent 20%, transparent 40%,
+    white 40%, white 60%,
+    transparent 60%, transparent 80%,
+    white 80%, white 100%
+  );
 }
 
 .mobile {
