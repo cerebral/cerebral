@@ -4,6 +4,7 @@ import createStaticTree from './staticTree'
 import ExecutionProvider from './providers/Execution'
 import PropsProvider from './providers/Props'
 import PathProvider from './providers/Path'
+import AbortProvider from './providers/Abort'
 import Path from './Path'
 import Abort from './Abort'
 import {Sequence, Parallel} from './primitives'
@@ -46,6 +47,7 @@ class FunctionTreeExecution extends EventEmitter {
     this.functionTree = functionTree
     this.datetime = Date.now()
     this.errorCallback = errorCallback
+    this.isAborted = false
 
     this.runFunction = this.runFunction.bind(this)
   }
@@ -56,6 +58,10 @@ class FunctionTreeExecution extends EventEmitter {
     the returned value being a promise
   */
   runFunction (funcDetails, payload, prevPayload, next) {
+    if (this.isAborted) {
+      return
+    }
+
     const context = this.createContext(funcDetails, payload, prevPayload)
     const functionTree = this.functionTree
     const errorCallback = this.errorCallback
@@ -71,6 +77,19 @@ class FunctionTreeExecution extends EventEmitter {
 
     if (result instanceof Abort) {
       const finalPayload = Object.assign({}, payload, result.payload)
+
+      if (funcDetails.getAbortChain) {
+        functionTree.runTree('abort', funcDetails.getAbortChain(), Object.assign({}, finalPayload, {
+          _execution: {
+            id: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            isAbort: true
+          }
+        }))
+      }
+
+      execution.isAborted = true
+
       return functionTree.emit('abort', execution, funcDetails, finalPayload, result)
     }
 
@@ -148,7 +167,8 @@ class FunctionTreeExecution extends EventEmitter {
     return [
       ExecutionProvider(this, Abort),
       PropsProvider(),
-      PathProvider()
+      PathProvider(),
+      AbortProvider()
     ].concat(this.functionTree.contextProviders).reduce(function (currentContext, contextProvider) {
       var newContext = (
         typeof contextProvider === 'function'

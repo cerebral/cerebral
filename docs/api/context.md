@@ -131,3 +131,12 @@ You have access to function tree execution as well. This holds information about
 ```js
 function someAction ({execution}) {}
 ```
+
+## Abort
+To abort execution you can use the abort provider:
+
+```js
+function someAction ({abort}) {
+  return abort({}) // Optional payload
+}
+```

@@ -407,4 +407,75 @@ describe('FunctionTree', () => {
 
     execute(tree)
   })
+  it('should use abort chain using sequence', (done) => {
+    let executedCount = 0
+    const execute = FunctionTree([])
+
+    function funcA ({abort}) { return abort() }
+    function funcB () { executedCount++ }
+
+    const tree = sequence([
+      funcA
+    ], [
+      funcB
+    ])
+
+    execute.once('end', () => {
+      assert.equal(executedCount, 1)
+      done()
+    })
+
+    execute(tree)
+  })
+  it('should use abort chain using parallel', (done) => {
+    let executedCount = 0
+    const execute = FunctionTree([])
+
+    function funcA ({abort}) { return abort() }
+    function funcB () { executedCount++ }
+
+    const tree = parallel([
+      funcA
+    ], [
+      funcB
+    ])
+
+    execute.once('end', () => {
+      assert.equal(executedCount, 1)
+      done()
+    })
+
+    execute(tree)
+  })
+  it('should not continue async execution when aborted', (done) => {
+    let executedCount = 0
+    const execute = FunctionTree([])
+
+    function funcA ({path}) {
+      return Promise.resolve(path.test())
+    }
+    function funcB ({abort}) {
+      return abort()
+    }
+    function funcC () { executedCount++ }
+    function funcD () { executedCount++ }
+
+    const tree = parallel([
+      funcA, {
+        test: funcC
+      },
+      funcB
+    ], [
+      funcD
+    ])
+
+    execute.once('end', () => {
+      setTimeout(() => {
+        assert.equal(executedCount, 1)
+        done()
+      })
+    })
+
+    execute(tree)
+  })
 })

@@ -107,6 +107,26 @@ module.exports = sequence('My awesome sequence', [
 ])
 ```
 
+You can also add a second sequence. This is the **abort sequence**. When one of the functions return an abort it will run this sequence.
+
+```js
+const sequence = require('function-tree').sequence
+
+function someFunction (context) {
+  return context.abort()
+}
+function someOtherFunction (context) {}
+
+module.exports = sequence('My awesome sequence', [
+  someFunction,
+  someOtherFunction // does not run
+], [
+  someAbortHandlingFunction
+])
+```
+
+Note that aborting a sequence does not cause **bubbling** up to other abort sequences.
+
 ### parallel
 ```js
 const parallel = require('function-tree').parallel
@@ -120,7 +140,7 @@ module.exports = parallel([
 ])
 ```
 
-Even though **someFunction** returns a Promise, **someOtherFunction** will be run immediately.
+Even though **someFunction** returns a Promise, **someOtherFunction** will be run immediately. Parallel has the same naming and abort possibilities as a sequence.
 
 ### context
 
@@ -213,7 +233,7 @@ const FunctionTree = require('function-tree').default
 const execute = FunctionTree([])
 
 function funcA (context) {
-  return context.execution.abort()
+  return context.execution.abort({}) // optional payload
 }
 
 function funcB (context) {
@@ -225,9 +245,19 @@ const tree = [
   funcB
 ]
 
+// If not caught by an abort chain and event is triggered
 execute.on('abort', (functionDetails, payload) => {})
 
 execute(tree)
+```
+
+### abort
+Just short for **execution.abort**.
+
+```js
+function funcA (context) {
+  return context.abort({}) // optional payload
+}
 ```
 
 ### error

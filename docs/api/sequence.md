@@ -20,6 +20,7 @@ export default sequence([
 ])
 ```
 
+## Name
 You can name a sequence, which will be displayed in debugger:
 ```js
 import {sequence} from 'cerebral'
@@ -30,6 +31,7 @@ export default sequence('my sequence', [
 ])
 ```
 
+## Compose
 You can compose a sequence into existing sequence. The debugger will show this composition:
 ```js
 import someAction from '../actions/someAction'
@@ -40,3 +42,25 @@ export default [
   someOtherSequence
 ]
 ```
+
+## Abort
+You can abort a sequence execution:
+
+```js
+import {sequence} from 'cerebral'
+
+function someActionAborting ({abort}) {
+  return abort({}) // Optional payload
+}
+function someAction () {}
+function someActionHandlingAbort () {}
+
+export default sequence('my sequence', [
+  someActionAborting,
+  someAction // will not run
+], [
+  someActionHandlingAbort
+])
+```
+
+Abort does not **bubble**, meaning actions that abort will only reach its specific abort sequence.

@@ -3,9 +3,11 @@ export class Sequence {
     if (typeof args[0] === 'string') {
       this.name = args[0]
       this.items = args[1]
+      this.abortChain = args[2]
     } else {
       this.name = null
       this.items = args[0]
+      this.abortChain = args[1]
     }
 
     if (!Array.isArray(this.items)) {
@@ -27,9 +29,11 @@ export class Parallel {
     if (typeof args[0] === 'string') {
       this.name = args[0]
       this.items = args[1]
+      this.abortChain = args[2]
     } else {
       this.name = null
       this.items = args[0]
+      this.abortChain = args[1]
     }
 
     if (!Array.isArray(this.items)) {
