@@ -30,10 +30,31 @@ module.exports = function (fileInfo, api) {
   const expressions = []
 
   expressions.push(
-    j.property('init', j.identifier('state'), objectExpression.get(0).node)
+    j.property('init', j.identifier('state'), modelInstances.get(0).node.arguments[0])
   )
 
-  const controllerVariableName = modelInstances.get(0).parent.parent.value.id.name
+  // Find any expressions that use the controller variable
+  let controllerVariableName = 'controller'
+
+  let controller = root.find(j.VariableDeclarator, {
+    init: {
+      callee: {
+        name: 'Controller'
+      }
+    }
+  })
+
+  if (controller.length) {
+    controllerVariableName = controller.get(0).node.id.name
+  } else {
+    controller = root.find(j.AssignmentExpression, {
+      right: {
+        callee: { name: 'Controller' }
+      }
+    })
+
+    controllerVariableName = controller.get(0).node.left.name
+  }
 
   // Find any expressions that use the controller variable
   const controllerExpressions = root.find(j.ExpressionStatement, {
