@@ -19,7 +19,7 @@ function Navigation (props) {
 
   return (
     <div id='navigation-mobile' className='docs-navigation mobile'>
-      <div id='hamburger' className='docs-navigation-hamburger'/>
+      <div id='hamburger' className='docs-navigation-hamburger' />
       <div className='docs-navigation-title mobile'>
         {props.sectionName.replace('_', ' ')}
       </div>
