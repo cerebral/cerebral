@@ -3,13 +3,15 @@ import {connect} from 'cerebral/react'
 import {state, props, signal} from 'cerebral/tags'
 import {css} from 'aphrodite'
 import styles from './styles'
+import {field} from 'cerebral-provider-forms'
 
 export default connect({
-  field: state`${props`path`}`,
+  field: field(state`${props`path`}`),
   settings: state`app.settings`,
   fieldChanged: signal`simple.fieldChanged`
 },
   function Input ({name, field, path, settings, fieldChanged}) {
+
     function onChange (e) {
       fieldChanged({
         field: path,

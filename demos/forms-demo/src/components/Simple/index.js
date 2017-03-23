@@ -4,10 +4,10 @@ import {state, signal} from 'cerebral/tags'
 import {css} from 'aphrodite'
 import styles from './styles'
 import Input from '../Fields/Input'
-import {isValidForm} from 'cerebral-forms'
+import {form} from 'cerebral-provider-forms'
 
 export default connect({
-  form: state`simple.form`,
+  form: form(state`simple.form`),
   settings: state`app.settings`,
   onSubmitted: signal`simple.onSubmitted`,
   onReset: signal`simple.onReset`
@@ -21,7 +21,7 @@ export default connect({
     )
     const resetButtonStyle = buttonStyle
     if (disableSubmitWhenFormIsInValid.value) {
-      enabled = isValidForm(form)
+      enabled = form.isValid
       buttonStyle = css(
         styles.button,
         enabled ? null : styles.disabled
@@ -35,9 +35,13 @@ export default connect({
           you fill in a value it must be validated as an email. The form result will be showed in the panel at the bottom.
         </div>
         <div style={{marginTop: 40}}>
-          <Input name={'Firstname'} path={'simple.form.firstname'} />
-          <Input name={'Lastname'} path={'simple.form.lastname'} />
-          <Input name={'Email'} path={'simple.form.email'} />
+          {
+            Object.keys(form.getFields()).map((field, index) => {
+              return (
+                <Input name={field} key={index} path={`simple.form.${field}`} />
+              )
+            })
+          }
         </div>
         <div style={{marginTop: 50}}>
           <button onClick={(e) => onSubmitted({formPath: 'simple.form'})} disabled={!enabled} className={buttonStyle}>Submit</button>

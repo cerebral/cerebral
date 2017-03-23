@@ -1,12 +1,12 @@
 import unToggleSettings from '../actions/unToggleSettings'
 import hidePanel from '../actions/hidePanel'
-import {changeField} from 'cerebral-forms'
 import {when} from 'cerebral/operators'
-import {input} from 'cerebral/tags'
+import {props, state} from 'cerebral/tags'
+import {setField} from 'cerebral-provider-forms/operators'
 
 export default [
-  ...changeField,
-  when(input`value`), {
+  setField(state`${props`field`}`, props`value`),
+  when(props`value`), {
     true: [
       hidePanel,
       unToggleSettings
