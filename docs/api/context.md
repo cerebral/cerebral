@@ -28,8 +28,8 @@ someSignal({
 The first action will receive the payload passed into the signal.
 
 ```js
-function actionA ({input}) {
-  input // {foo: "bar"}
+function actionA ({props}) {
+  props // {foo: "bar"}
 
   return {
     bar: 'baz'
@@ -37,15 +37,15 @@ function actionA ({input}) {
 }
 ```
 
-By returning a new object the next action will see an extended input:
+By returning a new object the next action will see an extended payload:
 
 ```js
-function actionB ({input}) {
-  input // {foo: "bar", bar: "baz"}
+function actionB ({props}) {
+  props // {foo: "bar", bar: "baz"}
 }
 ```
 
-So returning an object from actions, either directly or from a promise, extends the input for later actions to handle.
+So returning an object from actions, either directly or from a promise, extends the payload for later actions to handle.
 
 ## State
 To change the state of your application you use the state API. It is available to every action.
