@@ -4,7 +4,8 @@
 `npm install cerebral-provider-storage@next --save --save-exact`
 
 ## description
-This module exposes local storage as a provider, where it by default parses and serializes to JSON.
+This module exposes local storage or session storage as a provider,
+where it by default parses and serializes to JSON.
 
 ## API
 
@@ -31,7 +32,7 @@ const controller = Controller({
 ```
 
 ### set
-Write data to local storage.
+Write data to storage.
 
 *action*
 ```javascript
@@ -51,7 +52,7 @@ export default [
 ```
 
 ### get
-Get data from local storage.
+Get data from storage.
 
 *action*
 ```javascript
@@ -70,5 +71,25 @@ export default [
   function someAction ({props}) {
     props.value // Whatever was on "someKey"
   }
+]
+```
+
+### remove
+Remove data from storage.
+
+*action*
+```javascript
+function someAction({storage}) {
+  storage.remove('someKey')
+}
+```
+
+*factory*
+```javascript
+import {state} from 'cerebral/tags'
+import {removeStorage} from 'cerebral-provider-storage/operators'
+
+export default [
+  removeStorage(state`currentStorageKey`)
 ]
 ```
