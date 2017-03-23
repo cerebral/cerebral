@@ -113,6 +113,31 @@ export default connect({
 )
 ```
 
+You can also use the **field*** computed, pointing to the field.
+
+To use a form you use the **form** computed, pointing to the form. Typically:
+
+```js
+import React from 'react'
+import {connect} from 'cerebral/react'
+import {field} from 'cerebral-provider-forms'
+
+export default connect({
+  field: field(state`path.to.form.name`)
+},
+  function MyForm ({field}) {
+    // Value of some field
+    field.value
+    // A true/false if field has a value
+    field.hasValue
+    // A true/false if field has been changed
+    field.isPristine
+    // A true/false if field is valid
+    field.isValid
+  }
+)
+```
+
 ## provider
 You can also access your forms in actions.
 
