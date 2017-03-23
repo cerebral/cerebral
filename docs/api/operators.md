@@ -189,14 +189,16 @@ path to isolate the actions to be run:
 
 ```js
 import {wait} from 'cerebral/operators'
+import {parallel} from 'cerebral'
 
-export default [
-  [ // this runs in parallel
+export default 
+  someAction,
+  parallel('my parallel with wait', [
     wait(200), {
       continue: [doSomethingAfterWaiting]
     },
     otherActionInParallel
-  ]
+  ])
 ]
 ```
 
