@@ -33,6 +33,9 @@ function StorageProvider (options = {}) {
       },
       set (key, value) {
         target.setItem(options.prefix + key, options.json ? JSON.stringify(value) : value)
+      },
+      remove (key) {
+        target.removeItem(options.prefix + key)
       }
     }
   }
