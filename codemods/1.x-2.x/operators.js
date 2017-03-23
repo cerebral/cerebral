@@ -108,7 +108,7 @@ module.exports = function (fileInfo, api) {
   }
 
   if (tagNames.length) {
-    operatorsImport.insertAfter(
+    operatorsImport.at(operatorsImport.length - 1).insertAfter(
       j.importDeclaration(
         tagNames.map((name) => {
           return j.importSpecifier(j.identifier(name))
