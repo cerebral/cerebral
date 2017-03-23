@@ -27,7 +27,7 @@
     "inferno": "^1.2.2",
     "inferno-component": "^1.2.2",
     "inferno-create-element": "^1.2.2",
-    "prismjs": "^1.5.1",
+    "prismjs": "^1.6.0",
     "ws": "^1.1.1"
   },
   "devDependencies": {

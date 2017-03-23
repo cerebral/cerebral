@@ -146,7 +146,7 @@ class Controller extends FunctionTree {
     Uses function tree to run the array and optional
     payload passed in. The payload will be checkd
   */
-  runSignal (name, signal, payload = {}, cb) {
+  runSignal (name, signal, payload = {}) {
     if (this.devtools && (!isObject(payload) || !isSerializable(payload))) {
       console.warn(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`, payload)
       payload = {}
@@ -166,7 +166,30 @@ class Controller extends FunctionTree {
       }, {})
     }
 
-    this.runTree(name, signal, payload)
+    this.runTree(name, signal, payload, (error) => {
+      if (error) {
+        const signalPath = error.execution.name.split('.')
+        const signalCatch = signalPath.reduce((currentModule, key, index) => {
+          if (index === signalPath.length - 1) {
+            return currentModule.signals[key].catch
+          }
+
+          return currentModule ? currentModule.modules[key] : undefined
+        }, this.module)
+
+        if (!signalCatch) {
+          throw error
+        }
+
+        if (Array.isArray(signalCatch)) {
+          this.runSignal('catch', signalCatch, error.payload)
+        } else if (error.name in signalCatch) {
+          this.runSignal('catch', signalCatch[error.name], error.payload)
+        } else {
+          throw error
+        }
+      }
+    })
   }
   /*
     Returns a function which binds the name/path of signal,
@@ -185,7 +208,7 @@ class Controller extends FunctionTree {
       throwError(`There is no signal at path "${path}"`)
     }
 
-    return signal
+    return signal.run
   }
 
   addModule (path, module) {
@@ -198,11 +221,7 @@ class Controller extends FunctionTree {
       return currentModule.modules[key]
     }, this)
 
-    parentModule.module.modules[moduleKey] = module
-
-    if (module.state) {
-      this.model.set(path.split('.'), module.state)
-    }
+    parentModule.module.modules[moduleKey] = new Module(this, path.split('.'), module)
 
     if (module.provider) {
       this.contextProviders.push(module.provider)

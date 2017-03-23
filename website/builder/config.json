@@ -21,8 +21,8 @@
   "docs": {
     "get_started": [
       "index",
-      "debugger",
       "the_architecture",
+      "debugger",
       "resources",
       "counter",
       "todomvc"

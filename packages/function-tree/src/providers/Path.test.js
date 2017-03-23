@@ -96,6 +96,6 @@ describe('PathProvider', () => {
         ],
         bar: []
       }
-    ], done)
+    ]).then(() => done())
   })
 })

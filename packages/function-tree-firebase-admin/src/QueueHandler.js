@@ -2,23 +2,18 @@ import Queue from 'firebase-queue'
 
 function authenticate ({firebase, props, path}) {
   return firebase.verifyIdToken(props.data._token)
-    .then((decodedToken) => path.success({uid: decodedToken.uid}))
-    .catch((error) => path.error({error}))
+    .then((decodedToken) => ({uid: decodedToken.uid}))
 }
 
-function createRunTask (task, run) {
+function createRunTask (task, cb) {
   return (data, progress, resolve, reject) => {
     const _execution = data._execution
 
     delete data._execution
 
-    run(task.specId, [
-      authenticate, {
-        success: task.tree,
-        error: function authenticationError (context) {
-          context.props.task.reject(context.props.error)
-        }
-      }
+    cb(task.specId, [
+      authenticate,
+      task.tree
     ], {
       _execution,
       data,
@@ -31,10 +26,10 @@ function createRunTask (task, run) {
   }
 }
 
-export class TaskRunner {
-  constructor (options = {}) {
+export class QueueHandler {
+  constructor (options = {}, cb) {
     this.specPrefix = options.specPrefix || ''
-    this.run = options.run || function () { throw new Error('You have to add a function tree executer as a "run" property') }
+    this.cb = cb || function () { throw new Error('You have to add a callback') }
     this.tasks = options.tasks || []
     this.queueRef = options.queueRef
     this.registeredQueues = []
@@ -44,7 +39,7 @@ export class TaskRunner {
       return new Queue(this.queueRef, {
         specId: this.specPrefix ? `${this.specPrefix}_${task.specId}` : task.specId,
         numWorkers: task.numWorkers
-      }, createRunTask(task, this.run))
+      }, createRunTask(task, this.cb))
     })
   }
   stop () {

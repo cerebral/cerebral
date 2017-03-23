@@ -305,6 +305,7 @@ describe('Controller', () => {
       state: {
         bar: 'baz'
       }}})
+
     assert.equal(controller.getState('foo.bar'), 'baz')
   })
   it('should add signals correctly when module added', () => {

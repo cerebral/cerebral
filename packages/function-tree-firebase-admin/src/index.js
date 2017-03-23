@@ -1,3 +1,3 @@
 export {default as Provider} from './Provider'
-export {TaskRunner} from './TaskRunner'
+export {QueueHandler} from './QueueHandler'
 export {TestTasks} from './TestTasks'

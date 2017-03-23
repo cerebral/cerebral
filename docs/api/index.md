@@ -18,10 +18,57 @@ export default controller
 ```
 
 ## Errors
-Cerebral knows about any errors that happen during a signal execution, synchronous and asynchronous. Cerebral throws these errors to the console, but you can intercept this if you want to pass errors to tracking services etc. The error will be thrown to console after your error handler(s) has run.
+Cerebral knows about any errors that happen during a signal execution, synchronous and asynchronous. Cerebral throws these errors to the console, but you can implement your own system of error handling.
+
+When an error occurs, either explicitly by you or implicitly, it will throw to the console. But you can catch these at the signal level or globally.
+
+Here we define a module and instead of defining the signal directly we use an object to define the signal itself and its catch handler. The catch itself executes just like a signal, but will be inlined with the action that caused the error in the debugger.
 
 ```js
-controller.on('error', function (error, execution, functionDetails) {})
+{
+  state: {},
+  signals: {
+    somethingHappened: {
+      signal: [somAction],
+      catch: [someCatchHandler]
+    }
+  }
+}
+```
+
+You can also define exactly what kind of errors you want to handle.
+
+```js
+{
+  state: {},
+  signals: {
+    somethingHappened: {
+      signal: [someRequest, handleResponse],
+      catch: {
+        RequestError: [someCatchHandler],
+      }
+    }
+  }
+}
+```
+
+In this scenario **someRequest** has thrown an error that would be defined something like this:
+
+```js
+class RequestError extends Error {
+  constructor () {
+    this.name = 'RequestError'
+    this.message = 'Failed request'
+  }
+}
+```
+
+That means you can create all sorts of errors and throw them wherever you want in the signal. They will be catched.
+
+You can also define a global error handler. This error handler will be called no matter if an error is caught or not. Useful for tracking failures in production.
+
+```js
+controller.on('error', (error) => {})
 ```
 
 ## Methods

@@ -1,4 +1,3 @@
-/* global Prism */
 import './styles.css'
 import Inferno from 'inferno'
 import {connect} from 'cerebral/inferno'
@@ -38,12 +37,6 @@ export default connect({
     }
     onActionClick (action) {
       connector.inspect(this.props.signal.name, action.actionIndex)
-    }
-    componentDidMount () {
-      Prism.highlightAll()
-    }
-    componentDidUpdate () {
-      Prism.highlightAll()
     }
     toggleOutput (event, action, output) {
       const expandedOutputs = Object.assign({}, this.state.expandedOutputs)
@@ -126,6 +119,8 @@ export default connect({
         this.actionHasSearchContent(action)
       )
 
+      const isExecuted = Boolean(this.props.signal.functionsRun[action.functionIndex])
+
       const executedBySignal = (
         this.props.signal.functionsRun[action.functionIndex] && this.props.signal.functionsRun[action.functionIndex].executedId
       ) ? this.props.executedBySignals[this.props.signal.functionsRun[action.functionIndex].executedId] : null
@@ -133,7 +128,7 @@ export default connect({
       return (
         <Action
           action={action}
-          faded={hasSearchContent === false}
+          faded={hasSearchContent === false || !isExecuted}
           execution={this.props.signal.functionsRun[action.functionIndex]}
           key={index}
           onMutationClick={this.onMutationClick}
