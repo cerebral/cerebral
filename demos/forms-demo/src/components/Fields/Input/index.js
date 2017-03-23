@@ -11,7 +11,6 @@ export default connect({
   fieldChanged: signal`simple.fieldChanged`
 },
   function Input ({name, field, path, settings, fieldChanged}) {
-
     function onChange (e) {
       fieldChanged({
         field: path,
