@@ -5,6 +5,7 @@ import resetForm from './helpers/resetForm'
 import formToJSON from './helpers/formToJSON'
 export {default as form} from './form'
 export {default as rules} from './rules'
+export {computedField as field} from './form'
 
 function FormsProvider (options = {}) {
   if (options.rules) {

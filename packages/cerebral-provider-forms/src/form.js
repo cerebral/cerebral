@@ -68,6 +68,21 @@ export class Form {
 
 }
 
+export function computedField (fieldValueTag) {
+  return compute(
+    fieldValueTag,
+    (fieldValue) => {
+      if (!fieldValue || typeof fieldValue !== 'object') {
+        console.warn(`Cerebral Forms - Field value: ${fieldValueTag} did not resolve to an object`)
+        return {}
+      }
+      const field = new Field(fieldValue, null)
+      field._validate()
+      return field
+    }
+  )
+}
+
 export default function computedForm (formValueTag) {
   return compute(
     formValueTag,
