@@ -115,8 +115,6 @@ export default connect({
 
 You can also use the **field*** computed, pointing to the field.
 
-To use a form you use the **form** computed, pointing to the form. Typically:
-
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
