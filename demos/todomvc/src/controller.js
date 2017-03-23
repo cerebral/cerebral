@@ -21,6 +21,7 @@ const controller = Controller({
   }),
   providers: [
     StorageProvider({
+      target: window.localStorage,
       sync: {todos: 'todos'},
       prefix: 'todomvc'
     }),
