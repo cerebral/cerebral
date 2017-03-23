@@ -9,7 +9,7 @@ state`items.${state`currentItemKey`}`
 state`items.${props`itemKey`}`
 ```
 
-This allows you to express signals and component dependencies a lot more effectively. There are 5 tags in Cerebral.
+This allows you to express signals and component dependencies a lot more effectively. There are 4 tags in Cerebral.
 
 - **state** - Used in signals and connect to target state
 - **props** - Used in signals to target payload and in connect to target component props
