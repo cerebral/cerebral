@@ -1,5 +1,5 @@
 # Parallel
-A parallel runs actions all actions right after each other, even if they return a promise.
+A parallel runs all actions right after each other, even if they return a promise.
 
 ```js
 import {parallel} from 'cerebral'
