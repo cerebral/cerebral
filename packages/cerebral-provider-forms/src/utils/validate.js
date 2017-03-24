@@ -43,7 +43,7 @@ export default function validate (form, value, validationRules) {
         name: ruleKey,
         arg: arg
       },
-      errorMessage: _rules2.default._errorMessages[ruleKey] ? _rules2.default._errorMessages[ruleKey](value, arg) : null
+      errorMessage: rules._errorMessages[ruleKey] ? rules._errorMessages[ruleKey](value, arg) : null
     }
   }, initialValidation)
 }
