@@ -1,10 +1,10 @@
 import {set, when} from 'cerebral/operators'
-import {state, input} from 'cerebral/tags'
-import {form, changeField, validateForm, resetForm} from 'cerebral-forms'
+import {state, props} from 'cerebral/tags'
+import {setField, resetForm} from 'cerebral-provider-forms/operators'
 
 export default {
   state: {
-    form: form({
+    form: {
       firstname: {
         value: '',
         isRequired: true
@@ -20,29 +20,28 @@ export default {
         isRequired: false
       },
       showErrors: false
-    })
+    }
   },
   signals: {
     routed: [
       set(state`app.currentView`, 'Simple')
     ],
     fieldChanged: [
-      when(state`${input`settingsField`}.value`), {
+      when(state`${props`settingsField`}.value`), {
         true: [
           set(state`app.settings.showErrors`, true),
-          changeField
+          setField(state`${props`field`}`, props`value`)
         ],
         false: [
-          set(state`${input`field`}.value`, input`value`)
+          set(state`${props`field`}.value`, props`value`)
         ]
       }
     ],
     onSubmitted: [
-      set(state`app.settings.showErrors`, true),
-      validateForm(state`${input`formPath`}`)
+      set(state`app.settings.showErrors`, true)
     ],
     onReset: [
-      resetForm(state`${input`formPath`}`)
+      resetForm(state`${props`formPath`}`)
     ]
   }
 }

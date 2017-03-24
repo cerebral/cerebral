@@ -1,12 +1,11 @@
 import {set} from 'cerebral/operators'
 import {state} from 'cerebral/tags'
-import {form} from 'cerebral-forms'
 import toggleSelectSettings from './chains/toggleSelectSettings'
 
 export default {
   state: {
     currentView: 'Simple',
-    settings: form({
+    settings: {
       validateOnChange: {
         value: true,
         description: 'Show error messages on change',
@@ -28,7 +27,7 @@ export default {
         unToggleFieldsWhenChecked: ['app.settings.validateOnChange', 'app.settings.validateInputOnBlur']
       },
       showErrors: false
-    })
+    }
   },
   signals: {
     routed: [
