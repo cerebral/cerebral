@@ -33,7 +33,6 @@ export default function validate (form, value, validationRules) {
     } else {
       arg = undefined
     }
-
     
     const isValid = rule(value, form, arg)
 
