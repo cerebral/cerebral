@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import FirebaseProviderError from './FirebaseProviderError'
 
 export default function createTask (options, executionId, functionIndex) {
   return (name, payload = {}) => {
@@ -26,7 +27,7 @@ export default function createTask (options, executionId, functionIndex) {
               resolve()
             } else if (val._error_details) {
               taskRef.off()
-              reject(new Error(val._error_details))
+              reject(new FirebaseProviderError(val._error_details))
             }
           })
         })

@@ -12,14 +12,8 @@ import {httpGet} from 'cerebral-provider-http/operators'
 import {state, props} from 'cerebral/tags'
 
 export default [
-  httpGet(`/items/${props`itemKey`}`), {
-    success: [
-      set(state`app.currentItem`, props`result`)
-    ],
-    error: [
-      set(state`app.error`, props`result`)
-    ]
-  }
+  httpGet(`/items/${props`itemKey`}`),
+  set(state`app.currentItem`, props`result`)
 ]
 ```
 

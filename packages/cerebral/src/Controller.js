@@ -16,8 +16,9 @@ import ResolveProvider from './providers/Resolve'
   based on top level providers and providers defined in modules
 */
 class Controller extends FunctionTree {
-  constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
+  constructor (config) {
     super()
+    const {state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}} = config
     const getSignal = this.getSignal
 
     this.getSignal = () => {
@@ -25,6 +26,7 @@ class Controller extends FunctionTree {
     }
     this.componentDependencyStore = new DependencyStore()
     this.options = options
+    this.catch = options.catch || null
     this.flush = this.flush.bind(this)
     this.devtools = devtools
     this.model = new Model({}, this.devtools)
@@ -181,7 +183,15 @@ class Controller extends FunctionTree {
           throw error
         }
 
-        if (Array.isArray(signalCatch)) {
+        if (typeof signalCatch === 'function') {
+          const signalChain = signalCatch(error)
+
+          if (signalChain) {
+            this.runSignal('catch', signalChain, error.payload)
+          } else {
+            throw error
+          }
+        } if (Array.isArray(signalCatch)) {
           this.runSignal('catch', signalCatch, error.payload)
         } else if (error.name in signalCatch) {
           this.runSignal('catch', signalCatch[error.name], error.payload)

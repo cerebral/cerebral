@@ -1,6 +1,7 @@
 import {
   createRef
 } from './helpers'
+import FirebaseProviderError from './FirebaseProviderError'
 
 export default function update (path, payload) {
   const ref = createRef(path)
@@ -11,4 +12,7 @@ export default function update (path, payload) {
     return convertedPayload
   }, {}))
     .then(() => undefined)
+    .catch((error) => {
+      throw new FirebaseProviderError(error.message)
+    })
 }

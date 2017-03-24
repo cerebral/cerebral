@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
+import FirebaseProviderError from './FirebaseProviderError'
 
 export default function getUser () {
   return new Promise((resolve, reject) => {
@@ -25,6 +26,8 @@ export default function getUser () {
             })
           })
         }
-      }, reject)
+      }, (error) => {
+        throw new FirebaseProviderError(error.message)
+      })
   })
 }

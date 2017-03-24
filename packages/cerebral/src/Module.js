@@ -17,7 +17,7 @@ class Module {
 
       currentSignals[signalKey] = {
         signal: signal.signal || signal,
-        catch: signal.catch || null,
+        catch: signal.catch || controller.catch,
         run (payload) {
           controller.runSignal(path.concat(signalKey).join('.'), signal.signal || signal, payload)
         }

@@ -4,13 +4,6 @@ import FileUpload from './fileUpload'
 
 import DEFAULT_OPTIONS from './DEFAULT_OPTIONS'
 
-import {
-  httpGet as httpGetFactory,
-  httpPost as httpPostFactory,
-  httpPut as httpPutFactory,
-  httpPatch as httpPatchFactory,
-  httpDelete as httpDeleteFactory} from './operators'
-
 export {default as HttpProviderError} from './HttpProviderError'
 
 export default function HttpProviderFactory (passedOptions) {

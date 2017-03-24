@@ -86,20 +86,32 @@ export function parseHeaders (rawHeaders) {
   }, {})
 }
 
-function callNextPath (response, path, defaultPath) {
-  return path['' + response.status]
-    ? path['' + response.status](response)
-    : path[defaultPath](response)
-}
-
 export function processResponse (httpAction, path) {
   return httpAction
-    .then((response) => callNextPath(response, path, 'success'))
-    .catch((response) => {
-      if (response.isAborted) {
-        return path.abort(response)
+    .then((response) => {
+      if (path && path[response.status]) {
+        return path[response.status](response)
       }
 
-      return callNextPath(response, path, 'error')
+      return path && path.success ? path.success(response) : response
+    })
+    .catch((error) => {
+      if (!path) {
+        throw error
+      }
+
+      if (error.message.isAborted && path.abort) {
+        return path.abort({error: error.payload.error})
+      }
+
+      if (path[error.message.status]) {
+        return path[error.message.status]({error: error.payload.error})
+      }
+
+      if (path.error) {
+        return path.error({error: error.payload.error})
+      }
+
+      throw error
     })
 }

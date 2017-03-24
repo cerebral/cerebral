@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
+import FirebaseProviderError from './FirebaseProviderError'
 
 export default function signInWithGoogle (options) {
   const scopes = options.scopes || []
@@ -24,7 +25,9 @@ export default function signInWithGoogle (options) {
           resolve({
             user: user
           })
-        }, reject)
+        }, (error) => {
+          reject(new FirebaseProviderError(error.message))
+        })
     }
   })
 }
