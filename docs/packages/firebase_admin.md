@@ -38,13 +38,11 @@ Get value. Outputs {key: 'theKey', value: 'theValue'}.
 ```js
 function updateItems (context) {
   return context.firebase.value('some/path')
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### transaction
-Run a transaction.
+Run a transaction. Outputs nothing.
 ```js
 function updateItems (context) {
   return context.firebase.transaction('some/path', (maybeValue) => {
@@ -54,41 +52,33 @@ function updateItems (context) {
 
     return context.props.data.foo
   })
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### set
-Set new data.
+Set new data. Output nothing.
 ```js
 function addItem (context) {
   return context.firebase.set(`items/${context.props.data.itemKey}`, context.props.data.item)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### push
-Push new data.
+Push new data. Outputs {key: 'keyAdded'}.
 ```js
 function addItem (context) {
   return context.firebase.push('items', context.props.data.item)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### update
-Update multiple paths.
+Update multiple paths. Outputs nothing.
 ```js
 function updateItems (context) {
   return context.firebase.update({
     'items/1': context.props.data.item1Data,
     'items/2': context.props.data.item2Data
   })
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
@@ -101,22 +91,18 @@ function authenticate (context) {
 ```
 
 ### deleteUser
-Delete a user from Firebase.
+Delete a user from Firebase. Outputs nothing.
 ```js
 function deleteProfile (context) {
   return context.firebase.deleteUser(context.props.uid)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### remove
-Remove key.
+Remove key. Outputs nothing.
 ```js
 function removeItem (context) {
   return context.firebase.remove(`items/${context.props.itemKey}`)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 

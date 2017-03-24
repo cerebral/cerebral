@@ -24,15 +24,7 @@ export default function linkWithFacebook (options = {}) {
           resolve({
             user: user
           })
-        },
-        (error) => {
-          reject({
-            code: error.code,
-            message: error.message,
-            email: error.email
-          })
-        }
-      )
+        }, reject)
     }
   })
 }

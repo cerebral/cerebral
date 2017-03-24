@@ -24,43 +24,23 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
         return firebase.database().ref(path).push().key
       },
       deleteUser (uid) {
-        return new Promise((resolve, reject) => {
-          firebase.auth().deleteUser(uid)
-            .then(() => resolve())
-            .catch((error) => reject({error}))
-        })
+        return firebase.auth().deleteUser(uid)
       },
       remove (path) {
         const ref = firebase.database().ref(path)
 
-        return new Promise((resolve, reject) => {
-          ref.remove()
-            .then(() => resolve())
-            .catch((error) => reject({error: error.message}))
-        })
+        return ref.remove().then(() => undefined)
       },
       push (path, value) {
         const ref = firebase.database().ref(path).push()
 
-        return new Promise((resolve, reject) => {
-          ref.set(value)
-            .then(() => resolve({key: ref.key}))
-            .catch((error) => reject({error: error.message}))
-        })
+        return ref.set(value).then(() => ({key: ref.key}))
       },
       set (path, value) {
-        return new Promise((resolve, reject) => {
-          firebase.database().ref(path).set(value)
-            .then(() => resolve())
-            .catch((error) => reject({error: error.message}))
-        })
+        return firebase.database().ref(path).set(value).then(() => undefined)
       },
       update (path, value) {
-        return new Promise((resolve, reject) => {
-          firebase.database().ref(path).update(value)
-            .then(() => resolve())
-            .catch((error) => reject({error: error.message}))
-        })
+        return firebase.database().ref(path).update(value).then(() => undefined)
       },
       value (path, options) {
         options = options || {}
@@ -73,15 +53,11 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
               key: path.split('/').pop(),
               value: snapshot.val()
             })
-          }, (error) => reject({error: error.message}))
+          }, reject)
         })
       },
       transaction (path, cb) {
-        return new Promise((resolve, reject) => {
-          firebase.database().ref(path).transaction(cb)
-            .then(() => resolve())
-            .catch((error) => reject({error: error.message}))
-        })
+        return firebase.database().ref(path).transaction(cb).then(() => undefined)
       }
     }
   }

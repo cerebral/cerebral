@@ -1,3 +1,5 @@
+import HttpProviderError from './HttpProviderError'
+
 export function createResponse (options, resolve, reject) {
   return (event) => {
     switch (event.type) {
@@ -11,15 +13,18 @@ export function createResponse (options, resolve, reject) {
         }
         break
       case 'error':
-        reject({
+        reject(new HttpProviderError({
           status: event.currentTarget.status,
-          result: 'Request error'
-        })
+          result: 'Request error',
+          isAborted: false
+        }))
         break
       case 'abort':
-        reject({
+        reject(new HttpProviderError({
+          status: event.currentTarget.status,
+          result: 'Request abort',
           isAborted: true
-        })
+        }))
         break
     }
   }

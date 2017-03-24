@@ -12,8 +12,6 @@ export default function signInAnonymously () {
             user: createUser(user)
           })
         })
-      },
-      reject
-    )
+      }, reject)
   })
 }

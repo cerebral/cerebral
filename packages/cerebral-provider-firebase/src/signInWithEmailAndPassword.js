@@ -12,10 +12,6 @@ export default function signInWithEmailAndPassword (email, password) {
               user: createUser(user)
             })
           })
-        },
-        (error) => {
-          reject({error})
-        }
-      )
+        }, reject)
   })
 }

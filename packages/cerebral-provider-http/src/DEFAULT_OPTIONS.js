@@ -1,4 +1,5 @@
 import {urlEncode, parseHeaders} from './utils'
+import HttpProviderError from './HttpProviderError'
 
 export default {
   method: 'get',
@@ -40,11 +41,11 @@ export default {
         result: result
       })
     } else {
-      reject({
+      reject(new HttpProviderError({
         status: xhr.status,
         headers: responseHeaders,
         result: result
-      })
+      }))
     }
   }
 }

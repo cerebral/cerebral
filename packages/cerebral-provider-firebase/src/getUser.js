@@ -25,14 +25,6 @@ export default function getUser () {
             })
           })
         }
-      },
-      (error) => {
-        reject({
-          code: error.code,
-          message: error.message,
-          email: error.email
-        })
-      }
-    )
+      }, reject)
   })
 }

@@ -11,10 +11,6 @@ export default function createUserWithEmailAndPassword (email, password) {
             user: createUser(user)
           })
         })
-      },
-      (error) => {
-        reject({error})
-      }
-    )
+      }, reject)
   })
 }

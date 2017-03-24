@@ -23,9 +23,7 @@ export default function put (path, file, options = {}) {
         state: snapshot.state // 'paused', 'running'
       })
     },
-    (error) => {
-      reject({error: error.message})
-    },
+    reject,
     () => {
       resolve({url: uploadTask.snapshot.downloadURL, filename})
     })

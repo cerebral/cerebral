@@ -43,10 +43,8 @@ Write data to this database location. This will overwrite any data at this locat
 
 *action*
 ```javascript
-function someAction({firebase, path}) {
+function someAction({firebase}) {
   return firebase.set('foo.bar', 'baz')
-    .then(path.success)
-    .catch(path.error)
 }
 ```
 
@@ -56,25 +54,23 @@ import {props} from 'cerebral/tags'
 import {set} from 'cerebral-provider-firebase/operators'
 
 export default [
-  set('foo.bar', props`foo`), {
-    success: [],
-    error: []
-  }
+  set('foo.bar', props`foo`)
 ]
 ```
+
+*output*
+No output
 
 ## update
 As opposed to the set() method, update() can be use to selectively update only the referenced properties at the current location (instead of replacing all the child properties at the current location).
 
 *action*
 ```javascript
-function someAction({firebase, path}) {
+function someAction({firebase}) {
   return firebase.update('some.path', {
     'foo': 'bar',
     'items.item1.isAwesome': true
   })
-    .then(path.success)
-    .catch(path.error)
 }
 ```
 
@@ -87,24 +83,22 @@ export default [
   update('some.path', {
     'foo.bar': props`bar`,
     'foo.baz': props`baz`
-  }), {
-    success: [],
-    error: []
-  }
+  })
 ]
 ```
+
+*output*
+No output
 
 ## push
 Generates a new child location using a unique key and returns its reference from the action. An example being `{key: "-KWKImT_t3SLmkJ4s3-w"}`.
 
 *action*
 ```javascript
-function someAction({firebase, path}) {
+function someAction({firebase}) {
   return firebase.push('users', {
     name: 'Bob'
   })
-    .then(path.success)
-    .catch(path.error)
 }
 ```
 
@@ -114,11 +108,13 @@ import {state} from 'cerebral/tags'
 import {push} from 'cerebral-provider-firebase/operators'
 
 export default [
-  push('users', state`newUser`), {
-    success: [],
-    error: []
-  }
+  push('users', state`newUser`)
 ]
+```
+
+*output*
+```javascript
+{key: 'theAddedKey'}
 ```
 
 ## remove
@@ -126,10 +122,8 @@ Remove the data at this database location.
 
 *action*
 ```javascript
-function someAction({ firebase, path}) {
+function someAction({ firebase}) {
   return firebase.remove('foo.bar')
-    .then(path.success)
-    .catch(path.error)
 }
 ```
 
@@ -139,12 +133,12 @@ import {props, string} from 'cerebral/tags'
 import {remove} from 'cerebral-provider-firebase/operators'
 
 export default [
-  remove(string`users.${props`userKey`}`), {
-    success: [],
-    error: []
-  }
+  remove(string`users.${props`userKey`}`)
 ]
 ```
+
+*output*
+No output
 
 ## transaction
 Atomically modifies the data at the provided location.
@@ -155,7 +149,7 @@ To accomplish this, you pass transaction() an update function which is used to t
 
 *action*
 ```javascript
-function someAction({firebase, path}) {
+function someAction({firebase}) {
 
   function transactionFunction(currentData){
     if (currentData === null) {
@@ -168,12 +162,11 @@ function someAction({firebase, path}) {
   return firebase.transaction('some.transaction.path', transactionFunction)
     .then((result) => {
       if(result.committed){
-        return path.success({result: result.value})
+        return {result: result.value}
       } else {
-        return path.abort()
+        throw new Error('Transaction failed')
       }
     })
-    .catch(path.error)
 }
 ```
 
@@ -190,11 +183,13 @@ function transactionFunction(currentData){
 }
 
 export default [
-  transaction('foo.bar', transactionFunction), {
-    success: [],
-    error: []
-  }
+  transaction('foo.bar', transactionFunction)
 ]
+```
+
+*output*
+```javascript
+{committed: true, value: 'new value'}
 ```
 
 Note: Modifying data with set() will cancel any pending transactions at that location, so extreme care should be taken if mixing set() and transaction() to update the same data.
@@ -205,24 +200,23 @@ Note: When using transactions with Security and Firebase Rules in place, be awar
 
 *action*
 ```js
-function someAction({ firebase, path }) {
+function someAction({ firebase }) {
   return firebase.value('someKey.foo')
-    .then(path.success)
-    .catch(path.error);
 }
 ```
-The result will be available as `{ key: 'foo', value: 'bar' }`. Or `{ error: 'error message'}`.
 
 *factory*
 ```javascript
 import {value} from 'cerebral-provider-firebase/operators'
 
 export default [
-  value('foo.bar'), {
-    success: [],
-    error: []
-  }
+  value('foo.bar')
 ]
+```
+
+*output*
+```javascript
+{key: 'keyYouLookedUpValueOn', value: 'the value'}
 ```
 
 ## onValue
@@ -358,13 +352,11 @@ If you are using the [firebase-queue](https://github.com/firebase/firebase-queue
 
 *action*
 ```js
-function someAction({ firebase, path, state }) {
+function someAction({ firebase, state }) {
   return firebase.task('create_post', {
     uid: state.get('app.user.uid'),
     text: state.get('posts.newPostText')
   })
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -379,22 +371,20 @@ export default [
   task('some_task', {
     uid: state`user.uid`,
     data: props`data`
-  }), {
-    success: [],
-    error: []
-  }
+  })
 ]
 ```
+
+*output*
+No output
 
 ## getUser
 Will resolve to `{user: {}}` if user exists. If user was redirected from Facebook/Google etc. as part of first sign in, this method will handle the confirmed registration of the user.
 
 *action*
 ```js
-function someAction({ firebase, path }) {
+function someAction({ firebase }) {
   return firebase.getUser()
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -403,22 +393,22 @@ function someAction({ firebase, path }) {
 import {getUser} from 'cerebral-provider-firebase/operators'
 
 export default [
-  getUser(), {
-    success: [],
-    error: []
-  }
+  getUser()
 ]
 ```
 
+*output*
+```javascript
+{user: {}}
+```
+
 ## signInAnonymously
-This login will method will resolve to existing anonymous or create a new one for you. Resolves to `{user: {}}`.
+This login will method will resolve to existing anonymous or create a new one for you.
 
 *action*
 ```js
-function someAction({ firebase, path }) {
+function someAction({ firebase }) {
   return firebase.signInAnonymously()
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -427,25 +417,25 @@ function someAction({ firebase, path }) {
 import {signInAnonymously} from 'cerebral-provider-firebase/operators'
 
 export default [
-  signInAnonymously(), {
-    success: [],
-    error: []
-  }
+  signInAnonymously()
 ]
 ```
 
+*output*
+```javascript
+{user: {}}
+```
+
 ## createUserWithEmailAndPassword
-Register a new user with email and password. Resolves to `{user: {}}`.
+Register a new user with email and password.
 
 *action*
 ```js
-function someAction({ firebase, path, state }) {
+function someAction({ firebase, state }) {
   const email = state.get('register.email')
   const password = state.get('register.password')
 
   return firebase.createUserWithEmailAndPassword(email, password)
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -455,15 +445,17 @@ import {state} from 'cerebral/tags'
 import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase/operators'
 
 export default [
-  createUserWithEmailAndPassword(state`newUser.email`, state`newUser.password`), {
-    success: [],
-    error: []
-  }
+  createUserWithEmailAndPassword(state`newUser.email`, state`newUser.password`)
 ]
 ```
 
+*output*
+```javascript
+{user: {}}
+```
+
 ## signInWithEmailAndPassword
-Sign in a user with email and password. Resolves to `{user: {}}`.
+Sign in a user with email and password.
 
 *action*
 ```js
@@ -472,8 +464,6 @@ function someAction({ firebase, path, state }) {
   const password = state.get('register.password')
 
   return firebase.signInWithEmailAndPassword(email, password)
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -483,25 +473,25 @@ import {props} from 'cerebral/tags'
 import {signInWithEmailAndPassword} from 'cerebral-provider-firebase/operators'
 
 export default [
-  signInWithEmailAndPassword(props`email`, props`password`), {
-    success: [],
-    error: []
-  }
+  signInWithEmailAndPassword(props`email`, props`password`)
 ]
 ```
 
+*output*
+```javascript
+{user: {}}
+```
+
 ## signInWith{PROVIDER}
-Sign in a user with Facebook, Google or Github. Resolves to `{user: {}}`, or redirects.
+Sign in a user with Facebook, Google or Github.
 
 *action*
 ```js
-function someAction({ firebase, path, state }) {
+function someAction({ firebase, state }) {
   return firebase.signInWithFacebook({
     redirect: false, // Use popup or redirect. Redirect typically for mobile
     scopes: [] // Facebook scopes to access
   })
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -513,27 +503,30 @@ import {signInWithFacebook} from 'cerebral-provider-firebase/operators'
 export default [
   signInWithFacebook({
     redirect: state`useragent.media.small`
-  }), {
-    success: [],
-    error: []
-  }
+  })
 ]
 ```
+
+*output*
+Either this will be a redirect or it outputs:
+
+```javascript
+{user: {}}
+```
+
 Similar you can sign in with Google or GitHub.
 Just use `signInWithGoogle` or `signInWithGithub` instead of `signInWithFacebook`.
 
 ## linkWithFacebook{PROVIDER}
-Link an anonymous account with Facebook, Google or Github. Resolves to `{user: {}}`, or redirects.
+Link an anonymous account with Facebook, Google or Github.
 
 *action*
 ```js
-function someAction({ firebase, path, state }) {
+function someAction({ firebase, state }) {
   return firebase.linkWithFacebook({
     redirect: false, // Use popup or redirect. Redirect typically for mobile
     scopes: [] // Facebook scopes to access
   })
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -545,12 +538,17 @@ import {linkWithFacebook} from 'cerebral-provider-firebase/operators'
 export default [
   linkWithFacebook({
     redirect: state`useragent.media.small`
-  }), {
-    success: [],
-    error: []
-  }
+  })
 ]
 ```
+
+*output*
+Either this will be a redirect or it outputs:
+
+```javascript
+{user: {}}
+```
+
 Similar you can sign in with Google or GitHub.
 Just use `linkWithGoogle` or `linkWithGithub` instead of `linkWithFacebook`.
 
@@ -559,10 +557,8 @@ Sign out user. **getUser** will now not resolve a user anymore.
 
 *action*
 ```js
-function someAction({ firebase, path }) {
+function someAction({ firebase }) {
   return firebase.signOut()
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -571,21 +567,19 @@ function someAction({ firebase, path }) {
 import {signOut} from 'cerebral-provider-firebase/operators'
 
 export default [
-  signOut(), {
-    success: [],
-    error: []
-  }
+  signOut()
 ]
 ```
+
+*output*
+No output
 
 ## sendPasswordResetEmail
 
 *action*
 ```js
-function someAction({ firebase, path, state }) {
+function someAction({ firebase, state }) {
   return firebase.sendPasswordResetEmail(state.get('user.email'))
-    .then(path.success)
-    .catch(path.error);
 }
 ```
 
@@ -595,12 +589,12 @@ import {state} from 'cerebral/tags'
 import {sendPasswordResetEmail} from 'cerebral-provider-firebase/operators'
 
 export default [
-  sendPasswordResetEmail(state`user.email`), {
-    success: [],
-    error: []
-  }
+  sendPasswordResetEmail(state`user.email`)
 ]
 ```
+
+*output*
+No output
 
 ## setOnDisconnect
 Sets a value when Firebase detects user has disconnected.
@@ -622,6 +616,9 @@ export default [
 ]
 ```
 
+*output*
+No output
+
 ## cancelOnDisconnect
 Cancel setting a value when Firebase detects disconnect.
 
@@ -642,39 +639,62 @@ export default [
 ]
 ```
 
+*output*
+No output
+
 ## put
 
 Upload a new file at the given location. Please note that the file is **not** stored inside the realtime database but into Google Cloud Storage (please consult filrebase documentation). This means that you need to take care of storage security as well.
 
-The options expect a progress field that can be either a signal (that will be called with `progress`, `totalBytes` and `bytesTransferred`) or a state path to directly set `progress` value.
-
 Note that `put` expects a folder as first argument and will use the name of the provided file. If you want to control the filename, add this in the options. In this case, make sure to respect file type and extension...
 
-On success, `props` contains an `url` and the `filename`.
-
+*action*
 ```js
-import {props, signal, state, string} from 'cerebral/tags'
+function someAction({ firebase, props }) {
+  return firebase.put('folderName', props.file, {
+    progress({progress, bytesTransferred, totalBytes, state}) {
+      /* do whatever */
+    },
+    // Override name, make sure you set same extension
+    filename: 'customName.png'
+  })
+}
+```
+
+*factory*
+```js
+import {props, signal, string, state} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase/operators'
 
 // we expect props.file to contain a file provided by
 // a user in an <input type='file' />
 export default [
   put(string`posts.all.${props`postId`}`, props`file`, {
+    // Trigger a signal which receives payload
     progress: signal`gallery.progress`
-  }), {
-    success: [
-      set(state`posts.all.${props`postId`}.imageUrl`, props`url`),
-      set(state`posts.all.${props`postId`}.imageName`, props`filename`),
-    ],
-    error: []
-  }
+    // Set progress on a state value
+    progress: state`gallery.progress`
+  })
 ]
+```
+
+*output*
+```js
+{url: 'urlToFile', filename: 'nameOfFile'}
 ```
 
 ## delete
 
 Use `delete` to remove an uploaded file. Specify the containing folder and filename.
 
+*action*
+```js
+function someAction({ firebase, props }) {
+  return firebase.delete('folderName', props.fileName)
+}
+```
+
+*factory*
 ```js
 import {props, state, string} from 'cerebral/tags'
 import {put} from 'cerebral-provider-firebase/operators'
@@ -683,9 +703,9 @@ export default [
   firebase.delete(
     string`posts.all.${props`postId`}`,
     state`posts.all.${props`postId`}.imageName`
-  ), {
-    success: [],
-    error: []
-  }
+  )
 ]
 ```
+
+*output*
+No output
