@@ -13,10 +13,16 @@ export default {
   loginSignIn: 'Logga in',
   loginCreateUser: 'Skapa användare',
   loginSignOut: 'Logga ut',
-  loginValidationEmailRequired: 'Fyll i epost',
-  loginValidationEmailNotValid: 'Ingen giltig epost',
-  loginValidationPasswordRequired: 'Fyll i lösenord',
-  loginValidationPasswordTooShort: 'Lösenord är för kort',
+  validationErrors: {
+    signIn: {
+      email: {
+        isEmail: 'Ingen giltig epost'
+      },
+      password: {
+        minLength: 'Lösenord är för kort'
+      }
+    }
+  },
   loginErrors: {
     'auth/email-already-in-use': 'Epostadressen används redan',
     'auth/too-many-requests': 'Vi har blockat alla förfrågningar på grund av felaktig aktivitet. Försök igen senare.'

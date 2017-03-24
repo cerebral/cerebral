@@ -14,20 +14,12 @@ export default {
       email: {
         value: '',
         validationRules: ['isEmail'],
-        validationMessages: {
-          'isEmail': 'loginValidationEmailNotValid'
-        },
-        isRequired: true,
-        requiredMessage: 'loginValidationEmailRequired'
+        isRequired: true
       },
       password: {
         value: '',
         validationRules: ['minLength:5'],
-        validationMessages: {
-          'minLength': 'loginValidationPasswordTooShort'
-        },
-        isRequired: true,
-        requiredMessage: 'loginValidationPasswordRequired'
+        isRequired: true
       },
       showErrors: false
     },

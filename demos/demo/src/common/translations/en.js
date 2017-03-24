@@ -13,10 +13,16 @@ export default {
   loginSignIn: 'Sign In',
   loginCreateUser: 'Create user',
   loginSignOut: 'Sign Out',
-  loginValidationEmailRequired: 'Must provide an email',
-  loginValidationEmailNotValid: 'Not a valid email',
-  loginValidationPasswordRequired: 'Must provide a password',
-  loginValidationPasswordTooShort: 'Password too short',
+  validationErrors: {
+    signIn: {
+      email: {
+        isEmail: 'Not a valid email'
+      },
+      password: {
+        minLength: 'Password too short'
+      }
+    }
+  },
   loginErrors: {
     'auth/email-already-in-use': 'The email address is already in use by another account.',
     'auth/too-many-requests': 'We have blocked all requests from this device due to unusual activity. Try again later.'
