@@ -34,13 +34,16 @@ export default function validate (form, value, validationRules) {
       arg = undefined
     }
 
+    
+    const isValid = rule(value, form, arg)
+
     return {
-      isValid: rule(value, form, arg),
-      failedRule: {
+      isValid,
+      failedRule: isValid ? null : {
         name: ruleKey,
-        arg
+        arg: arg
       },
-      errorMessage: rules._errorMessages[ruleKey] ? rules._errorMessages[ruleKey](value, arg) : null
+      errorMessage: _rules2.default._errorMessages[ruleKey] ? _rules2.default._errorMessages[ruleKey](value, arg) : null
     }
   }, initialValidation)
 }
