@@ -41,7 +41,7 @@ export default function validate (form, value, validationRules) {
       isValid,
       failedRule: isValid ? null : {
         name: ruleKey,
-        arg: arg
+        arg
       },
       errorMessage: rules._errorMessages[ruleKey] ? rules._errorMessages[ruleKey](value, arg) : null
     }
