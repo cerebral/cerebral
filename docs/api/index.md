@@ -157,7 +157,7 @@ controller.on('parallelProgress', (execution, payload, functionsStillResolvingCo
 ```
 
 ### parallelEnd
-Triggered whenever Cerebral executes actions in parallel.
+Triggered whenever Cerebral ends executing actions in parallel.
 
 ```js
 controller.on('parallelEnd', (execution, payload, functionsExecutedCount) => {})

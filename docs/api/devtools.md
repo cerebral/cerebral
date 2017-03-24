@@ -21,10 +21,12 @@ const controller = Controller({
     // state dependencies or signals above the set number  
     bigComponentsWarning: 5,
 
-    // In addition to basic JavaScript types Object, Array, String, Number
-    // and Boolean, File, FileList and Blob is allowed to be stored in state
+    // In addition to these basic JavaScript types: Object, Array, String, Number
+    // and Boolean, types of File, FileList, Blob, ImageData and RegExp is allowed to be stored in state
     // tree. You can add additional types if you know what you are doing :)
-    allowedTypes: []
+    allowedTypes: [
+     Blob
+    ]
   })
 })
 ```

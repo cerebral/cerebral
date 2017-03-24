@@ -277,7 +277,7 @@ This works the same in context for 2.x
 ```js
 connect({
   foo: someComputed,
-  foo2: someComputed.props({foo: 'bar'})
+  foo2: someComputedFactory({foo: 'bar'})
 })
 ```
 
