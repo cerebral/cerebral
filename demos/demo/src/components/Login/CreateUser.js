@@ -19,7 +19,7 @@ export default connect(
 
     const error = (fieldName) => {
       const field = signIn[fieldName]
-      if(field.failedRule) {
+      if (field.failedRule) {
         return resolveTranslation(t, `validationErrors.signIn.${fieldName}.${field.failedRule.name}`)
       }
       return null
