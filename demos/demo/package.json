@@ -17,7 +17,7 @@
   "dependencies": {
     "bulma": "^0.2.3",
     "cerebral": "^2.0.0-b",
-    "cerebral-forms": "^1.0.0-b",
+    "cerebral-provider-forms": "^1.0.0-b",
     "cerebral-router": "^1.0.0-b",
     "cerebral-provider-firebase": "^1.0.0-b",
     "js-joda": "^1.1.13",

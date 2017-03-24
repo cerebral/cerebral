@@ -3,11 +3,12 @@ import {connect} from 'cerebral/react'
 import {signal, state} from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 import Input from './Input'
+import {form} from 'cerebral-provider-forms'
 
 export default connect(
   {
     t: translations,
-    signIn: state`user.$signIn`,
+    signIn: form(state`user.$signIn`),
     anonClick: signal`user.signInAnonClicked`,
     buttonClick: signal`user.signInClicked`,
     enterPress: signal`user.signInEnterPressed`,
@@ -22,7 +23,7 @@ export default connect(
 
         <Input
           icon='fa fa-user'
-          message={t[signIn.email.errorMessage]}
+          message={t[signIn.email.validationMessages[signIn.email.failedRule.name]]}
           placeholder={t.loginEmailPlaceholder}
           showError={showError(signIn.email)}
           value={signIn.email.value}
@@ -36,7 +37,7 @@ export default connect(
         <Input
           fieldType='password'
           icon='fa fa-user'
-          message={t[signIn.password.errorMessage]}
+          message={t[signIn.password.validationMessages[signIn.password.failedRule.name]]}
           placeholder={t.loginPasswordPlaceholder}
           showError={showError(signIn.password)}
           value={signIn.password.value}
