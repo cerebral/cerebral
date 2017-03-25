@@ -38,10 +38,10 @@ class Devtools {
     this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
     this.allowedTypes = []
       .concat(typeof File === 'undefined' ? [] : File)
-      .concat(typeof FileList  === 'undefined' ? [] : FileList)
-      .concat(typeof Blob  === 'undefined' ? [] : Blob)
-      .concat(typeof ImageData  === 'undefined' ? [] : ImageData)
-      .concat(typeof RegExp  === 'undefined' ? [] : RegExp)
+      .concat(typeof FileList === 'undefined' ? [] : FileList)
+      .concat(typeof Blob === 'undefined' ? [] : Blob)
+      .concat(typeof ImageData === 'undefined' ? [] : ImageData)
+      .concat(typeof RegExp === 'undefined' ? [] : RegExp)
       .concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)
