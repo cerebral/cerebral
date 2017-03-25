@@ -26,7 +26,7 @@ class Controller extends FunctionTree {
     }
     this.componentDependencyStore = new DependencyStore()
     this.options = options
-    this.catch = options.catch || null
+    this.catch = config.catch || null
     this.flush = this.flush.bind(this)
     this.devtools = devtools
     this.model = new Model({}, this.devtools)

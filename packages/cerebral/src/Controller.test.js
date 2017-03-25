@@ -360,4 +360,21 @@ describe('Controller', () => {
     const after = controller.contextProviders.length
     assert.equal(after, before - 1)
   })
+  it('should be able to globally add error catchers', (done) => {
+    const controller = new Controller({
+      state: {},
+      signals: {
+        test: [
+          () => {
+            throw new Error('foo')
+          }
+        ]
+      },
+      catch: [({props}) => {
+        assert.ok(props.error)
+        done()
+      }]
+    })
+    controller.getSignal('test')()
+  })
 })
