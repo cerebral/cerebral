@@ -2,7 +2,7 @@ import DependencyTracker from '../DependencyTracker'
 import {Compute} from '../Compute'
 import {getChangedProps, throwError, ensureStrictPath, createResolver} from './../utils'
 
-export default (View) => {
+export default (View, deferredUpdates) => {
   class BaseComponent extends View.Component {
     constructor (dependencies, mergeProps, props, context) {
       super(props, context)
@@ -227,12 +227,32 @@ export default (View) => {
       that matches the state changes. There is no need to update the tags
       as their declared state deps can not change
     */
-    _updateFromState (stateChanges, force) {
+    _updateFromState (stateChanges, force, isAsync) {
       if (this._isUnmounting) {
         return
       }
 
-      this._update(this.props, force ? this.forceUpdateDependencyTrackers() : this.updateDependencyTrackers(stateChanges, {}, this.props))
+      if (isAsync) {
+        const hasDeferredUpdates = Boolean(this.nextDeferredUpdates)
+
+        this.nextDeferredUpdates = () => {
+          this._update(this.props, force ? this.forceUpdateDependencyTrackers() : this.updateDependencyTrackers(stateChanges, {}, this.props))
+        }
+
+        if (!hasDeferredUpdates) {
+          deferredUpdates(() => {
+            if (this._isUnmounting || !this.nextDeferredUpdates) {
+              return
+            }
+
+            this.nextDeferredUpdates()
+            this.nextDeferredUpdates = null
+          })
+        }
+      } else {
+        this.nextDeferredUpdates = null
+        this._update(this.props, force ? this.forceUpdateDependencyTrackers() : this.updateDependencyTrackers(stateChanges, {}, this.props))
+      }
     }
     /*
       Run update, re-evaluating the tags and computed, if neccessary

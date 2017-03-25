@@ -46,6 +46,7 @@ class FunctionTreeExecution extends EventEmitter {
     this.functionTree = functionTree
     this.datetime = Date.now()
     this.errorCallback = errorCallback
+    this.isAsync = false
 
     this.runFunction = this.runFunction.bind(this)
   }
@@ -80,6 +81,7 @@ class FunctionTreeExecution extends EventEmitter {
     */
     if (isPromise(result)) {
       functionTree.emit('asyncFunction', execution, funcDetails, payload, result)
+      this.isAsync = true
       result
         .then(function (result) {
           if (result instanceof Abort) {
