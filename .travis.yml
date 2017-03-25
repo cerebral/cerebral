@@ -28,7 +28,7 @@ after_success:
     # TODO: check changed path to decide if npm publish necessary
     lerna bootstrap;
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
-    lerna publish -c --npm-tag next --yes --exact --ignore function-tree-firebase-admin;
+    lerna publish -c --npm-tag next --yes --exact;
     npm run deploy && echo 'Website updated.';
   fi
 branches:
