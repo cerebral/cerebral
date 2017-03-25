@@ -37,9 +37,12 @@ class Devtools {
     this.isResettingDebugger = false
     this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
     this.allowedTypes = []
-      .concat(this.isBrowserEnv ? [File, FileList, Blob, ImageData, RegExp] : [])
       .concat(options.allowedTypes || [])
-
+    typeof File !== 'undefined' ? this.allowedTypes.push(File) : null
+    typeof FileList !== 'undefined' ? this.allowedTypes.push(FileList) : null
+    typeof Blob !== 'undefined' ? this.allowedTypes.push(Blob) : null
+    typeof ImageData !== 'undefined' ? this.allowedTypes.push(ImageData) : null
+    typeof RegExp !== 'undefined' ? this.allowedTypes.push(RegExp) : null
     this.sendInitial = this.sendInitial.bind(this)
     this.sendComponentsMap = delay(this.sendComponentsMap, 50)
   }
