@@ -55,6 +55,17 @@ function updateDefaultHttpOptions({http}) {
 }
 ```
 
+## error
+Throws **HttpProviderError**. Its message property contains:
+
+```js
+{
+  result: 'Message or response body',
+  status: 200,
+  isAborted: false
+}
+```
+
 ## request
 
 ```js
