@@ -62,7 +62,8 @@ Throws **HttpProviderError**. Its message property contains:
 {
   result: 'Message or response body',
   status: 200,
-  isAborted: false
+  isAborted: false,
+  headers: {}
 }
 ```
 
