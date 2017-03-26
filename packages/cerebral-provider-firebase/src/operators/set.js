@@ -1,8 +1,11 @@
+import {createReturnPromise} from '../helpers'
+
 function setFactory (setPath, value) {
   function set ({firebase, path, resolve}) {
-    return firebase.set(resolve.value(setPath), resolve.value(value))
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.set(resolve.value(setPath), resolve.value(value)),
+      path
+    )
   }
 
   return set

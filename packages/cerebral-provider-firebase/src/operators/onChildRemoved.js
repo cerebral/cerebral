@@ -1,4 +1,4 @@
-import {convertObjectWithTemplates} from './utils'
+import {convertObjectWithTemplates} from '../helpers'
 
 function onChildRemovedFactory (path, signal, options = {}) {
   function onChildRemoved ({firebase, resolve}) {

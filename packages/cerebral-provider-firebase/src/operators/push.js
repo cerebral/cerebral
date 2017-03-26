@@ -1,8 +1,11 @@
+import {createReturnPromise} from '../helpers'
+
 function pushFactory (pushPath, value) {
   function push ({firebase, path, resolve}) {
-    return firebase.push(resolve.value(pushPath), resolve.value(value))
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.push(resolve.value(pushPath), resolve.value(value)),
+      path
+    )
   }
 
   return push

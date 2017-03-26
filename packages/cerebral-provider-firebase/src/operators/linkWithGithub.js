@@ -1,8 +1,11 @@
+import {createReturnPromise} from '../helpers'
+
 function linkWithGithubFactory (options) {
   function linkWithGithub ({firebase, path}) {
-    return firebase.linkWithGithub(options)
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.linkWithGithub(options),
+      path
+    )
   }
 
   return linkWithGithub
