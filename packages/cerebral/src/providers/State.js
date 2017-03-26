@@ -63,7 +63,7 @@ function StateProviderFactory () {
               const path = args[0]
               const type = typeof args[1]
               const signalName = context.execution.name
-              throwError(`The Signal '${signalName}' passed an invalid value of type '${type}' to the state tree at path '${path}'`)
+              throwError(`The Signal '${signalName}' passed an invalid value of type '${type}' to the state tree at path: '${path}'`)
             }
           }
         }
