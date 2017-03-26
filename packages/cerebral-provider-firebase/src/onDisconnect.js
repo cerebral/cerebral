@@ -16,7 +16,7 @@ export function setOnDisconnect (path, value) {
 
 export function cancelOnDisconnect () {
   if (!ref) {
-    throw new FirebaseProviderError('You have no set setOnDisconnect')
+    throw new FirebaseProviderError('You have no setOnDisconnect')
   }
 
   ref.onDisconnect().cancel()
