@@ -8,6 +8,7 @@ import resetClicked from './signals/resetClicked'
 import modelClicked from './signals/modelClicked'
 import searchValueChanged from './signals/searchValueChanged'
 import escPressed from './signals/escPressed'
+import addPortErrored from './signals/addPortErrored'
 
 export default () => ({
   state: {
@@ -39,6 +40,7 @@ export default () => ({
     mutationDoubleClicked,
     mutationClicked,
     resetClicked,
-    modelClicked
+    modelClicked,
+    addPortErrored
   }
 })

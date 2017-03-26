@@ -60,6 +60,10 @@ function Action ({action, faded, execution, children, onMutationClick, onActionC
       </div>
       {error ? (
         <div className='action-error'>
+          <div className='action-actionInput'>
+            <div className='action-inputLabel'>props:</div>
+            <div className='action-inputValue'><Inspector value={execution.payload} /></div>
+          </div>
           <strong>{error.name}</strong> : {error.message}
           <pre data-line={getLineNumber(error)}>
             <code className='language-javascript' dangerouslySetInnerHTML={{__html: renderCode(error)}} />

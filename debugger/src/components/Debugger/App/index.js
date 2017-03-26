@@ -13,13 +13,15 @@ import Model from '../Model'
 export default connect({
   port: state`port`,
   type: state`type`,
+  error: state`error`,
   currentPage: state`debugger.currentPage`,
   executingSignalsCount: state`debugger.executingSignalsCount`,
   settings: state`debugger.settings`,
   isSmall: state`useragent.media.small`,
   mutationsError: state`debugger.mutationsError`,
   escPressed: signal`debugger.escPressed`,
-  payloadReceived: signal`debugger.payloadReceived`
+  payloadReceived: signal`debugger.payloadReceived`,
+  addPortErrored: signal`debugger.addPortErrored`
 },
   class App extends Inferno.Component {
     componentDidMount () {
@@ -30,7 +32,11 @@ export default connect({
       })
 
       connector.addPort(this.props.port, (payload) => {
-        this.props.payloadReceived(payload)
+        if (payload instanceof Error) {
+          this.props.addPortErrored({error: payload.message})
+        } else {
+          this.props.payloadReceived(payload)
+        }
       })
     }
     renderLayout () {
@@ -69,7 +75,6 @@ export default connect({
             return (
               <div className='app-content'>
                 <Signals />
-                {this.props.type === 'c' || this.props.type === 'cft' ? <Model /> : null}
               </div>
             )
           case 'components':
@@ -82,13 +87,11 @@ export default connect({
             return (
               <div className='app-content'>
                 <Mutations />
-                {this.props.type === 'c' || this.props.type === 'cft' ? <Model /> : null}
               </div>
             )
           case 'model':
             return (
               <div className='app-content'>
-                <Signals />
                 {this.props.type === 'c' || this.props.type === 'cft' ? <Model /> : null}
               </div>
             )
@@ -96,6 +99,14 @@ export default connect({
             return null
         }
       }
+    }
+    renderError () {
+      return (
+        <div className='error'>
+          <div className='error-title'>warning</div>
+          {this.props.error}
+        </div>
+      )
     }
     render () {
       const mutationsError = this.props.mutationsError
@@ -112,7 +123,7 @@ export default connect({
               <Toolbar />
             </div>
           }
-          {this.renderLayout()}
+          {this.props.error ? this.renderError() : this.renderLayout()}
           <div className='execution'>
             {this.props.executingSignalsCount ? 'executing' : 'idle'}
             <div className={classNames('execution-led', {
