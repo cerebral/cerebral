@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function signInWithFacebook (options) {
   const scopes = options.scopes || []
@@ -26,7 +26,7 @@ export default function signInWithFacebook (options) {
             user: user
           })
         }, (error) => {
-          throw new FirebaseProviderError(error.message)
+          throw new FirebaseProviderAuthenticationError(error.message)
         })
     }
   })

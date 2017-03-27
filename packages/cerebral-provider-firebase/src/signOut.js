@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderError} from './errors'
 
 export default function signOut () {
   return firebase.auth().signOut()

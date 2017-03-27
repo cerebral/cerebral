@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function linkWithGithub (options = {}) {
   const scopes = options.scopes || []
@@ -26,7 +26,7 @@ export default function linkWithGithub (options = {}) {
             user: user
           })
         }, (error) => {
-          reject(new FirebaseProviderError(error.message))
+          reject(new FirebaseProviderAuthenticationError(error.message))
         })
     }
   })

@@ -39,7 +39,8 @@ const controller = Controller({
 - All factories supports template tags, allowing you to dynamically create paths and points to values
 
 ## error
-Throws **FirebaseProviderError**. Its message property contains error message from Firebase error.
+- **FirebaseProviderError**. The *message* property contains the Firebase error message
+- **FirebaseProviderAuthenticationError**. The *message* property contains the Firebase error message. The *code* property contains the authentication error code
 
 ## set
 Write data to this database location. This will overwrite any data at this location and all child locations. Passing **null** for the new value is equivalent to calling remove(); all data at this location or any child location will be deleted.

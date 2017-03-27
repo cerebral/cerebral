@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderError} from './errors'
 
 export default function sendPasswordResetEmail (email) {
   return firebase.auth().sendPasswordResetEmail(email)

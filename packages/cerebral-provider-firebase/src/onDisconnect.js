@@ -1,7 +1,7 @@
 import {
   createRef
 } from './helpers'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderError} from './errors'
 
 let ref = null
 

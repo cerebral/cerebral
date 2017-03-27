@@ -1,7 +1,7 @@
 import {
   createRef
 } from './helpers'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderError} from './errors'
 
 export default function value (path, options) {
   const ref = createRef(path, options)

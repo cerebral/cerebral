@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function signInAnonymously () {
   return new Promise((resolve, reject) => {
@@ -14,7 +14,7 @@ export default function signInAnonymously () {
           })
         })
       }, (error) => {
-        reject(new FirebaseProviderError(error.message))
+        reject(new FirebaseProviderAuthenticationError(error.message))
       })
   })
 }

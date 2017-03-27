@@ -1,7 +1,7 @@
 import {
   createStorageRef
 } from './helpers'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderError} from './errors'
 
 /* options.progress expects a function which will receive
  * details on the upload: { progress, bytesTransferred, totalBytes, state }

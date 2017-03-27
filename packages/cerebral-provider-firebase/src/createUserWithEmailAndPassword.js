@@ -1,6 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
-import FirebaseProviderError from './FirebaseProviderError'
+import {FirebaseProviderError} from './errors'
 
 export default function createUserWithEmailAndPassword (email, password) {
   return new Promise((resolve, reject) => {
