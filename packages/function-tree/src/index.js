@@ -174,7 +174,7 @@ export function parallel (...args) {
 }
 
 export class FunctionTree extends EventEmitter {
-  constructor (contextProviders) {
+  constructor (contextProviders, returnInstance) {
     super()
     this.cachedTrees = []
     this.cachedStaticTrees = []
@@ -183,6 +183,11 @@ export class FunctionTree extends EventEmitter {
     this.runTree.on = this.on.bind(this)
     this.runTree.once = this.once.bind(this)
     this.runTree.off = this.removeListener.bind(this)
+
+    // When not extended
+    if (!returnInstance) {
+      return this.runTree
+    }
   }
 
   /*
@@ -260,5 +265,5 @@ export class FunctionTree extends EventEmitter {
 }
 
 export default (contextProviders) => {
-  return new FunctionTree(contextProviders).runTree
+  return new FunctionTree(contextProviders)
 }

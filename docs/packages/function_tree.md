@@ -11,14 +11,14 @@ Function-tree is somewhat in the same family as Rxjs and Promises. The main diff
 Rxjs and Promises are also about execution control, but neither of them have declarative conditional execution paths, you have to write an *IF* or *SWITCH* statement or decouple streams. With function tree you are able to diverge the execution down paths just as declaratively as functions. This helps readability.
 
 ## API
-Function-tree is implemented with ES6 imports, meaning that on Node you will have to point to the specific exports, like **default**. Examples are given with Node environment.
+Function-tree is implemented with ES6 imports, meaning that on Node you will have to point to the specific exports. Examples are given with Node environment.
 
 ### instantiate
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
-const execute = FunctionTree([
+const execute = new FunctionTree([
   // Providers
 ])
 
@@ -34,19 +34,19 @@ execute([
 Download the function tree standalone debugger for [Mac](https://drive.google.com/file/d/0B1pYKovu9Upyb1Bkdm5IbkdBN3c/view?usp=sharing), [Windows](https://drive.google.com/file/d/0B1pYKovu9UpyMGRRbG45dWR6R1k/view?usp=sharing) or [Linux](https://drive.google.com/file/d/0B1pYKovu9UpyMFQ5dEdnSy1aN0E/view?usp=sharing).
 
 ```js
-const FunctionTree = require('function-tree').default
-const Devtools = require('function-tree/devtools').default
+const FunctionTree = require('function-tree').FunctionTree
+const Devtools = require('function-tree/devtools').Devtools
 
 // Instantiate the devtools with the port
 // you are running the debugger on
-const devtools = Devtools({
+const devtools = new Devtools({
   remoteDebugger: 'localhost:8585'
 })
 
 // Add the provider to any instantiated
 // function tree you want to pass
 // information from
-const execute = FunctionTree([
+const execute = new FunctionTree([
   devtools.Provider()
 ])
 
@@ -127,13 +127,13 @@ Even though **someFunction** returns a Promise, **someOtherFunction** will be ru
 #### props
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
 function funcA (context) {
   context.props.foo // "bar"
 }
 
-const execute = FunctionTree()
+const execute = new FunctionTree()
 const tree = [
   funcA
 ]
@@ -145,7 +145,7 @@ execute(tree, {foo: 'bar'})
 The path is only available on the context when the function can diverge the execution down a path.
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
 function funcA (context) {
   context.props.foo // "bar"
@@ -170,7 +170,7 @@ function funcC(context) {
   context.props.foo3 // "bar3"
 }
 
-const execute = FunctionTree([])
+const execute = new FunctionTree([])
 const tree = [
   funcA, {
     pathA: [
@@ -209,8 +209,8 @@ const tree = [
 ```
 ##### abort
 ```js
-const FunctionTree = require('function-tree').default
-const execute = FunctionTree([])
+const FunctionTree = require('function-tree').FunctionTree
+const execute = new FunctionTree([])
 
 function funcA (context) {
   return context.execution.abort()
@@ -232,8 +232,8 @@ execute(tree)
 
 ### error
 ```js
-const FunctionTree = require('function-tree').default
-const execute = FunctionTree([])
+const FunctionTree = require('function-tree').FunctionTree
+const execute = new FunctionTree([])
 
 // As an event (async)
 execute.on('error', function (error, execution, payload) {
@@ -252,7 +252,7 @@ execute(tree, (error, execution, payload) => {
 A provider gives you access to the current context and other information about the execution. It is required that you return the context or a mutated version of it.
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
 function MyProvider(context, functionDetails, payload) {
   context // Current context
@@ -274,7 +274,7 @@ function MyProvider(context, functionDetails, payload) {
   return context // Always return the changed context
 }
 
-const execute = FunctionTree([
+const execute = new FunctionTree([
   MyProvider
 ])
 ```
@@ -285,7 +285,7 @@ Providers lets us do some pretty amazing things. The debugger for **function-tre
 Will extend the context. If the debugger is active the methods on the attached object will be wrapped and debugger will notify about their uses.
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 const ContextProvider = require('function-tree/providers').ContextProvider
 const request = require('request')
 
@@ -294,7 +294,7 @@ function funcA (context) {
   context.request.get('/whatever') // Debugger will know about this
 }
 
-const execute = FunctionTree([
+const execute = new FunctionTree([
   ContextProvider({
     request
   })

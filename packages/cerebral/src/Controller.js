@@ -17,7 +17,7 @@ import ResolveProvider from './providers/Resolve'
 */
 class Controller extends FunctionTree {
   constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
-    super()
+    super([], true)
     const getSignal = this.getSignal
 
     this.getSignal = () => {
