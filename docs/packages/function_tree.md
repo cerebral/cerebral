@@ -11,16 +11,15 @@ Function-tree is somewhat in the same family as Rxjs and Promises. The main diff
 Rxjs and Promises are also about execution control, but neither of them have declarative conditional execution paths, you have to write an *IF* or *SWITCH* statement or decouple streams. With function tree you are able to diverge the execution down paths just as declaratively as functions. This helps readability.
 
 ## API
-Function-tree is implemented with ES6 imports, meaning that on Node you will have to point to the specific exports, like **default**. Examples are given with Node environment.
 
 ### instantiate
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
-const execute = FunctionTree([
-  // Providers
-])
+const execute = FunctionTree({
+  // add side effect libraries to context
+})
 
 execute([
   function someFunc (context) {},
@@ -30,12 +29,29 @@ execute([
 })
 ```
 
+You can also add multiple custom context providers by using an array:
+
+```js
+const execute = FunctionTree([{
+    // add side effect libraries to context
+  },
+  SomeCustomProvider()
+])
+```
+
+In browser environment you can use **import**:
+
+```js
+import FunctionTree, {parallel, sequence} from 'function-tree'
+```
+
+
 ### devtools
 Download the function tree standalone debugger for [Mac](https://drive.google.com/file/d/0B1pYKovu9Upyb1Bkdm5IbkdBN3c/view?usp=sharing), [Windows](https://drive.google.com/file/d/0B1pYKovu9UpyMGRRbG45dWR6R1k/view?usp=sharing) or [Linux](https://drive.google.com/file/d/0B1pYKovu9UpyMFQ5dEdnSy1aN0E/view?usp=sharing).
 
 ```js
-const FunctionTree = require('function-tree').default
-const Devtools = require('function-tree/devtools').default
+const FunctionTree = require('function-tree').FunctionTree
+const Devtools = require('function-tree/devtools')
 
 // Instantiate the devtools with the port
 // you are running the debugger on
@@ -127,7 +143,7 @@ Even though **someFunction** returns a Promise, **someOtherFunction** will be ru
 #### props
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
 function funcA (context) {
   context.props.foo // "bar"
@@ -145,7 +161,7 @@ execute(tree, {foo: 'bar'})
 The path is only available on the context when the function can diverge the execution down a path.
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
 function funcA (context) {
   context.props.foo // "bar"
@@ -209,7 +225,7 @@ const tree = [
 ```
 ##### abort
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 const execute = FunctionTree([])
 
 function funcA (context) {
@@ -232,7 +248,7 @@ execute(tree)
 
 ### error
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 const execute = FunctionTree([])
 
 // As an event (async)
@@ -252,7 +268,7 @@ execute(tree, (error, execution, payload) => {
 A provider gives you access to the current context and other information about the execution. It is required that you return the context or a mutated version of it.
 
 ```js
-const FunctionTree = require('function-tree').default
+const FunctionTree = require('function-tree').FunctionTree
 
 function MyProvider(context, functionDetails, payload) {
   context // Current context
@@ -281,36 +297,11 @@ const execute = FunctionTree([
 
 Providers lets us do some pretty amazing things. The debugger for **function-tree** is actually just a provider that sends information to the debugger about execution and exposes an API for other providers to send their own data to the debugger.
 
-#### ContextProvider
-Will extend the context. If the debugger is active the methods on the attached object will be wrapped and debugger will notify about their uses.
-
-```js
-const FunctionTree = require('function-tree').default
-const ContextProvider = require('function-tree/providers').ContextProvider
-const request = require('request')
-
-function funcA (context) {
-  context.request
-  context.request.get('/whatever') // Debugger will know about this
-}
-
-const execute = FunctionTree([
-  ContextProvider({
-    request
-  })
-])
-const tree = [
-  funcA
-]
-
-execute(tree)
-```
-
 ### events
 The execute function is also an event emitter.
 
 ```js
-import FunctionTree from 'function-tree'
+const FunctionTree = require('function-tree').FunctionTree
 
 const execute = FunctionTree([])
 const tree = [

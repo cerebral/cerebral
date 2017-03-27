@@ -407,4 +407,32 @@ describe('FunctionTree', () => {
 
     execute(tree)
   })
+  it('should add stuff to context by passing in an object', (done) => {
+    const execute = FunctionTree({
+      foo: {
+        bar () { return 'bar' }
+      }
+    })
+
+    execute([
+      function (context) {
+        assert.ok(context.foo.bar(), 'bar')
+        done()
+      }
+    ])
+  })
+  it('should add stuff to context by passing in an object in the array', (done) => {
+    const execute = FunctionTree([{
+      foo: {
+        bar () { return 'bar' }
+      }
+    }])
+
+    execute([
+      function (context) {
+        assert.ok(context.foo.bar(), 'bar')
+        done()
+      }
+    ])
+  })
 })
