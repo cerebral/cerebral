@@ -40,7 +40,8 @@ class Debugger extends Inferno.Component {
             controller: Controller({
               state: {
                 port,
-                type: storedApps[port].type
+                type: storedApps[port].type,
+                error: null
               },
               modules: {
                 debugger: DebuggerModule(),

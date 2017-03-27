@@ -57,6 +57,9 @@ function createWindow () {
         }
       })
     })
+    clients[port].wss.on('error', function (ws) {
+      mainWindow.webContents.send('port:exists', port)
+    })
     mainWindow.webContents.send('port:added', port)
   })
 

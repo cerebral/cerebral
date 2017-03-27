@@ -279,6 +279,13 @@ class Value extends Inferno.Component {
   onBlur () {
     this.setState({isEditing: false})
   }
+  shortenString (string) {
+    if (string.length > 50) {
+      return string.substr(0, 47) + '...'
+    }
+
+    return string
+  }
   renderValue (value, hasNext) {
     const isExactHighlightPath = this.props.highlightPath && String(this.props.highlightPath) === String(this.props.path)
 
@@ -299,7 +306,7 @@ class Value extends Inferno.Component {
       return (
         <div className={isExactHighlightPath ? 'inspector-highlight' : null}>
           {this.props.propertyKey ? this.props.propertyKey + ': ' : <span />}
-          <span onClick={this.onClick}>{isString(value) ? '"' + value + '"' : String(value)}</span>
+          <span onClick={this.onClick}>{isString(value) ? '"' + this.shortenString(value) + '"' : String(value)}</span>
           {hasNext ? ',' : null}
         </div>
       )
