@@ -4,7 +4,9 @@ You trigger a signal when something happens in your application. For example a b
 
 Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the functions in this tree **actions**.
 
-You can define this execution tree with a single action:
+## Sequence
+
+You can define an execution tree with a single action:
 
 ```js
 function myAction () {}
@@ -12,7 +14,7 @@ function myAction () {}
 export default myAction
 ```
 
-Or you can group them together in a *sequence* using an array:
+This will automatically be converted to a *sequence* with a single action. By using an array you can define multiple actions in one sequence:
 
 ```js
 function actionA () {}
@@ -25,6 +27,53 @@ export default [
 ```
 
 In a sequence Cerebral runs one action after the other synchronously. When an action returns a promise it will hold until the promise resolves and then continue the sequence.
+
+You can define a sequence explicitly:
+
+```js
+import {sequence} from 'cerebral'
+
+function actionA () {}
+function actionB () {}
+
+export default sequence([
+  actionA,
+  actionB
+])
+```
+
+This is exactly the same as the example above, but we have a couple of new possibilities now.
+
+### Name
+You can give a sequence a name:
+
+```js
+import {sequence} from 'cerebral'
+
+export default sequence('My sequence', [])
+```
+
+This name is picked up by the debugger and will be displayed in the visualization of the signal. This is useful in very complex compositions.
+
+### Abort
+You can also abort the execution of a sequence. This is useful when you for example have failing HTTP requests etc. and there is no reason to continue signal execution.
+
+```js
+import {sequence} from 'cerebral'
+
+function actionA () {}
+function actionB () {}
+function actionC () {}
+
+export default sequence('My sequence', [
+  actionA,
+  actionB
+], [
+  actionC
+])
+```
+
+The third argument is the "abort sequence". If any of these actions return an **abort** it will stop execution and rather start a new execution on the abort sequence. The debugger will show you exactly what action caused an abort and its execution. Read more about how to abort in the API documentation.
 
 ## Parallel execution
 You can also run these actions in parallel. You do that by using the **parallel** function:
@@ -46,6 +95,8 @@ export default [
 ```
 
 If actionA returns a promise actionB will still be run instantly, meaning that they run in parallel. When both actionA and actionB is done, actionC is run.
+
+Parallel also has naming and abort possibilities, just like sequence.
 
 ## Composing
 Actions and a sequence of actions can be composed into other sequences of actions. This is a powerful concept that allows you to decouple a lot of your logic and compose it together wherever it is needed:

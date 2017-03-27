@@ -18,12 +18,12 @@ function isPaths (item) {
   )
 }
 
-function analyze (functions, item, isParallel) {
+function analyze (functions, item, isParallel, abortChain) {
   if (item instanceof Parallel || item instanceof Sequence) {
     const instance = item.toJSON()
 
     return Object.assign(instance, {
-      items: analyze(functions, instance.items, item instanceof Parallel).items
+      items: analyze(functions, instance.items, item instanceof Parallel, item.abortChain).items
     })
   } else if (Array.isArray(item)) {
     return new Sequence(item.reduce((allItems, subItem, index) => {
@@ -39,6 +39,11 @@ function analyze (functions, item, isParallel) {
           functionIndex: functions.push(subItem) - 1,
           function: subItem
         }
+
+        if (abortChain) {
+          funcDetails.getAbortChain = () => abortChain
+        }
+
         const nextItem = item[index + 1]
 
         if (isPaths(nextItem)) {

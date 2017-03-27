@@ -12,6 +12,7 @@ export default parallel([
 ])
 ```
 
+## Name
 You can name a parallel, which will be displayed in debugger:
 ```js
 import {parallel} from 'cerebral'
@@ -24,6 +25,7 @@ export default parallel('my parallel', [
 ])
 ```
 
+## Compose
 You can compose parallel into any existing sequence:
 ```js
 import {parallel} from 'cerebral'
@@ -39,3 +41,31 @@ export default [
   ])
 ]
 ```
+
+## Abort
+You can abort a parallel execution:
+
+```js
+import {parallel} from 'cerebral'
+
+function someActionAborting ({abort}) {
+  return abort({}) // Optional payload
+}
+function someAction () {}
+function someActionHandlingAbort () {}
+
+export default parallel('my parallel', [
+  someActionAborting, {
+    success: [], // Will not run
+    error: [] // Will not run
+  },
+  someAction, { // Runs until resolved
+    success: [], // Will not run if executed after abort
+    error: [] // Will not run if executed after abort
+  }
+], [
+  someActionHandlingAbort
+])
+```
+
+Abort does not **bubble**, meaning actions that abort will only reach its specific abort sequence.

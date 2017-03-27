@@ -140,7 +140,9 @@ export default connect({
           onActionClick={this.onActionClick}
           executed={executedBySignal ? (
             <Signal
-              className={'executedBy'}
+              className={classnames('executedBy', {
+                'abort': executedBySignal.executedBy.isAbort
+              })}
               style={{
                 backgroundColor: '#FAFAFA'
               }}

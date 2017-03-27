@@ -12,6 +12,8 @@
   overflow: auto;
 }
 
+.executedBy.abort h3 {}
+
 .executedByLine {
   height: 3px;
   border-bottom: 1px solid #DDD;

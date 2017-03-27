@@ -1,4 +1,4 @@
-import {Controller} from 'cerebral'
+import {Controller, sequence} from 'cerebral'
 import Devtools from 'cerebral/devtools'
 import {ContextProvider} from 'cerebral/providers'
 import uuid from 'uuid'
@@ -36,15 +36,25 @@ const controller = Controller({
   signals: {
     rootRouted: redirect('/all'),
     newTodoTitleChanged: set(state`newTodoTitle`, props`title`),
-    newTodoSubmitted: [
+    newTodoSubmitted: sequence([
       when(state`newTodoTitle`), {
         true: [
           addTodo,
           set(state`newTodoTitle`, '')
         ],
         false: []
+      },
+      function abort ({abort}) {
+        return abort()
+      },
+      function couldContinue () {
+
       }
-    ],
+    ], [
+      function aborted () {
+
+      }
+    ]),
     todoNewTitleChanged: set(state`todos.${props`uid`}.editedTitle`, props`title`),
     todoNewTitleSubmitted: [
       when(state`todos.${props`uid`}.editedTitle`), {

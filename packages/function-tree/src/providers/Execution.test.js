@@ -15,21 +15,19 @@ describe('ExecutionProvider', () => {
       }
     ])
   })
-  it('should be able to retry execution', () => {
+  it('should be able to retry execution', (done) => {
     const execute = FunctionTree()
     let count = 0
 
     function funcA () {
-      return new Promise(resolve => {
-        resolve()
-      })
+      return Promise.resolve()
     }
 
-    function funcB ({input, execution}) {
-      if (input.retryCount < 3) {
+    function funcB ({props, execution}) {
+      if (props.retryCount < 3) {
         count++
         return execution.retry({
-          retryCount: input.retryCount + 1
+          retryCount: props.retryCount + 1
         })
       }
     }
@@ -41,6 +39,7 @@ describe('ExecutionProvider', () => {
       retryCount: 0
     }, () => {
       assert.equal(count, 3)
+      done()
     })
   })
   it('should be able to abort execution', () => {
