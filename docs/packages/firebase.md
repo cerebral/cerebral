@@ -57,7 +57,13 @@ import {props} from 'cerebral/tags'
 import {set} from 'cerebral-provider-firebase/operators'
 
 export default [
-  set('foo.bar', props`foo`)
+  set('foo.bar', props`foo`),
+
+  // Alternatively with explicit paths
+  set('foo.bar', props`foo`), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -86,7 +92,16 @@ export default [
   update('some.path', {
     'foo.bar': props`bar`,
     'foo.baz': props`baz`
-  })
+  }),
+
+  // Alternatively with explicit paths
+  update('some.path', {
+    'foo.bar': props`bar`,
+    'foo.baz': props`baz`
+  }), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -111,7 +126,13 @@ import {state} from 'cerebral/tags'
 import {push} from 'cerebral-provider-firebase/operators'
 
 export default [
-  push('users', state`newUser`)
+  push('users', state`newUser`),
+
+  // Alternatively with explicit paths
+  push('users', state`newUser`), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -136,7 +157,13 @@ import {props, string} from 'cerebral/tags'
 import {remove} from 'cerebral-provider-firebase/operators'
 
 export default [
-  remove(string`users.${props`userKey`}`)
+  remove(string`users.${props`userKey`}`),
+
+  // Alternatively with explicit paths
+  remove(string`users.${props`userKey`}`), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -186,6 +213,9 @@ function transactionFunction(currentData){
 }
 
 export default [
+  transaction('foo.bar', transactionFunction),
+
+  // Alternatively with explicit paths
   transaction('foo.bar', transactionFunction)
 ]
 ```
@@ -213,7 +243,13 @@ function someAction({ firebase }) {
 import {value} from 'cerebral-provider-firebase/operators'
 
 export default [
-  value('foo.bar')
+  value('foo.bar'),
+
+  // Alternatively with explicit paths
+  value('foo.bar'), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -374,7 +410,16 @@ export default [
   task('some_task', {
     uid: state`user.uid`,
     data: props`data`
-  })
+  }),
+
+  // Alternatively with explicit paths
+  task('some_task', {
+    uid: state`user.uid`,
+    data: props`data`
+  }), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -396,7 +441,13 @@ function someAction({ firebase }) {
 import {getUser} from 'cerebral-provider-firebase/operators'
 
 export default [
-  getUser()
+  getUser(),
+
+  // Alternatively with explicit paths
+  getUser(), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -420,7 +471,13 @@ function someAction({ firebase }) {
 import {signInAnonymously} from 'cerebral-provider-firebase/operators'
 
 export default [
-  signInAnonymously()
+  signInAnonymously(),
+
+  // Alternatively with explicit paths
+  signInAnonymously(), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -448,7 +505,13 @@ import {state} from 'cerebral/tags'
 import {createUserWithEmailAndPassword} from 'cerebral-provider-firebase/operators'
 
 export default [
-  createUserWithEmailAndPassword(state`newUser.email`, state`newUser.password`)
+  createUserWithEmailAndPassword(state`newUser.email`, state`newUser.password`),
+
+  // Alternatively with explicit paths
+  createUserWithEmailAndPassword(state`newUser.email`, state`newUser.password`), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -476,7 +539,13 @@ import {props} from 'cerebral/tags'
 import {signInWithEmailAndPassword} from 'cerebral-provider-firebase/operators'
 
 export default [
-  signInWithEmailAndPassword(props`email`, props`password`)
+  signInWithEmailAndPassword(props`email`, props`password`),
+
+  // Alternatively with explicit paths
+  signInWithEmailAndPassword(props`email`, props`password`), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -506,7 +575,15 @@ import {signInWithFacebook} from 'cerebral-provider-firebase/operators'
 export default [
   signInWithFacebook({
     redirect: state`useragent.media.small`
-  })
+  }),
+
+  // Alternatively with explicit paths
+  signInWithFacebook({
+    redirect: state`useragent.media.small`
+  }), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -541,7 +618,15 @@ import {linkWithFacebook} from 'cerebral-provider-firebase/operators'
 export default [
   linkWithFacebook({
     redirect: state`useragent.media.small`
-  })
+  }),
+
+  // Alternatively with explicit paths
+  linkWithFacebook({
+    redirect: state`useragent.media.small`
+  }), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -570,7 +655,13 @@ function someAction({ firebase }) {
 import {signOut} from 'cerebral-provider-firebase/operators'
 
 export default [
-  signOut()
+  signOut(),
+
+  // Alternatively with explicit paths
+  signOut(), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -592,7 +683,13 @@ import {state} from 'cerebral/tags'
 import {sendPasswordResetEmail} from 'cerebral-provider-firebase/operators'
 
 export default [
-  sendPasswordResetEmail(state`user.email`)
+  sendPasswordResetEmail(state`user.email`),
+
+  // Alternatively with explicit paths
+  sendPasswordResetEmail(state`user.email`), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -677,7 +774,16 @@ export default [
     progress: signal`gallery.progress`
     // Set progress on a state value
     progress: state`gallery.progress`
-  })
+  }),
+
+  // Alternatively with explicit paths
+  put(string`posts.all.${props`postId`}`, props`file`, {
+    progress: signal`gallery.progress`
+    progress: state`gallery.progress`
+  }), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
@@ -700,13 +806,22 @@ function someAction({ firebase, props }) {
 *factory*
 ```js
 import {props, state, string} from 'cerebral/tags'
-import {put} from 'cerebral-provider-firebase/operators'
+import {delete as firebaseDelete} from 'cerebral-provider-firebase/operators'
 
 export default [
-  firebase.delete(
+  firebaseDelete(
     string`posts.all.${props`postId`}`,
     state`posts.all.${props`postId`}.imageName`
-  )
+  ),
+
+  // Alternatively with explicit paths
+  firebaseDelete(
+    string`posts.all.${props`postId`}`,
+    state`posts.all.${props`postId`}.imageName`
+  ), {
+    success: [],
+    error: []
+  }
 ]
 ```
 

@@ -116,6 +116,9 @@ function someGetAction ({http}) {
 import {httpGet} from 'cerebral-provider-http/operators'
 
 export default [
+  httpGet('/items'),
+
+  // Alternatively with explicit paths
   httpGet('/items'), {
     success: [],
     error: [],
@@ -123,6 +126,17 @@ export default [
     '${STATUS_CODE}': [] // Optionally any status code, ex. 404: []
   }
 ]
+```
+
+*output*
+```javascript
+{
+  result: 'the response',
+  status: 200,
+
+  // If aborted
+  isAborted: true
+}
 ```
 
 ## post
@@ -147,6 +161,12 @@ export default [
   httpPost('/items', {
     title: props`itemTitle`,
     foo: 'bar'
+  }),
+
+  // Alternatively with explicit paths
+  httpPost('/items', {
+    title: props`itemTitle`,
+    foo: 'bar'
   }), {
     success: [],
     error: [],
@@ -154,6 +174,17 @@ export default [
     '${STATUS_CODE}': [] // Optionally any status code, ex. 404: []
   }
 ]
+```
+
+*output*
+```javascript
+{
+  result: 'the response',
+  status: 200,
+
+  // If aborted
+  isAborted: true
+}
 ```
 
 ## put
@@ -176,6 +207,11 @@ import {httpPost} from 'cerebral-provider-http/operators'
 export default [
   httpPut('/items', {
     // BODY object
+  }),
+
+  // Alternatively with explicit paths
+  httpPut('/items', {
+    // BODY object
   }), {
     success: [],
     error: [],
@@ -183,6 +219,17 @@ export default [
     '${STATUS_CODE}': [] // Optionally any status code, ex. 404: []
   }
 ]
+```
+
+*output*
+```javascript
+{
+  result: 'the response',
+  status: 200,
+
+  // If aborted
+  isAborted: true
+}
 ```
 
 ## patch
@@ -204,6 +251,9 @@ import {httpPost} from 'cerebral-provider-http/operators'
 import {state, props, string} from 'cerebral/tags'
 
 export default [
+  httpPatch(string`/items/${props`itemId`}`, state`patchData`),
+
+  // Alternatively with explicit paths
   httpPatch(string`/items/${props`itemId`}`, state`patchData`), {
     success: [],
     error: [],
@@ -211,6 +261,17 @@ export default [
     '${STATUS_CODE}': [] // Optionally any status code, ex. 404: []
   }
 ]
+```
+
+*output*
+```javascript
+{
+  result: 'the response',
+  status: 200,
+
+  // If aborted
+  isAborted: true
+}
 ```
 
 ## delete
@@ -232,6 +293,9 @@ import {httpPost} from 'cerebral-provider-http/operators'
 import {state} from 'cerebral/tags'
 
 export default [
+  httpDelete(string`/items/${state`currentItemId`}`),
+
+  // Alternatively with explicit paths
   httpDelete(string`/items/${state`currentItemId`}`), {
     success: [],
     error: [],
@@ -241,9 +305,64 @@ export default [
 ]
 ```
 
+*output*
+```javascript
+{
+  result: 'the response',
+  status: 200,
+
+  // If aborted
+  isAborted: true
+}
+```
+
 ## uploadFile
 
-**COMING SOON**
+*action*
+```js
+function someDeleteAction ({http, props}) {
+  return http.uploadFile('/upload', props.files, {
+    name: 'filename.png', // Default to "files"
+    data: {}, // Additional form data
+    headers: {},
+    onProgress(progress) {} // Upload progress
+  })
+}
+```
+
+*factory*
+```js
+import {httpUploadFile} from 'cerebral-provider-http/operators'
+import {state, props} from 'cerebral/tags'
+
+export default [
+  httpUploadFile('/uploads', props`file`, {
+    name: state`currentFileName`
+  }),
+
+  // Alternatively with explicit paths
+  httpUploadFile('/uploads', props`file`, {
+    name: state`currentFileName`
+  }), {
+    success: [],
+    error: [],
+    abort: [], // Optional
+    '${STATUS_CODE}': [] // Optionally any status code, ex. 404: []
+  }
+]
+```
+
+*output*
+```javascript
+{
+  result: 'the response',
+  status: 200,
+
+  // If aborted
+  isAborted: true
+}
+```
+
 
 ## response
 
@@ -259,10 +378,9 @@ function someGetAction ({http}) {
       response.headers // Parsed response headers
     })
     // All other status codes
-    .catch((response) => {
-      response.status // Status code of response
-      response.result // Parsed response text
-      response.headers // Parsed response headers
+    .catch((error) => {
+      // HttpProviderError
+      error.message // {status: 500, result: 'response text', headers: {}, isAborted: false}
     })
 }
 ```
@@ -275,12 +393,12 @@ function searchItems({input, state, path, http}) {
   http.abort('/items*') // regexp string
   return http.get(`/items?query=${input.query}`)
     .then(path.success)
-    .catch((response) => {
-      if (response.isAborted) {
+    .catch((error) => {
+      if (error.message.isAborted) {
         return path.abort()
       }
 
-      return path.error(response)
+      return path.error({error: error.message})
     })
 }
 
