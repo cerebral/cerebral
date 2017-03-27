@@ -2,6 +2,7 @@ import EventEmitter from 'eventemitter3'
 import executeTree from './executeTree'
 import createStaticTree from './staticTree'
 import ExecutionProvider from './providers/Execution'
+import ContextProvider from './providers/Context'
 import PropsProvider from './providers/Props'
 import PathProvider from './providers/Path'
 import Path from './Path'
@@ -153,7 +154,7 @@ class FunctionTreeExecution extends EventEmitter {
       var newContext = (
         typeof contextProvider === 'function'
           ? contextProvider(currentContext, funcDetails, payload, prevPayload)
-          : Object.assign(currentContext, contextProvider)
+          : ContextProvider(contextProvider)(currentContext, funcDetails, payload, prevPayload)
       )
 
       if (newContext !== currentContext) {
@@ -178,7 +179,14 @@ export class FunctionTree extends EventEmitter {
     super()
     this.cachedTrees = []
     this.cachedStaticTrees = []
-    this.contextProviders = contextProviders || []
+    if (Array.isArray(contextProviders)) {
+      this.contextProviders = contextProviders
+    } else if (contextProviders) {
+      this.contextProviders = [ContextProvider(contextProviders)]
+    } else {
+      this.contextProviders = []
+    }
+
     this.runTree = this.runTree.bind(this)
     this.runTree.on = this.on.bind(this)
     this.runTree.once = this.once.bind(this)

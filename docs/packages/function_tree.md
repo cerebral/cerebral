@@ -18,9 +18,10 @@ Function-tree is implemented with ES6 imports, meaning that on Node you will hav
 ```js
 const FunctionTree = require('function-tree').FunctionTree
 
-const execute = new FunctionTree([
-  // Providers
-])
+const execute = new FunctionTree({
+  // add side effect libraries to context
+})
+
 
 execute([
   function someFunc (context) {},
@@ -29,6 +30,23 @@ execute([
   foo: 'bar' // optional payload
 })
 ```
+
+You can also add multiple custom context providers by using an array:
+
+```js
+const execute = FunctionTree([{
+    // add side effect libraries to context
+  },
+  SomeCustomProvider()
+])
+```
+
+In browser environment you can use **import**:
+
+```js
+import FunctionTree, {parallel, sequence} from 'function-tree'
+```
+
 
 ### devtools
 Download the function tree standalone debugger for [Mac](https://drive.google.com/file/d/0B1pYKovu9Upyb1Bkdm5IbkdBN3c/view?usp=sharing), [Windows](https://drive.google.com/file/d/0B1pYKovu9UpyMGRRbG45dWR6R1k/view?usp=sharing) or [Linux](https://drive.google.com/file/d/0B1pYKovu9UpyMFQ5dEdnSy1aN0E/view?usp=sharing).
@@ -281,36 +299,11 @@ const execute = new FunctionTree([
 
 Providers lets us do some pretty amazing things. The debugger for **function-tree** is actually just a provider that sends information to the debugger about execution and exposes an API for other providers to send their own data to the debugger.
 
-#### ContextProvider
-Will extend the context. If the debugger is active the methods on the attached object will be wrapped and debugger will notify about their uses.
-
-```js
-const FunctionTree = require('function-tree').FunctionTree
-const ContextProvider = require('function-tree/providers').ContextProvider
-const request = require('request')
-
-function funcA (context) {
-  context.request
-  context.request.get('/whatever') // Debugger will know about this
-}
-
-const execute = new FunctionTree([
-  ContextProvider({
-    request
-  })
-])
-const tree = [
-  funcA
-]
-
-execute(tree)
-```
-
 ### events
 The execute function is also an event emitter.
 
 ```js
-import FunctionTree from 'function-tree'
+const FunctionTree = require('function-tree').FunctionTree
 
 const execute = FunctionTree([])
 const tree = [
