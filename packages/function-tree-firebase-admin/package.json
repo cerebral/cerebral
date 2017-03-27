@@ -1,6 +1,5 @@
 {
   "name": "function-tree-firebase-admin",
-  "private": "true",
   "version": "1.0.0-b",
   "description": "Firebase admin execution and provider",
   "main": "lib/index.js",
