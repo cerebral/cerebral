@@ -61,7 +61,7 @@ class Action extends Inferno.Component {
     }
   }
   render () {
-    const {action, faded, execution, children, onMutationClick, onActionClick, executed} = this.props
+    const {action, faded, execution, children, onMutationClick, executed} = this.props
 
     const error = execution && execution.error
     const titleClassname = classnames({
@@ -70,10 +70,11 @@ class Action extends Inferno.Component {
       'action-faded': faded
     })
     return (
-      <div className={error ? 'action action-actionError' : 'action'}>
-        <div
-          className={titleClassname}
-          onClick={() => onActionClick(action)}>
+      <div
+        className={error ? 'action action-actionError' : 'action'}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className={titleClassname}>
           {error ? <i className='icon icon-warning' /> : null}
           {action.isAsync ? <i className='icon icon-asyncAction' /> : null}
           {renderActionTitle(action)}

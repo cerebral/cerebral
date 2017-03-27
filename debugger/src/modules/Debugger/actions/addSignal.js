@@ -5,7 +5,7 @@ function addSignal ({props, state, resolve}) {
   const execution = props.data.execution
   const prevSignal = signalsList[signalsList.length - 1]
   const newSignal = {
-    name: execution.name,
+    name: execution.name || String(execution.executionId),
     executionId: execution.executionId,
     source: props.source,
     isExecuting: true,

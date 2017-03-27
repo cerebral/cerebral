@@ -1,4 +1,4 @@
-import {convertObjectWithTemplates} from '../utils'
+import {convertObjectWithTemplates, processResponse} from '../utils'
 
 function uploadFileFactory (urlValue, filesValue, optionsValue) {
   function uploadFile ({http, resolve, path}) {

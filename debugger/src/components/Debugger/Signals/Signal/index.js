@@ -2,7 +2,6 @@ import './styles.css'
 import Inferno from 'inferno'
 import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
-import connector from 'connector'
 import classnames from 'classnames'
 
 import Action from './Action'
@@ -20,7 +19,6 @@ export default connect({
       super()
       this.renderAction = this.renderAction.bind(this)
       this.onMutationClick = this.onMutationClick.bind(this)
-      this.onActionClick = this.onActionClick.bind(this)
       this.state = {expandedOutputs: {}}
     }
     shouldComponentUpdate (nextProps, nextState) {
@@ -34,9 +32,6 @@ export default connect({
       this.props.mutationClicked({
         path
       })
-    }
-    onActionClick (action) {
-      connector.inspect(this.props.signal.name, action.actionIndex)
     }
     toggleOutput (event, action, output) {
       const expandedOutputs = Object.assign({}, this.state.expandedOutputs)
@@ -103,7 +98,7 @@ export default connect({
     renderAction (action, index) {
       if (action._functionTreePrimitive) {
         return (
-          <div key={index}>
+          <div key={index} onClick={(event) => event.stopPropagation()}>
             <span className='signal-groupName'><strong>{action.type}</strong>{action.name ? ': ' + action.name : null}</span>
             <div className='signal-groupHeader' key={index}>
               <div className='signal-group'>
@@ -132,7 +127,6 @@ export default connect({
           execution={this.props.signal.functionsRun[action.functionIndex]}
           key={index}
           onMutationClick={this.onMutationClick}
-          onActionClick={this.onActionClick}
           executed={executedBySignal ? (
             <Signal
               className={'executedBy'}

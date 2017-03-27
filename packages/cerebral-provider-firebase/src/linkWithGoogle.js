@@ -26,7 +26,7 @@ export default function linkWithGoogle (options = {}) {
             user: user
           })
         }, (error) => {
-          reject(new FirebaseProviderAuthenticationError(error.message))
+          reject(new FirebaseProviderAuthenticationError(error))
         })
     }
   })

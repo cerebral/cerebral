@@ -14,7 +14,7 @@ export default function signInAnonymously () {
           })
         })
       }, (error) => {
-        reject(new FirebaseProviderAuthenticationError(error.message))
+        reject(new FirebaseProviderAuthenticationError(error))
       })
   })
 }

@@ -26,7 +26,7 @@ export default function signInWithFacebook (options) {
             user: user
           })
         }, (error) => {
-          throw new FirebaseProviderAuthenticationError(error.message)
+          throw new FirebaseProviderAuthenticationError(error)
         })
     }
   })

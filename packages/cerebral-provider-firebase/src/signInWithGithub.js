@@ -26,7 +26,7 @@ export default function signInWithGithub (options) {
             user: user
           })
         }, (error) => {
-          reject(new FirebaseProviderAuthenticationError(error.message))
+          reject(new FirebaseProviderAuthenticationError(error))
         })
     }
   })

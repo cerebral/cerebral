@@ -14,7 +14,7 @@ export default function signInWithEmailAndPassword (email, password) {
             })
           })
         }, (error) => {
-          reject(new FirebaseProviderAuthenticationError(error.message))
+          reject(new FirebaseProviderAuthenticationError(error))
         })
   })
 }
