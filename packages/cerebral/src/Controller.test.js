@@ -370,10 +370,12 @@ describe('Controller', () => {
           }
         ]
       },
-      catch: [({props}) => {
-        assert.ok(props.error)
-        done()
-      }]
+      catch: new Map([
+        [Error, [({props}) => {
+          assert.ok(props.error)
+          done()
+        }]]
+      ])
     })
     controller.getSignal('test')()
   })

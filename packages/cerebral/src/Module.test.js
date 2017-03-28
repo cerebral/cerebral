@@ -110,26 +110,6 @@ describe('Module', () => {
     controller.getSignal('foo.test')()
     assert.deepEqual(controller.getState(), {foo: {foo: 'bar2'}})
   })
-  it('should be able to define signals with catch property', () => {
-    const controller = new Controller({
-      modules: {
-        foo: {
-          state: {
-            foo: 'bar'
-          },
-          signals: {
-            test: {
-              signal: [() => { throw new Error('bar2') }],
-              catch: [({props, state}) => state.set('foo.foo', props.error.message)]
-            }
-          }
-        }
-      }
-    })
-
-    controller.getSignal('foo.test')()
-    assert.deepEqual(controller.getState(), {foo: {foo: 'bar2'}})
-  })
   it('should be able to define signals with catch property and custom errors', () => {
     const controller = new Controller({
       modules: {
@@ -140,9 +120,9 @@ describe('Module', () => {
           signals: {
             test: {
               signal: [() => { throw new Error('bar2') }],
-              catch: {
-                'Error': [({props, state}) => state.set('foo.foo', props.error.message)]
-              }
+              catch: new Map([
+                [Error, [({props, state}) => state.set('foo.foo', props.error.message)]]
+              ])
             }
           }
         }
@@ -153,6 +133,7 @@ describe('Module', () => {
     assert.deepEqual(controller.getState(), {foo: {foo: 'bar2'}})
   })
   it('should throw when no matching custom catch type', () => {
+    class TestError {}
     const controller = new Controller({
       modules: {
         foo: {
@@ -161,10 +142,10 @@ describe('Module', () => {
           },
           signals: {
             test: {
-              signal: [() => { throw new Error('bar2') }],
-              catch: {
-                'CustomError': [({props, state}) => state.set('foo.foo', props.error.message)]
-              }
+              signal: [() => { throw new TestError('bar2') }],
+              catch: new Map([
+                [Error, [({props, state}) => state.set('foo.foo', props.error.message)]]
+              ])
             }
           }
         }

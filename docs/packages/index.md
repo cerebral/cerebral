@@ -56,14 +56,22 @@ function updateDefaultHttpOptions({http}) {
 ```
 
 ## error
-Throws **HttpProviderError**. Its message property contains:
+
+### HttpProviderError
 
 ```js
+import {HttpProviderError} from 'cerebral-provider-http'
+
+// Error structure
 {
-  result: 'Message or response body',
-  status: 200,
-  isAborted: false,
-  headers: {}
+  name: 'HttpProviderError',
+  message: {
+    result: 'Message or response body',
+    status: 200,
+    isAborted: false,
+    headers: {}
+  },
+  stack: '...'  
 }
 ```
 

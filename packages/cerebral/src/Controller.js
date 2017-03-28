@@ -183,21 +183,17 @@ class Controller extends FunctionTree {
           throw error
         }
 
-        if (typeof signalCatch === 'function') {
-          const signalChain = signalCatch(error)
+        if (signalCatch instanceof Map) {
+          for (let [errorType, signalChain] of signalCatch) {
+            if (error instanceof errorType) {
+              this.runSignal('catch', signalChain, error.payload)
 
-          if (signalChain) {
-            this.runSignal('catch', signalChain, error.payload)
-          } else {
-            throw error
+              return
+            }
           }
-        } if (Array.isArray(signalCatch)) {
-          this.runSignal('catch', signalCatch, error.payload)
-        } else if (error.name in signalCatch) {
-          this.runSignal('catch', signalCatch[error.name], error.payload)
-        } else {
-          throw error
         }
+
+        throw error
       }
     })
   }

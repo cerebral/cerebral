@@ -6,7 +6,7 @@ export class FirebaseProviderError extends Error {
   }
 }
 
-export class FirebaseProviderAuthenticationError extends Error {
+export class FirebaseProviderAuthenticationError extends FirebaseProviderError {
   constructor (error) {
     super()
     this.name = 'FirebaseProviderAuthenticationError'

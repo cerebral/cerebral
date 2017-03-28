@@ -2,9 +2,9 @@
 
 Handling complex asynchronous flows is a challenging task for error handling. If things are not done correctly errors can be swallowed and you will have a hard time figuring out why your application does not work.
 
-Error handling in Cerebral signals are done for you. Wherever you throw an error, it will be caught correctly and thrown to the console unless you have explicitly said you want to handle it. No matter if errors are thrown to console or not the debugger will always show the errors. The action in question is highlighted red, you will se the error message, the code related and even what executed related to you catching the error.
+Error handling in Cerebral signals are done for you. Wherever you throw an error, it will be caught correctly and thrown to the console unless you have explicitly said you want to handle it. No matter if errors are thrown to console or not, the debugger will always show the errors. The action in question is highlighted red, you will see the error message, the code related and even what executed related to you catching the error.
 
-IMAGE
+![debugger_error](/images/debugger_error.png)
 
 ## Catching errors
 To catch an error from a signal you define it with the signal definition:
@@ -16,14 +16,16 @@ export default {
   signals: {
     // Define the signal as an object
     somethingHappened: {
-      signal: [],
-      catch: []
+      signal: someSequence,
+      catch: new Map([
+        [Error, someSequenceHandlingError]
+      ])
     }
   }
 }
 ```
 
-You catch errors using a new sequence of actions. If the signal has an error this catch sequence will trigger, passing in the error on the payload:
+If you are not familiar with the **Map** JavaScript API, [you can read more here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map). We basically tell the signal that we are interested in any instance of error thrown... meaning all errors basically. Then we point to the sequence of actions we want to handle it. An error will be passed in to the sequence of actions handling the error:
 
 ```js
 {
@@ -36,60 +38,26 @@ You catch errors using a new sequence of actions. If the signal has an error thi
 }
 ```
 
-You can also match on the name of the action:
-
-*someModule.js*
-```js
-export default {
-  state: {},
-  signals: {
-    // Define the signal as an object
-    somethingHappened: {
-      signal: [],
-      catch: {
-        FirebaseProviderError: []
-      }
-    }
-  }
-}
-```
-
-In this scenario we are only catching errors related to the Firebase provider, all other errors are thrown to console.
-
-For optimal control you can use a function to define your catch:
-
-*someModule.js*
-```js
-export default {
-  state: {},
-  signals: {
-    // Define the signal as an object
-    somethingHappened: {
-      signal: [],
-      catch(error) {
-        if (error instanceof Error) {
-          return []
-        }
-      }
-    }
-  }
-}
-```
-
-With a function you get the error instance and matches expect to return an action sequence to trigger.
-
 ## Catching globally
-In most applications error handling can be handled et a global level. That means you define your signals as normal and you rather define catch handlers on the controller itself:
+In most applications error handling can be handled at a global level. That means you define your signals as normal and you rather define catch handlers on the controller itself:
 
 ```js
 import {Controller} from 'cerebral'
+import {
+  FirebaseProviderAuthenticationError,
+  FirebaseProviderError
+} from 'cerebral-provider-firebase'
+import {
+  HttpProviderError
+} from 'cerebral-provider-http'
 
 const controller = Controller({
   modules: {},
-  catch: {
-    FirebaseProviderError: [],
-    HttpProviderError: []
-  }
+  catch: new Map([
+    [FirebaseProviderAuthenticationError, []]
+    [FirebaseProviderError, []],
+    [HttpProviderError, []]
+  ])
 })
 ```
 
