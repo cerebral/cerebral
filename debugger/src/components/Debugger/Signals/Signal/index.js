@@ -116,9 +116,9 @@ export default connect({
 
       const isExecuted = Boolean(this.props.signal.functionsRun[action.functionIndex])
 
-      const executedBySignal = (
-        this.props.signal.functionsRun[action.functionIndex] && this.props.signal.functionsRun[action.functionIndex].executedId
-      ) ? this.props.executedBySignals[this.props.signal.functionsRun[action.functionIndex].executedId] : null
+      const executedBySignals = (
+        this.props.signal.functionsRun[action.functionIndex] && this.props.signal.functionsRun[action.functionIndex].executedIds.length
+      ) ? this.props.signal.functionsRun[action.functionIndex].executedIds.map((executedId) => this.props.executedBySignals[executedId]) : null
 
       return (
         <Action
@@ -127,8 +127,9 @@ export default connect({
           execution={this.props.signal.functionsRun[action.functionIndex]}
           key={index}
           onMutationClick={this.onMutationClick}
-          executed={executedBySignal ? (
+          executed={executedBySignals ? executedBySignals.map((executedBySignal, index) => (
             <Signal
+              key={index}
               className={'executedBy'}
               style={{
                 backgroundColor: '#FAFAFA'
@@ -141,7 +142,7 @@ export default connect({
               searchValue={this.props.searchValue}
               mutationClicked={() => {}}
             />
-          ) : null}
+          )) : null}
         >
           {action.outputs ? this.renderOutputs(action) : null}
         </Action>
