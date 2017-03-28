@@ -6,24 +6,25 @@ import Devtools from 'cerebral/devtools'
 import Router from 'cerebral-router'
 import app from './modules/app'
 import simple from './modules/simple'
-import checkout from './modules/checkout'
 import App from './components/App'
+import FormsProvider from 'cerebral-provider-forms'
 
 const controller = Controller({
   router: Router({
     routes: {
       '/': 'app.routed',
-      '/simple': 'simple.routed',
-      '/checkout': 'checkout.routed'
+      '/simple': 'simple.routed'
     },
     onlyHash: true
   }),
   devtools: Devtools(),
   modules: {
     app,
-    simple,
-    checkout
-  }
+    simple
+  },
+  providers: [
+    FormsProvider()
+  ]
 })
 
 render((

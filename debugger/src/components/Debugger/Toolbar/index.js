@@ -34,6 +34,11 @@ export default connect({
               {
                 this.props.type === 'c' || this.props.type === 'cft' ? [
                   <li
+                    className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'model'})}
+                    onClick={() => this.props.pageChanged({page: 'model'})}>
+                    <i className='icon icon-model' /> STATE-TREE
+                  </li>,
+                  <li
                     className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'mutations'})}
                     onClick={() => this.props.pageChanged({page: 'mutations'})}>
                     <i className='icon icon-mutation' /> MUTATIONS
@@ -42,11 +47,6 @@ export default connect({
                     className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'components'})}
                     onClick={() => this.props.pageChanged({page: 'components'})}>
                     <i className='icon icon-components' /> COMPONENTS
-                  </li>,
-                  <li
-                    className={classNames('toolbar-tabOnSmall', 'toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'model'})}
-                    onClick={() => this.props.pageChanged({page: 'model'})}>
-                    <i className='icon icon-model' /> STATE-TREE
                   </li>,
                   <li className='toolbar-search'>
                     <input

@@ -1,11 +1,11 @@
 import {set} from 'cerebral/operators'
 import {props, state} from 'cerebral/tags'
-import {isValidForm} from 'cerebral-forms'
+import {isValidForm} from 'cerebral-provider-forms/operators'
 import signIn from '../actions/signIn'
 import firebaseInit from '../../app/signals/firebaseInit'
 
 const signInWithFirebase = [
-  isValidForm('user.$signIn'), {
+  isValidForm(state`user.$signIn`), {
     true: [
       signIn, {
         success: [

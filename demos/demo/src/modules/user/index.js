@@ -1,39 +1,37 @@
 import {set} from 'cerebral/operators'
 import {props, state} from 'cerebral/tags'
-import {form, changeField} from 'cerebral-forms'
 import createUser from './signals/createUser'
 import signIn from './signals/signIn'
 import signInAnonymous from './signals/signInAnonymous'
 import signOut from './signals/signOut'
+import {setField} from 'cerebral-provider-forms/operators'
 
 export default {
   state: {
     lang: 'en',
     $loggedIn: false,
-    $signIn: form({
+    $signIn: {
       email: {
         value: '',
         validationRules: ['isEmail'],
-        validationMessages: ['loginValidationEmailNotValid'],
-        isRequired: true,
-        requiredMessage: 'loginValidationEmailRequired'
+        isRequired: true
       },
       password: {
         value: '',
         validationRules: ['minLength:5'],
-        validationMessages: ['loginValidationPasswordTooShort'],
-        isRequired: true,
-        requiredMessage: 'loginValidationPasswordRequired'
+        isRequired: true
       },
       showErrors: false
-    }),
+    },
     $loginTab: 'SignIn',
     $currentUser: null
   },
   signals: {
     createUserClicked: createUser,
     createUserEnterPressed: createUser,
-    fieldChanged: changeField,
+    fieldChanged: [
+      setField(state`${props`field`}`, props`value`)
+    ],
     signInAnonClicked: signInAnonymous,
     signInClicked: signIn,
     signInEnterPressed: signIn,

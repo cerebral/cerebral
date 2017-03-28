@@ -33,6 +33,9 @@ const connector = {
         connector.sendEvent(port, 'ping')
       }
     })
+    ipcRenderer.on('port:exists', function onPortExists () {
+      eventCallback(new Error('Something running on this port already'))
+    })
     ipcRenderer.send('port:add', port)
   },
   onPortFocus (cb) {

@@ -13,6 +13,16 @@ export default {
   loginSignIn: 'Se connecter',
   loginCreateUser: 'Créer un utilisateur',
   loginSignOut: 'Se déconnecter',
+  validationErrors: {
+    signIn: {
+      email: {
+        isEmail: 'Not a valid email'
+      },
+      password: {
+        minLength: 'Password too short'
+      }
+    }
+  },
   loginErrors: {
     'auth/email-already-in-use': 'L\'adresse e-mail est déjà utilisée par un autre compte.',
     'auth/too-many-requests': 'Nous avons bloqué toutes les demandes de ce périphérique en raison d\'une activité inhabituelle. Réessayez plus tard.'

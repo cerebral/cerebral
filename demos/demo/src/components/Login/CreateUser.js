@@ -3,17 +3,27 @@ import {connect} from 'cerebral/react'
 import {signal, state} from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 import Input from './Input'
+import {form} from 'cerebral-provider-forms'
+import resolveTranslation from '../../helpers/resolveTranslation'
 
 export default connect(
   {
     buttonClick: signal`user.createUserClicked`,
     enterPress: signal`user.createUserEnterPressed`,
     fieldChange: signal`user.fieldChanged`,
-    signIn: state`user.$signIn`,
+    signIn: form(state`user.$signIn`),
     t: translations
   },
   function Login ({buttonClick, enterPress, fieldChange, signIn, t}) {
     const showError = field => signIn.showErrors && !field.isValid
+
+    const error = (fieldName) => {
+      const field = signIn[fieldName]
+      if (field.failedRule) {
+        return resolveTranslation(t, `validationErrors.signIn.${fieldName}.${field.failedRule.name}`)
+      }
+      return null
+    }
 
     return (
       <div>
@@ -21,7 +31,7 @@ export default connect(
 
         <Input
           icon='fa fa-user'
-          message={t[signIn.email.errorMessage]}
+          message={error('email')}
           placeholder={t.loginEmailPlaceholder}
           showError={showError(signIn.email)}
           value={signIn.email.value}
@@ -35,7 +45,7 @@ export default connect(
         <Input
           fieldType='password'
           icon='fa fa-user'
-          message={t[signIn.password.errorMessage]}
+          message={error('password')}
           placeholder={t.loginPasswordPlaceholder}
           showError={showError(signIn.password)}
           value={signIn.password.value}

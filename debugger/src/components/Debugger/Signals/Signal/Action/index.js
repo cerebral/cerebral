@@ -55,10 +55,13 @@ class Action extends Inferno.Component {
     }
   }
   componentDidUpdate () {
-    if (this.errorElement && !this.isHighlighted) {
-      Prism.highlightElement(this.errorElement)
-      this.isHighlighted = true
-    }
+    // Inferno hack, this triggers too early
+    setTimeout(() => {
+      if (this.errorElement && !this.isHighlighted) {
+        Prism.highlightElement(this.errorElement)
+        this.isHighlighted = true
+      }
+    })
   }
   render () {
     const {action, faded, execution, children, onMutationClick, executed} = this.props
@@ -81,6 +84,10 @@ class Action extends Inferno.Component {
         </div>
         {error ? (
           <div className='action-error'>
+            <div className='action-actionInput'>
+              <div className='action-inputLabel'>props:</div>
+              <div className='action-inputValue'><Inspector value={execution.payload} /></div>
+            </div>
             <strong>{error.name}</strong> : {error.message}
             <pre data-line={getLineNumber(error)}>
               <code

@@ -1,5 +1,5 @@
 /* global CustomEvent */
-import WebSocket from 'ws'
+import WebSocket from 'universal-websocket-client'
 import Path from '../Path'
 const VERSION = 'v1'
 

@@ -5,7 +5,7 @@ function StorageProvider (options = {}) {
   options.prefix = options.prefix ? options.prefix + '.' : ''
 
   function createProvider (context) {
-    const target = options.target ? window[options.target] : window.localStorage
+    const target = options.target
 
     if (options.sync) {
       context.controller.on('flush', (changes) => {
@@ -33,6 +33,9 @@ function StorageProvider (options = {}) {
       },
       set (key, value) {
         target.setItem(options.prefix + key, options.json ? JSON.stringify(value) : value)
+      },
+      remove (key) {
+        target.removeItem(options.prefix + key)
       }
     }
   }

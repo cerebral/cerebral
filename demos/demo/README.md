@@ -1,6 +1,6 @@
 # Cerebral-Demo
 
-This application is a simple time-tracker built with `cerebral`, `cerebral-provider-firebase`, `cerebral-forms` and `cerebral-router`. It serves as an example on how all these modules work together to create a complete application with relational data, login, time based events and so on.
+This application is a simple time-tracker built with `cerebral`, `cerebral-provider-firebase`, `cerebral-provider-forms` and `cerebral-router`. It serves as an example on how all these modules work together to create a complete application with relational data, login, time based events and so on.
 
 This project is an ongoing community effort so if you feel like you could add some features, please join in !
 

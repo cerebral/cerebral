@@ -1,5 +1,5 @@
 # Sequence
-A sequence runs actions one after the other. If an action returns a promise it will hold until moving on.
+A sequence runs actions one after the other. If an action returns a promise it will hold until the promise is resolved or rejected.
 
 Simple format of a sequence is to use an array literal:
 ```js
