@@ -18,7 +18,7 @@ function getActionName (action) {
 }
 
 function getLineNumber (error) {
-  const variable = error.name === 'TypeError' && error.message.match(/'(.*?)'/) ? error.message.match(/'(.*?)'/)[1] : error.message.split(' ')[0]
+  const variable = error.name === 'TypeError' && String(error.message).match(/'(.*?)'/) ? String(error.message).match(/'(.*?)'/)[1] : String(error.message).split(' ')[0]
   const lines = error.func.split('\n')
 
   return lines.reduce((lineNumber, line, index) => {
@@ -88,7 +88,9 @@ class Action extends Inferno.Component {
               <div className='action-inputLabel'>props:</div>
               <div className='action-inputValue'><Inspector value={execution.payload} /></div>
             </div>
-            <strong>{error.name}</strong> : {error.message}
+            <div className='action-error-message'>
+              <strong>{error.name}:</strong> <Inspector value={error.message} />
+            </div>
             <pre data-line={getLineNumber(error)}>
               <code
                 ref={(node) => { this.errorElement = node }}
