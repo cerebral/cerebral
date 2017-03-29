@@ -1,5 +1,5 @@
 import { Sequence, Parallel, FunctionTreePrimitive } from "./primitives";
 
-declare function StaticTree(tree: Sequence | Parallel | FunctionTreePrimitive | Array<Function | Sequence | Parallel>): Array<FunctionTreePrimitive>;
+declare function createStaticTree(tree: Sequence | Parallel | FunctionTreePrimitive | Array<Function | Sequence | Parallel>): Array<FunctionTreePrimitive>;
 
-export default StaticTree;
+export default createStaticTree;

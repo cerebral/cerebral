@@ -1,11 +1,12 @@
-import { FunctionTreePrimitive } from "./primitives";
+import { FunctionTreePrimitive, Parallel, Sequence } from "./primitives";
 import { EventEmitter } from "events";
+import Provider from "./providers/Provider";
 
-declare function sequence(items: Array<FunctionTreePrimitive>);
-declare function sequence(name: string, items: Array<FunctionTreePrimitive>);
+declare function sequence(items: Array<FunctionTreePrimitive>): Sequence;
+declare function sequence(name: string, items: Array<FunctionTreePrimitive>): Sequence;
 
-declare function parallel(items: Array<FunctionTreePrimitive>);
-declare function parallel(name: string, items: Array<FunctionTreePrimitive>);
+declare function parallel(items: Array<FunctionTreePrimitive>): Parallel;
+declare function parallel(name: string, items: Array<FunctionTreePrimitive>): Parallel;
 
 declare interface RunTreeFunction {
     (): void;
@@ -14,15 +15,15 @@ declare interface RunTreeFunction {
     off(event: string | symbol, listener: Function): this;
 }
 
-declare interface FunctionTree extends EventEmitter {
-    new (contextProviders: Array<any>);
+declare class FunctionTree extends EventEmitter {
+    constructor(contextProviders: Array<Provider>);
     cachedTrees: Array<FunctionTreePrimitive>;
-    contextProviders: Array<any>;
+    contextProviders: Array<Provider>;
     runTree: RunTreeFunction;
 }
 
 export { sequence, parallel, FunctionTree };
 
-declare function FunctionTreeFactory (contextProviders: Array<any>): RunTreeFunction;
+declare function _default(contextProviders: Array<Provider>): RunTreeFunction;
 
-export default FunctionTreeFactory;
+export default _default;

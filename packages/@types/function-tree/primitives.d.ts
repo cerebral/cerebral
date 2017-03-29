@@ -8,16 +8,21 @@ export declare interface FunctionTreePrimitive {
     outputs?: { [name: string]: FunctionTreePrimitive };
 }
 
-export declare interface Sequence {
-    new (items: Array<FunctionTreePrimitive>);
-    new (name: string, items: Array<FunctionTreePrimitive>);
+export declare class Sequence {
+    constructor(items: Array<FunctionTreePrimitive>);
+    constructor(name: string, items: Array<FunctionTreePrimitive>);
     
     toJSON(): FunctionTreePrimitive;
 }
 
-export declare interface Parallel {
-    new (items: Array<FunctionTreePrimitive>);
-    new (name: string, items: Array<FunctionTreePrimitive>);
+export declare class Parallel {
+    constructor(items: Array<FunctionTreePrimitive>);
+    constructor(name: string, items: Array<FunctionTreePrimitive>);
     
     toJSON(): FunctionTreePrimitive;
+}
+
+export declare interface Payload {
+    [key: string]: any;
+    [key: number]: any;
 }

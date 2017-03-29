@@ -1,10 +1,11 @@
+import { Payload } from "./primitives";
 declare interface IPath {
-    path: string;
-    payload: any;
+    path: Path;
+    payload: Payload;
 }
 
-declare interface Path extends IPath {
-    new (path: string, payload: any);
+declare class Path implements IPath {
+    constructor(public path: Path, public payload: Payload);
     toJS (): IPath;
 }
 
