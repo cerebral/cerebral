@@ -1,5 +1,6 @@
 import { FunctionTreePrimitive, Payload } from "../primitives";
 
-declare function Provider(context: any, funcDetails: FunctionTreePrimitive, payload: Payload, next: any): any;
+// What interface context has ? Should it be extendable ?
+declare function Provider(context: any, funcDetails: FunctionTreePrimitive, payload: Payload, next: Payload): any;
 
 export default Provider;

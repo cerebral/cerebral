@@ -1,4 +1,5 @@
-import { FunctionTreePrimitive, Parallel, Sequence } from "./primitives";
+import { FunctionTreePrimitive, Parallel, Payload, Sequence } from "./primitives";
+// Dependency on "events" from @types/node, maybe is there a better way ? Or there should be another dependency ?
 import { EventEmitter } from "events";
 import Provider from "./providers/Provider";
 
@@ -20,6 +21,8 @@ declare class FunctionTree extends EventEmitter {
     cachedTrees: Array<FunctionTreePrimitive>;
     contextProviders: Array<Provider>;
     runTree: RunTreeFunction;
+    
+    createContext(funcDetails: FunctionTreePrimitive, payload: Payload, prevPayload: Payload): Array<Provider>;
 }
 
 export { sequence, parallel, FunctionTree };

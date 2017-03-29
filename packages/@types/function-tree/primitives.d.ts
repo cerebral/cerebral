@@ -1,3 +1,4 @@
+// Is it correct ?
 export declare interface FunctionTreePrimitive {
     name?: string;
     "function": Function;
@@ -22,6 +23,7 @@ export declare class Parallel {
     toJSON(): FunctionTreePrimitive;
 }
 
+// What should Payload be ?
 export declare interface Payload {
     [key: string]: any;
     [key: number]: any;
