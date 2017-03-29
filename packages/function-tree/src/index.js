@@ -6,7 +6,7 @@ import ContextProvider from './providers/Context'
 import PropsProvider from './providers/Props'
 import PathProvider from './providers/Path'
 import Path from './Path'
-import {Sequence, Parallel} from './primitives'
+import {Sequence, Parallel, Primitive} from './primitives'
 
 /*
   Need to create a unique ID for each execution to identify it
@@ -230,7 +230,7 @@ export class FunctionTree extends EventEmitter {
     args.forEach((arg) => {
       if (typeof arg === 'string') {
         name = arg
-      } else if (Array.isArray(arg) || arg instanceof Sequence || arg instanceof Parallel) {
+      } else if (Array.isArray(arg) || arg instanceof Primitive) {
         tree = arg
       } else if (!tree && typeof arg === 'function') {
         tree = arg
