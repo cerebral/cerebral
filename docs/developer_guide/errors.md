@@ -2,12 +2,12 @@
 
 Handling complex asynchronous flows is a challenging task for error handling. If things are not done correctly errors can be swallowed and you will have a hard time figuring out why your application does not work.
 
-Error handling in Cerebral signals are done for you. Wherever you throw an error, it will be caught correctly and thrown to the console unless you have explicitly said you want to handle it. No matter if errors are thrown to console or not, the debugger will always show the errors. The action in question is highlighted red, you will see the error message, the code related and even what executed related to you catching the error.
+Error handling in Cerebral signals are done for you. Wherever you throw an error, it will be caught correctly and thrown to the console unless you have explicitly said you want to handle it. And even when you do explicitly handle it Cerebral will still show the error in the debugger, meaning you can never go wrong. The action in question is highlighted red, you will see the error message, the code related and even what executed related to you catching the error.
 
 ![debugger_error](/images/debugger_error.png)
 
 ## Catching errors
-To catch an error from a signal you define it with the signal definition:
+To catch an error from a signal you can define it with the signal definition:
 
 *someModule.js*
 ```js
@@ -18,21 +18,21 @@ export default {
     somethingHappened: {
       signal: someSequence,
       catch: new Map([
-        [Error, someSequenceHandlingError]
+        [FirebaseProviderError, someSequenceHandlingError]
       ])
     }
   }
 }
 ```
 
-If you are not familiar with the **Map** JavaScript API, [you can read more here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map). We basically tell the signal that we are interested in any instance of error thrown... meaning all errors basically. Then we point to the sequence of actions we want to handle it. An error will be passed in to the sequence of actions handling the error:
+If you are not familiar with the **Map** JavaScript API, [you can read more here](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map). We basically tell the signal that we are interested in any errors thrown by the Firebase Provider. Then we point to the sequence of actions we want to handle it. An error will be passed in to the sequence of actions handling the error:
 
 ```js
 {
   foo: 'bar', // already on payload
   error: {
-    name: 'Error',
-    message: 'undefined is not a function',
+    name: 'FirebaseProviderError',
+    message: 'Could not connect',
     stack: '...'
   }
 }
@@ -61,5 +61,38 @@ const controller = Controller({
 })
 ```
 
-## Provider errors
-Any providers that can throw errors, typically related to server communication, has their own error type. That means when you use the **cerebral-provider-firebase** or **cerebral-provider-http** you will be able to catch errors specifically from these providers. Read more about those in the packages themselves.
+## Creating an error type
+JavaScript has a base error class of **Error**. When you create your own error types it makes sense to extend **Error**. This is only recently supported in browsers, but you can use [babel-plugin-transform-builtin-extend](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) to make sure extending errors works correctly.
+
+```js
+class AppError extends Error {
+  constructor(message) {
+    super(message)
+    this.name = 'AppError'
+  }
+}
+```
+
+This allows you to create more specific errors by subclassing:
+
+```js
+class AuthError extends AppError {
+  constructor(message, code) {
+    super(message)
+
+    this.name = 'AuthError'
+    this.code = code
+  }
+  // By adding a custom "toJSON" method you decide
+  // how the error will be shown when passed to the
+  // debugger and your catch handler
+  toJSON () {
+    return {
+      name: this.name,
+      message: this.message,
+      code: this.code,
+      stack: this.stack
+    }
+  }
+}
+```

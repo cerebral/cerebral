@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@cerebral/monorepo": "0.0.1",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
     "cerebral": "^2.0.0-b",
     "xhr-mock": "https://github.com/christianalfoni/xhr-mock.git"
   }

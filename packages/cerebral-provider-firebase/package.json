@@ -20,8 +20,7 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage":
-    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-firebase#readme",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-firebase#readme",
   "dependencies": {
     "firebase": "^3.5.2"
   },
@@ -30,6 +29,7 @@
   },
   "devDependencies": {
     "@cerebral/monorepo": "0.0.1",
-    "cerebral": "^2.0.0-b"
+    "cerebral": "^2.0.0-b",
+    "babel-plugin-transform-builtin-extend": "^1.1.2"
   }
 }

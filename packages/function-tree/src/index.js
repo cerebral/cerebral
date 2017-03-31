@@ -40,7 +40,7 @@ function createErrorObject (error, execution, functionDetails, payload) {
   errorToReturn.functionDetails = functionDetails
   errorToReturn.payload = Object.assign({}, payload, {
     _execution: {id: execution.id, functionIndex: functionDetails.functionIndex},
-    error: {
+    error: error.toJSON ? error.toJSON() : {
       name: error.name,
       message: error.message,
       stack: error.stack

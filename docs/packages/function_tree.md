@@ -33,7 +33,7 @@ execute([
   // can be passed in to a new execution (will be indicated in debugger)
   error.payload
 
-  // A serialized version of the error. Name, message and stack
+  // A serialized version of the error. Name, message and stack, or custom error serialization
   error.payload.error
 })
 ```
