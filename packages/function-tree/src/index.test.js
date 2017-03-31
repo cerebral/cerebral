@@ -1,14 +1,14 @@
 /* eslint-env mocha */
-import FunctionTreeExecution from './'
+import FunctionTree from './'
 import assert from 'assert'
 
 describe('FunctionTreeExecution', () => {
   describe('execution.abort()', () => {
     it('should stop if aborted from sync action', (done) => {
-      const runTree = FunctionTreeExecution([])
-      runTree.on('abort', () => done())
+      const ft = new FunctionTree([])
+      ft.on('abort', () => done())
 
-      runTree([
+      ft.run([
         ({execution}) => {
           return execution.abort()
         },
@@ -18,10 +18,10 @@ describe('FunctionTreeExecution', () => {
       ])
     })
     it('should stop if aborted from async action', (done) => {
-      const runTree = FunctionTreeExecution([])
-      runTree.on('abort', () => done())
+      const ft = new FunctionTree([])
+      ft.on('abort', () => done())
 
-      runTree([
+      ft.run([
         ({execution}) => {
           return Promise.resolve(execution.abort())
         },
@@ -31,13 +31,13 @@ describe('FunctionTreeExecution', () => {
       ])
     })
     it('should pass final payload in event', (done) => {
-      const runTree = FunctionTreeExecution([])
-      runTree.on('abort', (execution, funcDetails, result) => {
+      const ft = new FunctionTree([])
+      ft.on('abort', (execution, funcDetails, result) => {
         assert.deepEqual(result, {prop1: 'value', prop2: 'updated'})
         done()
       })
 
-      runTree([
+      ft.run([
         ({execution}) => {
           return Promise.resolve(execution.abort({prop2: 'updated'}))
         }

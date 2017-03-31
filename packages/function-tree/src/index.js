@@ -175,7 +175,7 @@ export function parallel (...args) {
 }
 
 export class FunctionTree extends EventEmitter {
-  constructor (contextProviders, returnInstance) {
+  constructor (contextProviders) {
     super()
     this.cachedTrees = []
     this.cachedStaticTrees = []
@@ -187,22 +187,14 @@ export class FunctionTree extends EventEmitter {
       this.contextProviders = []
     }
 
-    this.runTree = this.runTree.bind(this)
-    this.runTree.on = this.on.bind(this)
-    this.runTree.once = this.once.bind(this)
-    this.runTree.off = this.removeListener.bind(this)
-
-    // When not extended
-    if (!returnInstance) {
-      return this.runTree
-    }
+    this.run = this.run.bind(this)
   }
 
   /*
     Analyses the tree to identify paths and its validity. This analysis
     is cached. Then the method creates an execution for the tree to run.
   */
-  runTree () {
+  run () {
     let name
     let tree
     let payload
@@ -272,6 +264,4 @@ export class FunctionTree extends EventEmitter {
   }
 }
 
-export default (contextProviders) => {
-  return new FunctionTree(contextProviders)
-}
+export default FunctionTree

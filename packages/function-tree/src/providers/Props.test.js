@@ -4,18 +4,18 @@ import assert from 'assert'
 
 describe('PropsProvider', () => {
   it('should have "props" on context', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       ({props}) => {
         assert.ok(props)
       }
     ])
   })
   it('should have initial payload on props', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       ({props}) => {
         assert.deepEqual(props, {
           foo: 'bar'

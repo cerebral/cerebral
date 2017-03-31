@@ -4,9 +4,9 @@ import assert from 'assert'
 
 describe('ExecutionProvider', () => {
   it('should expose the instance on the context', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute('something', [
+    ft.run('something', [
       ({execution}) => {
         assert.equal(execution.name, 'something')
         assert.ok(execution.id)
@@ -16,7 +16,7 @@ describe('ExecutionProvider', () => {
     ])
   })
   it('should be able to retry execution', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
     let count = 0
 
     function funcA () {
@@ -34,7 +34,7 @@ describe('ExecutionProvider', () => {
       }
     }
 
-    execute([
+    ft.run([
       funcA,
       funcB
     ], {
@@ -44,7 +44,7 @@ describe('ExecutionProvider', () => {
     })
   })
   it('should be able to abort execution', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
     let count = 0
 
     function funcA ({execution}) {
@@ -55,10 +55,10 @@ describe('ExecutionProvider', () => {
       count++
     }
 
-    execute.on('abort', () => {
+    ft.on('abort', () => {
       assert.equal(count, 0)
     })
-    execute([
+    ft.run([
       funcA,
       funcB
     ])

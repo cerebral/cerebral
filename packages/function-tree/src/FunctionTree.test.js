@@ -4,32 +4,32 @@ import assert from 'assert'
 
 describe('FunctionTree', () => {
   it('should create a function tree extending event emitter', () => {
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
 
-    assert.equal(typeof execute.on, 'function')
-    assert.equal(typeof execute.once, 'function')
-    assert.equal(typeof execute.off, 'function')
+    assert.equal(typeof ft.on, 'function')
+    assert.equal(typeof ft.once, 'function')
+    assert.equal(typeof ft.off, 'function')
   })
   it('should run functions', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       () => {
         assert.ok(true)
       }
     ])
   })
   it('should run sequences', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute(sequence([
+    ft.run(sequence([
       () => {
         assert.ok(true)
       }
     ]))
   })
   it('should pass arguments to context creator and run it for each action', () => {
-    const execute = FunctionTree([
+    const ft = new FunctionTree([
       function SomeProvider (context, functionDetails, payload, prevPayload) {
         assert.ok(context)
         assert.equal(functionDetails.functionIndex, 0)
@@ -40,14 +40,14 @@ describe('FunctionTree', () => {
       }
     ])
 
-    execute([
+    ft.run([
       () => {}
     ], {
       foo: 'bar'
     })
   })
   it('should pass previous payload to context provider', () => {
-    const execute = FunctionTree([
+    const ft = new FunctionTree([
       function SomeProvider (context, functionDetails, payload, prevPayload) {
         if (functionDetails.functionIndex === 0) {
           assert.deepEqual(payload, {foo: 'bar'})
@@ -61,7 +61,7 @@ describe('FunctionTree', () => {
       }
     ])
 
-    execute([
+    ft.run([
       () => ({foo: 'bar2'}),
       () => {}
     ], {
@@ -69,7 +69,7 @@ describe('FunctionTree', () => {
     })
   })
   it('should pass returned context into functions', () => {
-    const execute = FunctionTree([
+    const ft = new FunctionTree([
       function SomeProvider (context) {
         context.foo = 'bar'
 
@@ -77,7 +77,7 @@ describe('FunctionTree', () => {
       }
     ])
 
-    execute([
+    ft.run([
       ({foo}) => {
         assert.equal(foo, 'bar')
       }
@@ -85,63 +85,63 @@ describe('FunctionTree', () => {
   })
   it('should emit execution events in correct order', () => {
     let eventsCount = 0
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute.once('start', function () {
+    ft.once('start', function () {
       eventsCount++
       assert.equal(eventsCount, 1)
     })
-    execute.once('functionStart', function () {
+    ft.once('functionStart', function () {
       eventsCount++
       assert.equal(eventsCount, 2)
-      execute.once('functionStart', function () {
+      ft.once('functionStart', function () {
         eventsCount++
         assert.equal(eventsCount, 4)
       })
     })
-    execute.once('functionEnd', function () {
+    ft.once('functionEnd', function () {
       eventsCount++
       assert.equal(eventsCount, 3)
-      execute.once('functionEnd', function () {
+      ft.once('functionEnd', function () {
         eventsCount++
         assert.equal(eventsCount, 5)
       })
     })
-    execute.on('end', function () {
+    ft.on('end', function () {
       eventsCount++
       assert.equal(eventsCount, 6)
     })
-    execute([
+    ft.run([
       function actionA () {},
       function actionB () {}
     ])
   })
   it('should pass action and payload on action events', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute.once('functionStart', function (execution, functionDetails, payload) {
+    ft.once('functionStart', function (execution, functionDetails, payload) {
       assert.ok(execution.id)
       assert.equal(functionDetails.functionIndex, 0)
       assert.deepEqual(payload, {foo: 'bar'})
     })
-    execute.once('functionEnd', function (execution, functionDetails, payload) {
+    ft.once('functionEnd', function (execution, functionDetails, payload) {
       assert.ok(execution.id)
       assert.equal(functionDetails.functionIndex, 0)
       assert.deepEqual(payload, {foo: 'bar'})
     })
-    execute([
+    ft.run([
       () => {}
     ], {
       foo: 'bar'
     })
   })
   it('should indicate parallel execution on function', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute.once('functionStart', function (execution, functionDetails) {
+    ft.once('functionStart', function (execution, functionDetails) {
       assert.ok(true)
     })
-    execute([
+    ft.run([
       parallel([
         () => {},
         () => {}
@@ -149,11 +149,11 @@ describe('FunctionTree', () => {
     ])
   })
   it('should pass final payload on end event', () => {
-    const execute = FunctionTree()
-    execute.once('end', (execution, payload) => {
+    const ft = new FunctionTree()
+    ft.once('end', (execution, payload) => {
       assert.deepEqual(payload, {foo: 'bar', bar: 'foo'})
     })
-    execute([
+    ft.run([
       () => {
         return {bar: 'foo'}
       }
@@ -175,7 +175,7 @@ describe('FunctionTree', () => {
       assert.ok(true)
     }
 
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
     const tree = [
       actionA, {
         success: [
@@ -187,8 +187,8 @@ describe('FunctionTree', () => {
         ]
       }
     ]
-    execute(tree, () => {
-      execute(tree, () => {
+    ft.run(tree, () => {
+      ft.run(tree, () => {
         done()
       })
     })
@@ -200,22 +200,22 @@ describe('FunctionTree', () => {
       }
     }
 
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
     const tree = [
       actionA, {
         success: []
       }
     ]
-    execute.once('error', (error) => {
+    ft.once('error', (error) => {
       assert.ok(error.message.match(/needs to be a path or a Promise/))
       done()
     })
-    execute(tree)
+    ft.run(tree)
   })
   it('should provide unique index to functions, even though the same', () => {
     function actionA () {}
     let count = 0
-    const execute = FunctionTree([
+    const ft = new FunctionTree([
       function (context, functionDetails) {
         if (count === 0) {
           assert.equal(functionDetails.functionIndex, 0)
@@ -232,7 +232,7 @@ describe('FunctionTree', () => {
       actionA,
       actionA
     ]
-    execute(tree)
+    ft.run(tree)
   })
   it('should emit branchStart and branchEnd events', () => {
     let branchStartCount = 0
@@ -242,7 +242,7 @@ describe('FunctionTree', () => {
     }
     function actionB () {}
     function actionC () {}
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
     const tree = [
       actionA, {
         test: [actionB]
@@ -252,13 +252,13 @@ describe('FunctionTree', () => {
       },
       actionC
     ]
-    execute.on('pathStart', () => {
+    ft.on('pathStart', () => {
       branchStartCount++
     })
-    execute.on('pathEnd', () => {
+    ft.on('pathEnd', () => {
       branchEndCount++
     })
-    execute(tree)
+    ft.run(tree)
     assert(branchStartCount, 2)
     assert(branchEndCount, 2)
   })
@@ -269,7 +269,7 @@ describe('FunctionTree', () => {
     function actionB ({props}) {
       assert.deepEqual(props, {foo: 'bar'})
     }
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
     const tree = [
       actionA, {
         true: [],
@@ -277,7 +277,7 @@ describe('FunctionTree', () => {
       },
       actionB
     ]
-    execute(tree, {
+    ft.run(tree, {
       foo: 'bar'
     })
   })
@@ -288,21 +288,21 @@ describe('FunctionTree', () => {
     function actionB () {
       return Promise.resolve()
     }
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
     const tree = [
       [
         actionA,
         actionB
       ]
     ]
-    execute.once('parallelStart', (execution, currentPayload, functionsToResolve) => {
+    ft.once('parallelStart', (execution, currentPayload, functionsToResolve) => {
       assert.ok(execution)
       assert.deepEqual(currentPayload, {
         foo: 'bar'
       })
       assert.equal(functionsToResolve, 2)
     })
-    execute.once('parallelProgress', (execution, currentPayload, functionsResolving) => {
+    ft.once('parallelProgress', (execution, currentPayload, functionsResolving) => {
       assert.ok(execution)
       assert.deepEqual(currentPayload, {
         foo: 'bar',
@@ -310,14 +310,14 @@ describe('FunctionTree', () => {
       })
       assert.equal(functionsResolving, 1)
     })
-    execute.once('parallelEnd', (execution, currentPayload, functionsResolved) => {
+    ft.once('parallelEnd', (execution, currentPayload, functionsResolved) => {
       assert.ok(execution)
       assert.deepEqual(currentPayload, {
         foo: 'bar'
       })
       assert.equal(functionsResolved, 2)
     })
-    execute.once('end', (execution, finalPayload) => {
+    ft.once('end', (execution, finalPayload) => {
       assert.deepEqual(finalPayload, {
         foo: 'bar',
         bar: 'baz'
@@ -325,7 +325,7 @@ describe('FunctionTree', () => {
       done()
     })
 
-    execute(tree, {
+    ft.run(tree, {
       foo: 'bar'
     })
   })
@@ -337,7 +337,7 @@ describe('FunctionTree', () => {
     function funcB () {
       results.push('B')
     }
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
     const tree = [
       parallel([
         funcA,
@@ -345,12 +345,12 @@ describe('FunctionTree', () => {
       ])
     ]
 
-    execute.once('end', () => {
+    ft.once('end', () => {
       assert.deepEqual(results, ['B', 'A'])
       done()
     })
 
-    execute(tree)
+    ft.run(tree)
   })
   it('should run grouped functions sequencially inside parallel', (done) => {
     const results = []
@@ -368,7 +368,7 @@ describe('FunctionTree', () => {
         results.push('D')
       }
     ]
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
     const tree = [
       parallel([
         funcA,
@@ -377,16 +377,16 @@ describe('FunctionTree', () => {
       ])
     ]
 
-    execute.once('end', () => {
+    ft.once('end', () => {
       assert.deepEqual(results, ['B', 'A', 'C', 'D'])
       done()
     })
 
-    execute(tree)
+    ft.run(tree)
   })
   it('should run functions after sequence', (done) => {
     let executedCount = 0
-    const execute = FunctionTree([])
+    const ft = new FunctionTree([])
 
     function funcA () { executedCount++ }
     function funcB () { executedCount++ }
@@ -400,21 +400,21 @@ describe('FunctionTree', () => {
       funcC
     ]
 
-    execute.once('end', () => {
+    ft.once('end', () => {
       assert.equal(executedCount, 3)
       done()
     })
 
-    execute(tree)
+    ft.run(tree)
   })
   it('should add stuff to context by passing in an object', (done) => {
-    const execute = FunctionTree({
+    const ft = new FunctionTree({
       foo: {
         bar () { return 'bar' }
       }
     })
 
-    execute([
+    ft.run([
       function (context) {
         assert.ok(context.foo.bar(), 'bar')
         done()
@@ -422,13 +422,13 @@ describe('FunctionTree', () => {
     ])
   })
   it('should add stuff to context by passing in an object in the array', (done) => {
-    const execute = FunctionTree([{
+    const ft = new FunctionTree([{
       foo: {
         bar () { return 'bar' }
       }
     }])
 
-    execute([
+    ft.run([
       function (context) {
         assert.ok(context.foo.bar(), 'bar')
         done()

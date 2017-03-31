@@ -1,5 +1,5 @@
 import DependencyStore from './DependencyStore'
-import {FunctionTree} from 'function-tree'
+import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
 import {ensurePath, isDeveloping, throwError, isSerializable, forceSerializable, isObject, getProviders, cleanPath} from './utils'
@@ -166,7 +166,7 @@ class Controller extends FunctionTree {
       }, {})
     }
 
-    this.runTree(name, signal, payload)
+    this.run(name, signal, payload)
   }
   /*
     Returns a function which binds the name/path of signal,
