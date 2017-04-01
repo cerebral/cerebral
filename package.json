@@ -59,7 +59,8 @@
     "react-dom": "^15.4.2",
     "react-scripts": "0.9.4",
     "shx": "^0.2.2",
-    "standard": "^8.6.0"
+    "standard": "^8.6.0",
+    "babel-plugin-transform-builtin-extend": "^1.1.2"
   },
   "config": {
     "commitizen": {

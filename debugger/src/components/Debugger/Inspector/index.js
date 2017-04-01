@@ -67,7 +67,7 @@ class ObjectValue extends Inferno.Component {
   constructor (props, context) {
     super(props)
     const isHighlightPath = !!(this.props.highlightPath && isInPath(this.props.highlightPath, this.props.path))
-    const preventCollapse = this.props.path.length === 0 && context.options.expanded
+    const preventCollapse = (this.props.path.length === 0) && context.options.expanded
 
     this.state = {
       isCollapsed: !preventCollapse && !isHighlightPath
@@ -80,7 +80,7 @@ class ObjectValue extends Inferno.Component {
     const context = this.context
     const props = nextProps
     const isHighlightPath = !!(props.highlightPath && isInPath(props.highlightPath, props.path))
-    const preventCollapse = props.path.length === 0 && context.options.expanded
+    const preventCollapse = (props.path.length === 0) && context.options.expanded
 
     if (this.state.isCollapsed) {
       this.setState({
@@ -276,7 +276,7 @@ class Value extends Inferno.Component {
     this.setState({isEditing: false})
   }
   shortenString (string) {
-    if (!this.state.forceShowString && string.length > 50) {
+    if (!this.state.forceShowString && (string.length > 50)) {
       return string.substr(0, 47) + '...'
     }
 
@@ -307,7 +307,7 @@ class Value extends Inferno.Component {
         >
           {this.props.propertyKey ? this.props.propertyKey + ': ' : <span />}
           <span onClick={this.onClick}>{isString(value) ? '"' + this.shortenString(value) + '"' : String(value)}</span>
-          {hasNext ? ',' : null}
+          {hasNext && ','}
         </div>
       )
     }

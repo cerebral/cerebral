@@ -99,7 +99,7 @@ export default connect({
       if (action._functionTreePrimitive) {
         return (
           <div key={index} onClick={(event) => event.stopPropagation()}>
-            <span className='signal-groupName'><strong>{action.type}</strong>{action.name ? ': ' + action.name : null}</span>
+            <span className='signal-groupName'><strong>{action.type}</strong>{action.name && ': ' + action.name}</span>
             <div className='signal-groupHeader' key={index}>
               <div className='signal-group'>
                 {action.items.map(this.renderAction)}
@@ -118,16 +118,16 @@ export default connect({
 
       const executedBySignals = (
         this.props.signal.functionsRun[action.functionIndex] && this.props.signal.functionsRun[action.functionIndex].executedIds.length
-      ) ? this.props.signal.functionsRun[action.functionIndex].executedIds.map((executedId) => this.props.executedBySignals[executedId]) : null
+      ) ? this.props.signal.functionsRun[action.functionIndex].executedIds.map((executedId) => this.props.executedBySignals[executedId]) : []
 
       return (
         <Action
           action={action}
-          faded={hasSearchContent === false || !isExecuted}
+          faded={(hasSearchContent === false) || !isExecuted}
           execution={this.props.signal.functionsRun[action.functionIndex]}
           key={index}
           onMutationClick={this.onMutationClick}
-          executed={executedBySignals ? executedBySignals.map((executedBySignal, index) => (
+          executed={executedBySignals.map((executedBySignal, index) => (
             <Signal
               key={index}
               className={'executedBy'}
@@ -142,9 +142,9 @@ export default connect({
               searchValue={this.props.searchValue}
               mutationClicked={() => {}}
             />
-          )) : null}
+          ))}
         >
-          {action.outputs ? this.renderOutputs(action) : null}
+          {action.outputs && this.renderOutputs(action)}
         </Action>
       )
     }

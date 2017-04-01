@@ -157,4 +157,29 @@ describe('Module', () => {
     })
     assert.deepEqual(controller.getState(), {foo: {foo: 'bar'}})
   })
+  it('should be able to override error handling at specific signal', () => {
+    const controller = new Controller({
+      modules: {
+        foo: {
+          state: {
+            foo: 'bar'
+          },
+          signals: {
+            test: {
+              signal: [() => { throw new Error('!') }],
+              catch: new Map([
+                [Error, [({props, state}) => state.set('foo.foo', 'module')]]
+              ])
+            }
+          }
+        }
+      },
+      catch: new Map([
+        [Error, [({props, state}) => state.set('foo.foo', 'controller')]]
+      ])
+    })
+
+    controller.getSignal('foo.test')()
+    assert.deepEqual(controller.getState(), {foo: {foo: 'module'}})
+  })
 })

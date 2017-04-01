@@ -18,7 +18,7 @@ function getActionName (action) {
 }
 
 function getLineNumber (error) {
-  const variable = error.name === 'TypeError' && String(error.message).match(/'(.*?)'/) ? String(error.message).match(/'(.*?)'/)[1] : String(error.message).split(' ')[0]
+  const variable = (error.name === 'TypeError') && String(error.message).match(/'(.*?)'/) ? String(error.message).match(/'(.*?)'/)[1] : String(error.message).split(' ')[0]
   const lines = error.func.split('\n')
 
   return lines.reduce((lineNumber, line, index) => {
@@ -78,8 +78,8 @@ class Action extends Inferno.Component {
         onClick={(event) => event.stopPropagation()}
       >
         <div className={titleClassname}>
-          {error ? <i className='icon icon-warning' /> : null}
-          {action.isAsync ? <i className='icon icon-asyncAction' /> : null}
+          {error && <i className='icon icon-warning' />}
+          {action.isAsync && <i className='icon icon-asyncAction' />}
           {renderActionTitle(action)}
         </div>
         {error ? (
@@ -91,7 +91,7 @@ class Action extends Inferno.Component {
             <div className='action-error-message'>
               <strong>{error.name}:</strong> <Inspector value={error.message} />
             </div>
-            <pre data-line={getLineNumber(error)}>
+            <pre data-line={getLineNumber(error) || null}>
               <code
                 ref={(node) => { this.errorElement = node }}
                 className='language-javascript'
@@ -114,12 +114,12 @@ class Action extends Inferno.Component {
                 {execution.data.filter(data => data.type !== 'mutation').map((service, index) => <Service service={service} key={index} />)}
               </div>
               {executed}
-              {execution.output ? (
+              {execution.output && (
                 <div className='action-actionInput'>
                   <div className='action-inputLabel'>output:</div>
                   <div className='action-inputValue'><Inspector value={execution.output} /></div>
                 </div>
-              ) : null}
+              )}
             </div>
             {children}
           </div>

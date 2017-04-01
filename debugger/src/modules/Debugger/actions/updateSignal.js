@@ -17,7 +17,7 @@ function updateSignal ({props, state}) {
       executedIds: []
     })
   }
-  if (execution.data && execution.data.type === 'mutation') {
+  if (execution.data && (execution.data.type === 'mutation')) {
     state.unshift('debugger.mutations', {
       executionId: execution.executionId,
       signalName: signal.name,

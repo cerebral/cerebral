@@ -240,7 +240,10 @@ export default [
   transaction('foo.bar', transactionFunction),
 
   // Alternatively with explicit paths
-  transaction('foo.bar', transactionFunction)
+  transaction('foo.bar', transactionFunction), {
+    success: [],
+    error: []
+  }
 ]
 ```
 
