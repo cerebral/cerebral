@@ -1,19 +1,17 @@
 # Routing
-Typically applications use a router. To instantiate the Cerebral router, install it as a separate package and instantiate it as a module:
+Typically applications use a router. To instantiate the Cerebral router, install it as a separate package and add to the controller:
 
 ```js
 import {Controller} from 'cerebral'
 import Router from 'cerebral-router'
 
 const controller = Controller({
-  modules: {
-    router: Router({
-      routes: {}, // Route definitions
-      query: false, // Query support
-      onlyHash: false, // Use hash urls
-      baseUrl: '/' // Only handle url changes on nested path
-    })
-  }
+  router: Router({
+    routes: {}, // Route definitions
+    query: false, // Query support
+    onlyHash: false, // Use hash urls
+    baseUrl: '/' // Only handle url changes on nested path
+  })
 })
 ```
 
@@ -32,16 +30,15 @@ const controller = Controller({
   state: {
     currentPage: 'home'
   },
+  router: Router({
+    routes: {
+      '/': 'home.routed',
+      '/posts': 'posts.routed'
+    }
+  }),
   modules: {
     home: HomeModule,
-    posts: PostsModule,
-    
-    router: Router({
-      routes: {
-        '/': 'home.routed',
-        '/posts': 'posts.routed',
-      ]
-    }),
+    posts: PostsModule
   }
 })
 ```
