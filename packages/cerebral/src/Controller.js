@@ -62,16 +62,16 @@ class Controller extends FunctionTree {
 
     this.on('asyncFunction', (execution, funcDetails) => {
       if (!funcDetails.isParallel) {
-        this.flush()
+        this.flush(false, execution.isAsync)
       }
     })
     this.on('parallelStart', () => this.flush())
     this.on('parallelProgress', (execution, currentPayload, functionsResolving) => {
       if (functionsResolving === 1) {
-        this.flush()
+        this.flush(false, execution.isAsync)
       }
     })
-    this.on('end', () => this.flush())
+    this.on('end', (execution) => this.flush(false, execution.isAsync))
 
     if (this.devtools) {
       this.devtools.init(this)
@@ -98,17 +98,17 @@ class Controller extends FunctionTree {
     Whenever components needs to be updated, this method
     can be called
   */
-  flush (force) {
+  flush (force, isAsync) {
     const changes = this.model.flush()
 
     if (!force && !Object.keys(changes).length) {
       return
     }
 
-    this.updateComponents(changes, force)
-    this.emit('flush', changes, Boolean(force))
+    this.updateComponents(changes, force, isAsync)
+    this.emit('flush', changes, Boolean(force), isAsync)
   }
-  updateComponents (changes, force) {
+  updateComponents (changes, force, isAsync) {
     let componentsToRender = []
 
     if (force) {
@@ -122,12 +122,12 @@ class Controller extends FunctionTree {
       if (this.devtools) {
         this.devtools.updateComponentsMap(component)
       }
-      component._updateFromState(changes, force)
+      component._updateFromState(changes, force, isAsync)
     })
     const end = Date.now()
 
     if (this.devtools && componentsToRender.length) {
-      this.devtools.sendComponentsMap(componentsToRender, changes, start, end)
+      this.devtools.sendComponentsMap(componentsToRender, changes, start, end, isAsync)
     }
   }
   /*
