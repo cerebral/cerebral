@@ -10,6 +10,6 @@ export default function push (path, payload) {
   return newItem.set(payload)
     .then(() => ({key: newItem.key}))
     .catch((error) => {
-      throw new FirebaseProviderError(error.message)
+      throw new FirebaseProviderError(error)
     })
 }

@@ -25,7 +25,7 @@ export default function put (path, file, options = {}) {
       })
     },
     (error) => {
-      reject(new FirebaseProviderError(error.message))
+      reject(new FirebaseProviderError(error))
     },
     () => {
       resolve({url: uploadTask.snapshot.downloadURL, filename})

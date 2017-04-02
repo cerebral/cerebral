@@ -1,5 +1,6 @@
 import {
-  createRef
+  createRef,
+  noop as noReturnValue
 } from './helpers'
 import {FirebaseProviderError} from './errors'
 
@@ -7,8 +8,8 @@ export default function remove (path) {
   const ref = createRef(path)
 
   return ref.remove()
-    .then(() => undefined)
+    .then(noReturnValue)
     .catch((error) => {
-      throw new FirebaseProviderError(error.message)
+      throw new FirebaseProviderError(error)
     })
 }

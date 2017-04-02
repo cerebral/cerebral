@@ -1,5 +1,6 @@
 import {
-  createRef
+  createRef,
+  noop as noReturnValue
 } from './helpers'
 import {FirebaseProviderError} from './errors'
 
@@ -11,8 +12,8 @@ export default function update (path, payload) {
 
     return convertedPayload
   }, {}))
-    .then(() => undefined)
+    .then(noReturnValue)
     .catch((error) => {
-      throw new FirebaseProviderError(error.message)
+      throw new FirebaseProviderError(error)
     })
 }

@@ -11,6 +11,6 @@ export default function signOut () {
       }
     })
     .catch((error) => {
-      throw new FirebaseProviderError(error.message)
+      throw new FirebaseProviderError(error)
     })
 }

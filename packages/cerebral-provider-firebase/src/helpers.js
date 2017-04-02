@@ -110,3 +110,5 @@ export function convertObjectWithTemplates (obj, resolve) {
     return convertedObject
   }, {})
 }
+
+export function noop () {}

@@ -27,7 +27,7 @@ export default function getUser () {
           })
         }
       }, (error) => {
-        throw new FirebaseProviderError(error.message)
+        reject(new FirebaseProviderError(error))
       })
   })
 }

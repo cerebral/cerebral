@@ -13,7 +13,7 @@ export default function createUserWithEmailAndPassword (email, password) {
           })
         })
       }, (error) => {
-        reject(new FirebaseProviderError(error.message))
+        reject(new FirebaseProviderError(error))
       })
   })
 }

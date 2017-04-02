@@ -9,6 +9,6 @@ export default function transaction (path, transactionFunction) {
   return ref.transaction(transactionFunction)
     .then((result) => ({committed: result.committed, value: result.snapshot.val()}))
     .catch((error) => {
-      throw new FirebaseProviderError(error.message)
+      throw new FirebaseProviderError(error)
     })
 }
