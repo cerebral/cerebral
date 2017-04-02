@@ -61,16 +61,16 @@ class Devtools {
     Then all mutations are replayed to the model and all the components
     will be rerendered using the "flush" event and "force" flag.
 
-    It will also replace the "runTree" method of the controller to
+    It will also replace the "run" method of the controller to
     prevent any new signals firing off when in "remember state"
   */
   remember (index) {
     this.controller.model.state = JSON.parse(this.initialModelString)
 
     if (index === 0) {
-      this.controller.runTree = this.originalRunTreeFunction
+      this.controller.run = this.originalRunTreeFunction
     } else {
-      this.controller.runTree = (name) => {
+      this.controller.run = (name) => {
         console.warn(`The signal "${name}" fired while debugger is remembering state, it was ignored`)
       }
     }
@@ -144,7 +144,7 @@ class Devtools {
   */
   init (controller) {
     this.controller = controller
-    this.originalRunTreeFunction = controller.runTree
+    this.originalRunTreeFunction = controller.run
 
     if (this.storeMutations) {
       this.initialModelString = JSON.stringify(controller.model.get())
