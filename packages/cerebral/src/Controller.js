@@ -176,7 +176,7 @@ class Controller extends FunctionTree {
             return currentModule.signals[key].catch
           }
 
-          return currentModule ? currentModule.modules[key] : undefined
+          return currentModule ? currentModule.modules[key] : null
         }, this.module)
 
         if (!signalCatch) {
