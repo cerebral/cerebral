@@ -27,7 +27,7 @@ export default connect({
           <li className='toolbar-item'>
             <ul className='toolbar-tabs'>
               <li
-                className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'signals' || !this.props.isSmall && this.props.currentPage === 'model'})}
+                className={classNames('toolbar-tab', {'toolbar-tab--active': this.props.currentPage === 'signals'})}
                 onClick={() => this.props.pageChanged({page: 'signals'})}>
                 <i className='icon icon-signals' /> {this.props.type === 'c' || this.props.type === 'cft' ? 'SIGNALS' : 'EXECUTION'}
               </li>
