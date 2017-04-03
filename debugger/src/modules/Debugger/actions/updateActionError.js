@@ -6,6 +6,8 @@ function updateActionError ({props, state}) {
     `debugger.signals.${execution.executionId}`
   )
 
+  state.set(`${signalPath}.isExecuting`, false)
+  state.set(`${signalPath}.hasError`, true)
   state.set(`${signalPath}.functionsRun.${execution.functionIndex}.error`, execution.error)
 }
 
