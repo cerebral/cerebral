@@ -1,5 +1,7 @@
 import firebaseAdmin from 'firebase-admin'
 
+function noReturnValue () {}
+
 function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
   let cachedProvider = null
   const firebase = customFirebaseInstance || firebaseAdmin
@@ -29,7 +31,7 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
       remove (path) {
         const ref = firebase.database().ref(path)
 
-        return ref.remove().then(() => undefined)
+        return ref.remove().then(noReturnValue)
       },
       push (path, value) {
         const ref = firebase.database().ref(path).push()
@@ -37,10 +39,10 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
         return ref.set(value).then(() => ({key: ref.key}))
       },
       set (path, value) {
-        return firebase.database().ref(path).set(value).then(() => undefined)
+        return firebase.database().ref(path).set(value).then(noReturnValue)
       },
       update (path, value) {
-        return firebase.database().ref(path).update(value).then(() => undefined)
+        return firebase.database().ref(path).update(value).then(noReturnValue)
       },
       value (path, options) {
         options = options || {}
@@ -57,7 +59,7 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
         })
       },
       transaction (path, cb) {
-        return firebase.database().ref(path).transaction(cb).then(() => undefined)
+        return firebase.database().ref(path).transaction(cb).then(noReturnValue)
       }
     }
   }
