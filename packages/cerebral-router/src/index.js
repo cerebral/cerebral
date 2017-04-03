@@ -131,6 +131,14 @@ export default function Router (options = {}) {
 
     return {
       init,
+      getSignalUrl (signalName, input) {
+        if (signals[signalName]) {
+          const route = signals[signalName].route
+          return options.baseUrl + options.mapper.stringify(route, input || {})
+        } else {
+          return false
+        }
+      },
       provider (context) {
         context.router = contextProvider
 
