@@ -13,10 +13,11 @@ function updateSignal ({props, state}) {
   } else {
     state.merge(`${signalPath}.functionsRun.${execution.functionIndex}`, {
       payload: execution.payload,
-      data: execution.data ? [execution.data] : []
+      data: execution.data ? [execution.data] : [],
+      executedIds: []
     })
   }
-  if (execution.data && execution.data.type === 'mutation') {
+  if (execution.data && (execution.data.type === 'mutation')) {
     state.unshift('debugger.mutations', {
       executionId: execution.executionId,
       signalName: signal.name,

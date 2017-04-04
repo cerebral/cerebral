@@ -112,7 +112,7 @@ class Devtools {
             name: execution.name,
             staticTree: execution.staticTree,
             datetime: execution.datetime,
-            executedBy: payload._execution ? payload._execution : null
+            executedBy: (payload && payload._execution) ? payload._execution : null
           }
         }
       })

@@ -21,11 +21,20 @@ const execute = FunctionTree({
   // add side effect libraries to context
 })
 
+// returns a promise
 execute([
   function someFunc (context) {},
   function someOtherFunc (context) {}
 ], {
   foo: 'bar' // optional payload
+})
+.catch((error) => {
+  // Current payload with execution details,
+  // can be passed in to a new execution (will be indicated in debugger)
+  error.payload
+
+  // A serialized version of the error. Name, message and stack, or custom error serialization
+  error.payload.error
 })
 ```
 
@@ -76,9 +85,33 @@ You can now use the debugger from your functions contexts and/or providers:
 function someFunction(context) {
   context.debugger.send({
     method: 'someMethod',
-    args: ['foo', 'bar'],
-    color: 'red'
+    args: ['foo', 'bar']
   })
+}
+```
+
+Or you can use it when creating providers to easily wrap their usage:
+
+```js
+function MyProvider (options = {}) {
+  let cachedProvider = null
+
+  function createProvider (context) {
+    return {
+      doSomething() {},
+      doSomethingElse() {}
+    }
+  }
+
+  return (context) => {
+    context.myProvider = cachedProvider = (cachedProvider || createProvider(context))
+
+    if (context.debugger) {
+      context.debugger.wrapProvider('myProvider')
+    }
+
+    return context
+  }
 }
 ```
 
@@ -200,68 +233,23 @@ const tree = [
 execute(tree, {foo: 'bar'})
 ```
 
-#### execution
-
-##### retry
-```js
-function funcA (context) {
-  return new Promise(resolve => {
-    setTimeout(resolve, 500)
-  })
-}
-
-function funcB (context) {
-  if (context.props.retryCount < 3) {
-    return context.execution.retry({
-      retryCount: context.props.retryCount + 1
-    })
-  }
-}
-
-const tree = [
-  funcA,
-  funcB
-]
-```
-##### abort
-```js
-const FunctionTree = require('function-tree').FunctionTree
-const execute = FunctionTree([])
-
-function funcA (context) {
-  return context.execution.abort()
-}
-
-function funcB (context) {
-  // Does not run
-}
-
-const tree = [
-  funcA,
-  funcB
-]
-
-execute.on('abort', (functionDetails, payload) => {})
-
-execute(tree)
-```
-
 ### error
 ```js
 const FunctionTree = require('function-tree').FunctionTree
 const execute = FunctionTree([])
 
-// As an event (async)
-execute.on('error', function (error, execution, payload) {
+// As a global event (always triggered, even when caught)
+// Triggers sync/async depending on where error occurs
+execute.on('error', (error) => {})
 
-})
+// As callback for single execution
+// Triggers sync/async depending on where error occurs
+execute(tree, (error) => {})
 
-// As callback (sync)
-execute(tree, (error, execution, payload) => {
-  if (error) {
-    // There is an error
-  }
-})
+// As promise for single execution (when no callback)
+// Triggers async
+execute(tree)
+  .catch((error) => {})
 ```
 
 ### provider

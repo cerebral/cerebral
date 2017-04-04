@@ -74,3 +74,7 @@
   font-weight: normal;
   font-size: 10px;
 }
+
+.list-item-error {
+  color: #eb1e1e;
+}

@@ -16,8 +16,9 @@ import ResolveProvider from './providers/Resolve'
   based on top level providers and providers defined in modules
 */
 class Controller extends FunctionTree {
-  constructor ({state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}}) {
+  constructor (config) {
     super()
+    const {state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}} = config
     const getSignal = this.getSignal
 
     this.getSignal = () => {
@@ -25,6 +26,7 @@ class Controller extends FunctionTree {
     }
     this.componentDependencyStore = new DependencyStore()
     this.options = options
+    this.catch = config.catch || null
     this.flush = this.flush.bind(this)
     this.devtools = devtools
     this.model = new Model({}, this.devtools)
@@ -146,7 +148,7 @@ class Controller extends FunctionTree {
     Uses function tree to run the array and optional
     payload passed in. The payload will be checkd
   */
-  runSignal (name, signal, payload = {}, cb) {
+  runSignal (name, signal, payload = {}) {
     if (this.devtools && (!isObject(payload) || !isSerializable(payload))) {
       console.warn(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`, payload)
       payload = {}
@@ -166,7 +168,34 @@ class Controller extends FunctionTree {
       }, {})
     }
 
-    this.runTree(name, signal, payload)
+    this.runTree(name, signal, payload, (error) => {
+      if (error) {
+        const signalPath = error.execution.name.split('.')
+        const signalCatch = signalPath.reduce((currentModule, key, index) => {
+          if (index === signalPath.length - 1) {
+            return currentModule.signals[key].catch
+          }
+
+          return currentModule ? currentModule.modules[key] : null
+        }, this.module)
+
+        if (!signalCatch) {
+          throw error
+        }
+
+        if (signalCatch instanceof Map) {
+          for (let [errorType, signalChain] of signalCatch) {
+            if (error instanceof errorType) {
+              this.runSignal('catch', signalChain, error.payload)
+
+              return
+            }
+          }
+        }
+
+        throw error
+      }
+    })
   }
   /*
     Returns a function which binds the name/path of signal,
@@ -185,7 +214,7 @@ class Controller extends FunctionTree {
       throwError(`There is no signal at path "${path}"`)
     }
 
-    return signal
+    return signal.run
   }
 
   addModule (path, module) {
@@ -198,11 +227,7 @@ class Controller extends FunctionTree {
       return currentModule.modules[key]
     }, this)
 
-    parentModule.module.modules[moduleKey] = module
-
-    if (module.state) {
-      this.model.set(path.split('.'), module.state)
-    }
+    parentModule.module.modules[moduleKey] = new Module(this, path.split('.'), module)
 
     if (module.provider) {
       this.contextProviders.push(module.provider)

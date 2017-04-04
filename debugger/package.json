@@ -16,7 +16,7 @@
   "repository": "https://github.com/cerebral/cerebral",
   "author": "Christian Alfoni",
   "dependencies": {
-    "babel-plugin-inferno": "^1.7.0",
+    "babel-plugin-inferno": "^3.1.0",
     "cerebral": "2.0.0-b-alpha.d6efd5f3",
     "cerebral-module-useragent": "1.0.0-b-alpha.d6efd5f3",
     "classnames": "^2.2.5",
@@ -24,10 +24,10 @@
     "electron-default-menu": "^1.0.0",
     "electron-json-storage": "^2.1.0",
     "function-tree": "0.5.0-b-alpha.d6efd5f3",
-    "inferno": "^1.2.2",
-    "inferno-component": "^1.2.2",
-    "inferno-create-element": "^1.2.2",
-    "prismjs": "^1.5.1",
+    "inferno": "^1.5.3",
+    "inferno-component": "^1.5.3",
+    "inferno-create-element": "^1.5.3",
+    "prismjs": "^1.6.0",
     "ws": "^1.1.1"
   },
   "devDependencies": {

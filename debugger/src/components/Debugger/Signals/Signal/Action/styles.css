@@ -133,3 +133,11 @@
   line-height: 20px;
   padding-right: 5px;
 }
+
+.action-error-message {
+  display: flex;
+}
+
+.action-error-message > strong {
+  margin-right: 5px;
+}

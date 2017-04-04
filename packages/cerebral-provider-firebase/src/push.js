@@ -1,15 +1,15 @@
 import {
   createRef
 } from './helpers'
+import {FirebaseProviderError} from './errors'
 
 export default function push (path, payload) {
   const ref = createRef(path)
   const newItem = ref.push()
-  return new Promise((resolve, reject) => {
-    newItem.set(payload)
-    .then(
-      () => resolve({key: newItem.key}),
-      (error) => reject({error: error.message})
-    )
-  })
+
+  return newItem.set(payload)
+    .then(() => ({key: newItem.key}))
+    .catch((error) => {
+      throw new FirebaseProviderError(error)
+    })
 }

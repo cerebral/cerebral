@@ -1,4 +1,4 @@
-import {convertObjectWithTemplates} from './utils'
+import {convertObjectWithTemplates} from '../helpers'
 
 function onChildAddedFactory (path, signal, options = {}) {
   function onChildAdded ({firebase, resolve}) {

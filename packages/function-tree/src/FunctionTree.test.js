@@ -187,8 +187,8 @@ describe('FunctionTree', () => {
         ]
       }
     ]
-    execute(tree, () => {
-      execute(tree, () => {
+    execute(tree).then(() => {
+      execute(tree).then(() => {
         done()
       })
     })
@@ -206,11 +206,11 @@ describe('FunctionTree', () => {
         success: []
       }
     ]
-    execute.once('error', (error) => {
+
+    execute(tree).catch((error) => {
       assert.ok(error.message.match(/needs to be a path or a Promise/))
       done()
     })
-    execute(tree)
   })
   it('should provide unique index to functions, even though the same', () => {
     function actionA () {}
@@ -406,6 +406,33 @@ describe('FunctionTree', () => {
     })
 
     execute(tree)
+  })
+  it('should not continue async execution when error thrown', (done) => {
+    let executedCount = 0
+    const execute = FunctionTree([])
+
+    function funcA ({path}) {
+      return Promise.resolve(path.test())
+    }
+    function funcB () {
+      throw new Error('foo')
+    }
+    function funcC () { executedCount++ }
+
+    const tree = parallel([
+      funcA, {
+        test: funcC
+      },
+      funcB
+    ])
+
+    execute(tree)
+      .catch(() => {
+        setTimeout(() => {
+          assert.equal(executedCount, 0)
+          done()
+        })
+      })
   })
   it('should add stuff to context by passing in an object', (done) => {
     const execute = FunctionTree({

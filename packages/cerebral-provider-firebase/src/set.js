@@ -1,13 +1,15 @@
 import {
-  createRef
+  createRef,
+  noop as noReturnValue
 } from './helpers'
+import {FirebaseProviderError} from './errors'
 
 export default function set (path, payload) {
   const ref = createRef(path)
-  return new Promise((resolve, reject) => {
-    ref.set(payload).then(
-      () => resolve({}),
-      (error) => reject({error: error.message})
-    )
-  })
+
+  return ref.set(payload)
+    .then(noReturnValue)
+    .catch((error) => {
+      throw new FirebaseProviderError(error)
+    })
 }

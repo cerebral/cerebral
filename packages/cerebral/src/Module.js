@@ -1,8 +1,9 @@
 class Module {
   constructor (controller, path, moduleDescription) {
+    const stringPath = path.join('.')
     const moduleStub = {
       controller,
-      path: path.join('.'),
+      path: stringPath,
       name: path.slice().pop()
     }
 
@@ -14,8 +15,16 @@ class Module {
     module.signals = Object.keys(module.signals || {}).reduce((currentSignals, signalKey) => {
       const signal = module.signals[signalKey]
 
-      currentSignals[signalKey] = (payload) => {
-        controller.runSignal(path.concat(signalKey).join('.'), signal, payload)
+      currentSignals[signalKey] = {
+        signal: signal.signal || signal,
+        catch: (signal.catch || controller.catch) ? new Map([].concat(
+          controller.catch ? [...controller.catch] : []
+        ).concat(
+          signal.catch ? [...signal.catch] : []
+        )) : null,
+        run (payload) {
+          controller.runSignal(path.concat(signalKey).join('.'), signal.signal || signal, payload)
+        }
       }
 
       return currentSignals

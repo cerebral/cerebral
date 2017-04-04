@@ -4,7 +4,7 @@
 `npm install function-tree-firebase-admin@next --save --save-exact`
 
 ## description
-The firebase admin package for function-tree allows you to easily handle Firebase Queues. With the Cerebral debugger you will even be able to merge execution data cross client/server. This package helps you set up a **TaskRunner** which combines a function tree definition of your choice with a Firebase Queue reference.
+The firebase admin package for function-tree allows you to easily handle Firebase Queues. With the Cerebral debugger you will even be able to merge execution data cross client/server. This package helps you set up a **QueueHandler** which registers your specs with queues and lets you know when new tasks are ready to be run.
 
 ## Provider
 First you create a function tree with the Firebase provider. You will need to add the Devtools with the same port as the client to merge execution.
@@ -38,13 +38,11 @@ Get value. Outputs {key: 'theKey', value: 'theValue'}.
 ```js
 function updateItems (context) {
   return context.firebase.value('some/path')
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### transaction
-Run a transaction.
+Run a transaction. Outputs nothing.
 ```js
 function updateItems (context) {
   return context.firebase.transaction('some/path', (maybeValue) => {
@@ -54,41 +52,33 @@ function updateItems (context) {
 
     return context.props.data.foo
   })
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### set
-Set new data.
+Set new data. Output nothing.
 ```js
 function addItem (context) {
   return context.firebase.set(`items/${context.props.data.itemKey}`, context.props.data.item)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### push
-Push new data.
+Push new data. Outputs {key: 'keyAdded'}.
 ```js
 function addItem (context) {
   return context.firebase.push('items', context.props.data.item)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### update
-Update multiple paths.
+Update multiple paths. Outputs nothing.
 ```js
 function updateItems (context) {
   return context.firebase.update({
     'items/1': context.props.data.item1Data,
     'items/2': context.props.data.item2Data
   })
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
@@ -101,35 +91,31 @@ function authenticate (context) {
 ```
 
 ### deleteUser
-Delete a user from Firebase.
+Delete a user from Firebase. Outputs nothing.
 ```js
 function deleteProfile (context) {
   return context.firebase.deleteUser(context.props.uid)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
 ### remove
-Remove key.
+Remove key. Outputs nothing.
 ```js
 function removeItem (context) {
   return context.firebase.remove(`items/${context.props.itemKey}`)
-    .then(context.path.success)
-    .catch(context.path.error)
 }
 ```
 
-## TaskRunner
-The TaskRunner is responsible for registering Firebase Queues with your defined specs and what trees should run when new tasks arrive in Firebase. The TaskRunner also automatically authenticates the tasks using **verifyIdToken**.
+## QueueHandler
+The QueueHandler is responsible for registering Firebase Queues with your defined specs and what trees should run when new tasks arrive in Firebase. The QueueHandler also automatically authenticates the tasks using **verifyIdToken**.
 
 ```js
 const runTask = require('./runTask')
 const firebase = require('firebase-admin')
 const username = require('username')
-const TaskRunner = require('function-tree-firebase-admin').TaskRunner
+const QueueHandler = require('function-tree-firebase-admin').QueueHandler
 
-module.exports = new TaskRunner({
+module.exports = new QueueHandler({
   // If you are using a specPrefix on the client during development
   // you will have to use it here as well, to pick up the correct
   // queue tasks. It is automatically removed in production
@@ -144,11 +130,14 @@ module.exports = new TaskRunner({
     ]
   }],
 
-  // The function tree that executes the tasks
-  run: runTask,
-
   // A reference in Firebase to your queue
   queueRef: firebase.database().ref('queue')
+}, (specId, tree, payload) => {
+  runTask(specId, tree, payload)
+    .catch((error) => {
+      // Handle error. Payload has error property with details
+      runTask('ERROR', [/* A tree handling errors */], error.payload)
+    })
 });
 ```
 

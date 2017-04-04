@@ -206,22 +206,20 @@ And update the signals as well:
   homeClicked: [
     set(state`activeTab`, 'home')
   ],
-  reposClicked: [
-    set(state`activeTab`, 'repos'),
-    showToast(string`Loading data for repo: ${props`repo`}`),
-    parallel([
-      getRepo('cerebral'),
-      getRepo('addressbar')
-    ]),
-    when(props`error`), {
-      'true': showToast(string`Error: ${props`error`}`, 5000, 'error'),
-      'false': [
-        set(state`repos.cerebral`, props`cerebral`),
-        set(state`repos.addressbar`, props`addressbar`),
-        showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
-      ]
-    }
-  ]
+  reposClicked: {
+    signal: [
+      set(state`activeTab`, 'repos'),
+      showToast(string`Loading data for repo: ${props`repo`}`),
+      parallel([
+        getRepo('cerebral'),
+        getRepo('addressbar')
+      ]),
+      set(state`repos.cerebral`, props`cerebral`),
+      set(state`repos.addressbar`, props`addressbar`),
+      showToast(string`The repos have ${starsCount} stars`, 5000, 'success')  
+    ],
+    catch: showToast(string`Error: ${props`error.message`}`, 5000)
+  }
 }
 ...
 ```

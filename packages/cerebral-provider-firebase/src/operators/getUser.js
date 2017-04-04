@@ -1,8 +1,11 @@
+import {createReturnPromise} from '../helpers'
+
 function getUserFactory () {
   function getUser ({firebase, path}) {
-    return firebase.getUser()
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.getUser(),
+      path
+    )
   }
 
   return getUser
