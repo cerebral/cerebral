@@ -305,6 +305,7 @@ describe('Controller', () => {
       state: {
         bar: 'baz'
       }}})
+
     assert.equal(controller.getState('foo.bar'), 'baz')
   })
   it('should add signals correctly when module added', () => {
@@ -358,5 +359,24 @@ describe('Controller', () => {
     controller.removeModule('foo')
     const after = controller.contextProviders.length
     assert.equal(after, before - 1)
+  })
+  it('should be able to globally add error catchers', (done) => {
+    const controller = new Controller({
+      state: {},
+      signals: {
+        test: [
+          () => {
+            throw new Error('foo')
+          }
+        ]
+      },
+      catch: new Map([
+        [Error, [({props}) => {
+          assert.ok(props.error)
+          done()
+        }]]
+      ])
+    })
+    controller.getSignal('test')()
   })
 })

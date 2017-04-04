@@ -1,8 +1,11 @@
+import {createReturnPromise} from '../helpers'
+
 function signInAnonymouslyFactory () {
   function signInAnonymously ({firebase, path}) {
-    return firebase.signInAnonymously()
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.signInAnonymously(),
+      path
+    )
   }
 
   return signInAnonymously

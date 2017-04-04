@@ -1,3 +1,5 @@
+import {createReturnPromise} from '../helpers'
+
 function putFactory (putPath, file, options = {}) {
   function put ({firebase, props, state, path, resolve}) {
     const evaluatedOptions = Object.keys(options).reduce((currentEvaluatedOptions, key) => {
@@ -25,9 +27,10 @@ function putFactory (putPath, file, options = {}) {
       return currentEvaluatedOptions
     }, {})
 
-    return firebase.put(resolve.value(putPath), resolve.value(file), evaluatedOptions)
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.put(resolve.value(putPath), resolve.value(file), evaluatedOptions),
+      path
+    )
   }
 
   return put

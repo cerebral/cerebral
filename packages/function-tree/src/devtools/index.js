@@ -1,5 +1,5 @@
 /* global CustomEvent */
-import WebSocket from 'ws'
+import WebSocket from 'universal-websocket-client'
 import Path from '../Path'
 const VERSION = 'v1'
 
@@ -112,7 +112,7 @@ class Devtools {
             name: execution.name,
             staticTree: execution.staticTree,
             datetime: execution.datetime,
-            executedBy: payload._execution ? payload._execution : null
+            executedBy: (payload && payload._execution) ? payload._execution : null
           }
         }
       })

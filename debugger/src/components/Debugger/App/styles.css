@@ -85,3 +85,19 @@
 .execution-led--executing {
   background-color: #dbb427;
 }
+
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: calc(100vh - 81px);
+  font-size: 32px;
+}
+
+.error-title {
+  color: #eb1e1e;
+  font-size: 80px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}

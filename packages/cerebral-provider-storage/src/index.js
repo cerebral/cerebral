@@ -5,7 +5,7 @@ function StorageProvider (options = {}) {
   options.prefix = options.prefix ? options.prefix + '.' : ''
 
   function createProvider (context) {
-    const target = options.target ? window[options.target] : window.localStorage
+    const target = options.target
 
     if (options.sync) {
       context.controller.on('flush', (changes) => {

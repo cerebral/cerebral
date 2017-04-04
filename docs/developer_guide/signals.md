@@ -1,6 +1,6 @@
 # Signals
 
-The signals of Cerebral are named in past tense. So typically you would name a signal **inputChanged** or **mounted**. Going through this guide you will see what benefits this approach gives you. To trigger a signal you call it just like you would call a function, the difference is that you start a function tree execution.
+You trigger a signal when something happens in your application. For example a button is clicked, but also if a websocket connection receives a message. The signal runs the business logic of your application. You compose together state changes, side effects and other logic in one coherent flow. The signals of Cerebral are named in past tense. So typically you would name a signal **inputChanged** or **mounted**. Going through this guide you will see what benefits this approach gives you. To trigger a signal you call it just like you would call a function, the difference is that you start a function-tree execution.
 
 Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the functions in this tree **actions**.
 

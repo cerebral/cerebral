@@ -37,7 +37,11 @@ class Devtools {
     this.isResettingDebugger = false
     this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
     this.allowedTypes = []
-      .concat(this.isBrowserEnv ? [File, FileList, Blob, ImageData, RegExp] : [])
+      .concat(typeof File === 'undefined' ? [] : File)
+      .concat(typeof FileList === 'undefined' ? [] : FileList)
+      .concat(typeof Blob === 'undefined' ? [] : Blob)
+      .concat(typeof ImageData === 'undefined' ? [] : ImageData)
+      .concat(typeof RegExp === 'undefined' ? [] : RegExp)
       .concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)
@@ -237,7 +241,7 @@ class Devtools {
     called again
   */
   watchExecution () {
-    this.controller.on('start', (execution) => {
+    this.controller.on('start', (execution, payload) => {
       const message = JSON.stringify({
         type: 'executionStart',
         source: 'c',
@@ -246,7 +250,8 @@ class Devtools {
             executionId: execution.id,
             name: execution.name,
             staticTree: execution.staticTree,
-            datetime: execution.datetime
+            datetime: execution.datetime,
+            executedBy: (payload && payload._execution) ? payload._execution : null
           }
         }
       })

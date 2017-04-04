@@ -1,8 +1,11 @@
+import {createReturnPromise} from '../helpers'
+
 function linkWithGoogleFactory (options) {
   function linkWithGoogle ({firebase, path}) {
-    return firebase.linkWithGoogle(options)
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.linkWithGoogle(options),
+      path
+    )
   }
 
   return linkWithGoogle

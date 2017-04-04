@@ -113,7 +113,7 @@ export default connect({
 )
 ```
 
-You can also use the **field*** computed, pointing to the field.
+You can also use the **field** computed, pointing to the field.
 
 ```js
 import React from 'react'
@@ -123,7 +123,7 @@ import {field} from 'cerebral-provider-forms'
 export default connect({
   field: field(state`path.to.form.name`)
 },
-  function MyForm ({field}) {
+  function MyField ({field}) {
     // Value of some field
     field.value
     // A true/false if field has a value

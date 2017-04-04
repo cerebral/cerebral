@@ -11,6 +11,7 @@ export default connect({
   debugger: state`debugger`,
   signalsList: signalsList,
   isExecuting: state`debugger.isExecuting`,
+  executedBySignals: state`debugger.executedBySignals`,
   searchValue: state`debugger.searchValue`,
   signalClicked: signal`debugger.signalClicked`
 },
@@ -57,12 +58,33 @@ export default connect({
         this.props.searchValue &&
         this.hasSearchContent(signal)
       )
+      const isExecuting = (
+        signal.isExecuting ||
+        (signal.executedIds || []).reduce((isSubExecuting, executedId) => {
+          if (isSubExecuting) {
+            return true
+          }
+
+          return this.props.executedBySignals[executedId].isExecuting
+        }, false)
+      )
+      const hasError = (
+        signal.hasError ||
+        (signal.executedIds || []).reduce((hasSubError, executedId) => {
+          if (hasSubError) {
+            return true
+          }
+
+          return this.props.executedBySignals[executedId].hasError
+        }, false)
+      )
 
       const className = classnames({
         'list-item': true,
         'list-activeItem': isActive,
         'list-grouped': signal.isGrouped,
-        pulse: signal.isExecuting
+        'list-item-error': hasError,
+        pulse: isExecuting
       })
       const indicatorClassname = classnames('list-indicator', {
         'list-fadedItem': hasSearchContent === false

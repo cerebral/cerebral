@@ -6,13 +6,13 @@
 }
 
 .signals-list {
-  flex: 2;
+  flex: 1;
   min-width: 200px;
 }
 
 .signals-signal {
   margin-left: 10px;
-  flex: 4;
+  flex: 3;
   overflow: auto;
 }
 

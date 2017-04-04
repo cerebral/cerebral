@@ -28,6 +28,9 @@ import sendPasswordResetEmail from './sendPasswordResetEmail'
 import linkWithGithub from './linkWithGithub'
 import {setOnDisconnect, cancelOnDisconnect} from './onDisconnect'
 
+export {FirebaseProviderError} from './errors'
+export {FirebaseProviderAuthenticationError} from './errors'
+
 export default function FirebaseProviderFactory (options = { payload: {} }) {
   firebase.initializeApp(options.config)
 

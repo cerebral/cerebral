@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
+import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function linkWithGoogle (options = {}) {
   const scopes = options.scopes || []
@@ -24,15 +25,9 @@ export default function linkWithGoogle (options = {}) {
           resolve({
             user: user
           })
-        },
-        (error) => {
-          reject({
-            code: error.code,
-            message: error.message,
-            email: error.email
-          })
-        }
-      )
+        }, (error) => {
+          reject(new FirebaseProviderAuthenticationError(error))
+        })
     }
   })
 }

@@ -48,5 +48,7 @@ When building an application you often need to keep things like files and blobs 
 - **File**
 - **FilesList**
 - **Blob**
+- **ImageData**
+- **RegExp**
 
 If you want to force Cerebral to support other types as well, you can do that with a devtools option. This is perfectly okay, but remember all state changes has to be done through the state API.

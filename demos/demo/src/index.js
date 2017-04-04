@@ -5,6 +5,7 @@ import {Container} from 'cerebral/react'
 import FirebaseProvider from 'cerebral-provider-firebase'
 import firebaseConfig from './firebaseConfig'
 import * as visibility from './helpers/visibility'
+import FormsProvider from 'cerebral-provider-forms'
 
 // Modules
 import Devtools from 'cerebral/devtools'
@@ -33,7 +34,8 @@ const controller = Controller({
   }),
 
   providers: [
-    FirebaseProvider({config: firebaseConfig})
+    FirebaseProvider({config: firebaseConfig}),
+    FormsProvider()
   ],
 
   modules: {

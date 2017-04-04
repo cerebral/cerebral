@@ -21,6 +21,7 @@ const controller = Controller({
   }),
   providers: [
     StorageProvider({
+      target: window.localStorage,
       sync: {todos: 'todos'},
       prefix: 'todomvc'
     }),
@@ -75,7 +76,12 @@ const controller = Controller({
     clearCompletedClicked: [
       clearCompletedTodos
     ],
-    filterClicked: set(state`filter`, props`filter`)
+    filterClicked: [
+      set(state`filter`, props`filter`),
+      function Test () {
+        throw new Error('Wuuut?')
+      }
+    ]
   }
 })
 

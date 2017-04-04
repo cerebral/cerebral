@@ -1,9 +1,7 @@
-/* global Prism */
 import './styles.css'
 import Inferno from 'inferno'
 import {connect} from 'cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
-import connector from 'connector'
 import classnames from 'classnames'
 
 import Action from './Action'
@@ -21,7 +19,6 @@ export default connect({
       super()
       this.renderAction = this.renderAction.bind(this)
       this.onMutationClick = this.onMutationClick.bind(this)
-      this.onActionClick = this.onActionClick.bind(this)
       this.state = {expandedOutputs: {}}
     }
     shouldComponentUpdate (nextProps, nextState) {
@@ -35,15 +32,6 @@ export default connect({
       this.props.mutationClicked({
         path
       })
-    }
-    onActionClick (action) {
-      connector.inspect(this.props.signal.name, action.actionIndex)
-    }
-    componentDidMount () {
-      Prism.highlightAll()
-    }
-    componentDidUpdate () {
-      Prism.highlightAll()
     }
     toggleOutput (event, action, output) {
       const expandedOutputs = Object.assign({}, this.state.expandedOutputs)
@@ -110,8 +98,8 @@ export default connect({
     renderAction (action, index) {
       if (action._functionTreePrimitive) {
         return (
-          <div key={index}>
-            <span className='signal-groupName'><strong>{action.type}</strong>{action.name ? ': ' + action.name : null}</span>
+          <div key={index} onClick={(event) => event.stopPropagation()}>
+            <span className='signal-groupName'><strong>{action.type}</strong>{action.name && ': ' + action.name}</span>
             <div className='signal-groupHeader' key={index}>
               <div className='signal-group'>
                 {action.items.map(this.renderAction)}
@@ -126,20 +114,22 @@ export default connect({
         this.actionHasSearchContent(action)
       )
 
-      const executedBySignal = (
-        this.props.signal.functionsRun[action.functionIndex] && this.props.signal.functionsRun[action.functionIndex].executedId
-      ) ? this.props.executedBySignals[this.props.signal.functionsRun[action.functionIndex].executedId] : null
+      const isExecuted = Boolean(this.props.signal.functionsRun[action.functionIndex])
+
+      const executedBySignals = (
+        this.props.signal.functionsRun[action.functionIndex] && this.props.signal.functionsRun[action.functionIndex].executedIds.length
+      ) ? this.props.signal.functionsRun[action.functionIndex].executedIds.map((executedId) => this.props.executedBySignals[executedId]) : []
 
       return (
         <Action
           action={action}
-          faded={hasSearchContent === false}
+          faded={(hasSearchContent === false) || !isExecuted}
           execution={this.props.signal.functionsRun[action.functionIndex]}
           key={index}
           onMutationClick={this.onMutationClick}
-          onActionClick={this.onActionClick}
-          executed={executedBySignal ? (
+          executed={executedBySignals.map((executedBySignal, index) => (
             <Signal
+              key={index}
               className={'executedBy'}
               style={{
                 backgroundColor: '#FAFAFA'
@@ -152,9 +142,9 @@ export default connect({
               searchValue={this.props.searchValue}
               mutationClicked={() => {}}
             />
-          ) : null}
+          ))}
         >
-          {action.outputs ? this.renderOutputs(action) : null}
+          {action.outputs && this.renderOutputs(action)}
         </Action>
       )
     }

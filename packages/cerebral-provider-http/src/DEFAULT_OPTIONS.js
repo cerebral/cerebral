@@ -1,4 +1,5 @@
-import {urlEncode, parseHeaders} from './utils'
+import {urlEncode, getAllResponseHeaders} from './utils'
+import HttpProviderError from './HttpProviderError'
 
 export default {
   method: 'get',
@@ -29,9 +30,7 @@ export default {
       result = JSON.parse(xhr.responseText)
     }
 
-    const responseHeaders = 'getAllResponseHeaders' in xhr
-      ? parseHeaders(xhr.getAllResponseHeaders())
-      : null
+    const responseHeaders = getAllResponseHeaders(xhr)
 
     if (xhr.status >= 200 && xhr.status < 300) {
       resolve({
@@ -40,11 +39,7 @@ export default {
         result: result
       })
     } else {
-      reject({
-        status: xhr.status,
-        headers: responseHeaders,
-        result: result
-      })
+      reject(new HttpProviderError(xhr.status, responseHeaders, result))
     }
   }
 }

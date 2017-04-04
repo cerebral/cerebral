@@ -213,7 +213,7 @@ Now we would like to use our computed in the signal, and we want to show the cou
 ### Replacing with computed
 Let us remove the **setStarsCount** action and refactor our signal to instead grab the repos first, then we update the state in one go. This just to show you different strategies.
 
-Check out the refactoring of our *getRepo* action. The factory is no longer return paths, just values. So either they return a result using the repo name as the key, or they will set an error.
+Check out the refactoring of our *getRepo* action. The factory is no longer return paths. So either we return a result using the repo name as the key, or we throw an error.
 
 ```js
 ...
@@ -223,8 +223,8 @@ function getRepo (repoName) {
       .then((response) => {
         return {[repoName]: response.result}
       })
-      .catch((response) => {
-        return {error: response.error}
+      .catch(() => {
+        throw new Error('REQUEST_ERROR')
       })
   }
 
@@ -240,26 +240,24 @@ We can change now the signal to look like:
 import starsCount from './starsCount'
 ...
 {
-  buttonClicked: [
-    showToast(string`Loading data for repos...`),
-    parallel([
-      getRepo('cerebral'),
-      getRepo('addressbar')
-    ]),
-    when(props`error`), {
-      'true': showToast(string`Error: ${props`error`}`, 5000),
-      'false': [
-        set(state`repos.cerebral`, props`cerebral`),
-        set(state`repos.addressbar`, props`addressbar`),
-        showToast(string`The repos have ${starsCount} stars`, 5000, 'success')
-      ]
-    }
-  ]
+  buttonClicked: {
+    signal: [
+      showToast(string`Loading data for repos...`),
+      parallel([
+        getRepo('cerebral'),
+        getRepo('addressbar')
+      ]),
+      set(state`repos.cerebral`, props`cerebral`),
+      set(state`repos.addressbar`, props`addressbar`),
+      showToast(string`The repos have ${starsCount} stars`, 5000, 'success')
+    ],
+    catch: showToast(string`Error: ${props`error.message`}`, 5000)
+  }
 }
 ...
 ```
 
-We also use the *when* operator to figure out if we indeed have an error, diverging execution to show an error message. Otherwise, we update our state tree and show the message.
+We have now defined our signal in two parts. The happy path and what to do if an error is thrown (catch). You can even define types of errors you want to be catched, but you can read more about that in the API documentation.
 
 Note here that we also updated the *toast* to allow no time to be passed in, causing it to stick.
 

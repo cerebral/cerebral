@@ -1,7 +1,13 @@
 function updateActionError ({props, state}) {
   const execution = props.data.execution
-  const signalPath = `debugger.signals.${execution.executionId}`
+  const signalPath = state.get(`debugger.executedBySignals.${execution.executionId}`) ? (
+    `debugger.executedBySignals.${execution.executionId}`
+  ) : (
+    `debugger.signals.${execution.executionId}`
+  )
 
+  state.set(`${signalPath}.isExecuting`, false)
+  state.set(`${signalPath}.hasError`, true)
   state.set(`${signalPath}.functionsRun.${execution.functionIndex}.error`, execution.error)
 }
 
