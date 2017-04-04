@@ -7,7 +7,7 @@ let ref = null
 
 export function setOnDisconnect (path, value) {
   if (ref) {
-    throw new FirebaseProviderError('You have already a setOnDisconnect')
+    throw new FirebaseProviderError({message: 'You have already a setOnDisconnect'})
   }
 
   ref = createRef(path)
@@ -16,7 +16,7 @@ export function setOnDisconnect (path, value) {
 
 export function cancelOnDisconnect () {
   if (!ref) {
-    throw new FirebaseProviderError('You have no setOnDisconnect')
+    throw new FirebaseProviderError({message: 'You have no setOnDisconnect'})
   }
 
   ref.onDisconnect().cancel()
