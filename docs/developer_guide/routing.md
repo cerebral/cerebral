@@ -87,7 +87,7 @@ const pages = {
   posts: Posts
 }
 
-export default Connect({
+export default connect({
   currentPage: state`currentPage`
 },
   function App(props) {
