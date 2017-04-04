@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 import FunctionTreeExecution from './'
 import assert from 'assert'
-import ES6Error from 'es6-error'
 
 describe('FunctionTreeExecution', () => {
   describe('throwing errors', () => {
@@ -70,10 +69,10 @@ describe('FunctionTreeExecution', () => {
     it('should use error toJSON, if available, to serialize error', (done) => {
       const runTree = FunctionTreeExecution([])
 
-      class CustomError extends ES6Error {
+      class CustomError {
         constructor (message) {
-          super(message)
           this.name = 'CustomError'
+          this.message = message
         }
         toJSON () {
           return this.message

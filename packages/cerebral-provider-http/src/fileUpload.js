@@ -1,4 +1,5 @@
 /* eslint-env browser */
+import {getAllResponseHeaders} from './utils'
 import HttpProviderError from './HttpProviderError'
 
 function parseResponse (xhr) {
@@ -8,10 +9,7 @@ function parseResponse (xhr) {
       result: JSON.parse(xhr.responseText)
     }
   } catch (e) {
-    throw new HttpProviderError({
-      status: xhr.status,
-      result: e.message
-    })
+    throw new HttpProviderError(xhr.status, getAllResponseHeaders(xhr), xhr.responseText, e.message)
   }
 }
 

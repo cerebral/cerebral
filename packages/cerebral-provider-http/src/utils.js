@@ -13,18 +13,10 @@ export function createResponse (options, resolve, reject) {
         }
         break
       case 'error':
-        reject(new HttpProviderError({
-          status: event.currentTarget.status,
-          result: 'Request error',
-          isAborted: false
-        }))
+        reject(new HttpProviderError(event.currentTarget.status, null, null, 'request error'))
         break
       case 'abort':
-        reject(new HttpProviderError({
-          status: event.currentTarget.status,
-          result: 'Request abort',
-          isAborted: true
-        }))
+        reject(new HttpProviderError(event.currentTarget.status, null, null, 'request abort', true))
         break
     }
   }
@@ -95,6 +87,7 @@ export function processResponse (httpAction, path) {
 
       return path && path.success ? path.success(response) : response
     })
+    // This error will be an instance of HttpError
     .catch((error) => {
       if (!path) {
         throw error
@@ -114,4 +107,10 @@ export function processResponse (httpAction, path) {
 
       throw error
     })
+}
+
+export function getAllResponseHeaders (xhr) {
+  return 'getAllResponseHeaders' in xhr
+    ? parseHeaders(xhr.getAllResponseHeaders())
+    : null
 }

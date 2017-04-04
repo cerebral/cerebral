@@ -161,7 +161,7 @@ describe('Http Provider', () => {
           ({http, path}) => {
             return http.get('/items')
               .catch((error) => {
-                assert.ok(error.message.isAborted)
+                assert.ok(error.isAborted)
                 return path.aborted()
               })
           }, {

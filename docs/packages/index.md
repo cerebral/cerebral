@@ -65,12 +65,11 @@ import {HttpProviderError} from 'cerebral-provider-http'
 // Error structure
 {
   name: 'HttpProviderError',
-  message: {
-    result: 'Message or response body',
-    status: 200,
-    isAborted: false,
-    headers: {}
-  },
+  message: 'Some potential error message',
+  body: 'Message or response body',
+  status: 200,
+  isAborted: false,
+  headers: {},
   stack: '...'  
 }
 ```
