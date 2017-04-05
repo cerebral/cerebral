@@ -1,11 +1,18 @@
+import {FunctionTree} from '../'
 import WebSocket from 'universal-websocket-client'
 import Path from '../Path'
 const VERSION = 'v1'
 
-export class Devtools {
-  constructor (options = {
+class DevtoolsClass {
+  constructor (tree, options = {
     remoteDebugger: null
   }) {
+    if (!Array.isArray(tree) && !(tree instanceof FunctionTree)) {
+      throw new Error('Function-tree Devtools: You have to pass a function tree or array of function trees as first argument')
+    }
+
+    this.trees = Array.isArray(tree) ? tree : [tree]
+    this.trees.forEach((tree) => tree.contextProviders.unshift(this.Provider(options)))
     this.VERSION = VERSION
     this.remoteDebugger = options.remoteDebugger || null
     this.backlog = []
@@ -16,10 +23,11 @@ export class Devtools {
     this.isResettingDebugger = false
 
     if (!this.remoteDebugger) {
-      throw new Error('Cerebral Devtools: You have to pass in the "remoteDebugger" option')
+      throw new Error('Function-tree Devtools: You have to pass in the "remoteDebugger" option')
     }
 
     this.sendInitial = this.sendInitial.bind(this)
+    this.watchExecution = this.watchExecution.bind(this)
 
     this.init()
   }
@@ -51,6 +59,7 @@ export class Devtools {
 
     this.ws.onopen = () => {
       this.ws.send(JSON.stringify({type: 'ping'}))
+      this.trees.forEach(this.watchExecution)
     }
     this.ws.onclose = () => {
       console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
@@ -289,6 +298,8 @@ export class Devtools {
   }
 }
 
-export default function (...args) {
-  return new Devtools(...args)
+export function Devtools (...args) {
+  return new DevtoolsClass(...args)
 }
+
+export default Devtools

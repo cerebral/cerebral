@@ -93,24 +93,18 @@ import Devtools from 'function-tree/devtools'
 // const FunctionTree = require('function-tree').FunctionTree
 // const Devtools = require('function-tree/devtools').Devtools
 
-// Instantiate the devtools with the port
-// you are running the debugger on
-const devtools = new Devtools({
-  remoteDebugger: 'localhost:8585'
-})
+const ft = new FunctionTree([])
 
-// Add the provider to any instantiated
-// function tree you want to pass
-// information from
-const ft = new FunctionTree([
-  devtools.Provider()
-])
-
-// Watch execution of the tree
-devtools.watchExecution(ft)
+// Pass the instance of function-tree to debug. You can
+// optionally pass an array of function-trees
+if (process.env.NODE_ENV !== 'production') {
+  Devtools(ft, {
+    remoteDebugger: 'localhost:8585'
+  })  
+}
 ```
 
-Or you can use it when creating providers to easily wrap their usage:
+You can use it when creating providers to easily wrap their usage:
 
 ```js
 function MyProvider (options = {}) {
