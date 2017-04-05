@@ -93,12 +93,12 @@ export function processResponse (httpAction, path) {
         throw error
       }
 
-      if (error.message.isAborted && path.abort) {
+      if (error.isAborted && path.abort) {
         return path.abort({error: error.payload.error})
       }
 
-      if (path[error.message.status]) {
-        return path[error.message.status]({error: error.payload.error})
+      if (path[error.status]) {
+        return path[error.status]({error: error.payload.error})
       }
 
       if (path.error) {
