@@ -1,10 +1,13 @@
-function deleteUserFactory (passwordTemplate) {
-  function deleteUser (context) {
-    const password = typeof passwordTemplate === 'function' ? passwordTemplate(context).value : passwordTemplate
+import {createReturnPromise} from '../helpers'
 
-    return context.firebase.deleteUser(password)
-      .then(context.path.success)
-      .catch(context.path.error)
+function deleteUserFactory (passwordTemplate) {
+  function deleteUser ({firebase, resolve, path}) {
+    const password = resolve.value(passwordTemplate)
+
+    return createReturnPromise(
+      firebase.deleteUser(password),
+      path
+    )
   }
 
   return deleteUser

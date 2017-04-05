@@ -1,4 +1,4 @@
-import {Sequence, Parallel} from './primitives'
+import {Sequence, Parallel, Primitive} from './primitives'
 
 function getFunctionName (fn) {
   let ret = fn.toString()
@@ -13,13 +13,12 @@ function isPaths (item) {
     item &&
     !Array.isArray(item) &&
     typeof item === 'object' &&
-    !(item instanceof Sequence) &&
-    !(item instanceof Parallel)
+    !(item instanceof Primitive)
   )
 }
 
 function analyze (functions, item, isParallel) {
-  if (item instanceof Parallel || item instanceof Sequence) {
+  if (item instanceof Primitive) {
     const instance = item.toJSON()
 
     return Object.assign(instance, {
@@ -27,7 +26,7 @@ function analyze (functions, item, isParallel) {
     })
   } else if (Array.isArray(item)) {
     return new Sequence(item.reduce((allItems, subItem, index) => {
-      if (subItem instanceof Parallel || subItem instanceof Sequence) {
+      if (subItem instanceof Primitive) {
         const instance = subItem.toJSON()
 
         return allItems.concat(Object.assign(instance, {

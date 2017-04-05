@@ -23,12 +23,20 @@ const ft = new FunctionTree({
   // add side effect libraries to context
 })
 
-
 ft.run([
+// returns a promise
   function someFunc (context) {},
   function someOtherFunc (context) {}
 ], {
   foo: 'bar' // optional payload
+})
+.catch((error) => {
+  // Current payload with execution details,
+  // can be passed in to a new execution (will be indicated in debugger)
+  error.payload
+
+  // A serialized version of the error. Name, message and stack, or custom error serialization
+  error.payload.error
 })
 ```
 
@@ -67,6 +75,31 @@ const ft = new FunctionTree([
 
 // Watch execution of the tree
 devtools.watchExecution(ft)
+```
+
+Or you can use it when creating providers to easily wrap their usage:
+
+```js
+function MyProvider (options = {}) {
+  let cachedProvider = null
+
+  function createProvider (context) {
+    return {
+      doSomething() {},
+      doSomethingElse() {}
+    }
+  }
+
+  return (context) => {
+    context.myProvider = cachedProvider = (cachedProvider || createProvider(context))
+
+    if (context.debugger) {
+      context.debugger.wrapProvider('myProvider')
+    }
+
+    return context
+  }
+}
 ```
 
 ### sequence
@@ -205,9 +238,11 @@ import FunctionTree from 'function-tree'
 const ft = new FunctionTree([])
 
 // As an event (async)
-ft.on('error', function (error, execution, payload) {
+ft.on('error', function (error, execution, payload) {})
 
-})
+// As callback for single execution
+// Triggers sync/async depending on where error occurs
+ft.run(tree, (error) => {})
 
 // As callback (sync)
 ft.run(tree, (error, execution, payload) => {

@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
 import {string, props} from 'cerebral/tags'
-import HttpProvider, {httpGet, httpPost, httpPut, httpPatch, httpDelete} from './'
+import HttpProvider from './'
+import {httpGet, httpPost, httpPut, httpPatch, httpDelete} from './operators'
 import assert from 'assert'
 import mock from 'xhr-mock'
 
@@ -159,8 +160,8 @@ describe('Http Provider', () => {
         test: [
           ({http, path}) => {
             return http.get('/items')
-              .catch((response) => {
-                assert.ok(response.isAborted)
+              .catch((error) => {
+                assert.ok(error.isAborted)
                 return path.aborted()
               })
           }, {

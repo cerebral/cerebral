@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import {FirebaseProviderError} from './errors'
 
 export default function signOut () {
   return firebase.auth().signOut()
@@ -8,5 +9,8 @@ export default function signOut () {
           window.localStorage.removeItem(key)
         }
       }
+    })
+    .catch((error) => {
+      throw new FirebaseProviderError(error)
     })
 }

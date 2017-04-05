@@ -83,3 +83,32 @@ export function createUser (user) {
     photoURL: user.photoURL
   }
 }
+
+export function createReturnPromise (returnPromise, path) {
+  let promise = returnPromise
+
+  if (path && path.success) {
+    promise = promise.then(path.success)
+  }
+  if (path && path.error) {
+    promise = promise.catch((error) => {
+      return path.error({error: error.message})
+    })
+  }
+
+  return promise
+}
+
+export function convertObjectWithTemplates (obj, resolve) {
+  if (resolve.isTag(obj)) {
+    return resolve.value(obj)
+  }
+
+  return Object.keys(obj).reduce((convertedObject, key) => {
+    convertedObject[key] = resolve.value(obj[key])
+
+    return convertedObject
+  }, {})
+}
+
+export function noop () {}

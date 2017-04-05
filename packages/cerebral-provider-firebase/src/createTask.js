@@ -1,4 +1,5 @@
 import firebase from 'firebase'
+import {FirebaseProviderError} from './errors'
 
 export default function createTask (options, executionId, functionIndex) {
   return (name, payload = {}) => {
@@ -18,7 +19,7 @@ export default function createTask (options, executionId, functionIndex) {
           }, payload))
 
           const taskRef = firebase.database().ref(`${tasksPath}/${taskKey.key}`)
-          taskRef.on('value', data => {
+          taskRef.on('value', (data) => {
             const val = data.val()
 
             if (!val) {
@@ -26,7 +27,7 @@ export default function createTask (options, executionId, functionIndex) {
               resolve()
             } else if (val._error_details) {
               taskRef.off()
-              reject({error: val._error_details})
+              reject(new FirebaseProviderError(val._error_details))
             }
           })
         })

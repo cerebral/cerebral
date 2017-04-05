@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
+import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function signInWithEmailAndPassword (email, password) {
   return new Promise((resolve, reject) => {
@@ -12,10 +13,8 @@ export default function signInWithEmailAndPassword (email, password) {
               user: createUser(user)
             })
           })
-        },
-        (error) => {
-          reject({error})
-        }
-      )
+        }, (error) => {
+          reject(new FirebaseProviderAuthenticationError(error))
+        })
   })
 }

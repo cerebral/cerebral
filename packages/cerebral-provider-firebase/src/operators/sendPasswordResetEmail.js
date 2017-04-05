@@ -1,8 +1,11 @@
+import {createReturnPromise} from '../helpers'
+
 function sendPasswordResetEmailFactory (email) {
   function sendPasswordResetEmail ({firebase, path, resolve}) {
-    return firebase.sendPasswordResetEmail(resolve.value(email))
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.sendPasswordResetEmail(resolve.value(email)),
+      path
+    )
   }
 
   return sendPasswordResetEmail

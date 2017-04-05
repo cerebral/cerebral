@@ -64,7 +64,7 @@ function MyProvider (options = {}) {
   }
 
   return (context) => {
-    context.myProvider = cachedProvider = cachedProvider || createProvider(context)
+    context.myProvider = cachedProvider = (cachedProvider || createProvider(context))
 
     if (context.debugger) {
       context.debugger.wrapProvider('myProvider')

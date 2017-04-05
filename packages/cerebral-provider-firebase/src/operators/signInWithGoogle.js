@@ -1,10 +1,11 @@
-import {convertObjectWithTemplates} from './utils'
+import {createReturnPromise, convertObjectWithTemplates} from '../helpers'
 
 function signInWithGoogleFactory (options = {}) {
   function signInWithGoogle ({firebase, path, resolve}) {
-    return firebase.signInWithGoogle(convertObjectWithTemplates(options, resolve))
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.signInWithGoogle(convertObjectWithTemplates(options, resolve)),
+      path
+    )
   }
 
   return signInWithGoogle

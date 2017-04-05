@@ -1,19 +1,17 @@
 # Routing
-Typically applications use a router. To instantiate the Cerebral router, install it as a separate package and instantiate it as a module:
+Typically applications use a router. To instantiate the Cerebral router, install it as a separate package and add to the controller:
 
 ```js
 import {Controller} from 'cerebral'
 import Router from 'cerebral-router'
 
 const controller = Controller({
-  modules: {
-    router: Router({
-      routes: [], // Route definitions
-      query: false, // Query support
-      onlyHash: false, // Use hash urls
-      baseUrl: '/' // Only handle url changes on nested path
-    })
-  }
+  router: Router({
+    routes: {}, // Route definitions
+    query: false, // Query support
+    onlyHash: false, // Use hash urls
+    baseUrl: '/' // Only handle url changes on nested path
+  })
 })
 ```
 
@@ -32,16 +30,15 @@ const controller = Controller({
   state: {
     currentPage: 'home'
   },
+  router: Router({
+    routes: {
+      '/': 'home.routed',
+      '/posts': 'posts.routed'
+    }
+  }),
   modules: {
     home: HomeModule,
-    posts: PostsModule,
-    
-    router: Router({
-      routes: [
-        {path: '/', signal: 'home.routed'},
-        {path: '/posts', signal: 'posts.routed'}
-      ]
-    }),
+    posts: PostsModule
   }
 })
 ```
@@ -90,7 +87,7 @@ const pages = {
   posts: Posts
 }
 
-export default Connect({
+export default connect({
   currentPage: state`currentPage`
 },
   function App(props) {
@@ -209,22 +206,20 @@ And update the signals as well:
   homeClicked: [
     set(state`activeTab`, 'home')
   ],
-  reposClicked: [
-    set(state`activeTab`, 'repos'),
-    showToast(string`Loading data for repo: ${props`repo`}`),
-    parallel([
-      getRepo('cerebral'),
-      getRepo('addressbar')
-    ]),
-    when(props`error`), {
-      'true': showToast(string`Error: ${props`error`}`, 5000, 'error'),
-      'false': [
-        set(state`repos.cerebral`, props`cerebral`),
-        set(state`repos.addressbar`, props`addressbar`),
-        showToast(string`The repos have ${starsCount} stars`, 5000, 'success')    
-      ]
-    }
-  ]
+  reposClicked: {
+    signal: [
+      set(state`activeTab`, 'repos'),
+      showToast(string`Loading data for repo: ${props`repo`}`),
+      parallel([
+        getRepo('cerebral'),
+        getRepo('addressbar')
+      ]),
+      set(state`repos.cerebral`, props`cerebral`),
+      set(state`repos.addressbar`, props`addressbar`),
+      showToast(string`The repos have ${starsCount} stars`, 5000, 'success')  
+    ],
+    catch: showToast(string`Error: ${props`error.message`}`, 5000)
+  }
 }
 ...
 ```

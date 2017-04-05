@@ -27,44 +27,68 @@ class Debugger extends Inferno.Component {
     this.removePort = this.removePort.bind(this)
   }
   componentDidMount () {
-    jsonStorage.get('apps', (err, storedApps) => {
-      if (err) {
-        return
-      }
-
-      const ports = Object.keys(storedApps)
-
-      this.setState({
-        apps: ports.reduce((apps, port) => {
-          apps[port] = Object.assign(storedApps[port], {
-            controller: Controller({
-              state: {
-                port,
-                type: storedApps[port].type,
-                error: null
-              },
-              modules: {
-                debugger: DebuggerModule(),
-                useragent: UserAgent({
-                  media: {
-                    small: '(max-width: 1270px)'
-                  }
-                })
-              }
-            })
-          })
-
-          return apps
-        }, {}),
-        currentPort: ports[0] || null,
-        isLoading: false
+    Promise.all([
+      new Promise((resolve, reject) => {
+        jsonStorage.get('apps', (err, storedApps) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(storedApps)
+          }
+        })
+      }),
+      new Promise((resolve, reject) => {
+        jsonStorage.get('currentPort', (err, currentPort) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(typeof currentPort === 'string' ? currentPort : null)
+          }
+        })
       })
-    })
+    ])
+      .then((results) => {
+        const storedApps = results[0]
+        const currentPort = results[1]
+        const ports = Object.keys(storedApps)
+
+        this.setState({
+          apps: ports.reduce((apps, port) => {
+            apps[port] = Object.assign(storedApps[port], {
+              controller: Controller({
+                state: {
+                  port,
+                  type: storedApps[port].type,
+                  error: null
+                },
+                modules: {
+                  debugger: DebuggerModule(),
+                  useragent: UserAgent({
+                    media: {
+                      small: '(max-width: 1270px)'
+                    }
+                  })
+                }
+              })
+            })
+
+            return apps
+          }, {}),
+          currentPort: currentPort || ports[0] || null,
+          isLoading: false
+        })
+      })
+
     connector.onPortFocus((port) => {
       this.setState({
         currentPort: port
       })
     })
+  }
+  componentDidUpdate (prevProps, prevState) {
+    if (this.state.currentPort !== prevState.currentPort) {
+      jsonStorage.set('currentPort', this.state.currentPort)
+    }
   }
   addPort (type, name, port) {
     if (this.state.apps[port]) {

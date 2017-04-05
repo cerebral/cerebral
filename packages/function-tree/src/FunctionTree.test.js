@@ -187,6 +187,7 @@ describe('FunctionTree', () => {
         ]
       }
     ]
+
     ft.run(tree, () => {
       ft.run(tree, () => {
         done()
@@ -206,6 +207,7 @@ describe('FunctionTree', () => {
         success: []
       }
     ]
+
     ft.once('error', (error) => {
       assert.ok(error.message.match(/needs to be a path or a Promise/))
       done()
@@ -406,6 +408,33 @@ describe('FunctionTree', () => {
     })
 
     ft.run(tree)
+  })
+  it('should not continue async execution when error thrown', (done) => {
+    let executedCount = 0
+    const ft = new FunctionTree([])
+
+    function funcA ({path}) {
+      return Promise.resolve(path.test())
+    }
+    function funcB () {
+      throw new Error('foo')
+    }
+    function funcC () { executedCount++ }
+
+    const tree = parallel([
+      funcA, {
+        test: funcC
+      },
+      funcB
+    ])
+
+    ft.run(tree)
+      .catch(() => {
+        setTimeout(() => {
+          assert.equal(executedCount, 0)
+          done()
+        })
+      })
   })
   it('should add stuff to context by passing in an object', (done) => {
     const ft = new FunctionTree({

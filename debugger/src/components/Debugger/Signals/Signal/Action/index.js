@@ -1,3 +1,4 @@
+/* global Prism */
 import './styles.css'
 import Inferno from 'inferno' // eslint-disable-line
 
@@ -17,7 +18,7 @@ function getActionName (action) {
 }
 
 function getLineNumber (error) {
-  const variable = error.name === 'TypeError' && error.message.match(/'(.*?)'/) ? error.message.match(/'(.*?)'/)[1] : error.message.split(' ')[0]
+  const variable = (error.name === 'TypeError') && String(error.message).match(/'(.*?)'/) ? String(error.message).match(/'(.*?)'/)[1] : String(error.message).split(' ')[0]
   const lines = error.func.split('\n')
 
   return lines.reduce((lineNumber, line, index) => {
@@ -42,60 +43,90 @@ function renderCode (error) {
   return error.func.split('\n').map((line) => line.replace(/\t/, '')).join('\n')
 }
 
-function Action ({action, faded, execution, children, onMutationClick, onActionClick, executed}) {
-  const error = execution && execution.error
-  const titleClassname = classnames({
-    'action-actionErrorHeader': error,
-    'action-actionHeader': !error,
-    'action-faded': faded
-  })
-  return (
-    <div className={error ? 'action action-actionError' : 'action'}>
+class Action extends Inferno.Component {
+  constructor (props) {
+    super(props)
+    this.isHighlighted = false
+  }
+  componentDidMount () {
+    if (this.errorElement) {
+      Prism.highlightElement(this.errorElement)
+      this.isHighlighted = true
+    }
+  }
+  componentDidUpdate () {
+    // Inferno hack, this triggers too early
+    setTimeout(() => {
+      if (this.errorElement && !this.isHighlighted) {
+        Prism.highlightElement(this.errorElement)
+        this.isHighlighted = true
+      }
+    })
+  }
+  render () {
+    const {action, faded, execution, children, onMutationClick, executed} = this.props
+
+    const error = execution && execution.error
+    const titleClassname = classnames({
+      'action-actionErrorHeader': error,
+      'action-actionHeader': !error,
+      'action-faded': faded
+    })
+    return (
       <div
-        className={titleClassname}
-        onClick={() => onActionClick(action)}>
-        {error ? <i className='icon icon-warning' /> : null}
-        {action.isAsync ? <i className='icon icon-asyncAction' /> : null}
-        {renderActionTitle(action)}
-      </div>
-      {error ? (
-        <div className='action-error'>
-          <div className='action-actionInput'>
-            <div className='action-inputLabel'>props:</div>
-            <div className='action-inputValue'><Inspector value={execution.payload} /></div>
-          </div>
-          <strong>{error.name}</strong> : {error.message}
-          <pre data-line={getLineNumber(error)}>
-            <code className='language-javascript' dangerouslySetInnerHTML={{__html: renderCode(error)}} />
-          </pre>
+        className={error ? 'action action-actionError' : 'action'}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className={titleClassname}>
+          {error && <i className='icon icon-warning' />}
+          {action.isAsync && <i className='icon icon-asyncAction' />}
+          {renderActionTitle(action)}
         </div>
-      ) : null}
-      {!error && execution ? (
-        <div>
-          <div className={faded ? 'action-faded' : null}>
+        {error ? (
+          <div className='action-error'>
             <div className='action-actionInput'>
               <div className='action-inputLabel'>props:</div>
               <div className='action-inputValue'><Inspector value={execution.payload} /></div>
             </div>
-            <div className='action-mutations'>
-              {execution.data.filter(data => data.type === 'mutation').map((mutation, index) => <Mutation mutation={mutation} key={index} onMutationClick={onMutationClick} />)}
+            <div className='action-error-message'>
+              <strong>{error.name}:</strong> <Inspector value={error.message} />
             </div>
-            <div className='action-services'>
-              {execution.data.filter(data => data.type !== 'mutation').map((service, index) => <Service service={service} key={index} />)}
-            </div>
+            <pre data-line={getLineNumber(error) || null}>
+              <code
+                ref={(node) => { this.errorElement = node }}
+                className='language-javascript'
+                dangerouslySetInnerHTML={{__html: renderCode(error)}} />
+            </pre>
             {executed}
-            {execution.output ? (
-              <div className='action-actionInput'>
-                <div className='action-inputLabel'>output:</div>
-                <div className='action-inputValue'><Inspector value={execution.output} /></div>
-              </div>
-            ) : null}
           </div>
-          {children}
-        </div>
         ) : null}
-    </div>
-  )
+        {!error && execution ? (
+          <div>
+            <div className={faded ? 'action-faded' : null}>
+              <div className='action-actionInput'>
+                <div className='action-inputLabel'>props:</div>
+                <div className='action-inputValue'><Inspector value={execution.payload} /></div>
+              </div>
+              <div className='action-mutations'>
+                {execution.data.filter(data => data.type === 'mutation').map((mutation, index) => <Mutation mutation={mutation} key={index} onMutationClick={onMutationClick} />)}
+              </div>
+              <div className='action-services'>
+                {execution.data.filter(data => data.type !== 'mutation').map((service, index) => <Service service={service} key={index} />)}
+              </div>
+              {executed}
+              {execution.output && (
+                <div className='action-actionInput'>
+                  <div className='action-inputLabel'>output:</div>
+                  <div className='action-inputValue'><Inspector value={execution.output} /></div>
+                </div>
+              )}
+            </div>
+            {children}
+          </div>
+          ) : null}
+      </div>
+    )
+  }
 }
 
 export default Action

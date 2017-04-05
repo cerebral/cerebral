@@ -1,3 +1,5 @@
+import HttpProviderError from './HttpProviderError'
+
 export function createResponse (options, resolve, reject) {
   return (event) => {
     switch (event.type) {
@@ -11,15 +13,10 @@ export function createResponse (options, resolve, reject) {
         }
         break
       case 'error':
-        reject({
-          status: event.currentTarget.status,
-          result: 'Request error'
-        })
+        reject(new HttpProviderError(event.currentTarget.status, null, null, 'request error'))
         break
       case 'abort':
-        reject({
-          isAborted: true
-        })
+        reject(new HttpProviderError(event.currentTarget.status, null, null, 'request abort', true))
         break
     }
   }
@@ -81,20 +78,39 @@ export function parseHeaders (rawHeaders) {
   }, {})
 }
 
-function callNextPath (response, path, defaultPath) {
-  return path['' + response.status]
-    ? path['' + response.status](response)
-    : path[defaultPath](response)
-}
-
 export function processResponse (httpAction, path) {
   return httpAction
-    .then((response) => callNextPath(response, path, 'success'))
-    .catch((response) => {
-      if (response.isAborted) {
-        return path.abort(response)
+    .then((response) => {
+      if (path && path[response.status]) {
+        return path[response.status](response)
       }
 
-      return callNextPath(response, path, 'error')
+      return path && path.success ? path.success(response) : response
     })
+    // This error will be an instance of HttpError
+    .catch((error) => {
+      if (!path) {
+        throw error
+      }
+
+      if (error.message.isAborted && path.abort) {
+        return path.abort({error: error.payload.error})
+      }
+
+      if (path[error.message.status]) {
+        return path[error.message.status]({error: error.payload.error})
+      }
+
+      if (path.error) {
+        return path.error({error: error.payload.error})
+      }
+
+      throw error
+    })
+}
+
+export function getAllResponseHeaders (xhr) {
+  return 'getAllResponseHeaders' in xhr
+    ? parseHeaders(xhr.getAllResponseHeaders())
+    : null
 }

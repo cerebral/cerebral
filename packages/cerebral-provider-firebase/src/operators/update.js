@@ -1,10 +1,11 @@
-import {convertObjectWithTemplates} from './utils'
+import {createReturnPromise, convertObjectWithTemplates} from '../helpers'
 
 function updateFactory (updates) {
   function update ({firebase, path, resolve}) {
-    return firebase.update(convertObjectWithTemplates(updates, resolve))
-      .then(path.success)
-      .catch(path.error)
+    return createReturnPromise(
+      firebase.update(convertObjectWithTemplates(updates, resolve)),
+      path
+    )
   }
 
   return update

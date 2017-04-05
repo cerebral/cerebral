@@ -5,7 +5,7 @@ function addSignal ({props, state, resolve}) {
   const execution = props.data.execution
   const prevSignal = signalsList[signalsList.length - 1]
   const newSignal = {
-    name: execution.name,
+    name: execution.name || String(execution.executionId),
     executionId: execution.executionId,
     source: props.source,
     isExecuting: true,
@@ -17,8 +17,10 @@ function addSignal ({props, state, resolve}) {
   }
 
   if (newSignal.executedBy) {
+    const executedByPath = state.get(`debugger.signals.${newSignal.executedBy.id}`) ? `debugger.signals.${newSignal.executedBy.id}` : `debugger.executedBySignals.${newSignal.executedBy.id}`
+
     state.set(`debugger.executedBySignals.${execution.executionId}`, newSignal)
-    state.set(`debugger.signals.${newSignal.executedBy.id}.functionsRun.${newSignal.executedBy.functionIndex}.executedId`, execution.executionId)
+    state.push(`${executedByPath}.functionsRun.${newSignal.executedBy.functionIndex}.executedIds`, execution.executionId)
   } else {
     state.set(`debugger.signals.${execution.executionId}`, newSignal)
     state.set('debugger.executingSignalsCount', state.get('debugger.executingSignalsCount') + 1)

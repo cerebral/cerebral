@@ -66,15 +66,11 @@ function renderType (value, hasNext, path, propertyKey, highlightPath, modelChan
 class ObjectValue extends Inferno.Component {
   constructor (props, context) {
     super(props)
-    const numberOfKeys = Object.keys(props.value).length
     const isHighlightPath = !!(this.props.highlightPath && isInPath(this.props.highlightPath, this.props.path))
-    const preventCollapse = this.props.path.length === 0 && context.options.expanded
+    const preventCollapse = (this.props.path.length === 0) && context.options.expanded
 
     this.state = {
-      isCollapsed: (
-        !preventCollapse && !isHighlightPath &&
-        (numberOfKeys > 3 || numberOfKeys === 0 ? true : !context.options.expanded)
-      )
+      isCollapsed: !preventCollapse && !isHighlightPath
     }
 
     this.onCollapseClick = this.onCollapseClick.bind(this)
@@ -83,16 +79,12 @@ class ObjectValue extends Inferno.Component {
   componentWillReceiveProps (nextProps) {
     const context = this.context
     const props = nextProps
-    const numberOfKeys = Object.keys(props.value).length
     const isHighlightPath = !!(props.highlightPath && isInPath(props.highlightPath, props.path))
-    const preventCollapse = props.path.length === 0 && context.options.expanded
+    const preventCollapse = (props.path.length === 0) && context.options.expanded
 
     if (this.state.isCollapsed) {
       this.setState({
-        isCollapsed: (
-          !preventCollapse && !isHighlightPath &&
-          (numberOfKeys > 3 || numberOfKeys === 0 ? true : !context.options.expanded)
-        )
+        isCollapsed: !preventCollapse && !isHighlightPath
       })
     }
   }
@@ -160,30 +152,21 @@ class ObjectValue extends Inferno.Component {
 }
 
 class ArrayValue extends Inferno.Component {
-  constructor (props, context) {
+  constructor (props) {
     super(props)
-    const numberOfItems = props.value.length
     const isHighlightPath = this.props.highlightPath && isInPath(this.props.highlightPath, this.props.path)
     this.state = {
-      isCollapsed: (
-        !isHighlightPath &&
-        (numberOfItems > 3 || numberOfItems === 0) ? true : !context.options.expanded
-      )
+      isCollapsed: !isHighlightPath
     }
     this.onCollapseClick = this.onCollapseClick.bind(this)
     this.onExpandClick = this.onExpandClick.bind(this)
   }
   componentWillReceiveProps (nextProps) {
-    const context = this.context
     const props = nextProps
-    const numberOfItems = props.value.length
     const isHighlightPath = props.highlightPath && isInPath(props.highlightPath, props.path)
     if (this.state.isCollapsed) {
       this.setState({
-        isCollapsed: (
-          !isHighlightPath &&
-          (numberOfItems > 3 || numberOfItems === 0) ? true : !context.options.expanded
-        )
+        isCollapsed: !isHighlightPath
       })
     }
   }
@@ -247,12 +230,15 @@ class Value extends Inferno.Component {
     super(props)
     this.state = {
       isEditing: false,
-      path: props.path.slice()
+      path: props.path.slice(),
+      forceShowString: false
     }
 
     this.onSubmit = this.onSubmit.bind(this)
     this.onBlur = this.onBlur.bind(this)
     this.onClick = this.onClick.bind(this)
+    this.onMouseOver = this.onMouseOver.bind(this)
+    this.onMouseLeave = this.onMouseLeave.bind(this)
   }
   componentDidUpdate () {
     if (String(this.props.highlightPath) === String(this.props.path)) {
@@ -262,6 +248,16 @@ class Value extends Inferno.Component {
   onClick () {
     this.setState({
       isEditing: !!this.context.options.canEdit
+    })
+  }
+  onMouseOver () {
+    this.setState({
+      forceShowString: true
+    })
+  }
+  onMouseLeave () {
+    this.setState({
+      forceShowString: false
     })
   }
   onSubmit (value) {
@@ -280,7 +276,7 @@ class Value extends Inferno.Component {
     this.setState({isEditing: false})
   }
   shortenString (string) {
-    if (string.length > 50) {
+    if (!this.state.forceShowString && (string.length > 50)) {
       return string.substr(0, 47) + '...'
     }
 
@@ -304,10 +300,14 @@ class Value extends Inferno.Component {
       )
     } else {
       return (
-        <div className={isExactHighlightPath ? 'inspector-highlight' : null}>
+        <div
+          className={isExactHighlightPath ? 'inspector-highlight' : null}
+          onMouseOver={this.onMouseOver}
+          onMouseLeave={this.onMouseLeave}
+        >
           {this.props.propertyKey ? this.props.propertyKey + ': ' : <span />}
           <span onClick={this.onClick}>{isString(value) ? '"' + this.shortenString(value) + '"' : String(value)}</span>
-          {hasNext ? ',' : null}
+          {hasNext && ','}
         </div>
       )
     }

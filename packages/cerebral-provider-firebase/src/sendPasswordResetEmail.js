@@ -1,11 +1,11 @@
+import {noop as noReturnValue} from './helpers'
 import firebase from 'firebase'
+import {FirebaseProviderError} from './errors'
 
 export default function sendPasswordResetEmail (email) {
-  return new Promise((resolve, reject) => {
-    firebase.auth().sendPasswordResetEmail(email)
-      .then(
-        () => resolve(),
-        (error) => reject({error})
-      )
-  })
+  return firebase.auth().sendPasswordResetEmail(email)
+    .then(noReturnValue)
+    .catch((error) => {
+      throw new FirebaseProviderError(error)
+    })
 }

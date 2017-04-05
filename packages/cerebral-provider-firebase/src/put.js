@@ -1,6 +1,7 @@
 import {
   createStorageRef
 } from './helpers'
+import {FirebaseProviderError} from './errors'
 
 /* options.progress expects a function which will receive
  * details on the upload: { progress, bytesTransferred, totalBytes, state }
@@ -24,7 +25,7 @@ export default function put (path, file, options = {}) {
       })
     },
     (error) => {
-      reject({error: error.message})
+      reject(new FirebaseProviderError(error))
     },
     () => {
       resolve({url: uploadTask.snapshot.downloadURL, filename})
