@@ -1,6 +1,7 @@
 function equalsFactory (target) {
   function equals ({state, props, path, resolve}) {
     if (!resolve.isTag(target, 'state', 'props')) {
+      console.log(resolve.isTag(target, 'state', 'props'))
       throw new Error('Cerebral operator.equals: You have to use the STATE or PROPS TAG as first argument')
     }
 

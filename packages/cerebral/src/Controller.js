@@ -106,7 +106,6 @@ class Controller extends FunctionTree {
     if (!force && !Object.keys(changes).length) {
       return
     }
-
     this.updateComponents(changes, force)
     this.emit('flush', changes, Boolean(force))
   }

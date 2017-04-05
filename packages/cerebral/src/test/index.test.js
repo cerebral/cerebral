@@ -84,6 +84,42 @@ describe('test helpers', () => {
           assert.equal(response[1].output.baz, 'baz')
         })
     })
+    it('should warn if signal contains actions with duplicate names', () => {
+      let warnCount = 0
+      const originWarn = console.warn
+      console.warn = function (...args) {
+        warnCount++
+        originWarn.apply(this, args)
+      }
+      const testSignal = [
+        function action1 ({props}) {
+          return {bar: 'bar'}
+        },
+        function action1 ({props}) {
+          return {baz: 'baz'}
+        }
+      ]
+      return runSignal(testSignal, {props: {foo: 'foo'}}, {recordActions: 'byName'})
+        .then(({action1}) => {
+          assert.equal(warnCount, 1)
+        })
+    })
+    it('should catch error', () => {
+      const testSignal = [
+        function action1 ({props}) {
+          return {bar: 'bar'}
+        },
+        function action2 ({props}) {
+          throw new Error('Error')
+          return {baz: 'baz'}
+        }
+      ]
+      runSignal(testSignal, {props: {foo: 'foo'}}, {recordActions: 'byName'})
+        .catch((e) => {
+          assert.equal(e.message, 'Error')
+        })
+
+    })
   })
 
   describe('RunSignal factory', () => {

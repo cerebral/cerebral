@@ -41,4 +41,25 @@ describe('operator.equals', () => {
     controller.getSignal('test')()
     assert.equal(count, 1)
   })
+  it('should throw on bad argument', (done) => {
+    const controller = Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        test: [
+          equals('foo'), {
+            bar: [() => {}],
+            otherwise: []
+          }
+        ]
+      }
+    })
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+    controller.getSignal('test')()
+  })
 })
