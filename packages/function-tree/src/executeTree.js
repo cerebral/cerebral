@@ -1,12 +1,14 @@
+import {FunctionTreeExecutionError} from './errors'
+
 function isPrimitive (primitive, type) {
   return primitive._functionTreePrimitive && primitive.type === type
 }
 
 /*
   Runs through the tree providing a "next" callback to process next step
-  of execution
+  of execution,
 */
-export default function executeTree (tree, resolveFunctionResult, initialPayload, branchStart, branchEnd, parallelStart, parallelProgress, parallelEnd, end) {
+export default function executeTree (execution, initialPayload, branchStart, branchEnd, parallelStart, parallelProgress, parallelEnd, end) {
   function runBranch (branch, index, payload, prevPayload, nextBranch) {
     function runNextItem (result) {
       runBranch(branch, index + 1, result, payload, nextBranch)
@@ -23,7 +25,12 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
             branchStart(funcDetails, result.path, newPayload)
             runBranch(funcDetails.outputs[result.path].items, 0, newPayload, payload, outputResult)
           } else {
-            throw new Error(`function-tree - function ${funcDetails.name} must use one of its possible outputs: ${outputs.join(', ')}.`)
+            throw new FunctionTreeExecutionError(
+              execution,
+              funcDetails,
+              payload,
+              `function ${funcDetails.name} must use one of its possible outputs: ${outputs.join(', ')}.`
+            )
           }
         } else {
           outputResult(newPayload)
@@ -34,7 +41,7 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
     const currentItem = branch[index]
 
     if (!currentItem) {
-      if (branch !== tree) {
+      if (branch !== execution.staticTree) {
         branchEnd(payload)
       }
       nextBranch(payload)
@@ -47,7 +54,7 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
       parallelStart(payload, itemLength)
       currentItem.items.forEach((func, index) => {
         if (func.function) {
-          resolveFunctionResult(func, payload, prevPayload, processFunctionOutput(func, (payload) => {
+          execution.runFunction(func, payload, prevPayload, processFunctionOutput(func, (payload) => {
             payloads.push(payload)
             if (payloads.length === itemLength) {
               parallelEnd(payload, itemLength)
@@ -71,9 +78,9 @@ export default function executeTree (tree, resolveFunctionResult, initialPayload
         return payloads
       })
     } else {
-      resolveFunctionResult(currentItem, payload, prevPayload, processFunctionOutput(currentItem, runNextItem))
+      execution.runFunction(currentItem, payload, prevPayload, processFunctionOutput(currentItem, runNextItem))
     }
   }
 
-  return runBranch([tree], 0, initialPayload, null, end)
+  return runBranch([execution.staticTree], 0, initialPayload, null, end)
 }

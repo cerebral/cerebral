@@ -50,6 +50,39 @@ const ft = new FunctionTree([{
 ])
 ```
 
+## errors
+
+### FunctionTreeError (base)
+```js
+import {FunctionTreeError} from 'function-tree'
+// Node:
+// const FunctionTreeError = require('function-tree').FunctionTreeError
+
+// Error structure
+{
+  name: 'FunctionTreeError',
+  message: 'Some function-tree error'
+  stack: '...'  
+}
+```
+
+### FunctionTreeExecutionError
+```js
+import {FunctionTreeExecutionError} from 'function-tree'
+// Node:
+// const FunctionTreeExecutionError = require('function-tree').FunctionTreeExecutionError
+
+// Error structure
+{
+  name: 'FunctionTreeExecutionError',
+  message: 'Some execution error'
+  execution: {name: 'someName'},
+  funcDetails: {name: 'someFunction', functionIndex: 5},
+  payload: {foo: 'bar'},
+  stack: '...'  
+}
+```
+
 ### devtools
 Download the function tree standalone debugger for [Mac](https://drive.google.com/file/d/0B1pYKovu9Upyb1Bkdm5IbkdBN3c/view?usp=sharing), [Windows](https://drive.google.com/file/d/0B1pYKovu9UpyMGRRbG45dWR6R1k/view?usp=sharing) or [Linux](https://drive.google.com/file/d/0B1pYKovu9UpyMFQ5dEdnSy1aN0E/view?usp=sharing).
 

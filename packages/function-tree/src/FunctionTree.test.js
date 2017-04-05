@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import FunctionTree, {sequence, parallel} from './'
+import FunctionTree, {sequence, parallel, FunctionTreeExecutionError} from './'
 import assert from 'assert'
 
 describe('FunctionTree', () => {
@@ -209,10 +209,11 @@ describe('FunctionTree', () => {
     ]
 
     ft.once('error', (error) => {
+      assert.ok(error instanceof FunctionTreeExecutionError)
       assert.ok(error.message.match(/needs to be a path or a Promise/))
       done()
     })
-    ft.run(tree)
+    ft.run(tree).catch(() => {})
   })
   it('should provide unique index to functions, even though the same', () => {
     function actionA () {}

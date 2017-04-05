@@ -7,6 +7,8 @@ import PropsProvider from './providers/Props'
 import PathProvider from './providers/Path'
 import Path from './Path'
 import {Sequence, Parallel, Primitive} from './primitives'
+import {FunctionTreeExecutionError, FunctionTreeError} from './errors'
+export {FunctionTreeExecutionError, FunctionTreeError} from './errors'
 
 /*
   Need to create a unique ID for each execution to identify it
@@ -109,7 +111,7 @@ class FunctionTreeExecution extends EventEmitter {
             next(result.toJS())
           } else if (funcDetails.outputs) {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
-            throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
+            throw new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path'))
           } else if (isValidResult(result)) {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next({
@@ -117,7 +119,7 @@ class FunctionTreeExecution extends EventEmitter {
             })
           } else {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
-            throw new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
+            throw new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result'))
           }
         })
         .catch(function (result) {
@@ -128,7 +130,7 @@ class FunctionTreeExecution extends EventEmitter {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next(result.toJS())
           } else if (funcDetails.outputs) {
-            let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path')
+            let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path'))
 
             execution.hasThrown = true
             errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
@@ -138,7 +140,7 @@ class FunctionTreeExecution extends EventEmitter {
               payload: result
             })
           } else {
-            let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
+            let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result'))
             execution.hasThrown = true
 
             errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
@@ -148,7 +150,7 @@ class FunctionTreeExecution extends EventEmitter {
       functionTree.emit('functionEnd', execution, funcDetails, payload, result)
       next(result.toJS())
     } else if (funcDetails.outputs) {
-      let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path or a Promise')
+      let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path or a Promise'))
 
       this.hasThrown = true
       errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
@@ -158,7 +160,7 @@ class FunctionTreeExecution extends EventEmitter {
         payload: result
       })
     } else {
-      let error = new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result')
+      let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result'))
       this.hasThrown = true
 
       errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
@@ -181,7 +183,7 @@ class FunctionTreeExecution extends EventEmitter {
       )
 
       if (newContext !== currentContext) {
-        throw new Error('function-tree: You are not returning the context from a provider')
+        throw new FunctionTreeError('You are not returning the context from a provider')
       }
 
       return newContext
@@ -251,15 +253,14 @@ export class FunctionTree extends EventEmitter {
       } else {
         staticTree = this.cachedStaticTrees[treeIdx]
       }
-      const execution = new FunctionTreeExecution(name, staticTree, this, (error, execution, funcDetails, payload) => {
-        this.emit('error', error, execution, funcDetails, payload)
+      const execution = new FunctionTreeExecution(name, staticTree, this, (error, execution, funcDetails, finalPayload) => {
+        this.emit('error', error, execution, funcDetails, finalPayload)
         reject(error)
       })
 
       this.emit('start', execution, payload)
       executeTree(
-        execution.staticTree,
-        execution.runFunction,
+        execution,
         payload,
         (funcDetails, path, currentPayload) => {
           this.emit('pathStart', path, execution, funcDetails, currentPayload)
