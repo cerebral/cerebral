@@ -106,7 +106,6 @@ describe('React', () => {
     })
   })
   describe('container', () => {
-
     it('should be able to expose controller', () => {
       const controller = Controller({
         state: {
@@ -145,11 +144,6 @@ describe('React', () => {
       })
     })
     it('should throw an error if container component is not provided', () => {
-      const controller = Controller({
-        state: {
-          foo: 'bar'
-        }
-      })
       const TestComponent = connect({
         foo: state`foo`
       }, (props) => {
@@ -182,16 +176,16 @@ describe('React', () => {
           <TestComponent />
         </Container>
       ))
-      const TestComponentRef = TestUtils.findRenderedComponentWithType(tree,TestComponent)
+      const TestComponentRef = TestUtils.findRenderedComponentWithType(tree, TestComponent)
       assert.equal(TestComponentRef._isUnmounting, undefined)
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
-      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode);
+      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode)
       assert.equal(TestComponentRef._isUnmounting, true)
       assert.deepEqual(controller.componentDependencyStore.getAllUniqueEntities(), [])
     })
-    /*it.only('should be able to update component from container with devtools', () => {
+    /* it.only('should be able to update component from container with devtools', () => {
       const controller = Controller({
-        devtools: { init () {}, send () {}, updateComponentsMap () {}},
+        devtools: { init () {}, send () {}, updateComponentsMap () {} },
         state: {
           foo: 'bar',
           bar: 'foo'
@@ -222,7 +216,7 @@ describe('React', () => {
       assert.equal(renderCount, 1)
       controller.getSignal('test')()
       assert.equal(renderCount, 2)
-    })*/
+    }) */
   })
   describe('connect', () => {
     it('should throw an error if no dependencies provided', () => {
@@ -246,7 +240,7 @@ describe('React', () => {
     it('should throw an error if dependency item is not tags or compute', () => {
       const controller = Controller({})
       const TestComponent = connect({
-        foo: () => {},
+        foo: () => {}
       }, (props) => {
         return (
           <div>{props.foo}</div>
@@ -925,13 +919,6 @@ describe('React', () => {
             map: ''
           }
         })
-        class TestComponentClass extends React.Component {
-          render () {
-            return (
-              <div>{this.props.foo.length}</div>
-            )
-          }
-        }
         const TestComponent = connect({
           foo: state`map.*`
         }, (props) => {

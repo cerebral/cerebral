@@ -36,7 +36,7 @@ describe('utils', () => {
   describe('forceSerializable', () => {
     it('should return constructor name if it is not serializable', () => {
       class Test {}
-      assert.equal(utils.forceSerializable(new Test()).toJSON(), '[Test]' )
+      assert.equal(utils.forceSerializable(new Test()).toJSON(), '[Test]')
     })
   })
   describe('dependencyMatch', () => {

@@ -111,17 +111,14 @@ describe('test helpers', () => {
         },
         function action2 ({props}) {
           throw new Error('Error')
-          return {baz: 'baz'}
         }
       ]
       runSignal(testSignal, {props: {foo: 'foo'}}, {recordActions: 'byName'})
         .catch((e) => {
           assert.equal(e.message, 'Error')
         })
-
     })
   })
-
   describe('RunSignal factory', () => {
     it('should create a runSignal helper that can be used many times', () => {
       const runSignal = RunSignal({
