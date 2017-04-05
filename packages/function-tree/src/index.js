@@ -59,11 +59,10 @@ function isPromise (result) {
   return result && typeof result.then === 'function' && typeof result.catch === 'function'
 }
 
-class FunctionTreeExecution extends EventEmitter {
+class FunctionTreeExecution {
   constructor (name, staticTree, functionTree, errorCallback) {
-    super()
     this.id = createUniqueId()
-    this.name = name
+    this.name = name || staticTree.name || this.id
     this.staticTree = staticTree
     this.functionTree = functionTree
     this.datetime = Date.now()

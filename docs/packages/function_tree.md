@@ -158,7 +158,7 @@ module.exports = sequence([
 ])
 ```
 
-The first argument to **sequence** can be a string, which names the sequence. This will be shown in the debugger.
+The first argument to **sequence** can be a string, which names the sequence. This will be shown in the debugger. If it is the root sequence it will be used as the name of the execution itself.
 
 ```js
 import {sequence} from 'function-tree'

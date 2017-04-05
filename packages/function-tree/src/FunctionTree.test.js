@@ -28,6 +28,25 @@ describe('FunctionTree', () => {
       }
     ]))
   })
+  it('should set name of execution based on explicit, sequence name or id', () => {
+    const ft = new FunctionTree()
+
+    ft.run([
+      ({execution}) => {
+        assert.ok(execution.name)
+      }
+    ])
+    ft.run('foo', [
+      ({execution}) => {
+        assert.equal(execution.name, 'foo')
+      }
+    ])
+    ft.run(sequence('bar', [
+      ({execution}) => {
+        assert.equal(execution.name, 'bar')
+      }
+    ]))
+  })
   it('should pass arguments to context creator and run it for each action', () => {
     const ft = new FunctionTree([
       function SomeProvider (context, functionDetails, payload, prevPayload) {
