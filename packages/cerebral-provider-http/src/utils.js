@@ -94,15 +94,15 @@ export function processResponse (httpAction, path) {
       }
 
       if (error.isAborted && path.abort) {
-        return path.abort({error: error.payload.error})
+        return path.abort({error: error.toJSON()})
       }
 
       if (path[error.status]) {
-        return path[error.status]({error: error.payload.error})
+        return path[error.status]({error: error.toJSON()})
       }
 
       if (path.error) {
-        return path.error({error: error.payload.error})
+        return path.error({error: error.toJSON()})
       }
 
       throw error
