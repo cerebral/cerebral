@@ -1,4 +1,5 @@
 import {Sequence, Parallel, Primitive} from './primitives'
+import {FunctionTreeError} from './errors'
 
 function getFunctionName (fn) {
   let ret = fn.toString()
@@ -44,7 +45,7 @@ function analyze (functions, item, isParallel) {
           funcDetails.outputs = {}
           Object.keys(nextItem).forEach((key) => {
             if (subItem.outputs && !~subItem.outputs.indexOf(key)) {
-              throw new Error(`function-tree - Outputs object doesn't match list of possible outputs defined for function.`)
+              throw new FunctionTreeError(`Outputs object doesn't match list of possible outputs defined for function.`)
             }
             funcDetails.outputs[key] = analyze(functions, typeof nextItem[key] === 'function' ? [nextItem[key]] : nextItem[key])
           })
@@ -58,11 +59,11 @@ function analyze (functions, item, isParallel) {
 
         return allItems.concat(items)
       } else {
-        throw new Error('function-tree - Unexpected entry in tree')
+        throw new FunctionTreeError('Unexpected entry in tree')
       }
     }, [])).toJSON()
   } else {
-    throw new Error('function-tree - Unexpected entry in tree')
+    throw new FunctionTreeError('Unexpected entry in tree')
   }
 }
 

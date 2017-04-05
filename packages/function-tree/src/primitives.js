@@ -1,3 +1,5 @@
+import {FunctionTreeError} from './errors'
+
 export class Primitive {
   constructor (type, ...args) {
     this.type = type
@@ -11,7 +13,7 @@ export class Primitive {
     }
 
     if (!Array.isArray(this.items)) {
-      throw new Error(`function-tree: You have not passed an array of functions to ${type}`)
+      throw new FunctionTreeError(`You have not passed an array of functions to ${type}`)
     }
   }
   toJSON () {

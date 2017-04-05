@@ -1,5 +1,5 @@
 import DependencyStore from './DependencyStore'
-import {FunctionTree} from 'function-tree'
+import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
 import {ensurePath, isDeveloping, throwError, isSerializable, forceSerializable, isObject, getProviders, cleanPath} from './utils'
@@ -168,7 +168,7 @@ class Controller extends FunctionTree {
       }, {})
     }
 
-    this.runTree(name, signal, payload, (error) => {
+    this.run(name, signal, payload, (error) => {
       if (error) {
         const signalPath = error.execution.name.split('.')
         const signalCatch = signalPath.reduce((currentModule, key, index) => {

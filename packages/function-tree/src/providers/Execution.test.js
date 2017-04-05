@@ -4,9 +4,9 @@ import assert from 'assert'
 
 describe('ExecutionProvider', () => {
   it('should expose the instance on the context', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute('something', [
+    ft.run('something', [
       ({execution}) => {
         assert.equal(execution.name, 'something')
         assert.ok(execution.id)

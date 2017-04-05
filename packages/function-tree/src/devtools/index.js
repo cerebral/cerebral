@@ -1,68 +1,69 @@
-/* global CustomEvent */
+import {FunctionTree} from '../'
 import WebSocket from 'universal-websocket-client'
 import Path from '../Path'
 const VERSION = 'v1'
 
-class Devtools {
-  constructor (options = {
+class DevtoolsClass {
+  constructor (tree, options = {
     remoteDebugger: null
   }) {
+    if (!Array.isArray(tree) && !(tree instanceof FunctionTree)) {
+      throw new Error('Function-tree Devtools: You have to pass a function tree or array of function trees as first argument')
+    }
+
+    this.trees = Array.isArray(tree) ? tree : [tree]
+    this.trees.forEach((tree) => tree.contextProviders.unshift(this.Provider(options)))
     this.VERSION = VERSION
     this.remoteDebugger = options.remoteDebugger || null
     this.backlog = []
     this.latestExecutionId = null
     this.isConnected = false
     this.ws = null
+    this.reconnectInterval = 10000
     this.isResettingDebugger = false
-    this.isBrowserEnv = typeof window !== 'undefined' && Boolean(window.addEventListener)
+
+    if (!this.remoteDebugger) {
+      throw new Error('Function-tree Devtools: You have to pass in the "remoteDebugger" option')
+    }
 
     this.sendInitial = this.sendInitial.bind(this)
+    this.watchExecution = this.watchExecution.bind(this)
 
     this.init()
   }
 
   addListeners () {
-    if (this.remoteDebugger) {
-      this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
-      this.ws.onmessage = (event) => {
-        const message = JSON.parse(event.data)
-        switch (message.type) {
-          case 'pong':
-            this.sendInitial()
-            break
-          case 'ping':
-            this.sendInitial()
-            break
-        }
+    this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
+    this.ws.onmessage = (event) => {
+      const message = JSON.parse(event.data)
+      switch (message.type) {
+        case 'pong':
+          this.sendInitial()
+          break
+        case 'ping':
+          this.sendInitial()
+          break
       }
-    } else if (this.isBrowserEnv) {
-      window.addEventListener('funtion-tree.debugger.pong', this.sendInitial)
-      window.addEventListener('funtion-tree.debugger.ping', this.sendInitial)
     }
+  }
+  reconnect () {
+    setTimeout(() => {
+      this.init()
+      this.ws.onclose = () => {
+        this.reconnect()
+      }
+    }, this.reconnectInterval)
   }
   init () {
     this.addListeners()
 
-    if (this.remoteDebugger) {
-      this.ws.onopen = () => {
-        this.ws.send(JSON.stringify({type: 'ping'}))
-      }
-      this.ws.onclose = () => {
-        console.warn('Could not connect to Function Tree Debugger application, make sure it is running on the correct port')
-        if (this.isBrowserEnv) {
-          this.reInit()
-        }
-      }
-      this.ws.onerror = () => {
-        if (this.isBrowserEnv) {
-          this.reInit()
-        }
-      }
-    } else if (this.isBrowserEnv) {
-      const event = new CustomEvent('function-tree.client.message', {
-        detail: JSON.stringify({type: 'ping'})
-      })
-      window.dispatchEvent(event)
+    this.ws.onopen = () => {
+      this.ws.send(JSON.stringify({type: 'ping'}))
+      this.trees.forEach(this.watchExecution)
+    }
+    this.ws.onclose = () => {
+      console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
+      this.reconnect()
     }
   }
   safeStringify (object) {
@@ -84,22 +85,8 @@ class Devtools {
       return value
     })
   }
-  reInit () {
-    this.remoteDebugger = null
-    this.addListeners()
-
-    const event = new CustomEvent('function-tree.client.message', {
-      detail: JSON.stringify({type: 'ping'})
-    })
-    window.dispatchEvent(event)
-  }
   sendMessage (stringifiedMessage) {
-    if (this.remoteDebugger) {
-      this.ws.send(stringifiedMessage)
-    } else if (this.isBrowserEnv) {
-      const event = new CustomEvent('function-tree.client.message', {detail: stringifiedMessage})
-      window.dispatchEvent(event)
-    }
+    this.ws.send(stringifiedMessage)
   }
   watchExecution (tree) {
     tree.on('start', (execution, payload) => {
@@ -311,6 +298,8 @@ class Devtools {
   }
 }
 
-export default function (...args) {
-  return new Devtools(...args)
+export function Devtools (...args) {
+  return new DevtoolsClass(...args)
 }
+
+export default Devtools

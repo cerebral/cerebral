@@ -77,10 +77,7 @@ const controller = Controller({
       clearCompletedTodos
     ],
     filterClicked: [
-      set(state`filter`, props`filter`),
-      function Test () {
-        throw new Error('Wuuut?')
-      }
+      set(state`filter`, props`filter`)
     ]
   }
 })

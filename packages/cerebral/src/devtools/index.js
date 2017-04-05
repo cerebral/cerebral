@@ -1,5 +1,5 @@
-/* global CustomEvent WebSocket File FileList Blob ImageData */
-import {delay} from '../utils'
+/* global WebSocket File FileList Blob ImageData */
+import {delay, throwError} from '../utils'
 import Path from 'function-tree/lib/Path'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
@@ -27,15 +27,20 @@ class Devtools {
     this.preventPropsReplacement = options.preventPropsReplacement || false
     this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
+
+    if (!this.remoteDebugger) {
+      throwError('You have to pass "remoteDebugger" property')
+    }
+
     this.backlog = []
     this.mutations = []
     this.initialModelString = null
     this.isConnected = false
     this.controller = null
     this.originalRunTreeFunction = null
+    this.reconnectInterval = 5000
     this.ws = null
     this.isResettingDebugger = false
-    this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
     this.allowedTypes = []
       .concat(typeof File === 'undefined' ? [] : File)
       .concat(typeof FileList === 'undefined' ? [] : FileList)
@@ -56,16 +61,16 @@ class Devtools {
     Then all mutations are replayed to the model and all the components
     will be rerendered using the "flush" event and "force" flag.
 
-    It will also replace the "runTree" method of the controller to
+    It will also replace the "run" method of the controller to
     prevent any new signals firing off when in "remember state"
   */
   remember (index) {
     this.controller.model.state = JSON.parse(this.initialModelString)
 
     if (index === 0) {
-      this.controller.runTree = this.originalRunTreeFunction
+      this.controller.run = this.originalRunTreeFunction
     } else {
-      this.controller.runTree = (name) => {
+      this.controller.run = (name) => {
         console.warn(`The signal "${name}" fired while debugger is remembering state, it was ignored`)
       }
     }
@@ -91,51 +96,39 @@ class Devtools {
     Sets up the listeners to Chrome Extension or remote debugger
   */
   addListeners () {
-    if (this.remoteDebugger) {
-      this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
-      this.ws.onmessage = (event) => {
-        const message = JSON.parse(event.data)
-        switch (message.type) {
-          case 'changeModel':
-            this.controller.model.set(message.data.path, message.data.value)
-            this.controller.flush()
-            break
-          case 'remember':
-            if (!this.storeMutations) {
-              console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
-            }
-            this.remember(message.data)
-            break
-          case 'reset':
-            this.reset()
-            break
-          case 'pong':
-            this.sendInitial()
-            break
-          case 'ping':
-            this.sendInitial()
-            break
-        }
+    this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
+    this.ws.onmessage = (event) => {
+      const message = JSON.parse(event.data)
+      switch (message.type) {
+        case 'changeModel':
+          this.controller.model.set(message.data.path, message.data.value)
+          this.controller.flush()
+          break
+        case 'remember':
+          if (!this.storeMutations) {
+            console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
+          }
+          this.remember(message.data)
+          break
+        case 'reset':
+          this.reset()
+          break
+        case 'pong':
+          this.sendInitial()
+          break
+        case 'ping':
+          this.sendInitial()
+          break
       }
-    } else {
-      window.addEventListener('cerebral2.debugger.changeModel', (event) => {
-        this.controller.model.set(event.detail.path, event.detail.value)
-        this.controller.flush()
-      })
-      window.addEventListener('cerebral2.debugger.remember', (event) => {
-        if (!this.storeMutations) {
-          console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
-        }
-        this.remember(event.detail)
-      })
-      window.addEventListener('cerebral2.debugger.reset', (event) => {
-        this.reset()
-      })
-      // When debugger responds a client ping
-      window.addEventListener('cerebral2.debugger.pong', this.sendInitial)
-      // When debugger pings the client
-      window.addEventListener('cerebral2.debugger.ping', this.sendInitial)
     }
+  }
+  reconnect () {
+    setTimeout(() => {
+      this.init(this.controller)
+      this.ws.onclose = () => {
+        this.reconnect()
+      }
+    }, this.reconnectInterval)
   }
   /*
     The debugger might be ready or it might not. The initial communication
@@ -151,7 +144,7 @@ class Devtools {
   */
   init (controller) {
     this.controller = controller
-    this.originalRunTreeFunction = controller.runTree
+    this.originalRunTreeFunction = controller.run
 
     if (this.storeMutations) {
       this.initialModelString = JSON.stringify(controller.model.get())
@@ -159,80 +152,21 @@ class Devtools {
 
     this.addListeners()
 
-    if (this.remoteDebugger) {
-      this.ws.onopen = () => {
-        this.ws.send(JSON.stringify({type: 'ping'}))
-      }
-      this.ws.onclose = () => {
-        if (this.isBrowserEnv) {
-          console.warn('You have configured remoteDebugger, but could not connect. Falling back to Chrome extension')
-          this.reInit()
-        } else {
-          console.warn('You have configured remoteDebugger, but could not connect. Please start the remote debugger and make sure you connect to correct port')
-        }
-      }
-      this.ws.onerror = () => {
-        if (this.isBrowserEnv) {
-          this.reInit()
-        }
-      }
-    } else if (this.isBrowserEnv) {
-      const event = new CustomEvent('cerebral2.client.message', {
-        detail: JSON.stringify({type: 'ping'})
-      })
-      window.dispatchEvent(event)
-    } else {
-      console.warn('The Cerebral devtools is running in a non browser environment. You have to add the remoteDebugger option')
+    this.ws.onopen = () => {
+      this.ws.send(JSON.stringify({type: 'ping'}))
     }
-
-    if (this.isBrowserEnv) {
-      let hidden, visibilityChange
-      if (typeof document.hidden !== 'undefined') {
-        hidden = 'hidden'
-        visibilityChange = 'visibilitychange'
-      } else if (typeof document.msHidden !== 'undefined') {
-        hidden = 'msHidden'
-        visibilityChange = 'msvisibilitychange'
-      } else if (typeof document.webkitHidden !== 'undefined') {
-        hidden = 'webkitHidden'
-        visibilityChange = 'webkitvisibilitychange'
-      }
-
-      document.addEventListener(visibilityChange, () => {
-        if (!document[hidden]) {
-          this.sendMessage(JSON.stringify({
-            type: 'focusApp',
-            source: 'c',
-            data: null
-          }))
-        }
-      }, false)
+    this.ws.onclose = () => {
+      console.warn('Could not connect to the debugger, please make sure it is running... automatically retrying in the background')
+      this.reconnect()
     }
 
     this.watchExecution()
   }
   /*
-    When websocket close, reinit with chrome extension
-  */
-  reInit () {
-    this.remoteDebugger = null
-    this.addListeners()
-
-    const event = new CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify({type: 'ping'})
-    })
-    window.dispatchEvent(event)
-  }
-  /*
     Sends message to chrome extension or remote debugger
   */
   sendMessage (stringifiedMessage) {
-    if (this.remoteDebugger) {
-      this.ws.send(stringifiedMessage)
-    } else {
-      const event = new CustomEvent('cerebral2.client.message', {detail: stringifiedMessage})
-      window.dispatchEvent(event)
-    }
+    this.ws.send(stringifiedMessage)
   }
   /*
     Watches function tree for execution of signals. This is passed to
