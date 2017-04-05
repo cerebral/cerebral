@@ -1,13 +1,13 @@
 import {throwError} from '../utils'
 
-function VerifyInputProvider (context, functionDetails) {
+function VerifyPropsProvider (context, functionDetails) {
   try {
-    JSON.stringify(context.input)
+    JSON.stringify(context.props)
   } catch (e) {
-    throwError(`The function ${functionDetails.name} in signal ${context.execution.name} is not given a valid input`)
+    throwError(`The function ${functionDetails.name} in signal ${context.execution.name} is not given a valid payload`)
   }
 
   return context
 }
 
-export default VerifyInputProvider
+export default VerifyPropsProvider
