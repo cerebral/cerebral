@@ -32,7 +32,7 @@ export default class Router {
       this.routesBySignal = getRoutesBySignal(this.routesConfig, controller)
 
       addressbar.on('change', this.onUrlChange.bind(this))
-      controller.runTree.on('start', this.onSignalStart.bind(this))
+      controller.on('start', this.onSignalStart.bind(this))
       controller.on('flush', this.onFlush.bind(this))
 
       if (!options.preventAutostart) {
