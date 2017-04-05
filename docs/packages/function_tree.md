@@ -314,6 +314,25 @@ const ft = new FunctionTree([
 
 Providers lets us do some pretty amazing things. The debugger for **function-tree** is actually just a provider that sends information to the debugger about execution and exposes an API for other providers to send their own data to the debugger.
 
+#### StopExecutionProvider
+By using a condition you can tell the function tree to stop executions.
+
+```js
+import {StopExecutionProvider} from 'function-tree'
+// Node:
+// const StopExecutionProvider = require('function-tree').StopExecutionProvider
+
+const ft = new FunctionTree([
+  StopExecutionProvider({
+    nameOfExecution (context) {
+      return context.props.stop
+    }
+  })
+])
+```
+
+If the condition returns true the execution will throw an error and stop.
+
 ### events
 The execute function is also an event emitter.
 

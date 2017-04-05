@@ -6,7 +6,7 @@ function isPrimitive (primitive, type) {
 
 /*
   Runs through the tree providing a "next" callback to process next step
-  of execution,
+  of execution
 */
 export default function executeTree (execution, initialPayload, branchStart, branchEnd, parallelStart, parallelProgress, parallelEnd, end) {
   function runBranch (branch, index, payload, prevPayload, nextBranch) {
