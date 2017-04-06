@@ -138,7 +138,7 @@ describe('State', () => {
   })
   it('should work with devtools', () => {
     const controller = new Controller({
-      devtools: { init () {}, send () {}, sendExecutionData: () => {} },
+      devtools: { init () {}, send () {}, sendExecutionData () {} },
       state: {
         foo: ['foo']
       },

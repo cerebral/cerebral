@@ -180,6 +180,7 @@ export function dependencyMatch (changes, dependencyMap) {
 export function getWithPath (obj) {
   return (path) => {
     return path.split('.').reduce((currentValue, key, index) => {
+      console.log(currentValue, key, index)
       if (index > 0 && currentValue === undefined) {
         throwError(`You are extracting with path "${path}", but it is not valid for this object`)
       }
