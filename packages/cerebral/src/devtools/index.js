@@ -155,6 +155,7 @@ class Devtools {
     this.ws.onopen = () => {
       this.ws.send(JSON.stringify({type: 'ping'}))
     }
+    this.ws.onerror = () => {}
     this.ws.onclose = () => {
       console.warn('Could not connect to the debugger, please make sure it is running... automatically retrying in the background')
       this.reconnect()
