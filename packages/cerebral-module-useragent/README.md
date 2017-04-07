@@ -1,15 +1,17 @@
 # cerebral-module-useragent
 
-A Cerebral module for everything user agent.
+## install
 
-[![NPM version][npm-image]][npm-url]
-[![Commitizen friendly][commitizen-image]][commitizen-url]
-[![Semantic Release][semantic-release-image]][semantic-release-url]
-[![js-standard-style][standard-image]][standard-url]
-[![Discord][discord-image]][discord-url]
+**NPM**
 
-## Concept
-The useragent module puts information about the browser into your model, and it also updates this information when the size of the browser changes etc.
+`npm install cerebral-module-useragent@next --save --save-exact`
+
+**YARN**
+
+`yarn add cerebral-module-useragent@next --exact`
+
+## description
+The useragent module puts information about the browser into your state tree, and it also updates this information when this information changes.
 
 - UA parser: browser and device
 - Window: size & orientation
@@ -17,10 +19,8 @@ The useragent module puts information about the browser into your model, and it 
 - Feature detection
 - Internet connectivity
 
-### Install
-This project is still in alpha. To test alpha version check [instructions in monorepo](https://github.com/cerebral/cerebral/blob/master/README.md).
+## instantiate
 
-### Setup
 ```js
 import {Controller} from 'cerebral'
 import Useragent from 'cerebral-module-useragent'
@@ -66,23 +66,3 @@ const controller = Controller({
   }
 })
 ```
-
-### Grabbing details from useragent
-The useragent module will populate your model on the given namespace. All you need to do in your view layer is to grab whatever data you need from it, for example media:
-
-```javascript
-export default connect({
-  media: 'useragent.media.*'
-}, ...)
-```
-
-[npm-image]: https://img.shields.io/npm/v/cerebral-module-useragent.svg?style=flat
-[npm-url]: https://npmjs.org/package/cerebral-module-useragent
-[commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg
-[commitizen-url]: http://commitizen.github.io/cz-cli/
-[semantic-release-image]: https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg?style=flat-square
-[semantic-release-url]: https://github.com/semantic-release/semantic-release
-[standard-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg
-[standard-url]: http://standardjs.com/
-[discord-image]: https://img.shields.io/badge/discord-join%20chat-blue.svg
-[discord-url]: https://discord.gg/0kIweV4bd2bwwsvH

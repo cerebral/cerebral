@@ -1,7 +1,13 @@
 # function-tree-firebase-admin
 
 ## install
+**NPM**
+
 `npm install function-tree-firebase-admin@next --save --save-exact`
+
+**YARN**
+
+`yarn add function-tree-firebase-admin@next --exact`
 
 ## description
 The firebase admin package for function-tree allows you to easily handle Firebase Queues. With the Cerebral debugger you will even be able to merge execution data cross client/server. This package helps you set up a **QueueHandler** which registers your specs with queues and lets you know when new tasks are ready to be run.

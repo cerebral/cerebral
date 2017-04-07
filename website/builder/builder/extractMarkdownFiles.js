@@ -17,13 +17,13 @@ module.exports = function () {
 
   return Promise.all(sections.map(function (section) {
     return Promise.all(config.docs[section].map(function (file) {
-      return readFile(`docs/${section}/${file}.md`)
+      return readFile(typeof file === 'string' ? `${file}.md` : `${file.path}.md`)
     }))
   }))
     .then(function (fileContents) {
       return sections.reduce(function (contentTree, dir, index) {
         contentTree[dir] = config.docs[dir].reduce(function (subContent, contentName, subIndex) {
-          const key = contentName
+          const key = subIndex === 0 ? 'index' : (contentName.name || path.basename(contentName))
           const content = (fileContents[index][subIndex].match(/\[.*?]\(.*?\)/g) || [])
             .map((markdownLink) => {
               return markdownLink.match(/\((.*)\)/).pop()

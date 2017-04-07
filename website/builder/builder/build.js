@@ -47,6 +47,7 @@ Promise.all([
   .then(function (results) {
     const docs = results[0]
     const pages = results[1]
+
     const pagesNotContainingDocs = Object.keys(pages).filter(function (page) {
       return page !== 'docs'
     })

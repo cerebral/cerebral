@@ -9,13 +9,31 @@ To install Cerebral you need to use the Node Package Manager. NPM is part of [No
 
 To install Cerebral BETA you have to explicitly install Cerebral and its dependency:
 
+**NPM**
+
 `npm install cerebral@next --save --save-exact`
+
+**YARN**
+
+`yarn add cerebral@next --exact`
 
 
 ## Choosing a view type
 Cerebral technically can use any view layer. Currently it officially supports [React](https://facebook.github.io/react/) and [Inferno](http://infernojs.org/). From a Cerebral perspective they have the exact same API, you just have to choose to import from **cerebral/react** or **cerebral/inferno**. For specific API differences of the two view libraries please check their documentation.
 
 Choose React if you want a huge ecosystem of shared components and documentation. Inferno is faster than React and is recommended to be used when you do not depend heavily on 3rd party components.
+
+**NPM**
+
+`npm install react react-dom babel-preset-react --save`
+
+`npm install inferno inferno-component babel-plugin-inferno --save`
+
+**YARN**
+
+`yarn add react react-dom babel-preset-react`
+
+`yarn add inferno inferno-component babel-plugin-inferno`
 
 ## Hello world
 *controller.js*
@@ -62,3 +80,6 @@ render((
   </Container>
 ), document.querySelector('#app'))
 ```
+
+## Swag store
+You might get to the point where a Cerebral coffee cup at work, a Cerebral t-shirt going to a conference or a Cerebral notebook seems like fun... head over to [the swag store](https://cerebral.threadless.com/). It also brings some income to the Cerebral organization which will be spent on getting people together :-)

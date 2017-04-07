@@ -20,57 +20,73 @@
   },
   "docs": {
     "get_started": [
-      "index",
-      "the_architecture",
-      "debugger",
-      "resources",
-      "counter",
-      "todomvc"
+      "../../docs/get_started/get_started",
+      "../../docs/get_started/the_architecture",
+      "../../docs/get_started/debugger",
+      "../../docs/get_started/resources",
+      "../../docs/get_started/counter",
+      "../../docs/get_started/todomvc"
     ],
     "developer_guide": [
-      "index",
-      "state",
-      "connect",
-      "signals",
-      "actions",
-      "operators",
-      "factories",
-      "paths",
-      "compute",
-      "routing",
-      "organize",
-      "providers",
-      "errors",
-      "test",
-      "collaborate"
+      "../../docs/developer_guide/introduction",
+      "../../docs/developer_guide/state",
+      "../../docs/developer_guide/connect",
+      "../../docs/developer_guide/signals",
+      "../../docs/developer_guide/actions",
+      "../../docs/developer_guide/operators",
+      "../../docs/developer_guide/factories",
+      "../../docs/developer_guide/paths",
+      "../../docs/developer_guide/compute",
+      "../../docs/developer_guide/routing",
+      "../../docs/developer_guide/organize",
+      "../../docs/developer_guide/providers",
+      "../../docs/developer_guide/errors",
+      "../../docs/developer_guide/test",
+      "../../docs/developer_guide/collaborate"
     ],
-    "packages": [
-      "index",
-      "firebase",
-      "useragent",
-      "forms",
-      "storage",
-      "function_tree",
-      "firebase_admin"
-    ],
+    "packages": [{
+      "name": "router",
+      "path": "../../packages/cerebral-router/README"
+    }, {
+      "name": "http",
+      "path": "../../packages/cerebral-provider-http/README"
+    }, {
+      "name": "firebase",
+      "path": "../../packages/cerebral-provider-firebase/README"
+    }, {
+      "name": "useragent",
+      "path": "../../packages/cerebral-module-useragent/README"
+    }, {
+      "name": "forms",
+      "path": "../../packages/cerebral-provider-forms/README"
+    }, {
+      "name": "storage",
+      "path": "../../packages/cerebral-provider-storage/README"
+    }, {
+      "name": "function_tree",
+      "path": "../../packages/function-tree/README"
+    }, {
+      "name": "firebase_admin",
+      "path": "../../packages/function-tree-firebase-admin/README"
+    }],
     "migration": [
-      "index"
+      "../../docs/migration/migration"
     ],
     "api": [
-      "index",
-      "sequence",
-      "parallel",
-      "devtools",
-      "context",
-      "state",
-      "tags",
-      "container",
-      "connect",
-      "modules",
-      "operators",
-      "providers",
-      "compute",
-      "statecontainer"
+      "../../docs/api/controller",
+      "../../docs/api/sequence",
+      "../../docs/api/parallel",
+      "../../docs/api/devtools",
+      "../../docs/api/context",
+      "../../docs/api/state",
+      "../../docs/api/tags",
+      "../../docs/api/container",
+      "../../docs/api/connect",
+      "../../docs/api/modules",
+      "../../docs/api/operators",
+      "../../docs/api/providers",
+      "../../docs/api/compute",
+      "../../docs/api/statecontainer"
     ]
   }
 }
