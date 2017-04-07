@@ -11,6 +11,11 @@ const controller = Controller({
     // fall back to chrome extension if unable to connect
     remoteDebugger: 'localhost:8585',
 
+    // By default the devtools tries to reconnect
+    // to debugger when it can not be reached, but
+    // you can turn it off
+    reconnect: true,
+
     // Time travel
     storeMutations: true,
 

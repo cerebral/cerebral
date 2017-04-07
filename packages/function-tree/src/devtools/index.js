@@ -1,18 +1,13 @@
-import {FunctionTree} from '../'
 import WebSocket from 'universal-websocket-client'
 import Path from '../Path'
 const VERSION = 'v1'
 
-class DevtoolsClass {
-  constructor (tree, options = {
-    remoteDebugger: null
+export class Devtools {
+  constructor (options = {
+    remoteDebugger: null,
+    reconnect: true
   }) {
-    if (!Array.isArray(tree) && !(tree instanceof FunctionTree)) {
-      throw new Error('Function-tree Devtools: You have to pass a function tree or array of function trees as first argument')
-    }
-
-    this.trees = Array.isArray(tree) ? tree : [tree]
-    this.trees.forEach((tree) => tree.contextProviders.unshift(this.Provider(options)))
+    this.trees = []
     this.VERSION = VERSION
     this.remoteDebugger = options.remoteDebugger || null
     this.backlog = []
@@ -20,6 +15,7 @@ class DevtoolsClass {
     this.isConnected = false
     this.ws = null
     this.reconnectInterval = 10000
+    this.doReconnect = typeof options.reconnect === 'undefined' ? true : options.reconnect
     this.isResettingDebugger = false
 
     if (!this.remoteDebugger) {
@@ -27,7 +23,6 @@ class DevtoolsClass {
     }
 
     this.sendInitial = this.sendInitial.bind(this)
-    this.watchExecution = this.watchExecution.bind(this)
 
     this.init()
   }
@@ -50,21 +45,42 @@ class DevtoolsClass {
     setTimeout(() => {
       this.init()
       this.ws.onclose = () => {
+        this.isConnected = false
         this.reconnect()
       }
     }, this.reconnectInterval)
   }
   init () {
     this.addListeners()
-    this.trees.forEach(this.watchExecution)
     this.ws.onopen = () => {
       this.ws.send(JSON.stringify({type: 'ping'}))
     }
     this.ws.onerror = () => {}
     this.ws.onclose = () => {
-      console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
-      this.reconnect()
+      this.isConnected = false
+
+      if (this.doReconnect) {
+        console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
+        this.reconnect()
+      }
     }
+  }
+  add (tree) {
+    this.trees.push(tree)
+    tree.contextProviders.unshift(this.Provider())
+    this.watchExecution(tree)
+  }
+  remove (tree) {
+    this.trees.splice(this.trees.indexOf(tree), 1)
+    tree.removeAllListeners('start')
+    tree.removeAllListeners('end')
+    tree.removeAllListeners('pathStart')
+    tree.removeAllListeners('functionStart')
+    tree.removeAllListeners('functionEnd')
+    tree.removeAllListeners('error')
+  }
+  destroy () {
+    this.trees.forEach(this.remove.bind(this))
   }
   safeStringify (object) {
     const refs = []
@@ -264,7 +280,7 @@ class DevtoolsClass {
       this.backlog.push(message)
     }
   }
-  Provider (options) {
+  Provider () {
     const sendExecutionData = this.sendExecutionData.bind(this)
     function provider (context, functionDetails, payload) {
       context.debugger = {
@@ -296,10 +312,6 @@ class DevtoolsClass {
 
     return provider
   }
-}
-
-export function Devtools (...args) {
-  return new DevtoolsClass(...args)
 }
 
 export default Devtools
