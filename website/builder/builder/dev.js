@@ -5,18 +5,37 @@ const extractMarkdownFiles = require('./extractMarkdownFiles')
 const extractPages = require('./extractPages')
 const render = require('./render')
 const {readFile, readScript, extractRawText} = require('./utils')
+const chokidar = require('chokidar')
+const config = require('../config.json')
 
 const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 3000
+const filesToWatch = Object.keys(config.docs).reduce((files, sectionKey) => {
+  return files.concat(config.docs[sectionKey].map(file => path.resolve((file.path || file) + '.md')))
+}, [])
 
-Promise.all([
-  extractMarkdownFiles(),
-  extractPages()
-])
-  .then(function (results) {
-    const docs = results[0]
-    const pages = results[1]
+let docs
+let pages
 
+const watcher = chokidar.watch(filesToWatch, {
+  persistent: true
+})
+
+watcher.on('change', updateDocsAndPages)
+
+function updateDocsAndPages () {
+  return Promise.all([
+    extractMarkdownFiles(),
+    extractPages()
+  ])
+    .then(function (results) {
+      docs = results[0]
+      pages = results[1]
+    })
+}
+
+updateDocsAndPages()
+  .then(() => {
     app.use('/', express.static('public'))
 
     app.get('/docs/:sectionName*', function (req, res) {

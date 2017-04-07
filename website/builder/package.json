@@ -5,9 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-watch builder/dev --presets es2015,react --watch docs pages css scripts",
-    "build": "babel-node builder/build --presets es2015,react",
-    "prepublish": "ln -nfs ../../docs ./docs"
+    "start": "babel-watch builder/dev --presets es2015,react --watch pages css scripts",
+    "build": "babel-node builder/build --presets es2015,react"
   },
   "author": "",
   "license": "ISC",
@@ -20,5 +19,8 @@
     "prismjs": "^1.6.0",
     "string-template": "^1.0.0",
     "yargs": "^6.6.0"
+  },
+  "dependencies": {
+    "chokidar": "^1.6.1"
   }
 }

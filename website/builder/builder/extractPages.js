@@ -7,7 +7,7 @@ module.exports = function () {
       return files.reduce(function (filesWithContent, file) {
         const fileName = `${path.basename(file, '.js')}`
 
-        filesWithContent[fileName] = require(`../pages/${file}`).default
+        filesWithContent[fileName] = require(`../pages/${file}`).default || require(`../pages/${file}`)
 
         return filesWithContent
       }, {})
