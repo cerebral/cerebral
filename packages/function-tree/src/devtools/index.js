@@ -56,10 +56,9 @@ class DevtoolsClass {
   }
   init () {
     this.addListeners()
-
+    this.trees.forEach(this.watchExecution)
     this.ws.onopen = () => {
       this.ws.send(JSON.stringify({type: 'ping'}))
-      this.trees.forEach(this.watchExecution)
     }
     this.ws.onclose = () => {
       console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
