@@ -17,13 +17,15 @@ class Devtools {
     preventPropsReplacement: false,
     bigComponentsWarning: 10,
     remoteDebugger: null,
-    allowedTypes: []
+    allowedTypes: [],
+    doReconnect: true
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
     this.debuggerComponentDetailsId = 1
     this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
     this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
+    this.doReconnect = typeof options.reconnect === 'undefined' ? true : options.reconnect
     this.preventPropsReplacement = options.preventPropsReplacement || false
     this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
@@ -126,6 +128,7 @@ class Devtools {
     setTimeout(() => {
       this.init(this.controller)
       this.ws.onclose = () => {
+        this.isConnected = false
         this.reconnect()
       }
     }, this.reconnectInterval)
@@ -157,8 +160,11 @@ class Devtools {
     }
     this.ws.onerror = () => {}
     this.ws.onclose = () => {
-      console.warn('Could not connect to the debugger, please make sure it is running... automatically retrying in the background')
-      this.reconnect()
+      this.isConnected = false
+      if (this.doReconnect) {
+        console.warn('Could not connect to the debugger, please make sure it is running... automatically retrying in the background')
+        this.reconnect()
+      }
     }
 
     this.watchExecution()
@@ -464,19 +470,21 @@ class Devtools {
     debugger updates
   */
   sendComponentsMap (componentsToRender, changes, start, end) {
-    this.sendMessage(JSON.stringify({
-      type: 'components',
-      source: 'c',
-      data: {
-        map: this.debuggerComponentsMap,
-        render: {
-          start: start,
-          duration: end - start,
-          changes: changes,
-          components: componentsToRender.map(this.extractComponentName)
+    if (this.isConnected) {
+      this.sendMessage(JSON.stringify({
+        type: 'components',
+        source: 'c',
+        data: {
+          map: this.debuggerComponentsMap,
+          render: {
+            start: start,
+            duration: end - start,
+            changes: changes,
+            components: componentsToRender.map(this.extractComponentName)
+          }
         }
-      }
-    }))
+      }))
+    }
   }
 }
 
