@@ -2,7 +2,7 @@ import DependencyTracker from '../DependencyTracker'
 import {Compute} from '../Compute'
 import {getChangedProps, throwError, ensureStrictPath, createResolver} from './../utils'
 
-export default (View) => {
+export default (View, PropTypes) => {
   class BaseComponent extends View.Component {
     constructor (dependencies, mergeProps, props, context) {
       super(props, context)
@@ -292,9 +292,9 @@ export default (View) => {
     }
     CerebralComponent.displayName = `CerebralWrapping_${Component.displayName || Component.name}`
 
-    if (View.PropTypes) {
+    if (PropTypes != null) {
       CerebralComponent.contextTypes = {
-        cerebral: View.PropTypes.object
+        cerebral: PropTypes.object
       }
     }
 
