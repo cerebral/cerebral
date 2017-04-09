@@ -11,6 +11,7 @@ export default class HttpProviderError extends Error {
   toJSON () {
     return {
       name: this.name,
+      message: this.message,
       status: this.status,
       headers: this.headers,
       body: this.body,

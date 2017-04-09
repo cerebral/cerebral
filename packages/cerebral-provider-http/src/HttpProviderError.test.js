@@ -4,7 +4,7 @@ import assert from 'assert'
 
 describe('errors', () => {
   it('should have base error', () => {
-    const error = new HttpProviderError(200, {foo: 'bar'}, 'foo')
+    const error = new HttpProviderError(200, {foo: 'bar'}, 'foo', 'msg')
 
     assert.ok(error instanceof Error)
     assert.ok(error.stack)
@@ -12,6 +12,7 @@ describe('errors', () => {
     assert.equal(error.toJSON().status, 200)
     assert.deepEqual(error.toJSON().headers, {foo: 'bar'})
     assert.equal(error.toJSON().body, 'foo')
+    assert.equal(error.toJSON().message, 'msg')
     assert.equal(error.toJSON().isAborted, false)
   })
 })
