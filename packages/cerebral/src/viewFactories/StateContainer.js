@@ -40,7 +40,7 @@ export default (View) => {
 function createDummyController (state = {}, signals = {}) {
   const getState = (path) => {
     return ensurePath(path).reduce((currentState, pathKey) => {
-      return currentState[pathKey]
+      return currentState ? currentState[pathKey] : undefined
     }, state)
   }
   return {
