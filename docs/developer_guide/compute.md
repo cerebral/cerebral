@@ -213,7 +213,7 @@ Now we would like to use our computed in the signal, and we want to show the cou
 ### Replacing with computed
 Let us remove the **setStarsCount** action and refactor our signal to instead grab the repos first, then we update the state in one go. This just to show you different strategies.
 
-Check out the refactoring of our *getRepo* action. The factory is no longer return paths. So either we return a result using the repo name as the key, or we throw an error.
+Check out the refactoring of our *getRepo* action. The factory is no longer returning paths. We just return a payload to the signal if the request is successful. That means any errors will be thrown from the HTTP provider.
 
 ```js
 ...
@@ -222,9 +222,6 @@ function getRepo (repoName) {
     return http.get(`/repos/cerebral/${repoName}`)
       .then((response) => {
         return {[repoName]: response.result}
-      })
-      .catch(() => {
-        throw new Error('REQUEST_ERROR')
       })
   }
 
@@ -237,6 +234,7 @@ We can change now the signal to look like:
 
 ```js
 ...
+import HttpProvider, {HttpProviderError} from 'cerebral-provider-http'
 import starsCount from './starsCount'
 ...
 {
@@ -251,13 +249,15 @@ import starsCount from './starsCount'
       set(state`repos.addressbar`, props`addressbar`),
       showToast(string`The repos have ${starsCount} stars`, 5000, 'success')
     ],
-    catch: showToast(string`Error: ${props`error.message`}`, 5000)
+    catch: new Map([
+      [HttpProviderError, showToast(string`Error: ${props`error.message`}`, 5000)]
+    ])
   }
 }
 ...
 ```
 
-We have now defined our signal in two parts. The happy path and what to do if an error is thrown (catch). You can even define types of errors you want to be catched, but you can read more about that in the API documentation.
+We have now defined our signal in two parts. The happy path and what to do if an error is thrown (catch). We use a JavaScript [map](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) to define what errors we are interested in being thrown, in this case an http provider error, and what logic to run when that happens. That means all other errors will be thrown to console as normal.
 
 Note here that we also updated the *toast* to allow no time to be passed in, causing it to stick.
 
