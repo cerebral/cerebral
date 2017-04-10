@@ -218,7 +218,9 @@ And update the signals as well:
       set(state`repos.addressbar`, props`addressbar`),
       showToast(string`The repos have ${starsCount} stars`, 5000, 'success')  
     ],
-    catch: showToast(string`Error: ${props`error.message`}`, 5000)
+    catch: new Map([
+      [HttpProviderError, showToast(string`Error: ${props`error.message`}`, 5000)]
+    ])
   }
 }
 ...
@@ -246,15 +248,13 @@ And go ahead by doing the router config as follows inside the controller:
 ...
 const controller = Controller({
   ...
-  modules: {
-    router: Router({
-      routes: [
-        {path: '/', signal: 'homeClicked'},
-        {path: '/repos', signal: 'reposClicked'}
-      ],
-      onlyHash: true
-    })
-  },
+  Router({
+    routes: {
+      '/': 'homeClicked',
+      '/repos': 'reposClicked'
+    },
+    onlyHash: true
+  }),
   ...
 })
 ...

@@ -23,7 +23,8 @@ module.exports = function () {
     .then(function (fileContents) {
       return sections.reduce(function (contentTree, dir, index) {
         contentTree[dir] = config.docs[dir].reduce(function (subContent, contentName, subIndex) {
-          const key = subIndex === 0 ? 'index' : (contentName.name || path.basename(contentName))
+          const name = (contentName.name || path.basename(contentName))
+          const key = subIndex === 0 ? 'index' : name
           const content = (fileContents[index][subIndex].match(/\[.*?]\(.*?\)/g) || [])
             .map((markdownLink) => {
               return markdownLink.match(/\((.*)\)/).pop()
@@ -41,6 +42,7 @@ module.exports = function () {
 
           subContent[key] = MTRC(content)
           subContent[key].raw = content
+          subContent[key].githubUrl = `https://github.com/cerebral/cerebral/tree/master/${(contentName.path || contentName).replace('../../', '')}.md`
 
           return subContent
         }, {})
