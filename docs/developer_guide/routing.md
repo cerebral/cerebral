@@ -248,7 +248,7 @@ And go ahead by doing the router config as follows inside the controller:
 ...
 const controller = Controller({
   ...
-  Router({
+  router: Router({
     routes: {
       '/': 'homeClicked',
       '/repos': 'reposClicked'
