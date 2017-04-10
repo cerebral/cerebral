@@ -229,7 +229,7 @@ describe('FunctionTree', () => {
 
     ft.once('error', (error) => {
       assert.ok(error instanceof FunctionTreeExecutionError)
-      assert.ok(error.message.match(/needs to be a path or a Promise/))
+      assert.ok(error.message.match(/needs to be a path of either success/))
       done()
     })
     ft.run(tree).catch(() => {})
