@@ -109,7 +109,7 @@ class FunctionTreeExecution {
             next(result.toJS())
           } else if (funcDetails.outputs) {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
-            throw new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path'))
+            throw new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path of either ' + Object.keys(funcDetails.outputs)))
           } else if (isValidResult(result)) {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next({
@@ -128,7 +128,7 @@ class FunctionTreeExecution {
             functionTree.emit('functionEnd', execution, funcDetails, payload, result)
             next(result.toJS())
           } else if (funcDetails.outputs) {
-            let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path'))
+            let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path of either ' + Object.keys(funcDetails.outputs)))
 
             execution.hasThrown = true
             errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
@@ -148,7 +148,7 @@ class FunctionTreeExecution {
       functionTree.emit('functionEnd', execution, funcDetails, payload, result)
       next(result.toJS())
     } else if (funcDetails.outputs) {
-      let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path or a Promise'))
+      let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path of either ' + Object.keys(funcDetails.outputs)))
 
       this.hasThrown = true
       errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
@@ -181,7 +181,7 @@ class FunctionTreeExecution {
       )
 
       if (newContext !== currentContext) {
-        throw new FunctionTreeError('You are not returning the context from a provider')
+        throw new FunctionTreeError('A provider is not returning the context object, maybe it is a function factory and you forgot to call it?')
       }
 
       return newContext
