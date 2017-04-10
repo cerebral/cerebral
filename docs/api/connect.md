@@ -82,3 +82,29 @@ export default connect({
 ```
 
 This component will only render when any keys are added or removed, meaning that nested change to a child does not cause a new render.
+
+## Override props
+You can add an additional function to connect that gives you full control of properties of the component and dependencies. The returned object from this function will be the exact props passed into the component.
+
+```js
+import React from 'react'
+import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
+
+export default connect({
+  foo: signal`app.foo`,
+  clicked: signal`app.somethingClicked`
+}, (dependencyProps, ownProps, resolve) => {
+  return {}
+},
+  function App(props) {
+
+  }
+)
+```
+
+**dependencyProps** are the props you connected.
+
+**props** are the props passed into the component by the parent.
+
+**resolve** allows you to resolve computed etc., just like resolve in actions.
