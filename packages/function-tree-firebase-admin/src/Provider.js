@@ -42,7 +42,11 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
         return firebase.database().ref(path).set(value).then(noReturnValue)
       },
       update (path, value) {
-        return firebase.database().ref(path).update(value).then(noReturnValue)
+        if (path && value) {
+          return firebase.database().ref(path).update(value).then(noReturnValue)
+        }
+
+        return firebase.database().update(path).then(noReturnValue)
       },
       value (path, options) {
         options = options || {}

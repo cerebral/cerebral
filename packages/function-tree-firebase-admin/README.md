@@ -78,12 +78,21 @@ function addItem (context) {
 ```
 
 ### update
-Update multiple paths. Outputs nothing.
+Update multiple paths from top level or at specific path. Outputs nothing.
 ```js
 function updateItems (context) {
   return context.firebase.update({
     'items/1': context.props.data.item1Data,
     'items/2': context.props.data.item2Data
+  })
+}
+```
+
+```js
+function updateItems (context) {
+  return context.firebase.update('items', {
+    '1': context.props.data.item1Data,
+    '2': context.props.data.item2Data
   })
 }
 ```
