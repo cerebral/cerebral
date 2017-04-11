@@ -74,8 +74,24 @@ const controller = Controller({
 ### getUrl
 ```js
 function myAction({router}) {
-  // Get current url, example: "/items"
+  // If url is "http://localhost:3000/items?foo=bar", returns "/items?foo=bar"
   router.getUrl()
+}
+```
+
+### getUrlBase
+```js
+function myAction({router}) {
+  // If url is "http://localhost:3000/items?foo=bar", returns "/items"
+  router.getUrlBase()
+}
+```
+
+### getUrlQuery
+```js
+function myAction({router}) {
+  // If url is "http://localhost:3000/items?foo=bar", returns "foo=bar"
+  router.getUrlQuery()
 }
 ```
 
