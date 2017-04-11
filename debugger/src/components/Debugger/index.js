@@ -18,7 +18,8 @@ class Debugger extends Inferno.Component {
       isLoading: true,
       apps: {},
       currentApp: null,
-      showAddApp: false
+      showAddApp: false,
+      error: null
     }
     this.addPort = this.addPort.bind(this)
     this.addNewPort = this.addNewPort.bind(this)
@@ -27,6 +28,10 @@ class Debugger extends Inferno.Component {
     this.removePort = this.removePort.bind(this)
   }
   componentDidMount () {
+    window.onerror = (error, mip, mop, stack) => {
+      this.setState({error})
+    }
+
     Promise.all([
       new Promise((resolve, reject) => {
         jsonStorage.get('apps', (err, storedApps) => {
@@ -167,6 +172,16 @@ class Debugger extends Inferno.Component {
     this.storeCurrentApps(newApps)
   }
   render () {
+    if (this.state.error) {
+      return (
+        <div class='error'>
+          <h1>Ops, something bad happened :(</h1>
+          <h4>{this.state.error}</h4>
+          <button onClick={() => window.location.reload()}>restart debugger</button>
+        </div>
+      )
+    }
+
     if (this.state.isLoading) {
       return null
     }

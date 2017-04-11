@@ -13,7 +13,8 @@ export default connect({
   searchValue: state`debugger.searchValue`,
   isExecuting: state`debugger.isExecuting`,
   mutationDoubleClicked: signal`debugger.mutationDoubleClicked`,
-  mutationClicked: signal`debugger.mutationClicked`
+  mutationClicked: signal`debugger.mutationClicked`,
+  signalClicked: signal`debugger.signalClicked`
 },
   function Mutations ({
     mutations,
@@ -21,7 +22,8 @@ export default connect({
     searchValue,
     isExecuting,
     mutationDoubleClicked,
-    mutationClicked
+    mutationClicked,
+    signalClicked
   }) {
     return (
       <div className='mutations'>
@@ -53,7 +55,12 @@ export default connect({
               >
                 {currentRememberedMutationIndex === index ? <div className='list-remembered' /> : null}
                 <div className='list-indicator' style={signalStyle} />
-                <div className='signal-name'>{mutation.signalName}</div>
+                <div
+                  className='signal-name'
+                  onClick={() => signalClicked({executionId: mutation.executionId})}
+                >
+                  {mutation.signalName}
+                </div>
                 <Mutation mutation={mutation.data} onMutationClick={(path) => mutationClicked({path})} />
               </li>
             )

@@ -60,7 +60,7 @@ export default connect({
           this.props.signal.functionsRun[action.functionIndex] &&
           this.props.signal.functionsRun[action.functionIndex].path === output
         )
-        const style = isOutput ? {cursor: 'pointer'} : {opacity: 0.3, fontSize: '8px'}
+        const style = isOutput ? {cursor: 'pointer'} : {opacity: 0.3}
         let isExpanded = this.state.expandedOutputs[action.functionIndex] && this.state.expandedOutputs[action.functionIndex][output]
         isExpanded = typeof isExpanded === 'undefined' ? true : isExpanded
         const outputs = action.outputs[output]._functionTreePrimitive ? action.outputs[output].items : action.outputs[output]
