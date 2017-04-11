@@ -20,48 +20,39 @@ class DependencyTracker {
     const propsGetter = getWithPath(props)
     let hasChanged = false
 
+    function setTrackMap (path, newTrackMap) {
+      const pathArray = path.split('.')
+      pathArray.reduce((currentNewTrackMapLevel, key, index) => {
+        if (!currentNewTrackMapLevel[key]) {
+          hasChanged = true
+          currentNewTrackMapLevel[key] = {}
+        }
+
+        if (index < pathArray.length - 1) {
+          currentNewTrackMapLevel[key].children = currentNewTrackMapLevel[key].children || {}
+        }
+
+        return currentNewTrackMapLevel[key].children
+      }, newTrackMap)
+    }
+
     this.value = this.computed.getValue({
       state (path) {
         const value = stateGetter(path)
         const strictPath = ensureStrictPath(path, value)
-        const strictPathArray = strictPath.split('.')
 
         newStateTrackFlatMap[strictPath] = true
 
         if (!stateTrackFlatMap[strictPath]) hasChanged = true
-
-        strictPathArray.reduce((currentNewStateTrackMapLevel, key, index) => {
-          if (!currentNewStateTrackMapLevel[key]) {
-            currentNewStateTrackMapLevel[key] = {}
-          }
-
-          if (index < strictPathArray.length - 1) {
-            currentNewStateTrackMapLevel[key].children = currentNewStateTrackMapLevel[key].children || {}
-          }
-
-          return currentNewStateTrackMapLevel[key].children
-        }, newStateTrackMap)
+        setTrackMap(strictPath, newStateTrackMap)
 
         return value
       },
       props (path) {
-        const pathArray = path.split('.')
         newPropsTrackFlatMap[path] = true
 
         if (!propsTrackFlatMap[path]) hasChanged = true
-
-        pathArray.reduce((currentNewPropsTrackMapLevel, key, index) => {
-          if (!currentNewPropsTrackMapLevel[key]) {
-            hasChanged = true
-            currentNewPropsTrackMapLevel[key] = {}
-          }
-
-          if (index < pathArray.length - 1) {
-            currentNewPropsTrackMapLevel[key].children = currentNewPropsTrackMapLevel[key].children || {}
-          }
-
-          return currentNewPropsTrackMapLevel[key].children
-        }, newPropsTrackMap)
+        setTrackMap(path, newPropsTrackMap)
 
         return propsGetter(path)
       }
