@@ -1,4 +1,4 @@
-export function redirectFactory (url) {
+export default function redirectFactory (url) {
   function redirect ({router, resolve}) {
     router.redirect(resolve.value(url))
   }
