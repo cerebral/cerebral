@@ -1,4 +1,4 @@
-export function goToFactory (url) {
+export default function goToFactory (url) {
   function goTo ({router, resolve}) {
     router.goTo(resolve.value(url))
   }
