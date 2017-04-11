@@ -161,7 +161,14 @@ export default (View) => {
             } else {
               currentProps[key] = value
             }
-          } else if (tag.type === 'signal' || tag.type === 'props') {
+          } else if (tag.type === 'signal') {
+            try {
+              currentProps[key] = tag.getValue(getters)
+            } catch (e) {
+              const path = tag.getPath(getters)
+              throwError(`Component ${this._displayName} There is no signal at '${path}'`)
+            }
+          } else if (tag.type === 'props') {
             currentProps[key] = tag.getValue(getters)
           }
         }

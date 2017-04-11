@@ -122,4 +122,19 @@ describe('State', () => {
     controller.getSignal('foo')()
     assert.deepEqual(controller.getState(), {foo: ['foo', 'bar']})
   })
+
+  it('should provide a descriptive error when passing invalid value to state', () => {
+    const controller = new Controller({
+      devtools: {init () {}},
+      state: {
+        foo: ''
+      },
+      signals: {
+        foo: [({state}) => state.set('foo', () => {})]
+      }
+    })
+    assert.throws(() => {
+      controller.getSignal('foo')()
+    }, Error)
+  })
 })
