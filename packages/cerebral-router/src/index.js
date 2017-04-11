@@ -90,6 +90,12 @@ export default function Router (options = {}) {
       getUrl () {
         return addressbar.value.replace(addressbar.origin + options.baseUrl, '')
       },
+      getUrlBase () {
+        return addressbar.value.replace(addressbar.origin + options.baseUrl, '').split('?')[0]
+      },
+      getUrlQuery () {
+        return addressbar.value.replace(addressbar.origin + options.baseUrl, '').split('?')[1]
+      },
       goTo (url) {
         addressbar.value = options.baseUrl + url
         onUrlChange()
