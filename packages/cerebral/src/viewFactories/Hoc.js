@@ -161,7 +161,7 @@ export default (View) => {
             } else {
               currentProps[key] = value
             }
-          } if (tag.type === 'signal') {
+          } else if (tag.type === 'signal') {
             try {
               currentProps[key] = tag.getValue(getters)
             } catch (e) {
