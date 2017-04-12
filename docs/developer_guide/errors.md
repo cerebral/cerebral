@@ -18,7 +18,7 @@ export default {
     somethingHappened: {
       signal: someSequence,
       catch: new Map([
-        [FirebaseProviderError, someSequenceHandlingError]
+        [FirebaseProviderError, someErrorHandlingSequence]
       ])
     }
   }
