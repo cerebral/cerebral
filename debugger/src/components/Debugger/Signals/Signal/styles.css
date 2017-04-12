@@ -79,12 +79,12 @@
 
 .signal-outputName {
   height: 20px;
+  font-size: 14px;
   line-height: 20px;
   cursor: default;
 }
 
 .signal-outputName.executed {
-  font-size: 14px;
   font-weight: bold;
   color: #333;
   cursor: pointer;

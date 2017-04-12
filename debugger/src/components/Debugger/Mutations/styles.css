@@ -24,7 +24,6 @@
   position: relative;
   display: flex;
   padding-left: 15px;
-  cursor: pointer;
   min-height: 30px;
   line-height: 30px;
   border-bottom: 1px solid #DDD;
@@ -65,9 +64,14 @@
 }
 
 .mutations .signal-name {
-  flex: 0 0 150px;
+  flex: 0 0 200px;
   font-size: 12px;
   text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.mutations .signal-name:hover {
+  color: #1e78c3;
 }
 
 .mutations .mutation {
