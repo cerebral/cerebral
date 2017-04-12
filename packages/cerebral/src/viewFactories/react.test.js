@@ -127,7 +127,7 @@ describe('React', () => {
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
-    it('should throw if no controller provided', () => {
+    it('should throw when no controller provided', () => {
       const TestComponent = connect({
         foo: state`foo`
       }, (props) => {
@@ -143,7 +143,7 @@ describe('React', () => {
         ))
       })
     })
-    it('should throw an error if container component is not provided', () => {
+    it('should throw when container component is not provided', () => {
       const TestComponent = connect({
         foo: state`foo`
       }, (props) => {
@@ -183,9 +183,9 @@ describe('React', () => {
       assert.equal(TestComponentRef._isUnmounting, true)
       assert.deepEqual(controller.componentDependencyStore.getAllUniqueEntities(), [])
     })
-    /* it.only('should be able to update component from container with devtools', () => {
+    it('should be able to update component from container with devtools', () => {
       const controller = Controller({
-        devtools: { init () {}, send () {}, updateComponentsMap () {} },
+        devtools: { init () {}, send () {}, updateComponentsMap () {}, sendExecutionData () {}, sendComponentsMap () {} },
         state: {
           foo: 'bar',
           bar: 'foo'
@@ -216,7 +216,7 @@ describe('React', () => {
       assert.equal(renderCount, 1)
       controller.getSignal('test')()
       assert.equal(renderCount, 2)
-    }) */
+    })
   })
   describe('connect', () => {
     it('should throw an error if no dependencies provided', () => {
@@ -420,6 +420,38 @@ describe('React', () => {
       const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
       component.callSignal()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+    })
+    it('should rerender when controller flush method called with force option', () => {
+      let renderCount = 0
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      class TestComponentClass extends React.Component {
+        render () {
+          renderCount++
+          return (
+            <div>{`${this.props.foo}${this.props.bar}`}</div>
+          )
+        }
+      }
+      const TestComponent = connect({
+        foo: state`foo`,
+        bar: compute((get) => {
+          return get(state`foo`) + renderCount
+        })
+      }, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'barbar0')
+      controller.flush(true)
+      assert.equal(renderCount, 2)
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'barbar1')
     })
     it('should rerender on parent dep replacement', () => {
       const controller = Controller({

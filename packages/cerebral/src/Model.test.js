@@ -51,6 +51,22 @@ describe('Model', () => {
       forceChildPathUpdates: true
     }])
   })
+  it('should throw when updating invalid path', () => {
+    const model = new Model({
+      foo: 'bar'
+    })
+    assert.throws(() => {
+      model.set(['foo', 'bar'], 'baz2')
+    })
+  })
+  it('should throw when updating invalid nested path', () => {
+    const model = new Model({
+      foo: 'bar'
+    })
+    assert.throws(() => {
+      model.set(['foo', 'bar', 'baz'], 'baz2')
+    })
+  })
 
   describe('SET', () => {
     it('should be able to set state', () => {
@@ -239,6 +255,14 @@ describe('Model', () => {
       }, {preventExternalMutations: true})
       assert.throws(() => {
         model.set(['foo', 'bar'], 'baz2')
+      })
+    })
+    it('should throw when updating invalid nested path', () => {
+      const model = new Model({
+        foo: 'bar'
+      }, {preventExternalMutations: true})
+      assert.throws(() => {
+        model.set(['foo', 'bar', 'baz'], 'baz2')
       })
     })
     it('should ignore non writeable props when freezing', () => {

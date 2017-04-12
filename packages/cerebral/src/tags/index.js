@@ -1,6 +1,6 @@
 import Tag from './Tag'
 
-function createTemplateTag (tag, options = {}) {
+function createTemplateTag (tag, options) {
   return (strings, ...values) => {
     return new Tag(tag, options, strings, values)
   }
