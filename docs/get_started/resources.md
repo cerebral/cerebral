@@ -1,5 +1,8 @@
 # Resources
 
+## Cerebral in detail
+- [Routing](https://medium.com/@christianalfoni/cerebral-in-detail-routing-96e922e69156)
+
 ## Cerebral projects
 - [Webpackbin](https://www.webpackbin.com). A bin service using Webpack
 - [Unity connect](https://connect.unity.com/). The Unity social platform
