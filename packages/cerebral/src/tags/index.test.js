@@ -36,7 +36,6 @@ describe('Tags', () => {
   })
   it('should throw when getters is not defined', () => {
     const tag = state`foo.${props`foo`}`
-    const stateObject = {foo: 'bar'}
     assert.throws(() => {
       tag.getValue()
     })

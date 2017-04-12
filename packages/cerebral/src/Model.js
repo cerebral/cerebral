@@ -110,7 +110,7 @@ class Model {
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
         if (!isObject(currentState)) {
-            throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
+          throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
         }
         currentState[key] = this.unfreezeObject(currentState[key])
 

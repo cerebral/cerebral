@@ -447,7 +447,6 @@ describe('React', () => {
           <TestComponent />
         </Container>
       ))
-      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'barbar0')
       controller.flush(true)
       assert.equal(renderCount, 2)
