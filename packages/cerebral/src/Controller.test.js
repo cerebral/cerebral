@@ -11,20 +11,20 @@ describe('Controller', () => {
     })
     assert.deepEqual(controller.getState(), {foo: 'bar'})
   })
-  /* it('should warn devtools recommendation', () => {
+  it('should warn devtools recommendation', () => {
     let warnCount = 0
     const originWarn = console.warn
     console.warn = function (...args) {
       warnCount++
       originWarn.apply(this, args)
     }
-    navigator = {userAgent: 'Chrome'}
+    navigator = {userAgent: 'Chrome'} // eslint-disable-line
     Controller({
       state: {}
     })
     assert.equal(warnCount, 1)
-    navigator = {userAgent: 'node.js'}
-  }) */
+    navigator = {userAgent: 'node.js'} // eslint-disable-line
+  })
   it('should throw error when signals are grabbed before initialized', () => {
     assert.throws(() => {
       Controller({
