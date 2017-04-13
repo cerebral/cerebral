@@ -74,10 +74,9 @@
     ],
     "api": [
       "../../docs/api/controller",
-      "../../docs/api/sequence",
-      "../../docs/api/parallel",
+      "../../docs/api/action",
+      "../../docs/api/signal",
       "../../docs/api/devtools",
-      "../../docs/api/context",
       "../../docs/api/state",
       "../../docs/api/tags",
       "../../docs/api/container",

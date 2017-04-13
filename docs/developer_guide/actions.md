@@ -1,28 +1,30 @@
 # Actions
 
-A signal runs actions and actions are actually just functions.
+A signal runs actions and actions are actually just functions. These functions receive one argument, created by Cerebral. It is called the **context**:
 
 ```js
-function iAmAnAction () {}
+function iAmAnAction (context) {}
 ```
 
-That means you do not need any API to define an action. This makes actions highly testable.
+Whatever you need to define the logic of an action is on the context. It means you do not need any API to define an action or import any other modules to define business logic. This makes actions highly testable and easy to write.
 
-Typically you use actions to change the state of the application or run other side effects.
+Typically you use actions to change the state of the application or run other side effects:
 
 ```js
+// With destructuring
 function iAmAnAction ({props, state}) {
   state.set('some.path', props.someValue)
 }
-```
 
-```js
-function iAmAnAction ({http, path}) {
-  return http.get('/someitems')
-    .then(path.success)
-    .catch(path.error)
+// Without destructuring
+function iAmAnAction (context) {
+  context.state.set('some.path', context.props.someValue)
 }
 ```
+
+
+## The context
+So the context is just an object. A new context is created for every action run and it is populated by what we call **providers**. There are default providers in Cerebral that exposes **props** and **path**, as seen in above example. There are also other default providers, you can add new providers by installing extra packages and you can even create your own. You will learn more about providers later.
 
 ## Update props
 You update the props on the signal by returning an object from the action. This object will be merged with existing props.
