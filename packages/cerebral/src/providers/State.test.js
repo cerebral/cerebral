@@ -124,7 +124,7 @@ describe('State', () => {
   })
   it('should provide a descriptive error when passing invalid value to state', () => {
     const controller = new Controller({
-      devtools: {init () {}},
+      devtools: {init () {}, sendExecutionData () {}},
       state: {
         foo: ''
       },

@@ -254,6 +254,28 @@ describe('React', () => {
         ))
       })
     })
+    it('should throw when signal is not defined', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect({
+        foo: state`foo`,
+        fooCalled: signal`fooCalled`
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+      })
+    })
     it('should convert component to json', () => {
       const controller = Controller({
         state: {

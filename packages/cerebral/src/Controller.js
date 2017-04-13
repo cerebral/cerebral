@@ -156,7 +156,7 @@ class Controller extends FunctionTree {
 
     if (this.devtools) {
       payload = Object.keys(payload).reduce((currentPayload, key) => {
-        if (!isSerializable(payload, this.devtools.allowedTypes)) {
+        if (!isSerializable(payload[key], this.devtools.allowedTypes)) {
           console.warn(`You passed an invalid payload to signal "${name}", on key "${key}". Only serializable values like Object, Array, String, Number and Boolean can be passed in. Also these special value types:`, this.devtools.allowedTypes)
 
           return currentPayload
@@ -221,13 +221,13 @@ class Controller extends FunctionTree {
     const pathArray = path.split('.')
     const moduleKey = pathArray.pop()
     const parentModule = pathArray.reduce((currentModule, key) => {
-      if (!currentModule) {
+      if (!currentModule.modules[key]) {
         throwError(`The path "${pathArray.join('.')}" is invalid, can not add module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
       }
       return currentModule.modules[key]
-    }, this)
+    }, this.module)
 
-    parentModule.module.modules[moduleKey] = new Module(this, path.split('.'), module)
+    parentModule.modules[moduleKey] = new Module(this, path.split('.'), module)
 
     if (module.provider) {
       this.contextProviders.push(module.provider)
@@ -246,19 +246,19 @@ class Controller extends FunctionTree {
     const moduleKey = pathArray.pop()
 
     const parentModule = pathArray.reduce((currentModule, key) => {
-      if (!currentModule) {
+      if (!currentModule.modules[key]) {
         throwError(`The path "${pathArray.join('.')}" is invalid, can not remove module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
       }
       return currentModule.modules[key]
-    }, this)
+    }, this.module)
 
-    const module = parentModule.module.modules[moduleKey]
+    const module = parentModule.modules[moduleKey]
 
     if (module.provider) {
       this.contextProviders.splice(this.contextProviders.indexOf(module.provider), 1)
     }
 
-    delete parentModule.module.modules[moduleKey]
+    delete parentModule.modules[moduleKey]
 
     this.model.unset(path.split('.'))
 
