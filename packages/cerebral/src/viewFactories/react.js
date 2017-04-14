@@ -1,9 +1,24 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import ContainerFactory from './Container'
 import StateContainerFactory from './StateContainer'
 import HocFactory from './Hoc'
 import connectFactory, { decoratorFactory } from './connect'
+
+let PropTypes
+
+if (React.version.slice(0, 4) === '15.5') {
+  try {
+    PropTypes = require('prop-types')
+  } catch (e) {
+    console.error(
+      'In order to support react@15.5+, you need to have prop-types package installed. ' +
+      'Please add prop-types to your dependencies (`npm install --save prop-types`)'
+    )
+    throw e
+  }
+}
+
+PropTypes = PropTypes || React.PropTypes
 
 export const Container = ContainerFactory(React, PropTypes)
 export const StateContainer = StateContainerFactory(React, PropTypes)

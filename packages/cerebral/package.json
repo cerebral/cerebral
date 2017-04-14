@@ -18,8 +18,7 @@
   "homepage": "http://cerebral.github.io/cerebral-website",
   "dependencies": {
     "eventemitter3": "^2.0.2",
-    "function-tree": "^0.5.0-b",
-    "prop-types": "^15.5.4"
+    "function-tree": "^0.5.0-b"
   },
   "devDependencies": {
     "@cerebral/monorepo": "0.0.1"
