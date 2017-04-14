@@ -5,8 +5,9 @@ import HocFactory from './Hoc'
 import connectFactory, { decoratorFactory } from './connect'
 
 let PropTypes
+const [major, minor] = React.version.split('.')
 
-if (React.version.slice(0, 4) === '15.5') {
+if ((major === '15' && minor >= 5) || major >= 16) {
   try {
     PropTypes = require('prop-types')
   } catch (e) {
