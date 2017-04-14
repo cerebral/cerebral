@@ -19,33 +19,15 @@ export default controller
 
 ## Errors
 
-### Signal
+
 ```js
 import {Controller} from 'cerebral'
-
-const controller = Controller({
-  signals: {
-    somethingHappened: {
-      signal: [somAction],
-      catch: new Map([
-        [SomeCustomErrorInstanceType, [someCustomCatchHandlerSequence]],
-        [Error, [someCatchHandlerSequence]]
-      ])
-    }
-  }
-})
-
-export default controller
-```
-
-### Global
-```js
-import {Controller} from 'cerebral'
+import {HttpProviderError} from 'cerebral-provider-http'
 
 const controller = Controller({
   catch: new Map([
-    [SomeCustomErrorInstanceType, [someCustomCatchHandlerSequence]],
-    [Error, [someCatchHandlerSequence]]
+    [HttpProviderError, someCustomCatchHandlerSequence],
+    [Error, someCatchHandlerSequence]
   ])
 })
 

@@ -1,4 +1,4 @@
-# Context
+# Action
 
 When actions run they are passed a context. This context is created by Cerebral for every action run.
 
