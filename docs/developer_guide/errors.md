@@ -62,10 +62,12 @@ const controller = Controller({
 ```
 
 ## Creating an error type
-JavaScript has a base error class of **Error**. When you create your own error types it makes sense to extend **Error**. This is only recently supported in browsers, but you can use [babel-plugin-transform-builtin-extend](https://github.com/loganfsmyth/babel-plugin-transform-builtin-extend) to make sure extending errors works correctly.
+JavaScript has a base error class of **Error**. When you create your own error types it makes sense to extend **Error**. This is only recently supported in browsers, but you can use [es6-error](https://www.npmjs.com/package/es6-error) to make sure extending errors works correctly.
 
 ```js
-class AppError extends Error {
+import ES6Error from 'es6-error'
+
+class AppError extends ES6Error {
   constructor(message) {
     super(message)
     this.name = 'AppError'
