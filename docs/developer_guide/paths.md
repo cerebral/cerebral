@@ -144,6 +144,7 @@ The path **success** and **error** are now available inside the action because w
 </button>
 ...
 ```
+Now we are ready to test drive our changes.
 
 ### Parallel execution
 But there is an issue here. Did you notice that the message *Loading data for repo...* is blocking the execution for 2 seconds? It would be nice to indicate to Cerebral that actions can execute in parallel.

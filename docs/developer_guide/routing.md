@@ -225,7 +225,7 @@ And update the signals as well:
 }
 ...
 ```
-Now you can test-drive your changes. You should see the first tab activated. Now go to the debugger and change *activeTab* state to 'repos' and you will see the second tab. If you click the tabs you will actually trigger the signals which appear in the debugger. Nice! But what has this to do with Routing?
+Now you can test drive your changes. You should see the first tab activated. Now go to the debugger and change *activeTab* state to 'repos' and you will see the second tab. If you click the tabs you will actually trigger the signals which appear in the debugger. Nice! But what has this to do with Routing?
 
 ### Introducing the router
 Traditional routers are a wrapper around your components and they manipulate what components to display based on the URL. That is not how routing works in Cerebral. In Cerebral you connect URLs to signals. So:
