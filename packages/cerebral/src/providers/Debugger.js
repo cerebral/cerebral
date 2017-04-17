@@ -33,7 +33,16 @@ function DebuggerProviderFactory () {
           }
 
           return wrappedProvider
-        }, {})
+        }, (
+          typeof provider === 'function' ? (...args) => {
+            context.debugger.send({
+              method: `${providerKey}`,
+              args: args
+            })
+
+            return provider.apply(provider, args)
+          } : {}
+        ))
       }
     }
 

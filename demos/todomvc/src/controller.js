@@ -1,6 +1,5 @@
-import {Controller} from 'cerebral'
+import {Controller, provide} from 'cerebral'
 import Devtools from 'cerebral/devtools'
-import {ContextProvider} from 'cerebral/providers'
 import uuid from 'uuid'
 import Router from 'cerebral-router'
 import {redirect} from 'cerebral-router/operators'
@@ -21,12 +20,12 @@ const controller = Controller({
     }
   }),
   providers: [
+    provide('uuid', uuid),
     StorageProvider({
       target: window.localStorage,
       sync: {todos: 'todos'},
       prefix: 'todomvc'
-    }),
-    ContextProvider({uuid})
+    })
   ],
   state: {
     newTodoTitle: '',
