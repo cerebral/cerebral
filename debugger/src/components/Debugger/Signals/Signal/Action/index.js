@@ -108,7 +108,7 @@ class Action extends Inferno.Component {
                 <div className='action-inputValue'><Inspector value={execution.payload} /></div>
               </div>
               <div className='action-mutations'>
-                {execution.data.map((data, index) => data.type === 'mutation' ? <Mutation mutation={data} key={index} onMutationClick={onMutationClick} /> : <Service service={data} key={index} />)}
+                {execution.data.filter((data) => Boolean(data)).map((data, index) => data.type === 'mutation' ? <Mutation mutation={data} key={index} onMutationClick={onMutationClick} /> : <Service service={data} key={index} />)}
               </div>
               {executed}
               {execution.output && (
