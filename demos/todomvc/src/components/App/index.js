@@ -1,16 +1,20 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
+import {connect, query} from '../../GraphQl'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 import computedCounts from '../../computed/counts'
 
 export default connect({
-  counts: computedCounts
+  counts: computedCounts,
+  data: query`{
+    hello
+  }`
 },
-  function App ({counts}) {
+  function App ({counts, data}) {
     return (
       <div id='todoapp-wrapper'>
+        <h1>{data.hello}</h1>
         <section className='todoapp'>
           <header className='header'>
             <h1>todos</h1>

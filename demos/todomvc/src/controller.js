@@ -10,6 +10,8 @@ import addTodo from './actions/addTodo'
 import toggleAllChecked from './actions/toggleAllChecked'
 import clearCompletedTodos from './actions/clearCompletedTodos'
 
+import GraphQlModule from './GraphQl'
+
 const controller = Controller({
   devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
   router: Router({
@@ -27,6 +29,20 @@ const controller = Controller({
       prefix: 'todomvc'
     })
   ],
+  modules: {
+    graphql: GraphQlModule({
+      schema: `
+        type Query {
+          hello: String
+        }
+      `,
+      root: {
+        hello: () => {
+          return 'Hello world'
+        }
+      }
+    })
+  },
   state: {
     newTodoTitle: '',
     todos: window.localStorage.getItem('todomvc.todos') ? JSON.parse(window.localStorage.getItem('todomvc.todos')) : {},
