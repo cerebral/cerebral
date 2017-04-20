@@ -1,9 +1,10 @@
 import firebase from 'firebase'
+import {FirebaseProviderError} from './errors'
 const refs = {}
 
 export function createRef (path, options = {}) {
   if (path.indexOf('/') >= 0) {
-    throw new Error('cerebral-module-firebase: The path "' + path + '" is not valid. Use dot notation for consistency with Cerebral')
+    throw new FirebaseProviderError('The path "' + path + '" is not valid. Use dot notation for consistency with Cerebral')
   }
   path = path.replace(/\./g, '/')
   return Object.keys(options).reduce((ref, key) => {
@@ -16,7 +17,7 @@ export function createRef (path, options = {}) {
 
 export function createStorageRef (path) {
   if (path.indexOf('/') >= 0) {
-    throw new Error('cerebral-module-firebase: The path "' + path + '" is not valid. Use dot notation for consistency with Cerebral')
+    throw new FirebaseProviderError('The path "' + path + '" is not valid. Use dot notation for consistency with Cerebral')
   }
   path = path.replace(/\./g, '/')
   return firebase.storage().ref(path)
@@ -24,13 +25,10 @@ export function createStorageRef (path) {
 
 export function listenTo (ref, path, event, signal, cb) {
   refs[path] = refs[path] || {}
-  refs[path][event] = refs[path][event] || {}
-  if (refs[path][event][signal]) {
-    refs[path][event][signal].off()
-  }
-  refs[path][event][signal] = ref
+  refs[path][event] = refs[path][event] ? refs[path][event].concat(ref) : [ref]
+
   ref.on(event, cb, (error) => {
-    throw new Error('cerebral-module-firebase: ' + event + ' listener to path ' + path + ', triggering signal: ' + signal + ', gave error: ' + error.message)
+    throw new FirebaseProviderError(event + ' listener to path ' + path + ', triggering signal: ' + signal + ', gave error: ' + error.message)
   })
 }
 
@@ -38,37 +36,61 @@ const events = {
   'onChildAdded': 'child_added',
   'onChildChanged': 'child_changed',
   'onChildRemoved': 'child_removed',
-  'onValue': 'value'
+  'onValue': 'value',
+  '*': '*'
 }
 
-export function stopListening (path, event, signal) {
+export function stopListening (passedPath, event, signal) {
   const realEventName = events[event]
+  const pathArray = passedPath.split('.')
+  let path = passedPath
+  let isWildcardPath = false
 
   if (event && !realEventName) {
-    throw new Error('cerebral-module-firebase - The event "' + event + '" is not a valid event. Use: "' + Object.keys(events))
+    throw new FirebaseProviderError('The event "' + event + '" is not a valid event. Use: "' + Object.keys(events))
   }
 
-  if (!refs[path]) {
-    throw new Error('cerebral-module-firebase - The path "' + path + '" has no listeners')
+  if (pathArray[pathArray.length - 1] === '*') {
+    isWildcardPath = true
+    pathArray.pop()
+    path = pathArray.join('.')
   }
 
-  if (realEventName && !refs[path][realEventName]) {
-    throw new Error('cerebral-module-firebase - The event "' + realEventName + '" has no listeners on path "' + path + '"')
-  }
+  if (isWildcardPath) {
+    const refsHit = Object.keys(refs).reduce((currentKeysHit, ref) => {
+      if (ref.indexOf(path) === 0) {
+        return currentKeysHit.concat(ref)
+      }
 
-  if (signal && !refs[path][realEventName][signal]) {
-    throw new Error('cerebral-module-firebase - The signal "' + signal + '" has no listeners on path "' + path + '" and event "' + realEventName + '"')
-  }
+      return currentKeysHit
+    }, [])
 
-  if (!event && !signal) {
-    refs[path].off()
-    delete refs[path]
-  } else if (!signal) {
-    refs[path][realEventName].off()
-    delete refs[path][realEventName]
+    if (!refsHit.length) {
+      throw new FirebaseProviderError('The path "' + path + '" has no listeners')
+    }
+
+    refsHit.forEach((ref) => {
+      if (realEventName === '*') {
+        Object.keys(refs[ref]).forEach((eventName) => {
+          refs[ref][eventName].forEach((listener) => listener.off())
+          delete refs[ref][eventName]
+        })
+      } else {
+        refs[ref][realEventName].forEach((listener) => listener.off())
+        delete refs[ref][realEventName]
+      }
+    })
   } else {
-    refs[path][realEventName][signal].off()
-    delete refs[path][realEventName][signal]
+    if (!refs[path]) {
+      throw new FirebaseProviderError('The path "' + path + '" has no listeners')
+    }
+
+    if (realEventName && !refs[path][realEventName]) {
+      throw new FirebaseProviderError('The event "' + realEventName + '" has no listeners on path "' + path + '"')
+    }
+
+    refs[path][realEventName].forEach((listener) => listener.off())
+    delete refs[path][realEventName]
   }
 }
 
