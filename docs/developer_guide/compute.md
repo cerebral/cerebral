@@ -213,7 +213,7 @@ Now we would like to use our computed in the signal, and we want to show the cou
 ### Replacing with computed
 Let us remove the **setStarsCount** action and refactor our signal to instead grab the repos first, then we update the state in one go. This just to show you different strategies.
 
-Check out the following, again refactored, version of our *getRepo* action. The factory is no longer returning paths. We just return a payload to the signal if the request is successful. That means any errors will be thrown from the HTTP provider. Sounds good? Let us use it:
+Check out the refactoring of our *getRepo* action. The factory is no longer returning paths. We just return a payload to the signal if the request is successful. That means any errors will be thrown from the HTTP provider. Sounds good? Let us use it:
 
 ```js
 ...
