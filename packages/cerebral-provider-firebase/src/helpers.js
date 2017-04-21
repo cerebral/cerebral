@@ -40,8 +40,8 @@ const events = {
   '*': '*'
 }
 
-export function stopListening (passedPath, event, signal) {
-  const realEventName = events[event]
+export function stopListening (passedPath, event) {
+  const realEventName = events[event] || '*'
   const pathArray = passedPath.split('.')
   let path = passedPath
   let isWildcardPath = false
@@ -78,6 +78,10 @@ export function stopListening (passedPath, event, signal) {
       } else {
         refs[ref][realEventName].forEach((listener) => listener.off())
         delete refs[ref][realEventName]
+      }
+
+      if (Object.keys(refs[ref]).length === 0) {
+        delete refs[ref];
       }
     })
   } else {

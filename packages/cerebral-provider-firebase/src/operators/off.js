@@ -1,6 +1,6 @@
-function offFactory (path, event, signal) {
+function offFactory (path, event) {
   function off ({firebase, resolve}) {
-    firebase.off(resolve.value(path), resolve.value(event), resolve.path(signal))
+    firebase.off(resolve.value(path), resolve.value(event))
   }
 
   return off
