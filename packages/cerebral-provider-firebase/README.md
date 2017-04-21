@@ -306,7 +306,7 @@ This will **NOT** immediately grab the value and trigger the signal passed, the 
 To stop listening for updates to the value:
 ```js
 function someAction({ firebase }) {
-  firebase.off('someKey.foo', 'onValue', 'someModule.fooUpdated');
+  firebase.off('someKey.foo', 'onValue');
 }
 ```
 
@@ -342,7 +342,7 @@ This will immediately grab and trigger the signal `posts.postAdded` for every po
 To stop listening for updates to the posts:
 ```js
 function someAction({ firebase }) {
-  firebase.off('posts', 'onChildAdded', 'posts.postAdded');
+  firebase.off('posts', 'onChildAdded');
 }
 ```
 
@@ -374,7 +374,7 @@ This will trigger the signal `posts.postRemoved` whenever a post is removed from
 To stop listening:
 ```js
 function someAction({ firebase }) {
-  firebase.off('posts', 'onChildRemoved', 'posts.postRemoved');
+  firebase.off('posts', 'onChildRemoved');
 }
 ```
 
@@ -404,7 +404,7 @@ This will trigger the signal `posts.postChanged` whenever a post is changed in t
 To stop listening:
 ```js
 function someAction({ firebase }) {
-  firebase.off('posts', 'onChildChanged', 'posts.postChanged');
+  firebase.off('posts', 'onChildChanged');
 }
 ```
 
@@ -416,6 +416,40 @@ export default [
   onChildChanged('foo.bar', 'some.signal', {
     // Same options as above
   })
+]
+```
+
+## off
+
+*action*
+```js
+function someAction({ firebase }) {
+  // Turn off listener at specific path and
+  // specific event
+  firebase.off('posts', 'onChildChanged')
+
+  // Turn off all listeners at specific path
+  firebase.off('posts', 'onChildChanged')
+
+  // Turn off all listeners of specific event at wildcard path
+  firebase.off('posts.*', 'onChildChanged')
+
+  // Turn off all listeners at wildcard path
+  firebase.off('posts.*')
+}
+```
+
+*factory*
+```javascript
+import {string} from 'cerebral/tags'
+import {off} from 'cerebral-provider-firebase/operators'
+
+export default [
+  // Same API as in actions, also wildcard
+  off('posts', 'onChildChanged'),
+
+  // Compose using string tag
+  off(string`posts.${state`selectedPostKey`}`)
 ]
 ```
 

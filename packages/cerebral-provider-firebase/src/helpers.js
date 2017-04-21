@@ -81,7 +81,7 @@ export function stopListening (passedPath, event) {
       }
 
       if (Object.keys(refs[ref]).length === 0) {
-        delete refs[ref];
+        delete refs[ref]
       }
     })
   } else {
