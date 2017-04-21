@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import {compute} from '..'
+import {compute, sequence} from '..'
 import {state, props} from '../tags'
 import {runCompute, runAction, runSignal, RunSignal, CerebralTest} from '.'
 import assert from 'assert'
@@ -82,6 +82,23 @@ describe('test helpers', () => {
           assert.equal(response[0].output.bar, 'bar')
           assert.equal(response[1].props.bar, 'bar')
           assert.equal(response[1].output.baz, 'baz')
+        })
+    })
+    it('should test a signal with sequence', () => {
+      const testSignal = sequence([
+        function action1 ({props}) {
+          return {bar: 'bar'}
+        },
+        function action2 ({props}) {
+          return {baz: 'baz'}
+        }
+      ])
+      return runSignal(testSignal, {props: {foo: 'foo'}}, {recordActions: 'byName'})
+        .then(({action1, action2}) => {
+          assert.equal(action1.props.foo, 'foo')
+          assert.equal(action1.output.bar, 'bar')
+          assert.equal(action2.props.bar, 'bar')
+          assert.equal(action2.output.baz, 'baz')
         })
     })
   })
