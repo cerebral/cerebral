@@ -1,4 +1,4 @@
-import parseQuery from 'graphql-tag'
+import {parse} from 'graphql'
 
 function traverse (data, visit) {
   if (Array.isArray(data)) {
@@ -27,7 +27,7 @@ function look (data, visit) {
 }
 
 function getPaths (query) {
-  const ast = parseQuery`${query}`
+  const ast = parse(query)
   const path = []
   const paths = []
 
@@ -54,6 +54,8 @@ function getPaths (query) {
         }
     }
   })
+
+  console.log(paths);
 
   return paths
 }

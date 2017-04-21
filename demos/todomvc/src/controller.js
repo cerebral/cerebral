@@ -12,6 +12,22 @@ import clearCompletedTodos from './actions/clearCompletedTodos'
 
 import GraphQlModule from './GraphQl'
 
+const users = [
+  {
+    id: 1,
+    username: 'christianalfoni',
+    email: 'christianalfoni@gmail.com'
+  }
+]
+
+const posts = [
+  {
+    id: 1,
+    title: 'test',
+    body: 'woop'
+  }
+]
+
 const controller = Controller({
   devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
   router: Router({
@@ -32,13 +48,42 @@ const controller = Controller({
   modules: {
     graphql: GraphQlModule({
       schema: `
+        type Post {
+          id: Int!
+          title: String
+          body: String
+        }
+
+        type User {
+          id: Int!
+          username: String
+          email: String
+        }
+
         type Query {
-          hello: String
+          posts: [Post]
+          post (id: Int!): Post
+          users: [User]
+          user: User
+        }
+
+        schema {
+          query: Query
         }
       `,
       root: {
-        hello: () => {
-          return 'Hello world'
+        post({ id }) {
+          return posts.filter((post) => post.id === id)[0]
+        },
+        posts(...args) {
+          console.log(args);
+          return posts
+        },
+        user({ id }) {
+          return users.filter((user) => user.id === id)[0]
+        },
+        users() {
+          return users
         }
       }
     })

@@ -8,7 +8,11 @@ import computedCounts from '../../computed/counts'
 export default connect({
   counts: computedCounts,
   data: query`{
-    hello
+    posts {
+      id,
+      title,
+      body
+    }
   }`
 },
   function App ({counts, data}) {

@@ -1,4 +1,4 @@
-import { graphql, buildSchema } from 'graphql'
+import { graphql, buildSchema, typeFromAST, parse, buildASTSchema } from 'graphql'
 import Tag from 'cerebral/lib/tags/Tag'
 
 export {default as connect} from './connect'
@@ -15,21 +15,39 @@ function Module (options = {}) {
       state: {},
       signals: {
         test: [
-          ({graphql, props, state}) => {
-            graphql.query(props.query)
-              .then((result) => {
-                // Safe insert
-                state.set(`graphql.data`, result.data)
-              })
+          function query ({graphql, props}) {
+            return graphql.query(props.query)
+          },
+          function setResponse ({props, state}) {
+            state.set(`graphql.data`, props.data)
           }
         ]
       },
       provider (context) {
+        const resolvers = Object.assign({}, options.root);
+
         context.graphql = {
           query(query) {
-            return graphql(schema, query, options.root);
+            return graphql(schema, query, resolvers);
           }
         }
+
+        if (context.debugger) {
+          context.debugger.wrapProvider('graphql');
+          Object.keys(resolvers).reduce((wrappedResolvers, resolver) => {
+            const origin = wrappedResolvers[resolver]
+            wrappedResolvers[resolver] = (...args) => {
+              context.debugger.send({
+                method: `graphql.resolvers.${resolver}`,
+                args
+              })
+
+              return origin.apply(null, args);
+            }
+            return wrappedResolvers
+          }, resolvers);
+        }
+
         return context
       }
     }
