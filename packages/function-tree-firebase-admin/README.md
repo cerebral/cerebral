@@ -136,9 +136,9 @@ module.exports = new QueueHandler({
   // queue tasks. It is automatically removed in production
   specPrefix: username.sync(),
 
-  // You can specify your own authenticate function.
-  // If you don't firebase.verifyIdToken will be used.
-  authenticate: () => {},
+  // You can specify if you want to authenticate or not.
+  // default is false
+  authenticate: true,
 
   // An array of specs and corresponding trees to run
   tasks: [{
