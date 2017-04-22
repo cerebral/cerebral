@@ -5,12 +5,36 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
+const log = require('electron-log');
+const {autoUpdater} = require("electron-updater");
+autoUpdater.logger = log;
+autoUpdater.logger.transports.file.level = 'info';
+autoUpdater.on('checking-for-update', () => {
+  log.info('Checking for update...');
+})
+autoUpdater.on('update-available', (ev, info) => {
+  log.info('Update available.');
+})
+autoUpdater.on('update-not-available', (ev, info) => {
+  log.info('Update not available.');
+})
+autoUpdater.on('error', (ev, err) => {
+  log.info('Error in auto-updater.');
+})
+autoUpdater.on('download-progress', (ev, progressObj) => {
+  log.info('Download progress...');
+})
+autoUpdater.on('update-downloaded', (ev, info) => {
+  log.info('Update downloaded; will install in 5 seconds');
+});
+log.info('App starting...');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
 function createWindow () {
+  autoUpdater.checkForUpdates();
   const clients = {}
 
   mainWindow = new BrowserWindow({icon: path.resolve('icons', 'icon.png'), width: 800, height: 600})
