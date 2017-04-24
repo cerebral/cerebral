@@ -30,7 +30,7 @@
     "start": "react-scripts start",
     "prebuild": "npm run sass",
     "build": "react-scripts build",
-    "sass": "./node_modules/.bin/node-sass src/scss/app.scss -o public/css/",
+    "sass": "node-sass src/scss/app.scss -o public/css/",
     "eject": "react-scripts eject",
     "prepublish": "npm run build"
   }

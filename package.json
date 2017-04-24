@@ -4,9 +4,9 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "setup": "lerna bootstrap",
-    "setup:packages": "lerna bootstrap --scope '@(function-tree|cerebral*)'",
-    "setup:babel": "lerna bootstrap --scope '@(function-tree|cerebral*|babel*)'",
+    "setup": "lerna bootstrap && link-parent-bin -s true",
+    "setup:packages": "lerna bootstrap --scope \"@(function-tree|cerebral*)\" && link-parent-bin -s true",
+    "setup:babel": "lerna bootstrap --scope \"@(function-tree|cerebral*|babel*)\" && link-parent-bin -s true",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
     "lint": "standard",
@@ -15,19 +15,8 @@
     "coverage": "lerna run coverage --ignore @cerebral/monorepo",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "deploy": "cd website/publisher && npm run ci"
-  },
-  "bin": {
-    "babel": "./node_modules/.bin/babel",
-    "mocha": "./node_modules/.bin/mocha",
-    "nyc": "./node_modules/.bin/nyc",
-    "react-scripts": "./node_modules/.bin/react-scripts",
-    "npm-run-all": "./node_modules/.bin/npm-run-all",
-    "run-p": "./node_modules/.bin/run-p",
-    "run-s": "./node_modules/.bin/run-s",
-    "shx": "./node_modules/.bin/shx",
-    "gh-pages": "./node_modules/.bin/gh-pages",
-    "jest": "./node_modules/.bin/jest"
+    "deploy": "cd website/publisher && npm run ci",
+    "link-parent-bin": "link-parent-bin"
   },
   "dependencies": {
     "babel-cli": "^6.23.0",
@@ -74,5 +63,8 @@
       "**/node_modules/**",
       "**/build/"
     ]
+  },
+  "devDependencies": {
+    "link-parent-bin": "^0.1.1"
   }
 }
