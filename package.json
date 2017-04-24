@@ -29,7 +29,6 @@
     "babel-register": "^6.23.0",
     "commitizen": "^2.9.6",
     "coveralls": "^2.12.0",
-    "cross-env": "^3.2.3",
     "cz-customizable": "^4.0.0",
     "cz-customizable-ghooks": "^1.5.0",
     "gh-pages": "^0.12.0",
@@ -65,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "cross-env": "^3.2.3",
     "link-parent-bin": "^0.1.1"
   }
 }
