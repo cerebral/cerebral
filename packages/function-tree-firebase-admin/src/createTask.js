@@ -1,5 +1,5 @@
 import firebase from 'firebase-admin'
-import { FirebaseProviderError } from './errors'
+import { FirebaseAdminError } from './errors'
 
 export default function createTask (options, executionId, functionIndex) {
   return (name, payload = {}) => {
@@ -31,7 +31,7 @@ export default function createTask (options, executionId, functionIndex) {
           resolve()
         } else if (val._error_details) {
           taskRef.off()
-          reject(new FirebaseProviderError(val._error_details))
+          reject(new FirebaseAdminError(val._error_details))
         }
       })
     })

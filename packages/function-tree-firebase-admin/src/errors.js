@@ -1,7 +1,7 @@
-export class FirebaseProviderError extends Error {
+export class FirebaseAdminError extends Error {
   constructor (error) {
     super(error.message)
-    this.name = 'FirebaseProviderError'
+    this.name = 'FirebaseAdminError'
     this.message = error.message
   }
   toJSON () {
