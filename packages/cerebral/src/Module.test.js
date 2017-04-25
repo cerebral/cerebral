@@ -183,7 +183,6 @@ describe('Module', () => {
     assert.deepEqual(controller.getState(), {foo: {foo: 'module'}})
   })
   it('should throw when signal is not set properly', () => {
-    class TestError {}
     const controller = new Controller({
       modules: {
         foo: {
@@ -197,5 +196,5 @@ describe('Module', () => {
     assert.throws(() => {
       controller.getSignal('foo.test')()
     })
-  })  
+  })
 })
