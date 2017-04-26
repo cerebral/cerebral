@@ -19,7 +19,7 @@ It's created using a very nice library called ["shortway" by Thiago Santos](http
 
 ```javascript
 
-import shortcuts from 'cerebral-shortcuts-module';
+import shortcuts from 'cerebral-module-shortcuts';
 
 const controller = Controller({
   signals: {
