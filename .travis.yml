@@ -8,7 +8,8 @@ notifications:
   email: false
 before_script:
 - npm prune
-- link-parent-bin
+- link-parent-bin -s true
+- link-parent-bin -s true -c babel
 - lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-provider-firebase|cerebral-provider-forms|cerebral-router|babel-*)'
 - lerna bootstrap --scope @cerebral/codemods*
 after_success:
@@ -27,8 +28,8 @@ after_success:
   fi
   if [[ $TRAVIS_BRANCH == 'next' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
     # TODO: check changed path to decide if npm publish necessary
+    npm run link;
     lerna bootstrap;
-    npm run link-parent-bin;
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
     lerna publish -c --npm-tag next --yes --exact;
     npm run deploy && echo 'Website updated.';

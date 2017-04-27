@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "setup": "lerna bootstrap && link-parent-bin -s true",
-    "setup:packages": "lerna bootstrap --scope \"@(function-tree|cerebral*)\" && link-parent-bin -s true",
-    "setup:babel": "lerna bootstrap --scope \"@(function-tree|cerebral*|babel*)\" && link-parent-bin -s true",
+    "link": "link-parent-bin -s true && ink-parent-bin -s true -c babel",
+    "setup": "lerna bootstrap && npm run link",
+    "setup:packages": "lerna bootstrap --scope \"@(function-tree|cerebral*)\" && npm run link",
+    "setup:babel": "lerna bootstrap --scope \"@(function-tree|cerebral*|babel*)\" && npm run link",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
     "lint": "standard",
