@@ -46,6 +46,8 @@
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-scripts": "0.9.4",
+    "cross-env": "^3.2.3",
+    "link-parent-bin": "^0.1.1",
     "shx": "^0.2.2",
     "standard": "^8.6.0"
   },
@@ -63,9 +65,5 @@
       "**/node_modules/**",
       "**/build/"
     ]
-  },
-  "devDependencies": {
-    "cross-env": "^3.2.3",
-    "link-parent-bin": "^0.1.1"
   }
 }
