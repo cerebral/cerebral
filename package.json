@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
-    "link": "link-parent-bin -s true && link-parent-bin -s true -c babel",
+    "link": "link-parent-bin -s true && link-parent-bin -s true -c babel && link-parent-bin -s true -c demos && link-parent-bin -s true -c website",
     "setup": "npm run link && lerna bootstrap",
     "setup:packages": "npm run link && lerna bootstrap --scope \"@(function-tree|cerebral*)\"",
     "setup:babel": "npm run link && lerna bootstrap --scope \"@(function-tree|cerebral*|babel*)\"",
@@ -17,7 +17,7 @@
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
     "deploy": "cd website/publisher && npm run ci",
-    "link-parent-bin": "link-parent-bin"
+    "postinstall": "npm run link"
   },
   "dependencies": {
     "babel-cli": "^6.23.0",
