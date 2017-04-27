@@ -11,6 +11,10 @@ class DependencyStore {
     for (const depsMapKey in depsMap) {
       const path = depsMapKey.split('.')
 
+      if (path[path.length - 1] === '!') {
+        continue
+      }
+
       path.reduce((currentMapLevel, key, index) => {
         if (!currentMapLevel[key]) {
           currentMapLevel[key] = {}

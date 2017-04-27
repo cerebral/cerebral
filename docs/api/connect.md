@@ -83,6 +83,22 @@ export default connect({
 
 This component will only render when any keys are added or removed, meaning that nested change to a child does not cause a new render.
 
+You can also define a "one time" dependency. With this approach you will get the value when the component mounts, but it will not rerender when the state path changes.
+
+```js
+import React from 'react'
+import {connect} from 'cerebral/react'
+import {state} from 'cerebral/tags'
+
+export default connect({
+  someState: state`app.someState.!`,
+},
+  function App (props) {
+    props.someState
+  }
+)
+```
+
 ## Override props
 You can add an additional function to connect that gives you full control of properties of the component and dependencies. The returned object from this function will be the exact props passed into the component.
 

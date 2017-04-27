@@ -913,5 +913,39 @@ describe('React', () => {
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'h1').innerHTML, 'foo')
       })
     })
+    it('should NOT rerender when dependency set with !', () => {
+      const controller = Controller({
+        state: {
+          foo: {
+            bar: 'baz'
+          }
+        },
+        signals: {
+          methodCalled: [({state}) => state.set('foo', {bar: 'baz2'})]
+        }
+      })
+      class TestComponentClass extends React.Component {
+        callSignal () {
+          this.props.methodCalled()
+        }
+        render () {
+          return (
+            <div>{this.props.foo}</div>
+          )
+        }
+      }
+      const TestComponent = connect({
+        foo: state`foo.bar.!`,
+        methodCalled: signal`methodCalled`
+      }, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
+      component.callSignal()
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'baz')
+    })
   })
 })

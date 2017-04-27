@@ -22,7 +22,7 @@ export function getChangedProps (propsA, propsB) {
 }
 
 export function cleanPath (path) {
-  return typeof path === 'string' ? path.replace(/\.\*\*|\.\*/, '') : path
+  return typeof path === 'string' ? path.replace(/\.\*\*|\.\*|.\!/, '') : path
 }
 
 export function isObject (obj) {
