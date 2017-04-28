@@ -8,7 +8,6 @@ global.window = document.defaultView
 
 import {Controller} from 'cerebral'
 import shortcuts from './'
-import assert from 'assert'
 
 describe('Shortcuts module', () => {
   it('should trigger signal upon keypress of letter "z"', (done) => {
