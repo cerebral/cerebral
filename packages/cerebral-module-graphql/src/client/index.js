@@ -1,4 +1,5 @@
 import {graphql} from 'graphql'
+import {print} from 'graphql/language'
 import GraphQl from '../GraphQl'
 import querySignal from '../querySignal'
 import createExecutableSchema from './createExecutableSchema'
@@ -22,7 +23,7 @@ function GraphQlModule (options = {}) {
       provider(context) {
         context.graphql = {
           query(query) {
-            return graphql(schema, query, null, context)
+            return graphql(schema, graphQl.addQuery(query).printed, null, context)
               .then((result) => {
                 if (result.errors) {
                   throw result.errors[0]

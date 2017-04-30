@@ -99,7 +99,10 @@ describe('GraphQlModule - Server', () => {
         })
         assert.deepEqual(controller.getState().graphql.queries, {
           [query]: {
-            isLoading: false
+            isLoading: false,
+            objectIds: {
+              author: 1
+            }
           }
         })
         done()

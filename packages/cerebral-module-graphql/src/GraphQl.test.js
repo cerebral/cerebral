@@ -1,10 +1,92 @@
 /* eslint-env mocha */
 import assert from 'assert'
 import GraphQl from './GraphQl'
-import gqlt from 'graphql-tag'
 import createExecutableSchema from './client/createExecutableSchema'
+import {parse, print} from 'graphql/language'
 
 describe('GraphQl', () => {
+  describe('addQuery', () => {
+    it('should ensure objects has the defined id field', () => {
+      const graphQl = new GraphQl(createExecutableSchema({
+        schema: `
+          type Author {
+            id: ID!
+            firstName: String
+          }
+
+          type Query {
+            author: Author
+          }
+
+          schema {
+            query: Query
+          }
+        `,
+        resolvers: {
+          Query: {
+            author() {}
+          }
+        }
+      }))
+
+      const queryDetails = graphQl.addQuery(`
+        {
+          author (id: 1) {
+            firstName
+          }
+        }
+      `)
+
+      assert.equal(queryDetails.printed, `{
+  author(id: 1) {
+    firstName
+    id
+  }
+}
+`)
+    })
+    it('should ensure objects has the fields used as arguments', () => {
+      const graphQl = new GraphQl(createExecutableSchema({
+        schema: `
+          type Author {
+            id: ID!
+            firstName: String
+            login: String
+          }
+
+          type Query {
+            author: Author
+          }
+
+          schema {
+            query: Query
+          }
+        `,
+        resolvers: {
+          Query: {
+            author() {}
+          }
+        }
+      }))
+
+      const queryDetails = graphQl.addQuery(`
+        {
+          author (login: "test") {
+            firstName
+          }
+        }
+      `)
+
+      assert.equal(queryDetails.printed, `{
+  author(login: "test") {
+    firstName
+    id
+    login
+  }
+}
+`)
+    })
+  })
   describe('getQueryTypes', () => {
     it('should convert query types to normalizr friendly structure', () => {
       const graphQl = new GraphQl(createExecutableSchema({
@@ -151,14 +233,14 @@ describe('GraphQl', () => {
         }
       }))
 
-      const query = gqlt`
+      const query = parse(`
         {
           author (id: 1) {
-            id
+            id,
             firstName
           }
         }
-      `
+      `)
 
       assert.deepEqual(graphQl.createQueryStructureWithRelations(query), [{
         name: 'Author',
@@ -195,7 +277,7 @@ describe('GraphQl', () => {
         }
       }))
 
-      const query = gqlt`
+      const query = parse(`
         {
           author (id: 1) {
             id
@@ -203,7 +285,7 @@ describe('GraphQl', () => {
             posts
           }
         }
-      `
+      `)
 
       assert.deepEqual(graphQl.createQueryStructureWithRelations(query), [{
         name: 'Author',
@@ -250,6 +332,7 @@ describe('GraphQl', () => {
           }
         }
       `
+      graphQl.addQuery(query)
 
       assert.deepEqual(graphQl.normalize(query, {
         author: {
@@ -257,10 +340,15 @@ describe('GraphQl', () => {
           firstName: 'woop'
         }
       }), {
-        Author: {
-          1: {
-            id: 1,
-            firstName: 'woop'
+        objectIds: {
+          author: 1
+        },
+        entities: {
+          Author: {
+            1: {
+              id: 1,
+              firstName: 'woop'
+            }
           }
         }
       })
@@ -304,6 +392,8 @@ describe('GraphQl', () => {
         }
       `
 
+      graphQl.addQuery(query)
+
       assert.deepEqual(graphQl.normalize(query, {
         author: {
           id: 1,
@@ -314,17 +404,74 @@ describe('GraphQl', () => {
           }]
         }
       }), {
-        Author: {
-          1: {
-            id: 1,
-            firstName: 'woop',
-            posts: [1]
-          }
+        objectIds: {
+          author: 1
         },
-        Post: {
-          1: {
-            id: 1,
-            title: 'hm'
+        entities: {
+          Author: {
+            1: {
+              id: 1,
+              firstName: 'woop',
+              posts: [1]
+            }
+          },
+          Post: {
+            1: {
+              id: 1,
+              title: 'hm'
+            }
+          }
+        }
+      })
+    })
+    it('should normalize query with no arguments', () => {
+      const graphQl = new GraphQl(createExecutableSchema({
+        schema: `
+          type User {
+            id: ID!
+            name: String
+          }
+
+          type Query {
+            me: User
+          }
+
+          schema {
+            query: Query
+          }
+        `,
+        resolvers: {
+          Query: {
+            me() {}
+          }
+        }
+      }))
+
+      const query = `
+        {
+          me {
+            name
+          }
+        }
+      `
+
+      graphQl.addQuery(query)
+
+      assert.deepEqual(graphQl.normalize(query, {
+        me: {
+          id: 1,
+          name: 'woop'
+        }
+      }), {
+        objectIds: {
+          me: 1
+        },
+        entities: {
+          User: {
+            1: {
+              id: 1,
+              name: 'woop'
+            }
           }
         }
       })

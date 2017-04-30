@@ -1,6 +1,6 @@
 import {state} from 'cerebral/tags'
 import {compute} from 'cerebral'
-import qlt from 'graphql-tag'
+import queryCache from '../queryCache'
 
 function getQueryStructure (queryStructure) {
   switch (queryStructure.kind) {
@@ -13,16 +13,6 @@ function getQueryStructure (queryStructure) {
     case 'Field':
       return queryStructure
   }
-}
-
-function getObjectId (objectQueryStructure) {
-  return objectQueryStructure.arguments.reduce((id, argument) => {
-    return id || argument.name.value === 'id' && argument.value.value
-  }, null)
-}
-
-function buildQueryFieldObject () {
-
 }
 
 function buildQueryFieldList (queryFields, ids, objectType, objectTypes, queryTypes, get) {
@@ -68,13 +58,29 @@ export default function createComputed (query) {
       }
     }
 
-    const queryStructure = qlt`${query}`
-
+    const queryStructure = queryCache.get(query).ast
     const objectQueryStructures = getQueryStructure(queryStructure)
 
     return objectQueryStructures.reduce((object, objectQueryStructure) => {
       const objectType = objectTypes[queryTypes[objectQueryStructure.name.value].name]
-      const objectPath = `graphql.entities.${objectType.name}.${getObjectId(objectQueryStructure)}`
+      const id = queryStatus.objectIds[objectQueryStructure.name.value]
+
+      let objectPath
+      if (id) {
+        objectPath = `graphql.entities.${objectType.name}.${id}`
+      } else {
+        const objects = get(state`graphql.entities.${objectType.name}.!`)
+        const lookupField = objectQueryStructure.arguments[0].name.value
+        const lookupValue = objectQueryStructure.arguments[0].value.value
+
+        objectPath = Object.keys(objects).reduce((currentPath, objectKey) => {
+          if (objects[objectKey][lookupField] === lookupValue) {
+            return `graphql.entities.${objectType.name}.${objectKey}`
+          }
+
+          return currentPath
+        }, null)
+      }
       const queryFields = objectQueryStructure.selectionSet.selections
       return Object.assign(object, {
         [objectQueryStructure.name.value]: buildQueryResultFields(queryFields, objectPath, objectType, objectTypes, queryTypes, get)

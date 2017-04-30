@@ -37,17 +37,18 @@ function GraphQlModule (options = {}) {
       provider(context) {
         context.graphql = {
           query(query) {
-            return http.query(query, options)
-              .then((result) => {
-                if (result.errors) {
-                  throw result.errors[0]
-                }
+            return graphQlPromise
+              .then((graphQl) => {
+                return http.query(graphQl.addQuery(query).printed, options)
+                  .then((result) => {
+                    if (result.errors) {
+                      throw result.errors[0]
+                    }
 
-                return graphQlPromise.then((graphQl) => {
-                  return {
-                    data: graphQl.normalize(query, result.data)
-                  }
-                })
+                    return {
+                      data: graphQl.normalize(query, result.data)
+                    }
+                  })
               })
           }
         }

@@ -178,4 +178,114 @@ describe('createComputed', () => {
       query
     })
   })
+  it('should find entity when not id is used', (done) => {
+    const controller = Controller({
+      modules: {
+        graphql: GraphQlModule({
+          schema: `
+            type Author {
+              id: ID!
+              firstName: String
+              login: String
+            }
+
+            type Query {
+              author (login: String): Author
+            }
+
+            schema {
+              query: Query
+            }
+          `,
+          resolvers: {
+            Query: {
+              author() {
+                return {id: 1, firstName: 'Bob', login: 'test'}
+              }
+            }
+          }
+        })
+      }
+    })
+
+    const query = `
+      {
+        author (login: "test") {
+          firstName
+        }
+      }
+    `
+    const computed = createComputed(query)
+
+    controller.once('end', () => {
+      assert.deepEqual(computed.getValue({
+        state: controller.getState.bind(controller)
+      }), {
+        author: {
+          id: '1',
+          firstName: 'Bob',
+          login: 'test'
+        }
+      })
+      done()
+    })
+
+    controller.getSignal('graphql.queried')({
+      query
+    })
+  })
+  it('should find entity when no argument is used', (done) => {
+    const controller = Controller({
+      modules: {
+        graphql: GraphQlModule({
+          schema: `
+            type User {
+              id: ID!
+              name: String
+            }
+
+            type Query {
+              me: User
+            }
+
+            schema {
+              query: Query
+            }
+          `,
+          resolvers: {
+            Query: {
+              me() {
+                return {id: 1, name: 'Bob'}
+              }
+            }
+          }
+        })
+      }
+    })
+
+    const query = `
+      {
+        me {
+          name
+        }
+      }
+    `
+    const computed = createComputed(query)
+
+    controller.once('end', () => {
+      assert.deepEqual(computed.getValue({
+        state: controller.getState.bind(controller)
+      }), {
+        me: {
+          id: '1',
+          name: 'Bob'
+        }
+      })
+      done()
+    })
+
+    controller.getSignal('graphql.queried')({
+      query
+    })
+  })
 })

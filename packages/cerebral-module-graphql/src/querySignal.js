@@ -7,18 +7,19 @@ export default [
   function query ({props, graphql}) {
     return graphql.query(props.query)
   },
-  function setResult ({props, state}) {
-    Object.keys(props.data).forEach((type) => {
+  function setResult ({props, state, graphql}) {
+    Object.keys(props.data.entities).forEach((type) => {
       if (!state.get(`graphql.entities.${type}`)) {
-        state.set(`graphql.entities.${type}`, props.data[type])
+        state.set(`graphql.entities.${type}`, props.data.entities[type])
       } else {
-        Object.keys(props.data[type]).forEach((entityId) => {
-          state.merge(`graphql.entities.${type}.${entityId}`, props.data[type][entityId])
+        Object.keys(props.data.entities[type]).forEach((entityId) => {
+          state.merge(`graphql.entities.${type}.${entityId}`, props.data.entities[type][entityId])
         })
       }
     })
     state.set(`graphql.queries.${props.query}`, {
-      isLoading: false
+      isLoading: false,
+      objectIds: props.data.objectIds
     })
   }
 ]

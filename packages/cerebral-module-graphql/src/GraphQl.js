@@ -1,6 +1,8 @@
 import {GraphQLObjectType, GraphQLScalarType, GraphQLNonNull, GraphQLList} from 'graphql'
-import qlt from 'graphql-tag'
 import {normalize, schema as normalizrSchema} from 'normalizr';
+import {parse, print, visit, visitor} from 'graphql/language'
+import {isFieldsOfObjectType, getMissingIdFieldName, getMissingArgFieldNames} from './utils'
+import queryCache from './queryCache'
 
 class GraphQl {
   constructor (schema) {
@@ -8,19 +10,66 @@ class GraphQl {
     this.queryTypes = this.getQueryTypes(this.schema)
     this.objectTypes = this.getObjectTypes(this.schema)
   }
+  addQuery (query) {
+    if (queryCache.get(query)) {
+      return queryCache.get(query)
+    }
+
+    const self = this
+    const ast = visit(parse(query), {
+      enter(node, key, parent, path, ancestors) {
+        if (isFieldsOfObjectType(node, parent, self.queryTypes)) {
+          const objectType = self.objectTypes[self.queryTypes[parent.name.value].name]
+          const missingIdFieldName = getMissingIdFieldName(node, objectType)
+          const missingArgFieldNames = getMissingArgFieldNames(parent, objectType)
+
+          node.selections = node.selections.concat(
+            missingIdFieldName && missingArgFieldNames.indexOf(missingIdFieldName) === -1 ? {
+              kind: 'Field',
+              alias: null,
+              name: {kind: 'Name', value: missingIdFieldName},
+              arguments: [],
+              directives: [],
+              selectionSet: null
+            } : []
+          ).concat(missingArgFieldNames.map((missingArgFieldName) => ({
+            kind: 'Field',
+            alias: null,
+            name: {kind: 'Name', value: missingArgFieldName},
+            arguments: [],
+            directives: [],
+            selectionSet: null
+          })))
+
+          return node
+        }
+      }
+    })
+
+    return queryCache.add(query, {
+      ast,
+      printed: print(ast)
+    })
+  }
   /*
     Normalizes data structure based on query
   */
   normalize (query, data) {
-    const queryStructure = qlt`${query}`
+    const queryStructure = queryCache.get(query).ast
     const queryStructuresWithRelations = this.createQueryStructureWithRelations(queryStructure)
-
-    return queryStructuresWithRelations.reduce((entities, queryStructureWithRelations) => {
+    return queryStructuresWithRelations.reduce((result, queryStructureWithRelations) => {
       const normalizeSchema = this.createNormalizeSchema(queryStructureWithRelations)
       const jsData = JSON.parse(JSON.stringify(data[queryStructureWithRelations.fieldName]))
+      const normalized = normalize(jsData, normalizeSchema)
 
-      return Object.assign(entities, normalize(jsData, normalizeSchema).entities)
-    }, {})
+      result.entities = Object.assign(result.entities, normalized.entities)
+      result.objectIds[queryStructureWithRelations.fieldName] = normalized.result
+
+      return result
+    }, {
+      objectIds: {},
+      entities: {}
+    })
   }
   getQueryTypes (schema) {
     return Object.keys(schema._queryType._fields).reduce((currentObjectTypes, fieldKey) => {
@@ -28,7 +77,7 @@ class GraphQl {
         name: schema._queryType._fields[fieldKey].type.ofType.name,
         isList: true
       } : {
-        name: schema._queryType._fields[fieldKey].type.name
+        name: schema._queryType._fields[fieldKey].type.name || schema._queryType._fields[fieldKey].type.ofType.name
       }
 
       return currentObjectTypes
