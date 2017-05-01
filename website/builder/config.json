@@ -44,6 +44,21 @@
       "../../docs/developer_guide/test",
       "../../docs/developer_guide/collaborate"
     ],
+    "api": [
+      "../../docs/api/controller",
+      "../../docs/api/action",
+      "../../docs/api/signal",
+      "../../docs/api/devtools",
+      "../../docs/api/state",
+      "../../docs/api/tags",
+      "../../docs/api/container",
+      "../../docs/api/connect",
+      "../../docs/api/modules",
+      "../../docs/api/operators",
+      "../../docs/api/providers",
+      "../../docs/api/compute",
+      "../../docs/api/statecontainer"
+    ],
     "packages": [{
       "name": "router",
       "path": "../../packages/cerebral-router/README"
@@ -71,21 +86,6 @@
     }],
     "migration": [
       "../../docs/migration/migration"
-    ],
-    "api": [
-      "../../docs/api/controller",
-      "../../docs/api/action",
-      "../../docs/api/signal",
-      "../../docs/api/devtools",
-      "../../docs/api/state",
-      "../../docs/api/tags",
-      "../../docs/api/container",
-      "../../docs/api/connect",
-      "../../docs/api/modules",
-      "../../docs/api/operators",
-      "../../docs/api/providers",
-      "../../docs/api/compute",
-      "../../docs/api/statecontainer"
     ]
   }
 }
