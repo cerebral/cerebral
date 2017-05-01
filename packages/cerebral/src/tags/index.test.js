@@ -36,6 +36,15 @@ describe('Tags', () => {
       tag.getValue({props: propsObject})
     })
   })
+  it('should throw on undefined interpolated value', () => {
+    const bar = void 0
+    assert.throws(() => {
+      props`foo.${bar}`
+    })
+    assert.throws(() => {
+      props`baz.${'bar'}.${bar}`
+    })
+  })
   it('should NOT throw on undefined value', () => {
     const tagA = props`foo.bar`
     const tagB = props`baz`
