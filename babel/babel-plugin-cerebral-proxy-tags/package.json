@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "build": "BABEL_ENV=production babel -d dist ./*.js",
+    "build": "cross-env BABEL_ENV=production babel -d dist ./*.js",
     "coverage": "npm test -- --coverage",
     "prepublish": "npm run build"
   },
@@ -14,7 +14,6 @@
   "license": "MIT",
   "repository": "https://github.com/cerebral/cerebral/babel/babel-plugin-cerebral-proxy-tags",
   "devDependencies": {
-    "@cerebral/monorepo": "0.0.1",
     "cerebral": "^2.0.0-b"
   },
   "files": [

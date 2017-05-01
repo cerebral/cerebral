@@ -4,12 +4,9 @@
   "description": "Firebase admin execution and provider",
   "main": "lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "coverage": "nyc --reporter=lcov --reporter=json npm run test",
     "prepublish": "npm run build"
-  },
-  "devDependencies": {
-    "@cerebral/monorepo": "0.0.1"
   },
   "dependencies": {
     "faye-websocket": "^0.11.1",

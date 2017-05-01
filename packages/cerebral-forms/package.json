@@ -6,7 +6,7 @@
   "scripts": {
     "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
     "test:watch": "npm run test -- --watch",
-    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "coverage": "nyc --reporter=lcov --reporter=json npm run test",
     "prepublish": "npm run build"
   },
@@ -29,7 +29,6 @@
     "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "@cerebral/monorepo": "0.0.1",
     "cerebral": "^2.0.0-b"
   },
   "nyc": {

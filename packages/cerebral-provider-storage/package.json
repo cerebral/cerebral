@@ -4,7 +4,7 @@
   "description": "Storage provider for Cerebral 2",
   "main": "lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -26,7 +26,6 @@
     "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "@cerebral/monorepo": "0.0.1",
     "cerebral": "^2.0.0-b"
   }
 }

@@ -1,5 +1,5 @@
 {
   "lerna": "2.0.0-rc.1",
   "version": "independent",
-  "packages": ["packages/*", "website/*", "demos/*", "babel/*", "codemods/*", "debugger/", "."]
+  "packages": ["packages/*", "website/*", "demos/*", "babel/*", "codemods/*", "debugger/"]
 }
