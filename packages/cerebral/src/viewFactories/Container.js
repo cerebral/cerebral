@@ -1,6 +1,6 @@
 import {throwError, noop} from '../utils'
 
-export default (View) => {
+export default (View, PropTypes) => {
   class Container extends View.Component {
     getChildContext () {
       const {controller} = this.props
@@ -22,13 +22,13 @@ export default (View) => {
     }
   }
 
-  if (View.PropTypes) {
+  if (PropTypes != null) {
     Container.propTypes = {
-      controller: View.PropTypes.object.isRequired,
-      children: View.PropTypes.node.isRequired
+      controller: PropTypes.object.isRequired,
+      children: PropTypes.node.isRequired
     }
     Container.childContextTypes = {
-      cerebral: View.PropTypes.object.isRequired
+      cerebral: PropTypes.object.isRequired
     }
   }
 

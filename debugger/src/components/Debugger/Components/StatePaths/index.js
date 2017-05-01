@@ -33,13 +33,7 @@ export default function StatePaths (props) {
           }, false) : true
         }).map((key) => {
           return (
-            <div
-              key={key}
-              className='statePaths-item'
-              onClick={() => this.componentMapPathClick({
-                mapPath: key
-              })}
-            >
+            <div key={key} className='statePaths-item'>
               <div className='statePaths-pathName'>
                 {componentsWithStatePaths[key].name} {componentsWithStatePaths[key].renderCount === 0 ? null : <small>({componentsWithStatePaths[key].renderCount})</small>}
               </div>

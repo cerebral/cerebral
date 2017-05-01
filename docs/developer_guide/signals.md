@@ -85,7 +85,7 @@ signal()
 This signal triggers synchronously and you can pass it a payload.
 
 ```js
-...
+// ...
 signal({
   foo: 'bar'
 })
@@ -94,6 +94,9 @@ signal({
 This payload is brought into the signal execution and acts as the **props** of the signal. Typically you will not trigger signals manually this way, but rather from within a component.
 
 ```js
+// ...
+import {signal} from 'cerebral/tags'
+
 connect({
   somethingHappened: signal`app.somethingHappened`
 },

@@ -182,4 +182,17 @@ describe('Module', () => {
     controller.getSignal('foo.test')()
     assert.deepEqual(controller.getState(), {foo: {foo: 'module'}})
   })
+  it('should throw when signal is not set properly', () => {
+    assert.throws(() => {
+      Controller({
+        modules: {
+          foo: {
+            signals: {
+              test: undefined
+            }
+          }
+        }
+      })
+    })
+  })
 })

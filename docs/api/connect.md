@@ -71,7 +71,7 @@ import {connect} from 'cerebral/react'
 import {state} from 'cerebral/tags'
 
 export default connect({
-  array: state`app.array.*`,
+  list: state`app.array.*`,
   map: state`app.map.*`,
 },
   function App (props) {

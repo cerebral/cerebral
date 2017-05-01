@@ -1,15 +1,28 @@
 const React = require('react')
 const path = require('path')
-const MTRC = require('markdown-to-react-components')
+const marksy = require('marksy').marksy
 const {readFile, fileExistsSync} = require('./utils')
 const config = require('../config.json')
 
-MTRC.configure({
-  a: React.createClass({
-    render () {
-      return <a href={this.props.href} target={this.props.href.substr(0, 4) === 'http' ? 'new' : null}>{this.props.children}</a>
+const compile = marksy({
+  components: {
+    Youtube (props) {
+      return (
+        <div style={{textAlign: 'center'}}>
+          <iframe
+            style={{border: '1px solid #333'}}
+            width='560'
+            height='315'
+            src={props.url}
+            frameborder='0'
+            allowfullscreen />
+        </div>
+      )
     }
-  })
+  },
+  a (props) {
+    return <a href={props.href} target={props.href.substr(0, 4) === 'http' ? 'new' : null}>{props.children}</a>
+  }
 })
 
 module.exports = function () {
@@ -40,7 +53,7 @@ module.exports = function () {
               return currentContent.replace(`(${filePath})`, `(${path.dirname(filePath) + '/' + path.basename(filePath, '.md')}.html)`)
             }, fileContents[index][subIndex])
 
-          subContent[key] = MTRC(content)
+          subContent[key] = compile(content)
           subContent[key].raw = content
           subContent[key].githubUrl = `https://github.com/cerebral/cerebral/tree/master/${(contentName.path || contentName).replace('../../', '')}.md`
 

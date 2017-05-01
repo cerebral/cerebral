@@ -1,3 +1,5 @@
+import {throwError} from './utils'
+
 class Module {
   constructor (controller, path, moduleDescription) {
     const stringPath = path.join('.')
@@ -14,7 +16,9 @@ class Module {
     /* Convert arrays to actually runable signals */
     module.signals = Object.keys(module.signals || {}).reduce((currentSignals, signalKey) => {
       const signal = module.signals[signalKey]
-
+      if (!signal) {
+        throwError(`Signal with name "${signalKey}" is undefined. Please check that the signal is set to either an array or a function.`)
+      }
       currentSignals[signalKey] = {
         signal: signal.signal || signal,
         catch: (signal.catch || controller.catch) ? new Map([].concat(

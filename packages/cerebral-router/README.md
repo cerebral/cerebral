@@ -71,6 +71,15 @@ const controller = Controller({
 })
 ```
 
+When a mapped signal triggers it will trigger with a payload if either **params** are defined on the route or the url has a **query**. For example */items/123?showUser=true* will produce the following payload to the signal, available on the **props** :
+
+```js
+{
+  itemId: '123',
+  showUser: true
+}
+```
+
 ### getUrl
 ```js
 function myAction({router}) {

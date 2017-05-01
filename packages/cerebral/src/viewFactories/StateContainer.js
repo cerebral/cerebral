@@ -1,6 +1,6 @@
 import {ensurePath, noop} from '../utils'
 
-export default (View) => {
+export default (View, PropTypes) => {
   class StateContainer extends View.Component {
     getChildContext () {
       const controller = createDummyController(this.props.state, this.props.signals)
@@ -18,13 +18,13 @@ export default (View) => {
     }
   }
 
-  if (View.PropTypes) {
+  if (PropTypes != null) {
     StateContainer.propTypes = {
-      state: View.PropTypes.object,
-      children: View.PropTypes.node.isRequired
+      state: PropTypes.object,
+      children: PropTypes.node.isRequired
     }
     StateContainer.childContextTypes = {
-      cerebral: View.PropTypes.object.isRequired
+      cerebral: PropTypes.object.isRequired
     }
   }
 
