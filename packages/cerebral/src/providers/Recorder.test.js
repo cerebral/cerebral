@@ -433,7 +433,7 @@ describe('Recorder', () => {
     })
     controller.getSignal('stop')()
   })
-  /* it.only('should throw an error when sending play signal while already playing or recording', () => {
+  it('should throw an error when sending play signal while already playing or recording', () => {
     const timeout = timeoutMock()
     const RecorderProvider = require('./Recorder').default
     const now = Date.now()
@@ -471,5 +471,5 @@ describe('Recorder', () => {
     assert.throws(() => {
       controller.getSignal('play')()
     })
-  }) */
+  })
 })
