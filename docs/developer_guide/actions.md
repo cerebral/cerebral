@@ -77,7 +77,7 @@ function shoutIt ({props}) {
 
 As you can see we grabbed the props just like we grabbed the state. The object we return from the action will be merged with the existing props. That means we are overriding the **message** with exclamation marks.
 
-We also add an action for setting the toast.
+We also add an action for setting the toast which pulls out the message from the props.
 
 ```js
 function setToast ({state, props}) {
@@ -99,7 +99,7 @@ Then we wire those actions together in our buttonClicked-**signal**
 ```
 
 ### Passing a payload
-Now we just need to change our button click to actually pass a message:
+As you can see we are passing the message as a payload in the onClick-Handler. Feel free to change it:
 
 *App.js*
 ```js
