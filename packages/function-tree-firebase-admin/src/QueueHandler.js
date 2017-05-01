@@ -5,17 +5,15 @@ function authenticate ({firebase, props, path}) {
     .then((decodedToken) => ({uid: decodedToken.uid}))
 }
 
-function noop () {}
-
 function createRunTask (task, shouldAuthenticate, cb) {
   return (data, progress, resolve, reject) => {
     const _execution = data._execution
 
     delete data._execution
-    cb(task.specId, [
-      shouldAuthenticate ? authenticate : noop,
-      task.tree
-    ], {
+
+    cb(task.specId, [].concat(
+      shouldAuthenticate ? authenticate : []
+    ).concat(task.tree), {
       _execution,
       data,
       task: {
