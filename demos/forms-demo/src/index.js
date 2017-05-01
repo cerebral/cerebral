@@ -17,7 +17,7 @@ const controller = Controller({
     },
     onlyHash: true
   }),
-  devtools: Devtools(),
+  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
   modules: {
     app,
     simple

@@ -20,9 +20,7 @@ import user from './modules/user'
 import App from './components/App'
 
 const controller = Controller({
-  devtools: Devtools({
-    // remoteDebugger: 'localhost:8585'
-  }),
+  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
   router: Router({
     routes: {
       '/': 'app.routed',
