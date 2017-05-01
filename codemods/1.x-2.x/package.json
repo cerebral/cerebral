@@ -8,7 +8,6 @@
   "author": "Adam Hoddinott <adam.hoddinott@salespreso.com>",
   "license": "MIT",
   "devDependencies": {
-    "@cerebral/monorepo": "0.0.1",
     "jscodeshift": "^0.3.30"
   }
 }

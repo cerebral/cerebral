@@ -7,9 +7,6 @@
   "contributors": [
     "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
-  "devDependencies": {
-    "@cerebral/monorepo": "0.0.1"
-  },
   "dependencies": {
     "cerebral": "^2.0.0-b",
     "cerebral-router": "^1.0.0-b",

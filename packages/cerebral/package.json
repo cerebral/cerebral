@@ -20,9 +20,6 @@
     "eventemitter3": "^2.0.2",
     "function-tree": "^0.5.0-b"
   },
-  "devDependencies": {
-    "@cerebral/monorepo": "0.0.1"
-  },
   "scripts": {
     "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
     "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",

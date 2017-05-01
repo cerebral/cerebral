@@ -34,7 +34,6 @@
     "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "@cerebral/monorepo": "0.0.1",
     "cerebral": "^2.0.0-b"
   }
 }

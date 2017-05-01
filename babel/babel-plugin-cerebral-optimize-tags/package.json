@@ -14,7 +14,6 @@
   "license": "MIT",
   "repository": "https://github.com/cerebral/cerebral/babel/babel-plugin-cerebral-optimize-tags",
   "devDependencies": {
-    "@cerebral/monorepo": "0.0.1",
     "cerebral": "^2.0.0-b"
   },
   "files": [

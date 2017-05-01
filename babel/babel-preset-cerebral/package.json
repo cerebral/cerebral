@@ -17,9 +17,6 @@
     "babel-plugin-cerebral-proxy-tags": "^1.0.1",
     "babel-plugin-cerebral-optimize-tags": "^1.0.0"
   },
-  "devDependencies": {
-    "@cerebral/monorepo": "0.0.1"
-  },
   "files": [
     "dist"
   ],
