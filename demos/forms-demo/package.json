@@ -2,9 +2,6 @@
   "name": "@cerebral/forms-demo",
   "version": "0.1.0",
   "private": true,
-  "devDependencies": {
-    "@cerebral/monorepo": "0.0.1"
-  },
   "dependencies": {
     "aphrodite": "^1.2.0",
     "cerebral": "^2.0.0-b",

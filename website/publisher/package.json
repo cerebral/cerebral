@@ -1,7 +1,7 @@
 {
   "name": "@cerebral/website",
   "version": "0.0.0",
-  "private": "true",
+  "private": true,
   "scripts": {
     "clean": "shx rm -rf build && shx mkdir -p ./build",
     "website:build": "cd ../builder && npm run build",
@@ -15,9 +15,5 @@
     "ci": "run-s clean build deploy"
   },
   "author": "Alexey Gurianov <gurianov@gmail.com>",
-  "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {
-    "@cerebral/monorepo": "0.0.1"
-  }
+  "license": "MIT"
 }

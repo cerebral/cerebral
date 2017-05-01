@@ -4,9 +4,10 @@
   "version": "0.0.1",
   "license": "MIT",
   "scripts": {
+    "link": "link-parent-bin -s true && link-parent-bin -s true -c babel && link-parent-bin -s true -c demos && link-parent-bin -s true -c website",
     "setup": "lerna bootstrap",
-    "setup:packages": "lerna bootstrap --scope '@(function-tree|cerebral*)'",
-    "setup:babel": "lerna bootstrap --scope '@(function-tree|cerebral*|babel*)'",
+    "setup:packages": "lerna bootstrap --scope \"@(function-tree|cerebral*)\"",
+    "setup:babel": "lerna bootstrap --scope \"@(function-tree|cerebral*|babel*)\"",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
     "lint": "standard",
@@ -15,19 +16,8 @@
     "coverage": "lerna run coverage --ignore @cerebral/monorepo",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "deploy": "cd website/publisher && npm run ci"
-  },
-  "bin": {
-    "babel": "./node_modules/.bin/babel",
-    "mocha": "./node_modules/.bin/mocha",
-    "nyc": "./node_modules/.bin/nyc",
-    "react-scripts": "./node_modules/.bin/react-scripts",
-    "npm-run-all": "./node_modules/.bin/npm-run-all",
-    "run-p": "./node_modules/.bin/run-p",
-    "run-s": "./node_modules/.bin/run-s",
-    "shx": "./node_modules/.bin/shx",
-    "gh-pages": "./node_modules/.bin/gh-pages",
-    "jest": "./node_modules/.bin/jest"
+    "deploy": "cd website/publisher && npm run ci",
+    "postinstall": "npm run link"
   },
   "dependencies": {
     "babel-cli": "^6.23.0",
@@ -40,7 +30,6 @@
     "babel-register": "^6.23.0",
     "commitizen": "^2.9.6",
     "coveralls": "^2.12.0",
-    "cross-env": "^3.2.3",
     "cz-customizable": "^4.0.0",
     "cz-customizable-ghooks": "^1.5.0",
     "gh-pages": "^0.12.0",
@@ -57,6 +46,8 @@
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-scripts": "0.9.4",
+    "cross-env": "^3.2.3",
+    "link-parent-bin": "^0.1.1",
     "shx": "^0.2.2",
     "standard": "^8.6.0"
   },

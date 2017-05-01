@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
-    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -26,7 +26,6 @@
     "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "@cerebral/monorepo": "0.0.1",
     "cerebral": "^2.0.0-b",
     "xhr-mock": "https://github.com/christianalfoni/xhr-mock.git"
   }
