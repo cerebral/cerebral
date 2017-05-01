@@ -85,7 +85,7 @@ class Controller extends FunctionTree {
       typeof navigator !== 'undefined' &&
       /Chrome/.test(navigator.userAgent)
     ) {
-      console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: https://cerebral.github.io/cerebral-website/install/02_debugger.html')
+      console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: http://cerebraljs.com/docs/get_started/debugger.html')
     }
 
     this.getSignal = getSignal
