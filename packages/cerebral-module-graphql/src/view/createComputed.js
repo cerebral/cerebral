@@ -9,9 +9,7 @@ function getQueryStructure (queryStructure) {
     case 'OperationDefinition':
       return getQueryStructure(queryStructure.selectionSet)
     case 'SelectionSet':
-      return queryStructure.selections.map(getQueryStructure)
-    case 'Field':
-      return queryStructure
+      return queryStructure.selections[0]
   }
 }
 
@@ -58,35 +56,32 @@ export default function createComputed (query) {
       }
     }
 
-    const queryStructure = queryCache.get(query).ast
-    const objectQueryStructures = getQueryStructure(queryStructure)
+    const queryStructure = queryCache.get(query)
+    const objectQueryStructure = getQueryStructure(queryStructure)
 
-    return objectQueryStructures.reduce((object, objectQueryStructure) => {
-      const objectType = objectTypes[queryTypes[objectQueryStructure.name.value].name]
-      const id = queryStatus.objectIds[objectQueryStructure.name.value]
+    const objectType = objectTypes[queryTypes[objectQueryStructure.name.value].name]
+    const id = queryStatus.objectIds[objectQueryStructure.name.value]
 
-      let objectPath
-      if (id) {
-        objectPath = `graphql.entities.${objectType.name}.${id}`
-      } else {
-        const objects = get(state`graphql.entities.${objectType.name}.!`)
-        const lookupField = objectQueryStructure.arguments[0].name.value
-        const lookupValue = objectQueryStructure.arguments[0].value.value
+    let objectPath
+    if (id) {
+      objectPath = `graphql.entities.${objectType.name}.${id}`
+    } else {
+      const objects = get(state`graphql.entities.${objectType.name}.!`)
+      const lookupField = objectQueryStructure.arguments[0].name.value
+      const lookupValue = objectQueryStructure.arguments[0].value.value
 
-        objectPath = Object.keys(objects).reduce((currentPath, objectKey) => {
-          if (objects[objectKey][lookupField] === lookupValue) {
-            return `graphql.entities.${objectType.name}.${objectKey}`
-          }
+      objectPath = Object.keys(objects).reduce((currentPath, objectKey) => {
+        if (objects[objectKey][lookupField] === lookupValue) {
+          return `graphql.entities.${objectType.name}.${objectKey}`
+        }
 
-          return currentPath
-        }, null)
-      }
-      const queryFields = objectQueryStructure.selectionSet.selections
-      return Object.assign(object, {
-        [objectQueryStructure.name.value]: buildQueryResultFields(queryFields, objectPath, objectType, objectTypes, queryTypes, get)
-      })
-    }, {})
+        return currentPath
+      }, null)
+    }
+    const queryFields = objectQueryStructure.selectionSet.selections
 
-    return object
+    return Object.assign(buildQueryResultFields(queryFields, objectPath, objectType, objectTypes, queryTypes, get), {
+      isLoading: false
+    })
   })
 }

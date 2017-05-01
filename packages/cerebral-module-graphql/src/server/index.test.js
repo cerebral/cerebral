@@ -51,7 +51,8 @@ describe('GraphQlModule - Server', () => {
             }
           },
           entities: {},
-          queries: {}
+          queries: {},
+          batchedQueries: []
         }
       })
       done()

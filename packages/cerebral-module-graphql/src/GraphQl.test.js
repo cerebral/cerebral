@@ -29,7 +29,7 @@ describe('GraphQl', () => {
         }
       }))
 
-      const queryDetails = graphQl.addQuery(`
+      const ast = graphQl.addQuery(`
         {
           author (id: 1) {
             firstName
@@ -37,7 +37,7 @@ describe('GraphQl', () => {
         }
       `)
 
-      assert.equal(queryDetails.printed, `{
+      assert.equal(print(ast), `{
   author(id: 1) {
     firstName
     id
@@ -69,7 +69,7 @@ describe('GraphQl', () => {
         }
       }))
 
-      const queryDetails = graphQl.addQuery(`
+      const ast = graphQl.addQuery(`
         {
           author (login: "test") {
             firstName
@@ -77,7 +77,7 @@ describe('GraphQl', () => {
         }
       `)
 
-      assert.equal(queryDetails.printed, `{
+      assert.equal(print(ast), `{
   author(login: "test") {
     firstName
     id

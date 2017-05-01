@@ -1,4 +1,4 @@
-import {graphql} from 'graphql'
+import {graphql, print} from 'graphql'
 import GraphQl from '../GraphQl'
 import querySignal from '../querySignal'
 import schemaResponseSignal from './schemaResponseSignal'
@@ -28,7 +28,8 @@ function GraphQlModule (options = {}) {
         objectTypes: null,
         queryTypes: null,
         entities: {},
-        queries: {}
+        queries: {},
+        batchedQueries: []
       },
       signals: {
         schemaResponded: schemaResponseSignal,
@@ -36,17 +37,19 @@ function GraphQlModule (options = {}) {
       },
       provider(context) {
         context.graphql = {
-          query(query) {
+          query(queries) {
             return graphQlPromise
               .then((graphQl) => {
-                return http.query(graphQl.addQuery(query).printed, options)
+                return http.query(print(graphQl.addQuery(queries)), options)
                   .then((result) => {
                     if (result.errors) {
                       throw result.errors[0]
                     }
 
                     return {
-                      data: graphQl.normalize(query, result.data)
+                      data: queries.map((query) => {
+                        return graphQl.normalize(query, result.data)
+                      })
                     }
                   })
               })

@@ -50,7 +50,8 @@ describe('GraphQlModule - Client', () => {
           }
         },
         entities: {},
-        queries: {}
+        queries: {},
+        batchedQueries: []
       }
     })
   })

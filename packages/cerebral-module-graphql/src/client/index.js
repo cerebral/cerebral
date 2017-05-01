@@ -15,22 +15,25 @@ function GraphQlModule (options = {}) {
         objectTypes: graphQl.objectTypes,
         queryTypes: graphQl.queryTypes,
         entities: {},
-        queries: {}
+        queries: {},
+        batchedQueries: []
       },
       signals: {
         queried: querySignal
       },
       provider(context) {
         context.graphql = {
-          query(query) {
-            return graphql(schema, graphQl.addQuery(query).printed, null, context)
+          query(queries) {
+            return graphql(schema, print(graphQl.addQuery(queries)), null, context)
               .then((result) => {
                 if (result.errors) {
                   throw result.errors[0]
                 }
 
                 return {
-                  data: graphQl.normalize(query, result.data)
+                  data: queries.map((query) => {
+                    return graphQl.normalize(query, result.data)
+                  })
                 }
               })
           }

@@ -92,10 +92,9 @@ describe('createComputed', () => {
       assert.deepEqual(computed.getValue({
         state: controller.getState.bind(controller)
       }), {
-        author: {
-          id: '1',
-          firstName: 'Bob'
-        }
+        id: '1',
+        firstName: 'Bob',
+        isLoading: false
       })
       done()
     })
@@ -162,14 +161,13 @@ describe('createComputed', () => {
       assert.deepEqual(computed.getValue({
         state: controller.getState.bind(controller)
       }), {
-        author: {
+        id: '1',
+        firstName: 'Bob',
+        posts: [{
           id: '1',
-          firstName: 'Bob',
-          posts: [{
-            id: '1',
-            title: 'woop'
-          }]
-        }
+          title: 'woop'
+        }],
+        isLoading: false
       })
       done()
     })
@@ -221,11 +219,10 @@ describe('createComputed', () => {
       assert.deepEqual(computed.getValue({
         state: controller.getState.bind(controller)
       }), {
-        author: {
-          id: '1',
-          firstName: 'Bob',
-          login: 'test'
-        }
+        id: '1',
+        firstName: 'Bob',
+        login: 'test',
+        isLoading: false
       })
       done()
     })
@@ -276,10 +273,9 @@ describe('createComputed', () => {
       assert.deepEqual(computed.getValue({
         state: controller.getState.bind(controller)
       }), {
-        me: {
-          id: '1',
-          name: 'Bob'
-        }
+        id: '1',
+        name: 'Bob',
+        isLoading: false
       })
       done()
     })

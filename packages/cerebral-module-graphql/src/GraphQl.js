@@ -10,7 +10,28 @@ class GraphQl {
     this.queryTypes = this.getQueryTypes(this.schema)
     this.objectTypes = this.getObjectTypes(this.schema)
   }
-  addQuery (query) {
+  addQuery (queries) {
+    return (Array.isArray(queries) ? queries : [queries]).reduce((currentMergedQueries, query) => {
+      if (!currentMergedQueries) {
+        return this.createQueryAst(query)
+      }
+
+      const queryAst = this.addQuery(query)
+
+      return Object.assign({}, currentMergedQueries, {
+        definitions: currentMergedQueries.definitions.map((definition) => {
+          return Object.assign({}, definition, {
+            selectionSet: Object.assign({}, definition.selectionSet, {
+              selections: definition.selectionSet.selections.concat(
+                queryAst.definitions[0].selectionSet.selections
+              )
+            })
+          })
+        })
+      })
+    }, null)
+  }
+  createQueryAst (query) {
     if (queryCache.get(query)) {
       return queryCache.get(query)
     }
@@ -46,17 +67,15 @@ class GraphQl {
       }
     })
 
-    return queryCache.add(query, {
-      ast,
-      printed: print(ast)
-    })
+    return queryCache.add(query, ast)
   }
   /*
     Normalizes data structure based on query
   */
   normalize (query, data) {
-    const queryStructure = queryCache.get(query).ast
+    const queryStructure = queryCache.get(query)
     const queryStructuresWithRelations = this.createQueryStructureWithRelations(queryStructure)
+
     return queryStructuresWithRelations.reduce((result, queryStructureWithRelations) => {
       const normalizeSchema = this.createNormalizeSchema(queryStructureWithRelations)
       const jsData = JSON.parse(JSON.stringify(data[queryStructureWithRelations.fieldName]))

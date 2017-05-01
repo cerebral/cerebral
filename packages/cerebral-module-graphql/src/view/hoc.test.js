@@ -47,21 +47,20 @@ describe('connect', () => {
       }
     })
     const TestComponent = connect({
-      query: query`
+      author: query`
         {
           author (id: 1) {
-            id
             name
           }
         }
       `
     },
-      function Component ({query}) {
-        if (query.isLoading) {
+      function Component ({author}) {
+        if (author.isLoading) {
           return <div>Loading</div>
         }
 
-        return <div>{query.author.name}</div>
+        return <div>{author.name}</div>
       }
     )
 
@@ -118,25 +117,23 @@ describe('connect', () => {
       }
     })
     const TestComponent = connect({
-      query: query`
+      author: query`
         {
           author (id: 1) {
-            id
             name
             posts {
-              id
               title
             }
           }
         }
       `
     },
-      function Component ({query}) {
-        if (query.isLoading) {
+      function Component ({author}) {
+        if (author.isLoading) {
           return <div>Loading</div>
         }
 
-        return <div>{query.author.posts[0].title}</div>
+        return <div>{author.posts[0].title}</div>
       }
     )
 
@@ -191,25 +188,27 @@ describe('connect', () => {
       }
     })
     const TestComponent = connect({
-      query: query`
+      author: query`
         {
           author (id: 1) {
-            id
             name
           }
+        }
+      `,
+      post: query`
+        {
           post (id: 1) {
-            id
             title
           }
         }
       `
     },
-      function Component ({query}) {
-        if (query.isLoading) {
+      function Component ({author, post}) {
+        if (author.isLoading || post.isLoading) {
           return <div>Loading</div>
         }
 
-        return <div>{query.author.name + query.post.title}</div>
+        return <div>{author.name + post.title}</div>
       }
     )
 
@@ -219,9 +218,13 @@ describe('connect', () => {
       </Container>
     ))
 
-    controller.once('end', () => {
-      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'BobWoop')
-      done()
+    let endCount = 0
+    controller.on('end', () => {
+      endCount++
+      if (endCount === 2) {
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'BobWoop')
+        done()
+      }
     })
 
     assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'Loading')
