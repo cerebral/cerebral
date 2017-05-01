@@ -121,7 +121,7 @@ it('should increment numbers in state', () => {
 The `runSignal` test helper accepts the `signal` (chain of actions or signal name) and `fixture` arguments and returns a promise. `runSignal` is designed to be called one time, to test calling multiple signals in a single test see the `RunSignal` factory below.
 
 ```js
-runSignal(signal, fixture. options).then((result) => {})
+runSignal(signal, fixture, options).then((result) => {})
 ```
 
 The optional `fixture` argument should be an object that contains any of the following:
@@ -195,7 +195,7 @@ it('should handle button clicks', () => {
 The `CerebralTest` factory returns runSignal, setState and getState functions that can be called many times without resetting the controller in between.
 
 ```js
-const cerebral = CerebralTest(fixture. options)
+const cerebral = CerebralTest(fixture, options)
 cerebral.setState(path, value)
 cerebral.runSignal(signal, props).then((result) => {})
 const value = cerebral.getState(path)
