@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import {state, props} from './'
+import {state, props, string} from './'
 import assert from 'assert'
 
 describe('Tags', () => {
@@ -10,6 +10,11 @@ describe('Tags', () => {
       return 'baz'
     }
     assert.equal(tag.getValue({state: stateFunc}), 'baz')
+  })
+  it('should return string value when hasValue option sets false', () => {
+    const tag = string`foo.bar`
+    const stateObject = {foo: {bar: 'mip'}}
+    assert.equal(tag.getValue({state: stateObject}), 'foo.bar')
   })
   it('should compose tags', () => {
     const tag = state`foo.${state`bar`}`
@@ -27,6 +32,15 @@ describe('Tags', () => {
     const stateObject = {foo: 'bar'}
     assert.throws(() => {
       tag.getValue({state: stateObject})
+    })
+  })
+  it('should throw when getters is not defined', () => {
+    const tag = state`foo.${props`foo`}`
+    assert.throws(() => {
+      tag.getValue()
+    })
+    assert.throws(() => {
+      tag.getPath()
     })
   })
   it('should throw when invalid path is used', () => {

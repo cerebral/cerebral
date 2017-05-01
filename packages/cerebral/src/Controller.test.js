@@ -11,6 +11,20 @@ describe('Controller', () => {
     })
     assert.deepEqual(controller.getState(), {foo: 'bar'})
   })
+  it('should warn devtools recommendation', () => {
+    let warnCount = 0
+    const originWarn = console.warn
+    console.warn = function (...args) {
+      warnCount++
+      originWarn.apply(this, args)
+    }
+    navigator = {userAgent: 'Chrome'} // eslint-disable-line
+    Controller({
+      state: {}
+    })
+    assert.equal(warnCount, 1)
+    navigator = {userAgent: 'node.js'} // eslint-disable-line
+  })
   it('should throw error when signals are grabbed before initialized', () => {
     assert.throws(() => {
       Controller({
@@ -132,7 +146,7 @@ describe('Controller', () => {
   })
   it('should create JSON stringify friendly value of unserializable payload property to signal', () => {
     const controller = new Controller({
-      devtools: {init () {}},
+      devtools: {init () {}, allowedTypes: [Date]},
       signals: {
         foo: [({props}) => assert.equal(JSON.stringify(props), '{"date":"[Date]"}')]
       }
@@ -141,7 +155,34 @@ describe('Controller', () => {
       date: new Date()
     })
   })
-  it('should ignore when passing in unserializable payload to signal', () => {
+  it('should warn unserializable payload', () => {
+    let warnCount = 0
+    const originWarn = console.warn
+    console.warn = function (...args) {
+      warnCount++
+      originWarn.apply(this, args)
+    }
+
+    const controller = new Controller({
+      devtools: {init () {}},
+      signals: {
+        foo: [() => {}]
+      }
+    })
+    class Test {}
+    controller.getSignal('foo')({
+      test: new Test()
+    })
+    assert.equal(warnCount, 1)
+  })
+  it('should ignore and warn when passing in unserializable payload to signal', () => {
+    let warnCount = 0
+    const originWarn = console.warn
+    console.warn = function (...args) {
+      warnCount++
+      originWarn.apply(this, args)
+    }
+
     const controller = new Controller({
       devtools: {init () {}},
       signals: {
@@ -151,6 +192,7 @@ describe('Controller', () => {
       }
     })
     controller.getSignal('foo')(new Date())
+    assert.equal(warnCount, 1)
   })
   it('should throw when pointing to a non existing signal', () => {
     const controller = new Controller({})
@@ -345,6 +387,79 @@ describe('Controller', () => {
     const after = controller.contextProviders.length
     assert.equal(after, before + 1)
   })
+  it('should add subModule using path', () => {
+    const controller = new Controller({
+      state: {
+        test: true
+      },
+      modules: {
+        foo: {}
+      }
+    })
+    const module = {
+      modules: {},
+      signals: {},
+      state: {bar: 'baz'}
+    }
+    controller.addModule('foo.bar', module)
+    assert.ok(controller.module.modules['foo'].modules['bar'])
+    assert.deepEqual(controller.module.modules['foo'].modules, {bar: {
+      modules: {},
+      signals: {},
+      state: {
+        bar: 'baz'
+      }}})
+
+    assert.equal(controller.getState('foo.bar.bar'), 'baz')
+  })
+  it('should throw when module path is invalid', () => {
+    const controller = new Controller({})
+    const module = {}
+    assert.throws(() => {
+      controller.addModule('foo.bar', module)
+    })
+    assert.throws(() => {
+      controller.addModule('foo.bar.baz', module)
+    })
+  })
+  it('should remove module using path', () => {
+    const controller = new Controller({
+      state: {},
+      modules: {
+        foo: {}
+      }
+    })
+    controller.removeModule('foo')
+    assert.equal(controller.module.modules['foo'], undefined)
+  })
+  it('should remove subModule using path', () => {
+    const controller = new Controller({
+      state: {
+        test: true
+      },
+      modules: {
+        foo: {
+          modules: {
+            bar: {}
+          }
+        }
+      }
+    })
+    controller.removeModule('foo.bar')
+    assert.ok(controller.module.modules['foo'])
+    assert.equal(controller.module.modules['foo'].modules['bar'], undefined)
+  })
+  it('should warn on remove module when module path is not provided', () => {
+    let warnCount = 0
+    const originWarn = console.warn
+    console.warn = function (...args) {
+      warnCount++
+      originWarn.apply(this, args)
+    }
+    const controller = new Controller({})
+    controller.removeModule()
+    assert.equal(warnCount, 1)
+  })
   it('should remove provider from contextProviders when removing module', () => {
     const controller = new Controller({
       state: {},
@@ -359,6 +474,16 @@ describe('Controller', () => {
     controller.removeModule('foo')
     const after = controller.contextProviders.length
     assert.equal(after, before - 1)
+  })
+  it('should throw on remove module when module path is invalid', () => {
+    const controller = new Controller({})
+    const module = {}
+    assert.throws(() => {
+      controller.removeModule('foo.bar', module)
+    })
+    assert.throws(() => {
+      controller.removeModule('foo.bar.baz', module)
+    })
   })
   it('should be able to globally add error catchers', (done) => {
     const controller = new Controller({
@@ -378,5 +503,13 @@ describe('Controller', () => {
       ])
     })
     controller.getSignal('test')()
+  })
+  it('should init the route if it is provided', () => {
+    const router = () => {
+      return {init () { assert(true) }}
+    }
+    Controller({
+      router
+    })
   })
 })

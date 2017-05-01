@@ -31,10 +31,6 @@ export default (View, PropTypes) => {
       state tracker and tags state dependencies
     */
     componentWillMount () {
-      if (!this.context.cerebral.controller) {
-        throwError('Can not find controller, did you remember to use the Container component? Read more at: https://cerebral.github.io/api/05_connect.html')
-      }
-
       this.context.cerebral.registerComponent(this, Object.assign(
         {},
         this.dependencyTrackersDependencyMaps.state,
@@ -74,6 +70,9 @@ export default (View, PropTypes) => {
       A getter for StateTracker and tags to grab state from Cerebral
     */
     stateGetter (path) {
+      if (!this.context.cerebral) {
+        throwError('Can not find controller, did you remember to use the Container component? Read more at: https://cerebral.github.io/api/05_connect.html')
+      }
       return this.context.cerebral.controller.getState(path)
     }
     /*
@@ -109,6 +108,10 @@ export default (View, PropTypes) => {
       return Object.keys(this.dependencies).reduce((currentDepsMap, propKey) => {
         if (this.dependencyTrackers[propKey]) {
           return currentDepsMap
+        }
+
+        if (!this.dependencies[propKey].getTags) {
+          throwError(`Prop ${propKey} should be tags or a function on the specific property you want to dynamically create.`)
         }
 
         const getters = this.createTagGetters(props)
@@ -180,7 +183,7 @@ export default (View, PropTypes) => {
         this.context.cerebral.controller.devtools &&
         this.context.cerebral.controller.devtools.bigComponentsWarning &&
         !this._hasWarnedBigComponent &&
-        Object.keys(this.dependencies || {}).length >= this.context.cerebral.controller.devtools.bigComponentsWarning
+        Object.keys(this.dependencies).length >= this.context.cerebral.controller.devtools.bigComponentsWarning
       ) {
         console.warn(`Component named ${this._displayName} has a lot of dependencies, consider refactoring or adjust this option in devtools`)
         this._hasWarnedBigComponent = true
@@ -261,7 +264,6 @@ export default (View, PropTypes) => {
         this.dependencyTrackersDependencyMaps.state,
         this.tagsDependencyMap
       )
-
       this.context.cerebral.updateComponent(this, prevDepsMap, nextDepsMap)
 
       this.forceUpdate()

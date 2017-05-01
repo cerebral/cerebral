@@ -23,6 +23,16 @@ describe('DependencyTracker', () => {
     assert.deepEqual(tracker.stateTrackMap, {foo: {}})
     assert.deepEqual(tracker.propsTrackMap, {bar: {}})
   })
+  it('should track child paths when run', () => {
+    const computed = compute((get) => {
+      return get(state`foo`) + get(props`bar.baz`)
+    })
+    const tracker = new DependencyTracker(computed)
+    tracker.run(() => 'bar', {bar: {baz: 'foo'}})
+    assert.equal(tracker.value, 'barfoo')
+    assert.deepEqual(tracker.stateTrackMap, {foo: {}})
+    assert.deepEqual(tracker.propsTrackMap, {bar: {children: {baz: {}}}})
+  })
   it('should pass props getter when run', () => {
     const computed = compute((get) => {
       return get(props`foo`)
@@ -31,7 +41,7 @@ describe('DependencyTracker', () => {
     tracker.run(() => {}, {foo: 'bar'})
     assert.equal(tracker.value, 'bar')
   })
-  it('should be able to match changes map', () => {
+  it('should be able to match state changes map', () => {
     const tracker = new DependencyTracker()
     tracker.stateTrackMap = {
       foo: {
@@ -43,5 +53,18 @@ describe('DependencyTracker', () => {
     assert.equal(tracker.match([{
       path: ['foo', 'bar']
     }], {}), true)
+  })
+  it('should be able to match props changes map', () => {
+    const tracker = new DependencyTracker()
+    tracker.propsTrackMap = {
+      foo: {
+        children: {
+          bar: {}
+        }
+      }
+    }
+    assert.equal(tracker.match({}, [{
+      path: ['foo', 'bar']
+    }]), true)
   })
 })

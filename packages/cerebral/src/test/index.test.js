@@ -84,6 +84,26 @@ describe('test helpers', () => {
           assert.equal(response[1].output.baz, 'baz')
         })
     })
+    it('should warn if signal contains actions with duplicate names', () => {
+      let warnCount = 0
+      const originWarn = console.warn
+      console.warn = function (...args) {
+        warnCount++
+        originWarn.apply(this, args)
+      }
+      const testSignal = [
+        function action1 ({props}) {
+          return {bar: 'bar'}
+        },
+        function action1 ({props}) {
+          return {baz: 'baz'}
+        }
+      ]
+      return runSignal(testSignal, {props: {foo: 'foo'}}, {recordActions: 'byName'})
+        .then(({action1}) => {
+          assert.equal(warnCount, 1)
+        })
+    })
     it('should test a signal with sequence', () => {
       const testSignal = sequence([
         function action1 ({props}) {
@@ -102,7 +122,6 @@ describe('test helpers', () => {
         })
     })
   })
-
   describe('RunSignal factory', () => {
     it('should create a runSignal helper that can be used many times', () => {
       const runSignal = RunSignal({

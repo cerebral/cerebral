@@ -92,26 +92,9 @@ class DependencyStore {
         }
       }
     }
-
     traverseChildren(this.map)
 
     return entities
-  }
-  /*
-    Converts the changes map from "flush" to an array of paths
-  */
-  convertChangeMap (currentLevel, details = {currentPath: [], allPaths: []}) {
-    Object.keys(currentLevel).forEach((key) => {
-      details.currentPath.push(key)
-      if (currentLevel[key] === true) {
-        details.allPaths.push(details.currentPath.join('.'))
-      } else {
-        this.convertChangeMap(currentLevel[key], details)
-      }
-      details.currentPath.pop()
-    })
-
-    return details.allPaths
   }
   /*
     Returns entities based on a change map returned from

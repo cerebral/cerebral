@@ -81,18 +81,6 @@ export function isDeveloping () {
   return process.env.NODE_ENV !== 'production'
 }
 
-export function isDebuggerEnv () {
-  return !(
-    (
-      typeof window === 'undefined'
-    ) ||
-    (
-      typeof window.chrome === 'undefined' &&
-      !process && !process.versions && !process.versions.electron
-    )
-  )
-}
-
 export function delay (func, wait) {
   return function (...args) {
     const context = this

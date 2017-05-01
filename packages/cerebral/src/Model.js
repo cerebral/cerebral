@@ -67,20 +67,24 @@ class Model {
     for example array sorting
   */
   updateIn (path, cb, forceChildPathUpdates = false) {
-    if (this.preventExternalMutations) {
-      this.updateInFrozen(path, cb, forceChildPathUpdates)
-
-      return
-    }
-
     if (!path.length) {
       cb(this.state, this, 'state')
 
       return
     }
 
+    if (this.preventExternalMutations) {
+      this.updateInFrozen(path, cb, forceChildPathUpdates)
+
+      return
+    }
+
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
+        if (!isObject(currentState)) {
+          throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
+        }
+
         const currentValue = currentState[key]
 
         cb(currentState[key], currentState, key)
@@ -102,13 +106,12 @@ class Model {
     to not go down already frozen paths
   */
   updateInFrozen (path, cb, forceChildPathUpdates) {
-    if (!path.length) {
-      cb(this.state, this, 'state')
-    }
-
     this.state = this.unfreezeObject(this.state)
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
+        if (!isObject(currentState)) {
+          throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
+        }
         currentState[key] = this.unfreezeObject(currentState[key])
 
         const currentValue = currentState[key]

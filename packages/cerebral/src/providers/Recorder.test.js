@@ -386,4 +386,90 @@ describe('Recorder', () => {
     controller.getSignal('stop')()
     assert(eventsCount, 1)
   })
+  it('should work with devtools', () => {
+    const timeout = timeoutMock()
+    const RecorderProvider = require('./Recorder').default
+    const now = Date.now()
+    const recording = {
+      start: now,
+      end: now + 20,
+      duration: 20,
+      initialState: [{
+        path: [],
+        value: JSON.stringify({foo: 'bar2'})
+      }],
+      events: [{
+        type: 'mutation',
+        method: 'set',
+        args: JSON.stringify(['foo', 'bar3']),
+        timestamp: now + 10
+      }]
+    }
+    const controller = new Controller({
+      devtools: { init () {}, send () {}, sendExecutionData () {} },
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        play: [({recorder}) => {
+          recorder.loadRecording(recording)
+          recorder.play({
+            allowedSignals: ['stop']
+          })
+        }],
+        stop: [({recorder}) => recorder.stop()]
+      },
+      providers: [RecorderProvider({
+        setTimeout: timeout
+      })]
+    })
+    controller.getSignal('play')()
+    assert.deepEqual(controller.getState(), {
+      foo: 'bar2'
+    })
+    timeout.tick()
+    assert.deepEqual(controller.getState(), {
+      foo: 'bar3'
+    })
+    controller.getSignal('stop')()
+  })
+  it('should throw an error when sending play signal while already playing or recording', () => {
+    const timeout = timeoutMock()
+    const RecorderProvider = require('./Recorder').default
+    const now = Date.now()
+    const recording = {
+      start: now,
+      end: now + 20,
+      duration: 20,
+      initialState: [{
+        path: [],
+        value: JSON.stringify({foo: 'bar2'})
+      }],
+      events: [{
+        type: 'mutation',
+        method: 'set',
+        args: JSON.stringify(['foo', 'bar3']),
+        timestamp: now + 5
+      }]
+    }
+    const controller = new Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        play: [({recorder}) => {
+          recorder.loadRecording(recording)
+          recorder.play()
+          recorder.play()
+        }]
+      },
+      providers: [RecorderProvider({
+        setTimeout: timeout
+      })]
+    })
+
+    assert.throws(() => {
+      controller.getSignal('play')()
+    })
+  })
 })

@@ -2,10 +2,10 @@ function DebuggerProviderFactory () {
   function DebuggerProvider (context, functionDetails, payload, prevPayload) {
     const devtools = context.controller.devtools
 
-    if (devtools.preventInputPropReplacement) {
+    if (devtools.preventPropsReplacement) {
       Object.keys(payload).forEach((key) => {
         if (prevPayload && key in prevPayload && prevPayload[key] !== payload[key]) {
-          throw new Error(`Cerebral Devtools - You have activated the "preventInputPropReplacement" option and in signal "${context.execution.name}", before the action "${functionDetails.name}", the key "${key}" was replaced`)
+          throw new Error(`Cerebral Devtools - You have activated the "preventPropsReplacement" option and in signal "${context.execution.name}", before the action "${functionDetails.name}", the key "${key}" was replaced`)
         }
       })
     }
@@ -13,9 +13,6 @@ function DebuggerProviderFactory () {
     context.debugger = {
       send (debuggerData) {
         devtools.sendExecutionData(debuggerData, context, functionDetails, payload)
-      },
-      getColor () {
-        return '#333'
       },
       wrapProvider (providerKey) {
         const provider = context[providerKey]

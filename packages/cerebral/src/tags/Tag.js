@@ -85,14 +85,6 @@ export default class Tag {
         return currentPath + string + valueTemplate.getValue(getters)
       }
 
-      if (valueTemplate && valueTemplate.getValue) {
-        valueTemplate.flagAll()
-
-        return currentPath + string + valueTemplate.getValue({
-          get: getters.state
-        })
-      }
-
       return currentPath + string + (valueTemplate || '')
     }, '')
   }

@@ -10,6 +10,7 @@ global.CustomEvent = global.window.CustomEvent = () => {}
 global.window.dispatchEvent = () => {}
 
 const React = require('react')
+const ReactDOM = require('react-dom')
 const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
 const Controller = require('../Controller').default
@@ -48,6 +49,34 @@ describe('React', () => {
       })
       const tree = TestUtils.renderIntoDocument((
         <StateContainer state={model}>
+          <TestComponent />
+        </StateContainer>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+    })
+    it('should be able to expose signals', () => {
+      const model = {
+        foo: 'bar'
+      }
+      const signals = {
+        test2: [
+          () => {}
+        ]
+      }
+      const TestComponent = connect({
+        foo: state`foo`,
+        test: signal`test`,
+        test2: signal`test2`
+      }, (props) => {
+        assert.equal(typeof props.test === 'function', true)
+        assert.equal(typeof props.test2 === 'object', true)
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <StateContainer state={model} signals={signals}>
           <TestComponent />
         </StateContainer>
       ))
@@ -98,7 +127,7 @@ describe('React', () => {
 
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
     })
-    it('should throw if no controller provided', () => {
+    it('should throw when no controller provided', () => {
       const TestComponent = connect({
         foo: state`foo`
       }, (props) => {
@@ -114,8 +143,212 @@ describe('React', () => {
         ))
       })
     })
+    it('should throw when container component is not provided', () => {
+      const TestComponent = connect({
+        foo: state`foo`
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <TestComponent />
+        ))
+      })
+    })
+    it('should be able to unregister component from container after unmounting component', () => {
+      const controller = Controller({
+        devtools: {init () {}, send () {}, updateComponentsMap () {}},
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect({
+        foo: state`foo`
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      const TestComponentRef = TestUtils.findRenderedComponentWithType(tree, TestComponent)
+      assert.equal(TestComponentRef._isUnmounting, undefined)
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      ReactDOM.unmountComponentAtNode(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').parentNode)
+      assert.equal(TestComponentRef._isUnmounting, true)
+      assert.deepEqual(controller.componentDependencyStore.getAllUniqueEntities(), [])
+    })
+    it('should be able to update component from container with devtools', () => {
+      const controller = Controller({
+        devtools: { init () {}, send () {}, updateComponentsMap () {}, sendExecutionData () {}, sendComponentsMap () {} },
+        state: {
+          foo: 'bar',
+          bar: 'foo'
+        },
+        signals: {
+          test: [({state}) => {
+            state.set('foo', 'foo')
+          }]
+        }
+      })
+      let renderCount = 0
+      const TestComponent = connect({
+        foo: state`foo`,
+        bar: state`bar`
+      }, (props) => {
+        renderCount++
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
+      assert.equal(renderCount, 1)
+      controller.getSignal('test')()
+      assert.equal(renderCount, 2)
+    })
   })
   describe('connect', () => {
+    it('should throw an error if no dependencies provided', () => {
+      assert.throws(() => {
+        connect(undefined, (props) => {
+          return (
+            <div>bar</div>
+          )
+        })
+      })
+    })
+    it('should throw an error if dependency is a function', () => {
+      assert.throws(() => {
+        connect((props) => ({}), (props) => {
+          return (
+            <div>bar</div>
+          )
+        })
+      })
+    })
+    it('should throw an error if dependency item is not tags or compute', () => {
+      const controller = Controller({})
+      const TestComponent = connect({
+        foo: () => {}
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+      }, Error, 'Cerebral - You are not passing controller to Container')
+    })
+  })
+  describe('connect', () => {
+    it('should throw when signal is not defined', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect({
+        foo: state`foo`,
+        fooCalled: signal`fooCalled`
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+      })
+    })
+    it('should convert component to json', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const MyComponent = (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      }
+      MyComponent.displayName = 'Test'
+      const TestComponent = connect({
+        foo: state`foo`
+      }, MyComponent)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedComponentWithType(tree, TestComponent).toJSON(), 'Test')
+    })
+    it('should warn if component has more dependencies than devtools configuration', () => {
+      let warnCount = 0
+      const originWarn = console.warn
+      console.warn = function (...args) {
+        warnCount++
+        originWarn.apply(this, args)
+      }
+      const controller = Controller({
+        devtools: {bigComponentsWarning: 2, init () {}, send () {}, updateComponentsMap () {}},
+        state: {
+          foo: 'foo',
+          bar: 'bar'
+        },
+        signals: {
+          fooCalled: [],
+          barCalled: []
+        }
+      })
+      const TestComponent = connect({
+        foo: state`foo`,
+        bar: state`bar`,
+        fooCalled: signal`fooCalled`
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedComponentWithType(tree, TestComponent)._hasWarnedBigComponent, true)
+      assert.equal(warnCount, 1)
+    })
+    it('should throw an error if no container component provided', () => {
+      const TestComponent = connect({
+        foo: 'foo'
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <TestComponent />
+        ))
+      }, Error, 'Cerebral - Can not find Cerebral controller, did you remember to use the Container component? Read more at: http://www.cerebraljs.com/documentation/cerebral-view-react')
+    })
     it('should be able to extract state', () => {
       const controller = Controller({
         state: {
@@ -171,6 +404,27 @@ describe('React', () => {
       controller.getSignal('test')()
       assert.equal(renderCount, 2)
     })
+    it('should throw an error if there is no path or computed assigned to prop', () => {
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      const TestComponent = connect({
+        foo: ''
+      }, (props) => {
+        return (
+          <div>{props.foo}</div>
+        )
+      })
+      assert.throws(() => {
+        TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+      }, Error, 'Cerebral - There is no path or computed assigned to prop foo')
+    })
     it('should be able to extract signals', () => {
       const controller = Controller({
         state: {
@@ -225,6 +479,37 @@ describe('React', () => {
       const component = TestUtils.findRenderedComponentWithType(tree, TestComponentClass)
       component.callSignal()
       assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+    })
+    it('should rerender when controller flush method called with force option', () => {
+      let renderCount = 0
+      const controller = Controller({
+        state: {
+          foo: 'bar'
+        }
+      })
+      class TestComponentClass extends React.Component {
+        render () {
+          renderCount++
+          return (
+            <div>{`${this.props.foo}${this.props.bar}`}</div>
+          )
+        }
+      }
+      const TestComponent = connect({
+        foo: state`foo`,
+        bar: compute((get) => {
+          return get(state`foo`) + renderCount
+        })
+      }, TestComponentClass)
+      const tree = TestUtils.renderIntoDocument((
+        <Container controller={controller}>
+          <TestComponent />
+        </Container>
+      ))
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'barbar0')
+      controller.flush(true)
+      assert.equal(renderCount, 2)
+      assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'barbar1')
     })
     it('should rerender on parent dep replacement', () => {
       const controller = Controller({
@@ -717,6 +1002,27 @@ describe('React', () => {
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
         controller.getSignal('changeState')()
         assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar2')
+      })
+      it('should return array', () => {
+        const controller = Controller({
+          state: {
+            map: ''
+          }
+        })
+        const TestComponent = connect({
+          foo: state`map.*`
+        }, (props) => {
+          assert.deepEqual(props.foo, [])
+          return (
+            <div>{props.foo.length}</div>
+          )
+        })
+        const tree = TestUtils.renderIntoDocument((
+          <Container controller={controller}>
+            <TestComponent />
+          </Container>
+        ))
+        assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, '0')
       })
       it('should update dependency map when compute is rerun', () => {
         const controller = Controller({
