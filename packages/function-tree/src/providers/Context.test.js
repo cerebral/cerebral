@@ -5,13 +5,13 @@ import assert from 'assert'
 
 describe('ContextProvider', () => {
   it('should add whatever is passed on to the context', () => {
-    const execute = FunctionTree([
+    const ft = new FunctionTree([
       ContextProvider({
         foo: 'bar'
       })
     ])
 
-    execute([
+    ft.run([
       ({foo}) => {
         assert.equal(foo, 'bar')
       }

@@ -1,22 +1,17 @@
 export default function (target, ...args) {
-  if (typeof target !== 'function') {
-    throw new Error('Cerebral operator.splice: You have to use a state template tag as first argument')
-  }
-
-  function splice (context) {
-    const targetTemplate = target(context)
-    if (targetTemplate.target !== 'state') {
-      throw new Error('Cerebral operator.splice: You have to use a state template tag as first argument')
+  function splice ({state, resolve}) {
+    if (!resolve.isTag(target, 'state')) {
+      throw new Error('Cerebral operator.splice: You have to use the STATE TAG as first argument')
     }
 
-    const spliceArgs = args.map(arg => (
-      typeof arg === 'function' ? arg(context).value : arg
-    ))
+    const spliceArgs = args.map(arg => resolve.value(arg))
 
-    context.state.splice(targetTemplate.path, ...spliceArgs)
+    state.splice(resolve.path(target), ...spliceArgs)
   }
 
-  splice.displayName = 'operator.splice'
+  splice.displayName = `operator.splice(${String(target)}, ${args.map((arg) => {
+    return String(arg)
+  }).join(',')})`
 
   return splice
 }

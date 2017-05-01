@@ -47,10 +47,8 @@ export default {
         // when using form reset
         defaultValue: '',
 
-        // Some properties are created for you, set when validation runs
-        // and you can use them in components. You can also set these
-        // properties manually, though usually the validate action factory
-        // is used to handle this
+        // Some properties are created for you by the validate action factory
+        // which can be used in the components.
 
         // Toggled when field is validated
         hasValue: false,
@@ -93,28 +91,6 @@ export default function MyAction({state}) {
 }
 ```
 
-#### Set a default value for the whole form
-You can set a default value for a property using a factory:
-```js
-import {form, getFormFields} from 'cerebral-forms'
-
-const MyFormFactory = (formObject) => {
-  const myForm = form(formObject)
-  const fields = getFormFields(myForm)
-
-  // You can also set some special properties for the whole form
-  newForm.showErrors = false
-
-  fields.forEach((field) => {
-    field.requiredMessage = field.requiredMessage || 'This field is required'
-    field.someProp = field.someProp || 'Some default'
-  })
-
-  return myForm
-}
-
-```
-
 #### Custom global props
 You can add custom props to the root to the form state.
 
@@ -133,6 +109,28 @@ export default function MyAction({state}) {
     showErrors: false
   }))
 }
+```
+
+#### Set a default value for the whole form
+You can set a default value for a property using a factory:
+```js
+import {form, getFormFields} from 'cerebral-forms'
+
+const MyFormFactory = (formObject) => {
+  const myForm = form(formObject)
+  const fields = getFormFields(myForm)
+
+  // You can also set some special properties for the whole form
+  myForm.showErrors = false
+
+  fields.forEach((field) => {
+    field.requiredMessage = field.requiredMessage || 'This field is required'
+    field.someProp = field.someProp || 'Some default'
+  })
+
+  return myForm
+}
+
 ```
 
 ### field
@@ -202,7 +200,7 @@ export default connect({
 An **action** factory you can use to validate any field in any chain.
 
 ```js
-import {input} from 'cerebral/operators'
+import {props} from 'cerebral/tags'
 import {validateField} from 'cerebral-forms'
 
 export default [
@@ -210,7 +208,7 @@ export default [
   // static
   validateField('path.to.form.field'),
   // dynamic
-  validateField(input`fieldPath`),
+  validateField(props`fieldPath`),
   doThat
 ]
 ```
@@ -219,14 +217,14 @@ export default [
 An **action** factory you can use to validate a whole form.
 
 ```js
-import {input} from 'cerebral/operators'
+import {props} from 'cerebral/tags'
 import {validateForm} from 'cerebral-forms'
 
 export default [
   // static
   validateForm('path.to.form'),
   // dynamic
-  validateForm(input`formPath`),
+  validateForm(props`formPath`),
   isFormValid, {
     true: [
       passInForm
@@ -242,7 +240,7 @@ export default [
 An **action** factory you can use to reset any form from any chain. It will replace current value with the initial or default value defined. And revalidate.
 
 ```js
-import {input} from 'cerebral/operators'
+import {props} from 'cerebral/tags'
 import {resetForm} from 'cerebral-forms'
 
 export default [
@@ -250,7 +248,7 @@ export default [
   // static
   resetForm('path.to.form'),
   // dynamic
-  resetForm(input`formPath`),
+  resetForm(props`formPath`),
   doThat
 ]
 ```
@@ -341,14 +339,14 @@ export default connect({
 You can also use this function inside a chain:
 
 ```js
-import {input} from 'cerebral/operators'
+import {props} from 'cerebral/tags'
 import {isValidForm} from 'cerebral-forms'
 
 export default [
   // static
   isValidForm('path.to.form')
   // dynamic
-  isValidForm(input`formPath`), {
+  isValidForm(props`formPath`), {
     true: [],
     false: []
   }

@@ -1,15 +1,16 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, when} from './'
+import {when} from './'
+import {props, state} from '../tags'
 
 describe('operator.when', () => {
-  it('should check truthy value of input', () => {
+  it('should check truthy value of props', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
-          when(input`foo`), {
+          when(props`foo`), {
             true: [() => { count++ }],
             false: []
           }
@@ -21,7 +22,7 @@ describe('operator.when', () => {
   })
   it('should check truthy value of state', () => {
     let count = 0
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: false
       },
@@ -37,13 +38,13 @@ describe('operator.when', () => {
     controller.getSignal('test')()
     assert.equal(count, 1)
   })
-  it('should check truthy input using function', () => {
+  it('should check truthy props using function', () => {
     let accepted = 0
     let discarded = 0
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
-          when(input`value`, (value) => Boolean(value.length)), {
+          when(props`value`, (value) => Boolean(value.length)), {
             true: [
               () => { accepted++ }
             ],
@@ -61,7 +62,7 @@ describe('operator.when', () => {
   })
   it('should check truthy state using function', () => {
     let discarded = 0
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
@@ -84,13 +85,13 @@ describe('operator.when', () => {
   })
   it('should check truthy state using function and multiple values', () => {
     const results = []
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
       signals: {
         test: [
-          when(state`foo`, input`bar`, (foo, bar) => foo === bar), {
+          when(state`foo`, props`bar`, (foo, bar) => foo === bar), {
             true: [
               () => { results.push('true') }
             ],
@@ -107,10 +108,10 @@ describe('operator.when', () => {
   })
   it('should check truthy state using function and literal values', () => {
     const results = []
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
-          when(input`foo`, 'bar', (foo, bar) => foo === bar), {
+          when(props`foo`, 'bar', (foo, bar) => foo === bar), {
             true: [
               () => { results.push('true') }
             ],

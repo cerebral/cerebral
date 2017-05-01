@@ -1,6 +1,7 @@
 /* eslint-env mocha */
 import {Controller} from 'cerebral'
-import {set, state, input} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state, props} from 'cerebral/tags'
 import {form, validateField, validateForm} from '..'
 import assert from 'assert'
 
@@ -95,7 +96,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.name.value`, input`value`),
+            set(state`form.name.value`, props`value`),
             validateField('form.name')
           ]
         }
@@ -121,7 +122,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.firstName.value`, input`value`),
+            set(state`form.firstName.value`, props`value`),
             validateField('form.firstName')
           ]
         }
@@ -155,9 +156,9 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.firstName.value`, input`firstName`),
-            set(state`form.lastName.value`, input`lastName`),
-            set(state`form.age.value`, input`age`),
+            set(state`form.firstName.value`, props`firstName`),
+            set(state`form.lastName.value`, props`lastName`),
+            set(state`form.age.value`, props`age`),
             validateField('form.firstName'),
             validateField('form.lastName'),
             validateField('form.age')
@@ -191,7 +192,7 @@ describe('validate', () => {
       assert.equal(controller.getState('form.lastName.errorMessage'), null)
       assert.equal(controller.getState('form.age.errorMessage'), 'Must be numeric')
     })
-    it('should throw an error if dependsOn field path is not correct', () => {
+    it('should throw an error if dependsOn field path is not correct', (done) => {
       const controller = Controller({
         state: {
           form: form({
@@ -208,12 +209,17 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.firstName.value`, input`value`),
+            set(state`form.firstName.value`, props`value`),
             validateField('form.firstName')
           ]
         }
       })
-      assert.throws(() => { controller.getSignal('fieldChanged')({value: 'Ben'}) }, Error, 'Error: The path form.someField used with "dependsOn" on field form.firstName is not correct, please check it')
+      controller.removeListener('error')
+      controller.once('error', (error) => {
+        assert(error)
+        done()
+      })
+      controller.getSignal('fieldChanged')({value: 'Ben'})
     })
     it('should show correct errorMessages', () => {
       const controller = Controller({
@@ -238,8 +244,8 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.password.value`, input`value1`),
-            set(state`form.confirmPassword.value`, input`value2`),
+            set(state`form.password.value`, props`value1`),
+            set(state`form.confirmPassword.value`, props`value2`),
             validateField('form.password'),
             validateField('form.confirmPassword')
           ]
@@ -274,7 +280,7 @@ describe('validate', () => {
         },
         signals: {
           fieldChanged: [
-            set(state`form.name.value`, input`value`)
+            set(state`form.name.value`, props`value`)
           ],
           formSubmitted: [
             validateForm('form')

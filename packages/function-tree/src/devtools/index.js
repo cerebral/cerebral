@@ -1,20 +1,26 @@
-/* global CustomEvent */
-import WebSocket from 'ws'
-import Path from 'function-tree/lib/Path'
+import WebSocket from 'universal-websocket-client'
+import Path from '../Path'
 const VERSION = 'v1'
 
-class Devtools {
+export class Devtools {
   constructor (options = {
-    remoteDebugger: null
+    remoteDebugger: null,
+    reconnect: true
   }) {
+    this.trees = []
     this.VERSION = VERSION
     this.remoteDebugger = options.remoteDebugger || null
     this.backlog = []
     this.latestExecutionId = null
     this.isConnected = false
     this.ws = null
+    this.reconnectInterval = 10000
+    this.doReconnect = typeof options.reconnect === 'undefined' ? true : options.reconnect
     this.isResettingDebugger = false
-    this.isBrowserEnv = typeof window !== 'undefined' && Boolean(window.addEventListener)
+
+    if (!this.remoteDebugger) {
+      throw new Error('Function-tree Devtools: You have to pass in the "remoteDebugger" option')
+    }
 
     this.sendInitial = this.sendInitial.bind(this)
 
@@ -22,48 +28,59 @@ class Devtools {
   }
 
   addListeners () {
-    if (this.remoteDebugger) {
-      this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
-      this.ws.onmessage = (event) => {
-        const message = JSON.parse(event.data)
-        switch (message.type) {
-          case 'pong':
-            this.sendInitial()
-            break
-          case 'ping':
-            this.sendInitial()
-            break
-        }
+    this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
+    this.ws.onmessage = (event) => {
+      const message = JSON.parse(event.data)
+      switch (message.type) {
+        case 'pong':
+          this.sendInitial()
+          break
+        case 'ping':
+          this.sendInitial()
+          break
       }
-    } else if (this.isBrowserEnv) {
-      window.addEventListener('funtion-tree.debugger.pong', this.sendInitial)
-      window.addEventListener('funtion-tree.debugger.ping', this.sendInitial)
     }
+  }
+  reconnect () {
+    setTimeout(() => {
+      this.init()
+      this.ws.onclose = () => {
+        this.isConnected = false
+        this.reconnect()
+      }
+    }, this.reconnectInterval)
   }
   init () {
     this.addListeners()
-
-    if (this.remoteDebugger) {
-      this.ws.onopen = () => {
-        this.ws.send(JSON.stringify({type: 'ping'}))
-      }
-      this.ws.onclose = () => {
-        console.warn('Could not connect to Function Tree Debugger application, make sure it is running on the correct port')
-        if (this.isBrowserEnv) {
-          this.reInit()
-        }
-      }
-      this.ws.onerror = () => {
-        if (this.isBrowserEnv) {
-          this.reInit()
-        }
-      }
-    } else if (this.isBrowserEnv) {
-      const event = new CustomEvent('function-tree.client.message', {
-        detail: JSON.stringify({type: 'ping'})
-      })
-      window.dispatchEvent(event)
+    this.ws.onopen = () => {
+      this.ws.send(JSON.stringify({type: 'ping'}))
     }
+    this.ws.onerror = () => {}
+    this.ws.onclose = () => {
+      this.isConnected = false
+
+      if (this.doReconnect) {
+        console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
+        this.reconnect()
+      }
+    }
+  }
+  add (tree) {
+    this.trees.push(tree)
+    tree.contextProviders.unshift(this.Provider())
+    this.watchExecution(tree)
+  }
+  remove (tree) {
+    this.trees.splice(this.trees.indexOf(tree), 1)
+    tree.removeAllListeners('start')
+    tree.removeAllListeners('end')
+    tree.removeAllListeners('pathStart')
+    tree.removeAllListeners('functionStart')
+    tree.removeAllListeners('functionEnd')
+    tree.removeAllListeners('error')
+  }
+  destroy () {
+    this.trees.forEach(this.remove.bind(this))
   }
   safeStringify (object) {
     const refs = []
@@ -84,33 +101,21 @@ class Devtools {
       return value
     })
   }
-  reInit () {
-    this.remoteDebugger = null
-    this.addListeners()
-
-    const event = new CustomEvent('function-tree.client.message', {
-      detail: JSON.stringify({type: 'ping'})
-    })
-    window.dispatchEvent(event)
-  }
   sendMessage (stringifiedMessage) {
-    if (this.remoteDebugger) {
-      this.ws.send(stringifiedMessage)
-    } else if (this.isBrowserEnv) {
-      const event = new CustomEvent('function-tree.client.message', {detail: stringifiedMessage})
-      window.dispatchEvent(event)
-    }
+    this.ws.send(stringifiedMessage)
   }
   watchExecution (tree) {
-    tree.on('start', (execution) => {
+    tree.on('start', (execution, payload) => {
       const message = JSON.stringify({
         type: 'executionStart',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
             name: execution.name,
             staticTree: execution.staticTree,
-            datetime: execution.datetime
+            datetime: execution.datetime,
+            executedBy: (payload && payload._execution) ? payload._execution : null
           }
         }
       })
@@ -124,6 +129,7 @@ class Devtools {
     tree.on('end', (execution) => {
       const message = JSON.stringify({
         type: 'executionEnd',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id
@@ -141,6 +147,7 @@ class Devtools {
     tree.on('pathStart', (path, execution, funcDetails) => {
       const message = JSON.stringify({
         type: 'executionPathStart',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
@@ -159,6 +166,7 @@ class Devtools {
     tree.on('functionStart', (execution, funcDetails, payload) => {
       const message = this.safeStringify({
         type: 'execution',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
@@ -182,6 +190,7 @@ class Devtools {
 
       const message = this.safeStringify({
         type: 'executionFunctionEnd',
+        source: 'ft',
         data: {
           execution: {
             executionId: execution.id,
@@ -197,10 +206,35 @@ class Devtools {
         this.backlog.push(message)
       }
     })
+    tree.on('error', (error, execution, funcDetails) => {
+      const message = JSON.stringify({
+        type: 'executionFunctionError',
+        source: 'ft',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+              func: funcDetails.function.toString()
+            }
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        this.sendMessage(message)
+      } else {
+        this.backlog.push(message)
+      }
+    })
   }
   sendInitial () {
     const message = JSON.stringify({
       type: 'init',
+      source: 'ft',
       version: this.VERSION
     })
 
@@ -232,6 +266,7 @@ class Devtools {
 
     return this.safeStringify({
       type: type,
+      source: 'ft',
       version: this.VERSION,
       data: data
     })
@@ -245,15 +280,30 @@ class Devtools {
       this.backlog.push(message)
     }
   }
-  Provider (options = {colors: {}}) {
+  Provider () {
     const sendExecutionData = this.sendExecutionData.bind(this)
     function provider (context, functionDetails, payload) {
       context.debugger = {
         send (data) {
           sendExecutionData(data, context, functionDetails, payload)
         },
-        getColor (key) {
-          return options.colors[key] || '#333'
+        wrapProvider (providerKey) {
+          const provider = context[providerKey]
+
+          context[providerKey] = Object.keys(provider).reduce((wrappedProvider, key) => {
+            const originalFunc = provider[key]
+
+            wrappedProvider[key] = (...args) => {
+              context.debugger.send({
+                method: `${providerKey}.${key}`,
+                args: args
+              })
+
+              return originalFunc.apply(provider, args)
+            }
+
+            return wrappedProvider
+          }, {})
         }
       }
 
@@ -264,6 +314,4 @@ class Devtools {
   }
 }
 
-export default function (...args) {
-  return new Devtools(...args)
-}
+export default Devtools

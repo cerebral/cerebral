@@ -1,5 +1,5 @@
-/* global CustomEvent WebSocket File FileList Blob */
-import {debounce} from '../utils'
+/* global WebSocket File FileList Blob ImageData */
+import {delay, throwError} from '../utils'
 import Path from 'function-tree/lib/Path'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
@@ -14,42 +14,45 @@ class Devtools {
   constructor (options = {
     storeMutations: true,
     preventExternalMutations: true,
-    verifyStrictRender: true,
-    preventInputPropReplacement: false,
-    bigComponentsWarning: {
-      state: 5,
-      signals: 5
-    },
+    preventPropsReplacement: false,
+    bigComponentsWarning: 10,
     remoteDebugger: null,
-    multipleApps: true,
-    allowedTypes: []
+    allowedTypes: [],
+    doReconnect: true
   }) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
     this.debuggerComponentDetailsId = 1
     this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
     this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
-    this.verifyStrictRender = typeof options.verifyStrictRender === 'undefined' ? true : options.verifyStrictRender
-    this.preventInputPropReplacement = options.preventInputPropReplacement || false
-    this.bigComponentsWarning = options.bigComponentsWarning || {state: 5, signals: 5}
+    this.doReconnect = typeof options.reconnect === 'undefined' ? true : options.reconnect
+    this.preventPropsReplacement = options.preventPropsReplacement || false
+    this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
-    this.multipleApps = typeof options.multipleApps === 'undefined' ? true : options.multipleApps
+
+    if (!this.remoteDebugger) {
+      throwError('You have to pass "remoteDebugger" property')
+    }
+
     this.backlog = []
     this.mutations = []
-    this.latestExecutionId = null
     this.initialModelString = null
     this.isConnected = false
     this.controller = null
     this.originalRunTreeFunction = null
+    this.reconnectInterval = 5000
     this.ws = null
     this.isResettingDebugger = false
-    this.isBrowserEnv = typeof document !== 'undefined' && typeof window !== 'undefined'
     this.allowedTypes = []
-      .concat(this.isBrowserEnv ? [File, FileList, Blob] : [])
+      .concat(typeof File === 'undefined' ? [] : File)
+      .concat(typeof FileList === 'undefined' ? [] : FileList)
+      .concat(typeof Blob === 'undefined' ? [] : Blob)
+      .concat(typeof ImageData === 'undefined' ? [] : ImageData)
+      .concat(typeof RegExp === 'undefined' ? [] : RegExp)
       .concat(options.allowedTypes || [])
 
     this.sendInitial = this.sendInitial.bind(this)
-    this.sendComponentsMap = debounce(this.sendComponentsMap, 50)
+    this.sendComponentsMap = delay(this.sendComponentsMap, 50)
   }
   /*
     To remember state Cerebral stores the initial model as stringified
@@ -60,35 +63,27 @@ class Devtools {
     Then all mutations are replayed to the model and all the components
     will be rerendered using the "flush" event and "force" flag.
 
-    It will also replace the "runTree" method of the controller to
+    It will also replace the "run" method of the controller to
     prevent any new signals firing off when in "remember state"
   */
-  remember (executionId) {
+  remember (index) {
     this.controller.model.state = JSON.parse(this.initialModelString)
-    let lastMutationIndex
 
-    if (executionId === this.latestExecutionId) {
-      this.controller.runTree = this.originalRunTreeFunction
-      lastMutationIndex = this.mutations.length - 1
+    if (index === 0) {
+      this.controller.run = this.originalRunTreeFunction
     } else {
-      for (lastMutationIndex = this.mutations.length - 1; lastMutationIndex >= 0; lastMutationIndex--) {
-        if (this.mutations[lastMutationIndex].executionId === executionId) {
-          break
-        }
-      }
-
-      this.controller.runTree = (name) => {
+      this.controller.run = (name) => {
         console.warn(`The signal "${name}" fired while debugger is remembering state, it was ignored`)
       }
     }
 
-    for (let x = 0; x <= lastMutationIndex; x++) {
+    for (let x = 0; x < this.mutations.length - index; x++) {
       const mutation = JSON.parse(this.mutations[x].data)
-
       this.controller.model[mutation.method](...mutation.args)
     }
 
     this.controller.flush(true)
+    this.controller.emit('remember', JSON.parse(this.mutations[index].data).datetime)
   }
   /*
 
@@ -103,51 +98,40 @@ class Devtools {
     Sets up the listeners to Chrome Extension or remote debugger
   */
   addListeners () {
-    if (this.remoteDebugger) {
-      this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
-      this.ws.onmessage = (event) => {
-        const message = JSON.parse(event.data)
-        switch (message.type) {
-          case 'changeModel':
-            this.controller.model.set(message.data.path, message.data.value)
-            this.controller.flush()
-            break
-          case 'remember':
-            if (!this.storeMutations) {
-              console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
-            }
-            this.remember(message.data)
-            break
-          case 'reset':
-            this.reset()
-            break
-          case 'pong':
-            this.sendInitial()
-            break
-          case 'ping':
-            this.sendInitial()
-            break
-        }
+    this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
+    this.ws.onmessage = (event) => {
+      const message = JSON.parse(event.data)
+      switch (message.type) {
+        case 'changeModel':
+          this.controller.model.set(message.data.path, message.data.value)
+          this.controller.flush()
+          break
+        case 'remember':
+          if (!this.storeMutations) {
+            console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
+          }
+          this.remember(message.data)
+          break
+        case 'reset':
+          this.reset()
+          break
+        case 'pong':
+          this.sendInitial()
+          break
+        case 'ping':
+          this.sendInitial()
+          break
       }
-    } else {
-      window.addEventListener('cerebral2.debugger.changeModel', (event) => {
-        this.controller.model.set(event.detail.path, event.detail.value)
-        this.controller.flush()
-      })
-      window.addEventListener('cerebral2.debugger.remember', (event) => {
-        if (!this.storeMutations) {
-          console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
-        }
-        this.remember(event.detail)
-      })
-      window.addEventListener('cerebral2.debugger.reset', (event) => {
-        this.reset()
-      })
-      // When debugger responds a client ping
-      window.addEventListener('cerebral2.debugger.pong', this.sendInitial)
-      // When debugger pings the client
-      window.addEventListener('cerebral2.debugger.ping', this.sendInitial)
     }
+  }
+  reconnect () {
+    setTimeout(() => {
+      this.init(this.controller)
+      this.ws.onclose = () => {
+        this.isConnected = false
+        this.reconnect()
+      }
+    }, this.reconnectInterval)
   }
   /*
     The debugger might be ready or it might not. The initial communication
@@ -163,7 +147,7 @@ class Devtools {
   */
   init (controller) {
     this.controller = controller
-    this.originalRunTreeFunction = controller.runTree
+    this.originalRunTreeFunction = controller.run
 
     if (this.storeMutations) {
       this.initialModelString = JSON.stringify(controller.model.get())
@@ -171,84 +155,25 @@ class Devtools {
 
     this.addListeners()
 
-    if (this.remoteDebugger) {
-      this.ws.onopen = () => {
-        this.ws.send(JSON.stringify({type: 'ping'}))
-      }
-      this.ws.onclose = () => {
-        if (this.isBrowserEnv) {
-          console.warn('You have configured remoteDebugger, but could not connect. Falling back to Chrome extension')
-          this.reInit()
-        } else {
-          console.warn('You have configured remoteDebugger, but could not connect. Please start the remote debugger and make sure you connect to correct port')
-        }
-      }
-      this.ws.onerror = () => {
-        if (this.isBrowserEnv) {
-          this.reInit()
-        }
-      }
-    } else if (this.isBrowserEnv) {
-      const event = new CustomEvent('cerebral2.client.message', {
-        detail: JSON.stringify({type: 'ping'})
-      })
-      window.dispatchEvent(event)
-    } else {
-      console.warn('The Cerebral devtools is running in a non browser environment. You have to add the remoteDebugger option')
+    this.ws.onopen = () => {
+      this.ws.send(JSON.stringify({type: 'ping'}))
     }
-
-    if (this.isBrowserEnv && this.multipleApps) {
-      let hidden, visibilityChange
-      if (typeof document.hidden !== 'undefined') {
-        hidden = 'hidden'
-        visibilityChange = 'visibilitychange'
-      } else if (typeof document.msHidden !== 'undefined') {
-        hidden = 'msHidden'
-        visibilityChange = 'msvisibilitychange'
-      } else if (typeof document.webkitHidden !== 'undefined') {
-        hidden = 'webkitHidden'
-        visibilityChange = 'webkitvisibilitychange'
+    this.ws.onerror = () => {}
+    this.ws.onclose = () => {
+      this.isConnected = false
+      if (this.doReconnect) {
+        console.warn('Could not connect to the debugger, please make sure it is running... automatically retrying in the background')
+        this.reconnect()
       }
-
-      document.addEventListener(visibilityChange, () => {
-        if (!document[hidden]) {
-          this.isResettingDebugger = true
-          this.backlog.forEach((message) => {
-            this.sendMessage(message)
-          })
-          this.isResettingDebugger = false
-        }
-      }, false)
     }
 
     this.watchExecution()
   }
   /*
-    When websocket close, reinit with chrome extension
-  */
-  reInit () {
-    this.remoteDebugger = null
-    this.addListeners()
-
-    const event = new CustomEvent('cerebral2.client.message', {
-      detail: JSON.stringify({type: 'ping'})
-    })
-    window.dispatchEvent(event)
-  }
-  /*
     Sends message to chrome extension or remote debugger
   */
   sendMessage (stringifiedMessage) {
-    if (this.multipleApps && !this.isResettingDebugger) {
-      this.backlog.push(stringifiedMessage)
-    }
-
-    if (this.remoteDebugger) {
-      this.ws.send(stringifiedMessage)
-    } else {
-      const event = new CustomEvent('cerebral2.client.message', {detail: stringifiedMessage})
-      window.dispatchEvent(event)
-    }
+    this.ws.send(stringifiedMessage)
   }
   /*
     Watches function tree for execution of signals. This is passed to
@@ -257,15 +182,17 @@ class Devtools {
     called again
   */
   watchExecution () {
-    this.controller.runTree.on('start', (execution) => {
+    this.controller.on('start', (execution, payload) => {
       const message = JSON.stringify({
         type: 'executionStart',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
             name: execution.name,
             staticTree: execution.staticTree,
-            datetime: execution.datetime
+            datetime: execution.datetime,
+            executedBy: (payload && payload._execution) ? payload._execution : null
           }
         }
       })
@@ -276,9 +203,10 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('end', (execution) => {
+    this.controller.on('end', (execution) => {
       const message = JSON.stringify({
         type: 'executionEnd',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id
@@ -293,9 +221,10 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('pathStart', (path, execution, funcDetails) => {
+    this.controller.on('pathStart', (path, execution, funcDetails) => {
       const message = JSON.stringify({
         type: 'executionPathStart',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -311,9 +240,10 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('functionStart', (execution, funcDetails, payload) => {
+    this.controller.on('functionStart', (execution, funcDetails, payload) => {
       const message = JSON.stringify({
         type: 'execution',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -330,13 +260,14 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.runTree.on('functionEnd', (execution, funcDetails, payload, result) => {
+    this.controller.on('functionEnd', (execution, funcDetails, payload, result) => {
       if (!result || (result instanceof Path && !result.payload)) {
         return
       }
 
       const message = JSON.stringify({
         type: 'executionFunctionEnd',
+        source: 'c',
         data: {
           execution: {
             executionId: execution.id,
@@ -352,6 +283,46 @@ class Devtools {
         this.backlog.push(message)
       }
     })
+    this.controller.on('error', (error, execution, funcDetails) => {
+      const message = JSON.stringify({
+        type: 'executionFunctionError',
+        source: 'c',
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+              func: funcDetails.function.toString()
+            }
+          }
+        }
+      })
+
+      if (this.isConnected) {
+        this.sendMessage(message)
+      } else {
+        this.backlog.push(message)
+      }
+    })
+  }
+  /*
+    Sends multiple message in one batch to debugger, causing debugger
+    also to synchronously run all updates before rendering
+  */
+  sendBulkMessage (messages) {
+    const message = JSON.stringify({
+      type: 'bulk',
+      source: 'c',
+      version: this.VERSION,
+      data: {
+        messages
+      }
+    })
+
+    this.sendMessage(message)
   }
   /*
     Send initial model. If model has already been stringified we reuse it. Any
@@ -361,6 +332,7 @@ class Devtools {
     const initialModel = this.controller.model.get()
     const message = JSON.stringify({
       type: 'init',
+      source: 'c',
       version: this.VERSION,
       data: {
         initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
@@ -369,19 +341,16 @@ class Devtools {
 
     this.isResettingDebugger = true
     this.sendMessage(message)
-    this.backlog.forEach((backlogItem) => {
-      this.sendMessage(backlogItem)
-    })
+    this.sendBulkMessage(this.backlog)
     this.isResettingDebugger = false
 
-    if (!this.multipleApps) {
-      this.backlog = []
-    }
+    this.backlog = []
 
     this.isConnected = true
 
     this.sendMessage(JSON.stringify({
       type: 'components',
+      source: 'c',
       data: {
         map: this.debuggerComponentsMap,
         render: {
@@ -423,6 +392,7 @@ class Devtools {
 
     return JSON.stringify({
       type: type,
+      source: 'c',
       version: this.VERSION,
       data: data
     }).replace(`"${PLACEHOLDER_DEBUGGING_DATA}"`, mutationString)
@@ -456,21 +426,26 @@ class Devtools {
   updateComponentsMap (component, nextDeps, prevDeps) {
     const componentDetails = {
       name: this.extractComponentName(component),
-      renderCount: component.renderCount ? component.renderCount + 1 : 1,
+      renderCount: component.renderCount || 0,
       id: component.componentDetailsId || this.debuggerComponentDetailsId++
     }
+
+    if (arguments.length === 1) {
+      componentDetails.renderCount++
+    }
+
     component.componentDetailsId = componentDetails.id
     component.renderCount = componentDetails.renderCount
 
     if (prevDeps) {
       for (const depsKey in prevDeps) {
-        const debuggerComponents = this.debuggerComponentsMap[prevDeps[depsKey]]
+        const debuggerComponents = this.debuggerComponentsMap[depsKey]
 
         for (let x = 0; x < debuggerComponents.length; x++) {
           if (debuggerComponents[x].id === component.componentDetailsId) {
             debuggerComponents.splice(x, 1)
             if (debuggerComponents.length === 0) {
-              delete this.debuggerComponentsMap[prevDeps[depsKey]]
+              delete this.debuggerComponentsMap[depsKey]
             }
             break
           }
@@ -480,9 +455,9 @@ class Devtools {
 
     if (nextDeps) {
       for (const depsKey in nextDeps) {
-        this.debuggerComponentsMap[nextDeps[depsKey]] = (
-          this.debuggerComponentsMap[nextDeps[depsKey]]
-            ? this.debuggerComponentsMap[nextDeps[depsKey]].concat(componentDetails)
+        this.debuggerComponentsMap[depsKey] = (
+          this.debuggerComponentsMap[depsKey]
+            ? this.debuggerComponentsMap[depsKey].concat(componentDetails)
             : [componentDetails]
         )
       }
@@ -495,18 +470,21 @@ class Devtools {
     debugger updates
   */
   sendComponentsMap (componentsToRender, changes, start, end) {
-    this.sendMessage(JSON.stringify({
-      type: 'components',
-      data: {
-        map: this.debuggerComponentsMap,
-        render: {
-          start: start,
-          duration: end - start,
-          changes: changes,
-          components: componentsToRender.map(this.extractComponentName)
+    if (this.isConnected) {
+      this.sendMessage(JSON.stringify({
+        type: 'components',
+        source: 'c',
+        data: {
+          map: this.debuggerComponentsMap,
+          render: {
+            start: start,
+            duration: end - start,
+            changes: changes,
+            components: componentsToRender.map(this.extractComponentName)
+          }
         }
-      }
-    }))
+      }))
+    }
   }
 }
 

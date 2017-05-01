@@ -1,0 +1,14 @@
+import {createReturnPromise, convertObjectWithTemplates} from '../helpers'
+
+function taskFactory (taskName, payload = {}) {
+  function task ({firebase, path, resolve}) {
+    return createReturnPromise(
+      firebase.task(resolve.value(taskName), convertObjectWithTemplates(payload, resolve)),
+      path
+    )
+  }
+
+  return task
+}
+
+export default taskFactory

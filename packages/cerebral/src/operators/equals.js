@@ -1,11 +1,15 @@
 function equalsFactory (target) {
-  function equals (context) {
-    const targetValue = target(context).value
+  function equals ({state, props, path, resolve}) {
+    if (!resolve.isTag(target, 'state', 'props')) {
+      throw new Error('Cerebral operator.equals: You have to use the STATE or PROPS TAG as first argument')
+    }
 
-    return context.path[targetValue] ? context.path[targetValue]() : context.path.otherwise()
+    const targetValue = resolve.value(target)
+
+    return path[targetValue] ? path[targetValue]() : path.otherwise()
   }
 
-  equals.displayName = 'operator.equals'
+  equals.displayName = `operator.equals(${String(target)})`
 
   return equals
 }

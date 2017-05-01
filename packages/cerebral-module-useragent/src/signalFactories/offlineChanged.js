@@ -1,7 +1,8 @@
-import {set, state, input} from 'cerebral/operators'
+import {set} from 'cerebral/operators'
+import {state, props} from 'cerebral/tags'
 
 export default (path) => {
   return [
-    set(state`${path.join('.')}.network.offline`, input`offline`)
+    set(state`${path}.network.offline`, props`offline`)
   ]
 }

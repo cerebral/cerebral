@@ -1,4 +1,4 @@
-import {ensurePath} from '../utils'
+import {ensurePath, cleanPath, throwError} from '../utils'
 
 function StateProviderFactory () {
   const methods = [
@@ -11,8 +11,7 @@ function StateProviderFactory () {
     'unshift',
     'splice',
     'unset',
-    'concat',
-    'compute'
+    'concat'
   ]
   let provider = null
 
@@ -21,19 +20,15 @@ function StateProviderFactory () {
     let asyncTimeout = null
 
     return methods.reduce((currentStateContext, methodKey) => {
-      if (methodKey === 'compute') {
-        currentStateContext.compute = (...args) => model.compute(...args)
-      } else if (typeof model[methodKey] === 'function') {
-        currentStateContext[methodKey] = (...args) => {
-          const path = ensurePath(args.shift())
+      currentStateContext[methodKey] = (...args) => {
+        const path = ensurePath(cleanPath(args.shift()))
 
-          if (methodKey !== 'get') {
-            clearTimeout(asyncTimeout)
-            asyncTimeout = setTimeout(() => context.controller.flush())
-          }
-
-          return model[methodKey].apply(model, [path].concat(args))
+        if (methodKey !== 'get') {
+          clearTimeout(asyncTimeout)
+          asyncTimeout = setTimeout(() => context.controller.flush())
         }
+
+        return model[methodKey].apply(model, [path].concat(args))
       }
 
       return currentStateContext
@@ -55,13 +50,21 @@ function StateProviderFactory () {
             const path = ensurePath(argsCopy.shift())
 
             context.debugger.send({
+              datetime: Date.now(),
               type: 'mutation',
               color: '#333',
               method: methodKey,
               args: [path, ...argsCopy]
             })
 
-            return originFunc.apply(context.controller.model, args)
+            try {
+              originFunc.apply(context.controller.model, args)
+            } catch (e) {
+              const path = args[0]
+              const type = typeof args[1]
+              const signalName = context.execution.name
+              throwError(`The Signal '${signalName}' passed an invalid value of type '${type}' to the state tree at path: '${path}'`)
+            }
           }
         }
 

@@ -211,10 +211,10 @@ describe('Router', () => {
       }),
       signals: {
         doRedirect: [({router}) => router.redirect('/existing/foo/%3Atrue/%3A42')],
-        existing: [({input}) => {
-          assert.equal(input.string, 'foo')
-          assert.equal(input.bool, true)
-          assert.equal(input.num, 42)
+        existing: [({props}) => {
+          assert.equal(props.string, 'foo')
+          assert.equal(props.bool, true)
+          assert.equal(props.num, 42)
           assert.equal(addressbar.pathname, '/existing/foo/%3Atrue/%3A42')
           done()
         }]
@@ -233,10 +233,10 @@ describe('Router', () => {
       }),
       signals: {
         doRedirect: [({router}) => router.redirect('/existing')],
-        existing: [({input}) => {
-          assert.equal(input.string, 'foo')
-          assert.equal(input.bool, true)
-          assert.equal(input.num, 42)
+        existing: [({props}) => {
+          assert.equal(props.string, 'foo')
+          assert.equal(props.bool, true)
+          assert.equal(props.num, 42)
           assert.equal(addressbar.pathname, '/existing/foo/%3Atrue/%3A42')
         }]
       }
@@ -282,8 +282,8 @@ describe('Router', () => {
           }
         ],
         'detail': [
-          function checkAction ({input}) {
-            assert.equal(input.id, 42)
+          function checkAction ({props}) {
+            assert.equal(props.id, 42)
             assert.equal(addressbar.pathname, '/foo/%3A42')
             done()
           }

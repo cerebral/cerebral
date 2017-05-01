@@ -1,0 +1,32 @@
+{
+  "name": "cerebral-provider-storage",
+  "version": "1.0.0-b",
+  "description": "Storage provider for Cerebral 2",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral.git"
+  },
+  "keywords": [
+    "cerebral",
+    "localStorage",
+    "sessionStorage"
+  ],
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-storage#readme",
+  "peerDependencies": {
+    "cerebral": "^2.0.0-b"
+  },
+  "devDependencies": {
+    "@cerebral/monorepo": "0.0.1",
+    "cerebral": "^2.0.0-b"
+  }
+}

@@ -1,4 +1,6 @@
 /* eslint-env browser */
+import {getAllResponseHeaders} from './utils'
+import HttpProviderError from './HttpProviderError'
 
 function parseResponse (xhr) {
   try {
@@ -7,16 +9,13 @@ function parseResponse (xhr) {
       result: JSON.parse(xhr.responseText)
     }
   } catch (e) {
-    return {
-      status: xhr.status,
-      result: null
-    }
+    throw new HttpProviderError(xhr.status, getAllResponseHeaders(xhr), xhr.responseText, e.message)
   }
 }
 
 export default function (options) {
   if (!options.url) {
-    console.warn('upload-controller: options must contain url')
+    console.warn('upload-controller: you must provide a url')
     return
   }
   this.isAborted = false

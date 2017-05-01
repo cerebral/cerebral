@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, unshift} from './'
+import {unshift} from './'
+import {props, state} from '../tags'
 
 describe('operator.unshift', () => {
   it('should unshift value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
@@ -18,32 +19,37 @@ describe('operator.unshift', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
   })
-  it('should unshift value from input in model', () => {
-    const controller = new Controller({
+  it('should unshift value from props in model', () => {
+    const controller = Controller({
       state: {
         list: ['a', 'b']
       },
       signals: {
         test: [
-          unshift(state`list`, input`value`)
+          unshift(state`list`, props`value`)
         ]
       }
     })
     controller.getSignal('test')({value: 'x'})
     assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
   })
-  it('should throw on bad argument', () => {
-    const controller = new Controller({
+  it('should throw on bad argument', (done) => {
+    const controller = Controller({
       state: {
       },
       signals: {
         test: [
-          unshift(input`list`, 'bar')
+          unshift(props`list`, 'bar')
         ]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('test')({list: ['one']})
-    }, /operator.unshift/)
+
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

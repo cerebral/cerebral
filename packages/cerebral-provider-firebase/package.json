@@ -1,10 +1,11 @@
 {
   "name": "cerebral-provider-firebase",
-  "version": "1.0.0-0",
+  "version": "1.0.0-b",
   "description": "Firebase provider for Cerebral",
   "main": "lib/index.js",
   "scripts": {
-    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
+    "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
+    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -20,15 +21,15 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage":
-    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-firebase#readme",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-firebase#readme",
   "dependencies": {
     "firebase": "^3.5.2"
   },
   "peerDependencies": {
-    "cerebral": "2.0.0-0"
+    "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "cerebral": "2.0.0-0"
+    "@cerebral/monorepo": "0.0.1",
+    "cerebral": "^2.0.0-b"
   }
 }

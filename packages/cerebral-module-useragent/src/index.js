@@ -12,6 +12,7 @@ const defaultOptions = {
   feature: true,
   offline: {
     checkOnLoad: false,
+    checks: {xhr: {url: 'https://api.github.com'}},
     interceptRequests: true,
     reconnect: {
       initialDelay: 3,
@@ -34,16 +35,19 @@ export default (userOptions = {}) => {
   state.media = getMedia(options)
   state.feature = getFeatures(options)
   state.window = getWindowSpec()
-  state.network = {offline: false}
+  state.network = {offline: network.state === 'down'}
+
+  network.options = options.offline || {}
 
   return ({controller, path}) => {
     controller.on('initialized', () => {
-      const offlineChanged = controller.getSignal(`${path.join('.')}.offlineChanged`)
-      const windowChanged = controller.getSignal(`${path.join('.')}.windowChanged`)
+      const offlineChanged = controller.getSignal(`${path}.offlineChanged`)
+      const windowChanged = controller.getSignal(`${path}.windowChanged`)
 
       if (options.offline !== false) {
-        network.on('confirmed-up', () => { offlineChanged({offline: false}) })
-        network.on('confirmed-down', () => { offlineChanged({offline: true}) })
+        network.on('up', () => { controller.getState(`${path}.network.offline`) && offlineChanged({offline: false}) })
+        network.on('down', () => { !controller.getState(`${path}.network.offline`) && offlineChanged({offline: true}) })
+        network.check()
       }
 
       if (options.window !== false) {

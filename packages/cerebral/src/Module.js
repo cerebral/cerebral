@@ -1,35 +1,42 @@
 class Module {
-  constructor (path, module, controller) {
-    this.name = path.slice().pop()
-    this.path = path
-    this.controller = controller
-    this.modules = {}
-
-    const moduleDescription = typeof module === 'function' ? module(this) : module
-
-    this.initialState = moduleDescription.state || {}
-    if (moduleDescription.state) {
-      this.controller.getModel().set(this.path, moduleDescription.state)
+  constructor (controller, path, moduleDescription) {
+    const stringPath = path.join('.')
+    const moduleStub = {
+      controller,
+      path: stringPath,
+      name: path.slice().pop()
     }
 
-    this.signals = moduleDescription.signals || {}
-    this.provider = moduleDescription.provider
-    this.registerModules(moduleDescription.modules || {})
-  }
-  registerModules (modules) {
-    Object.keys(modules).forEach(moduleKey => {
-      this.modules[moduleKey] = new Module(this.path.concat(moduleKey), modules[moduleKey], this.controller)
-    })
-  }
-  /*
-    Used by controller to extract all the providers of all modules
-  */
-  getProviders () {
-    return (this.provider ? [this.provider] : []).concat(Object.keys(this.modules)
-      .reduce((nestedProviders, moduleKey) => {
-        return nestedProviders.concat(this.modules[moduleKey].getProviders())
-      }, [])
-    )
+    const module = typeof moduleDescription === 'function' ? moduleDescription(moduleStub) : moduleDescription
+
+    /* Set initial module state to model */
+    controller.getModel().set(path, module.state || {})
+    /* Convert arrays to actually runable signals */
+    module.signals = Object.keys(module.signals || {}).reduce((currentSignals, signalKey) => {
+      const signal = module.signals[signalKey]
+
+      currentSignals[signalKey] = {
+        signal: signal.signal || signal,
+        catch: (signal.catch || controller.catch) ? new Map([].concat(
+          controller.catch ? [...controller.catch] : []
+        ).concat(
+          signal.catch ? [...signal.catch] : []
+        )) : null,
+        run (payload) {
+          controller.runSignal(path.concat(signalKey).join('.'), signal.signal || signal, payload)
+        }
+      }
+
+      return currentSignals
+    }, {})
+
+    /* Instantiate submodules */
+    module.modules = Object.keys(module.modules || {}).reduce((registered, moduleKey) => {
+      registered[moduleKey] = new Module(controller, path.concat(moduleKey), module.modules[moduleKey])
+      return registered
+    }, {})
+
+    return module
   }
 }
 

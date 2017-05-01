@@ -22,35 +22,20 @@ import signInWithEmailAndPassword from './signInWithEmailAndPassword'
 import signOutService from './signOut'
 import signInWithFacebook from './signInWithFacebook'
 import signInWithGoogle from './signInWithGoogle'
+import signInWithGithub from './signInWithGithub'
+import deleteUser from './deleteUser'
+import sendPasswordResetEmail from './sendPasswordResetEmail'
+import linkWithGithub from './linkWithGithub'
+import {setOnDisconnect, cancelOnDisconnect} from './onDisconnect'
 
-export {default as createUserWithEmailAndPassword} from './factories/createUserWithEmailAndPassword'
-export {default as getUser} from './factories/getUser'
-export {default as off} from './factories/off'
-export {default as onChildAdded} from './factories/onChildAdded'
-export {default as onChildChanged} from './factories/onChildChanged'
-export {default as onChildRemoved} from './factories/onChildRemoved'
-export {default as onValue} from './factories/onValue'
-export {default as sendPasswordResetEmail} from './factories/sendPasswordResetEmail'
-export {default as signInAnonymously} from './factories/signInAnonymously'
-export {default as signInWithEmailAndPassword} from './factories/signInWithEmailAndPassword'
-export {default as signInWithFacebook} from './factories/signInWithFacebook'
-export {default as signInWithGoogle} from './factories/signInWithGoogle'
-export {default as signOut} from './factories/signOut'
-export {default as task} from './factories/task'
-export {default as value} from './factories/value'
-export {default as set} from './factories/set'
-export {default as update} from './factories/update'
-export {default as push} from './factories/push'
-export {default as put} from './factories/put'
-export {default as delete} from './factories/delete'
-export {default as remove} from './factories/remove'
-export {default as transaction} from './factories/transaction'
+export {FirebaseProviderError} from './errors'
+export {FirebaseProviderAuthenticationError} from './errors'
 
 export default function FirebaseProviderFactory (options = { payload: {} }) {
   firebase.initializeApp(options.config)
 
   let cachedProvider = null
-  function FirebaseProvider (context) {
+  function FirebaseProvider (context, functionDetails) {
     if (cachedProvider) {
       context.firebase = cachedProvider
     } else {
@@ -59,6 +44,7 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         signInAnonymously: signInAnonymouslyService,
         signInWithFacebook: signInWithFacebook,
         signInWithGoogle: signInWithGoogle,
+        signInWithGithub: signInWithGithub,
         off: stopListening,
         onChildAdded: createOnChildAdded(context.controller),
         onChildRemoved: createOnChildRemoved(context.controller),
@@ -67,20 +53,23 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
         value,
         push,
         put,
+        linkWithGithub,
         delete: deleteOp,
         update,
         set,
         remove,
         transaction,
-        task: createTask(options),
         createUserWithEmailAndPassword,
         signInWithEmailAndPassword,
         signOut: signOutService,
-        sendPasswordResetEmail (email) {
-          return firebase.auth().sendPasswordResetEmail(email)
-        }
+        deleteUser,
+        sendPasswordResetEmail,
+        setOnDisconnect,
+        cancelOnDisconnect
       }
     }
+
+    context.firebase.task = createTask(options, context.execution.id, functionDetails.functionIndex)
 
     if (context.debugger) {
       context.debugger.wrapProvider('firebase')
@@ -91,15 +80,3 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
 
   return FirebaseProvider
 }
-
-/*
-export default (options = { payload: {} }) => (module, controller) => {
-  controller.addContextProvider({
-    'cerebral-module-firebase': module.path
-  })
-  firebase.initializeApp(options.config)
-  module.addServices({
-
-  })
-}
-*/

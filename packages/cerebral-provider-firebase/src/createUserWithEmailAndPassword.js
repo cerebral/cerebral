@@ -1,26 +1,19 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
+import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function createUserWithEmailAndPassword (email, password) {
-  return firebase.auth().createUserWithEmailAndPassword(email, password)
-    .then(
-      () => {
-        return new Promise((resolve) => {
-          const unsubscribe = firebase.auth().onAuthStateChanged(user => {
-            unsubscribe()
-            resolve({
-              user: createUser(user)
-            })
+  return new Promise((resolve, reject) => {
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        const unsubscribe = firebase.auth().onAuthStateChanged(user => {
+          unsubscribe()
+          resolve({
+            user: createUser(user)
           })
         })
-      },
-      (error) => {
-        return {
-          error: {
-            code: error.code,
-            message: error.message
-          }
-        }
-      }
-    )
+      }, (error) => {
+        reject(new FirebaseProviderAuthenticationError(error))
+      })
+  })
 }

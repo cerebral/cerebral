@@ -1,5 +1,6 @@
 import firebase from 'firebase'
 import {createUser} from './helpers'
+import {FirebaseProviderError} from './errors'
 
 export default function getUser () {
   return new Promise((resolve, reject) => {
@@ -13,28 +14,20 @@ export default function getUser () {
             user.accessToken = result.credential.accessToken
           }
           resolve({
-            user: user
+            user: firebase.auth().currentUser ? user : null,
+            isRedirected: true
           })
         } else {
           const unsubscribe = firebase.auth().onAuthStateChanged(user => {
             unsubscribe()
-            if (user) {
-              resolve({
-                user: createUser(user)
-              })
-            } else {
-              reject()
-            }
+            resolve({
+              user: user ? createUser(user) : null,
+              isRedirected: false
+            })
           })
         }
-      },
-      (error) => {
-        reject({
-          code: error.code,
-          message: error.message,
-          email: error.email
-        })
-      }
-    )
+      }, (error) => {
+        reject(new FirebaseProviderError(error))
+      })
   })
 }

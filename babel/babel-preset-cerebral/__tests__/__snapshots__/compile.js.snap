@@ -1,0 +1,24 @@
+exports[`Preset transpiles cerebral specific syntax should not enable proxies by default 1`] = `
+"
+import { state } from \'cerebral/proxies\';
+
+state.hello.world;"
+`;
+
+exports[`Preset transpiles cerebral specific syntax should not transpile proxies when proxies: true 1`] = `
+"import { Tag as _Tag } from \'cerebral/tags\';
+
+
+new _Tag(\'state\', {
+      \'isStateDependency\': true
+}, [\'hello.world\'], []);"
+`;
+
+exports[`Preset transpiles cerebral specific syntax should optimize default options 1`] = `
+"import { Tag as _Tag } from \'cerebral/tags\';
+
+
+new _Tag(\'state\', {
+      \'isStateDependency\': true
+}, [\'hello.world\'], []);"
+`;

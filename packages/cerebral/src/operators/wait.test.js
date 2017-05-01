@@ -2,11 +2,12 @@
 import Controller from '../Controller'
 import assert from 'assert'
 import {wait} from './'
+import {parallel} from '../'
 
 describe('operator.wait', () => {
   it('should hold execution for set time', (done) => {
     const start = Date.now()
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
           wait(100),
@@ -21,10 +22,10 @@ describe('operator.wait', () => {
   })
   it('should hold execution for set time in parallel', (done) => {
     const start = Date.now()
-    const controller = new Controller({
+    const controller = Controller({
       signals: {
         test: [
-          [
+          parallel([
             wait(100), {
               continue: [
                 () => {
@@ -33,7 +34,7 @@ describe('operator.wait', () => {
                 }
               ]
             }
-          ]
+          ])
         ]
       }
     })

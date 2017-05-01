@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, splice, state} from './'
+import {splice} from './'
+import {props, state} from '../tags'
 
 describe('operator.splice', () => {
   it('should splice value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         list: ['a', 'b', 'c', 'd']
       },
@@ -18,32 +19,37 @@ describe('operator.splice', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['a', 'x', 'y', 'd']})
   })
-  it('should splice value from input in model', () => {
-    const controller = new Controller({
+  it('should splice value from props in model', () => {
+    const controller = Controller({
       state: {
         list: ['a', 'b', 'c', 'd']
       },
       signals: {
         test: [
-          splice(state`list`, input`idx`, 1, input`x`, input`y`)
+          splice(state`list`, props`idx`, 1, props`x`, props`y`)
         ]
       }
     })
     controller.getSignal('test')({idx: 2, x: 'one', y: 'two'})
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'one', 'two', 'd']})
   })
-  it('should throw on bad argument', () => {
-    const controller = new Controller({
+  it('should throw on bad argument', (done) => {
+    const controller = Controller({
       state: {
       },
       signals: {
         test: [
-          splice(input`list`, 1, 1, 'bar')
+          splice(props`list`, 1, 1, 'bar')
         ]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('test')({list: ['one', 'two']})
-    }, /operator.splice/)
+
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

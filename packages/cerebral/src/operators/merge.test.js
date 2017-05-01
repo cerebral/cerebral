@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, merge, state} from './'
+import {merge} from './'
+import {state, props} from '../tags'
 
 describe('operator.merge', () => {
   it('should merge value in model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         users: {
           john: 'John Difool'
@@ -23,8 +24,8 @@ describe('operator.merge', () => {
       largo: 'Largo Winch'
     }})
   })
-  it('should merge value from input in model', () => {
-    const controller = new Controller({
+  it('should merge value from props in model', () => {
+    const controller = Controller({
       state: {
         users: {
           john: 'John Difool'
@@ -32,7 +33,7 @@ describe('operator.merge', () => {
       },
       signals: {
         test: [
-          merge(state`users`, input`value`)
+          merge(state`users`, props`value`)
         ]
       }
     })
@@ -42,22 +43,27 @@ describe('operator.merge', () => {
       largo: 'Largo Winch'
     }})
   })
-  it('should throw on bad argument', () => {
-    const controller = new Controller({
+  it('should throw on bad argument', (done) => {
+    const controller = Controller({
       state: {
       },
       signals: {
         test: [
-          merge(input`users`, {joe: 'Joe'})
+          merge(props`users`, {joe: 'Joe'})
         ]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('test')({users: {}})
-    }, /operator.merge/)
+
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
   it('should create object if no value', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -70,13 +76,13 @@ describe('operator.merge', () => {
     assert.deepEqual(controller.getState(), {users: {joe: 'Joe'}})
   })
   it('should merge multiple objects', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
       },
       signals: {
         test: [
-          merge(state`users`, {joe: 'Joe'}, input`extend`, {
-            bob: input`bob`
+          merge(state`users`, {joe: 'Joe'}, props`extend`, {
+            bob: props`bob`
           })
         ]
       }

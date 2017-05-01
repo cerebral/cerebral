@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, state, toggle} from './'
+import {toggle} from './'
+import {props, state} from '../tags'
 
 describe('operator.toggle', () => {
   it('should toggle state', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: true
       },
@@ -18,8 +19,8 @@ describe('operator.toggle', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {foo: false})
   })
-  it('should toggle state with input', () => {
-    const controller = new Controller({
+  it('should toggle state with props', () => {
+    const controller = Controller({
       state: {
         todos: {
           one: true,
@@ -28,25 +29,30 @@ describe('operator.toggle', () => {
       },
       signals: {
         test: [
-          toggle(state`todos.${input`ref`}`)
+          toggle(state`todos.${props`ref`}`)
         ]
       }
     })
     controller.getSignal('test')({ref: 'one'})
     assert.deepEqual(controller.getState(), {todos: {one: false, two: false}})
   })
-  it('should throw on bad argument', () => {
-    const controller = new Controller({
+  it('should throw on bad argument', (done) => {
+    const controller = Controller({
       state: {
       },
       signals: {
         test: [
-          toggle(input`foo`)
+          toggle(props`foo`)
         ]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('test')({foo: true})
-    }, /operator.toggle/)
+
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
   })
 })

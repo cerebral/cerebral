@@ -1,11 +1,12 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import {input, string, set, state} from './'
+import {set, push} from './'
+import {props, state, string} from '../tags'
 
 describe('operator.set', () => {
   it('should set value to model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
@@ -18,28 +19,28 @@ describe('operator.set', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
   })
-  it('should set value to input', () => {
-    const controller = new Controller({
+  it('should set value to props', () => {
+    const controller = Controller({
       signals: {
         test: [
-          set(input`foo`, 'bar'),
-          ({input}) => {
-            assert.equal(input.foo, 'bar')
+          set(props`foo`, 'bar'),
+          ({props}) => {
+            assert.equal(props.foo, 'bar')
           }
         ]
       }
     })
     controller.getSignal('test')()
   })
-  it('should set deep value to input', () => {
-    const controller = new Controller({
+  it('should set deep value to props', () => {
+    const controller = Controller({
       signals: {
         test: [
-          set(input`foo`, {bing: 'bor'}),
-          set(input`foo.bar`, 'baz'),
-          ({input}) => {
-            assert.equal(input.foo.bar, 'baz')
-            assert.equal(input.foo.bing, 'bor')
+          set(props`foo`, {bing: 'bor'}),
+          set(props`foo.bar`, 'baz'),
+          ({props}) => {
+            assert.equal(props.foo.bar, 'baz')
+            assert.equal(props.foo.bing, 'bor')
           }
         ]
       }
@@ -47,7 +48,7 @@ describe('operator.set', () => {
     controller.getSignal('test')()
   })
   it('should set non string value to model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
@@ -60,14 +61,14 @@ describe('operator.set', () => {
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {foo: {bar: 'baz'}})
   })
-  it('should set value to model from input', () => {
-    const controller = new Controller({
+  it('should set value to model from props', () => {
+    const controller = Controller({
       state: {
         foo: 'bar'
       },
       signals: {
         test: [
-          set(state`foo`, input`value`)
+          set(state`foo`, props`value`)
         ]
       }
     })
@@ -77,7 +78,7 @@ describe('operator.set', () => {
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
   })
   it('should set value to model from model', () => {
-    const controller = new Controller({
+    const controller = Controller({
       state: {
         foo: 'bar',
         grabValue: 'bar2'
@@ -91,8 +92,8 @@ describe('operator.set', () => {
     controller.getSignal('test')()
     assert.equal(controller.getState().foo, 'bar2')
   })
-  it('should throw on bad argument', () => {
-    const controller = new Controller({
+  it('should throw on bad argument', (done) => {
+    const controller = Controller({
       state: {
       },
       signals: {
@@ -101,8 +102,58 @@ describe('operator.set', () => {
         ]
       }
     })
-    assert.throws(() => {
-      controller.getSignal('test')({foo: 'baz'})
-    }, /operator.set/)
+    controller.removeListener('error')
+    controller.once('error', (error) => {
+      assert.ok(error)
+      done()
+    })
+
+    controller.getSignal('test')()
+  })
+  it('should copy plain object', () => {
+    const controller = Controller({
+      state: {
+        foo: {}
+      },
+      signals: {
+        test: [
+          set(state`foo`, {}),
+          set(state`foo.${props`key`}`, 'bar')
+        ]
+      }
+    })
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), {'key1': 'bar'})
+    })
+    controller.getSignal('test')({
+      key: 'key1'
+    })
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), {'key2': 'bar'})
+    })
+    controller.getSignal('test')({
+      key: 'key2'
+    })
+  })
+  it('should copy array object', () => {
+    const controller = Controller({
+      state: {
+        foo: []
+      },
+      signals: {
+        test: [
+          set(state`foo`, []),
+          push(state`foo`, 'bar')
+        ]
+      }
+    })
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), ['bar'])
+    })
+    controller.getSignal('test')()
+    controller.once('end', () => {
+      assert.deepEqual(controller.getState('foo'), ['bar'])
+    })
+    controller.getSignal('test')()
   })
 })

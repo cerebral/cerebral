@@ -183,16 +183,18 @@ describe('Recorder', () => {
     controller.getSignal('update')()
     controller.getSignal('stop')()
     controller.once('flush', (changes) => {
-      assert.deepEqual(changes, {
-        foo: true
-      })
+      assert.deepEqual(changes, [{
+        path: ['foo'],
+        forceChildPathUpdates: true
+      }])
     })
     controller.getSignal('play')()
     timeout.tick()
     controller.once('flush', (changes) => {
-      assert.deepEqual(changes, {
-        foo: true
-      })
+      assert.deepEqual(changes, [{
+        path: ['foo'],
+        forceChildPathUpdates: true
+      }])
       controller.getSignal('stop')()
       done()
     })
@@ -303,4 +305,171 @@ describe('Recorder', () => {
     })
     controller.getSignal('stop')()
   })
+  it('should emit events', () => {
+    const timeout = timeoutMock()
+    const RecorderProvider = require('./Recorder').default
+    const controller = new Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        record: [({recorder}) => recorder.record({
+          initialState: ['foo']
+        })],
+        update: [({state}) => state.set('foo', 'bar2')],
+        update2: [({state}) => state.set('foo', 'bar3')],
+        stop: [({recorder}) => recorder.stop()],
+        play: [({recorder}) => recorder.play({
+          allowedSignals: ['stop']
+        })]
+      },
+      providers: [RecorderProvider({
+        setTimeout: timeout
+      })]
+    })
+    let eventsCount = 0
+    controller.on('recorder:record', () => {
+      eventsCount++
+    })
+    controller.on('recorder:stop', () => {
+      eventsCount++
+    })
+    controller.on('recorder:play', () => {
+      eventsCount++
+    })
+    controller.getSignal('record')()
+    controller.getSignal('update')()
+    controller.getSignal('stop')()
+    controller.getSignal('play')()
+    timeout.tick() // flush
+    timeout.tick()
+    controller.getSignal('update2')()
+    assert.deepEqual(controller.getState(), {foo: 'bar2'})
+    controller.getSignal('stop')()
+    assert(eventsCount, 4)
+  })
+  it('should add external events', () => {
+    const timeout = timeoutMock()
+    const RecorderProvider = require('./Recorder').default
+    const controller = new Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        record: [({recorder}) => recorder.record({
+          initialState: ['foo']
+        })],
+        update: [({state}) => state.set('foo', 'bar2')],
+        update2: [({state}) => state.set('foo', 'bar3')],
+        stop: [({recorder}) => recorder.stop()],
+        play: [({recorder}) => recorder.play({
+          allowedSignals: ['stop']
+        })]
+      },
+      providers: [RecorderProvider({
+        setTimeout: timeout
+      })]
+    })
+    let eventsCount = 0
+    controller.on('test', (data) => {
+      assert.equal(data, 'foo')
+      eventsCount++
+    })
+    controller.getSignal('record')()
+    controller.getSignal('update')()
+    controller.emit('recorder:event', 'test', 'foo')
+    controller.getSignal('stop')()
+    controller.getSignal('play')()
+    timeout.tick() // flush
+    timeout.tick()
+    timeout.tick()
+    controller.getSignal('stop')()
+    assert(eventsCount, 1)
+  })
+  it('should work with devtools', () => {
+    const timeout = timeoutMock()
+    const RecorderProvider = require('./Recorder').default
+    const now = Date.now()
+    const recording = {
+      start: now,
+      end: now + 20,
+      duration: 20,
+      initialState: [{
+        path: [],
+        value: JSON.stringify({foo: 'bar2'})
+      }],
+      events: [{
+        type: 'mutation',
+        method: 'set',
+        args: JSON.stringify(['foo', 'bar3']),
+        timestamp: now + 10
+      }]
+    }
+    const controller = new Controller({
+      devtools: { init () {}, send () {}, sendExecutionData () {} },
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        play: [({recorder}) => {
+          recorder.loadRecording(recording)
+          recorder.play({
+            allowedSignals: ['stop']
+          })
+        }],
+        stop: [({recorder}) => recorder.stop()]
+      },
+      providers: [RecorderProvider({
+        setTimeout: timeout
+      })]
+    })
+    controller.getSignal('play')()
+    assert.deepEqual(controller.getState(), {
+      foo: 'bar2'
+    })
+    timeout.tick()
+    assert.deepEqual(controller.getState(), {
+      foo: 'bar3'
+    })
+    controller.getSignal('stop')()
+  })
+  /* it.only('should throw an error when sending play signal while already playing or recording', () => {
+    const timeout = timeoutMock()
+    const RecorderProvider = require('./Recorder').default
+    const now = Date.now()
+    const recording = {
+      start: now,
+      end: now + 20,
+      duration: 20,
+      initialState: [{
+        path: [],
+        value: JSON.stringify({foo: 'bar2'})
+      }],
+      events: [{
+        type: 'mutation',
+        method: 'set',
+        args: JSON.stringify(['foo', 'bar3']),
+        timestamp: now + 5
+      }]
+    }
+    const controller = new Controller({
+      state: {
+        foo: 'bar'
+      },
+      signals: {
+        play: [({recorder}) => {
+          recorder.loadRecording(recording)
+          recorder.play()
+          recorder.play()
+        }]
+      },
+      providers: [RecorderProvider({
+        setTimeout: timeout
+      })]
+    })
+
+    assert.throws(() => {
+      controller.getSignal('play')()
+    })
+  }) */
 })

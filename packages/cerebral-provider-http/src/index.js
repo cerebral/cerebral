@@ -1,14 +1,10 @@
 import request from './request'
 import {urlEncode, mergeWith, createResponse} from './utils'
 import FileUpload from './fileUpload'
+
 import DEFAULT_OPTIONS from './DEFAULT_OPTIONS'
 
-export { default as FileUpload } from './fileUpload'
-export { default as httpGet } from './factories/httpGet'
-export { default as httpPost } from './factories/httpPost'
-export { default as httpPut } from './factories/httpPut'
-export { default as httpPatch } from './factories/httpPatch'
-export { default as httpDelete } from './factories/httpDelete'
+export {default as HttpProviderError} from './HttpProviderError'
 
 export default function HttpProviderFactory (passedOptions) {
   let moduleOptions = mergeWith({}, DEFAULT_OPTIONS)
@@ -102,10 +98,10 @@ export default function HttpProviderFactory (passedOptions) {
             requests[url].xhr.abort()
           })
         },
-        fileUpload (options = {}) {
-          options.url = moduleOptions.baseUrl + options.url
+        uploadFile (url, files, options = {}) {
+          options.url = moduleOptions.baseUrl + url
 
-          return new FileUpload(options)
+          return new FileUpload(options).send(files)
         }
       }
     }

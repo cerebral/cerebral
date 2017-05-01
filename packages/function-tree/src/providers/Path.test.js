@@ -4,9 +4,9 @@ import assert from 'assert'
 
 describe('PathProvider', () => {
   it('should add path function when paths can be taken', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       ({path}) => {
         assert.ok(path.success)
         assert.ok(path.error)
@@ -18,18 +18,18 @@ describe('PathProvider', () => {
     ])
   })
   it('should NOT add path function when paths can NOT be taken', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       ({path}) => {
         assert.ok(!path)
       }
     ])
   })
   it('should have possible outputs as methods', () => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       ({path}) => {
         assert.ok(path.foo)
         assert.ok(path.bar)
@@ -41,9 +41,9 @@ describe('PathProvider', () => {
     ])
   })
   it('should go down path based on method used', (done) => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       ({path}) => {
         return path.foo()
       }, {
@@ -58,15 +58,15 @@ describe('PathProvider', () => {
     ])
   })
   it('should pass payload down paths', (done) => {
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       ({path}) => {
         return path.foo({foo: 'bar'})
       }, {
         foo: [
-          ({input}) => {
-            assert.deepEqual(input, {foo: 'bar'})
+          ({props}) => {
+            assert.deepEqual(props, {foo: 'bar'})
             done()
           }
         ],
@@ -83,19 +83,19 @@ describe('PathProvider', () => {
       })
     }
 
-    function actionB ({input}) {
-      assert.deepEqual(input, {foo: 'bar'})
+    function actionB ({props}) {
+      assert.deepEqual(props, {foo: 'bar'})
     }
 
-    const execute = FunctionTree()
+    const ft = new FunctionTree()
 
-    execute([
+    ft.run([
       actionA, {
         foo: [
           actionB
         ],
         bar: []
       }
-    ], done)
+    ]).then(() => done())
   })
 })

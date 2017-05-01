@@ -1,7 +1,6 @@
 /* eslint-env mocha */
 import Controller from '../Controller'
 import assert from 'assert'
-import Computed from '../Computed'
 
 describe('State', () => {
   it('should be able to GET state', () => {
@@ -123,104 +122,31 @@ describe('State', () => {
     controller.getSignal('foo')()
     assert.deepEqual(controller.getState(), {foo: ['foo', 'bar']})
   })
-  it('should be able to COMPUTE state', () => {
-    const fullName = Computed({
-      firstName: 'user.firstName',
-      lastName: 'user.lastName'
-    }, ({firstName, lastName}) => {
-      return `${firstName} ${lastName}`
-    })
+  it('should provide a descriptive error when passing invalid value to state', () => {
     const controller = new Controller({
+      devtools: {init () {}, sendExecutionData () {}},
       state: {
-        user: {
-          firstName: 'John',
-          lastName: 'Difool'
-        }
+        foo: ''
       },
       signals: {
-        test: [({state}) => assert.deepEqual(state.compute(fullName), 'John Difool')]
+        foo: [({state}) => state.set('foo', () => {})]
       }
     })
-    controller.getSignal('test')()
+    assert.throws(() => {
+      controller.getSignal('foo')()
+    }, Error)
   })
-  it('should clear COMPUTE cache on signal flush', () => {
-    const fullName = Computed({
-      firstName: 'user.firstName',
-      lastName: 'user.lastName'
-    }, ({firstName, lastName}) => {
-      return `${firstName} ${lastName}`
-    })
+  it('should work with devtools', () => {
     const controller = new Controller({
+      devtools: { init () {}, send () {}, sendExecutionData () {} },
       state: {
-        user: {
-          firstName: 'John',
-          lastName: 'Difool'
-        }
+        foo: ['foo']
       },
       signals: {
-        warmup: [({state}) => {
-          assert.deepEqual(state.compute(fullName), 'John Difool')
-          state.set('user.firstName', 'Animah')
-        }],
-        test: [({state}) => {
-          assert.deepEqual(state.compute(fullName), 'Animah Difool')
-        }]
+        foo: [({state}) => state.splice('foo', 0, 1, 'bar')]
       }
     })
-    controller.getSignal('warmup')()
-    controller.getSignal('test')()
-  })
-  it('should allow forcing recompute on COMPUTE state', () => {
-    const fullName = Computed({
-      firstName: 'user.firstName',
-      lastName: 'user.lastName'
-    }, ({firstName, lastName}) => {
-      return `${firstName} ${lastName}`
-    })
-    const controller = new Controller({
-      state: {
-        user: {
-          firstName: 'John',
-          lastName: 'Difool'
-        }
-      },
-      signals: {
-        test: [({state}) => {
-          // Set cache
-          assert.deepEqual(state.compute(fullName), 'John Difool')
-          state.set('user.firstName', 'Animah')
-          // Cache used
-          assert.deepEqual(state.compute(fullName), 'John Difool')
-          // Force recompute
-          assert.deepEqual(state.compute(fullName, true), 'Animah Difool')
-        }]
-      }
-    })
-    controller.getSignal('test')()
-  })
-  it('should be able to COMPUTE state with debugger', () => {
-    const MockDevtools = {
-      init () {},
-      send () {}
-    }
-    const fullName = Computed({
-      firstName: 'user.firstName',
-      lastName: 'user.lastName'
-    }, ({firstName, lastName}) => {
-      return `${firstName} ${lastName}`
-    })
-    const controller = new Controller({
-      state: {
-        user: {
-          firstName: 'John',
-          lastName: 'Difool'
-        }
-      },
-      devtools: MockDevtools,
-      signals: {
-        test: [({state}) => assert.deepEqual(state.compute(fullName), 'John Difool')]
-      }
-    })
-    controller.getSignal('test')()
+    controller.getSignal('foo')()
+    assert.deepEqual(controller.getState(), {foo: ['bar']})
   })
 })

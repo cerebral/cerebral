@@ -1,40 +1,64 @@
 {
-  "name": "cerebral-monorepo",
-  "version": "0.0.0",
+  "name": "@cerebral/monorepo",
+  "private": true,
+  "version": "0.0.1",
+  "license": "MIT",
   "scripts": {
     "setup": "lerna bootstrap",
+    "setup:packages": "lerna bootstrap --scope '@(function-tree|cerebral*)'",
+    "setup:babel": "lerna bootstrap --scope '@(function-tree|cerebral*|babel*)'",
+    "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
     "lint": "standard",
-    "pretest": "npm run lint && lerna bootstrap",
-    "test": "lerna run test",
-    "coverage": "lerna run coverage && istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
+    "pretest": "npm run lint",
+    "test": "lerna run test --ignore @cerebral/monorepo",
+    "coverage": "lerna run coverage --ignore @cerebral/monorepo",
+    "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "deploy": "cd packages/website && npm run ci"
+    "deploy": "cd website/publisher && npm run ci"
   },
-  "license": "MIT",
-  "devDependencies": {
-    "babel-cli": "^6.18.0",
-    "babel-core": "^6.21.0",
-    "babel-eslint": "^7.0.0",
-    "babel-preset-es2015": "^6.16.0",
-    "babel-preset-react": "^6.16.0",
-    "babel-preset-stage-3": "^6.17.0",
-    "babel-register": "^6.16.3",
-    "commitizen": "^2.5.0",
-    "coveralls": "^2.11.14",
+  "bin": {
+    "babel": "./node_modules/.bin/babel",
+    "mocha": "./node_modules/.bin/mocha",
+    "nyc": "./node_modules/.bin/nyc",
+    "react-scripts": "./node_modules/.bin/react-scripts",
+    "npm-run-all": "./node_modules/.bin/npm-run-all",
+    "run-p": "./node_modules/.bin/run-p",
+    "run-s": "./node_modules/.bin/run-s",
+    "shx": "./node_modules/.bin/shx",
+    "gh-pages": "./node_modules/.bin/gh-pages",
+    "jest": "./node_modules/.bin/jest"
+  },
+  "dependencies": {
+    "babel-cli": "^6.23.0",
+    "babel-core": "^6.23.1",
+    "babel-eslint": "^7.1.1",
+    "babel-jest": "^18.0.0",
+    "babel-plugin-transform-builtin-extend": "^1.1.2",
+    "babel-preset-es2015": "^6.22.0",
+    "babel-preset-react": "^6.23.0",
+    "babel-register": "^6.23.0",
+    "commitizen": "^2.9.6",
+    "coveralls": "^2.12.0",
+    "cross-env": "^3.2.3",
     "cz-customizable": "^4.0.0",
-    "cz-customizable-ghooks": "^1.3.0",
-    "ghooks": "^1.0.3",
+    "cz-customizable-ghooks": "^1.5.0",
+    "gh-pages": "^0.12.0",
+    "husky": "^0.13.2",
     "istanbul-combine": "^0.3.0",
-    "jsdom": "^9.5.0",
-    "lerna": "2.0.0-beta.30",
-    "mocha": "^3.1.0",
+    "jest": "^18.1.0",
+    "jsdom": "^9.9.1",
+    "lerna": "2.0.0-rc.1",
+    "mocha": "^3.2.0",
     "mocha-jsdom": "^1.1.0",
-    "nyc": "^8.3.0",
-    "react": "^15.3.2",
-    "react-addons-test-utils": "^15.3.2",
-    "react-dom": "^15.3.2",
-    "standard": "^8.3.0"
+    "npm-run-all": "^4.0.2",
+    "nyc": "^10.1.2",
+    "react": "^15.4.2",
+    "react-addons-test-utils": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-scripts": "0.9.4",
+    "shx": "^0.2.2",
+    "standard": "^8.6.0"
   },
   "config": {
     "commitizen": {
@@ -42,31 +66,13 @@
     },
     "cz-customizable": {
       "config": ".cz-config.js"
-    },
-    "ghooks": {
-      "commit-msg": "./node_modules/cz-customizable-ghooks/lib/index.js $2"
     }
   },
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
-      "**/node_modules/",
-      "**/build/",
-      "packages/cerebral-debugger/chromeExtension/prism.js",
-      "packages/cerebral-debugger/electron/prism.js"
-    ],
-    "globals": [
-      "block",
-      "content",
-      "replace",
-      "tag",
-      "def",
-      "applyNext",
-      "applyCtx"
+      "**/node_modules/**",
+      "**/build/"
     ]
-  },
-  "private": true,
-  "dependencies": {
-    "inquirer": "^1.2.3"
   }
 }

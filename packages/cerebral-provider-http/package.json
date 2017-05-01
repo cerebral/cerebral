@@ -1,11 +1,11 @@
 {
   "name": "cerebral-provider-http",
-  "version": "1.0.0-0",
+  "version": "1.0.0-b",
   "description": "HTTP provider for Cerebral 2",
   "main": "lib/index.js",
   "scripts": {
-    "test": "../../node_modules/.bin/mocha --compilers js:../../node_modules/babel-register 'src/**/*.test.js'",
-    "build": "BABEL_ENV=production ../../node_modules/.bin/babel src/ --out-dir=lib/ -s",
+    "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
+    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -23,10 +23,11 @@
   },
   "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-http#readme",
   "peerDependencies": {
-    "cerebral": "2.0.0-0"
+    "cerebral": "^2.0.0-b"
   },
   "devDependencies": {
-    "cerebral": "2.0.0-0",
+    "@cerebral/monorepo": "0.0.1",
+    "cerebral": "^2.0.0-b",
     "xhr-mock": "https://github.com/christianalfoni/xhr-mock.git"
   }
 }
