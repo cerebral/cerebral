@@ -1,4 +1,5 @@
 import Path from 'function-tree/lib/Path'
+import {Primitive} from 'function-tree/lib/primitives'
 import {Controller} from '..'
 import {ensurePath, cleanPath} from '../utils'
 
@@ -21,7 +22,8 @@ export function runCompute (compute, fixtures = {}) {
 export function runSignal (signal, fixtures = {}, options = {}) {
   return new Promise((resolve, reject) => {
     const recordActions = options.recordActions && options.recordActions === 'byName' ? 'name' : 'functionIndex'
-    const controller = options.controller || Controller(Object.assign({}, fixtures, Array.isArray(signal) && {signals: {signal}}))
+    const isSignal = Array.isArray(signal) || signal instanceof Primitive
+    const controller = options.controller || Controller(Object.assign({}, fixtures, isSignal && {signals: {signal}}))
     const response = {controller}
 
     const actionStart = function (execution, funcDetails, payload) {
@@ -71,7 +73,7 @@ export function runSignal (signal, fixtures = {}, options = {}) {
     controller.on('functionEnd', actionEnd)
     controller.on('error', error)
     controller.on('end', signalEnd)
-    controller.getSignal(Array.isArray(signal) ? 'signal' : signal)(fixtures.props)
+    controller.getSignal(isSignal ? 'signal' : signal)(fixtures.props)
   })
 }
 
