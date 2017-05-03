@@ -42,6 +42,7 @@
       "../../docs/developer_guide/providers",
       "../../docs/developer_guide/errors",
       "../../docs/developer_guide/test",
+      "../../docs/developer_guide/production",
       "../../docs/developer_guide/collaborate"
     ],
     "api": [
