@@ -1,6 +1,7 @@
 // MOCKING
 /* eslint-env mocha */
 /* eslint-disable no-console */
+const Controller = require('../../cerebral/src/Controller').default
 global.window = {
   location: {
     origin: 'http://localhost:3000',
@@ -29,7 +30,24 @@ console.warn.warnings = []
 
 const addressbar = require('addressbar')
 
+const devtools = {
+  init () {},
+  send () {},
+  sendExecutionData () {}
+}
+
+function makeTest (router, signals) {
+  return Controller({
+    devtools,
+    modules: {
+      router
+    },
+    signals
+  })
+}
+
 module.exports = {
+  makeTest,
   triggerUrlChange (url) {
     let defaultPrevented = false
 
