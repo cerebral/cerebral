@@ -88,7 +88,7 @@ export default function computedForm (formValueTag) {
     formValueTag,
     (formValue) => {
       if (!formValue || typeof formValue !== 'object') {
-        console.warn('Cerebral Forms - Form value did not resolve to an object')
+        console.warn(`Cerebral Forms - Form value: ${formValueTag} did not resolve to an object`)
         return {}
       }
       return new Form(formValue)
