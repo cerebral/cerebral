@@ -1,4 +1,27 @@
+function isObject (obj) {
+  return typeof obj === 'object' && !Array.isArray(obj) && obj !== null
+}
+
+function compatConfig (config, prev = '') {
+  return Object.keys(config).reduce((flattened, key) => {
+    if (isObject(config[key])) {
+      return Object.assign(flattened, compatConfig(config[key], prev + key))
+    }
+
+    flattened[prev + key] = config[key]
+
+    return flattened
+  }, {})
+}
+
 export function flattenConfig (config, prev = '') {
+  if (!Array.isArray(config)) {
+    const flatConfig = compatConfig(config, prev)
+    config = Object.keys(flatConfig).map(key => ({
+      path: key,
+      signal: flatConfig[key]
+    }))
+  }
   return config.reduce((flattened, {path, signal, map, routes}) => {
     if (Array.isArray(routes)) {
       return Object.assign(flattened, flattenConfig(routes, prev + path))

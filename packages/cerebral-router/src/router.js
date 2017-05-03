@@ -15,7 +15,8 @@ export default class Router {
         getUrl: this.getUrl.bind(this),
         setUrl: this.setUrl.bind(this),
         goTo: this.goTo.bind(this),
-        redirect: this.redirect.bind(this)
+        redirect: this.redirect.bind(this),
+        redirectToSignal: this.redirectToSignal.bind(this)
         // getPathUrl(path, partialValues)
         // getSignalUrl(signalName, payload)
       }
@@ -32,7 +33,7 @@ export default class Router {
       this.routesBySignal = getRoutesBySignal(this.routesConfig, controller)
 
       addressbar.on('change', this.onUrlChange.bind(this))
-      controller.runTree.on('start', this.onSignalStart.bind(this))
+      controller.on('start', this.onSignalStart.bind(this))
       controller.on('flush', this.onFlush.bind(this))
 
       if (!options.preventAutostart) {
@@ -59,7 +60,15 @@ export default class Router {
     const url = this.getRoutablePart(event ? event.target.value : this.addressbar.value)
     if (url === null) return
 
-    const {match, route, values} = this.mapper.map(url, this.routesConfig) || {}
+    let match, route, values
+    try {
+      const mapped = this.mapper.map(url, this.routesConfig) || {}
+      match = mapped.match
+      route = mapped.route
+      values = mapped.values
+    } catch (err) {
+      throw new Error('Could not parse url (' + err + ').')
+    }
 
     if (!match) {
       if (this.options.allowEscape) return
@@ -75,7 +84,7 @@ export default class Router {
     const getters = {props: payload, state: this.stateGetter}
 
     if (stateMapping.length) {
-      console.log('set state from url change')
+      // console.log('set state from url change')
       this.controller.runSignal('router.routed', [
         ({state, resolve}) => {
           stateMapping.forEach((key) => {
@@ -95,7 +104,7 @@ export default class Router {
 
     const prevSignal = (this.routesConfig[this.activeRoute.route] || {}).signal
     if (signal && (prevSignal !== signal || getChangedProps(payload || {}, this.activeRoute.payload || {}))) {
-      console.log('start signal from url change')
+      // console.log('start signal from url change')
       this.controller.getSignal(signal)(payload)
     }
 
@@ -127,7 +136,6 @@ export default class Router {
     )
 
     this.setUrl(url)
-    console.log('update url on signal start')
 
     this.activeRoute = {route, payload}
   }
@@ -154,7 +162,7 @@ export default class Router {
     }, {})
 
     if (shouldUpdate) {
-      console.log('update url on flush')
+      // console.log('update url on flush')
       this.setUrl(this.mapper.stringify(route, Object.assign({}, resolvedMap)))
     }
   }
@@ -179,5 +187,13 @@ export default class Router {
     }
 
     this.onUrlChange()
+  }
+
+  redirectToSignal (signalName, payload) {
+    const route = this.routesBySignal[signalName]
+    if (!route) {
+      console.warn(`redirectToSignal: signal '${signalName}' not bound to route.`)
+    }
+    this.controller.getSignal(signalName)(payload)
   }
 }

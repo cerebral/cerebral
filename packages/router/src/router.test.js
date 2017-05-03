@@ -1,9 +1,8 @@
 /* eslint-env mocha */
 /* eslint-disable no-console */
-const triggerUrlChange = require('./testHelper').triggerUrlChange
+const {makeTest, triggerUrlChange} = require('./testHelper')
 
 // Have to require due to mocks (load correct order)
-const Controller = require('../../cerebral/src/Controller').default
 const Router = require('../src').default
 const addressbar = require('addressbar')
 const assert = require('assert')
@@ -19,17 +18,15 @@ describe('Router', () => {
   })
   it('should be able to define routes as config', () => {
     let count = 0
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         routes: {
           '/': 'test'
         }
-      }),
-      signals: {
+      }), {
         test: [() => { count++ }]
       }
-    })
+    )
     assert.equal(count, 1)
   })
   /*
@@ -50,25 +47,22 @@ describe('Router', () => {
   */
   it('should not trigger if preventAutostart option was provided', () => {
     let count = 0
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         preventAutostart: true,
         routes: {
           '/': 'test'
         }
-      }),
-      signals: {
+      }), {
         test: [() => { count++ }]
       }
-    })
+    )
     assert.equal(count, 0)
   })
   it('should support nested route definitions', () => {
     let count = 0
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         routes: {
           '/': 'foo',
           '/bar': {
@@ -78,83 +72,75 @@ describe('Router', () => {
             }
           }
         }
-      }),
-      signals: {
+      }), {
         foo: [() => { count++ }],
         bar: [() => { count++ }],
         baz: [() => { count++ }]
       }
-    })
+    )
     triggerUrlChange('/bar')
     triggerUrlChange('/bar/baz')
     assert.equal(count, 3)
   })
   it('should throw on missing signal', () => {
     assert.throws(() => {
-      Controller({
-        devtools: {init () {}, send () {}},
-        router: Router({
+      makeTest(
+        Router({
           routes: {
             '/': 'test'
           }
-        })
-      })
+        }), {}
+      )
     })
   })
   it('should throw on duplicate signal', () => {
     assert.throws(() => {
-      Controller({
-        devtools: {init () {}, send () {}},
-        router: Router({
+      makeTest(
+        Router({
           routes: {
             '/': 'test',
             '/foo': 'test'
           }
-        }),
-        signals: {
+        }), {
           test: []
         }
-      })
+      )
     })
   })
   it('should expose `getUrl` method on router provider', () => {
     addressbar.value = addressbar.origin + '/test'
-    const controller = Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    const controller = makeTest(
+      Router({
         baseUrl: '/test',
         onlyHash: true,
         preventAutostart: true,
         routes: {
           '/': 'test'
         }
-      }),
-      signals: {
+      }), {
         test: [
           function action ({router}) {
-            assert.equal(addressbar.value, 'http://localhost:3000/test/#/')
-            assert.equal(router.getUrl(), '/')
+            assert.equal(addressbar.value, 'http://localhost:3000/test#/?param=something')
+            assert.equal(router.getUrl(), '/?param=something')
           }
         ]
       }
-    })
-    controller.getSignal('test')({param: 'param'})
+    )
+    controller.getSignal('test')({param: 'something'})
   })
   it('should update addressbar for routable signal call', () => {
-    const controller = Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    const controller = makeTest(
+      Router({
         preventAutostart: true,
         routes: {
           '/': 'home',
           '/test': 'test'
         }
-      }),
-      signals: {
+      }), {
         home: [],
         test: []
       }
-    })
+    )
     controller.getSignal('test')()
 
     assert.equal(addressbar.pathname, '/test')
@@ -184,32 +170,28 @@ describe('Router', () => {
   it('should not update addressbar for regular signal call', () => {
     addressbar.value = addressbar.origin + '/test'
     let count = 0
-    const controller = Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    const controller = makeTest(
+      Router({
         routes: {
           '/test': 'test'
         }
-      }),
-      signals: {
+      }), {
         test: [],
         foo: [() => { count++ }]
       }
-    })
+    )
     controller.getSignal('foo')()
     assert.equal(addressbar.pathname, '/test')
     assert.equal(count, 1)
   })
   it('should allow redirect to url and trigger corresponded signal', (done) => {
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         routes: {
           '/': 'doRedirect',
           '/existing/:string/:bool/:num': 'existing'
         }
-      }),
-      signals: {
+      }), {
         doRedirect: [({router}) => router.redirect('/existing/foo/%3Atrue/%3A42')],
         existing: [({props}) => {
           assert.equal(props.string, 'foo')
@@ -219,19 +201,17 @@ describe('Router', () => {
           done()
         }]
       }
-    })
+    )
   })
   it('should replaceState on redirect by default', () => {
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         preventAutostart: true,
         routes: {
           '/foo': 'doRedirect',
           '/existing': 'existing'
         }
-      }),
-      signals: {
+      }), {
         doRedirect: [({router}) => router.redirect('/existing')],
         existing: [({props}) => {
           assert.equal(props.string, 'foo')
@@ -240,19 +220,17 @@ describe('Router', () => {
           assert.equal(addressbar.pathname, '/existing/foo/%3Atrue/%3A42')
         }]
       }
-    })
+    )
   })
   it('should expose goTo on context provider', (done) => {
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         preventAutostart: true,
         routes: {
           '/foo': 'doRedirect',
           '/existing': 'existing'
         }
-      }),
-      signals: {
+      }), {
         doRedirect: [({router}) => router.goTo('/existing')],
         existing: [() => {
           assert.equal(addressbar.pathname, '/existing')
@@ -260,20 +238,18 @@ describe('Router', () => {
           done()
         }]
       }
-    })
+    )
     triggerUrlChange('/foo')
   })
   it('should allow redirect to signal', (done) => {
-    const controller = Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    const controller = makeTest(
+      Router({
         preventAutostart: true,
         routes: {
           '/': 'home',
           '/foo/:id': 'detail'
         }
-      }),
-      signals: {
+      }), {
         'home': [],
         'createClicked': [
           function createEntity ({router}) {
@@ -289,20 +265,18 @@ describe('Router', () => {
           }
         ]
       }
-    })
+    )
 
     controller.getSignal('createClicked')()
   })
   it('should warn if trying redirect to signal not bound to route', () => {
-    const controller = Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    const controller = makeTest(
+      Router({
         preventAutostart: true,
         routes: {
           '/': 'home'
         }
-      }),
-      signals: {
+      }), {
         'home': [],
         'createClicked': [
           function createEntity ({router}) {
@@ -312,25 +286,23 @@ describe('Router', () => {
         ],
         'detail': []
       }
-    })
+    )
 
     controller.getSignal('createClicked')()
     assert.equal(console.warn.warnings.length, 1)
   })
   it('should prevent navigation and warn when no signals was matched', () => {
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         baseUrl: '/base',
         preventAutostart: true,
         routes: {
           '/': 'home'
         }
-      }),
-      signals: {
+      }), {
         'home': []
       }
-    })
+    )
 
     triggerUrlChange('/missing')
     assert.equal(console.warn.warnings.length, 0)
@@ -339,20 +311,18 @@ describe('Router', () => {
     assert.equal(console.warn.warnings.length, 1)
   })
   it('should not prevent navigation when no signals was matched if allowEscape option was provided', () => {
-    Controller({
-      devtools: {init () {}, send () {}},
-      router: Router({
+    makeTest(
+      Router({
         baseUrl: '/base',
         allowEscape: true,
         preventAutostart: true,
         routes: {
           '/': 'home'
         }
-      }),
-      signals: {
+      }), {
         'home': []
       }
-    })
+    )
 
     triggerUrlChange('/missing')
     assert.equal(console.warn.warnings.length, 0)
