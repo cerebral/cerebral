@@ -28,12 +28,79 @@ describe('provider', () => {
         test: [
           function action ({router}) {
             assert.equal(addressbar.value, 'http://localhost:3000/test#/?param=something')
-            assert.equal(router.getUrl(), '/?param=something')
+            assert.equal(router.getUrl(), 'http://localhost:3000/test#/?param=something')
           }
         ]
       }
     )
     controller.getSignal('test')({param: 'something'})
+  })
+
+  it('should expose `getPath`', () => {
+    addressbar.value = addressbar.origin + '/test'
+    const controller = makeTest(
+      Router({
+        baseUrl: '/test',
+        onlyHash: true,
+        preventAutostart: true,
+        routes: {
+          '/': 'test'
+        }
+      }), {
+        test: [
+          function action ({router}) {
+            assert.equal(addressbar.value, 'http://localhost:3000/test#/?param=something')
+            assert.equal(router.getPath(), '/')
+          }
+        ]
+      }
+    )
+    controller.getSignal('test')({param: 'something'})
+  })
+
+  it('should expose `getOrigin`', () => {
+    addressbar.value = addressbar.origin + '/test'
+    const controller = makeTest(
+      Router({
+        baseUrl: '/test',
+        onlyHash: true,
+        preventAutostart: true,
+        routes: {
+          '/': 'test'
+        }
+      }), {
+        test: [
+          function action ({router}) {
+            assert.equal(addressbar.value, 'http://localhost:3000/test#/?param=something')
+            assert.equal(router.getOrigin(), 'http://localhost:3000')
+          }
+        ]
+      }
+    )
+    controller.getSignal('test')({param: 'something'})
+  })
+
+  it('should expose `getValues`', () => {
+    addressbar.value = addressbar.origin + '/test'
+    const controller = makeTest(
+      Router({
+        baseUrl: '/test',
+        onlyHash: true,
+        preventAutostart: true,
+        routes: [{
+          path: '/:page',
+          signal: 'test'
+        }]
+      }), {
+        test: [
+          function action ({router}) {
+            assert.equal(addressbar.value, 'http://localhost:3000/test#/foo?param=something')
+            assert.deepEqual(router.getValues(), {page: 'foo', param: 'something'})
+          }
+        ]
+      }
+    )
+    controller.getSignal('test')({page: 'foo', param: 'something'})
   })
 
   it('should expose `redirect`', (done) => {

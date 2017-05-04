@@ -13,12 +13,13 @@ export default class Router {
     this.provider = {
       router: {
         getUrl: this.getUrl.bind(this),
+        getPath: this.getPath.bind(this),
+        getValues: this.getValues.bind(this),
+        getOrigin: this.getOrigin.bind(this),
         setUrl: this.setUrl.bind(this),
         goTo: this.goTo.bind(this),
         redirect: this.redirect.bind(this),
         redirectToSignal: this.redirectToSignal.bind(this)
-        // getPathUrl(path, partialValues)
-        // getSignalUrl(signalName, payload)
       }
     }
 
@@ -168,7 +169,22 @@ export default class Router {
   }
 
   getUrl () {
-    return this.addressbar.value.replace(this.addressbar.origin + this.options.baseUrl, '')
+    return this.addressbar.value
+  }
+
+  getPath () {
+    return this.addressbar.value.replace(this.addressbar.origin + this.options.baseUrl, '').split('?')[0]
+  }
+
+  getValues () {
+    const url = this.getRoutablePart(this.addressbar.value)
+    const mapped = this.mapper.map(url, this.routesConfig) || {}
+
+    return mapped.values
+  }
+
+  getOrigin () {
+    return this.addressbar.origin
   }
 
   goTo (url) {
