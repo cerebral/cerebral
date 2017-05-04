@@ -216,7 +216,7 @@ class Controller extends FunctionTree {
 
     return signal.run
   }
-  getModule (path){
+  getModule (path) {
     const pathArray = Array.isArray(path) ? path : path.split('.')
     return pathArray.reduce((currentModule, key) => {
       if (!currentModule.modules[key]) {
