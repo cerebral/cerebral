@@ -20,7 +20,7 @@ This makes it backwards compatible with current router API.
 }
 ```
 
-# Split tests in separate files
+# Split tests in separate files (christianalfoni)
 
   - baseUrl (contains basic query tests)
   - onlyHash (contains basic query tests)

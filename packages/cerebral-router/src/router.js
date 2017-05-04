@@ -1,4 +1,4 @@
-import {flattenConfig, getRoutesBySignal, getPath} from './utils'
+import {flattenConfig, getRoutesBySignal, hasChangedPath} from './utils'
 import {getChangedProps} from 'cerebral/lib/utils'
 
 export default class Router {
@@ -84,7 +84,6 @@ export default class Router {
     const getters = {props: payload, state: this.stateGetter}
 
     if (stateMapping.length) {
-      // console.log('set state from url change')
       this.controller.runSignal('router.routed', [
         ({state, resolve}) => {
           stateMapping.forEach((key) => {
@@ -92,7 +91,6 @@ export default class Router {
           })
         }
       ])
-      this.controller.flush()
     }
 
     if (propsMapping.length) {
@@ -104,7 +102,6 @@ export default class Router {
 
     const prevSignal = (this.routesConfig[this.activeRoute.route] || {}).signal
     if (signal && (prevSignal !== signal || getChangedProps(payload || {}, this.activeRoute.payload || {}))) {
-      // console.log('start signal from url change')
       this.controller.getSignal(signal)(payload)
     }
 
@@ -152,7 +149,7 @@ export default class Router {
       const path = map[key].getPath(getters)
       const value = map[key].getValue(getters)
 
-      shouldUpdate = shouldUpdate || (stateMapping.indexOf(key) >= 0 && getPath(changed, path))
+      shouldUpdate = shouldUpdate || (stateMapping.indexOf(key) >= 0 && hasChangedPath(changed, path))
 
       if (!this.options.filterFalsy || value) {
         resolved[key] = value
@@ -162,7 +159,6 @@ export default class Router {
     }, {})
 
     if (shouldUpdate) {
-      // console.log('update url on flush')
       this.setUrl(this.mapper.stringify(route, Object.assign({}, resolvedMap)))
     }
   }
