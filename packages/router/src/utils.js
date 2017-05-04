@@ -59,8 +59,10 @@ export function getRoutesBySignal (config) {
   }, {})
 }
 
-export function getPath (object, path) {
-  return path.split('.').reduce((currentPath, key) => {
-    return currentPath ? currentPath[key] : undefined
-  }, object)
+export function hasChangedPath (changes, path) {
+  for (let change in changes) {
+    if (changes[change].path.join('.') === path) {
+      return true
+    }
+  }
 }
