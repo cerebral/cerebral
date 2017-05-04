@@ -126,4 +126,16 @@ describe('operator.when', () => {
     controller.getSignal('test')({foo: 'nope'})
     assert.deepEqual(results, ['true', 'false'])
   })
+  it('should fail on incomplete definition', () => {
+    const controller = Controller({
+      signals: {
+        test: [
+          when(true)
+        ]
+      }
+    })
+    assert.throws(() => {
+      controller.getSignal('test')()
+    });
+  })
 })
