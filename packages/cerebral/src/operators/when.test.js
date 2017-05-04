@@ -136,6 +136,6 @@ describe('operator.when', () => {
     })
     assert.throws(() => {
       controller.getSignal('test')()
-    });
+    })
   })
 })
