@@ -17,18 +17,17 @@ const controller = Controller({
     },
     onlyHash: true
   }),
-  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
+  devtools: Devtools({remoteDebugger: 'localhost:8787'}),
   modules: {
     app,
     simple
   },
-  providers: [
-    FormsProvider()
-  ]
+  providers: [FormsProvider()]
 })
 
-render((
-  <Container controller={controller} >
+render(
+  <Container controller={controller}>
     <App />
-  </Container>
-), document.querySelector('#root'))
+  </Container>,
+  document.querySelector('#root')
+)

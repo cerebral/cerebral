@@ -5,9 +5,10 @@ import TodosList from '../List'
 import TodosFooter from '../Footer'
 import computedCounts from '../../computed/counts'
 
-export default connect({
-  counts: computedCounts
-},
+export default connect(
+  {
+    counts: computedCounts
+  },
   function App ({counts}) {
     return (
       <div id='todoapp-wrapper'>

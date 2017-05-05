@@ -4,8 +4,5 @@ import paths from '../paths'
 
 export default function (moduleName) {
   const {dynamicPaths} = paths(moduleName)
-  return [
-    ...dynamicPaths,
-    unset(state`${props`itemPath`}`)
-  ]
+  return [...dynamicPaths, unset(state`${props`itemPath`}`)]
 }

@@ -1,15 +1,21 @@
-import {isObject, isComplexObject, isSerializable, throwError, forceSerializable} from './utils'
+import {
+  isObject,
+  isComplexObject,
+  isSerializable,
+  throwError,
+  forceSerializable
+} from './utils'
 
 class Model {
   constructor (initialState = {}, devtools = null) {
     this.devtools = devtools
-    this.preventExternalMutations = devtools ? devtools.preventExternalMutations : false
+    this.preventExternalMutations = devtools
+      ? devtools.preventExternalMutations
+      : false
 
-    this.state = (
-      this.preventExternalMutations
-        ? this.freezeObject(initialState)
-        : initialState
-    )
+    this.state = this.preventExternalMutations
+      ? this.freezeObject(initialState)
+      : initialState
     this.changedPaths = []
   }
   /*
@@ -29,11 +35,7 @@ class Model {
   */
   freezeObject (object) {
     if (
-      (
-        !Array.isArray(object) &&
-        !isObject(object)
-      ) |
-      Object.isFrozen(object)
+      (!Array.isArray(object) && !isObject(object)) | Object.isFrozen(object)
     ) {
       return object
     }
@@ -82,20 +84,29 @@ class Model {
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
         if (!isObject(currentState)) {
-          throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
+          throwError(
+            `The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`
+          )
         }
 
         const currentValue = currentState[key]
 
         cb(currentState[key], currentState, key)
-        if (currentState[key] !== currentValue || isComplexObject(currentState[key]) && isComplexObject(currentValue)) {
+        if (
+          currentState[key] !== currentValue ||
+          (isComplexObject(currentState[key]) && isComplexObject(currentValue))
+        ) {
           this.changedPaths.push({
             path,
             forceChildPathUpdates
           })
         }
       } else if (!currentState[key]) {
-        throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.splice(0, path.length - 1).join('.')}" exist?`)
+        throwError(
+          `The path "${path.join('.')}" is invalid, can not update state. Does the path "${path
+            .splice(0, path.length - 1)
+            .join('.')}" exist?`
+        )
       }
 
       return currentState[key]
@@ -110,21 +121,30 @@ class Model {
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
         if (!isObject(currentState)) {
-          throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
+          throwError(
+            `The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`
+          )
         }
         currentState[key] = this.unfreezeObject(currentState[key])
 
         const currentValue = currentState[key]
         cb(currentState[key], currentState, key)
 
-        if (currentState[key] !== currentValue || isComplexObject(currentState[key]) && isComplexObject(currentValue)) {
+        if (
+          currentState[key] !== currentValue ||
+          (isComplexObject(currentState[key]) && isComplexObject(currentValue))
+        ) {
           this.changedPaths.push({
             path,
             forceChildPathUpdates
           })
         }
       } else if (!currentState[key]) {
-        throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.splice(0, path.length - 1).join('.')}" exist?`)
+        throwError(
+          `The path "${path.join('.')}" is invalid, can not update state. Does the path "${path
+            .splice(0, path.length - 1)
+            .join('.')}" exist?`
+        )
       } else {
         currentState[key] = this.unfreezeObject(currentState[key])
       }
@@ -138,11 +158,10 @@ class Model {
     Checks if value is serializable, if turned on
   */
   verifyValue (value, path) {
-    if (
-      this.devtools &&
-      !isSerializable(value, this.devtools.allowedTypes)
-    ) {
-      throwError(`You are passing a non serializable value into the state tree on path "${path.join('.')}"`)
+    if (this.devtools && !isSerializable(value, this.devtools.allowedTypes)) {
+      throwError(
+        `You are passing a non serializable value into the state tree on path "${path.join('.')}"`
+      )
     }
     if (this.devtools) {
       forceSerializable(value)
@@ -150,7 +169,7 @@ class Model {
   }
   verifyValues (values, path) {
     if (this.devtools) {
-      values.forEach((value) => {
+      values.forEach(value => {
         this.verifyValue(value, path)
       })
     }
@@ -162,13 +181,17 @@ class Model {
   }
   set (path, value) {
     this.verifyValue(value, path)
-    this.updateIn(path, (_, parent, key) => {
-      parent[key] = value
-    }, true)
+    this.updateIn(
+      path,
+      (_, parent, key) => {
+        parent[key] = value
+      },
+      true
+    )
   }
   push (path, value) {
     this.verifyValue(value, path)
-    this.updateIn(path, (array) => {
+    this.updateIn(path, array => {
       array.push(value)
     })
   }
@@ -188,31 +211,35 @@ class Model {
     }
   }
   pop (path) {
-    this.updateIn(path, (array) => {
+    this.updateIn(path, array => {
       array.pop()
     })
   }
   shift (path) {
-    this.updateIn(path, (array) => {
+    this.updateIn(path, array => {
       array.shift()
     })
   }
   unshift (path, value) {
     this.verifyValue(value, path)
-    this.updateIn(path, (array) => {
+    this.updateIn(path, array => {
       array.unshift(value)
     })
   }
   splice (path, ...args) {
     this.verifyValues(args, path)
-    this.updateIn(path, (array) => {
+    this.updateIn(path, array => {
       array.splice(...args)
     })
   }
   unset (path) {
-    this.updateIn(path, (_, parent, key) => {
-      delete parent[key]
-    }, true)
+    this.updateIn(
+      path,
+      (_, parent, key) => {
+        delete parent[key]
+      },
+      true
+    )
   }
   concat (path, value) {
     this.verifyValue(value, path)

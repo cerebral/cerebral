@@ -19,11 +19,15 @@ export function getRoutableSignals (config, controller) {
     const signal = controller.getSignal(config[route])
 
     if (!signal) {
-      throw new Error(`Cerebral router - The signal ${config[route]} for the route ${route} does not exist.`)
+      throw new Error(
+        `Cerebral router - The signal ${config[route]} for the route ${route} does not exist.`
+      )
     }
 
     if (routableSignals[config[route]]) {
-      throw new Error(`Cerebral router - The signal ${config[route]} has already been bound to route ${route}. Create a new signal and reuse actions instead if needed.`)
+      throw new Error(
+        `Cerebral router - The signal ${config[route]} has already been bound to route ${route}. Create a new signal and reuse actions instead if needed.`
+      )
     }
 
     routableSignals[config[route]] = {

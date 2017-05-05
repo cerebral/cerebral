@@ -1,8 +1,9 @@
 import Queue from 'firebase-queue'
 
 function authenticate ({firebase, props, path}) {
-  return firebase.verifyIdToken(props.data._token)
-    .then((decodedToken) => ({uid: decodedToken.uid}))
+  return firebase
+    .verifyIdToken(props.data._token)
+    .then(decodedToken => ({uid: decodedToken.uid}))
 }
 
 function createRunTask (task, cb) {
@@ -11,10 +12,7 @@ function createRunTask (task, cb) {
 
     delete data._execution
 
-    cb(task.specId, [
-      authenticate,
-      task.tree
-    ], {
+    cb(task.specId, [authenticate, task.tree], {
       _execution,
       data,
       task: {
@@ -29,24 +27,36 @@ function createRunTask (task, cb) {
 export class QueueHandler {
   constructor (options = {}, cb) {
     this.specPrefix = options.specPrefix || ''
-    this.cb = cb || function () { throw new Error('You have to add a callback') }
+    this.cb =
+      cb ||
+      function () {
+        throw new Error('You have to add a callback')
+      }
     this.tasks = options.tasks || []
     this.queueRef = options.queueRef
     this.registeredQueues = []
   }
   start () {
-    this.registeredQueues = this.tasks.map((task) => {
-      return new Queue(this.queueRef, {
-        specId: this.specPrefix ? `${this.specPrefix}_${task.specId}` : task.specId,
-        numWorkers: task.numWorkers
-      }, createRunTask(task, this.cb))
+    this.registeredQueues = this.tasks.map(task => {
+      return new Queue(
+        this.queueRef,
+        {
+          specId: this.specPrefix
+            ? `${this.specPrefix}_${task.specId}`
+            : task.specId,
+          numWorkers: task.numWorkers
+        },
+        createRunTask(task, this.cb)
+      )
     })
   }
   stop () {
-    return Promise.all(this.registeredQueues.map((queue, index) => {
-      return new Promise((resolve, reject) => {
-        queue.shutdown().then(resolve, reject)
+    return Promise.all(
+      this.registeredQueues.map((queue, index) => {
+        return new Promise((resolve, reject) => {
+          queue.shutdown().then(resolve, reject)
+        })
       })
-    }))
+    )
   }
 }

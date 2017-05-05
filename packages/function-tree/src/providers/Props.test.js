@@ -15,14 +15,17 @@ describe('PropsProvider', () => {
   it('should have initial payload on props', () => {
     const ft = new FunctionTree()
 
-    ft.run([
-      ({props}) => {
-        assert.deepEqual(props, {
-          foo: 'bar'
-        })
+    ft.run(
+      [
+        ({props}) => {
+          assert.deepEqual(props, {
+            foo: 'bar'
+          })
+        }
+      ],
+      {
+        foo: 'bar'
       }
-    ], {
-      foo: 'bar'
-    })
+    )
   })
 })

@@ -9,25 +9,37 @@ class Module {
       name: path.slice().pop()
     }
 
-    const module = typeof moduleDescription === 'function' ? moduleDescription(moduleStub) : moduleDescription
+    const module = typeof moduleDescription === 'function'
+      ? moduleDescription(moduleStub)
+      : moduleDescription
 
     /* Set initial module state to model */
     controller.getModel().set(path, module.state || {})
     /* Convert arrays to actually runable signals */
-    module.signals = Object.keys(module.signals || {}).reduce((currentSignals, signalKey) => {
+    module.signals = Object.keys(
+      module.signals || {}
+    ).reduce((currentSignals, signalKey) => {
       const signal = module.signals[signalKey]
       if (!signal) {
-        throwError(`Signal with name "${signalKey}" is undefined. Please check that the signal is set to either an array or a function.`)
+        throwError(
+          `Signal with name "${signalKey}" is undefined. Please check that the signal is set to either an array or a function.`
+        )
       }
       currentSignals[signalKey] = {
         signal: signal.signal || signal,
-        catch: (signal.catch || controller.catch) ? new Map([].concat(
-          controller.catch ? [...controller.catch] : []
-        ).concat(
-          signal.catch ? [...signal.catch] : []
-        )) : null,
+        catch: signal.catch || controller.catch
+          ? new Map(
+              []
+                .concat(controller.catch ? [...controller.catch] : [])
+                .concat(signal.catch ? [...signal.catch] : [])
+            )
+          : null,
         run (payload) {
-          controller.runSignal(path.concat(signalKey).join('.'), signal.signal || signal, payload)
+          controller.runSignal(
+            path.concat(signalKey).join('.'),
+            signal.signal || signal,
+            payload
+          )
         }
       }
 
@@ -35,8 +47,14 @@ class Module {
     }, {})
 
     /* Instantiate submodules */
-    module.modules = Object.keys(module.modules || {}).reduce((registered, moduleKey) => {
-      registered[moduleKey] = new Module(controller, path.concat(moduleKey), module.modules[moduleKey])
+    module.modules = Object.keys(
+      module.modules || {}
+    ).reduce((registered, moduleKey) => {
+      registered[moduleKey] = new Module(
+        controller,
+        path.concat(moduleKey),
+        module.modules[moduleKey]
+      )
       return registered
     }, {})
 

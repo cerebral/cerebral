@@ -4,9 +4,10 @@ import {connect} from 'cerebral/react'
 import {state} from 'cerebral/tags'
 import styles from './styles'
 
-export default connect({
-  currentView: state`app.currentView`
-},
+export default connect(
+  {
+    currentView: state`app.currentView`
+  },
   function MenuItem ({currentView, type}) {
     const innerContainer = css(
       styles.innerContainer,

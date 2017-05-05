@@ -11,7 +11,8 @@ describe('PathProvider', () => {
         assert.ok(path.success)
         assert.ok(path.error)
         return path.success()
-      }, {
+      },
+      {
         success: [],
         error: []
       }
@@ -34,19 +35,21 @@ describe('PathProvider', () => {
         assert.ok(path.foo)
         assert.ok(path.bar)
         return path.foo()
-      }, {
+      },
+      {
         foo: [],
         bar: []
       }
     ])
   })
-  it('should go down path based on method used', (done) => {
+  it('should go down path based on method used', done => {
     const ft = new FunctionTree()
 
     ft.run([
       ({path}) => {
         return path.foo()
-      }, {
+      },
+      {
         foo: [
           () => {
             assert.ok(true)
@@ -57,13 +60,14 @@ describe('PathProvider', () => {
       }
     ])
   })
-  it('should pass payload down paths', (done) => {
+  it('should pass payload down paths', done => {
     const ft = new FunctionTree()
 
     ft.run([
       ({path}) => {
         return path.foo({foo: 'bar'})
-      }, {
+      },
+      {
         foo: [
           ({props}) => {
             assert.deepEqual(props, {foo: 'bar'})
@@ -74,9 +78,9 @@ describe('PathProvider', () => {
       }
     ])
   })
-  it('should pass payload async', (done) => {
+  it('should pass payload async', done => {
     function actionA ({path}) {
-      return new Promise((resolve) => {
+      return new Promise(resolve => {
         setTimeout(function () {
           resolve(path.foo({foo: 'bar'}))
         })
@@ -89,13 +93,14 @@ describe('PathProvider', () => {
 
     const ft = new FunctionTree()
 
-    ft.run([
-      actionA, {
-        foo: [
-          actionB
-        ],
-        bar: []
-      }
-    ]).then(() => done())
+    ft
+      .run([
+        actionA,
+        {
+          foo: [actionB],
+          bar: []
+        }
+      ])
+      .then(() => done())
   })
 })

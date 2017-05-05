@@ -7,7 +7,7 @@ export default function signInWithFacebook (options) {
   const redirect = options.redirect || false
   const provider = new firebase.auth.FacebookAuthProvider()
 
-  scopes.forEach((scope) => {
+  scopes.forEach(scope => {
     provider.addScope(scope)
   })
 
@@ -16,18 +16,19 @@ export default function signInWithFacebook (options) {
       firebase.auth().signInWithRedirect(provider)
       resolve()
     } else {
-      firebase.auth().signInWithPopup(provider)
-      .then(
-        (result) => {
+      firebase.auth().signInWithPopup(provider).then(
+        result => {
           const user = createUser(result.user)
 
           user.accessToken = result.credential.accessToken
           resolve({
             user: user
           })
-        }, (error) => {
+        },
+        error => {
           reject(new FirebaseProviderAuthenticationError(error))
-        })
+        }
+      )
     }
   })
 }

@@ -8,7 +8,8 @@ import stopRunning from './stopRunning'
 const {draftPath} = paths('tasks')
 
 export default [
-  when(state`${draftPath}`, isRunning), {
+  when(state`${draftPath}`, isRunning),
+  {
     true: stopRunning,
     false: startRunning
   }

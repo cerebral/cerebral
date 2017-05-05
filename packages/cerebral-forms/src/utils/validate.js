@@ -38,9 +38,11 @@ export default function validate (form, value, validations) {
             return false
           }
 
-          const rule = rules[key] || function () {
-            throw new Error(`Rule ${key} is not found`)
-          }
+          const rule =
+            rules[key] ||
+            function () {
+              throw new Error(`Rule ${key} is not found`)
+            }
 
           return rule(value, form, validation[key])
         }, true),

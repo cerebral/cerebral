@@ -19,7 +19,14 @@ export default connect(
           <div className='modal-background' />
           <div className='modal-content'>
             <div style={{position: 'relative', overflow: 'visible'}}>
-              <div style={{position: 'absolute', top: -30, right: 12, zIndex: 2000}}>
+              <div
+                style={{
+                  position: 'absolute',
+                  top: -30,
+                  right: 12,
+                  zIndex: 2000
+                }}
+              >
                 <LangSelector />
               </div>
             </div>
@@ -27,17 +34,18 @@ export default connect(
               <div className='tabs'>
                 <ul>
                   <li className={`${tab === 'SignIn' ? 'is-active' : ''}`}>
-                    <a onClick={() => tabClick({value: 'SignIn'})}>{t.loginSignIn}</a>
+                    <a onClick={() => tabClick({value: 'SignIn'})}>
+                      {t.loginSignIn}
+                    </a>
                   </li>
                   <li className={`${tab === 'CreateUser' ? 'is-active' : ''}`}>
-                    <a onClick={() => tabClick({value: 'CreateUser'})}>{t.loginCreateUser}</a>
+                    <a onClick={() => tabClick({value: 'CreateUser'})}>
+                      {t.loginCreateUser}
+                    </a>
                   </li>
                 </ul>
               </div>
-              {tab === 'SignIn'
-               ? <SignIn />
-               : <CreateUser />
-              }
+              {tab === 'SignIn' ? <SignIn /> : <CreateUser />}
             </div>
           </div>
         </div>

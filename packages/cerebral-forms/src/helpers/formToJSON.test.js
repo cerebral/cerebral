@@ -4,7 +4,7 @@ import {formToJSON, form} from '..'
 import assert from 'assert'
 
 describe('formToJSON', () => {
-  it('should return nested form with only it\'s values', () => {
+  it("should return nested form with only it's values", () => {
     const controller = Controller({
       state: {
         form: form({
@@ -34,7 +34,7 @@ describe('formToJSON', () => {
       }
     })
   })
-  it('should return form with only it\'s values', () => {
+  it("should return form with only it's values", () => {
     const controller = Controller({
       state: {
         form: form({

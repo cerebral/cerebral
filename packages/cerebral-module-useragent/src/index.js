@@ -45,14 +45,20 @@ export default (userOptions = {}) => {
       const windowChanged = controller.getSignal(`${path}.windowChanged`)
 
       if (options.offline !== false) {
-        network.on('up', () => { controller.getState(`${path}.network.offline`) && offlineChanged({offline: false}) })
-        network.on('down', () => { !controller.getState(`${path}.network.offline`) && offlineChanged({offline: true}) })
+        network.on('up', () => {
+          controller.getState(`${path}.network.offline`) &&
+            offlineChanged({offline: false})
+        })
+        network.on('down', () => {
+          !controller.getState(`${path}.network.offline`) &&
+            offlineChanged({offline: true})
+        })
         network.check()
       }
 
       if (options.window !== false) {
         let updatingSpecs = false
-        window.addEventListener('resize', (event) => {
+        window.addEventListener('resize', event => {
           if (updatingSpecs) return
           updatingSpecs = true
           raf(() => {

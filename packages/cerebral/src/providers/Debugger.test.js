@@ -5,9 +5,19 @@ import assert from 'assert'
 describe('Debugger', () => {
   it('should send debuggerData', () => {
     const controller = new Controller({
-      devtools: { init () {}, send () {}, sendExecutionData (debuggerData) { assert.equal(debuggerData, 1) } },
+      devtools: {
+        init () {},
+        send () {},
+        sendExecutionData (debuggerData) {
+          assert.equal(debuggerData, 1)
+        }
+      },
       signals: {
-        foo: [(context) => { context.debugger.send(1) }]
+        foo: [
+          context => {
+            context.debugger.send(1)
+          }
+        ]
       }
     })
     controller.getSignal('foo')()
@@ -22,8 +32,9 @@ describe('Debugger', () => {
         }
       }
 
-      return (context) => {
-        context.myProvider = cachedProvider = cachedProvider || createProvider(context)
+      return context => {
+        context.myProvider = cachedProvider =
+          cachedProvider || createProvider(context)
 
         if (context.debugger) {
           context.debugger.wrapProvider('myProvider')
@@ -37,17 +48,13 @@ describe('Debugger', () => {
         init () {},
         send () {},
         sendExecutionData (debuggerData) {
-          assert.deepEqual(debuggerData,
-            {
-              method: 'myProvider.doSomething',
-              args: [ 1 ]
-            }
-          )
+          assert.deepEqual(debuggerData, {
+            method: 'myProvider.doSomething',
+            args: [1]
+          })
         }
       },
-      providers: [
-        MyProvider()
-      ],
+      providers: [MyProvider()],
       signals: {
         foo: [
           ({myProvider}) => {
@@ -60,7 +67,12 @@ describe('Debugger', () => {
   })
   it('throw send debuggerData', () => {
     const controller = new Controller({
-      devtools: { init () {}, send () {}, sendExecutionData () {}, preventPropsReplacement: true },
+      devtools: {
+        init () {},
+        send () {},
+        sendExecutionData () {},
+        preventPropsReplacement: true
+      },
       signals: {
         foo: [() => {}]
       }

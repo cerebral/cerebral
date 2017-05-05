@@ -14,12 +14,26 @@ export default connect(
     value: state`${props`moduleName`}.$draft.${props`field`}`,
     valueChanged: signal`${props`moduleName`}.formValueChanged`
   },
-  function Input ({autoFocus, enterPressed, escPressed, field, placeholderKey, t, value, valueChanged}) {
+  function Input ({
+    autoFocus,
+    enterPressed,
+    escPressed,
+    field,
+    placeholderKey,
+    t,
+    value,
+    valueChanged
+  }) {
     const onKeyPress = e => {
       switch (e.key) {
-        case 'Enter': enterPressed(); break
-        case 'Esc': escPressed(); break
-        default: break // noop
+        case 'Enter':
+          enterPressed()
+          break
+        case 'Esc':
+          escPressed()
+          break
+        default:
+          break // noop
       }
     }
 
@@ -28,14 +42,15 @@ export default connect(
     }
 
     return (
-      <textarea className='textarea'
+      <textarea
+        className='textarea'
         autoFocus={autoFocus}
         placeholder={t[placeholderKey]}
         onKeyPress={onKeyPress}
         onChange={onChange}
         name={field}
         value={value || ''}
-        />
+      />
     )
   }
 )

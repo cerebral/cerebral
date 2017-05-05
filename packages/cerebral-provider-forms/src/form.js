@@ -24,7 +24,9 @@ export class Field {
   constructor (field, form) {
     this._form = form
     Object.assign(this, field, {
-      isPristine: typeof field.isPristine === 'undefined' ? true : field.isPristine
+      isPristine: typeof field.isPristine === 'undefined'
+        ? true
+        : field.isPristine
     })
   }
   _validate () {
@@ -65,33 +67,28 @@ export class Form {
   getFields () {
     return getFormFields(this)
   }
-
 }
 
 export function computedField (fieldValueTag) {
-  return compute(
-    fieldValueTag,
-    (fieldValue) => {
-      if (!fieldValue || typeof fieldValue !== 'object') {
-        console.warn(`Cerebral Forms - Field value: ${fieldValueTag} did not resolve to an object`)
-        return {}
-      }
-      const field = new Field(fieldValue, null)
-      field._validate()
-      return field
+  return compute(fieldValueTag, fieldValue => {
+    if (!fieldValue || typeof fieldValue !== 'object') {
+      console.warn(
+        `Cerebral Forms - Field value: ${fieldValueTag} did not resolve to an object`
+      )
+      return {}
     }
-  )
+    const field = new Field(fieldValue, null)
+    field._validate()
+    return field
+  })
 }
 
 export default function computedForm (formValueTag) {
-  return compute(
-    formValueTag,
-    (formValue) => {
-      if (!formValue || typeof formValue !== 'object') {
-        console.warn('Cerebral Forms - Form value did not resolve to an object')
-        return {}
-      }
-      return new Form(formValue)
+  return compute(formValueTag, formValue => {
+    if (!formValue || typeof formValue !== 'object') {
+      console.warn('Cerebral Forms - Form value did not resolve to an object')
+      return {}
     }
-  )
+    return new Form(formValue)
+  })
 }

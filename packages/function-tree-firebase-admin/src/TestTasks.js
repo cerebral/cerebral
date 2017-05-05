@@ -32,57 +32,76 @@ function runTest (initialData, tasks, assertion, runTree, done) {
   }
 
   function resolveTest (error) {
-    server.getValue().then((snapshot) => {
+    server.getValue().then(snapshot => {
       client.delete().then(() => {
         server.close(() => {
           try {
-            if (assertion) { assertion(snapshot) }
+            if (assertion) {
+              assertion(snapshot)
+            }
             done(error)
-          } catch (e) { done(e) }
+          } catch (e) {
+            done(e)
+          }
         })
       })
     })
   }
 
-  function rejectTest (error) { resolveTest(error) }
+  function rejectTest (error) {
+    resolveTest(error)
+  }
 
-  tasks.reduce((currentPromise, task, index) => {
-    return currentPromise.then(() => {
-      return new Promise((resolve, reject) => {
-        function runTask (taskToRun) {
-          runTree('task_' + index, taskToRun.task, {
-            task: {
-              resolve () {
-                if (taskToRun.assert) {
-                  server.getValue()
-                    .then((snapshot) => {
-                      taskToRun.assert(snapshot)
+  tasks
+    .reduce((currentPromise, task, index) => {
+      return currentPromise.then(() => {
+        return new Promise((resolve, reject) => {
+          function runTask (taskToRun) {
+            runTree(
+              'task_' + index,
+              taskToRun.task,
+              {
+                task: {
+                  resolve () {
+                    if (taskToRun.assert) {
+                      server
+                        .getValue()
+                        .then(snapshot => {
+                          taskToRun.assert(snapshot)
+                          resolve()
+                        })
+                        .catch(reject)
+                    } else {
                       resolve()
-                    })
-                    .catch(reject)
-                } else { resolve() }
+                    }
+                  },
+                  reject (error) {
+                    reject(new Error(error))
+                  }
+                },
+                uid: taskToRun.uid,
+                data: taskToRun.data
               },
-              reject (error) {
-                reject(new Error(error))
+              err => {
+                if (err) {
+                  abortTest(err)
+                }
               }
-            },
-            uid: taskToRun.uid,
-            data: taskToRun.data
-          }, (err) => {
-            if (err) { abortTest(err) }
-          })
-        }
+            )
+          }
 
-        if (typeof task === 'function') {
-          server.getValue().then((snapshot) => {
-            runTask(task(snapshot))
-          })
-        } else { runTask(task) }
+          if (typeof task === 'function') {
+            server.getValue().then(snapshot => {
+              runTask(task(snapshot))
+            })
+          } else {
+            runTask(task)
+          }
+        })
       })
-    })
-  }, Promise.resolve())
+    }, Promise.resolve())
     .then(() => resolveTest(null))
-    .catch((error) => rejectTest(error))
+    .catch(error => rejectTest(error))
 }
 
 export class TestTasks {
@@ -91,7 +110,7 @@ export class TestTasks {
     this.runTree = new FunctionTree(this.providers)
   }
   create (initialData, tasks, assertion) {
-    return (done) => {
+    return done => {
       return runTest(
         initialData,
         Array.isArray(tasks) ? tasks : [tasks],

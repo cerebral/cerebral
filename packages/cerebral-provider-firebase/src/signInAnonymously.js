@@ -4,8 +4,7 @@ import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function signInAnonymously () {
   return new Promise((resolve, reject) => {
-    firebase.auth().signInAnonymously()
-    .then(
+    firebase.auth().signInAnonymously().then(
       () => {
         const unsubscribe = firebase.auth().onAuthStateChanged(user => {
           unsubscribe()
@@ -13,8 +12,10 @@ export default function signInAnonymously () {
             user: createUser(user)
           })
         })
-      }, (error) => {
+      },
+      error => {
         reject(new FirebaseProviderAuthenticationError(error))
-      })
+      }
+    )
   })
 }

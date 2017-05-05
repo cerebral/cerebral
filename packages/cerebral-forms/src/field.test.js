@@ -15,14 +15,19 @@ describe('field', () => {
         })
       },
       signals: {
-        fieldAdded: [({state}) => {
-          state.merge('form', form({
-            age: {
-              value: 18,
-              validationRules: ['isNumeric']
-            }
-          }))
-        }]
+        fieldAdded: [
+          ({state}) => {
+            state.merge(
+              'form',
+              form({
+                age: {
+                  value: 18,
+                  validationRules: ['isNumeric']
+                }
+              })
+            )
+          }
+        ]
       }
     })
     controller.getSignal('fieldAdded')()
@@ -66,23 +71,15 @@ describe('field', () => {
             value: '',
             isRequired: true,
             requiredMessage: 'Password is required.',
-            validationRules: [
-              'minLength:15'
-            ],
-            validationMessages: [
-              'Password must be at least 15 characters.'
-            ],
+            validationRules: ['minLength:15'],
+            validationMessages: ['Password must be at least 15 characters.'],
             dependsOn: 'form.repeatPassword'
           },
           repeatPassword: {
             value: '',
             isRequired: true,
-            validationRules: [
-              'equalsField:password'
-            ],
-            validationMessages: [
-              'Password must match repeat password.'
-            ],
+            validationRules: ['equalsField:password'],
+            validationMessages: ['Password must match repeat password.'],
             requiredMessage: 'Repeat password is required.',
             dependsOn: 'form.password'
           }
@@ -92,13 +89,22 @@ describe('field', () => {
         fieldChanged: changeField
       }
     })
-    controller.getSignal('fieldChanged')({field: 'form.password', value: 'abcdefghijklmnopqrstuvxyz'})
+    controller.getSignal('fieldChanged')({
+      field: 'form.password',
+      value: 'abcdefghijklmnopqrstuvxyz'
+    })
     assert.equal(controller.getState('form.password.isValid'), false)
     assert.equal(controller.getState('form.repeatPassword.isValid'), false)
-    controller.getSignal('fieldChanged')({field: 'form.repeatPassword', value: 'notthesame'})
+    controller.getSignal('fieldChanged')({
+      field: 'form.repeatPassword',
+      value: 'notthesame'
+    })
     assert.equal(controller.getState('form.password.isValid'), true)
     assert.equal(controller.getState('form.repeatPassword.isValid'), false)
-    controller.getSignal('fieldChanged')({field: 'form.repeatPassword', value: 'abcdefghijklmnopqrstuvxyz'})
+    controller.getSignal('fieldChanged')({
+      field: 'form.repeatPassword',
+      value: 'abcdefghijklmnopqrstuvxyz'
+    })
     assert.equal(controller.getState('form.password.isValid'), true)
     assert.equal(controller.getState('form.repeatPassword.isValid'), true)
   })

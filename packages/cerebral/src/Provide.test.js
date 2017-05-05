@@ -4,11 +4,9 @@ import provide from './Provide'
 import assert from 'assert'
 
 describe('Provide', () => {
-  it('should create a provider', (done) => {
+  it('should create a provider', done => {
     const controller = new Controller({
-      providers: [
-        provide('test', {foo: 'bar'})
-      ],
+      providers: [provide('test', {foo: 'bar'})],
       signals: {
         test: [
           ({test}) => {

@@ -42,14 +42,21 @@ export default connect(
 
           <div className='content'>
             <Input field='name' autoFocus placeholderKey='CompanyName' />
-            <Input field='image' type='file' icon='image' placeholderKey='ImageUrl' />
+            <Input
+              field='image'
+              type='file'
+              icon='image'
+              placeholderKey='ImageUrl'
+            />
             <Input field='website' icon='globe' placeholderKey='WebsiteUrl' />
             <Input field='email' icon='envelope' placeholderKey='Email' />
             <Input field='phone' icon='phone' placeholderKey='Telephone' />
             <p className='control'>
-              <Textarea field='notes'
+              <Textarea
+                field='notes'
                 moduleName='clients'
-                placeholderKey='Notes' />
+                placeholderKey='Notes'
+              />
             </p>
           </div>
         </div>

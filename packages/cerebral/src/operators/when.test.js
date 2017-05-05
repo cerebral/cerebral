@@ -10,8 +10,13 @@ describe('operator.when', () => {
     const controller = Controller({
       signals: {
         test: [
-          when(props`foo`), {
-            true: [() => { count++ }],
+          when(props`foo`),
+          {
+            true: [
+              () => {
+                count++
+              }
+            ],
             false: []
           }
         ]
@@ -28,9 +33,14 @@ describe('operator.when', () => {
       },
       signals: {
         test: [
-          when(state`foo`), {
+          when(state`foo`),
+          {
             true: [],
-            false: [() => { count++ }]
+            false: [
+              () => {
+                count++
+              }
+            ]
           }
         ]
       }
@@ -44,12 +54,17 @@ describe('operator.when', () => {
     const controller = Controller({
       signals: {
         test: [
-          when(props`value`, (value) => Boolean(value.length)), {
+          when(props`value`, value => Boolean(value.length)),
+          {
             true: [
-              () => { accepted++ }
+              () => {
+                accepted++
+              }
             ],
             false: [
-              () => { discarded++ }
+              () => {
+                discarded++
+              }
             ]
           }
         ]
@@ -68,12 +83,17 @@ describe('operator.when', () => {
       },
       signals: {
         test: [
-          when(state`foo`, (value) => value === 'bar'), {
+          when(state`foo`, value => value === 'bar'),
+          {
             true: [
-              ({state}) => { state.set('foo', 'bar2') }
+              ({state}) => {
+                state.set('foo', 'bar2')
+              }
             ],
             false: [
-              () => { discarded++ }
+              () => {
+                discarded++
+              }
             ]
           }
         ]
@@ -91,12 +111,17 @@ describe('operator.when', () => {
       },
       signals: {
         test: [
-          when(state`foo`, props`bar`, (foo, bar) => foo === bar), {
+          when(state`foo`, props`bar`, (foo, bar) => foo === bar),
+          {
             true: [
-              () => { results.push('true') }
+              () => {
+                results.push('true')
+              }
             ],
             false: [
-              () => { results.push('false') }
+              () => {
+                results.push('false')
+              }
             ]
           }
         ]
@@ -111,12 +136,17 @@ describe('operator.when', () => {
     const controller = Controller({
       signals: {
         test: [
-          when(props`foo`, 'bar', (foo, bar) => foo === bar), {
+          when(props`foo`, 'bar', (foo, bar) => foo === bar),
+          {
             true: [
-              () => { results.push('true') }
+              () => {
+                results.push('true')
+              }
             ],
             false: [
-              () => { results.push('false') }
+              () => {
+                results.push('false')
+              }
             ]
           }
         ]

@@ -9,7 +9,12 @@ function parseResponse (xhr) {
       result: JSON.parse(xhr.responseText)
     }
   } catch (e) {
-    throw new HttpProviderError(xhr.status, getAllResponseHeaders(xhr), xhr.responseText, e.message)
+    throw new HttpProviderError(
+      xhr.status,
+      getAllResponseHeaders(xhr),
+      xhr.responseText,
+      e.message
+    )
   }
 }
 
@@ -32,7 +37,10 @@ export default function (options) {
     fileUpload.isAborted = false
 
     return new Promise(function (resolve, reject) {
-      if (files && (files instanceof FileList || files.length || files instanceof File)) {
+      if (
+        files &&
+        (files instanceof FileList || files.length || files instanceof File)
+      ) {
         var formData = new FormData()
 
         if (files instanceof FileList || files.length) {
@@ -70,7 +78,7 @@ export default function (options) {
 
         xhr.upload.onprogress = function (e) {
           if (options.onProgress) {
-            var percentComplete = (e.loaded / e.total) * 100
+            var percentComplete = e.loaded / e.total * 100
             options.onProgress({
               progress: +percentComplete.toFixed(0)
             })

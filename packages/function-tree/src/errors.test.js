@@ -18,7 +18,12 @@ describe('errors', () => {
     const execution = {name: 'exec'}
     const funcDetails = {name: 'func', functionIndex: 1}
     const payload = {foo: 'bar'}
-    const error = new FunctionTreeExecutionError(execution, funcDetails, payload, baseError)
+    const error = new FunctionTreeExecutionError(
+      execution,
+      funcDetails,
+      payload,
+      baseError
+    )
 
     assert.ok(error instanceof Error)
     assert.ok(error instanceof FunctionTreeError)
@@ -30,7 +35,10 @@ describe('errors', () => {
     assert.equal(error.toJSON().name, 'FunctionTreeExecutionError')
     assert.equal(error.toJSON().message, 'foo')
     assert.deepEqual(error.toJSON().execution, {name: 'exec'})
-    assert.deepEqual(error.toJSON().funcDetails, {name: 'func', functionIndex: 1})
+    assert.deepEqual(error.toJSON().funcDetails, {
+      name: 'func',
+      functionIndex: 1
+    })
     assert.deepEqual(error.toJSON().payload, {foo: 'bar'})
     assert.ok(error.toJSON().stack)
   })

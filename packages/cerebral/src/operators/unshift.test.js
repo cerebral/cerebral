@@ -11,9 +11,7 @@ describe('operator.unshift', () => {
         list: ['a', 'b']
       },
       signals: {
-        test: [
-          unshift(state`list`, 'x')
-        ]
+        test: [unshift(state`list`, 'x')]
       }
     })
     controller.getSignal('test')()
@@ -25,27 +23,22 @@ describe('operator.unshift', () => {
         list: ['a', 'b']
       },
       signals: {
-        test: [
-          unshift(state`list`, props`value`)
-        ]
+        test: [unshift(state`list`, props`value`)]
       }
     })
     controller.getSignal('test')({value: 'x'})
     assert.deepEqual(controller.getState(), {list: ['x', 'a', 'b']})
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          unshift(props`list`, 'bar')
-        ]
+        test: [unshift(props`list`, 'bar')]
       }
     })
 
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })

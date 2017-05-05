@@ -61,7 +61,9 @@ function StateProviderFactory () {
               originFunc.apply(context.controller.model, args)
             } catch (e) {
               const signalName = context.execution.name
-              throwError(`The Signal "${signalName}" with action "${functionDetails.name}" has an error: ${e.message}`)
+              throwError(
+                `The Signal "${signalName}" with action "${functionDetails.name}" has an error: ${e.message}`
+              )
             }
           }
         }

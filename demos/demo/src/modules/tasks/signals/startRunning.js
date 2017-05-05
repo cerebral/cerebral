@@ -19,13 +19,12 @@ export default [
   set(props`key`, 'running'),
 
   // Save as running task in collection
-  ...save(moduleName), {
+  ...save(moduleName),
+  {
     success: [
       // Start running
       ...updateNow
     ],
-    error: [
-      set(state`${errorPath}`)
-    ]
+    error: [set(state`${errorPath}`)]
   }
 ]

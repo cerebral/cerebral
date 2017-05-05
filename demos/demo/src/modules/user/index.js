@@ -29,15 +29,11 @@ export default {
   signals: {
     createUserClicked: createUser,
     createUserEnterPressed: createUser,
-    fieldChanged: [
-      setField(state`${props`field`}`, props`value`)
-    ],
+    fieldChanged: [setField(state`${props`field`}`, props`value`)],
     signInAnonClicked: signInAnonymous,
     signInClicked: signIn,
     signInEnterPressed: signIn,
     signOutClicked: signOut,
-    loginTabClicked: [
-      set(state`user.$loginTab`, props`value`)
-    ]
+    loginTabClicked: [set(state`user.$loginTab`, props`value`)]
   }
 }

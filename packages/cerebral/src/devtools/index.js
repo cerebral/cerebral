@@ -11,21 +11,30 @@ const VERSION = 'v1'
   - Stores data related to time travel, if activated
 */
 class Devtools {
-  constructor (options = {
-    storeMutations: true,
-    preventExternalMutations: true,
-    preventPropsReplacement: false,
-    bigComponentsWarning: 10,
-    remoteDebugger: null,
-    allowedTypes: [],
-    doReconnect: true
-  }) {
+  constructor (
+    options = {
+      storeMutations: true,
+      preventExternalMutations: true,
+      preventPropsReplacement: false,
+      bigComponentsWarning: 10,
+      remoteDebugger: null,
+      allowedTypes: [],
+      doReconnect: true
+    }
+  ) {
     this.VERSION = VERSION
     this.debuggerComponentsMap = {}
     this.debuggerComponentDetailsId = 1
-    this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
-    this.preventExternalMutations = typeof options.preventExternalMutations === 'undefined' ? true : options.preventExternalMutations
-    this.doReconnect = typeof options.reconnect === 'undefined' ? true : options.reconnect
+    this.storeMutations = typeof options.storeMutations === 'undefined'
+      ? true
+      : options.storeMutations
+    this.preventExternalMutations = typeof options.preventExternalMutations ===
+      'undefined'
+      ? true
+      : options.preventExternalMutations
+    this.doReconnect = typeof options.reconnect === 'undefined'
+      ? true
+      : options.reconnect
     this.preventPropsReplacement = options.preventPropsReplacement || false
     this.bigComponentsWarning = options.bigComponentsWarning || 10
     this.remoteDebugger = options.remoteDebugger || null
@@ -72,8 +81,10 @@ class Devtools {
     if (index === 0) {
       this.controller.run = this.originalRunTreeFunction
     } else {
-      this.controller.run = (name) => {
-        console.warn(`The signal "${name}" fired while debugger is remembering state, it was ignored`)
+      this.controller.run = name => {
+        console.warn(
+          `The signal "${name}" fired while debugger is remembering state, it was ignored`
+        )
       }
     }
 
@@ -83,7 +94,10 @@ class Devtools {
     }
 
     this.controller.flush(true)
-    this.controller.emit('remember', JSON.parse(this.mutations[index].data).datetime)
+    this.controller.emit(
+      'remember',
+      JSON.parse(this.mutations[index].data).datetime
+    )
   }
   /*
 
@@ -99,7 +113,7 @@ class Devtools {
   */
   addListeners () {
     this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
-    this.ws.onmessage = (event) => {
+    this.ws.onmessage = event => {
       const message = JSON.parse(event.data)
       switch (message.type) {
         case 'changeModel':
@@ -108,7 +122,9 @@ class Devtools {
           break
         case 'remember':
           if (!this.storeMutations) {
-            console.warn('Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations')
+            console.warn(
+              'Cerebral Devtools - You tried to time travel, but you have turned of storing of mutations'
+            )
           }
           this.remember(message.data)
           break
@@ -162,7 +178,9 @@ class Devtools {
     this.ws.onclose = () => {
       this.isConnected = false
       if (this.doReconnect) {
-        console.warn('Could not connect to the debugger, please make sure it is running... automatically retrying in the background')
+        console.warn(
+          'Could not connect to the debugger, please make sure it is running... automatically retrying in the background'
+        )
         this.reconnect()
       }
     }
@@ -192,7 +210,9 @@ class Devtools {
             name: execution.name,
             staticTree: execution.staticTree,
             datetime: execution.datetime,
-            executedBy: (payload && payload._execution) ? payload._execution : null
+            executedBy: payload && payload._execution
+              ? payload._execution
+              : null
           }
         }
       })
@@ -203,7 +223,7 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.on('end', (execution) => {
+    this.controller.on('end', execution => {
       const message = JSON.stringify({
         type: 'executionEnd',
         source: 'c',
@@ -260,29 +280,32 @@ class Devtools {
         this.backlog.push(message)
       }
     })
-    this.controller.on('functionEnd', (execution, funcDetails, payload, result) => {
-      if (!result || (result instanceof Path && !result.payload)) {
-        return
-      }
-
-      const message = JSON.stringify({
-        type: 'executionFunctionEnd',
-        source: 'c',
-        data: {
-          execution: {
-            executionId: execution.id,
-            functionIndex: funcDetails.functionIndex,
-            output: result instanceof Path ? result.payload : result
-          }
+    this.controller.on(
+      'functionEnd',
+      (execution, funcDetails, payload, result) => {
+        if (!result || (result instanceof Path && !result.payload)) {
+          return
         }
-      })
 
-      if (this.isConnected) {
-        this.sendMessage(message)
-      } else {
-        this.backlog.push(message)
+        const message = JSON.stringify({
+          type: 'executionFunctionEnd',
+          source: 'c',
+          data: {
+            execution: {
+              executionId: execution.id,
+              functionIndex: funcDetails.functionIndex,
+              output: result instanceof Path ? result.payload : result
+            }
+          }
+        })
+
+        if (this.isConnected) {
+          this.sendMessage(message)
+        } else {
+          this.backlog.push(message)
+        }
       }
-    })
+    )
     this.controller.on('error', (error, execution, funcDetails) => {
       const message = JSON.stringify({
         type: 'executionFunctionError',
@@ -335,7 +358,9 @@ class Devtools {
       source: 'c',
       version: this.VERSION,
       data: {
-        initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
+        initialModel: this.initialModelString
+          ? PLACEHOLDER_INITIAL_MODEL
+          : initialModel
       }
     }).replace(`"${PLACEHOLDER_INITIAL_MODEL}"`, this.initialModelString)
 
@@ -348,16 +373,18 @@ class Devtools {
 
     this.isConnected = true
 
-    this.sendMessage(JSON.stringify({
-      type: 'components',
-      source: 'c',
-      data: {
-        map: this.debuggerComponentsMap,
-        render: {
-          components: []
+    this.sendMessage(
+      JSON.stringify({
+        type: 'components',
+        source: 'c',
+        data: {
+          map: this.debuggerComponentsMap,
+          render: {
+            components: []
+          }
         }
-      }
-    }))
+      })
+    )
   }
   /*
     Create the stringified message for the debugger. As we need to
@@ -369,7 +396,11 @@ class Devtools {
     const type = 'execution'
     let mutationString = ''
 
-    if (this.storeMutations && debuggingData && debuggingData.type === 'mutation') {
+    if (
+      this.storeMutations &&
+      debuggingData &&
+      debuggingData.type === 'mutation'
+    ) {
       mutationString = JSON.stringify(debuggingData)
     }
 
@@ -404,7 +435,12 @@ class Devtools {
     mutations are done or any wrapped methods run.
   */
   sendExecutionData (debuggingData, context, functionDetails, payload) {
-    const message = this.createExecutionMessage(debuggingData, context, functionDetails, payload)
+    const message = this.createExecutionMessage(
+      debuggingData,
+      context,
+      functionDetails,
+      payload
+    )
 
     if (this.isConnected) {
       this.sendMessage(message)
@@ -455,11 +491,11 @@ class Devtools {
 
     if (nextDeps) {
       for (const depsKey in nextDeps) {
-        this.debuggerComponentsMap[depsKey] = (
-          this.debuggerComponentsMap[depsKey]
-            ? this.debuggerComponentsMap[depsKey].concat(componentDetails)
-            : [componentDetails]
-        )
+        this.debuggerComponentsMap[depsKey] = this.debuggerComponentsMap[
+          depsKey
+        ]
+          ? this.debuggerComponentsMap[depsKey].concat(componentDetails)
+          : [componentDetails]
       }
     }
   }
@@ -471,19 +507,21 @@ class Devtools {
   */
   sendComponentsMap (componentsToRender, changes, start, end) {
     if (this.isConnected) {
-      this.sendMessage(JSON.stringify({
-        type: 'components',
-        source: 'c',
-        data: {
-          map: this.debuggerComponentsMap,
-          render: {
-            start: start,
-            duration: end - start,
-            changes: changes,
-            components: componentsToRender.map(this.extractComponentName)
+      this.sendMessage(
+        JSON.stringify({
+          type: 'components',
+          source: 'c',
+          data: {
+            map: this.debuggerComponentsMap,
+            render: {
+              start: start,
+              duration: end - start,
+              changes: changes,
+              components: componentsToRender.map(this.extractComponentName)
+            }
           }
-        }
-      }))
+        })
+      )
     }
   }
 }

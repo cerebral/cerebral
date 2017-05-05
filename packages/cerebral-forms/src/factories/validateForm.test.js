@@ -8,9 +8,7 @@ describe('validateField', () => {
   it('should validate form', () => {
     const controller = Controller({
       signals: {
-        validateForm: [
-          validateForm('form')
-        ],
+        validateForm: [validateForm('form')],
         changeField
       },
       state: {
@@ -23,16 +21,17 @@ describe('validateField', () => {
       }
     })
     assert.equal(controller.getState('form.name.isValid'), false)
-    controller.getSignal('changeField')({field: 'form.name', value: 'Longer name'})
+    controller.getSignal('changeField')({
+      field: 'form.name',
+      value: 'Longer name'
+    })
     controller.getSignal('validateForm')()
     assert.equal(controller.getState('form.name.isValid'), true)
   })
   it('should validate form by state tag', () => {
     const controller = Controller({
       signals: {
-        validateForm: [
-          validateForm(state`${props`form`}`)
-        ],
+        validateForm: [validateForm(state`${props`form`}`)],
         changeField
       },
       state: {
@@ -45,7 +44,10 @@ describe('validateField', () => {
       }
     })
     assert.equal(controller.getState('form.name.isValid'), false)
-    controller.getSignal('changeField')({field: 'form.name', value: 'Longer name'})
+    controller.getSignal('changeField')({
+      field: 'form.name',
+      value: 'Longer name'
+    })
     controller.getSignal('validateForm')({
       form: 'form'
     })
@@ -54,9 +56,7 @@ describe('validateField', () => {
   it('should validate nested forms', () => {
     const controller = Controller({
       signals: {
-        validateForm: [
-          validateForm(state`${props`form`}`)
-        ],
+        validateForm: [validateForm(state`${props`form`}`)],
         changeField
       },
       state: {
@@ -76,8 +76,14 @@ describe('validateField', () => {
     })
     assert.equal(controller.getState('form.name.isValid'), false)
     assert.equal(controller.getState('form.address.street.isValid'), false)
-    controller.getSignal('changeField')({field: 'form.name', value: 'Longer name'})
-    controller.getSignal('changeField')({field: 'form.address.street', value: '21 2nd Street'})
+    controller.getSignal('changeField')({
+      field: 'form.name',
+      value: 'Longer name'
+    })
+    controller.getSignal('changeField')({
+      field: 'form.address.street',
+      value: '21 2nd Street'
+    })
     controller.getSignal('validateForm')({
       form: 'form'
     })
@@ -87,9 +93,7 @@ describe('validateField', () => {
   it('should validate nested form arrays', () => {
     const controller = Controller({
       signals: {
-        validateForm: [
-          validateForm(state`${props`form`}`)
-        ],
+        validateForm: [validateForm(state`${props`form`}`)],
         changeField
       },
       state: {
@@ -112,15 +116,20 @@ describe('validateField', () => {
               }
             })
           ]
-
         })
       }
     })
     assert.equal(controller.getState('form.name.isValid'), false)
     assert.equal(controller.getState('form.address.0.street.isValid'), false)
     assert.equal(controller.getState('form.address.1.street.isValid'), true)
-    controller.getSignal('changeField')({field: 'form.name', value: 'Longer name'})
-    controller.getSignal('changeField')({field: 'form.address.0.street', value: '21 2nd Street'})
+    controller.getSignal('changeField')({
+      field: 'form.name',
+      value: 'Longer name'
+    })
+    controller.getSignal('changeField')({
+      field: 'form.address.0.street',
+      value: '21 2nd Street'
+    })
     controller.getSignal('validateForm')({
       form: 'form'
     })

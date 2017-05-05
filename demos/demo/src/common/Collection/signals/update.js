@@ -29,36 +29,36 @@ export default function update (moduleName) {
 
     // Clear form (avoid updated notify back to the form).
     unset(state`${draftPath}.key`),
-    ...save(moduleName), {
+    ...save(moduleName),
+    {
       success: [
         // Upload new image if we have one
-        when(props`imageFile`), {
+        when(props`imageFile`),
+        {
           true: [
-            firebase.put(
-              props`remoteItemImagePath`,
-              props`imageFile`,
-              {
-                progress: signal`${moduleName}.uploadProgress`
-              }
-            ), {
+            firebase.put(props`remoteItemImagePath`, props`imageFile`, {
+              progress: signal`${moduleName}.uploadProgress`
+            }),
+            {
               success: [
                 // Get latest (fresh) value
                 set(props`value`, state`${props`itemPath`}`),
                 set(props`value.image`, props`url`),
                 when(
-                  props`value.imageName`, props`filename`,
+                  props`value.imageName`,
+                  props`filename`,
                   (oldName, newName) => oldName && newName !== oldName
-                ), {
+                ),
+                {
                   true: [
                     // Delete previous image
                     firebase.delete(
                       props`remoteItemImagePath`,
                       props`value.imageName`
-                    ), {
+                    ),
+                    {
                       success: [],
-                      error: [
-                        set(state`${errorPath}`, props`error`)
-                      ]
+                      error: [set(state`${errorPath}`, props`error`)]
                     }
                   ],
                   false: []
@@ -70,24 +70,19 @@ export default function update (moduleName) {
                 unset(props`value.$imageFile`),
                 */
                 // New image uploaded, save item with updated url for image
-                ...save(moduleName), {
+                ...save(moduleName),
+                {
                   success: [],
-                  error: [
-                    set(state`${errorPath}`, props`error`)
-                  ]
+                  error: [set(state`${errorPath}`, props`error`)]
                 }
               ],
-              error: [
-                set(state`${errorPath}`, props`error`)
-              ]
+              error: [set(state`${errorPath}`, props`error`)]
             }
           ],
           false: []
         }
       ],
-      error: [
-        set(state`${errorPath}`, props`error`)
-      ]
+      error: [set(state`${errorPath}`, props`error`)]
     }
   ]
 }

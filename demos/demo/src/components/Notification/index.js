@@ -13,8 +13,7 @@ export default connect(
     if (error) {
       return (
         <div className='notification is-warning'>
-          <button className='delete'
-            onClick={() => dismiss()} />
+          <button className='delete' onClick={() => dismiss()} />
           {error}
         </div>
       )

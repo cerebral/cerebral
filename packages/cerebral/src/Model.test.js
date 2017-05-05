@@ -30,10 +30,12 @@ describe('Model', () => {
       }
     })
     model.set(['foo', 'bar'], 'value2')
-    assert.deepEqual(model.flush(), [{
-      path: ['foo', 'bar'],
-      forceChildPathUpdates: true
-    }])
+    assert.deepEqual(model.flush(), [
+      {
+        path: ['foo', 'bar'],
+        forceChildPathUpdates: true
+      }
+    ])
   })
   it('should flush same path changes correctly', () => {
     const model = new Model({
@@ -43,13 +45,16 @@ describe('Model', () => {
     })
     model.set(['foo', 'bar'], 'value2')
     model.set(['foo', 'bar'], 'value3')
-    assert.deepEqual(model.flush(), [{
-      path: ['foo', 'bar'],
-      forceChildPathUpdates: true
-    }, {
-      path: ['foo', 'bar'],
-      forceChildPathUpdates: true
-    }])
+    assert.deepEqual(model.flush(), [
+      {
+        path: ['foo', 'bar'],
+        forceChildPathUpdates: true
+      },
+      {
+        path: ['foo', 'bar'],
+        forceChildPathUpdates: true
+      }
+    ])
   })
   it('should throw when updating invalid path', () => {
     const model = new Model({
@@ -101,20 +106,24 @@ describe('Model', () => {
         }
       })
       model.merge(['foo'], {valB: 'bar'})
-      assert.deepEqual(model.flush(), [{
-        path: ['foo', 'valB'],
-        forceChildPathUpdates: true
-      }])
+      assert.deepEqual(model.flush(), [
+        {
+          path: ['foo', 'valB'],
+          forceChildPathUpdates: true
+        }
+      ])
     })
     it('should flush change on object only if no existing object', () => {
       const model = new Model({
         foo: null
       })
       model.merge(['foo'], {valB: 'bar'})
-      assert.deepEqual(model.flush(), [{
-        path: ['foo'],
-        forceChildPathUpdates: true
-      }])
+      assert.deepEqual(model.flush(), [
+        {
+          path: ['foo'],
+          forceChildPathUpdates: true
+        }
+      ])
     })
   })
   describe('POP', () => {
@@ -168,10 +177,12 @@ describe('Model', () => {
         }
       })
       model.unset(['foo', 'bar'])
-      assert.deepEqual(model.flush(), [{
-        path: ['foo', 'bar'],
-        forceChildPathUpdates: true
-      }])
+      assert.deepEqual(model.flush(), [
+        {
+          path: ['foo', 'bar'],
+          forceChildPathUpdates: true
+        }
+      ])
     })
   })
   describe('CONCAT', () => {
@@ -185,12 +196,15 @@ describe('Model', () => {
   })
   describe('Prevent mutations', () => {
     it('should freeze initial state if passed freeze option', () => {
-      const model = new Model({
-        foo: 'bar',
-        list: {
-          items: []
-        }
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: 'bar',
+          list: {
+            items: []
+          }
+        },
+        {preventExternalMutations: true}
+      )
       assert.throws(() => {
         model.state.foo = 'bar2'
       })
@@ -202,9 +216,12 @@ describe('Model', () => {
       })
     })
     it('should update non object values', () => {
-      const model = new Model({
-        foo: 'bar'
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: 'bar'
+        },
+        {preventExternalMutations: true}
+      )
       model.set(['foo'], 'bar2')
       assert.equal(model.state.foo, 'bar2')
       assert.throws(() => {
@@ -212,9 +229,12 @@ describe('Model', () => {
       })
     })
     it('should update object values', () => {
-      const model = new Model({
-        foo: {}
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: {}
+        },
+        {preventExternalMutations: true}
+      )
       assert.throws(() => {
         model.state.foo.bar = 'bar3'
       })
@@ -225,9 +245,12 @@ describe('Model', () => {
       })
     })
     it('should update array values', () => {
-      const model = new Model({
-        foo: []
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: []
+        },
+        {preventExternalMutations: true}
+      )
       assert.throws(() => {
         model.state.foo[0] = 'bar3'
       })
@@ -238,11 +261,14 @@ describe('Model', () => {
       })
     })
     it('should update nested values', () => {
-      const model = new Model({
-        foo: {
-          bar: 'baz'
-        }
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: {
+            bar: 'baz'
+          }
+        },
+        {preventExternalMutations: true}
+      )
       model.set(['foo', 'bar'], 'baz2')
       assert.equal(model.state.foo.bar, 'baz2')
       assert.throws(() => {
@@ -250,17 +276,23 @@ describe('Model', () => {
       })
     })
     it('should throw when updating invalid path', () => {
-      const model = new Model({
-        foo: 'bar'
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: 'bar'
+        },
+        {preventExternalMutations: true}
+      )
       assert.throws(() => {
         model.set(['foo', 'bar'], 'baz2')
       })
     })
     it('should throw when updating invalid nested path', () => {
-      const model = new Model({
-        foo: 'bar'
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: 'bar'
+        },
+        {preventExternalMutations: true}
+      )
       assert.throws(() => {
         model.set(['foo', 'bar', 'baz'], 'baz2')
       })
@@ -272,9 +304,12 @@ describe('Model', () => {
         writeable: false,
         enumerable: true
       })
-      const model = new Model({
-        foo: {}
-      }, {preventExternalMutations: true})
+      const model = new Model(
+        {
+          foo: {}
+        },
+        {preventExternalMutations: true}
+      )
       assert.doesNotThrow(() => {
         model.set(['foo'], object)
       })
@@ -282,32 +317,44 @@ describe('Model', () => {
   })
   describe('Serializable', () => {
     it('should make value forceSerializable when devtools are attached', () => {
-      const model = new Model({
-        foo: 'bar'
-      }, {allowedTypes: [Date]})
+      const model = new Model(
+        {
+          foo: 'bar'
+        },
+        {allowedTypes: [Date]}
+      )
       model.set(['foo'], new Date())
       assert.equal(model.state.foo.toJSON(), '[Date]')
     })
     it('should throw error if value inserted is not serializable', () => {
-      const model = new Model({
-        foo: 'bar'
-      }, {})
+      const model = new Model(
+        {
+          foo: 'bar'
+        },
+        {}
+      )
       assert.throws(() => {
         model.set(['foo'], new Date())
       })
     })
     it('should NOT throw error if value inserted is serializable', () => {
-      const model = new Model({
-        foo: 'bar'
-      }, {})
+      const model = new Model(
+        {
+          foo: 'bar'
+        },
+        {}
+      )
       assert.doesNotThrow(() => {
         model.set(['foo'], [])
       })
     })
     it('should NOT throw error if passing allowed type in devtools', () => {
-      const model = new Model({
-        foo: 'bar'
-      }, {allowedTypes: [Date]})
+      const model = new Model(
+        {
+          foo: 'bar'
+        },
+        {allowedTypes: [Date]}
+      )
       assert.doesNotThrow(() => {
         model.set(['foo'], new Date())
       })

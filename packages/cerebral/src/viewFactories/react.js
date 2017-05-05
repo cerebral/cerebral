@@ -2,7 +2,7 @@ import React from 'react'
 import ContainerFactory from './Container'
 import StateContainerFactory from './StateContainer'
 import HocFactory from './Hoc'
-import connectFactory, { decoratorFactory } from './connect'
+import connectFactory, {decoratorFactory} from './connect'
 
 let PropTypes
 const [major, minor] = React.version.split('.')
@@ -13,7 +13,7 @@ if ((major === '15' && minor >= 5) || major >= 16) {
   } catch (e) {
     console.error(
       'In order to support react@15.5+, you need to have prop-types package installed. ' +
-      'Please add prop-types to your dependencies (`npm install --save prop-types`)'
+        'Please add prop-types to your dependencies (`npm install --save prop-types`)'
     )
     throw e
   }

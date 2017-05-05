@@ -1,13 +1,13 @@
-import {
-  createRef
-} from './helpers'
+import {createRef} from './helpers'
 import {FirebaseProviderError} from './errors'
 
 let ref = null
 
 export function setOnDisconnect (path, value) {
   if (ref) {
-    throw new FirebaseProviderError({message: 'You have already a setOnDisconnect'})
+    throw new FirebaseProviderError({
+      message: 'You have already a setOnDisconnect'
+    })
   }
 
   ref = createRef(path)

@@ -8,26 +8,22 @@ export default function (moduleName) {
   return [
     ...dynamicPaths,
     set(props`filename`, state`${props`itemPath`}.imageName`),
-    firebase.remove(props`remoteItemPath`), {
+    firebase.remove(props`remoteItemPath`),
+    {
       success: [
-        when(props`filename`), {
+        when(props`filename`),
+        {
           true: [
-            firebase.delete(
-              props`remoteItemImagePath`,
-              props`filename`
-            ), {
+            firebase.delete(props`remoteItemImagePath`, props`filename`),
+            {
               success: [],
-              error: [
-                set(state`${errorPath}`, props`error`)
-              ]
+              error: [set(state`${errorPath}`, props`error`)]
             }
           ],
           false: []
         }
       ],
-      error: [
-        set(state`${errorPath}`, props`error`)
-      ]
+      error: [set(state`${errorPath}`, props`error`)]
     }
   ]
 }

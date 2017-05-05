@@ -9,7 +9,7 @@ export function runCompute (compute, fixtures = {}) {
     state: fixtures.state || {},
     signals: {
       test: [
-        ({ resolve }) => {
+        ({resolve}) => {
           response = resolve.value(compute, fixtures.props)
         }
       ]
@@ -21,17 +21,27 @@ export function runCompute (compute, fixtures = {}) {
 
 export function runSignal (signal, fixtures = {}, options = {}) {
   return new Promise((resolve, reject) => {
-    const recordActions = options.recordActions && options.recordActions === 'byName' ? 'name' : 'functionIndex'
+    const recordActions = options.recordActions &&
+      options.recordActions === 'byName'
+      ? 'name'
+      : 'functionIndex'
     const isSignal = Array.isArray(signal) || signal instanceof Primitive
-    const controller = options.controller || Controller(Object.assign({}, fixtures, isSignal && {signals: {signal}}))
+    const controller =
+      options.controller ||
+      Controller(Object.assign({}, fixtures, isSignal && {signals: {signal}}))
     const response = {controller}
 
     const actionStart = function (execution, funcDetails, payload) {
       if (options.singleAction) {
         response.props = payload
       } else {
-        if (!options.noDuplicateWarnings && response[funcDetails[recordActions]]) {
-          console.warn(`Cerebral[runSignal]: signal contains actions with duplicate names ('${funcDetails[recordActions]}')`)
+        if (
+          !options.noDuplicateWarnings &&
+          response[funcDetails[recordActions]]
+        ) {
+          console.warn(
+            `Cerebral[runSignal]: signal contains actions with duplicate names ('${funcDetails[recordActions]}')`
+          )
         }
         response[funcDetails[recordActions]] = {props: payload}
       }
@@ -82,7 +92,11 @@ export function CerebralTest (fixtures = {}, options = {}) {
   const model = controller.getModel()
   return {
     runSignal (signal, props) {
-      return runSignal(signal, { props }, Object.assign({}, options, {controller, noDuplicateWarnings: true}))
+      return runSignal(
+        signal,
+        {props},
+        Object.assign({}, options, {controller, noDuplicateWarnings: true})
+      )
     },
     setState (path, value) {
       model.set(ensurePath(cleanPath(path)), value)
@@ -100,5 +114,8 @@ export function RunSignal (fixtures = {}, options = {}) {
 }
 
 export function runAction (action, fixtures = {}) {
-  return runSignal([action], fixtures, {recordActions: true, singleAction: true})
+  return runSignal([action], fixtures, {
+    recordActions: true,
+    singleAction: true
+  })
 }

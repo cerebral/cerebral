@@ -11,27 +11,22 @@ describe('operator.pop', () => {
         list: ['a', 'b', 'c']
       },
       signals: {
-        test: [
-          pop(state`list`)
-        ]
+        test: [pop(state`list`)]
       }
     })
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['a', 'b']})
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          pop(props`list`)
-        ]
+        test: [pop(props`list`)]
       }
     })
 
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })

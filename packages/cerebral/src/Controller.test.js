@@ -148,7 +148,9 @@ describe('Controller', () => {
     const controller = new Controller({
       devtools: {init () {}, allowedTypes: [Date]},
       signals: {
-        foo: [({props}) => assert.equal(JSON.stringify(props), '{"date":"[Date]"}')]
+        foo: [
+          ({props}) => assert.equal(JSON.stringify(props), '{"date":"[Date]"}')
+        ]
       }
     })
     controller.getSignal('foo')({
@@ -186,9 +188,7 @@ describe('Controller', () => {
     const controller = new Controller({
       devtools: {init () {}},
       signals: {
-        foo: [
-          ({props}) => assert.deepEqual(props, {})
-        ]
+        foo: [({props}) => assert.deepEqual(props, {})]
       }
     })
     controller.getSignal('foo')(new Date())
@@ -204,16 +204,13 @@ describe('Controller', () => {
     const controller = new Controller({})
     assert.equal(controller.getState('foo.bar'), undefined)
   })
-  it('should flush at async action, resolved parallel and end of signal', (done) => {
+  it('should flush at async action, resolved parallel and end of signal', done => {
     let flushCount = 0
     const controller = new Controller({
       signals: {
         test: [
           () => Promise.resolve(),
-          [
-            () => Promise.resolve(),
-            () => Promise.resolve()
-          ]
+          [() => Promise.resolve(), () => Promise.resolve()]
         ]
       }
     })
@@ -240,24 +237,24 @@ describe('Controller', () => {
     })
     assert.deepEqual(controller.model.changedPaths, [])
   })
-  it('should flush async mutations', (done) => {
+  it('should flush async mutations', done => {
     const controller = new Controller({
       signals: {
-        test: [
-          ({state}) => setTimeout(() => state.set('foo', 'bar'))
-        ]
+        test: [({state}) => setTimeout(() => state.set('foo', 'bar'))]
       }
     })
-    controller.on('flush', (changes) => {
-      assert.deepEqual(changes, [{
-        path: ['foo'],
-        forceChildPathUpdates: true
-      }])
+    controller.on('flush', changes => {
+      assert.deepEqual(changes, [
+        {
+          path: ['foo'],
+          forceChildPathUpdates: true
+        }
+      ])
       done()
     })
     controller.getSignal('test')()
   })
-  it('should flush optimally in complex signals', (done) => {
+  it('should flush optimally in complex signals', done => {
     let flushCount = 0
     const controller = new Controller({
       signals: {
@@ -266,10 +263,9 @@ describe('Controller', () => {
           () => Promise.resolve(),
           () => {},
           [
-            ({path}) => Promise.resolve(path.a()), {
-              a: [
-                () => {}
-              ]
+            ({path}) => Promise.resolve(path.a()),
+            {
+              a: [() => {}]
             },
             () => Promise.resolve()
           ]
@@ -287,10 +283,14 @@ describe('Controller', () => {
     })
     controller.getSignal('test')()
   })
-  it('should remove default error listener when overriden', (done) => {
+  it('should remove default error listener when overriden', done => {
     const controller = new Controller({
       signals: {
-        test: [() => { foo.bar = 'baz' }] // eslint-disable-line
+        test: [
+          () => {
+            foo.bar = 'baz'
+          }
+        ] // eslint-disable-line
       }
     })
     controller.on('error', () => {
@@ -299,11 +299,19 @@ describe('Controller', () => {
     })
     controller.getSignal('test')()
   })
-  it('should remove default error listener when overriden using devtools', (done) => {
+  it('should remove default error listener when overriden using devtools', done => {
     const controller = new Controller({
-      devtools: {init (ctrl) { ctrl.on('error', () => {}) }},
+      devtools: {
+        init (ctrl) {
+          ctrl.on('error', () => {})
+        }
+      },
       signals: {
-        test: [() => { foo.bar = 'baz' }] // eslint-disable-line
+        test: [
+          () => {
+            foo.bar = 'baz'
+          }
+        ] // eslint-disable-line
       }
     })
     controller.on('error', () => {
@@ -341,12 +349,15 @@ describe('Controller', () => {
     }
     controller.addModule('foo', module)
     assert.ok(controller.module.modules['foo'])
-    assert.deepEqual(controller.module.modules, {foo: {
-      modules: {},
-      signals: {},
-      state: {
-        bar: 'baz'
-      }}})
+    assert.deepEqual(controller.module.modules, {
+      foo: {
+        modules: {},
+        signals: {},
+        state: {
+          bar: 'baz'
+        }
+      }
+    })
 
     assert.equal(controller.getState('foo.bar'), 'baz')
   })
@@ -403,12 +414,15 @@ describe('Controller', () => {
     }
     controller.addModule('foo.bar', module)
     assert.ok(controller.module.modules['foo'].modules['bar'])
-    assert.deepEqual(controller.module.modules['foo'].modules, {bar: {
-      modules: {},
-      signals: {},
-      state: {
-        bar: 'baz'
-      }}})
+    assert.deepEqual(controller.module.modules['foo'].modules, {
+      bar: {
+        modules: {},
+        signals: {},
+        state: {
+          bar: 'baz'
+        }
+      }
+    })
 
     assert.equal(controller.getState('foo.bar.bar'), 'baz')
   })
@@ -485,7 +499,7 @@ describe('Controller', () => {
       controller.removeModule('foo.bar.baz', module)
     })
   })
-  it('should be able to globally add error catchers', (done) => {
+  it('should be able to globally add error catchers', done => {
     const controller = new Controller({
       state: {},
       signals: {
@@ -496,17 +510,26 @@ describe('Controller', () => {
         ]
       },
       catch: new Map([
-        [Error, [({props}) => {
-          assert.ok(props.error)
-          done()
-        }]]
+        [
+          Error,
+          [
+            ({props}) => {
+              assert.ok(props.error)
+              done()
+            }
+          ]
+        ]
       ])
     })
     controller.getSignal('test')()
   })
   it('should init the route if it is provided', () => {
     const router = () => {
-      return {init () { assert(true) }}
+      return {
+        init () {
+          assert(true)
+        }
+      }
     }
     Controller({
       router

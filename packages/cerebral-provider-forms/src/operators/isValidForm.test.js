@@ -14,14 +14,13 @@ describe('isValidForm', () => {
       providers: [FormsProvider()],
       signals: {
         isValidForm: [
-          isValidForm(state`form`), {
+          isValidForm(state`form`),
+          {
             true: [() => validCount++],
             false: [() => invalidCount++]
           }
         ],
-        changeField: [
-          set(state`form.name.value`, 'B')
-        ]
+        changeField: [set(state`form.name.value`, 'B')]
       },
       state: {
         form: {

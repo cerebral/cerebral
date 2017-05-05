@@ -9,7 +9,9 @@ function createNext (next, path) {
 export default function PathProvider () {
   return (context, functionDetails, payload, next) => {
     if (functionDetails.outputs) {
-      context.path = Object.keys(functionDetails.outputs).reduce((output, outputPath) => {
+      context.path = Object.keys(
+        functionDetails.outputs
+      ).reduce((output, outputPath) => {
         output[outputPath] = createNext(next, outputPath)
 
         return output

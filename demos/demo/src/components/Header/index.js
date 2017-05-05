@@ -19,7 +19,9 @@ export default connect(
   function Demo ({currentUser, loading, loggedIn, signOutClicked, t}) {
     const match = TaglineRe.exec(t.SiteTagLine)
     const tagline = match
-      ? <h2 className='subtitle'>{match[1]}<a href='http://cerebraljs.com'>Cerebral</a>{match[2]}</h2>
+      ? <h2 className='subtitle'>
+          {match[1]}<a href='http://cerebraljs.com'>Cerebral</a>{match[2]}
+        </h2>
       : <h2 className='subtitle'>{t.SiteTagLine}</h2>
     return (
       <section className='hero is-dark'>
@@ -34,18 +36,16 @@ export default connect(
                 </a>
               </div>
               <div className='nav-right'>
-                {currentUser && (
+                {currentUser &&
                   <div className='nav-item'>
                     {currentUser.email || t.Anonymous}
-                  </div>
-                )}
-                {currentUser && (
+                  </div>}
+                {currentUser &&
                   <div className='nav-item'>
                     <a href='#' onClick={() => signOutClicked()}>
                       {t.loginSignOut}
                     </a>
-                  </div>
-                )}
+                  </div>}
                 <div className='nav-item'>
                   {loggedIn && <LangSelector />}
                 </div>

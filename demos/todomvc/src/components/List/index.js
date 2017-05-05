@@ -5,12 +5,13 @@ import {state, signal} from 'cerebral/tags'
 import computedIsAllChecked from '../../computed/isAllChecked'
 import computedTodosUid from '../../computed/visibleTodosUids'
 
-export default connect({
-  editingUid: state`editingUid`,
-  isAllChecked: computedIsAllChecked,
-  todosUids: computedTodosUid,
-  toggleAllChanged: signal`toggleAllChanged`
-},
+export default connect(
+  {
+    editingUid: state`editingUid`,
+    isAllChecked: computedIsAllChecked,
+    todosUids: computedTodosUid,
+    toggleAllChanged: signal`toggleAllChanged`
+  },
   function List ({editingUid, isAllChecked, todosUids, toggleAllChanged}) {
     return (
       <section className='main'>
@@ -18,7 +19,8 @@ export default connect({
           className='toggle-all'
           type='checkbox'
           checked={isAllChecked}
-          onChange={() => toggleAllChanged()} />
+          onChange={() => toggleAllChanged()}
+        />
         <label htmlFor='toggle-all'>
           Mark all as complete
         </label>
@@ -26,13 +28,7 @@ export default connect({
           {todosUids.map((todoUid, index) => {
             const isEditing = todoUid === editingUid
 
-            return (
-              <Todo
-                key={todoUid}
-                uid={todoUid}
-                isEditing={isEditing}
-              />
-            )
+            return <Todo key={todoUid} uid={todoUid} isEditing={isEditing} />
           })}
         </ul>
       </section>

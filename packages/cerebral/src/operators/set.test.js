@@ -11,9 +11,7 @@ describe('operator.set', () => {
         foo: 'bar'
       },
       signals: {
-        test: [
-          set(state`foo`, 'bar2')
-        ]
+        test: [set(state`foo`, 'bar2')]
       }
     })
     controller.getSignal('test')()
@@ -53,9 +51,7 @@ describe('operator.set', () => {
         foo: 'bar'
       },
       signals: {
-        test: [
-          set(state`foo`, {bar: 'baz'})
-        ]
+        test: [set(state`foo`, {bar: 'baz'})]
       }
     })
     controller.getSignal('test')()
@@ -67,9 +63,7 @@ describe('operator.set', () => {
         foo: 'bar'
       },
       signals: {
-        test: [
-          set(state`foo`, props`value`)
-        ]
+        test: [set(state`foo`, props`value`)]
       }
     })
     controller.getSignal('test')({
@@ -84,26 +78,21 @@ describe('operator.set', () => {
         grabValue: 'bar2'
       },
       signals: {
-        test: [
-          set(state`foo`, state`grabValue`)
-        ]
+        test: [set(state`foo`, state`grabValue`)]
       }
     })
     controller.getSignal('test')()
     assert.equal(controller.getState().foo, 'bar2')
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          set(string`foo`, 'bar')
-        ]
+        test: [set(string`foo`, 'bar')]
       }
     })
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })
@@ -116,20 +105,17 @@ describe('operator.set', () => {
         foo: {}
       },
       signals: {
-        test: [
-          set(state`foo`, {}),
-          set(state`foo.${props`key`}`, 'bar')
-        ]
+        test: [set(state`foo`, {}), set(state`foo.${props`key`}`, 'bar')]
       }
     })
     controller.once('end', () => {
-      assert.deepEqual(controller.getState('foo'), {'key1': 'bar'})
+      assert.deepEqual(controller.getState('foo'), {key1: 'bar'})
     })
     controller.getSignal('test')({
       key: 'key1'
     })
     controller.once('end', () => {
-      assert.deepEqual(controller.getState('foo'), {'key2': 'bar'})
+      assert.deepEqual(controller.getState('foo'), {key2: 'bar'})
     })
     controller.getSignal('test')({
       key: 'key2'
@@ -141,10 +127,7 @@ describe('operator.set', () => {
         foo: []
       },
       signals: {
-        test: [
-          set(state`foo`, []),
-          push(state`foo`, 'bar')
-        ]
+        test: [set(state`foo`, []), push(state`foo`, 'bar')]
       }
     })
     controller.once('end', () => {

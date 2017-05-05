@@ -22,13 +22,16 @@ export default function HttpProviderFactory (passedOptions) {
         requests[url] = {
           resolve: resolve,
           reject: reject,
-          xhr: cb(function (payload) {
-            delete requests[url]
-            resolve(payload)
-          }, function (error) {
-            delete requests[url]
-            reject(error)
-          })
+          xhr: cb(
+            function (payload) {
+              delete requests[url]
+              resolve(payload)
+            },
+            function (error) {
+              delete requests[url]
+              reject(error)
+            }
+          )
         }
       })
     }
@@ -55,34 +58,44 @@ export default function HttpProviderFactory (passedOptions) {
         get (url, passedQuery, options = {}) {
           const query = passedQuery || options.query
 
-          options.url = query && Object.keys(query).length ? url + '?' + urlEncode(query) : url
+          options.url = query && Object.keys(query).length
+            ? url + '?' + urlEncode(query)
+            : url
           options.method = 'GET'
 
           return requestService(options)
         },
         post (url, body, options = {}) {
-          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.url = options.query && Object.keys(options.query).length
+            ? url + '?' + urlEncode(options.query)
+            : url
           options.method = 'POST'
           options.body = body
 
           return requestService(options)
         },
         put (url, body, options = {}) {
-          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.url = options.query && Object.keys(options.query).length
+            ? url + '?' + urlEncode(options.query)
+            : url
           options.method = 'PUT'
           options.body = body
 
           return requestService(options)
         },
         patch (url, body, options = {}) {
-          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.url = options.query && Object.keys(options.query).length
+            ? url + '?' + urlEncode(options.query)
+            : url
           options.method = 'PATCH'
           options.body = body
 
           return requestService(options)
         },
         delete (url, query, options = {}) {
-          options.url = options.query && Object.keys(options.query).length ? url + '?' + urlEncode(options.query) : url
+          options.url = options.query && Object.keys(options.query).length
+            ? url + '?' + urlEncode(options.query)
+            : url
           options.method = 'DELETE'
 
           return requestService(options)
@@ -91,10 +104,10 @@ export default function HttpProviderFactory (passedOptions) {
           moduleOptions = mergeWith(newOptions, moduleOptions)
         },
         abort (regexp) {
-          const matchingUrls = Object.keys(requests).filter((url) => {
+          const matchingUrls = Object.keys(requests).filter(url => {
             return Boolean(url.match(new RegExp(regexp)))
           })
-          matchingUrls.forEach((url) => {
+          matchingUrls.forEach(url => {
             requests[url].xhr.abort()
           })
         },

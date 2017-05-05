@@ -52,7 +52,8 @@ describe('isValidFrom', () => {
     const controller = Controller({
       signals: {
         validateForm: [
-          isValidForm('form'), {
+          isValidForm('form'),
+          {
             false: [
               function (context) {
                 assert.ok(context)
@@ -80,7 +81,8 @@ describe('isValidFrom', () => {
     const controller = Controller({
       signals: {
         validateForm: [
-          isValidForm('form'), {
+          isValidForm('form'),
+          {
             true: [
               function (context) {
                 assert.ok(context)
@@ -108,7 +110,8 @@ describe('isValidFrom', () => {
     const controller = Controller({
       signals: {
         validateForm: [
-          isValidForm('form'), {
+          isValidForm('form'),
+          {
             true: [
               function (context) {
                 assert.ok(context)
@@ -161,12 +164,12 @@ describe('isValidFrom', () => {
     assert.deepEqual(fields, {
       firstName: {
         value: 'ben',
-        validationRules: [ 'isFirstUpperCase' ],
-        validationMessages: [ 'first letter is not uppercase' ],
+        validationRules: ['isFirstUpperCase'],
+        validationMessages: ['first letter is not uppercase'],
         defaultValue: 'ben',
         isValid: false,
         errorMessage: 'first letter is not uppercase',
-        isValueRules: [ 'isValue' ],
+        isValueRules: ['isValue'],
         isRequired: false,
         requiredMessage: null,
         hasValue: true,
@@ -178,9 +181,7 @@ describe('isValidFrom', () => {
   it('should be invalid', () => {
     const controller = Controller({
       signals: {
-        validateForm: [
-          validateForm('form')
-        ]
+        validateForm: [validateForm('form')]
       },
       state: {
         form: form({

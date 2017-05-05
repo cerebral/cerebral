@@ -13,7 +13,9 @@ export class Primitive {
     }
 
     if (!Array.isArray(this.items)) {
-      throw new FunctionTreeError(`You have not passed an array of functions to ${type}`)
+      throw new FunctionTreeError(
+        `You have not passed an array of functions to ${type}`
+      )
     }
   }
   toJSON () {

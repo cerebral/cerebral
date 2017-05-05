@@ -6,10 +6,12 @@ import {isRunning} from '../helpers'
 
 export default [
   // We have a running task
-  when(props`value`, isRunning), {
+  when(props`value`, isRunning),
+  {
     true: [...updateNow],
     false: [
-      when(props`value.key`, key => key === 'running'), {
+      when(props`value.key`, key => key === 'running'),
+      {
         true: [
           // stop timer
           unset(state`tasks.$now`)

@@ -4,16 +4,18 @@ import {FirebaseProviderAuthenticationError} from './errors'
 
 export default function createUserWithEmailAndPassword (email, password) {
   return new Promise((resolve, reject) => {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
+    firebase.auth().createUserWithEmailAndPassword(email, password).then(
+      () => {
         const unsubscribe = firebase.auth().onAuthStateChanged(user => {
           unsubscribe()
           resolve({
             user: createUser(user)
           })
         })
-      }, (error) => {
+      },
+      error => {
         reject(new FirebaseProviderAuthenticationError(error))
-      })
+      }
+    )
   })
 }

@@ -22,13 +22,7 @@ function createUniqueId () {
   to be nothing or an object
 */
 function isValidResult (result) {
-  return (
-    !result ||
-    (
-      typeof result === 'object' &&
-      !Array.isArray(result)
-    )
-  )
+  return !result || (typeof result === 'object' && !Array.isArray(result))
 }
 
 /*
@@ -40,12 +34,17 @@ function createErrorObject (error, execution, functionDetails, payload) {
   errorToReturn.execution = execution
   errorToReturn.functionDetails = functionDetails
   errorToReturn.payload = Object.assign({}, payload, {
-    _execution: {id: execution.id, functionIndex: functionDetails.functionIndex},
-    error: error.toJSON ? error.toJSON() : {
-      name: error.name,
-      message: error.message,
-      stack: error.stack
-    }
+    _execution: {
+      id: execution.id,
+      functionIndex: functionDetails.functionIndex
+    },
+    error: error.toJSON
+      ? error.toJSON()
+      : {
+          name: error.name,
+          message: error.message,
+          stack: error.stack
+        }
   })
 
   return errorToReturn
@@ -55,7 +54,11 @@ function createErrorObject (error, execution, functionDetails, payload) {
   If it walks like a duck and quacks like a duck...
 */
 function isPromise (result) {
-  return result && typeof result.then === 'function' && typeof result.catch === 'function'
+  return (
+    result &&
+    typeof result.then === 'function' &&
+    typeof result.catch === 'function'
+  )
 }
 
 class FunctionTreeExecution {
@@ -93,7 +96,12 @@ class FunctionTreeExecution {
     } catch (error) {
       this.hasThrown = true
 
-      return errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
+      return errorCallback(
+        createErrorObject(error, execution, funcDetails, payload),
+        execution,
+        funcDetails,
+        payload
+      )
     }
 
     /*
@@ -101,67 +109,203 @@ class FunctionTreeExecution {
       move on
     */
     if (isPromise(result)) {
-      functionTree.emit('asyncFunction', execution, funcDetails, payload, result)
+      functionTree.emit(
+        'asyncFunction',
+        execution,
+        funcDetails,
+        payload,
+        result
+      )
       result
         .then(function (result) {
           if (result instanceof Path) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
+            functionTree.emit(
+              'functionEnd',
+              execution,
+              funcDetails,
+              payload,
+              result
+            )
             next(result.toJS())
           } else if (funcDetails.outputs) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
-            throw new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path of either ' + Object.keys(funcDetails.outputs)))
+            functionTree.emit(
+              'functionEnd',
+              execution,
+              funcDetails,
+              payload,
+              result
+            )
+            throw new FunctionTreeExecutionError(
+              execution,
+              funcDetails,
+              payload,
+              new Error(
+                'The result ' +
+                  JSON.stringify(result) +
+                  ' from function ' +
+                  funcDetails.name +
+                  ' needs to be a path of either ' +
+                  Object.keys(funcDetails.outputs)
+              )
+            )
           } else if (isValidResult(result)) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
+            functionTree.emit(
+              'functionEnd',
+              execution,
+              funcDetails,
+              payload,
+              result
+            )
             next({
               payload: result
             })
           } else {
-            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
-            throw new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result'))
+            functionTree.emit(
+              'functionEnd',
+              execution,
+              funcDetails,
+              payload,
+              result
+            )
+            throw new FunctionTreeExecutionError(
+              execution,
+              funcDetails,
+              payload,
+              new Error(
+                'The result ' +
+                  JSON.stringify(result) +
+                  ' from function ' +
+                  funcDetails.name +
+                  ' is not a valid result'
+              )
+            )
           }
         })
         .catch(function (result) {
           if (result instanceof Error) {
             execution.hasThrown = true
-            errorCallback(createErrorObject(result, execution, funcDetails, payload), execution, funcDetails, payload)
+            errorCallback(
+              createErrorObject(result, execution, funcDetails, payload),
+              execution,
+              funcDetails,
+              payload
+            )
           } else if (result instanceof Path) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
+            functionTree.emit(
+              'functionEnd',
+              execution,
+              funcDetails,
+              payload,
+              result
+            )
             next(result.toJS())
           } else if (funcDetails.outputs) {
-            let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path of either ' + Object.keys(funcDetails.outputs)))
+            let error = new FunctionTreeExecutionError(
+              execution,
+              funcDetails,
+              payload,
+              new Error(
+                'The result ' +
+                  JSON.stringify(result) +
+                  ' from function ' +
+                  funcDetails.name +
+                  ' needs to be a path of either ' +
+                  Object.keys(funcDetails.outputs)
+              )
+            )
 
             execution.hasThrown = true
-            errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
+            errorCallback(
+              createErrorObject(error, execution, funcDetails, payload),
+              execution,
+              funcDetails,
+              payload
+            )
           } else if (isValidResult(result)) {
-            functionTree.emit('functionEnd', execution, funcDetails, payload, result)
+            functionTree.emit(
+              'functionEnd',
+              execution,
+              funcDetails,
+              payload,
+              result
+            )
             next({
               payload: result
             })
           } else {
-            let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result'))
+            let error = new FunctionTreeExecutionError(
+              execution,
+              funcDetails,
+              payload,
+              new Error(
+                'The result ' +
+                  JSON.stringify(result) +
+                  ' from function ' +
+                  funcDetails.name +
+                  ' is not a valid result'
+              )
+            )
             execution.hasThrown = true
 
-            errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
+            errorCallback(
+              createErrorObject(error, execution, funcDetails, payload),
+              execution,
+              funcDetails,
+              payload
+            )
           }
         })
     } else if (result instanceof Path) {
       functionTree.emit('functionEnd', execution, funcDetails, payload, result)
       next(result.toJS())
     } else if (funcDetails.outputs) {
-      let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' needs to be a path of either ' + Object.keys(funcDetails.outputs)))
+      let error = new FunctionTreeExecutionError(
+        execution,
+        funcDetails,
+        payload,
+        new Error(
+          'The result ' +
+            JSON.stringify(result) +
+            ' from function ' +
+            funcDetails.name +
+            ' needs to be a path of either ' +
+            Object.keys(funcDetails.outputs)
+        )
+      )
 
       this.hasThrown = true
-      errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
+      errorCallback(
+        createErrorObject(error, execution, funcDetails, payload),
+        execution,
+        funcDetails,
+        payload
+      )
     } else if (isValidResult(result)) {
       functionTree.emit('functionEnd', execution, funcDetails, payload, result)
       next({
         payload: result
       })
     } else {
-      let error = new FunctionTreeExecutionError(execution, funcDetails, payload, new Error('The result ' + JSON.stringify(result) + ' from function ' + funcDetails.name + ' is not a valid result'))
+      let error = new FunctionTreeExecutionError(
+        execution,
+        funcDetails,
+        payload,
+        new Error(
+          'The result ' +
+            JSON.stringify(result) +
+            ' from function ' +
+            funcDetails.name +
+            ' is not a valid result'
+        )
+      )
       this.hasThrown = true
 
-      errorCallback(createErrorObject(error, execution, funcDetails, payload), execution, funcDetails, payload)
+      errorCallback(
+        createErrorObject(error, execution, funcDetails, payload),
+        execution,
+        funcDetails,
+        payload
+      )
     }
   }
 
@@ -169,23 +313,26 @@ class FunctionTreeExecution {
     Creates the context for the next running function
   */
   createContext (funcDetails, payload, prevPayload) {
-    return [
-      ExecutionProvider(this),
-      PropsProvider(),
-      PathProvider()
-    ].concat(this.functionTree.contextProviders).reduce(function (currentContext, contextProvider) {
-      var newContext = (
-        typeof contextProvider === 'function'
+    return [ExecutionProvider(this), PropsProvider(), PathProvider()]
+      .concat(this.functionTree.contextProviders)
+      .reduce(function (currentContext, contextProvider) {
+        var newContext = typeof contextProvider === 'function'
           ? contextProvider(currentContext, funcDetails, payload, prevPayload)
-          : ContextProvider(contextProvider)(currentContext, funcDetails, payload, prevPayload)
-      )
+          : ContextProvider(contextProvider)(
+              currentContext,
+              funcDetails,
+              payload,
+              prevPayload
+            )
 
-      if (newContext !== currentContext) {
-        throw new FunctionTreeError('A provider is not returning the context object, maybe it is a function factory and you forgot to call it?')
-      }
+        if (newContext !== currentContext) {
+          throw new FunctionTreeError(
+            'A provider is not returning the context object, maybe it is a function factory and you forgot to call it?'
+          )
+        }
 
-      return newContext
-    }, {})
+        return newContext
+      }, {})
   }
 }
 
@@ -216,7 +363,7 @@ export class FunctionTree extends EventEmitter {
     let cb
     let staticTree
     const args = [].slice.call(arguments)
-    args.forEach((arg) => {
+    args.forEach(arg => {
       if (typeof arg === 'string') {
         name = arg
       } else if (Array.isArray(arg) || arg instanceof Primitive) {
@@ -243,10 +390,15 @@ export class FunctionTree extends EventEmitter {
       } else {
         staticTree = this.cachedStaticTrees[treeIdx]
       }
-      const execution = new FunctionTreeExecution(name, staticTree, this, (error, execution, funcDetails, finalPayload) => {
-        this.emit('error', error, execution, funcDetails, finalPayload)
-        reject(error)
-      })
+      const execution = new FunctionTreeExecution(
+        name,
+        staticTree,
+        this,
+        (error, execution, funcDetails, finalPayload) => {
+          this.emit('error', error, execution, funcDetails, finalPayload)
+          reject(error)
+        }
+      )
 
       this.emit('start', execution, payload)
       executeTree(
@@ -255,21 +407,33 @@ export class FunctionTree extends EventEmitter {
         (funcDetails, path, currentPayload) => {
           this.emit('pathStart', path, execution, funcDetails, currentPayload)
         },
-        (currentPayload) => {
+        currentPayload => {
           this.emit('pathEnd', execution, currentPayload)
         },
         (currentPayload, functionsToResolve) => {
-          this.emit('parallelStart', execution, currentPayload, functionsToResolve)
+          this.emit(
+            'parallelStart',
+            execution,
+            currentPayload,
+            functionsToResolve
+          )
         },
         (currentPayload, functionsResolved) => {
-          this.emit('parallelProgress', execution, currentPayload, functionsResolved)
+          this.emit(
+            'parallelProgress',
+            execution,
+            currentPayload,
+            functionsResolved
+          )
         },
         (currentPayload, functionsResolved) => {
           this.emit('parallelEnd', execution, currentPayload, functionsResolved)
         },
-        (finalPayload) => {
+        finalPayload => {
           this.emit('end', execution, finalPayload)
-          resolve === reject ? resolve(null, finalPayload) : resolve(finalPayload)
+          resolve === reject
+            ? resolve(null, finalPayload)
+            : resolve(finalPayload)
         }
       )
     }

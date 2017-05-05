@@ -1,10 +1,9 @@
 import signOut from '../actions/signOut'
 
 const signOutFirebase = [
-  signOut, {
-    success: [
-      () => window.location.reload(true)
-    ],
+  signOut,
+  {
+    success: [() => window.location.reload(true)],
     error: []
   }
 ]

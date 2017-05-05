@@ -31,20 +31,27 @@ describe('Recorder', () => {
         record: [({recorder}) => recorder.record()],
         update: [({state}) => state.set('foo', 'bar2')],
         stop: [({recorder}) => recorder.stop()],
-        verify: [({recorder}) => {
-          const recording = recorder.getRecording()
-          assert.ok(recording.end)
-          assert.ok(recording.start)
-          assert.deepEqual(recording.initialState[0].path, [])
-          assert.equal(recording.initialState[0].value, JSON.stringify({
-            foo: 'bar'
-          }))
-          assert.equal(recording.events.length, 3)
-        }]
+        verify: [
+          ({recorder}) => {
+            const recording = recorder.getRecording()
+            assert.ok(recording.end)
+            assert.ok(recording.start)
+            assert.deepEqual(recording.initialState[0].path, [])
+            assert.equal(
+              recording.initialState[0].value,
+              JSON.stringify({
+                foo: 'bar'
+              })
+            )
+            assert.equal(recording.events.length, 3)
+          }
+        ]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     controller.getSignal('record')()
     controller.getSignal('update')()
@@ -59,33 +66,41 @@ describe('Recorder', () => {
       start: now,
       end: now + 20,
       duration: 20,
-      initialState: [{
-        path: [],
-        value: JSON.stringify({foo: 'bar2'})
-      }],
-      events: [{
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar3']),
-        timestamp: now + 10
-      }]
+      initialState: [
+        {
+          path: [],
+          value: JSON.stringify({foo: 'bar2'})
+        }
+      ],
+      events: [
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar3']),
+          timestamp: now + 10
+        }
+      ]
     }
     const controller = new Controller({
       state: {
         foo: 'bar'
       },
       signals: {
-        play: [({recorder}) => {
-          recorder.loadRecording(recording)
-          recorder.play({
-            allowedSignals: ['stop']
-          })
-        }],
+        play: [
+          ({recorder}) => {
+            recorder.loadRecording(recording)
+            recorder.play({
+              allowedSignals: ['stop']
+            })
+          }
+        ],
         stop: [({recorder}) => recorder.stop()]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     controller.getSignal('play')()
     assert.deepEqual(controller.getState(), {
@@ -105,18 +120,26 @@ describe('Recorder', () => {
         foo: 'bar'
       },
       signals: {
-        record: [({recorder}) => recorder.record({
-          initialState: ['foo']
-        })],
+        record: [
+          ({recorder}) =>
+            recorder.record({
+              initialState: ['foo']
+            })
+        ],
         update: [({state}) => state.set('foo', 'bar2')],
         stop: [({recorder}) => recorder.stop()],
-        play: [({recorder}) => recorder.play({
-          allowedSignals: ['stop']
-        })]
+        play: [
+          ({recorder}) =>
+            recorder.play({
+              allowedSignals: ['stop']
+            })
+        ]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     controller.getSignal('record')()
     controller.getSignal('update')()
@@ -134,19 +157,27 @@ describe('Recorder', () => {
         foo: 'bar'
       },
       signals: {
-        record: [({recorder}) => recorder.record({
-          initialState: ['foo']
-        })],
+        record: [
+          ({recorder}) =>
+            recorder.record({
+              initialState: ['foo']
+            })
+        ],
         update: [({state}) => state.set('foo', 'bar2')],
         update2: [({state}) => state.set('foo', 'bar3')],
         stop: [({recorder}) => recorder.stop()],
-        play: [({recorder}) => recorder.play({
-          allowedSignals: ['stop']
-        })]
+        play: [
+          ({recorder}) =>
+            recorder.play({
+              allowedSignals: ['stop']
+            })
+        ]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     controller.getSignal('record')()
     controller.getSignal('update')()
@@ -158,7 +189,7 @@ describe('Recorder', () => {
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
     controller.getSignal('stop')()
   })
-  it('should emit flush event when playing back, on subsequente changes and as last event', (done) => {
+  it('should emit flush event when playing back, on subsequente changes and as last event', done => {
     const timeout = timeoutMock()
     const RecorderProvider = require('./Recorder').default
     const controller = new Controller({
@@ -166,35 +197,47 @@ describe('Recorder', () => {
         foo: 'bar'
       },
       signals: {
-        record: [({recorder}) => recorder.record({
-          initialState: ['foo']
-        })],
+        record: [
+          ({recorder}) =>
+            recorder.record({
+              initialState: ['foo']
+            })
+        ],
         update: [({state}) => state.set('foo', 'bar2')],
         stop: [({recorder}) => recorder.stop()],
-        play: [({recorder}) => recorder.play({
-          allowedSignals: ['stop']
-        })]
+        play: [
+          ({recorder}) =>
+            recorder.play({
+              allowedSignals: ['stop']
+            })
+        ]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     controller.getSignal('record')()
     controller.getSignal('update')()
     controller.getSignal('stop')()
-    controller.once('flush', (changes) => {
-      assert.deepEqual(changes, [{
-        path: ['foo'],
-        forceChildPathUpdates: true
-      }])
+    controller.once('flush', changes => {
+      assert.deepEqual(changes, [
+        {
+          path: ['foo'],
+          forceChildPathUpdates: true
+        }
+      ])
     })
     controller.getSignal('play')()
     timeout.tick()
-    controller.once('flush', (changes) => {
-      assert.deepEqual(changes, [{
-        path: ['foo'],
-        forceChildPathUpdates: true
-      }])
+    controller.once('flush', changes => {
+      assert.deepEqual(changes, [
+        {
+          path: ['foo'],
+          forceChildPathUpdates: true
+        }
+      ])
       controller.getSignal('stop')()
       done()
     })
@@ -208,40 +251,48 @@ describe('Recorder', () => {
       end: now + 25,
       duration: 25,
       initialState: [{path: [], value: JSON.stringify({foo: 'bar'})}],
-      events: [{
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar2']),
-        timestamp: now + 10
-      }, {
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar3']),
-        timestamp: now + 20
-      }, {
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar4']),
-        timestamp: now + 25
-      }]
+      events: [
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar2']),
+          timestamp: now + 10
+        },
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar3']),
+          timestamp: now + 20
+        },
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar4']),
+          timestamp: now + 25
+        }
+      ]
     }
     const controller = new Controller({
       state: {
         foo: 'bar'
       },
       signals: {
-        play: [({recorder}) => {
-          recorder.loadRecording(recording)
-          recorder.play({
-            allowedSignals: ['stop', 'pause']
-          })
-        }],
+        play: [
+          ({recorder}) => {
+            recorder.loadRecording(recording)
+            recorder.play({
+              allowedSignals: ['stop', 'pause']
+            })
+          }
+        ],
         pause: [({recorder}) => recorder.pause()],
         stop: [({recorder}) => recorder.stop()]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     controller.getSignal('play')()
     assert.equal(timeout.tick(), 10)
@@ -268,31 +319,37 @@ describe('Recorder', () => {
       end: now + 25,
       duration: 25,
       initialState: [{path: [], value: JSON.stringify({foo: 'bar'})}],
-      events: [{
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar2']),
-        timestamp: now + 10
-      }, {
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar3']),
-        timestamp: now + 20
-      }, {
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar4']),
-        timestamp: now + 25
-      }]
+      events: [
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar2']),
+          timestamp: now + 10
+        },
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar3']),
+          timestamp: now + 20
+        },
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar4']),
+          timestamp: now + 25
+        }
+      ]
     }
     const controller = new Controller({
       state: {
         foo: 'bar'
       },
       signals: {
-        load: [({recorder}) => {
-          recorder.loadRecording(recording)
-        }],
+        load: [
+          ({recorder}) => {
+            recorder.loadRecording(recording)
+          }
+        ],
         seek: [({recorder}) => recorder.seek(21)],
         stop: [({recorder}) => recorder.stop()]
       },
@@ -313,19 +370,27 @@ describe('Recorder', () => {
         foo: 'bar'
       },
       signals: {
-        record: [({recorder}) => recorder.record({
-          initialState: ['foo']
-        })],
+        record: [
+          ({recorder}) =>
+            recorder.record({
+              initialState: ['foo']
+            })
+        ],
         update: [({state}) => state.set('foo', 'bar2')],
         update2: [({state}) => state.set('foo', 'bar3')],
         stop: [({recorder}) => recorder.stop()],
-        play: [({recorder}) => recorder.play({
-          allowedSignals: ['stop']
-        })]
+        play: [
+          ({recorder}) =>
+            recorder.play({
+              allowedSignals: ['stop']
+            })
+        ]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     let eventsCount = 0
     controller.on('recorder:record', () => {
@@ -356,22 +421,30 @@ describe('Recorder', () => {
         foo: 'bar'
       },
       signals: {
-        record: [({recorder}) => recorder.record({
-          initialState: ['foo']
-        })],
+        record: [
+          ({recorder}) =>
+            recorder.record({
+              initialState: ['foo']
+            })
+        ],
         update: [({state}) => state.set('foo', 'bar2')],
         update2: [({state}) => state.set('foo', 'bar3')],
         stop: [({recorder}) => recorder.stop()],
-        play: [({recorder}) => recorder.play({
-          allowedSignals: ['stop']
-        })]
+        play: [
+          ({recorder}) =>
+            recorder.play({
+              allowedSignals: ['stop']
+            })
+        ]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     let eventsCount = 0
-    controller.on('test', (data) => {
+    controller.on('test', data => {
       assert.equal(data, 'foo')
       eventsCount++
     })
@@ -394,34 +467,42 @@ describe('Recorder', () => {
       start: now,
       end: now + 20,
       duration: 20,
-      initialState: [{
-        path: [],
-        value: JSON.stringify({foo: 'bar2'})
-      }],
-      events: [{
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar3']),
-        timestamp: now + 10
-      }]
+      initialState: [
+        {
+          path: [],
+          value: JSON.stringify({foo: 'bar2'})
+        }
+      ],
+      events: [
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar3']),
+          timestamp: now + 10
+        }
+      ]
     }
     const controller = new Controller({
-      devtools: { init () {}, send () {}, sendExecutionData () {} },
+      devtools: {init () {}, send () {}, sendExecutionData () {}},
       state: {
         foo: 'bar'
       },
       signals: {
-        play: [({recorder}) => {
-          recorder.loadRecording(recording)
-          recorder.play({
-            allowedSignals: ['stop']
-          })
-        }],
+        play: [
+          ({recorder}) => {
+            recorder.loadRecording(recording)
+            recorder.play({
+              allowedSignals: ['stop']
+            })
+          }
+        ],
         stop: [({recorder}) => recorder.stop()]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
     controller.getSignal('play')()
     assert.deepEqual(controller.getState(), {
@@ -441,31 +522,39 @@ describe('Recorder', () => {
       start: now,
       end: now + 20,
       duration: 20,
-      initialState: [{
-        path: [],
-        value: JSON.stringify({foo: 'bar2'})
-      }],
-      events: [{
-        type: 'mutation',
-        method: 'set',
-        args: JSON.stringify(['foo', 'bar3']),
-        timestamp: now + 5
-      }]
+      initialState: [
+        {
+          path: [],
+          value: JSON.stringify({foo: 'bar2'})
+        }
+      ],
+      events: [
+        {
+          type: 'mutation',
+          method: 'set',
+          args: JSON.stringify(['foo', 'bar3']),
+          timestamp: now + 5
+        }
+      ]
     }
     const controller = new Controller({
       state: {
         foo: 'bar'
       },
       signals: {
-        play: [({recorder}) => {
-          recorder.loadRecording(recording)
-          recorder.play()
-          recorder.play()
-        }]
+        play: [
+          ({recorder}) => {
+            recorder.loadRecording(recording)
+            recorder.play()
+            recorder.play()
+          }
+        ]
       },
-      providers: [RecorderProvider({
-        setTimeout: timeout
-      })]
+      providers: [
+        RecorderProvider({
+          setTimeout: timeout
+        })
+      ]
     })
 
     assert.throws(() => {

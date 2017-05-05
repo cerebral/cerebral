@@ -22,11 +22,15 @@ export default function validateFormFactory (formPath) {
       })
     }
     if (typeof formPath === 'string') {
-      console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into validateForm factory')
+      console.warn(
+        'DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into validateForm factory'
+      )
       validate(formPath.split('.'), state.get(formPath))
     } else {
       if (!resolve.isTag(formPath, 'state')) {
-        throw new Error('Cerebral Forms - validateField factory requires a STATE TAG')
+        throw new Error(
+          'Cerebral Forms - validateField factory requires a STATE TAG'
+        )
       }
 
       validate(resolve.path(formPath).split('.'), resolve.value(formPath))

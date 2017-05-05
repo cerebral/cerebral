@@ -17,7 +17,7 @@ try {
 export default function Router (options = {}) {
   options.mapper = options.mapper || urlMapper({query: options.query})
 
-  return (controller) => {
+  return controller => {
     if (!options.mapper || typeof options.mapper.map !== 'function') {
       throw new Error('Cerebral router - mapper option must be provided.')
     }
@@ -50,7 +50,10 @@ export default function Router (options = {}) {
 
       // check if url should be routed
       if (url.indexOf(options.baseUrl) === 0) {
-        const map = options.mapper.map(url.replace(options.baseUrl, ''), routesConfig)
+        const map = options.mapper.map(
+          url.replace(options.baseUrl, ''),
+          routesConfig
+        )
 
         if (map) {
           event && event.preventDefault()
@@ -61,7 +64,9 @@ export default function Router (options = {}) {
           if (options.allowEscape) return
 
           event && event.preventDefault()
-          console.warn(`Cerebral router - No route matched ${url}, navigation was prevented. Please verify url or catch unmatched routes with a "/*" route.`) // eslint-disable-line no-console
+          console.warn(
+            `Cerebral router - No route matched ${url}, navigation was prevented. Please verify url or catch unmatched routes with a "/*" route.`
+          ) // eslint-disable-line no-console
         }
       }
     }
@@ -72,7 +77,8 @@ export default function Router (options = {}) {
         const route = signal.route
         const props = payload
 
-        addressbar.value = options.baseUrl + options.mapper.stringify(route, props)
+        addressbar.value =
+          options.baseUrl + options.mapper.stringify(route, props)
       }
     }
 
@@ -91,10 +97,14 @@ export default function Router (options = {}) {
         return addressbar.value.replace(addressbar.origin + options.baseUrl, '')
       },
       getUrlBase () {
-        return addressbar.value.replace(addressbar.origin + options.baseUrl, '').split('?')[0]
+        return addressbar.value
+          .replace(addressbar.origin + options.baseUrl, '')
+          .split('?')[0]
       },
       getUrlQuery () {
-        return addressbar.value.replace(addressbar.origin + options.baseUrl, '').split('?')[1]
+        return addressbar.value
+          .replace(addressbar.origin + options.baseUrl, '')
+          .split('?')[1]
       },
       goTo (url) {
         addressbar.value = options.baseUrl + url
@@ -114,7 +124,9 @@ export default function Router (options = {}) {
         if (signal) {
           signal.signal(payload)
         } else {
-          console.warn(`Cerebral router - signal ${signalName} is not bound to route. Redirect wouldn't happen.`) // eslint-disable-line no-console
+          console.warn(
+            `Cerebral router - signal ${signalName} is not bound to route. Redirect wouldn't happen.`
+          ) // eslint-disable-line no-console
         }
       }
     }

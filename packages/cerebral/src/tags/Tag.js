@@ -41,9 +41,13 @@ export default class Tag {
     if (this.options.hasValue) {
       const getter = getters[this.type]
       if (!getter) {
-        throwError(`Tag of type ${this.type.toUpperCase()} can not be used in this context`)
+        throwError(
+          `Tag of type ${this.type.toUpperCase()} can not be used in this context`
+        )
       }
-      return typeof getter === 'function' ? getter(this.getPath(getters)) : this.extractValueWithPath(getter, this.getPath(getters))
+      return typeof getter === 'function'
+        ? getter(this.getPath(getters))
+        : this.extractValueWithPath(getter, this.getPath(getters))
     } else {
       return this.getPath(getters)
     }
@@ -68,7 +72,9 @@ export default class Tag {
   extractValueWithPath (obj, path) {
     return path.split('.').reduce((currentValue, key, index) => {
       if (index > 0 && currentValue === undefined) {
-        throwError(`A tag is extracting with path "${path}", but it is not valid`)
+        throwError(
+          `A tag is extracting with path "${path}", but it is not valid`
+        )
       }
 
       return currentValue[key]

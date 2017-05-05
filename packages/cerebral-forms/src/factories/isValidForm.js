@@ -3,7 +3,9 @@ import isValidFormHelper from '../helpers/isValidForm'
 function isValidFormFactory (formPath) {
   function isValidForm ({state, path, resolve}) {
     if (typeof formPath === 'string') {
-      console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into isValidForm factory')
+      console.warn(
+        'DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into isValidForm factory'
+      )
 
       const form = state.get(formPath)
 
@@ -14,7 +16,9 @@ function isValidFormFactory (formPath) {
       return path.false()
     } else {
       if (!resolve.isTag(formPath, 'state')) {
-        throw new Error('Cerebral Forms - isValidForm factory requires a STATE TAG')
+        throw new Error(
+          'Cerebral Forms - isValidForm factory requires a STATE TAG'
+        )
       }
 
       const form = resolve.value(formPath)

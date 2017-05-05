@@ -5,7 +5,7 @@ import assert from 'assert'
 describe('Tags', () => {
   it('should return value using function and path', () => {
     const tag = state`foo.bar`
-    const stateFunc = (path) => {
+    const stateFunc = path => {
       assert.equal(path, 'foo.bar')
       return 'baz'
     }
@@ -92,6 +92,6 @@ describe('Tags', () => {
   })
   it('should have string representation', () => {
     const tag = state`foo.${state`bar`}`
-    assert.equal(tag.toString(), 'state`foo.${state`bar`}`')// eslint-disable-line
+    assert.equal(tag.toString(), 'state`foo.${state`bar`}`') // eslint-disable-line
   })
 })

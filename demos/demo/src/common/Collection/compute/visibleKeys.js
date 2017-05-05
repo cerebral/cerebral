@@ -12,9 +12,9 @@ export default function (moduleName) {
     state`${draftPath}.key`,
     (items, afilter, selectedKey) => {
       const filter = afilter && afilter.toLowerCase()
-      const list = Object.keys(items).filter(key => (
-        !filter || items[key].name.toLowerCase().indexOf(filter) >= 0
-      ))
+      const list = Object.keys(items).filter(
+        key => !filter || items[key].name.toLowerCase().indexOf(filter) >= 0
+      )
 
       if (selectedKey && list.indexOf(selectedKey) < 0) {
         // Always show edited item (also if it is not saved yet)

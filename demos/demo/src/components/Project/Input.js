@@ -14,12 +14,26 @@ export default connect(
     valueChanged: signal`projects.formValueChanged`,
     t: translations
   },
-  function Input ({autoFocus, enterPressed, escPressed, field, placeholderKey, value, valueChanged, t}) {
+  function Input ({
+    autoFocus,
+    enterPressed,
+    escPressed,
+    field,
+    placeholderKey,
+    value,
+    valueChanged,
+    t
+  }) {
     const onKeyDown = e => {
       switch (e.key) {
-        case 'Enter': enterPressed(); break
-        case 'Escape': escPressed(); break
-        default: break // noop
+        case 'Enter':
+          enterPressed()
+          break
+        case 'Escape':
+          escPressed()
+          break
+        default:
+          break // noop
       }
     }
 
@@ -28,14 +42,16 @@ export default connect(
     }
 
     return (
-      <input className='input' type='text'
+      <input
+        className='input'
+        type='text'
         autoFocus={autoFocus}
         placeholder={t[placeholderKey]}
         onKeyDown={onKeyDown}
         onChange={onChange}
         value={value || ''}
         name={field}
-        />
+      />
     )
   }
 )

@@ -3,7 +3,10 @@ import {ensurePath, noop} from '../utils'
 export default (View, PropTypes) => {
   class StateContainer extends View.Component {
     getChildContext () {
-      const controller = createDummyController(this.props.state, this.props.signals)
+      const controller = createDummyController(
+        this.props.state,
+        this.props.signals
+      )
       return {
         cerebral: {
           controller: controller,
@@ -38,7 +41,7 @@ export default (View, PropTypes) => {
   state and mocks any signals when connecting the component.
 */
 function createDummyController (state = {}, signals = {}) {
-  const getState = (path) => {
+  const getState = path => {
     return ensurePath(path).reduce((currentState, pathKey) => {
       return currentState ? currentState[pathKey] : undefined
     }, state)

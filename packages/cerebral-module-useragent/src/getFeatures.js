@@ -7,17 +7,15 @@ export default function getFeatures (options) {
   let featureMap = {}
 
   Object.keys(uaFeatures)
-  .filter(isTestResult)
-  .filter(isEnabled)
-  .reduce((result, featureName) => {
-    result[featureName] = uaFeatures[featureName]
-    return result
-  }, featureMap)
+    .filter(isTestResult)
+    .filter(isEnabled)
+    .reduce((result, featureName) => {
+      result[featureName] = uaFeatures[featureName]
+      return result
+    }, featureMap)
 
   if (feature === Object(feature)) {
-    Object.keys(feature)
-    .filter(isCustomTest)
-    .reduce((result, featureName) => {
+    Object.keys(feature).filter(isCustomTest).reduce((result, featureName) => {
       result[featureName] = feature[featureName].call()
       return result
     }, featureMap)

@@ -22,11 +22,10 @@ const createFirebaseUser = [
       }),
       set(props`value.email`, props`user.email`),
       ...dynamicPaths,
-      firebase.set(props`remoteCollectionPath`, props`value`), {
+      firebase.set(props`remoteCollectionPath`, props`value`),
+      {
         success: [],
-        error: [
-          set(state`${signInPath}.error`, props`error`)
-        ]
+        error: [set(state`${signInPath}.error`, props`error`)]
       },
       ...firebaseInit
     ],

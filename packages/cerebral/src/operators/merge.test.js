@@ -13,16 +13,16 @@ describe('operator.merge', () => {
         }
       },
       signals: {
-        test: [
-          merge(state`users`, {largo: 'Largo Winch'})
-        ]
+        test: [merge(state`users`, {largo: 'Largo Winch'})]
       }
     })
     controller.getSignal('test')()
-    assert.deepEqual(controller.getState(), {users: {
-      john: 'John Difool',
-      largo: 'Largo Winch'
-    }})
+    assert.deepEqual(controller.getState(), {
+      users: {
+        john: 'John Difool',
+        largo: 'Largo Winch'
+      }
+    })
   })
   it('should merge value from props in model', () => {
     const controller = Controller({
@@ -32,30 +32,27 @@ describe('operator.merge', () => {
         }
       },
       signals: {
-        test: [
-          merge(state`users`, props`value`)
-        ]
+        test: [merge(state`users`, props`value`)]
       }
     })
     controller.getSignal('test')({value: {largo: 'Largo Winch'}})
-    assert.deepEqual(controller.getState(), {users: {
-      john: 'John Difool',
-      largo: 'Largo Winch'
-    }})
+    assert.deepEqual(controller.getState(), {
+      users: {
+        john: 'John Difool',
+        largo: 'Largo Winch'
+      }
+    })
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          merge(props`users`, {joe: 'Joe'})
-        ]
+        test: [merge(props`users`, {joe: 'Joe'})]
       }
     })
 
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })
@@ -64,12 +61,9 @@ describe('operator.merge', () => {
   })
   it('should create object if no value', () => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          merge(state`users`, {joe: 'Joe'})
-        ]
+        test: [merge(state`users`, {joe: 'Joe'})]
       }
     })
     controller.getSignal('test')()
@@ -77,8 +71,7 @@ describe('operator.merge', () => {
   })
   it('should merge multiple objects', () => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
         test: [
           merge(state`users`, {joe: 'Joe'}, props`extend`, {

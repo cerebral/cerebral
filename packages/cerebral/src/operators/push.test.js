@@ -11,9 +11,7 @@ describe('operator.push', () => {
         list: ['a', 'b']
       },
       signals: {
-        test: [
-          push(state`list`, 'c')
-        ]
+        test: [push(state`list`, 'c')]
       }
     })
     controller.getSignal('test')()
@@ -25,27 +23,22 @@ describe('operator.push', () => {
         list: ['a', 'b']
       },
       signals: {
-        test: [
-          push(state`list`, props`value`)
-        ]
+        test: [push(state`list`, props`value`)]
       }
     })
     controller.getSignal('test')({value: 'c'})
     assert.deepEqual(controller.getState(), {list: ['a', 'b', 'c']})
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          push(props`list`, 'bar')
-        ]
+        test: [push(props`list`, 'bar')]
       }
     })
 
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })

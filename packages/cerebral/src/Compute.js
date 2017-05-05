@@ -9,37 +9,45 @@ export class Compute {
     const computeGet = function (tag) {
       return tag.getValue(get)
     }
-    const result = this.args.reduce((details, arg, index) => {
-      if (arg instanceof Compute) {
-        details.results.push(arg.getValue(get))
-
-        return details
-      } else if (arg instanceof Tag) {
-        const path = arg.getPath(get)
-
-        if (path.indexOf('.*') > 0) {
-          const value = arg.getValue(get)
-
-          details.results.push(value ? Object.keys(value) : [])
-        } else {
+    const result = this.args.reduce(
+      (details, arg, index) => {
+        if (arg instanceof Compute) {
           details.results.push(arg.getValue(get))
+
+          return details
+        } else if (arg instanceof Tag) {
+          const path = arg.getPath(get)
+
+          if (path.indexOf('.*') > 0) {
+            const value = arg.getValue(get)
+
+            details.results.push(value ? Object.keys(value) : [])
+          } else {
+            details.results.push(arg.getValue(get))
+          }
+
+          return details
+        } else if (typeof arg === 'function') {
+          details.results.push(
+            arg(
+              ...details.results.slice(details.previousFuncIndex, index),
+              computeGet
+            )
+          )
+          details.previousFuncIndex = index
+
+          return details
         }
 
-        return details
-      } else if (typeof arg === 'function') {
-        details.results.push(arg(...details.results.slice(details.previousFuncIndex, index), computeGet))
-        details.previousFuncIndex = index
+        details.results.push(arg)
 
         return details
+      },
+      {
+        results: [],
+        previousFuncIndex: 0
       }
-
-      details.results.push(arg)
-
-      return details
-    }, {
-      results: [],
-      previousFuncIndex: 0
-    })
+    )
 
     return result.results[result.results.length - 1]
   }

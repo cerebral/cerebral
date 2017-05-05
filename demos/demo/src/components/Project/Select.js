@@ -13,20 +13,31 @@ export default connect(
     valueChanged: signal`projects.formValueChanged`,
     t: translations
   },
-  function Input ({autoFocus, clients, field, placeholder, value, valueChanged, t}) {
+  function Input ({
+    autoFocus,
+    clients,
+    field,
+    placeholder,
+    value,
+    valueChanged,
+    t
+  }) {
     const onChange = e => {
       valueChanged({key: field, value: e.target.value})
     }
 
-    const clientsList = Object.keys(clients).map(ref => clients[ref]).sort((a, b) => a <= b ? -1 : 1)
+    const clientsList = Object.keys(clients)
+      .map(ref => clients[ref])
+      .sort((a, b) => (a <= b ? -1 : 1))
 
     return (
-      <select className='select'
+      <select
+        className='select'
         placeholder={t[placeholder]}
         onChange={onChange}
         value={value || ''}
         name={field}
-        >
+      >
         {clientsList.map(c => (
           <option key={c.key} value={c.key}>
             {c.name}

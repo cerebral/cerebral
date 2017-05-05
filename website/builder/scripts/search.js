@@ -1,25 +1,35 @@
-(function () {
+;(function () {
   let text
   let isLoadingText = false
   let searchTimeout = null
 
   function search (value) {
-    const results = Object.keys(text).reduce(function (sectionResults, sectionKey) {
-      return sectionResults.concat(Object.keys(text[sectionKey]).reduce(function (subSectionResults, subSectionKey) {
-        const regexp = new RegExp(value, 'g')
-        const matches = (text[sectionKey][subSectionKey].raw.match(regexp) || []).length
+    const results = Object.keys(text).reduce(function (
+      sectionResults,
+      sectionKey
+    ) {
+      return sectionResults.concat(
+        Object.keys(text[sectionKey]).reduce(function (
+          subSectionResults,
+          subSectionKey
+        ) {
+          const regexp = new RegExp(value, 'g')
+          const matches = (text[sectionKey][subSectionKey].raw.match(
+            regexp
+          ) || []).length
 
-        if (matches) {
-          return subSectionResults.concat({
-            section: sectionKey,
-            subSection: subSectionKey,
-            title: text[sectionKey][subSectionKey].title,
-            matches
-          })
-        }
+          if (matches) {
+            return subSectionResults.concat({
+              section: sectionKey,
+              subSection: subSectionKey,
+              title: text[sectionKey][subSectionKey].title,
+              matches
+            })
+          }
 
-        return subSectionResults
-      }, []))
+          return subSectionResults
+        }, [])
+      )
     }, [])
 
     results.sort(function (resultA, resultB) {
@@ -61,29 +71,31 @@
     document.querySelector('#search-result').style.display = 'none'
   })
 
-  document.querySelector('#search-docs').addEventListener('keyup', function (event) {
-    if (event.target.value.length < 3) {
-      document.querySelector('#search-result').style.display = 'none'
+  document
+    .querySelector('#search-docs')
+    .addEventListener('keyup', function (event) {
+      if (event.target.value.length < 3) {
+        document.querySelector('#search-result').style.display = 'none'
 
-      return
-    }
+        return
+      }
 
-    if (isLoadingText) {
-      return setSearchLoadTimeout(event.target.value)
-    }
+      if (isLoadingText) {
+        return setSearchLoadTimeout(event.target.value)
+      }
 
-    if (text) {
-      search(event.target.value)
-    } else {
-      isLoadingText = true
-
-      const oReq = new window.XMLHttpRequest()
-      oReq.addEventListener('load', function () {
-        text = JSON.parse(this.responseText)
+      if (text) {
         search(event.target.value)
-      })
-      oReq.open('GET', '/docs-text.js')
-      oReq.send()
-    }
-  })
+      } else {
+        isLoadingText = true
+
+        const oReq = new window.XMLHttpRequest()
+        oReq.addEventListener('load', function () {
+          text = JSON.parse(this.responseText)
+          search(event.target.value)
+        })
+        oReq.open('GET', '/docs-text.js')
+        oReq.send()
+      }
+    })
 })()
