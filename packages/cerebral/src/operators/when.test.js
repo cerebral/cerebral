@@ -126,11 +126,23 @@ describe('operator.when', () => {
     controller.getSignal('test')({foo: 'nope'})
     assert.deepEqual(results, ['true', 'false'])
   })
-  it('should fail on incomplete definition', () => {
+  it('should fail on incomplete path definition', () => {
     const controller = Controller({
       signals: {
         test: [
-          when(true)
+          when(props`foo`)
+        ]
+      }
+    })
+    assert.throws(() => {
+      controller.getSignal('test')({foo: 'bar'})
+    })
+  })
+  it('should fail on incorrect usage', () => {
+    const controller = Controller({
+      signals: {
+        test: [
+          when(false), {true: [], false: []}
         ]
       }
     })
