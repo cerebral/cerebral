@@ -10,14 +10,14 @@
     "setup:babel": "lerna bootstrap --scope \"@(function-tree|cerebral*|babel*)\"",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
-    "lint": "standard",
-    "pretest": "npm run lint",
     "test": "lerna run test --ignore @cerebral/monorepo",
     "coverage": "lerna run coverage --ignore @cerebral/monorepo",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
     "deploy": "cd website/publisher && npm run ci",
-    "postinstall": "npm run link"
+    "postinstall": "npm run link",
+    "precommit": "lint-staged",
+    "format": "prettier-standard \"packages/**/*.js\" \"demos/**/*.js\" \"babel/**/*.js\" \"website/**/*.js\""
   },
   "dependencies": {
     "babel-cli": "^6.23.0",
@@ -30,6 +30,7 @@
     "babel-register": "^6.23.0",
     "commitizen": "^2.9.6",
     "coveralls": "^2.12.0",
+    "cross-env": "^3.2.3",
     "cz-customizable": "^4.0.0",
     "cz-customizable-ghooks": "^1.5.0",
     "gh-pages": "^0.12.0",
@@ -38,6 +39,9 @@
     "jest": "^18.1.0",
     "jsdom": "^9.9.1",
     "lerna": "2.0.0-rc.1",
+    "link-parent-bin": "^0.1.1",
+    "lint-staged": "^3.4.1",
+    "prettier-standard": "^5.0.0",
     "mocha": "^3.2.0",
     "mocha-jsdom": "^1.1.0",
     "npm-run-all": "^4.0.2",
@@ -46,10 +50,7 @@
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-scripts": "0.9.4",
-    "cross-env": "^3.2.3",
-    "link-parent-bin": "^0.1.1",
-    "shx": "^0.2.2",
-    "standard": "^8.6.0"
+    "shx": "^0.2.2"
   },
   "config": {
     "commitizen": {
@@ -58,6 +59,12 @@
     "cz-customizable": {
       "config": ".cz-config.js"
     }
+  },
+  "lint-staged": {
+    "*.js": [
+      "prettier-standard",
+      "git add"
+    ]
   },
   "standard": {
     "parser": "babel-eslint",

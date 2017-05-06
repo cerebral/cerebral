@@ -26,13 +26,9 @@ export default {
     filterEnterPressed: collection.newItem,
     formValueChanged: collection.updateDraft,
     penClicked: collection.edit,
-    phoneClicked: [
-      set(state`clients.$phone`, props`phone`)
-    ],
+    phoneClicked: [set(state`clients.$phone`, props`phone`)],
     removed: collection.removed,
-    routed: [
-      set(state`app.$selectedView`, 'Clients')
-    ],
+    routed: [set(state`app.$selectedView`, 'Clients')],
     saveClicked: collection.update,
     trashClicked: collection.remove,
     updated: collection.updated,

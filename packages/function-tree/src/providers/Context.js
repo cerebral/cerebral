@@ -13,8 +13,10 @@ export default function ContextProvider (extendedContext) {
 
         if (
           extendedContext[key].constructor &&
-          extendedContext[key].constructor.prototype.constructor !== Object.prototype.constructor &&
-          extendedContext[key].constructor.prototype.constructor !== Function.prototype.constructor
+          extendedContext[key].constructor.prototype.constructor !==
+            Object.prototype.constructor &&
+          extendedContext[key].constructor.prototype.constructor !==
+            Function.prototype.constructor
         ) {
           proto = extendedContext[key].constructor.prototype
         }
@@ -67,9 +69,15 @@ export default function ContextProvider (extendedContext) {
         }
 
         // Go through keys original value and wrap any attached methods
-        context[key] = proxy(Object.keys(contextValue), contextValue, context[key])// Object.keys(contextValue).reduce(proxy, context[key])
+        context[key] = proxy(
+          Object.keys(contextValue),
+          contextValue,
+          context[key]
+        ) // Object.keys(contextValue).reduce(proxy, context[key])
         // Go through proto
-        context[key] = proto ? proxy(Object.getOwnPropertyNames(proto), proto, context[key]) : context[key]
+        context[key] = proto
+          ? proxy(Object.getOwnPropertyNames(proto), proto, context[key])
+          : context[key]
       } else {
         context[key] = extendedContext[key]
       }

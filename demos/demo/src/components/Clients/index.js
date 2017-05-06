@@ -7,11 +7,22 @@ import Client from '../Client'
 
 export default connect(
   listProps('clients', {t: translations}),
-  function Clients ({enterPressed, filter, onChange, onClick, selectedKey, t, visibleKeys}) {
+  function Clients ({
+    enterPressed,
+    filter,
+    onChange,
+    onClick,
+    selectedKey,
+    t,
+    visibleKeys
+  }) {
     const onKeyPress = e => {
       switch (e.key) {
-        case 'Enter': enterPressed(); break
-        default: break // noop
+        case 'Enter':
+          enterPressed()
+          break
+        default:
+          break // noop
       }
     }
 
@@ -21,14 +32,14 @@ export default connect(
           <div className='level-left'>
             <div className='level-item'>
               <p className='control has-addons'>
-                <input className='input'
+                <input
+                  className='input'
                   placeholder={t.ClientNameFilter}
                   value={filter || ''}
                   onChange={e => onChange({value: e.target.value})}
                   onKeyPress={onKeyPress}
-                  />
-                <button className='button is-primary'
-                  onClick={() => onClick()}>
+                />
+                <button className='button is-primary' onClick={() => onClick()}>
                   {t.Add}
                 </button>
               </p>

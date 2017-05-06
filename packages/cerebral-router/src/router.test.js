@@ -27,7 +27,11 @@ describe('Router', () => {
         }
       }),
       signals: {
-        test: [() => { count++ }]
+        test: [
+          () => {
+            count++
+          }
+        ]
       }
     })
     assert.equal(count, 1)
@@ -59,7 +63,11 @@ describe('Router', () => {
         }
       }),
       signals: {
-        test: [() => { count++ }]
+        test: [
+          () => {
+            count++
+          }
+        ]
       }
     })
     assert.equal(count, 0)
@@ -80,9 +88,21 @@ describe('Router', () => {
         }
       }),
       signals: {
-        foo: [() => { count++ }],
-        bar: [() => { count++ }],
-        baz: [() => { count++ }]
+        foo: [
+          () => {
+            count++
+          }
+        ],
+        bar: [
+          () => {
+            count++
+          }
+        ],
+        baz: [
+          () => {
+            count++
+          }
+        ]
       }
     })
     triggerUrlChange('/bar')
@@ -193,14 +213,18 @@ describe('Router', () => {
       }),
       signals: {
         test: [],
-        foo: [() => { count++ }]
+        foo: [
+          () => {
+            count++
+          }
+        ]
       }
     })
     controller.getSignal('foo')()
     assert.equal(addressbar.pathname, '/test')
     assert.equal(count, 1)
   })
-  it('should allow redirect to url and trigger corresponded signal', (done) => {
+  it('should allow redirect to url and trigger corresponded signal', done => {
     Controller({
       devtools: {init () {}, send () {}},
       router: Router({
@@ -210,14 +234,18 @@ describe('Router', () => {
         }
       }),
       signals: {
-        doRedirect: [({router}) => router.redirect('/existing/foo/%3Atrue/%3A42')],
-        existing: [({props}) => {
-          assert.equal(props.string, 'foo')
-          assert.equal(props.bool, true)
-          assert.equal(props.num, 42)
-          assert.equal(addressbar.pathname, '/existing/foo/%3Atrue/%3A42')
-          done()
-        }]
+        doRedirect: [
+          ({router}) => router.redirect('/existing/foo/%3Atrue/%3A42')
+        ],
+        existing: [
+          ({props}) => {
+            assert.equal(props.string, 'foo')
+            assert.equal(props.bool, true)
+            assert.equal(props.num, 42)
+            assert.equal(addressbar.pathname, '/existing/foo/%3Atrue/%3A42')
+            done()
+          }
+        ]
       }
     })
   })
@@ -233,16 +261,18 @@ describe('Router', () => {
       }),
       signals: {
         doRedirect: [({router}) => router.redirect('/existing')],
-        existing: [({props}) => {
-          assert.equal(props.string, 'foo')
-          assert.equal(props.bool, true)
-          assert.equal(props.num, 42)
-          assert.equal(addressbar.pathname, '/existing/foo/%3Atrue/%3A42')
-        }]
+        existing: [
+          ({props}) => {
+            assert.equal(props.string, 'foo')
+            assert.equal(props.bool, true)
+            assert.equal(props.num, 42)
+            assert.equal(addressbar.pathname, '/existing/foo/%3Atrue/%3A42')
+          }
+        ]
       }
     })
   })
-  it('should expose goTo on context provider', (done) => {
+  it('should expose goTo on context provider', done => {
     Controller({
       devtools: {init () {}, send () {}},
       router: Router({
@@ -254,16 +284,18 @@ describe('Router', () => {
       }),
       signals: {
         doRedirect: [({router}) => router.goTo('/existing')],
-        existing: [() => {
-          assert.equal(addressbar.pathname, '/existing')
-          assert.equal(window.location.lastChangedWith, 'pushState')
-          done()
-        }]
+        existing: [
+          () => {
+            assert.equal(addressbar.pathname, '/existing')
+            assert.equal(window.location.lastChangedWith, 'pushState')
+            done()
+          }
+        ]
       }
     })
     triggerUrlChange('/foo')
   })
-  it('should allow redirect to signal', (done) => {
+  it('should allow redirect to signal', done => {
     const controller = Controller({
       devtools: {init () {}, send () {}},
       router: Router({
@@ -274,14 +306,14 @@ describe('Router', () => {
         }
       }),
       signals: {
-        'home': [],
-        'createClicked': [
+        home: [],
+        createClicked: [
           function createEntity ({router}) {
             const entityId = 42
-            router.redirectToSignal('detail', { id: entityId })
+            router.redirectToSignal('detail', {id: entityId})
           }
         ],
-        'detail': [
+        detail: [
           function checkAction ({props}) {
             assert.equal(props.id, 42)
             assert.equal(addressbar.pathname, '/foo/%3A42')
@@ -303,14 +335,14 @@ describe('Router', () => {
         }
       }),
       signals: {
-        'home': [],
-        'createClicked': [
+        home: [],
+        createClicked: [
           function createEntity ({router}) {
             const entityId = 42
-            router.redirectToSignal('detail', { id: entityId })
+            router.redirectToSignal('detail', {id: entityId})
           }
         ],
-        'detail': []
+        detail: []
       }
     })
 
@@ -328,7 +360,7 @@ describe('Router', () => {
         }
       }),
       signals: {
-        'home': []
+        home: []
       }
     })
 
@@ -350,7 +382,7 @@ describe('Router', () => {
         }
       }),
       signals: {
-        'home': []
+        home: []
       }
     })
 

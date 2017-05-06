@@ -1,4 +1,6 @@
-export {default as createUserWithEmailAndPassword} from './createUserWithEmailAndPassword'
+export {
+  default as createUserWithEmailAndPassword
+} from './createUserWithEmailAndPassword'
 export {default as getUser} from './getUser'
 export {default as off} from './off'
 export {default as onChildAdded} from './onChildAdded'
@@ -6,7 +8,9 @@ export {default as onChildChanged} from './onChildChanged'
 export {default as onChildRemoved} from './onChildRemoved'
 export {default as onValue} from './onValue'
 export {default as signInAnonymously} from './signInAnonymously'
-export {default as signInWithEmailAndPassword} from './signInWithEmailAndPassword'
+export {
+  default as signInWithEmailAndPassword
+} from './signInWithEmailAndPassword'
 export {default as signInWithFacebook} from './signInWithFacebook'
 export {default as signInWithGoogle} from './signInWithGoogle'
 export {default as signInWithGithub} from './signInWithGithub'

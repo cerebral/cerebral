@@ -12,27 +12,22 @@ describe('operator.unset', () => {
         bar: 'baz'
       },
       signals: {
-        test: [
-          unset(state`foo`)
-        ]
+        test: [unset(state`foo`)]
       }
     })
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {bar: 'baz'})
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          unset(props`foo`)
-        ]
+        test: [unset(props`foo`)]
       }
     })
 
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })

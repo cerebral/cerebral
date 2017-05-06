@@ -24,9 +24,7 @@ export default {
     enterPressed: startStopRunning,
     formValueChanged: updateDraft,
     removed: collection.removed,
-    routed: [
-      set(state`app.$selectedView`, 'Tasks')
-    ],
+    routed: [set(state`app.$selectedView`, 'Tasks')],
     startStopClicked: startStopRunning,
     timeHasPassed: updateNow,
     updated,

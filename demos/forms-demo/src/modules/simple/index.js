@@ -23,25 +23,18 @@ export default {
     }
   },
   signals: {
-    routed: [
-      set(state`app.currentView`, 'Simple')
-    ],
+    routed: [set(state`app.currentView`, 'Simple')],
     fieldChanged: [
-      when(state`${props`settingsField`}.value`), {
+      when(state`${props`settingsField`}.value`),
+      {
         true: [
           set(state`app.settings.showErrors`, true),
           setField(state`${props`field`}`, props`value`)
         ],
-        false: [
-          set(state`${props`field`}.value`, props`value`)
-        ]
+        false: [set(state`${props`field`}.value`, props`value`)]
       }
     ],
-    onSubmitted: [
-      set(state`app.settings.showErrors`, true)
-    ],
-    onReset: [
-      resetForm(state`${props`formPath`}`)
-    ]
+    onSubmitted: [set(state`app.settings.showErrors`, true)],
+    onReset: [resetForm(state`${props`formPath`}`)]
   }
 }

@@ -7,7 +7,7 @@ export default function linkWithGoogle (options = {}) {
   const redirect = options.redirect || false
   const provider = new firebase.auth.GoogleAuthProvider()
 
-  scopes.forEach((scope) => {
+  scopes.forEach(scope => {
     provider.addScope(scope)
   })
 
@@ -16,18 +16,19 @@ export default function linkWithGoogle (options = {}) {
       firebase.auth().currentUser.linkWithRedirect(provider)
       resolve()
     } else {
-      firebase.auth().currentUser.linkWithPopup(provider)
-      .then(
-        (result) => {
+      firebase.auth().currentUser.linkWithPopup(provider).then(
+        result => {
           const user = createUser(result.user)
 
           user.accessToken = result.credential.accessToken
           resolve({
             user: user
           })
-        }, (error) => {
+        },
+        error => {
           reject(new FirebaseProviderAuthenticationError(error))
-        })
+        }
+      )
     }
   })
 }

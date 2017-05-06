@@ -18,10 +18,13 @@ export default connect(
   function Login ({anonClick, buttonClick, enterPress, fieldChange, signIn, t}) {
     const showError = field => signIn.showErrors && !field.isValid
 
-    const error = (fieldName) => {
+    const error = fieldName => {
       const field = signIn[fieldName]
       if (field.failedRule) {
-        return resolveTranslation(t, `validationErrors.signIn.${fieldName}.${field.failedRule.name}`)
+        return resolveTranslation(
+          t,
+          `validationErrors.signIn.${fieldName}.${field.failedRule.name}`
+        )
       }
       return null
     }
@@ -36,10 +39,11 @@ export default connect(
           placeholder={t.loginEmailPlaceholder}
           showError={showError(signIn.email)}
           value={signIn.email.value}
-          onChange={e => fieldChange({
-            field: 'user.$signIn.email',
-            value: e.target.value
-          })}
+          onChange={e =>
+            fieldChange({
+              field: 'user.$signIn.email',
+              value: e.target.value
+            })}
           onEnter={e => enterPress()}
         />
 
@@ -50,18 +54,17 @@ export default connect(
           placeholder={t.loginPasswordPlaceholder}
           showError={showError(signIn.password)}
           value={signIn.password.value}
-          onChange={e => fieldChange({
-            field: 'user.$signIn.password',
-            value: e.target.value
-          })}
+          onChange={e =>
+            fieldChange({
+              field: 'user.$signIn.password',
+              value: e.target.value
+            })}
           onEnter={e => enterPress()}
         />
 
         <nav className='level'>
           <div className='level-left'>
-            <button className='button is-info'
-              onClick={() => anonClick()}
-              >
+            <button className='button is-info' onClick={() => anonClick()}>
               {t.tryApplicationAnonymously}
             </button>
           </div>

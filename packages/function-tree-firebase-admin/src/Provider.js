@@ -8,7 +8,9 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
 
   if (!customFirebaseInstance) {
     if (!options.serviceAccount || !options.databaseURL) {
-      throw new Error('FIREBASE: You are not passing correct options to provider')
+      throw new Error(
+        'FIREBASE: You are not passing correct options to provider'
+      )
     }
 
     firebase.initializeApp({
@@ -52,14 +54,20 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
         options = options || {}
 
         return new Promise((resolve, reject) => {
-          Object.keys(options).reduce((currentRef, optionKey) => {
-            return currentRef[optionKey](options[optionKey])
-          }, firebase.database().ref(path)).once('value', (snapshot) => {
-            resolve({
-              key: path.split('/').pop(),
-              value: snapshot.val()
-            })
-          }, reject)
+          Object.keys(options)
+            .reduce((currentRef, optionKey) => {
+              return currentRef[optionKey](options[optionKey])
+            }, firebase.database().ref(path))
+            .once(
+              'value',
+              snapshot => {
+                resolve({
+                  key: path.split('/').pop(),
+                  value: snapshot.val()
+                })
+              },
+              reject
+            )
         })
       },
       transaction (path, cb) {
@@ -68,7 +76,7 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
     }
   }
 
-  return (context) => {
+  return context => {
     context.firebase = cachedProvider = cachedProvider || createProvider()
 
     if (context.debugger) {

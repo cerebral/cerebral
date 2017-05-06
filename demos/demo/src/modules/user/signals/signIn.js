@@ -5,9 +5,11 @@ import signIn from '../actions/signIn'
 import firebaseInit from '../../app/signals/firebaseInit'
 
 const signInWithFirebase = [
-  isValidForm(state`user.$signIn`), {
+  isValidForm(state`user.$signIn`),
+  {
     true: [
-      signIn, {
+      signIn,
+      {
         success: [
           set(state`user.$loggedIn`, true),
           set(state`user.$signIn.email.value`, ''),
@@ -22,9 +24,7 @@ const signInWithFirebase = [
         ]
       }
     ],
-    false: [
-      set(state`user.$signIn.showErrors`, true)
-    ]
+    false: [set(state`user.$signIn.showErrors`, true)]
   }
 ]
 

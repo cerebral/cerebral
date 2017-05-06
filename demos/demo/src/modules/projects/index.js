@@ -30,13 +30,9 @@ export default {
     filterEnterPressed: collection.newItem,
     formValueChanged: collection.updateDraft,
     penClicked: collection.edit,
-    projectTagClicked: [
-      set(state`projects.$showProjectSelector`, true)
-    ],
+    projectTagClicked: [set(state`projects.$showProjectSelector`, true)],
     removed: collection.removed,
-    routed: [
-      set(state`app.$selectedView`, 'Projects')
-    ],
+    routed: [set(state`app.$selectedView`, 'Projects')],
     saveClicked: collection.update,
     selectorBackgroundClick: projectSelectorClose,
     selectorProjectClicked: projectSelectorSelect,

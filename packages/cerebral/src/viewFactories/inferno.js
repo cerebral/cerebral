@@ -4,7 +4,7 @@ import Component from 'inferno-component'
 import ContainerFactory from './Container'
 import StateContainerFactory from './StateContainer'
 import HocFactory from './Hoc'
-import connectFactory, { decoratorFactory } from './connect'
+import connectFactory, {decoratorFactory} from './connect'
 
 Inferno.createElement = createElement
 Inferno.Component = Component

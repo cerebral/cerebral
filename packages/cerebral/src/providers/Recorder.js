@@ -72,7 +72,10 @@ export default function RecorderProvider (options = {}) {
       const args = JSON.parse(mutation.args)
       const path = args.shift().split('.')
 
-      controller.model[mutation.method].apply(controller.model, [path].concat(args))
+      controller.model[mutation.method].apply(
+        controller.model,
+        [path].concat(args)
+      )
       updateDebugger(mutation.method, path, args)
     }
 
@@ -106,7 +109,7 @@ export default function RecorderProvider (options = {}) {
     }
 
     function resetState () {
-      currentRecording.initialState.forEach((state) => {
+      currentRecording.initialState.forEach(state => {
         const value = JSON.parse(state.value)
 
         controller.model.set(state.path, value)
@@ -137,7 +140,9 @@ export default function RecorderProvider (options = {}) {
       },
       play (options = {}) {
         if (isPlaying || isRecording) {
-          throw new Error('CEREBRAL Recorder - You can not play while already playing or recording')
+          throw new Error(
+            'CEREBRAL Recorder - You can not play while already playing or recording'
+          )
         }
 
         allowedSignals = options.allowedSignals || []
@@ -162,7 +167,7 @@ export default function RecorderProvider (options = {}) {
           ended = null
         }
 
-        const paths = (options.initialState || [''])
+        const paths = options.initialState || ['']
         const state = paths.map(function (path) {
           const arrayPath = path ? path.split('.') : []
 

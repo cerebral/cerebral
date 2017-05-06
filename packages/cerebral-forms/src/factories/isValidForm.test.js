@@ -11,7 +11,8 @@ describe('isValidForm', () => {
     const controller = Controller({
       signals: {
         isValidForm: [
-          isValidForm('form'), {
+          isValidForm('form'),
+          {
             true: [() => validCount++],
             false: [() => invalidCount++]
           }
@@ -39,7 +40,8 @@ describe('isValidForm', () => {
     const controller = Controller({
       signals: {
         isValidForm: [
-          isValidForm(state`${props`form`}`), {
+          isValidForm(state`${props`form`}`),
+          {
             true: [() => validCount++],
             false: [() => invalidCount++]
           }

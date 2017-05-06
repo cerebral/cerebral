@@ -4,7 +4,9 @@ import {throwError} from '../utils'
 function createTemplateTag (tag, options) {
   return (strings, ...values) => {
     if (values.some(value => value === undefined)) {
-      throwError('One of the values passed inside the tag interpolated to undefined. Please check')
+      throwError(
+        'One of the values passed inside the tag interpolated to undefined. Please check'
+      )
     }
     return new Tag(tag, options, strings, values)
   }

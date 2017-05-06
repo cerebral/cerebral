@@ -8,7 +8,16 @@ function isPrimitive (primitive, type) {
   Runs through the tree providing a "next" callback to process next step
   of execution
 */
-export default function executeTree (execution, initialPayload, branchStart, branchEnd, parallelStart, parallelProgress, parallelEnd, end) {
+export default function executeTree (
+  execution,
+  initialPayload,
+  branchStart,
+  branchEnd,
+  parallelStart,
+  parallelProgress,
+  parallelEnd,
+  end
+) {
   function runBranch (branch, index, payload, prevPayload, nextBranch) {
     function runNextItem (result) {
       runBranch(branch, index + 1, result, payload, nextBranch)
@@ -16,14 +25,24 @@ export default function executeTree (execution, initialPayload, branchStart, bra
 
     function processFunctionOutput (funcDetails, outputResult) {
       return function (result) {
-        const newPayload = Object.assign({}, payload, result ? result.payload : {})
+        const newPayload = Object.assign(
+          {},
+          payload,
+          result ? result.payload : {}
+        )
 
         if (result && funcDetails.outputs) {
           const outputs = Object.keys(funcDetails.outputs)
 
           if (~outputs.indexOf(result.path)) {
             branchStart(funcDetails, result.path, newPayload)
-            runBranch(funcDetails.outputs[result.path].items, 0, newPayload, payload, outputResult)
+            runBranch(
+              funcDetails.outputs[result.path].items,
+              0,
+              newPayload,
+              payload,
+              outputResult
+            )
           } else {
             throw new FunctionTreeExecutionError(
               execution,
@@ -54,15 +73,20 @@ export default function executeTree (execution, initialPayload, branchStart, bra
       parallelStart(payload, itemLength)
       currentItem.items.forEach((func, index) => {
         if (func.function) {
-          execution.runFunction(func, payload, prevPayload, processFunctionOutput(func, (payload) => {
-            payloads.push(payload)
-            if (payloads.length === itemLength) {
-              parallelEnd(payload, itemLength)
-              runNextItem(Object.assign.apply(Object, [{}].concat(payloads)))
-            } else {
-              parallelProgress(payload, itemLength - payloads.length)
-            }
-          }))
+          execution.runFunction(
+            func,
+            payload,
+            prevPayload,
+            processFunctionOutput(func, payload => {
+              payloads.push(payload)
+              if (payloads.length === itemLength) {
+                parallelEnd(payload, itemLength)
+                runNextItem(Object.assign.apply(Object, [{}].concat(payloads)))
+              } else {
+                parallelProgress(payload, itemLength - payloads.length)
+              }
+            })
+          )
         } else {
           runBranch(func.items, 0, payload, prevPayload, function (payload) {
             payloads.push(payload)
@@ -78,7 +102,12 @@ export default function executeTree (execution, initialPayload, branchStart, bra
         return payloads
       })
     } else {
-      execution.runFunction(currentItem, payload, prevPayload, processFunctionOutput(currentItem, runNextItem))
+      execution.runFunction(
+        currentItem,
+        payload,
+        prevPayload,
+        processFunctionOutput(currentItem, runNextItem)
+      )
     }
   }
 

@@ -5,18 +5,23 @@ import {debounce} from './'
 import {parallel} from '../'
 
 describe('operator.debounce', () => {
-  it('should debounce execution', (done) => {
+  it('should debounce execution', done => {
     const result = []
     const controller = Controller({
       signals: {
         test: [
-          debounce(50), {
-            continue: [() => {
-              assert.deepEqual(result, ['discard'])
-              done()
-            }],
+          debounce(50),
+          {
+            continue: [
+              () => {
+                assert.deepEqual(result, ['discard'])
+                done()
+              }
+            ],
             discard: [
-              () => { result.push('discard') }
+              () => {
+                result.push('discard')
+              }
             ]
           }
         ]
@@ -27,22 +32,29 @@ describe('operator.debounce', () => {
       controller.getSignal('test')()
     }, 10)
   })
-  it('should debounce execution in parallel', (done) => {
+  it('should debounce execution in parallel', done => {
     const result = []
     const controller = Controller({
       signals: {
         test: [
           parallel([
-            debounce(50), {
+            debounce(50),
+            {
               continue: [
                 () => {
                   assert.deepEqual(result, ['parallel', 'parallel', 'discard'])
                   done()
                 }
               ],
-              discard: [() => { result.push('discard') }]
+              discard: [
+                () => {
+                  result.push('discard')
+                }
+              ]
             },
-            () => { result.push('parallel') }
+            () => {
+              result.push('parallel')
+            }
           ])
         ]
       }

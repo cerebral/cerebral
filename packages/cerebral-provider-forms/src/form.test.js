@@ -96,11 +96,14 @@ describe('form', () => {
       providers: [FormsProvider()],
       state: {
         form: {
-          users: [{
-            value: ''
-          }, {
-            value: ''
-          }]
+          users: [
+            {
+              value: ''
+            },
+            {
+              value: ''
+            }
+          ]
         }
       },
       signals: {
@@ -123,11 +126,14 @@ describe('form', () => {
       providers: [FormsProvider()],
       state: {
         form: {
-          users: [{
-            value: 'Ben'
-          }, {
-            value: 'Dopey'
-          }]
+          users: [
+            {
+              value: 'Ben'
+            },
+            {
+              value: 'Dopey'
+            }
+          ]
         }
       },
       signals: {
@@ -148,12 +154,15 @@ describe('form', () => {
       providers: [FormsProvider()],
       state: {
         form: {
-          users: [{
-            value: 'Ben',
-            validationRules: ['minLength:5']
-          }, {
-            value: 'Dopey'
-          }]
+          users: [
+            {
+              value: 'Ben',
+              validationRules: ['minLength:5']
+            },
+            {
+              value: 'Dopey'
+            }
+          ]
         }
       },
       signals: {

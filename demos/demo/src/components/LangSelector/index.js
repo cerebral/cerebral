@@ -4,9 +4,7 @@ import {signal, state} from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 import * as LANGS from '../../common/translations'
 
-const LANG_OPTS = Object.keys(LANGS).map(lang => (
-  [lang, LANGS[lang].language]
-))
+const LANG_OPTS = Object.keys(LANGS).map(lang => [lang, LANGS[lang].language])
 
 export default connect(
   {
@@ -16,19 +14,30 @@ export default connect(
     showSelector: state`app.$showLangSelector`,
     t: translations
   },
-  function LangSelector ({onBackgroundClick, onClick, onOptionClick, showSelector, t}) {
+  function LangSelector ({
+    onBackgroundClick,
+    onClick,
+    onOptionClick,
+    showSelector,
+    t
+  }) {
     return (
       <div className='Selector'>
         <a onClick={() => onClick()}>{t.language}</a>
-        { showSelector &&
+        {showSelector &&
           <div>
-            <div className='SelectorBackground' onClick={() => onBackgroundClick()} />
+            <div
+              className='SelectorBackground'
+              onClick={() => onBackgroundClick()}
+            />
             <div className='SelectorLeft'>
               <div className='menu'>
                 <ul className='menu-list'>
                   {LANG_OPTS.map(lang => (
-                    <li key={lang[0]}
-                      onClick={() => onOptionClick({lang: lang[0]})}>
+                    <li
+                      key={lang[0]}
+                      onClick={() => onOptionClick({lang: lang[0]})}
+                    >
                       <a className={`${lang[0] === t.lang ? 'is-active' : ''}`}>
                         {lang[1]}
                       </a>
@@ -37,8 +46,7 @@ export default connect(
                 </ul>
               </div>
             </div>
-          </div>
-        }
+          </div>}
       </div>
     )
   }

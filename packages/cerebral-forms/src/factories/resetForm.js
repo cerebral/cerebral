@@ -31,14 +31,18 @@ function resetArray (formArray) {
 export default function resetFormFactory (formPath) {
   function resetForm ({state, resolve}) {
     if (typeof formPath === 'string') {
-      console.warn('DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into resetForm factory')
+      console.warn(
+        'DEPRECATION: Cerebral Forms now requires STATE TAG to be passed into resetForm factory'
+      )
 
       const form = state.get(formPath)
 
       state.merge(formPath, resetObject(form))
     } else {
       if (!resolve.isTag(formPath, 'state')) {
-        throw new Error('Cerebral Forms - isValidForm factory requires a STATE TAG')
+        throw new Error(
+          'Cerebral Forms - isValidForm factory requires a STATE TAG'
+        )
       }
 
       const form = resolve.value(formPath)

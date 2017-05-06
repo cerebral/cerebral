@@ -6,18 +6,22 @@ export default {
   baseUrl: '',
   headers: {
     'Content-Type': 'application/json; charset=UTF-8',
-    'Accept': 'application/json'
+    Accept: 'application/json'
   },
   onRequest (xhr, options) {
-    if (options.headers['Content-Type'] === 'application/x-www-form-urlencoded') {
+    if (
+      options.headers['Content-Type'] === 'application/x-www-form-urlencoded'
+    ) {
       options.body = urlEncode(options.body)
-    } else if (options.headers['Content-Type'].indexOf('application/json') >= 0) {
+    } else if (
+      options.headers['Content-Type'].indexOf('application/json') >= 0
+    ) {
       options.body = JSON.stringify(options.body)
     }
 
     xhr.withCredentials = Boolean(options.withCredentials)
 
-    Object.keys(options.headers).forEach((key) => {
+    Object.keys(options.headers).forEach(key => {
       xhr.setRequestHeader(key, options.headers[key])
     })
 
@@ -26,7 +30,10 @@ export default {
   onResponse (xhr, resolve, reject) {
     let result = xhr.responseText
 
-    if (result && xhr.getResponseHeader('Content-Type').indexOf('application/json') >= 0) {
+    if (
+      result &&
+      xhr.getResponseHeader('Content-Type').indexOf('application/json') >= 0
+    ) {
       result = JSON.parse(xhr.responseText)
     }
 

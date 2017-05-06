@@ -13,8 +13,13 @@ describe('operator.equals', () => {
       },
       signals: {
         test: [
-          equals(props`foo`), {
-            bar: [() => { count++ }],
+          equals(props`foo`),
+          {
+            bar: [
+              () => {
+                count++
+              }
+            ],
             otherwise: []
           }
         ]
@@ -31,8 +36,13 @@ describe('operator.equals', () => {
       },
       signals: {
         test: [
-          equals(state`foo`), {
-            bar: [() => { count++ }],
+          equals(state`foo`),
+          {
+            bar: [
+              () => {
+                count++
+              }
+            ],
             otherwise: []
           }
         ]
@@ -41,14 +51,15 @@ describe('operator.equals', () => {
     controller.getSignal('test')()
     assert.equal(count, 1)
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
       state: {
         foo: 'bar'
       },
       signals: {
         test: [
-          equals('foo'), {
+          equals('foo'),
+          {
             bar: [() => {}],
             otherwise: []
           }
@@ -56,7 +67,7 @@ describe('operator.equals', () => {
       }
     })
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })

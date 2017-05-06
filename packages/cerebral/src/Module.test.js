@@ -34,10 +34,12 @@ describe('Module', () => {
       modules: {
         foo: {
           signals: {
-            signalA: [(context) => {
-              assert.equal(context.foo, 'foo')
-              assert.equal(context.bar, 'bar')
-            }]
+            signalA: [
+              context => {
+                assert.equal(context.foo, 'foo')
+                assert.equal(context.bar, 'bar')
+              }
+            ]
           },
           provider (context) {
             context.foo = 'foo'
@@ -47,10 +49,12 @@ describe('Module', () => {
         },
         bar: {
           signals: {
-            signalB: [(context) => {
-              assert.equal(context.bar, 'bar')
-              assert.equal(context.foo, 'foo')
-            }]
+            signalB: [
+              context => {
+                assert.equal(context.bar, 'bar')
+                assert.equal(context.foo, 'foo')
+              }
+            ]
           },
           provider (context) {
             context.bar = 'bar'
@@ -68,8 +72,14 @@ describe('Module', () => {
     class Foo {
       constructor () {
         this.state = {foo: 'bar'}
-        this.signals = {bar: [(context) => { assert.equal(context.foo, 'foo') }]}
-        this.provider = (context) => {
+        this.signals = {
+          bar: [
+            context => {
+              assert.equal(context.foo, 'foo')
+            }
+          ]
+        }
+        this.provider = context => {
           context.foo = 'foo'
 
           return context
@@ -119,9 +129,19 @@ describe('Module', () => {
           },
           signals: {
             test: {
-              signal: [() => { throw new Error('bar2') }],
+              signal: [
+                () => {
+                  throw new Error('bar2')
+                }
+              ],
               catch: new Map([
-                [Error, [({props, state}) => state.set('foo.foo', props.error.message)]]
+                [
+                  Error,
+                  [
+                    ({props, state}) =>
+                      state.set('foo.foo', props.error.message)
+                  ]
+                ]
               ])
             }
           }
@@ -142,9 +162,19 @@ describe('Module', () => {
           },
           signals: {
             test: {
-              signal: [() => { throw new TestError('bar2') }],
+              signal: [
+                () => {
+                  throw new TestError('bar2')
+                }
+              ],
               catch: new Map([
-                [Error, [({props, state}) => state.set('foo.foo', props.error.message)]]
+                [
+                  Error,
+                  [
+                    ({props, state}) =>
+                      state.set('foo.foo', props.error.message)
+                  ]
+                ]
               ])
             }
           }
@@ -166,7 +196,11 @@ describe('Module', () => {
           },
           signals: {
             test: {
-              signal: [() => { throw new Error('!') }],
+              signal: [
+                () => {
+                  throw new Error('!')
+                }
+              ],
               catch: new Map([
                 [Error, [({props, state}) => state.set('foo.foo', 'module')]]
               ])

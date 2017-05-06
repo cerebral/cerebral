@@ -1,6 +1,11 @@
 import DependencyTracker from '../DependencyTracker'
 import {Compute} from '../Compute'
-import {getChangedProps, throwError, ensureStrictPath, createResolver} from './../utils'
+import {
+  getChangedProps,
+  throwError,
+  ensureStrictPath,
+  createResolver
+} from './../utils'
 
 export default (View, PropTypes) => {
   class BaseComponent extends View.Component {
@@ -14,16 +19,22 @@ export default (View, PropTypes) => {
         They are instantly run to produce their value and map of state
         dependencies
       */
-      this.dependencyTrackers = Object.keys(dependencies).reduce((currentDependencyTrackers, dependencyKey) => {
+      this.dependencyTrackers = Object.keys(
+        dependencies
+      ).reduce((currentDependencyTrackers, dependencyKey) => {
         if (dependencies[dependencyKey] instanceof Compute) {
-          currentDependencyTrackers[dependencyKey] = new DependencyTracker(dependencies[dependencyKey])
+          currentDependencyTrackers[dependencyKey] = new DependencyTracker(
+            dependencies[dependencyKey]
+          )
           currentDependencyTrackers[dependencyKey].run(this.stateGetter, props)
         }
 
         return currentDependencyTrackers
       }, {})
       this.dependencies = dependencies
-      this.dependencyTrackersDependencyMaps = this.getDependencyTrackersDependencyMaps(props)
+      this.dependencyTrackersDependencyMaps = this.getDependencyTrackersDependencyMaps(
+        props
+      )
       this.tagsDependencyMap = this.getTagsDependencyMap(props)
     }
     /*
@@ -31,11 +42,14 @@ export default (View, PropTypes) => {
       state tracker and tags state dependencies
     */
     componentWillMount () {
-      this.context.cerebral.registerComponent(this, Object.assign(
-        {},
-        this.dependencyTrackersDependencyMaps.state,
-        this.tagsDependencyMap
-      ))
+      this.context.cerebral.registerComponent(
+        this,
+        Object.assign(
+          {},
+          this.dependencyTrackersDependencyMaps.state,
+          this.tagsDependencyMap
+        )
+      )
     }
     /*
       We only allow forced render by change of props passed
@@ -60,18 +74,23 @@ export default (View, PropTypes) => {
     */
     componentWillUnmount () {
       this._isUnmounting = true
-      this.context.cerebral.unregisterComponent(this, Object.assign(
-        {},
-        this.dependencyTrackersDependencyMaps.state,
-        this.tagsDependencyMap
-      ))
+      this.context.cerebral.unregisterComponent(
+        this,
+        Object.assign(
+          {},
+          this.dependencyTrackersDependencyMaps.state,
+          this.tagsDependencyMap
+        )
+      )
     }
     /*
       A getter for StateTracker and tags to grab state from Cerebral
     */
     stateGetter (path) {
       if (!this.context.cerebral) {
-        throwError('Can not find controller, did you remember to use the Container component? Read more at: https://cerebral.github.io/api/05_connect.html')
+        throwError(
+          'Can not find controller, did you remember to use the Container component? Read more at: https://cerebral.github.io/api/05_connect.html'
+        )
       }
       return this.context.cerebral.controller.getState(path)
     }
@@ -86,46 +105,61 @@ export default (View, PropTypes) => {
       merge in their state dependencies
     */
     getDependencyTrackersDependencyMaps (props) {
-      return Object.keys(this.dependencies).reduce((currentDepsMaps, propKey) => {
-        if (this.dependencyTrackers[propKey]) {
-          currentDepsMaps.state = Object.assign(currentDepsMaps.state, this.dependencyTrackers[propKey].stateTrackFlatMap)
-          currentDepsMaps.props = Object.assign(currentDepsMaps.props, this.dependencyTrackers[propKey].propsTrackFlatMap)
+      return Object.keys(this.dependencies).reduce(
+        (currentDepsMaps, propKey) => {
+          if (this.dependencyTrackers[propKey]) {
+            currentDepsMaps.state = Object.assign(
+              currentDepsMaps.state,
+              this.dependencyTrackers[propKey].stateTrackFlatMap
+            )
+            currentDepsMaps.props = Object.assign(
+              currentDepsMaps.props,
+              this.dependencyTrackers[propKey].propsTrackFlatMap
+            )
+
+            return currentDepsMaps
+          }
 
           return currentDepsMaps
+        },
+        {
+          state: {},
+          props: {}
         }
-
-        return currentDepsMaps
-      }, {
-        state: {},
-        props: {}
-      })
+      )
     }
     /*
       Go through dependencies and extract tags related to state
       dependencies
     */
     getTagsDependencyMap (props) {
-      return Object.keys(this.dependencies).reduce((currentDepsMap, propKey) => {
+      return Object.keys(
+        this.dependencies
+      ).reduce((currentDepsMap, propKey) => {
         if (this.dependencyTrackers[propKey]) {
           return currentDepsMap
         }
 
         if (!this.dependencies[propKey].getTags) {
-          throwError(`Prop ${propKey} should be tags or a function on the specific property you want to dynamically create.`)
+          throwError(
+            `Prop ${propKey} should be tags or a function on the specific property you want to dynamically create.`
+          )
         }
 
         const getters = this.createTagGetters(props)
 
-        return this.dependencies[propKey].getTags(getters).reduce((updatedCurrentDepsMap, tag) => {
-          if (tag.options.isStateDependency) {
-            const path = tag.getPath(getters)
-            const strictPath = ensureStrictPath(path, this.stateGetter(path))
+        return this.dependencies[propKey]
+          .getTags(getters)
+          .reduce((updatedCurrentDepsMap, tag) => {
+            if (tag.options.isStateDependency) {
+              const path = tag.getPath(getters)
+              const strictPath = ensureStrictPath(path, this.stateGetter(path))
 
-            updatedCurrentDepsMap[strictPath] = true
-          }
+              updatedCurrentDepsMap[strictPath] = true
+            }
 
-          return updatedCurrentDepsMap
-        }, currentDepsMap)
+            return updatedCurrentDepsMap
+          }, currentDepsMap)
       }, {})
     }
     /*
@@ -144,7 +178,9 @@ export default (View, PropTypes) => {
     */
     getProps () {
       const props = this.props || {}
-      const dependenciesProps = Object.keys(this.dependencies).reduce((currentProps, key) => {
+      const dependenciesProps = Object.keys(
+        this.dependencies
+      ).reduce((currentProps, key) => {
         if (!this.dependencies[key]) {
           throwError(`There is no dependency assigned to prop ${key}`)
         }
@@ -169,7 +205,9 @@ export default (View, PropTypes) => {
               currentProps[key] = tag.getValue(getters)
             } catch (e) {
               const path = tag.getPath(getters)
-              throwError(`Component ${this._displayName} There is no signal at '${path}'`)
+              throwError(
+                `Component ${this._displayName} There is no signal at '${path}'`
+              )
             }
           } else if (tag.type === 'props') {
             currentProps[key] = tag.getValue(getters)
@@ -183,14 +221,21 @@ export default (View, PropTypes) => {
         this.context.cerebral.controller.devtools &&
         this.context.cerebral.controller.devtools.bigComponentsWarning &&
         !this._hasWarnedBigComponent &&
-        Object.keys(this.dependencies).length >= this.context.cerebral.controller.devtools.bigComponentsWarning
+        Object.keys(this.dependencies).length >=
+          this.context.cerebral.controller.devtools.bigComponentsWarning
       ) {
-        console.warn(`Component named ${this._displayName} has a lot of dependencies, consider refactoring or adjust this option in devtools`)
+        console.warn(
+          `Component named ${this._displayName} has a lot of dependencies, consider refactoring or adjust this option in devtools`
+        )
         this._hasWarnedBigComponent = true
       }
 
       if (this.mergeProps) {
-        return this.mergeProps(dependenciesProps, props, createResolver(this.createTagGetters(props)))
+        return this.mergeProps(
+          dependenciesProps,
+          props,
+          createResolver(this.createTagGetters(props))
+        )
       }
 
       return Object.assign({}, props, dependenciesProps)
@@ -200,7 +245,9 @@ export default (View, PropTypes) => {
       changes and props changes
     */
     updateDependencyTrackers (stateChanges, propsChanges, props) {
-      const hasChanged = Object.keys(this.dependencyTrackers).reduce((hasChanged, key) => {
+      const hasChanged = Object.keys(
+        this.dependencyTrackers
+      ).reduce((hasChanged, key) => {
         if (this.dependencyTrackers[key].match(stateChanges, propsChanges)) {
           this.dependencyTrackers[key].run(this.stateGetter, props)
 
@@ -216,7 +263,7 @@ export default (View, PropTypes) => {
       Forces update of all computed
     */
     forceUpdateDependencyTrackers () {
-      Object.keys(this.dependencyTrackers).forEach((key) => {
+      Object.keys(this.dependencyTrackers).forEach(key => {
         this.dependencyTrackers[key].run(this.stateGetter, this.props)
       })
 
@@ -229,7 +276,10 @@ export default (View, PropTypes) => {
       on props changed
     */
     _updateFromProps (propsChanges, props) {
-      this._update(props, this.updateDependencyTrackers({}, propsChanges, props))
+      this._update(
+        props,
+        this.updateDependencyTrackers({}, propsChanges, props)
+      )
     }
     /*
       Called by Container when the components state dependencies
@@ -242,17 +292,25 @@ export default (View, PropTypes) => {
         return
       }
 
-      this._update(this.props, force ? this.forceUpdateDependencyTrackers() : this.updateDependencyTrackers(stateChanges, {}, this.props))
+      this._update(
+        this.props,
+        force
+          ? this.forceUpdateDependencyTrackers()
+          : this.updateDependencyTrackers(stateChanges, {}, this.props)
+      )
     }
     /*
       Run update, re-evaluating the tags and computed, if neccessary
     */
     _update (props, hasChangedDependencyTrackers) {
-      const prevDependencyTrackersDependencyMaps = this.dependencyTrackersDependencyMaps
+      const prevDependencyTrackersDependencyMaps = this
+        .dependencyTrackersDependencyMaps
       const previousTagsDependencyMap = this.tagsDependencyMap
 
       this.tagsDependencyMap = this.getTagsDependencyMap(props)
-      this.dependencyTrackersDependencyMaps = hasChangedDependencyTrackers ? this.getDependencyTrackersDependencyMaps(props) : this.dependencyTrackersDependencyMaps
+      this.dependencyTrackersDependencyMaps = hasChangedDependencyTrackers
+        ? this.getDependencyTrackersDependencyMaps(props)
+        : this.dependencyTrackersDependencyMaps
 
       const prevDepsMap = Object.assign(
         {},
@@ -272,11 +330,15 @@ export default (View, PropTypes) => {
 
   return function HOC (dependencies, mergeProps, Component) {
     if (typeof dependencies === 'function') {
-      throwError('You can not use a function to define dependencies. Use tags or a function on the specific property you want to dynamically create')
+      throwError(
+        'You can not use a function to define dependencies. Use tags or a function on the specific property you want to dynamically create'
+      )
     }
 
     if (!dependencies) {
-      throwError('There is no reason to connect a component that has no dependencies')
+      throwError(
+        'There is no reason to connect a component that has no dependencies'
+      )
     }
 
     class CerebralComponent extends BaseComponent {

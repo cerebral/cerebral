@@ -3,10 +3,12 @@ import Path from '../Path'
 const VERSION = 'v1'
 
 export class Devtools {
-  constructor (options = {
-    remoteDebugger: null,
-    reconnect: true
-  }) {
+  constructor (
+    options = {
+      remoteDebugger: null,
+      reconnect: true
+    }
+  ) {
     this.trees = []
     this.VERSION = VERSION
     this.remoteDebugger = options.remoteDebugger || null
@@ -15,11 +17,15 @@ export class Devtools {
     this.isConnected = false
     this.ws = null
     this.reconnectInterval = 10000
-    this.doReconnect = typeof options.reconnect === 'undefined' ? true : options.reconnect
+    this.doReconnect = typeof options.reconnect === 'undefined'
+      ? true
+      : options.reconnect
     this.isResettingDebugger = false
 
     if (!this.remoteDebugger) {
-      throw new Error('Function-tree Devtools: You have to pass in the "remoteDebugger" option')
+      throw new Error(
+        'Function-tree Devtools: You have to pass in the "remoteDebugger" option'
+      )
     }
 
     this.sendInitial = this.sendInitial.bind(this)
@@ -29,7 +35,7 @@ export class Devtools {
 
   addListeners () {
     this.ws = new WebSocket(`ws://${this.remoteDebugger}`)
-    this.ws.onmessage = (event) => {
+    this.ws.onmessage = event => {
       const message = JSON.parse(event.data)
       switch (message.type) {
         case 'pong':
@@ -60,7 +66,9 @@ export class Devtools {
       this.isConnected = false
 
       if (this.doReconnect) {
-        console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
+        console.warn(
+          'Debugger application is not running on selected port... will reconnect automatically behind the scenes'
+        )
         this.reconnect()
       }
     }
@@ -86,11 +94,8 @@ export class Devtools {
     const refs = []
 
     return JSON.stringify(object, (key, value) => {
-      const isObject = (
-        typeof value === 'object' &&
-        value !== null &&
-        !Array.isArray(value)
-      )
+      const isObject =
+        typeof value === 'object' && value !== null && !Array.isArray(value)
 
       if (isObject && refs.indexOf(value) > -1) {
         return '[CIRCULAR]'
@@ -115,7 +120,9 @@ export class Devtools {
             name: execution.name,
             staticTree: execution.staticTree,
             datetime: execution.datetime,
-            executedBy: (payload && payload._execution) ? payload._execution : null
+            executedBy: payload && payload._execution
+              ? payload._execution
+              : null
           }
         }
       })
@@ -126,7 +133,7 @@ export class Devtools {
         this.backlog.push(message)
       }
     })
-    tree.on('end', (execution) => {
+    tree.on('end', execution => {
       const message = JSON.stringify({
         type: 'executionEnd',
         source: 'ft',
@@ -239,7 +246,7 @@ export class Devtools {
     })
 
     this.sendMessage(message)
-    this.backlog.forEach((backlogItem) => {
+    this.backlog.forEach(backlogItem => {
       this.sendMessage(backlogItem)
     })
 
@@ -272,7 +279,12 @@ export class Devtools {
     })
   }
   sendExecutionData (debuggingData, context, functionDetails, payload) {
-    const message = this.createExecutionMessage(debuggingData, context, functionDetails, payload)
+    const message = this.createExecutionMessage(
+      debuggingData,
+      context,
+      functionDetails,
+      payload
+    )
 
     if (this.isConnected) {
       this.sendMessage(message)
@@ -290,7 +302,9 @@ export class Devtools {
         wrapProvider (providerKey) {
           const provider = context[providerKey]
 
-          context[providerKey] = Object.keys(provider).reduce((wrappedProvider, key) => {
+          context[providerKey] = Object.keys(
+            provider
+          ).reduce((wrappedProvider, key) => {
             const originalFunc = provider[key]
 
             wrappedProvider[key] = (...args) => {

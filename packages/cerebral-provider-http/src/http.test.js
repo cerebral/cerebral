@@ -9,7 +9,7 @@ import mock from 'xhr-mock'
 mock.setup()
 
 describe('Http Provider', () => {
-  it('should create requests', (done) => {
+  it('should create requests', done => {
     mock.get('/items', (req, res) => {
       return res
         .status(200)
@@ -21,9 +21,11 @@ describe('Http Provider', () => {
       signals: {
         test: [
           ({http, path}) => {
-            return http.request({method: 'GET', url: '/items'})
+            return http
+              .request({method: 'GET', url: '/items'})
               .then(path.success)
-          }, {
+          },
+          {
             success: [
               ({props}) => {
                 assert.deepEqual(props, {
@@ -40,21 +42,19 @@ describe('Http Provider', () => {
     })
     controller.getSignal('test')()
   })
-  it('should create GET requests with queries', (done) => {
+  it('should create GET requests with queries', done => {
     mock.get('/items?foo=bar', (req, res) => {
       assert.equal(req.url(), '/items?foo=bar')
-      return res
-        .status(200)
-        .header('Content-Type', 'application/json')
+      return res.status(200).header('Content-Type', 'application/json')
     })
     const controller = Controller({
       providers: [HttpProvider()],
       signals: {
         test: [
           ({http, path}) => {
-            return http.get('/items', {foo: 'bar'})
-              .then(path.success)
-          }, {
+            return http.get('/items', {foo: 'bar'}).then(path.success)
+          },
+          {
             success: [() => done()]
           }
         ]
@@ -62,21 +62,19 @@ describe('Http Provider', () => {
     })
     controller.getSignal('test')()
   })
-  it('should create POST requests with body', (done) => {
+  it('should create POST requests with body', done => {
     mock.post('/items', (req, res) => {
       assert.equal(req.body(), JSON.stringify({foo: 'bar'}))
-      return res
-        .status(200)
-        .header('Content-Type', 'application/json')
+      return res.status(200).header('Content-Type', 'application/json')
     })
     const controller = Controller({
       providers: [HttpProvider()],
       signals: {
         test: [
           ({http, path}) => {
-            return http.post('/items', {foo: 'bar'})
-              .then(path.success)
-          }, {
+            return http.post('/items', {foo: 'bar'}).then(path.success)
+          },
+          {
             success: [() => done()]
           }
         ]
@@ -84,21 +82,19 @@ describe('Http Provider', () => {
     })
     controller.getSignal('test')()
   })
-  it('should create PUT requests with body', (done) => {
+  it('should create PUT requests with body', done => {
     mock.put('/items', (req, res) => {
       assert.equal(req.body(), JSON.stringify({foo: 'bar'}))
-      return res
-        .status(200)
-        .header('Content-Type', 'application/json')
+      return res.status(200).header('Content-Type', 'application/json')
     })
     const controller = Controller({
       providers: [HttpProvider()],
       signals: {
         test: [
           ({http, path}) => {
-            return http.put('/items', {foo: 'bar'})
-              .then(path.success)
-          }, {
+            return http.put('/items', {foo: 'bar'}).then(path.success)
+          },
+          {
             success: [() => done()]
           }
         ]
@@ -106,21 +102,19 @@ describe('Http Provider', () => {
     })
     controller.getSignal('test')()
   })
-  it('should create PATCH requests with body', (done) => {
+  it('should create PATCH requests with body', done => {
     mock.patch('/items', (req, res) => {
       assert.equal(req.body(), JSON.stringify({foo: 'bar'}))
-      return res
-        .status(200)
-        .header('Content-Type', 'application/json')
+      return res.status(200).header('Content-Type', 'application/json')
     })
     const controller = Controller({
       providers: [HttpProvider()],
       signals: {
         test: [
           ({http, path}) => {
-            return http.patch('/items', {foo: 'bar'})
-              .then(path.success)
-          }, {
+            return http.patch('/items', {foo: 'bar'}).then(path.success)
+          },
+          {
             success: [() => done()]
           }
         ]
@@ -128,21 +122,19 @@ describe('Http Provider', () => {
     })
     controller.getSignal('test')()
   })
-  it('should create DELETE requests', (done) => {
+  it('should create DELETE requests', done => {
     mock.delete('/items', (req, res) => {
       assert.ok(true)
-      return res
-        .status(200)
-        .header('Content-Type', 'application/json')
+      return res.status(200).header('Content-Type', 'application/json')
     })
     const controller = Controller({
       providers: [HttpProvider()],
       signals: {
         test: [
           ({http, path}) => {
-            return http.delete('/items')
-              .then(path.success)
-          }, {
+            return http.delete('/items').then(path.success)
+          },
+          {
             success: [() => done()]
           }
         ]
@@ -150,7 +142,7 @@ describe('Http Provider', () => {
     })
     controller.getSignal('test')()
   })
-  it('should abort request', (done) => {
+  it('should abort request', done => {
     mock.get('/items', (req, res) => {
       return res.timeout(500)
     })
@@ -159,24 +151,26 @@ describe('Http Provider', () => {
       signals: {
         test: [
           ({http, path}) => {
-            return http.get('/items')
-              .catch((error) => {
-                assert.ok(error.isAborted)
-                return path.aborted()
-              })
-          }, {
+            return http.get('/items').catch(error => {
+              assert.ok(error.isAborted)
+              return path.aborted()
+            })
+          },
+          {
             aborted: [() => done()]
           }
         ],
-        test2: [({http}) => {
-          http.abort('/items')
-        }]
+        test2: [
+          ({http}) => {
+            http.abort('/items')
+          }
+        ]
       }
     })
     controller.getSignal('test')()
     controller.getSignal('test2')()
   })
-  it('should expose factories to do requests', (done) => {
+  it('should expose factories to do requests', done => {
     mock.get('/items/1', (req, res) => {
       return res.status(200).header('Content-Type', 'application/json')
     })
@@ -198,20 +192,45 @@ describe('Http Provider', () => {
       providers: [HttpProvider()],
       signals: {
         test: [
-          httpGet(string`/items/${props`itemId`}`), {
-            success: [() => { responseCount++ }]
+          httpGet(string`/items/${props`itemId`}`),
+          {
+            success: [
+              () => {
+                responseCount++
+              }
+            ]
           },
-          httpPost(string`/items/${props`itemId`}`), {
-            success: [() => { responseCount++ }]
+          httpPost(string`/items/${props`itemId`}`),
+          {
+            success: [
+              () => {
+                responseCount++
+              }
+            ]
           },
-          httpPut(string`/items/${props`itemId`}`), {
-            success: [() => { responseCount++ }]
+          httpPut(string`/items/${props`itemId`}`),
+          {
+            success: [
+              () => {
+                responseCount++
+              }
+            ]
           },
-          httpPatch(string`/items/${props`itemId`}`), {
-            success: [() => { responseCount++ }]
+          httpPatch(string`/items/${props`itemId`}`),
+          {
+            success: [
+              () => {
+                responseCount++
+              }
+            ]
           },
-          httpDelete(string`/items/${props`itemId`}`), {
-            success: [() => { responseCount++ }]
+          httpDelete(string`/items/${props`itemId`}`),
+          {
+            success: [
+              () => {
+                responseCount++
+              }
+            ]
           },
           () => {
             assert.equal(responseCount, 5)
@@ -224,12 +243,10 @@ describe('Http Provider', () => {
       itemId: 1
     })
   })
-  it('should allow factories to accept tags in props data', (done) => {
+  it('should allow factories to accept tags in props data', done => {
     const mockResponse = (req, res) => {
       assert.equal(req.body(), JSON.stringify({data: 1}))
-      return res
-        .status(200)
-        .header('Content-Type', 'application/json')
+      return res.status(200).header('Content-Type', 'application/json')
     }
 
     mock.post('/test', mockResponse)
@@ -240,13 +257,16 @@ describe('Http Provider', () => {
       providers: [HttpProvider()],
       signals: {
         test: [
-          httpPost('/test', { data: props`data` }), {
+          httpPost('/test', {data: props`data`}),
+          {
             success: []
           },
-          httpPut('/test', { data: props`data` }), {
+          httpPut('/test', {data: props`data`}),
+          {
             success: []
           },
-          httpPatch('/test', { data: props`data` }), {
+          httpPatch('/test', {data: props`data`}),
+          {
             success: []
           },
           () => {
@@ -259,7 +279,7 @@ describe('Http Provider', () => {
       data: 1
     })
   })
-  it('should call status code paths', (done) => {
+  it('should call status code paths', done => {
     mock.get('/items/201', (req, res) => {
       return res.status(201).header('Content-Type', 'application/json')
     })
@@ -269,8 +289,13 @@ describe('Http Provider', () => {
       providers: [HttpProvider()],
       signals: {
         test: [
-          httpGet('/items/201'), {
-            '201': [() => { responseCount++ }]
+          httpGet('/items/201'),
+          {
+            '201': [
+              () => {
+                responseCount++
+              }
+            ]
           },
           () => {
             assert.equal(responseCount, 1)

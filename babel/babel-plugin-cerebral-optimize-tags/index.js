@@ -12,7 +12,10 @@ function isAllowedImport (importName) {
 export default function ({types: t}) {
   const optionsMap = {
     state: t.objectExpression([
-      t.objectProperty(t.stringLiteral('isStateDependency'), t.booleanLiteral(true))
+      t.objectProperty(
+        t.stringLiteral('isStateDependency'),
+        t.booleanLiteral(true)
+      )
     ]),
     string: t.objectExpression([
       t.objectProperty(t.stringLiteral('hasValue'), t.booleanLiteral(false))
@@ -35,7 +38,10 @@ export default function ({types: t}) {
         ) {
           let foundImport = false
           // Verify that all imports are allowed and track the localName
-          for (const {imported: {name: importName} = {}, local: {name: localName}} of path.node.specifiers) {
+          for (const {
+            imported: {name: importName} = {},
+            local: {name: localName}
+          } of path.node.specifiers) {
             if (importName === undefined) {
               continue
             }
@@ -43,7 +49,9 @@ export default function ({types: t}) {
               foundImport = true
               this.importedTagMap.set(localName, importName)
             } else {
-              throw path.buildCodeFrameError(`The Tag "${importName}" can't be imported`)
+              throw path.buildCodeFrameError(
+                `The Tag "${importName}" can't be imported`
+              )
             }
           }
           if (!foundImport) {
@@ -59,17 +67,23 @@ export default function ({types: t}) {
         }
       },
       TaggedTemplateExpression (path) {
-        const {node: {quasi: {quasis, expressions}, tag: {name: localName}}} = path
+        const {
+          node: {quasi: {quasis, expressions}, tag: {name: localName}}
+        } = path
         if (this.importedTagMap.has(localName)) {
           const name = this.importedTagMap.get(localName)
-          const options = optionsMap[name] ? optionsMap[name] : t.identifier('undefined')
+          const options = optionsMap[name]
+            ? optionsMap[name]
+            : t.identifier('undefined')
           const fnQuasis = quasis.map(e => t.stringLiteral(e.value.raw))
 
           path.replaceWith(
-            t.newExpression(
-              this.tagId,
-              [t.stringLiteral(name), options, t.arrayExpression(fnQuasis), t.arrayExpression(expressions)]
-            )
+            t.newExpression(this.tagId, [
+              t.stringLiteral(name),
+              options,
+              t.arrayExpression(fnQuasis),
+              t.arrayExpression(expressions)
+            ])
           )
         }
       }

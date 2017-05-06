@@ -5,7 +5,7 @@ import {wait} from './'
 import {parallel} from '../'
 
 describe('operator.wait', () => {
-  it('should hold execution for set time', (done) => {
+  it('should hold execution for set time', done => {
     const start = Date.now()
     const controller = Controller({
       signals: {
@@ -20,13 +20,14 @@ describe('operator.wait', () => {
     })
     controller.getSignal('test')()
   })
-  it('should hold execution for set time in parallel', (done) => {
+  it('should hold execution for set time in parallel', done => {
     const start = Date.now()
     const controller = Controller({
       signals: {
         test: [
           parallel([
-            wait(100), {
+            wait(100),
+            {
               continue: [
                 () => {
                   assert.ok(Date.now() - start >= 100)

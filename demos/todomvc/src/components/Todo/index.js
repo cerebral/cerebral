@@ -3,15 +3,16 @@ import classnames from 'classnames'
 import {connect} from 'cerebral/react'
 import {state, signal, props} from 'cerebral/tags'
 
-export default connect({
-  todo: state`todos.${props`uid`}`,
-  todoDoubleClicked: signal`todoDoubleClicked`,
-  newTitleChanged: signal`todoNewTitleChanged`,
-  newTitleSubmitted: signal`todoNewTitleSubmitted`,
-  toggleCompletedChanged: signal`toggleTodoCompletedChanged`,
-  removeTodoClicked: signal`removeTodoClicked`,
-  newTitleAborted: signal`todoNewTitleAborted`
-},
+export default connect(
+  {
+    todo: state`todos.${props`uid`}`,
+    todoDoubleClicked: signal`todoDoubleClicked`,
+    newTitleChanged: signal`todoNewTitleChanged`,
+    newTitleSubmitted: signal`todoNewTitleSubmitted`,
+    toggleCompletedChanged: signal`toggleTodoCompletedChanged`,
+    removeTodoClicked: signal`removeTodoClicked`,
+    newTitleAborted: signal`todoNewTitleAborted`
+  },
   function Todo ({
     uid,
     isEditing,
@@ -24,7 +25,9 @@ export default connect({
     newTitleAborted
   }) {
     return (
-      <li className={classnames({completed: todo.completed, editing: isEditing})}>
+      <li
+        className={classnames({completed: todo.completed, editing: isEditing})}
+      >
         <div className='view'>
           <input
             className='toggle'
@@ -40,21 +43,21 @@ export default connect({
             onClick={() => removeTodoClicked({uid})}
           />
         </div>
-        {
-          isEditing &&
-            <form onSubmit={(e) => {
+        {isEditing &&
+          <form
+            onSubmit={e => {
               e.preventDefault()
               newTitleSubmitted({uid})
-            }}>
-              <input
-                autoFocus
-                className='edit'
-                value={isEditing ? todo.editedTitle : todo.title}
-                onBlur={() => newTitleSubmitted({uid})}
-                onChange={(e) => newTitleChanged({uid, title: e.target.value})}
-              />
-            </form>
-        }
+            }}
+          >
+            <input
+              autoFocus
+              className='edit'
+              value={isEditing ? todo.editedTitle : todo.title}
+              onBlur={() => newTitleSubmitted({uid})}
+              onChange={e => newTitleChanged({uid, title: e.target.value})}
+            />
+          </form>}
       </li>
     )
   }

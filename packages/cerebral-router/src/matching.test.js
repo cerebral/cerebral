@@ -26,7 +26,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -62,7 +66,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -98,7 +106,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -135,7 +147,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -171,7 +187,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -214,7 +234,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -259,7 +283,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
       triggerUrlChange('/')
@@ -291,7 +319,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -330,7 +362,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -371,7 +407,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 
@@ -412,7 +452,11 @@ describe('Router - matching', () => {
           }
         }),
         signals: {
-          'home': [() => { count++ }]
+          home: [
+            () => {
+              count++
+            }
+          ]
         }
       })
 

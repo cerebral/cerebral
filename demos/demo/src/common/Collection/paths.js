@@ -9,13 +9,13 @@ export default function paths (moduleName) {
     errorPath: `app.$error`,
     dynamicPaths: [
       set(
-        props`remoteCollectionPath`, string`${state`user.$currentUser.uid`}.${moduleName}`
+        props`remoteCollectionPath`,
+        string`${state`user.$currentUser.uid`}.${moduleName}`
       ),
-      when(props`key`), {
+      when(props`key`),
+      {
         true: [
-          set(
-            props`itemPath`, string`${moduleName}.all.${props`key`}`
-          ),
+          set(props`itemPath`, string`${moduleName}.all.${props`key`}`),
           set(
             props`remoteItemPath`,
             string`${props`remoteCollectionPath`}.${props`key`}`

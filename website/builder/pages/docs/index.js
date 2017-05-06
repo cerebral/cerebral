@@ -10,11 +10,28 @@ function Docs (props) {
   return (
     <div className='docs-container'>
       <div className='beta'>beta</div>
-      <Navigation docs={props.docs} sectionName={props.sectionName} docName={props.docName} />
-      <NavigationMobile docs={props.docs} sectionName={props.sectionName} docName={props.docName} />
+      <Navigation
+        docs={props.docs}
+        sectionName={props.sectionName}
+        docName={props.docName}
+      />
+      <NavigationMobile
+        docs={props.docs}
+        sectionName={props.sectionName}
+        docName={props.docName}
+      />
       <div className='docs-content'>
-        <TOC docName={props.docName} sectionName={props.sectionName} sections={props.docs[props.sectionName]} />
-        <Doc doc={doc.tree} docName={props.docName} sectionName={props.sectionName} githubUrl={doc.githubUrl} />
+        <TOC
+          docName={props.docName}
+          sectionName={props.sectionName}
+          sections={props.docs[props.sectionName]}
+        />
+        <Doc
+          doc={doc.tree}
+          docName={props.docName}
+          sectionName={props.sectionName}
+          githubUrl={doc.githubUrl}
+        />
       </div>
     </div>
   )

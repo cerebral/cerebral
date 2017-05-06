@@ -24,16 +24,24 @@ export default connect(
               <Email email={item.email} />
             </div>
             <div className='level-right'>
-              {item.$isDefaultItem !== true && (
-                <a className='level-item' onClick={() => penClick({key: item.key})}>
-                  <span className='icon is-small'><i className='fa fa-pencil' /></span>
-                </a>
-              )}
-              {item.$isDefaultItem !== true && (
-                <a className='level-item' onClick={() => trashClick({key: item.key})}>
-                  <span className='icon is-small'><i className='fa fa-trash' /></span>
-                </a>
-              )}
+              {item.$isDefaultItem !== true &&
+                <a
+                  className='level-item'
+                  onClick={() => penClick({key: item.key})}
+                >
+                  <span className='icon is-small'>
+                    <i className='fa fa-pencil' />
+                  </span>
+                </a>}
+              {item.$isDefaultItem !== true &&
+                <a
+                  className='level-item'
+                  onClick={() => trashClick({key: item.key})}
+                >
+                  <span className='icon is-small'>
+                    <i className='fa fa-trash' />
+                  </span>
+                </a>}
             </div>
           </nav>
 

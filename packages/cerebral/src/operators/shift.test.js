@@ -11,27 +11,22 @@ describe('operator.shift', () => {
         list: ['a', 'b', 'c']
       },
       signals: {
-        test: [
-          shift(state`list`)
-        ]
+        test: [shift(state`list`)]
       }
     })
     controller.getSignal('test')()
     assert.deepEqual(controller.getState(), {list: ['b', 'c']})
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
-      state: {
-      },
+      state: {},
       signals: {
-        test: [
-          shift(props`list`, 'bar')
-        ]
+        test: [shift(props`list`, 'bar')]
       }
     })
 
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })

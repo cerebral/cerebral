@@ -2,7 +2,16 @@ import DependencyStore from './DependencyStore'
 import FunctionTree from 'function-tree'
 import Module from './Module'
 import Model from './Model'
-import {ensurePath, isDeveloping, throwError, isSerializable, forceSerializable, isObject, getProviders, cleanPath} from './utils'
+import {
+  ensurePath,
+  isDeveloping,
+  throwError,
+  isSerializable,
+  forceSerializable,
+  isObject,
+  getProviders,
+  cleanPath
+} from './utils'
 import VerifyPropsProvider from './providers/VerifyProps'
 import StateProvider from './providers/State'
 import DebuggerProvider from './providers/Debugger'
@@ -18,11 +27,21 @@ import ResolveProvider from './providers/Resolve'
 class Controller extends FunctionTree {
   constructor (config) {
     super()
-    const {state = {}, signals = {}, providers = [], modules = {}, router, devtools = null, options = {}} = config
+    const {
+      state = {},
+      signals = {},
+      providers = [],
+      modules = {},
+      router,
+      devtools = null,
+      options = {}
+    } = config
     const getSignal = this.getSignal
 
     this.getSignal = () => {
-      throwError('You are grabbing a signal before controller has initialized, please wait for "initialized" event')
+      throwError(
+        'You are grabbing a signal before controller has initialized, please wait for "initialized" event'
+      )
     }
     this.componentDependencyStore = new DependencyStore()
     this.options = options
@@ -38,29 +57,17 @@ class Controller extends FunctionTree {
     this.router = router ? router(this) : null
 
     if (options.strictRender) {
-      console.warn('DEPRECATION - No need to use strictRender option anymore, it is the only render mode now')
+      console.warn(
+        'DEPRECATION - No need to use strictRender option anymore, it is the only render mode now'
+      )
     }
 
-    this.contextProviders = [
-      ControllerProvider(this)
-    ].concat(
-      this.router ? [
-        this.router.provider
-      ] : []
-    ).concat((
-      this.devtools ? [
-        DebuggerProvider()
-      ] : []
-    )).concat((
-      isDeveloping() ? [
-        VerifyPropsProvider
-      ] : []
-    )).concat(
-      StateProvider(),
-      ResolveProvider()
-    ).concat(
-      providers.concat(getProviders(this.module))
-    )
+    this.contextProviders = [ControllerProvider(this)]
+      .concat(this.router ? [this.router.provider] : [])
+      .concat(this.devtools ? [DebuggerProvider()] : [])
+      .concat(isDeveloping() ? [VerifyPropsProvider] : [])
+      .concat(StateProvider(), ResolveProvider())
+      .concat(providers.concat(getProviders(this.module)))
 
     this.on('asyncFunction', (execution, funcDetails) => {
       if (!funcDetails.isParallel) {
@@ -68,11 +75,14 @@ class Controller extends FunctionTree {
       }
     })
     this.on('parallelStart', () => this.flush())
-    this.on('parallelProgress', (execution, currentPayload, functionsResolving) => {
-      if (functionsResolving === 1) {
-        this.flush()
+    this.on(
+      'parallelProgress',
+      (execution, currentPayload, functionsResolving) => {
+        if (functionsResolving === 1) {
+          this.flush()
+        }
       }
-    })
+    )
     this.on('end', () => this.flush())
 
     if (this.devtools) {
@@ -85,7 +95,9 @@ class Controller extends FunctionTree {
       typeof navigator !== 'undefined' &&
       /Chrome/.test(navigator.userAgent)
     ) {
-      console.warn('You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: http://cerebraljs.com/docs/get_started/debugger.html')
+      console.warn(
+        'You are not using the Cerebral devtools. It is highly recommended to use it in combination with the debugger: http://cerebraljs.com/docs/get_started/debugger.html'
+      )
     }
 
     this.getSignal = getSignal
@@ -116,11 +128,13 @@ class Controller extends FunctionTree {
     if (force) {
       componentsToRender = this.componentDependencyStore.getAllUniqueEntities()
     } else {
-      componentsToRender = this.componentDependencyStore.getUniqueEntities(changes)
+      componentsToRender = this.componentDependencyStore.getUniqueEntities(
+        changes
+      )
     }
 
     const start = Date.now()
-    componentsToRender.forEach((component) => {
+    componentsToRender.forEach(component => {
       if (this.devtools) {
         this.devtools.updateComponentsMap(component)
       }
@@ -150,14 +164,20 @@ class Controller extends FunctionTree {
   */
   runSignal (name, signal, payload = {}) {
     if (this.devtools && (!isObject(payload) || !isSerializable(payload))) {
-      console.warn(`You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`, payload)
+      console.warn(
+        `You passed an invalid payload to signal "${name}". Only serializable payloads can be passed to a signal. The payload has been ignored. This is the object:`,
+        payload
+      )
       payload = {}
     }
 
     if (this.devtools) {
       payload = Object.keys(payload).reduce((currentPayload, key) => {
         if (!isSerializable(payload[key], this.devtools.allowedTypes)) {
-          console.warn(`You passed an invalid payload to signal "${name}", on key "${key}". Only serializable values like Object, Array, String, Number and Boolean can be passed in. Also these special value types:`, this.devtools.allowedTypes)
+          console.warn(
+            `You passed an invalid payload to signal "${name}", on key "${key}". Only serializable values like Object, Array, String, Number and Boolean can be passed in. Also these special value types:`,
+            this.devtools.allowedTypes
+          )
 
           return currentPayload
         }
@@ -168,7 +188,7 @@ class Controller extends FunctionTree {
       }, {})
     }
 
-    this.run(name, signal, payload, (error) => {
+    this.run(name, signal, payload, error => {
       if (error) {
         const signalPath = error.execution.name.split('.')
         const signalCatch = signalPath.reduce((currentModule, key, index) => {
@@ -222,7 +242,11 @@ class Controller extends FunctionTree {
     const moduleKey = pathArray.pop()
     const parentModule = pathArray.reduce((currentModule, key) => {
       if (!currentModule.modules[key]) {
-        throwError(`The path "${pathArray.join('.')}" is invalid, can not add module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
+        throwError(
+          `The path "${pathArray.join('.')}" is invalid, can not add module. Does the path "${pathArray
+            .splice(0, path.length - 1)
+            .join('.')}" exist?`
+        )
       }
       return currentModule.modules[key]
     }, this.module)
@@ -247,7 +271,11 @@ class Controller extends FunctionTree {
 
     const parentModule = pathArray.reduce((currentModule, key) => {
       if (!currentModule.modules[key]) {
-        throwError(`The path "${pathArray.join('.')}" is invalid, can not remove module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
+        throwError(
+          `The path "${pathArray.join('.')}" is invalid, can not remove module. Does the path "${pathArray
+            .splice(0, path.length - 1)
+            .join('.')}" exist?`
+        )
       }
       return currentModule.modules[key]
     }, this.module)
@@ -255,7 +283,10 @@ class Controller extends FunctionTree {
     const module = parentModule.modules[moduleKey]
 
     if (module.provider) {
-      this.contextProviders.splice(this.contextProviders.indexOf(module.provider), 1)
+      this.contextProviders.splice(
+        this.contextProviders.indexOf(module.provider),
+        1
+      )
     }
 
     delete parentModule.modules[moduleKey]
@@ -264,7 +295,6 @@ class Controller extends FunctionTree {
 
     this.flush()
   }
-
 }
 
 export default function (...args) {

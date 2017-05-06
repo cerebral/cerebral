@@ -5,11 +5,12 @@ import {css} from 'aphrodite'
 import styles from './styles'
 import {field} from 'cerebral-provider-forms'
 
-export default connect({
-  field: field(state`${props`path`}`),
-  settings: state`app.settings`,
-  fieldChanged: signal`simple.fieldChanged`
-},
+export default connect(
+  {
+    field: field(state`${props`path`}`),
+    settings: state`app.settings`,
+    fieldChanged: signal`simple.fieldChanged`
+  },
   function Input ({name, field, path, settings, fieldChanged}) {
     function onChange (e) {
       fieldChanged({
@@ -37,7 +38,13 @@ export default connect({
     return (
       <div style={{marginTop: 10, fontSize: 14}}>
         {name} {field.isRequired ? '*' : ''}<br />
-        <input onChange={(e) => onChange(e)} onBlur={(e) => onBlur(e)} value={field.value} type={'text'} className={css(styles.input)} />
+        <input
+          onChange={e => onChange(e)}
+          onBlur={e => onBlur(e)}
+          value={field.value}
+          type={'text'}
+          className={css(styles.input)}
+        />
         {renderError()}
       </div>
     )

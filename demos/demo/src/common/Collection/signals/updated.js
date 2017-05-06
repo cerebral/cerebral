@@ -10,12 +10,13 @@ export default function (moduleName) {
 
     set(state`${props`itemPath`}`, props`value`),
 
-    when(state`${draftPath}.key`, props`key`,
+    when(
+      state`${draftPath}.key`,
+      props`key`,
       (draftKey, updatedKey) => draftKey === updatedKey
-    ), {
-      true: [
-        set(state`${draftPath}`, props`value`)
-      ],
+    ),
+    {
+      true: [set(state`${draftPath}`, props`value`)],
       false: []
     }
   ]

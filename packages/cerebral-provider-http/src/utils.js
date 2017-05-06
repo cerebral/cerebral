@@ -1,7 +1,7 @@
 import HttpProviderError from './HttpProviderError'
 
 export function createResponse (options, resolve, reject) {
-  return (event) => {
+  return event => {
     switch (event.type) {
       case 'load':
         return options.onResponse(event.currentTarget, resolve, reject)
@@ -13,10 +13,25 @@ export function createResponse (options, resolve, reject) {
         }
         break
       case 'error':
-        reject(new HttpProviderError(event.currentTarget.status, null, null, 'request error'))
+        reject(
+          new HttpProviderError(
+            event.currentTarget.status,
+            null,
+            null,
+            'request error'
+          )
+        )
         break
       case 'abort':
-        reject(new HttpProviderError(event.currentTarget.status, null, null, 'request abort', true))
+        reject(
+          new HttpProviderError(
+            event.currentTarget.status,
+            null,
+            null,
+            'request abort',
+            true
+          )
+        )
         break
     }
   }
@@ -42,9 +57,11 @@ export function urlEncode (obj, prefix) {
       var k = prefix ? prefix + '[' + p + ']' : p
       var v = obj[p]
 
-      str.push(typeof v === 'object'
-        ? urlEncode(v, k)
-        : encodeURIComponent(k) + '=' + encodeURIComponent(v))
+      str.push(
+        typeof v === 'object'
+          ? urlEncode(v, k)
+          : encodeURIComponent(k) + '=' + encodeURIComponent(v)
+      )
     }
   }
   return str.join('&')
@@ -79,34 +96,36 @@ export function parseHeaders (rawHeaders) {
 }
 
 export function processResponse (httpAction, path) {
-  return httpAction
-    .then((response) => {
-      if (path && path[response.status]) {
-        return path[response.status](response)
-      }
+  return (
+    httpAction
+      .then(response => {
+        if (path && path[response.status]) {
+          return path[response.status](response)
+        }
 
-      return path && path.success ? path.success(response) : response
-    })
-    // This error will be an instance of HttpError
-    .catch((error) => {
-      if (!path) {
+        return path && path.success ? path.success(response) : response
+      })
+      // This error will be an instance of HttpError
+      .catch(error => {
+        if (!path) {
+          throw error
+        }
+
+        if (error.isAborted && path.abort) {
+          return path.abort({error: error.toJSON()})
+        }
+
+        if (path[error.status]) {
+          return path[error.status]({error: error.toJSON()})
+        }
+
+        if (path.error) {
+          return path.error({error: error.toJSON()})
+        }
+
         throw error
-      }
-
-      if (error.isAborted && path.abort) {
-        return path.abort({error: error.toJSON()})
-      }
-
-      if (path[error.status]) {
-        return path[error.status]({error: error.toJSON()})
-      }
-
-      if (path.error) {
-        return path.error({error: error.toJSON()})
-      }
-
-      throw error
-    })
+      })
+  )
 }
 
 export function getAllResponseHeaders (xhr) {

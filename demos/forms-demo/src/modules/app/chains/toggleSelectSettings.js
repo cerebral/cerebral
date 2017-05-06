@@ -6,12 +6,9 @@ import {setField} from 'cerebral-provider-forms/operators'
 
 export default [
   setField(state`${props`field`}`, props`value`),
-  when(props`value`), {
-    true: [
-      hidePanel,
-      unToggleSettings
-    ],
-    false: [
-    ]
+  when(props`value`),
+  {
+    true: [hidePanel, unToggleSettings],
+    false: []
   }
 ]

@@ -11,7 +11,7 @@ import toggleAllChecked from './actions/toggleAllChecked'
 import clearCompletedTodos from './actions/clearCompletedTodos'
 
 const controller = Controller({
-  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
+  devtools: Devtools({remoteDebugger: 'localhost:8787'}),
   router: Router({
     onlyHash: true,
     routes: {
@@ -29,7 +29,9 @@ const controller = Controller({
   ],
   state: {
     newTodoTitle: '',
-    todos: window.localStorage.getItem('todomvc.todos') ? JSON.parse(window.localStorage.getItem('todomvc.todos')) : {},
+    todos: window.localStorage.getItem('todomvc.todos')
+      ? JSON.parse(window.localStorage.getItem('todomvc.todos'))
+      : {},
     filter: 'all',
     editingUid: null
   },
@@ -37,48 +39,46 @@ const controller = Controller({
     rootRouted: redirect('/all'),
     newTodoTitleChanged: set(state`newTodoTitle`, props`title`),
     newTodoSubmitted: [
-      when(state`newTodoTitle`), {
-        true: [
-          addTodo,
-          set(state`newTodoTitle`, '')
-        ],
+      when(state`newTodoTitle`),
+      {
+        true: [addTodo, set(state`newTodoTitle`, '')],
         false: []
       }
     ],
-    todoNewTitleChanged: set(state`todos.${props`uid`}.editedTitle`, props`title`),
+    todoNewTitleChanged: set(
+      state`todos.${props`uid`}.editedTitle`,
+      props`title`
+    ),
     todoNewTitleSubmitted: [
-      when(state`todos.${props`uid`}.editedTitle`), {
+      when(state`todos.${props`uid`}.editedTitle`),
+      {
         true: [
-          set(state`todos.${props`uid`}.title`, state`todos.${props`uid`}.editedTitle`),
+          set(
+            state`todos.${props`uid`}.title`,
+            state`todos.${props`uid`}.editedTitle`
+          ),
           unset(state`todos.${props`uid`}.editedTitle`),
           set(state`editingUid`, null)
         ],
         false: []
       }
     ],
-    removeTodoClicked: [
-      unset(state`todos.${props`uid`}`)
-    ],
+    removeTodoClicked: [unset(state`todos.${props`uid`}`)],
     todoDoubleClicked: [
-      set(state`todos.${props`uid`}.editedTitle`, state`todos.${props`uid`}.title`),
+      set(
+        state`todos.${props`uid`}.editedTitle`,
+        state`todos.${props`uid`}.title`
+      ),
       set(state`editingUid`, props`uid`)
     ],
-    toggleAllChanged: [
-      toggleAllChecked
-    ],
-    toggleTodoCompletedChanged: [
-      toggle(state`todos.${props`uid`}.completed`)
-    ],
+    toggleAllChanged: [toggleAllChecked],
+    toggleTodoCompletedChanged: [toggle(state`todos.${props`uid`}.completed`)],
     todoNewTitleAborted: [
       unset(state`todos.${props`uid`}.editedTitle`),
       set(state`editingUid`, null)
     ],
-    clearCompletedClicked: [
-      clearCompletedTodos
-    ],
-    filterClicked: [
-      set(state`filter`, props`filter`)
-    ]
+    clearCompletedClicked: [clearCompletedTodos],
+    filterClicked: [set(state`filter`, props`filter`)]
   }
 })
 

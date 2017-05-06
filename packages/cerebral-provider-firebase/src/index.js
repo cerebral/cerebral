@@ -1,7 +1,5 @@
 import firebase from 'firebase'
-import {
-  stopListening
-} from './helpers'
+import {stopListening} from './helpers'
 import signInAnonymouslyService from './signInAnonymously'
 import getUserService from './getUser'
 import createOnChildAdded from './createOnChildAdded'
@@ -31,7 +29,7 @@ import {setOnDisconnect, cancelOnDisconnect} from './onDisconnect'
 export {FirebaseProviderError} from './errors'
 export {FirebaseProviderAuthenticationError} from './errors'
 
-export default function FirebaseProviderFactory (options = { payload: {} }) {
+export default function FirebaseProviderFactory (options = {payload: {}}) {
   firebase.initializeApp(options.config)
 
   let cachedProvider = null
@@ -69,7 +67,11 @@ export default function FirebaseProviderFactory (options = { payload: {} }) {
       }
     }
 
-    context.firebase.task = createTask(options, context.execution.id, functionDetails.functionIndex)
+    context.firebase.task = createTask(
+      options,
+      context.execution.id,
+      functionDetails.functionIndex
+    )
 
     if (context.debugger) {
       context.debugger.wrapProvider('firebase')

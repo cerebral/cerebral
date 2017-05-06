@@ -19,11 +19,15 @@ export default [
   set(props`now`, now),
   set(props`value.endedAt`, props`now`),
   unset(state`tasks.$now`),
-  set(props`value.elapsed`, elapsedSeconds(props`value.startedAt`, props`value.endedAt`)),
+  set(
+    props`value.elapsed`,
+    elapsedSeconds(props`value.startedAt`, props`value.endedAt`)
+  ),
   // FIXME: same here...
   makeRef,
   set(props`key`, props`ref`),
-  ...save(moduleName), {
+  ...save(moduleName),
+  {
     success: [
       // Saved new task, now update 'running'
       set(state`${draftPath}.key`, 'running'),
@@ -32,15 +36,12 @@ export default [
       unset(state`${draftPath}.elapsed`),
       set(props`value`, state`${draftPath}`),
       set(props`key`, 'running'),
-      ...save(moduleName), {
+      ...save(moduleName),
+      {
         success: [],
-        error: [
-          set(state`${errorPath}`, props`error`)
-        ]
+        error: [set(state`${errorPath}`, props`error`)]
       }
     ],
-    error: [
-      set(state`${errorPath}`, props`error`)
-    ]
+    error: [set(state`${errorPath}`, props`error`)]
   }
 ]

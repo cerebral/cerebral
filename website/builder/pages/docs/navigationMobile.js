@@ -7,9 +7,18 @@ function Navigation (props) {
       <ul className='docs-navigation-menu mobile'>
         {Object.keys(props.docs).map(function (sectionKey, index) {
           return (
-            <li key={index} className={`docs-navigation-item${props.sectionName === sectionKey ? ' active' : ''} mobile`}>
+            <li
+              key={index}
+              className={`docs-navigation-item${props.sectionName === sectionKey ? ' active' : ''} mobile`}
+            >
               <a href={`/docs/${sectionKey}`}>{sectionKey.replace('_', ' ')}</a>
-              {props.sectionName === sectionKey ? <TOC docName={props.docName} sectionName={props.sectionName} sections={props.docs[props.sectionName]} /> : null}
+              {props.sectionName === sectionKey
+                ? <TOC
+                    docName={props.docName}
+                    sectionName={props.sectionName}
+                    sections={props.docs[props.sectionName]}
+                  />
+                : null}
             </li>
           )
         })}

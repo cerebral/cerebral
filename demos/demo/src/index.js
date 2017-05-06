@@ -20,7 +20,7 @@ import user from './modules/user'
 import App from './components/App'
 
 const controller = Controller({
-  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
+  devtools: Devtools({remoteDebugger: 'localhost:8787'}),
   router: Router({
     routes: {
       '/': 'app.routed',
@@ -31,10 +31,7 @@ const controller = Controller({
     onlyHash: true
   }),
 
-  providers: [
-    FirebaseProvider({config: firebaseConfig}),
-    FormsProvider()
-  ],
+  providers: [FirebaseProvider({config: firebaseConfig}), FormsProvider()],
 
   modules: {
     app,
@@ -48,8 +45,9 @@ const controller = Controller({
 controller.getSignal('app.bootstrap')({})
 visibility.register(controller.getSignal('tasks.visibilityChanged'))
 
-render((
-  <Container controller={controller} >
+render(
+  <Container controller={controller}>
     <App />
-  </Container>
-), document.querySelector('#root'))
+  </Container>,
+  document.querySelector('#root')
+)

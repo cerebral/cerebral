@@ -7,9 +7,12 @@ export default connect(
     onClick: signal`clients.phoneClicked`
   },
   function Phone ({onClick, phone}) {
-    return <a className='level-item'
-      onClick={phone ? () => onClick({phone}) : null}>
-      <span className='icon is-small'><i className='fa fa-phone' style={phone ? null : {color: '#ccc'}} /></span>
-    </a>
+    return (
+      <a className='level-item' onClick={phone ? () => onClick({phone}) : null}>
+        <span className='icon is-small'>
+          <i className='fa fa-phone' style={phone ? null : {color: '#ccc'}} />
+        </span>
+      </a>
+    )
   }
 )

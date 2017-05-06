@@ -2,7 +2,11 @@ import {convertObjectWithTemplates} from '../helpers'
 
 function onChildChangedFactory (path, signal, options = {}) {
   function onChildChanged ({firebase, resolve}) {
-    firebase.onChildChanged(resolve.value(path), resolve.path(signal), convertObjectWithTemplates(options, resolve))
+    firebase.onChildChanged(
+      resolve.value(path),
+      resolve.path(signal),
+      convertObjectWithTemplates(options, resolve)
+    )
   }
 
   return onChildChanged

@@ -11,38 +11,30 @@ export default {
   },
   signals: {
     bootstrap: [
-      when(state`user.$loggedIn`), {
+      when(state`user.$loggedIn`),
+      {
         true: [],
         false: [
-          getUser, {
+          getUser,
+          {
             success: [
               set(state`user.$loggedIn`, true),
               set(state`user.$currentUser`, props`user`),
               ...firebaseInit
             ],
-            error: [
-              set(state`user.$loggedIn`, false)
-            ]
+            error: [set(state`user.$loggedIn`, false)]
           }
         ]
       },
       set(state`app.$loading`, false)
     ],
-    dismissNotificationClicked: [
-      unset(state`app.$error`)
-    ],
-    routed: [
-      set(state`app.$selectedView`, 'Today')
-    ],
+    dismissNotificationClicked: [unset(state`app.$error`)],
+    routed: [set(state`app.$selectedView`, 'Today')],
     langOptionClicked: [
       set(state`user.lang`, props`lang`),
       unset(state`app.$showLangSelector`)
     ],
-    langSelectorClicked: [
-      set(state`app.$showLangSelector`, true)
-    ],
-    langSelectorBackgroundClicked: [
-      unset(state`app.$showLangSelector`)
-    ]
+    langSelectorClicked: [set(state`app.$showLangSelector`, true)],
+    langSelectorBackgroundClicked: [unset(state`app.$showLangSelector`)]
   }
 }

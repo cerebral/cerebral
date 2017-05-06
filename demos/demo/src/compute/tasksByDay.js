@@ -38,9 +38,9 @@ export default compute(
     })
     result.forEach(day => {
       day.totalElapsed = day.tasks.reduce((sum, task) => sum + task.elapsed, 0)
-      day.tasks.sort((a, b) => a.startedAt <= b.startedAt ? 1 : -1)
+      day.tasks.sort((a, b) => (a.startedAt <= b.startedAt ? 1 : -1))
     })
-    result.sort((a, b) => a.dayDate <= b.dayDate ? 1 : -1)
+    result.sort((a, b) => (a.dayDate <= b.dayDate ? 1 : -1))
 
     return result
   }

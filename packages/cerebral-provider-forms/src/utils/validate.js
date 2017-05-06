@@ -15,11 +15,15 @@ export default function validate (form, value, validationRules) {
       return result
     }
 
-    const ruleArray = validationRule instanceof RegExp ? ['regexp'] : validationRule.split(/:(.+)?/)
+    const ruleArray = validationRule instanceof RegExp
+      ? ['regexp']
+      : validationRule.split(/:(.+)?/)
     const ruleKey = ruleArray[0]
-    const rule = rules[ruleKey] || function () {
-      throw new Error(`Rule ${ruleKey} is not found`)
-    }
+    const rule =
+      rules[ruleKey] ||
+      function () {
+        throw new Error(`Rule ${ruleKey} is not found`)
+      }
     let arg
 
     if (validationRule instanceof RegExp) {
@@ -38,11 +42,15 @@ export default function validate (form, value, validationRules) {
 
     return {
       isValid,
-      failedRule: isValid ? null : {
-        name: ruleKey,
-        arg
-      },
-      errorMessage: rules._errorMessages[ruleKey] ? rules._errorMessages[ruleKey](value, arg) : null
+      failedRule: isValid
+        ? null
+        : {
+            name: ruleKey,
+            arg
+          },
+      errorMessage: rules._errorMessages[ruleKey]
+        ? rules._errorMessages[ruleKey](value, arg)
+        : null
     }
   }, initialValidation)
 }

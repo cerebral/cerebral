@@ -10,21 +10,22 @@ export default function init (moduleName, initState = {}) {
     ...dynamicPaths,
     () => {
       // set props.timestamp before calling value
-      return {timestamp: (new Date()).getTime()}
+      return {timestamp: new Date().getTime()}
     },
-    firebase.value(props`remoteCollectionPath`), {
+    firebase.value(props`remoteCollectionPath`),
+    {
       success: [
         // need to use 'merge' here to notify changes on default item keys
         merge(state`${collectionPath}`, initState),
-        when(props`value`), {
-          true: [
-            merge(state`${collectionPath}`, props`value`)
-          ],
+        when(props`value`),
+        {
+          true: [merge(state`${collectionPath}`, props`value`)],
           false: []
         },
         // start listening
         firebase.onChildAdded(
-          props`remoteCollectionPath`, signal`${moduleName}.updated`,
+          props`remoteCollectionPath`,
+          signal`${moduleName}.updated`,
           {
             orderByChild: 'updated_at',
             // Use the timestamp set before getting value
@@ -32,13 +33,15 @@ export default function init (moduleName, initState = {}) {
           }
         ),
         firebase.onChildChanged(
-          props`remoteCollectionPath`, signal`${moduleName}.updated`),
+          props`remoteCollectionPath`,
+          signal`${moduleName}.updated`
+        ),
         firebase.onChildRemoved(
-          props`remoteCollectionPath`, signal`${moduleName}.removed`)
+          props`remoteCollectionPath`,
+          signal`${moduleName}.removed`
+        )
       ],
-      error: [
-        set(state`${errorPath}`, props`error`)
-      ]
+      error: [set(state`${errorPath}`, props`error`)]
     }
   ]
 }

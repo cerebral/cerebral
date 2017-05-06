@@ -9,7 +9,8 @@ const {collectionPath} = paths(moduleName)
 
 export default [
   ...init(moduleName),
-  when(state`${collectionPath}.running`), {
+  when(state`${collectionPath}.running`),
+  {
     true: [
       set(props`value`, state`${collectionPath}.running`),
       set(props`key`, 'running'),

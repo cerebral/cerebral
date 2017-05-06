@@ -22,7 +22,9 @@ class DependencyStore {
           return currentMapLevel[key].children
         }
 
-        currentMapLevel[key].entities = currentMapLevel[key].entities ? currentMapLevel[key].entities.concat(entity) : [entity]
+        currentMapLevel[key].entities = currentMapLevel[key].entities
+          ? currentMapLevel[key].entities.concat(entity)
+          : [entity]
 
         return currentMapLevel
       }, this.map)
@@ -36,7 +38,10 @@ class DependencyStore {
       const path = depsMapKey.split('.')
       path.reduce((currentMapLevel, key, index) => {
         if (index === path.length - 1) {
-          currentMapLevel[key].entities.splice(currentMapLevel[key].entities.indexOf(entity), 1)
+          currentMapLevel[key].entities.splice(
+            currentMapLevel[key].entities.indexOf(entity),
+            1
+          )
 
           if (!currentMapLevel[key].entities.length) {
             delete currentMapLevel[key].entities
@@ -51,14 +56,18 @@ class DependencyStore {
     Updates entity based on changed dependencies
   */
   updateEntity (entity, prevDepsMap, nextDepsMap) {
-    const toRemove = Object.keys(prevDepsMap).reduce((removeDepsMap, prevDepsMapKey) => {
+    const toRemove = Object.keys(
+      prevDepsMap
+    ).reduce((removeDepsMap, prevDepsMapKey) => {
       if (!nextDepsMap[prevDepsMapKey]) {
         removeDepsMap[prevDepsMapKey] = true
       }
 
       return removeDepsMap
     }, {})
-    const toAdd = Object.keys(nextDepsMap).reduce((addDepsMap, nextDepsMapKey) => {
+    const toAdd = Object.keys(
+      nextDepsMap
+    ).reduce((addDepsMap, nextDepsMapKey) => {
       if (!prevDepsMap[nextDepsMapKey]) {
         addDepsMap[nextDepsMapKey] = true
       }

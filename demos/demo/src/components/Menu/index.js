@@ -36,8 +36,10 @@ export default connect(
               <ul className='menu-list'>
                 {menu.entries.map(entry => (
                   <li key={entry.name}>
-                    <a className={`${selectedView === entry.name ? 'is-active' : ''}`}
-                      href={`${entry.url}`}>
+                    <a
+                      className={`${selectedView === entry.name ? 'is-active' : ''}`}
+                      href={`${entry.url}`}
+                    >
                       <span className='icon is-small'>
                         <i className={`fa ${entry.icon}`} />
                       </span>

@@ -4,9 +4,8 @@ import {FirebaseProviderError} from './errors'
 
 export default function getUser () {
   return new Promise((resolve, reject) => {
-    firebase.auth().getRedirectResult()
-    .then(
-      (result) => {
+    firebase.auth().getRedirectResult().then(
+      result => {
         if (result.user) {
           const user = createUser(result.user)
 
@@ -26,8 +25,10 @@ export default function getUser () {
             })
           })
         }
-      }, (error) => {
+      },
+      error => {
         reject(new FirebaseProviderError(error))
-      })
+      }
+    )
   })
 }

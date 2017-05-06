@@ -6,13 +6,13 @@ export default function ClientHeader ({item}) {
       <div className='media-left'>
         <figure className='image is-32x32'>
           {typeof item.$imageProgress !== 'undefined'
-          ? <progress className='progress is-small'
-            value={item.$imageProgress}>
-            {Math.floor(item.$imageProgress * 100)}%
-          </progress>
-          : item.image &&
-            <img src={`${item.image}`} alt='user' />
-          }
+            ? <progress
+                className='progress is-small'
+                value={item.$imageProgress}
+              >
+                {Math.floor(item.$imageProgress * 100)}%
+              </progress>
+            : item.image && <img src={`${item.image}`} alt='user' />}
         </figure>
       </div>
       <div className='media-content'>
@@ -20,8 +20,7 @@ export default function ClientHeader ({item}) {
         {item.website &&
           <p className='subtitle is-6'>
             <a href={`http://${item.website}`}>{item.website}</a>
-          </p>
-        }
+          </p>}
       </div>
     </div>
   )

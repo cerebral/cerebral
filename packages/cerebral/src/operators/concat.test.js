@@ -11,9 +11,7 @@ describe('operator.concat', () => {
         list: ['one']
       },
       signals: {
-        test: [
-          concat(state`list`, ['two'])
-        ]
+        test: [concat(state`list`, ['two'])]
       }
     })
     controller.getSignal('test')()
@@ -26,28 +24,27 @@ describe('operator.concat', () => {
         list2: ['two', 'three']
       },
       signals: {
-        test: [
-          concat(state`list`, state`list2`)
-        ]
+        test: [concat(state`list`, state`list2`)]
       }
     })
     controller.getSignal('test')()
-    assert.deepEqual(controller.getState(), {list: ['one', 'two', 'three'], list2: ['two', 'three']})
+    assert.deepEqual(controller.getState(), {
+      list: ['one', 'two', 'three'],
+      list2: ['two', 'three']
+    })
   })
-  it('should throw on bad argument', (done) => {
+  it('should throw on bad argument', done => {
     const controller = Controller({
       state: {
         list: ['one']
       },
       signals: {
-        test: [
-          concat(props`list`, ['two'])
-        ]
+        test: [concat(props`list`, ['two'])]
       }
     })
 
     controller.removeListener('error')
-    controller.once('error', (error) => {
+    controller.once('error', error => {
       assert.ok(error)
       done()
     })

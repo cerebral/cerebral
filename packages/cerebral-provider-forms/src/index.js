@@ -16,7 +16,7 @@ function FormsProvider (options = {}) {
     rules._errorMessages = options.errorMessages
   }
 
-  return (context) => {
+  return context => {
     context.forms = {
       get (path) {
         return context.resolve.value(form(state`${path}`))

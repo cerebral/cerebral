@@ -15,8 +15,10 @@ function isTagValidInThisScope (scope, name) {
 }
 
 function isPlainPropertyAccess (t, property, computed) {
-  return (t.isIdentifier(property) && computed === false) ||
-          (t.isLiteral(property) && property.value)
+  return (
+    (t.isIdentifier(property) && computed === false) ||
+    (t.isLiteral(property) && property.value)
+  )
 }
 
 export default function ({types: t}) {
@@ -29,19 +31,21 @@ export default function ({types: t}) {
     visitor: {
       ImportDeclaration (path) {
         const {node: {source: {value}, source}} = path
-        if (
-          t.isStringLiteral(source) &&
-          isValidImportLocation(value)
-        ) {
+        if (t.isStringLiteral(source) && isValidImportLocation(value)) {
           // Verify that all imports are allowed and track the localName
-          for (const {imported: {name: importName} = {}, local: {name: localName}} of path.node.specifiers) {
+          for (const {
+            imported: {name: importName} = {},
+            local: {name: localName}
+          } of path.node.specifiers) {
             if (importName === undefined) {
               continue
             }
             if (isAllowedImport(importName)) {
               this.importedTagSet.add(localName)
             } else {
-              throw path.buildCodeFrameError(`The Tag "${importName}" can't be imported`)
+              throw path.buildCodeFrameError(
+                `The Tag "${importName}" can't be imported`
+              )
             }
           }
           // Change import to the real 'cerebral/tags';
@@ -56,7 +60,10 @@ export default function ({types: t}) {
 
         const tagName = path.node.object.name
 
-        if (!this.importedTagSet.has(tagName) || !isTagValidInThisScope(path.scope, tagName)) {
+        if (
+          !this.importedTagSet.has(tagName) ||
+          !isTagValidInThisScope(path.scope, tagName)
+        ) {
           return
         }
 
@@ -75,9 +82,11 @@ export default function ({types: t}) {
           // Plain id like state.a[1].b['test']
           if (isPlainPropertyAccess(t, property, computed)) {
             const value = t.isLiteral(property) ? property.value : property.name
-            quasi.push((quasi.length !== 0 || prevWasExpression ? '.' : '') + value)
+            quasi.push(
+              (quasi.length !== 0 || prevWasExpression ? '.' : '') + value
+            )
             prevWasExpression = false
-          // Nested expressions like state.a[state.b]
+            // Nested expressions like state.a[state.b]
           } else {
             quasi.push('.')
             expressions.push(property)

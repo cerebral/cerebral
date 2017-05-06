@@ -30,19 +30,25 @@ module.exports = {
   },
   readScript (filePath) {
     return new Promise(function (resolve, reject) {
-      babel.transformFile(filePath, {
-        presets: [require('babel-preset-es2015')]
-      }, function (err, result) {
-        if (err) {
-          return reject(err)
-        }
+      babel.transformFile(
+        filePath,
+        {
+          presets: [require('babel-preset-es2015')]
+        },
+        function (err, result) {
+          if (err) {
+            return reject(err)
+          }
 
-        resolve(result.code)
-      })
+          resolve(result.code)
+        }
+      )
     })
   },
   isUrl (string) {
-    return string.substr(0, 7) === 'http://' || string.substr(0, 8) === 'https://'
+    return (
+      string.substr(0, 7) === 'http://' || string.substr(0, 8) === 'https://'
+    )
   },
   writeFile (filePath, content) {
     return new Promise(function (resolve, reject) {
@@ -79,7 +85,10 @@ module.exports = {
   },
   extractRawText (docs) {
     return Object.keys(docs).reduce(function (docsText, sectionKey) {
-      docsText[sectionKey] = Object.keys(docs[sectionKey]).reduce(function (subDocsText, subSectionKey) {
+      docsText[sectionKey] = Object.keys(docs[sectionKey]).reduce(function (
+        subDocsText,
+        subSectionKey
+      ) {
         subDocsText[subSectionKey] = {
           raw: docs[sectionKey][subSectionKey].raw,
           title: docs[sectionKey][subSectionKey].toc[0].title

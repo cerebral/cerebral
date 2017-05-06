@@ -68,7 +68,7 @@ describe('getFormFields', () => {
         validationMessages: [],
         requiredMessage: null,
         errorMessage: null,
-        isValueRules: [ 'isValue' ],
+        isValueRules: ['isValue'],
         isRequired: false,
         hasValue: true,
         isPristine: true
@@ -84,7 +84,7 @@ describe('getFormFields', () => {
         validationMessages: [],
         requiredMessage: null,
         errorMessage: null,
-        isValueRules: [ 'isValue' ],
+        isValueRules: ['isValue'],
         isRequired: false,
         hasValue: true,
         isPristine: true

@@ -9,7 +9,10 @@ export default {
       validateOnChange: {
         value: true,
         description: 'Show error messages on change',
-        unToggleFieldsWhenChecked: ['app.settings.validateInputOnBlur', 'app.settings.validateFormOnSubmit']
+        unToggleFieldsWhenChecked: [
+          'app.settings.validateInputOnBlur',
+          'app.settings.validateFormOnSubmit'
+        ]
       },
       disableSubmitWhenFormIsInValid: {
         value: false,
@@ -19,20 +22,24 @@ export default {
       validateInputOnBlur: {
         value: false,
         description: 'Show error message on blur',
-        unToggleFieldsWhenChecked: ['app.settings.validateOnChange', 'app.settings.validateFormOnSubmit']
+        unToggleFieldsWhenChecked: [
+          'app.settings.validateOnChange',
+          'app.settings.validateFormOnSubmit'
+        ]
       },
       validateFormOnSubmit: {
         value: false,
         description: 'Show error message on submit',
-        unToggleFieldsWhenChecked: ['app.settings.validateOnChange', 'app.settings.validateInputOnBlur']
+        unToggleFieldsWhenChecked: [
+          'app.settings.validateOnChange',
+          'app.settings.validateInputOnBlur'
+        ]
       },
       showErrors: false
     }
   },
   signals: {
-    routed: [
-      set(state`app.currentView`, 'Simple')
-    ],
+    routed: [set(state`app.currentView`, 'Simple')],
     toggleSelectSettings
   }
 }

@@ -14,13 +14,10 @@ const checkImageSize = (key, value) => {
 export default function (moduleName) {
   const {draftPath, errorPath} = paths(moduleName)
   return [
-    when(props`key`, props`value`, checkImageSize), {
-      true: [
-        set(state`${draftPath}.${props`key`}`, props`value`)
-      ],
-      false: [
-        set(state`${errorPath}`, 'image exceeds maximum size of 100 KB')
-      ]
+    when(props`key`, props`value`, checkImageSize),
+    {
+      true: [set(state`${draftPath}.${props`key`}`, props`value`)],
+      false: [set(state`${errorPath}`, 'image exceeds maximum size of 100 KB')]
     }
   ]
 }

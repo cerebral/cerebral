@@ -8,13 +8,16 @@ function StorageProvider (options = {}) {
     const target = options.target
 
     if (options.sync) {
-      context.controller.on('flush', (changes) => {
-        changes.forEach((change) => {
-          Object.keys(options.sync).forEach((syncKey) => {
+      context.controller.on('flush', changes => {
+        changes.forEach(change => {
+          Object.keys(options.sync).forEach(syncKey => {
             if (change.path.join('.').indexOf(options.sync[syncKey]) === 0) {
               const value = context.controller.getState(options.sync[syncKey])
 
-              target.setItem(options.prefix + syncKey, options.json ? JSON.stringify(value) : value)
+              target.setItem(
+                options.prefix + syncKey,
+                options.json ? JSON.stringify(value) : value
+              )
             }
           })
         })
@@ -32,7 +35,10 @@ function StorageProvider (options = {}) {
         return value
       },
       set (key, value) {
-        target.setItem(options.prefix + key, options.json ? JSON.stringify(value) : value)
+        target.setItem(
+          options.prefix + key,
+          options.json ? JSON.stringify(value) : value
+        )
       },
       remove (key) {
         target.removeItem(options.prefix + key)
@@ -40,7 +46,7 @@ function StorageProvider (options = {}) {
     }
   }
 
-  return (context) => {
+  return context => {
     context.storage = cachedProvider = cachedProvider || createProvider(context)
 
     if (context.debugger) {

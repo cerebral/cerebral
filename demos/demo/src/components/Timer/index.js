@@ -17,8 +17,11 @@ export default connect(
   function Timer ({enterPressed, item, onChange, onClick, t}) {
     const onKeyPress = e => {
       switch (e.key) {
-        case 'Enter': enterPressed(); break
-        default: break // noop
+        case 'Enter':
+          enterPressed()
+          break
+        default:
+          break // noop
       }
     }
 
@@ -27,11 +30,15 @@ export default connect(
         <div className='level-left'>
           <div className='level-item'>
             <p className='control has-addons'>
-              <input className='input' type='text' style={{width: 230}}
+              <input
+                className='input'
+                type='text'
+                style={{width: 230}}
                 value={item.name || ''}
-                onChange={(e) => onChange({key: 'name', value: e.target.value})}
+                onChange={e => onChange({key: 'name', value: e.target.value})}
                 onKeyPress={onKeyPress}
-                placeholder={t.WhatAreYouDoing} />
+                placeholder={t.WhatAreYouDoing}
+              />
               <button className='button' onClick={() => onClick()}>
                 {isRunning(item) ? 'Stop' : 'Start'}
               </button>

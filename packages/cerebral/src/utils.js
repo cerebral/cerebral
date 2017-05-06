@@ -44,19 +44,16 @@ export function isSerializable (value, additionalTypes = []) {
 
   if (
     value !== undefined &&
-    (
-      validType ||
-      (
-        isObject(value) &&
+    (validType ||
+      (isObject(value) &&
         Object.prototype.toString.call(value) === '[object Object]' &&
-        (value.constructor === Object || Object.getPrototypeOf(value) === null)
-      ) ||
+        (value.constructor === Object ||
+          Object.getPrototypeOf(value) === null)) ||
       typeof value === 'number' ||
       typeof value === 'string' ||
       typeof value === 'boolean' ||
       value === null ||
-      Array.isArray(value)
-    )
+      Array.isArray(value))
   ) {
     return true
   }
@@ -109,8 +106,8 @@ export function forceSerializable (value) {
 }
 
 export function getProviders (module) {
-  return (module.provider ? [module.provider] : []).concat(Object.keys(module.modules || {})
-    .reduce((nestedProviders, moduleKey) => {
+  return (module.provider ? [module.provider] : []).concat(
+    Object.keys(module.modules || {}).reduce((nestedProviders, moduleKey) => {
       return nestedProviders.concat(getProviders(module.modules[moduleKey]))
     }, [])
   )
@@ -119,7 +116,9 @@ export function getProviders (module) {
 function extractAllChildMatches (children) {
   return Object.keys(children).reduce((matches, key) => {
     if (children[key].children) {
-      return matches.concat(children[key]).concat(extractAllChildMatches(children[key].children))
+      return matches
+        .concat(children[key])
+        .concat(extractAllChildMatches(children[key].children))
     }
 
     return matches.concat(children[key])
@@ -131,7 +130,11 @@ export function dependencyMatch (changes, dependencyMap) {
 
   for (let changeIndex = 0; changeIndex < changes.length; changeIndex++) {
     let currentDependencyMapLevel = dependencyMap
-    for (let pathKeyIndex = 0; pathKeyIndex < changes[changeIndex].path.length; pathKeyIndex++) {
+    for (
+      let pathKeyIndex = 0;
+      pathKeyIndex < changes[changeIndex].path.length;
+      pathKeyIndex++
+    ) {
       if (!currentDependencyMapLevel) {
         break
       }
@@ -141,13 +144,16 @@ export function dependencyMatch (changes, dependencyMap) {
       }
 
       if (pathKeyIndex === changes[changeIndex].path.length - 1) {
-        const dependency = currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]
+        const dependency =
+          currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]
         if (dependency) {
           currentMatches.push(dependency)
 
           if (dependency.children) {
             if (changes[changeIndex].forceChildPathUpdates) {
-              currentMatches = currentMatches.concat(extractAllChildMatches(dependency.children))
+              currentMatches = currentMatches.concat(
+                extractAllChildMatches(dependency.children)
+              )
             } else {
               if (dependency.children['**']) {
                 currentMatches.push(dependency.children['**'])
@@ -170,7 +176,9 @@ export function dependencyMatch (changes, dependencyMap) {
         break
       }
 
-      currentDependencyMapLevel = currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]].children
+      currentDependencyMapLevel =
+        currentDependencyMapLevel[changes[changeIndex].path[pathKeyIndex]]
+          .children
     }
   }
 
@@ -178,10 +186,12 @@ export function dependencyMatch (changes, dependencyMap) {
 }
 
 export function getWithPath (obj) {
-  return (path) => {
+  return path => {
     return path.split('.').reduce((currentValue, key, index) => {
       if (index > 0 && currentValue === undefined) {
-        throwError(`You are extracting with path "${path}", but it is not valid for this object`)
+        throwError(
+          `You are extracting with path "${path}", but it is not valid for this object`
+        )
       }
 
       return currentValue[key]
@@ -217,7 +227,11 @@ export function createResolver (getters) {
     },
     value (arg, overrideProps) {
       if (arg instanceof Tag || arg instanceof Compute) {
-        return arg.getValue(overrideProps ? Object.assign({}, getters, {props: overrideProps}) : getters)
+        return arg.getValue(
+          overrideProps
+            ? Object.assign({}, getters, {props: overrideProps})
+            : getters
+        )
       }
 
       return arg

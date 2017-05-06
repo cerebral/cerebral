@@ -9,8 +9,9 @@ import './styles.css'
 
 import App from './components/App'
 
-render((
+render(
   <Container controller={controller}>
     <App />
-  </Container>
-), document.querySelector('#root'))
+  </Container>,
+  document.querySelector('#root')
+)
