@@ -1,7 +1,7 @@
 {
-  "name": "cerebral-module-shortcuts",
+  "name": "@cerebral/shortcuts",
   "version": "1.0.0",
-  "description": "Cerebral 2 module to fire signals bound to keyboard shortcuts.",
+  "description": "Cerebral module to fire signals bound to keyboard shortcuts.",
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
@@ -23,9 +23,9 @@
     "url": "https://github.com/cerebral/cerebral/issues"
   },
   "homepage":
-    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-module-shortcuts#readme",
+    "https://github.com/cerebral/cerebral/tree/master/packages/shortcuts#readme",
   "dependencies": {
-    "shortway": "^0.3.0" 
+    "shortway": "^0.3.0"
   },
   "peerDependencies": {
     "cerebral": "^2.0.0-b"

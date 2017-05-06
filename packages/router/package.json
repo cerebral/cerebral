@@ -1,5 +1,5 @@
 {
-  "name": "cerebral-router",
+  "name": "@cerebral/router",
   "version": "1.0.0-b",
   "description": "An opinionated URL change handler for Cerebral",
   "main": "lib/index.js",

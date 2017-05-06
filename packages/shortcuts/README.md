@@ -1,25 +1,25 @@
-# cerebral-module-shortcuts
+# @cerebral/shortcuts
 
 ## install
 
 **NPM**
 
-`npm install cerebral-module-shortcuts@next --save --save-exact`
+`npm install @cerebral/shortcuts@next --save --save-exact`
 
 **YARN**
 
-`yarn add cerebral-module-shortcuts@next --exact`
+`yarn add @cerebral/shortcuts@next --exact`
 
 ## description
-This is a tiny module that allows you to bind keyboard shortcuts to Cerebral 2 signals.
+This is a tiny module that allows you to bind keyboard shortcuts to Cerebral signals.
 
-It's created using a very nice library called ["shortway" by Thiago Santos](https://github.com/thiamsantos/shortway) 
+It's created using a very nice library called ["shortway" by Thiago Santos](https://github.com/thiamsantos/shortway)
 
 ## example usage
 
 ```javascript
 
-import shortcuts from 'cerebral-module-shortcuts';
+import shortcuts from '@cerebral/shortcuts';
 
 const controller = Controller({
   signals: {
@@ -39,4 +39,4 @@ const controller = Controller({
     })
 });
 
-``` 
+```

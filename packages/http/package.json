@@ -1,5 +1,5 @@
 {
-  "name": "cerebral-provider-http",
+  "name": "@cerebral/http",
   "version": "1.0.0-b",
   "description": "HTTP provider for Cerebral 2",
   "main": "lib/index.js",

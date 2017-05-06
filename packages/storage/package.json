@@ -1,5 +1,5 @@
 {
-  "name": "cerebral-provider-storage",
+  "name": "@cerebral/storage",
   "version": "1.0.0-b",
   "description": "Storage provider for Cerebral 2",
   "main": "lib/index.js",

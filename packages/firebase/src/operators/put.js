@@ -7,7 +7,7 @@ function putFactory (putPath, file, options = {}) {
 
       if (key === 'progress') {
         if (!(resolve.isTag(option, 'state', 'signal'))) {
-          throw new Error('cerebral-module-firebase: The value for \'progress\' option should be either \'state\' or \'signal\' tag.')
+          throw new Error('@cerebral/firebase: The value for \'progress\' option should be either \'state\' or \'signal\' tag.')
         }
 
         if (option.type === 'signal') {

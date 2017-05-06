@@ -1,5 +1,5 @@
 {
-  "name": "cerebral-provider-forms",
+  "name": "@cerebral/forms",
   "version": "1.0.0-b",
   "description": "A computed form",
   "main": "lib/index.js",

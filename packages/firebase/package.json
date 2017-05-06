@@ -1,5 +1,5 @@
 {
-  "name": "cerebral-provider-firebase",
+  "name": "@cerebral/firebase",
   "version": "1.0.0-b",
   "description": "Firebase provider for Cerebral",
   "main": "lib/index.js",
