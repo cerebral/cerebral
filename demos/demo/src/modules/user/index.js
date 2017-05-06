@@ -4,7 +4,7 @@ import createUser from './signals/createUser'
 import signIn from './signals/signIn'
 import signInAnonymous from './signals/signInAnonymous'
 import signOut from './signals/signOut'
-import {setField} from 'cerebral-provider-forms/operators'
+import {setField} from '@cerebral/forms/operators'
 
 export default {
   state: {

@@ -1,6 +1,6 @@
 import {set, when} from 'cerebral/operators'
 import {props, state} from 'cerebral/tags'
-import * as firebase from 'cerebral-provider-firebase/operators'
+import * as firebase from '@cerebral/firebase/operators'
 import paths from '../paths'
 
 export default function (moduleName) {

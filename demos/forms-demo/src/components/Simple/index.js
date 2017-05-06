@@ -4,7 +4,7 @@ import {state, signal} from 'cerebral/tags'
 import {css} from 'aphrodite'
 import styles from './styles'
 import Input from '../Fields/Input'
-import {form} from 'cerebral-provider-forms'
+import {form} from '@cerebral/forms'
 
 export default connect({
   form: form(state`simple.form`),

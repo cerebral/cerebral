@@ -3,7 +3,7 @@ import {connect} from 'cerebral/react'
 import {state, props, signal} from 'cerebral/tags'
 import {css} from 'aphrodite'
 import styles from './styles'
-import {field} from 'cerebral-provider-forms'
+import {field} from '@cerebral/forms'
 
 export default connect({
   field: field(state`${props`path`}`),
