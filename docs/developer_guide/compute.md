@@ -234,7 +234,7 @@ We can change now the signal to look like:
 
 ```js
 ...
-import HttpProvider, {HttpProviderError} from 'cerebral-provider-http'
+import HttpProvider, {HttpProviderError} from '@cerebral/http'
 import starsCount from './starsCount'
 ...
 {

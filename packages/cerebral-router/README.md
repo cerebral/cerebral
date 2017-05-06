@@ -1,13 +1,13 @@
-# cerebral-router
+# @cerebral/router
 
 ## Install
 **NPM**
 
-`npm install cerebral-router@next --save --save-exact`
+`npm install @cerebral/router@next --save --save-exact`
 
 **YARN**
 
-`yarn add cerebral-router@next --exact`
+`yarn add @cerebral/router@next --exact`
 
 ## Description
 The router of Cerebral does not affect your view layer. A url change triggers a signal that puts your application in the correct state. Your view just reacts to this state, like any other state change.
@@ -18,7 +18,7 @@ The router of Cerebral does not affect your view layer. A url change triggers a 
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral-router'
+import Router from '@cerebral/router'
 
 const controller = Controller({
   router: Router({
@@ -49,7 +49,7 @@ const controller = Controller({
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral-router'
+import Router from '@cerebral/router'
 
 const controller = Controller({
   router: Router({
@@ -115,7 +115,7 @@ function myAction({router}) {
 
 *factory*
 ```js
-import {goTo} from 'cerebral-router/operators'
+import {goTo} from '@cerebral/router/operators'
 
 export default [
   goTo('/items')
@@ -133,7 +133,7 @@ function myAction({router}) {
 
 *factory*
 ```js
-import {redirect} from 'cerebral-router/operators'
+import {redirect} from '@cerebral/router/operators'
 
 export default [
   redirect('/items')
@@ -151,7 +151,7 @@ function myAction({router}) {
 
 *factory*
 ```js
-import {redirectToSignal} from 'cerebral-router/operators'
+import {redirectToSignal} from '@cerebral/router/operators'
 
 export default [
   redirectToSignal('app.itemsRouted', props`payload`)

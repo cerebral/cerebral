@@ -27,7 +27,7 @@ This will install the latest version of that package. New versions are automatic
 
 When you want to update your packages you **have to update all used packages in one go**, for example:
 
-`npm install cerebral@next cerebral-router@next cerebral-provider-http@next --save --save-exact`
+`npm install cerebral@next @cerebral/router@next @cerebral/http@next --save --save-exact`
 
 ## Contribute
 The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.

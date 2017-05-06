@@ -1,13 +1,13 @@
-# cerebral-provider-forms
+# @cerebral/forms
 
 ## install
 **NPM**
 
-`npm install cerebral-provider-forms@next --save --save-exact`
+`npm install @cerebral/forms@next --save --save-exact`
 
 **YARN**
 
-`yarn add cerebral-provider-forms@next --exact`
+`yarn add @cerebral/forms@next --exact`
 
 ## description
 The forms provider allows you to easily compute forms based on a number of rules. Easily add new rules, error messages and, if you want, add whatever you want to your fields for custom logic.
@@ -16,7 +16,7 @@ The forms provider allows you to easily compute forms based on a number of rules
 
 ```javascript
 import {Controller} from 'cerebral'
-import FormsProvider from 'cerebral-provider-forms'
+import FormsProvider from '@cerebral/forms'
 
 const controller = Controller({
   providers: [
@@ -91,7 +91,7 @@ To use a form you use the **form** computed, pointing to the form. Typically:
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
-import {form} from 'cerebral-provider-forms'
+import {form} from '@cerebral/forms'
 
 export default connect({
   form: form(state`path.to.form`)
@@ -124,7 +124,7 @@ You can also use the **field** computed, pointing to the field.
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
-import {field} from 'cerebral-provider-forms'
+import {field} from '@cerebral/forms'
 
 export default connect({
   field: field(state`path.to.form.name`)
@@ -255,7 +255,7 @@ When you change the value of a field you will need to use this operator. Note th
 
 ```js
 import {state, props} from 'cerebral/tags'
-import {setField} from 'cerebral-provider-forms/operators'
+import {setField} from '@cerebral/forms/operators'
 
 export default [
   setField(state`my.form.field`, props`value`)
@@ -267,7 +267,7 @@ Diverge execution based on validity of a form.
 
 ```js
 import {state} from 'cerebral/tags'
-import {isValidForm} from 'cerebral-provider-forms/operators'
+import {isValidForm} from '@cerebral/forms/operators'
 
 export default [
   isValidForm(state`my.form`) {
@@ -282,7 +282,7 @@ Reset a form.
 
 ```js
 import {state} from 'cerebral/tags'
-import {resetForm} from 'cerebral-provider-forms/operators'
+import {resetForm} from '@cerebral/forms/operators'
 
 export default [
   resetForm(state`my.form`)

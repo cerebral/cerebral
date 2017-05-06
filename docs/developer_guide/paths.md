@@ -62,7 +62,7 @@ function actionA ({path}) {
 In the previous chapter we introduced async actions. But what about the following scenario: "User gets data async from a server, server responds with either a success or error". To handle not only the so called *Happy Path* we should also allow our signals to branch out into a different flows depending on the result of the previous action.
 
 ### Http Provider
-So let us build that scenario introducing *cerebral-http-provider*. *cerebral-http-provider* is a simple http-provider which enables you to request data from servers. You could have used any other HTTP library if you wanted to. We have already added it as a configuration of the controller. The concept of **Providers** will be covered in more detail in one of the next chapters.
+So let us build that scenario introducing *@cerebral/http*. *@cerebral/http* is a simple http-provider which enables you to request data from servers. You could have used any other HTTP library if you wanted to. We have already added it as a configuration of the controller. The concept of **Providers** will be covered in more detail in one of the next chapters.
 
 To handle any kind of diverging execution in a signal we can use the concept of **paths**. A simple signal using paths and a sample async action named *getData* could look like this:
 

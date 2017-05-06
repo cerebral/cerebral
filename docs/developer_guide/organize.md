@@ -156,8 +156,8 @@ Our controller does the same kind of wiring. It wires the modules of our app to 
 ```js
 import {Controller} from 'cerebral'
 import Devtools from 'cerebral/devtools'
-import Router from 'cerebral-router'
-import HttpProvider from 'cerebral-provider-http'
+import Router from '@cerebral/router'
+import HttpProvider from '@cerebral/http'
 import app from './modules/app'
 import home from './modules/home'
 import repos from './modules/repos'

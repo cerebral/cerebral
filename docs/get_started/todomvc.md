@@ -7,9 +7,9 @@ import {Controller} from 'cerebral'
 import Devtools from 'cerebral/devtools'
 import {ContextProvider} from 'cerebral/providers'
 import uuid from 'uuid'
-import Router, {redirect} from 'cerebral-router'
+import Router, {redirect} from '@cerebral/router'
 // Providers
-import StorageProvider from 'cerebral-provider-storage'
+import StorageProvider from '@cerebral/storage'
 // Operators
 import {set, toggle, unset, when} from 'cerebral/operators'
 import {props, state} from 'cerebral/tags'

@@ -1,13 +1,13 @@
-# cerebral-provider-storage
+# @cerebral/storage
 
 ## install
 **NPM**
 
-`npm install cerebral-provider-storage@next --save --save-exact`
+`npm install @cerebral/storage@next --save --save-exact`
 
 **YARN**
 
-`yarn add cerebral-provider-storage@next --exact`
+`yarn add @cerebral/storage@next --exact`
 
 ## description
 This module exposes local storage or session storage as a provider,
@@ -19,7 +19,7 @@ where it by default parses and serializes to JSON.
 
 ```js
 import {Controller} from 'cerebral'
-import StorageProvider from 'cerebral-provider-storage'
+import StorageProvider from '@cerebral/storage'
 
 const controller = Controller({
   providers: [StorageProvider({
@@ -51,7 +51,7 @@ function someAction({storage}) {
 *factory*
 ```javascript
 import {state, props} from 'cerebral/tags'
-import {setStorage} from 'cerebral-provider-storage/operators'
+import {setStorage} from '@cerebral/storage/operators'
 
 export default [
   setStorage(state`currentStorageKey`, props`someData`)
@@ -71,7 +71,7 @@ function someAction({storage}) {
 *factory*
 ```javascript
 import {state, props} from 'cerebral/tags'
-import {getStorage} from 'cerebral-provider-storage/operators'
+import {getStorage} from '@cerebral/storage/operators'
 
 export default [
   getStorage('someKey'),
@@ -94,7 +94,7 @@ function someAction({storage}) {
 *factory*
 ```javascript
 import {state} from 'cerebral/tags'
-import {removeStorage} from 'cerebral-provider-storage/operators'
+import {removeStorage} from '@cerebral/storage/operators'
 
 export default [
   removeStorage(state`currentStorageKey`)

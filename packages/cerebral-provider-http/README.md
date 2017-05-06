@@ -1,20 +1,20 @@
-# cerebral-provider-http
+# @cerebral/http
 
 ## install
 **NPM**
 
-`npm install cerebral-provider-http@next --save --save-exact`
+`npm install @cerebral/http@next --save --save-exact`
 
 **YARN**
 
-`yarn add cerebral-provider-http@next --exact`
+`yarn add @cerebral/http@next --exact`
 
 ## description
 The HTTP provider exposes the ability to do HTTP requests both in actions and directly in signals. It supports **cors** and file upload, with progress handling. It default to **json**, but you can configure it to whatever you want.
 
 ```js
 import {set} from 'cerebral/operators'
-import {httpGet} from 'cerebral-provider-http/operators'
+import {httpGet} from '@cerebral/http/operators'
 import {state, props} from 'cerebral/tags'
 
 export default [
@@ -29,7 +29,7 @@ All factories of HTTP provider supports template tags.
 
 ```js
 import {Controller} from 'cerebral'
-import HttpProvider from 'cerebral-provider-http'
+import HttpProvider from '@cerebral/http'
 
 const controller = Controller({
   providers: [
@@ -66,7 +66,7 @@ function updateDefaultHttpOptions({http}) {
 ### HttpProviderError
 
 ```js
-import {HttpProviderError} from 'cerebral-provider-http'
+import {HttpProviderError} from '@cerebral/http'
 
 // Error structure
 {
@@ -126,7 +126,7 @@ function someGetAction ({http}) {
 
 *factory*
 ```js
-import {httpGet} from 'cerebral-provider-http/operators'
+import {httpGet} from '@cerebral/http/operators'
 
 export default [
   httpGet('/items'),
@@ -167,7 +167,7 @@ function somePostAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http/operators'
+import {httpPost} from '@cerebral/http/operators'
 import {props} from 'cerebral/tags'
 
 export default [
@@ -215,7 +215,7 @@ function somePutAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http/operators'
+import {httpPost} from '@cerebral/http/operators'
 
 export default [
   httpPut('/items', {
@@ -260,7 +260,7 @@ function somePatchAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http/operators'
+import {httpPost} from '@cerebral/http/operators'
 import {state, props, string} from 'cerebral/tags'
 
 export default [
@@ -302,7 +302,7 @@ function someDeleteAction ({http}) {
 
 *factory*
 ```js
-import {httpPost} from 'cerebral-provider-http/operators'
+import {httpPost} from '@cerebral/http/operators'
 import {state} from 'cerebral/tags'
 
 export default [
@@ -345,7 +345,7 @@ function someDeleteAction ({http, props}) {
 
 *factory*
 ```js
-import {httpUploadFile} from 'cerebral-provider-http/operators'
+import {httpUploadFile} from '@cerebral/http/operators'
 import {state, props} from 'cerebral/tags'
 
 export default [

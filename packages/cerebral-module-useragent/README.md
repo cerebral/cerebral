@@ -1,14 +1,14 @@
-# cerebral-module-useragent
+# @cerebral/useragent
 
 ## install
 
 **NPM**
 
-`npm install cerebral-module-useragent@next --save --save-exact`
+`npm install @cerebral/useragent@next --save --save-exact`
 
 **YARN**
 
-`yarn add cerebral-module-useragent@next --exact`
+`yarn add @cerebral/useragent@next --exact`
 
 ## description
 The useragent module puts information about the browser into your state tree, and it also updates this information when this information changes.
@@ -23,7 +23,7 @@ The useragent module puts information about the browser into your state tree, an
 
 ```js
 import {Controller} from 'cerebral'
-import Useragent from 'cerebral-module-useragent'
+import Useragent from '@cerebral/useragent'
 
 const controller = Controller({
   modules: {

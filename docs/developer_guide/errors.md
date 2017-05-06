@@ -46,10 +46,10 @@ import {Controller} from 'cerebral'
 import {
   FirebaseProviderAuthenticationError,
   FirebaseProviderError
-} from 'cerebral-provider-firebase'
+} from '@cerebral/firebase'
 import {
   HttpProviderError
-} from 'cerebral-provider-http'
+} from '@cerebral/http'
 
 const controller = Controller({
   modules: {},

@@ -1,13 +1,13 @@
-# function-tree-firebase-admin
+# @cerebral/firebase-admin
 
 ## install
 **NPM**
 
-`npm install function-tree-firebase-admin@next --save --save-exact`
+`npm install @cerebral/firebase-admin@next --save --save-exact`
 
 **YARN**
 
-`yarn add function-tree-firebase-admin@next --exact`
+`yarn add @cerebral/firebase-admin@next --exact`
 
 ## description
 The firebase admin package for function-tree allows you to easily handle Firebase Queues. With the Cerebral debugger you will even be able to merge execution data cross client/server. This package helps you set up a **QueueHandler** which registers your specs with queues and lets you know when new tasks are ready to be run.
@@ -18,7 +18,7 @@ First you create a function tree with the Firebase provider. You will need to ad
 ```js
 const FunctionTree = require('function-tree').FunctionTree
 const Devtools = require('function-tree/devtools')
-const FirebaseProvider = require('function-tree-firebase-admin').Provider
+const FirebaseProvider = require('@cerebral/firebase-admin').Provider
 
 const devtools = Devtools({
   // Connect to same port as the client to merge execution
@@ -128,7 +128,7 @@ The QueueHandler is responsible for registering Firebase Queues with your define
 const runTask = require('./runTask')
 const firebase = require('firebase-admin')
 const username = require('username')
-const QueueHandler = require('function-tree-firebase-admin').QueueHandler
+const QueueHandler = require('@cerebral/firebase-admin').QueueHandler
 
 module.exports = new QueueHandler({
   // If you are using a specPrefix on the client during development
@@ -175,7 +175,7 @@ function someFunc (context) {
 You can easily test tasks. The TestTasks includes a local [firebase-server](https://github.com/urish/firebase-server) and allows you to define a state of your Firebase instance before running tasks and assert its state after the tasks are run.
 
 ```js
-const TestTasks = require('function-tree-firebase-admin').TestTasks
+const TestTasks = require('@cerebral/firebase-admin').TestTasks
 
 const testTasks = new TestTasks([
   /* Any mocked providers */
