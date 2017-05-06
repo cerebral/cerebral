@@ -8,10 +8,10 @@ import Tasks from '../Tasks'
 import Today from '../Today'
 
 const VIEWS = {
-  Clients,
-  Projects,
-  Tasks,
-  Today
+  clients: Clients,
+  projects: Projects,
+  tasks: Tasks,
+  today: Today
 }
 
 export default connect(
@@ -19,7 +19,7 @@ export default connect(
     selectedView: state`app.$selectedView`
   },
   function Workspace ({selectedView}) {
-    const CurrentView = VIEWS[selectedView]
+    const CurrentView = VIEWS[selectedView] || Today
     return (
       <div className='section'>
         <CurrentView />

@@ -1,41 +1,41 @@
-function isObject (obj) {
-  return typeof obj === 'object' && !Array.isArray(obj) && obj !== null
-}
-
 function compatConfig (config, prev = '') {
-  return Object.keys(config).reduce((flattened, key) => {
-    if (isObject(config[key])) {
-      return Object.assign(flattened, compatConfig(config[key], prev + key))
+  return [].concat(...Object.keys(config).map(key => {
+    const conf = config[key]
+    if (typeof conf === 'string') {
+      return [{path: prev + key, signal: conf}]
     }
-
-    flattened[prev + key] = config[key]
-
-    return flattened
-  }, {})
+    return compatConfig(conf, prev + key)
+  }))
 }
 
 export function flattenConfig (config, prev = '') {
   if (!Array.isArray(config)) {
-    const flatConfig = compatConfig(config, prev)
-    config = Object.keys(flatConfig).map(key => ({
-      path: key,
-      signal: flatConfig[key]
-    }))
+    config = compatConfig(config)
   }
   return config.reduce((flattened, {path, signal, map, routes}) => {
-    if (Array.isArray(routes)) {
-      return Object.assign(flattened, flattenConfig(routes, prev + path))
+    if (routes) {
+      Object.assign(flattened, flattenConfig(routes, prev + path))
     }
 
     const currentPath = prev + path
-    const stateMapping = Object.keys(map || {}).filter((key) => map[key].type === 'state')
-    const propsMapping = Object.keys(map || {}).filter((key) => map[key].type === 'props')
+    const conf = {signal}
+    if (map) {
+      conf.map = map
+      const stateMapping = Object.keys(map).filter((key) => map[key].type === 'state')
+      if (stateMapping.length) {
+        conf.stateMapping = stateMapping
+      }
 
-    if (propsMapping.length && !signal) {
-      throw new Error(`Cerebral router - route ${currentPath} has props mappings but no signal was defined.`)
+      const propsMapping = Object.keys(map).filter((key) => map[key].type === 'props')
+      if (propsMapping.length) {
+        conf.propsMapping = propsMapping
+        if (!signal) {
+          throw new Error(`Cerebral router - route ${currentPath} has props mappings but no signal was defined.`)
+        }
+      }
     }
 
-    flattened[currentPath] = {signal, map, stateMapping, propsMapping}
+    flattened[currentPath] = conf
 
     return flattened
   }, {})

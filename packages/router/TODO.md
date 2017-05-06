@@ -29,3 +29,11 @@ This makes it backwards compatible with current router API.
 
   - urlToState
   - stateToUrl
+
+# New provider methods
+
+getUrl
+getUrlBase
+getUrlQuery
+
+reload ?

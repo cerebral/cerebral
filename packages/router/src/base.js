@@ -13,9 +13,6 @@ try {
   }
 }
 
-export {default as redirect} from './redirect'
-export {default as goTo} from './goTo'
-
 export default function (options = {}) {
   if (!options.mapper || typeof options.mapper.map !== 'function') {
     throw new Error('Cerebral router - mapper option must be provided.')

@@ -84,17 +84,18 @@ export default class Router {
     let payload = values
     const getters = {props: payload, state: this.stateGetter}
 
-    if (stateMapping.length) {
+    if (stateMapping) {
       this.controller.runSignal('router.routed', [
         ({state, resolve}) => {
           stateMapping.forEach((key) => {
-            state.set(resolve.path(map[key]), values[key] || null)
+            const value = values[key]
+            state.set(resolve.path(map[key]), value === undefined ? null : value)
           })
         }
       ])
     }
 
-    if (propsMapping.length) {
+    if (propsMapping) {
       payload = propsMapping.reduce((mappedPayload, key) => {
         mappedPayload[map[key].getPath(getters)] = values[key] || null
         return mappedPayload
@@ -141,7 +142,7 @@ export default class Router {
   onFlush (changed) {
     const {route, payload} = this.activeRoute
     const {map, stateMapping} = this.routesConfig[route] || {}
-    if (!stateMapping || !stateMapping.length) return
+    if (!stateMapping) return
 
     const getters = {props: payload, state: this.stateGetter}
     let shouldUpdate = false
@@ -153,7 +154,9 @@ export default class Router {
       shouldUpdate = shouldUpdate || (stateMapping.indexOf(key) >= 0 && hasChangedPath(changed, path))
 
       if (!this.options.filterFalsy || value) {
-        resolved[key] = value
+        // Cerebral state only supports null and url-mapper only supports
+        // undefined: so we map from one to the other here.
+        resolved[key] = value === null ? undefined : value
       }
 
       return resolved
@@ -207,5 +210,9 @@ export default class Router {
       console.warn(`redirectToSignal: signal '${signalName}' not bound to route.`)
     }
     this.controller.getSignal(signalName)(payload)
+  }
+
+  reload () {
+    this.redirect(this.getUrl())
   }
 }

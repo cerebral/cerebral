@@ -1,5 +1,3 @@
-import {set} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
 import Collection from '../../common/Collection'
 import startStopRunning from './signals/startStopRunning'
 import updated from './signals/updated'
@@ -24,9 +22,6 @@ export default {
     enterPressed: startStopRunning,
     formValueChanged: updateDraft,
     removed: collection.removed,
-    routed: [
-      set(state`app.$selectedView`, 'Tasks')
-    ],
     startStopClicked: startStopRunning,
     timeHasPassed: updateNow,
     updated,
