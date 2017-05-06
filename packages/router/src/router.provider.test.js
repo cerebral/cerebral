@@ -1,11 +1,9 @@
 /* eslint-env mocha */
 /* eslint-disable no-console */
-const {makeTest, triggerUrlChange} = require('./testHelper')
-
-// Have to require due to mocks (load correct order)
-const Router = require('../src').default
-const addressbar = require('addressbar')
-const assert = require('assert')
+import * as assert from 'assert'
+import addressbar from 'addressbar'
+import Router from './'
+import {makeTest, triggerUrlChange} from './testHelper'
 
 describe('provider', () => {
   beforeEach(() => {

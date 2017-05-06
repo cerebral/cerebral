@@ -82,7 +82,16 @@ const controller = Controller({
         // simple map to signal. all parsed path and queries params goes to signal
         // {path: '/:filter', signal: 'app.filterClicked'}
         // map to signal + state
-        {path: '/:filterName', signal: 'app.filterClicked', map: {filterName: props`filter`, todos: state`app.newTodoTitle`}}
+        {
+          path: '/:filterName',
+          signal: 'filterClicked',
+          map: {
+            // We could remove filterClicked signal above with
+            // filterName: state`filter`
+            filterName: props`filter`,
+            todos: state`newTodoTitle`
+          }
+        }
         // map to state only.
         // {path: '/:filterName', map: {filterName: state`app.filter`, title: state`app.newTodoTitle`}}
       ]

@@ -1,13 +1,10 @@
 /* eslint-env mocha */
 /* eslint-disable no-console */
-const {makeTest, triggerUrlChange} = require('./testHelper')
-const state = require('../../cerebral/src/tags').state
-const props = require('../../cerebral/src/tags').props
-
-// Have to require due to mocks (load correct order)
-const Router = require('../src').default
-const addressbar = require('addressbar')
-const assert = require('assert')
+import * as assert from 'assert'
+import addressbar from 'addressbar'
+import {props, state} from 'cerebral/tags'
+import Router from './'
+import {makeTest, triggerUrlChange} from './testHelper'
 
 describe('urlMapping', () => {
   beforeEach(() => {

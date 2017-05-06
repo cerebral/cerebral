@@ -24,6 +24,12 @@ class Controller extends FunctionTree {
     this.getSignal = () => {
       throwError('You are grabbing a signal before controller has initialized, please wait for "initialized" event')
     }
+
+    if (router) {
+      console.warn(`DEPRECATION: the 'router' module should be in modules.`)
+      modules.router = router
+    }
+
     this.componentDependencyStore = new DependencyStore()
     this.options = options
     this.catch = config.catch || null
@@ -35,7 +41,6 @@ class Controller extends FunctionTree {
       signals,
       modules
     })
-    this.router = router ? router(this) : null
 
     if (options.strictRender) {
       console.warn('DEPRECATION - No need to use strictRender option anymore, it is the only render mode now')
@@ -43,11 +48,7 @@ class Controller extends FunctionTree {
 
     this.contextProviders = [
       ControllerProvider(this)
-    ].concat(
-      this.router ? [
-        this.router.provider
-      ] : []
-    ).concat((
+    ].concat((
       this.devtools ? [
         DebuggerProvider()
       ] : []
@@ -89,8 +90,6 @@ class Controller extends FunctionTree {
     }
 
     this.getSignal = getSignal
-
-    if (this.router) this.router.init()
 
     this.model.flush()
 
