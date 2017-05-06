@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/function-tree-firebase-admin#readme",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/firebase-admin#readme",
   "nyc": {
     "exclude": [
       "node_modules",

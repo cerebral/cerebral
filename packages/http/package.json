@@ -21,7 +21,7 @@
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-http#readme",
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/http#readme",
   "peerDependencies": {
     "cerebral": "^2.0.0-b"
   },

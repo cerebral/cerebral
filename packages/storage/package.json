@@ -1,10 +1,9 @@
 {
-  "name": "cerebral-provider-firebase",
+  "name": "cerebral-provider-storage",
   "version": "1.0.0-b",
-  "description": "Firebase provider for Cerebral",
+  "description": "Storage provider for Cerebral 2",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
     "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
@@ -14,17 +13,15 @@
   },
   "keywords": [
     "cerebral",
-    "firebase"
+    "localStorage",
+    "sessionStorage"
   ],
-  "author": "Christian Alfoni",
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/cerebral/cerebral/issues"
   },
-  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-firebase#readme",
-  "dependencies": {
-    "firebase": "^3.5.2"
-  },
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/storage#readme",
   "peerDependencies": {
     "cerebral": "^2.0.0-b"
   },
