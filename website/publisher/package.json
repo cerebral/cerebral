@@ -1,5 +1,5 @@
 {
-  "name": "@cerebral/website",
+  "name": "cerebral-website",
   "version": "0.0.0",
   "private": true,
   "scripts": {

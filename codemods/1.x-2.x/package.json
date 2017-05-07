@@ -1,5 +1,5 @@
 {
-  "name": "@cerebral/codemods_1.x-2.x",
+  "name": "cerebral-codemods_1.x-2.x",
   "private": true,
   "version": "1.0.0",
   "scripts": {

@@ -1,5 +1,5 @@
 {
-  "name": "@cerebral/debugger",
+  "name": "cerebral-debugger",
   "version": "1.0.0",
   "private": true,
   "main": "electron/main.js",
