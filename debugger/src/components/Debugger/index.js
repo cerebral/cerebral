@@ -6,6 +6,7 @@ import {Controller} from 'cerebral'
 import {Container} from 'cerebral/inferno'
 import UserAgent from 'cerebral-module-useragent'
 import DebuggerModule from '../../modules/Debugger'
+import NewVersion from './NewVersion'
 
 import AddApp from './AddApp'
 import App from './App'
@@ -19,13 +20,16 @@ class Debugger extends Inferno.Component {
       apps: {},
       currentApp: null,
       showAddApp: false,
-      error: null
+      error: null,
+      versionChange: null
     }
     this.addPort = this.addPort.bind(this)
     this.addNewPort = this.addNewPort.bind(this)
     this.cancelAddNewPort = this.cancelAddNewPort.bind(this)
     this.changePort = this.changePort.bind(this)
     this.removePort = this.removePort.bind(this)
+    this.giveReminder = this.giveReminder.bind(this)
+    this.ignoreReminder = this.ignoreReminder.bind(this)
   }
   componentDidMount () {
     window.onerror = (error, mip, mop, stack) => {
@@ -48,6 +52,15 @@ class Debugger extends Inferno.Component {
             reject(err)
           } else {
             resolve(typeof currentPort === 'string' ? currentPort : null)
+          }
+        })
+      }),
+      new Promise((resolve, reject) => {
+        jsonStorage.get('ignoreVersion', (err, ignoreVersion) => {
+          if (err) {
+            reject(err)
+          } else {
+            resolve(typeof ignoreVersion === 'string' ? ignoreVersion : null)
           }
         })
       })
@@ -82,6 +95,14 @@ class Debugger extends Inferno.Component {
           currentPort: currentPort || ports[0] || null,
           isLoading: false
         })
+
+        connector.checkVersion((version) => {
+          if (version && version.current !== version.new && results[2] !== version.new) {
+            this.setState({
+              versionChange: version
+            })
+          }
+        })
       })
 
     connector.onPortFocus((port) => {
@@ -94,6 +115,17 @@ class Debugger extends Inferno.Component {
     if (this.state.currentPort !== prevState.currentPort) {
       jsonStorage.set('currentPort', this.state.currentPort)
     }
+  }
+  giveReminder () {
+    this.setState({
+      versionChange: null
+    })
+  }
+  ignoreReminder () {
+    jsonStorage.set('ignoreVersion', this.state.versionChange.new)
+    this.setState({
+      versionChange: null
+    })
   }
   addPort (type, name, port) {
     if (this.state.apps[port]) {
@@ -211,6 +243,9 @@ class Debugger extends Inferno.Component {
         <Container key={this.state.currentPort} controller={currentApp.controller} style={{height: '100%'}}>
           <App key={this.state.currentPort} />
         </Container>
+        {this.state.versionChange ? (
+          <NewVersion giveReminder={this.giveReminder} ignoreReminder={this.ignoreReminder} versionChange={this.state.versionChange} />
+        ) : null}
       </div>
     )
   }

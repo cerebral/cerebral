@@ -5,6 +5,7 @@ const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
+const checkNewVersion = require('./checkNewVersion')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -67,6 +68,12 @@ function createWindow () {
     clients[port].wss.close()
 
     delete clients[port]
+  })
+  electron.ipcMain.on('checkVersion', function (event, port) {
+    checkNewVersion()
+      .then((version) => {
+        mainWindow.webContents.send('version', version)
+      })
   })
 }
 
