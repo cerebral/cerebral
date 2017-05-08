@@ -26,6 +26,16 @@ describe('State', () => {
     controller.getSignal('foo')()
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
   })
+  it('should be able to SET state with an array in the path', () => {
+    const controller = new Controller({
+      state: {foo: ['bar']},
+      signals: {
+        foo: [({state}) => state.set('foo.0', 'baz')]
+      }
+    })
+    controller.getSignal('foo')()
+    assert.deepEqual(controller.getState(), {foo: ['baz']})
+  })
   it('should be able to PUSH state', () => {
     const controller = new Controller({
       state: {
