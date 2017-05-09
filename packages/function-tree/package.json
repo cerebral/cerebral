@@ -5,6 +5,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
+    "test:watch": "npm run test -- --watch",
     "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "coverage": "nyc --reporter=lcov --reporter=json npm run test",
     "prepublish": "npm run build"

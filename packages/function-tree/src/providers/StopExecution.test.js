@@ -4,7 +4,7 @@ import StopExecution from './StopExecution'
 import assert from 'assert'
 
 describe('StopExecutionProvider', () => {
-  it('should throw error when conditions are not met', (done) => {
+  it('should throw error when conditions return true', (done) => {
     const ft = new FunctionTree([
       StopExecution({
         test (context) { return context.props.doStop }
@@ -22,5 +22,39 @@ describe('StopExecutionProvider', () => {
         assert.ok(error instanceof FunctionTreeExecutionError)
         done()
       })
+  })
+  it('should continue when conditions return false', (done) => {
+    const ft = new FunctionTree([
+      StopExecution({
+        test (context) { return context.props.doStop }
+      })
+    ])
+
+    ft.run('test', {
+      doStop: false
+    }, [
+      ({props}) => {
+        assert.deepEqual(props, {
+          doStop: false
+        })
+        done()
+      }
+    ])
+  })
+  it('should continue when using without conditions', (done) => {
+    const ft = new FunctionTree([
+      StopExecution()
+    ])
+
+    ft.run('test', {
+      doStop: false
+    }, [
+      ({props}) => {
+        assert.deepEqual(props, {
+          doStop: false
+        })
+        done()
+      }
+    ])
   })
 })
