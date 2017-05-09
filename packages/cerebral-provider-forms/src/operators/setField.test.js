@@ -29,4 +29,35 @@ describe('setField', () => {
     })
     controller.getSignal('test')()
   })
+  it('should throw when field path is not a state tag', () => {
+    let errorCount = 0
+    const controller = Controller({
+      providers: [FormsProvider()],
+      signals: {
+        test: {
+          signal: [
+            setField('form.name', 'foo')
+          ],
+          catch: new Map([
+            [Error, [
+              ({props}) => {
+                errorCount++
+                assert.equal(props.error.name, 'Error')
+                assert.equal(props.error.message, 'Cerebral Forms - operator.setField: You have to use the STATE TAG as first argument')
+              }
+            ]]
+          ])
+        }
+      },
+      state: {
+        form: {
+          name: {
+            value: 'Ben'
+          }
+        }
+      }
+    })
+    controller.getSignal('test')()
+    assert.equal(errorCount, 1)
+  })
 })

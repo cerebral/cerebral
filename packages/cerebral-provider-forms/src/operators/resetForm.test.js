@@ -30,7 +30,7 @@ describe('resetForm', () => {
     })
     controller.getSignal('test')()
   })
-  it('Should reset nested Form', () => {
+  it('should reset nested Form', () => {
     const controller = Controller({
       providers: [FormsProvider()],
       signals: {
@@ -58,7 +58,7 @@ describe('resetForm', () => {
     })
     controller.getSignal('test')()
   })
-  it('Should reset nested form arrays', () => {
+  it('should reset nested form arrays', () => {
     const controller = Controller({
       providers: [FormsProvider()],
       signals: {
@@ -92,5 +92,36 @@ describe('resetForm', () => {
       }
     })
     controller.getSignal('test')()
+  })
+  it('should throw when form path is not a state tag', () => {
+    let errorCount = 0
+    const controller = Controller({
+      providers: [FormsProvider()],
+      signals: {
+        test: {
+          signal: [
+            resetForm('form')
+          ],
+          catch: new Map([
+            [Error, [
+              ({props}) => {
+                errorCount++
+                assert.equal(props.error.name, 'Error')
+                assert.equal(props.error.message, 'Cerebral Forms - operator.resetForm: You have to use the STATE TAG as an argument')
+              }
+            ]]
+          ])
+        }
+      },
+      state: {
+        form: {
+          name: {
+            value: 'Ben'
+          }
+        }
+      }
+    })
+    controller.getSignal('test')()
+    assert.equal(errorCount, 1)
   })
 })

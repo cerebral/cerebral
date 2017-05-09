@@ -32,6 +32,7 @@ module.exports = {
     {name: 'forms'},
     {name: 'http'},
     {name: 'useragent'},
+    {name: 'shortcuts'},
     {name: 'firebase'},
     {name: 'firebase-admin'},
     {name: 'storage'},

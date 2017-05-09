@@ -512,4 +512,17 @@ describe('Controller', () => {
       router
     })
   })
+  it('should be able to handle global error happening in runSignal', (done) => {
+    const controller = new Controller({
+      catch: new Map([
+        [Error, [({props}) => {
+          assert.ok(props.error)
+          done()
+        }]]
+      ])
+    })
+    assert.doesNotThrow(() => {
+      controller.runSignal('foo', [() => { throw new Error() }])
+    })
+  })
 })

@@ -1,0 +1,37 @@
+{
+  "name": "cerebral-module-shortcuts",
+  "version": "1.0.0",
+  "description": "Cerebral 2 module to fire signals bound to keyboard shortcuts.",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
+    "build": "BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "prepublish": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral.git"
+  },
+  "keywords": [
+    "cerebral",
+    "module",
+    "shortcuts"
+  ],
+  "author": "Eli Yukelzon <reflog@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "homepage":
+    "https://github.com/cerebral/cerebral/tree/master/packages/cerebral-module-shortcuts#readme",
+  "dependencies": {
+    "shortway": "^0.3.0" 
+  },
+  "peerDependencies": {
+    "cerebral": "^2.0.0-b"
+  },
+  "devDependencies": {
+    "@cerebral/monorepo": "0.0.1",
+    "cerebral": "^2.0.0-b"
+  }
+}

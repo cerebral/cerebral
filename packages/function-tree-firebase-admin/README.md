@@ -136,6 +136,10 @@ module.exports = new QueueHandler({
   // queue tasks. It is automatically removed in production
   specPrefix: username.sync(),
 
+  // You can specify if you want to authenticate or not.
+  // default is false
+  authenticate: true,
+
   // An array of specs and corresponding trees to run
   tasks: [{
     specId: 'some_spec_name',
@@ -148,10 +152,10 @@ module.exports = new QueueHandler({
   // A reference in Firebase to your queue
   queueRef: firebase.database().ref('queue')
 }, (specId, tree, payload) => {
-  runTask(specId, tree, payload)
+  runTask.run(specId, tree, payload)
     .catch((error) => {
       // Handle error. Payload has error property with details
-      runTask('ERROR', [/* A tree handling errors */], error.payload)
+      runTask.run('ERROR', [/* A tree handling errors */], error.payload)
     })
 });
 ```

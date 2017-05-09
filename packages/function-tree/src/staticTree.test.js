@@ -28,6 +28,25 @@ describe('StaticTree', () => {
     assert.equal(tree.items[0].functionIndex, 0)
     assert.ok(tree.items[0].function)
   })
+  it('should throw when unexpected entry in tree', () => {
+    assert.throws(() => {
+      staticTree([
+        function a () {},
+        1
+      ])
+    }, (err) => {
+      if ((err instanceof Error) && err.name === 'FunctionTreeError' && err.toJSON) {
+        return err.toJSON().message === 'Unexpected entry in tree'
+      }
+    })
+    assert.throws(() => {
+      staticTree(1)
+    }, (err) => {
+      if ((err instanceof Error) && err.name === 'FunctionTreeError' && err.toJSON) {
+        return err.toJSON().message === 'Unexpected entry in tree'
+      }
+    })
+  })
   it('should handle paths', () => {
     const tree = staticTree([
       function a () {}, {

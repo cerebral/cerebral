@@ -1,6 +1,6 @@
 export class FunctionTreeError extends Error {
   constructor (error) {
-    super(error.message)
+    super(error.message || error)
     this.name = 'FunctionTreeError'
   }
   toJSON () {

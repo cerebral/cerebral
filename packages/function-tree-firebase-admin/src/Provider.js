@@ -1,4 +1,5 @@
 import firebaseAdmin from 'firebase-admin'
+import createTask from './createTask'
 
 function noReturnValue () {}
 
@@ -8,7 +9,9 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
 
   if (!customFirebaseInstance) {
     if (!options.serviceAccount || !options.databaseURL) {
-      throw new Error('FIREBASE: You are not passing correct options to provider')
+      throw new Error(
+        'FIREBASE: You are not passing correct options to provider'
+      )
     }
 
     firebase.initializeApp({
@@ -36,7 +39,7 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
       push (path, value) {
         const ref = firebase.database().ref(path).push()
 
-        return ref.set(value).then(() => ({key: ref.key}))
+        return ref.set(value).then(() => ({ key: ref.key }))
       },
       set (path, value) {
         return firebase.database().ref(path).set(value).then(noReturnValue)
@@ -52,14 +55,20 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
         options = options || {}
 
         return new Promise((resolve, reject) => {
-          Object.keys(options).reduce((currentRef, optionKey) => {
-            return currentRef[optionKey](options[optionKey])
-          }, firebase.database().ref(path)).once('value', (snapshot) => {
-            resolve({
-              key: path.split('/').pop(),
-              value: snapshot.val()
-            })
-          }, reject)
+          Object.keys(options)
+            .reduce((currentRef, optionKey) => {
+              return currentRef[optionKey](options[optionKey])
+            }, firebase.database().ref(path))
+            .once(
+              'value',
+              snapshot => {
+                resolve({
+                  key: path.split('/').pop(),
+                  value: snapshot.val()
+                })
+              },
+              reject
+            )
         })
       },
       transaction (path, cb) {
@@ -68,8 +77,13 @@ function FirebaseAdminProvider (options = {}, customFirebaseInstance) {
     }
   }
 
-  return (context) => {
+  return (context, funcDetails) => {
     context.firebase = cachedProvider = cachedProvider || createProvider()
+    context.firebase.task = createTask(
+      options,
+      context.execution.id,
+      funcDetails.functionIndex
+    )
 
     if (context.debugger) {
       context.debugger.wrapProvider('firebase')
