@@ -3,7 +3,7 @@ class Path {
     this.path = path
     this.payload = payload
   }
-  toJS () {
+  toJSON () {
     return {
       path: this.path,
       payload: this.payload
