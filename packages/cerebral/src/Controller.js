@@ -171,16 +171,21 @@ class Controller extends FunctionTree {
     this.run(name, signal, payload, (error) => {
       if (error) {
         const signalPath = error.execution.name.split('.')
-        const signalCatch = signalPath.reduce((currentModule, key, index) => {
-          if (index === signalPath.length - 1) {
+        let signalCatch = signalPath.reduce((currentModule, key, index) => {
+          if (index === signalPath.length - 1 && currentModule.signals[key]) {
             return currentModule.signals[key].catch
           }
 
           return currentModule ? currentModule.modules[key] : null
         }, this.module)
 
+        // if signal doesn't have a catch method and we have a global catch, try using it
         if (!signalCatch) {
-          throw error
+          if (this.catch instanceof Map) {
+            signalCatch = this.catch
+          } else {
+            throw error
+          }
         }
 
         if (signalCatch instanceof Map) {
