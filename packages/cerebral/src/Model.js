@@ -81,7 +81,7 @@ class Model {
 
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
-        if (!isObject(currentState)) {
+        if (!Array.isArray(currentState) && !isObject(currentState)) {
           throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
         }
 
@@ -109,7 +109,7 @@ class Model {
     this.state = this.unfreezeObject(this.state)
     path.reduce((currentState, key, index) => {
       if (index === path.length - 1) {
-        if (!isObject(currentState)) {
+        if (!Array.isArray(currentState) && !isObject(currentState)) {
           throwError(`The path "${path.join('.')}" is invalid, can not update state. Does the path "${path.join('.')}" exist?`)
         }
         currentState[key] = this.unfreezeObject(currentState[key])
