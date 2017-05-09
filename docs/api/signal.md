@@ -214,3 +214,24 @@ function myAction ({someProvider, path}) {
     .then((result) => path.bananas({data: result.data}))
 }
 ```
+
+## Errors
+You can catch specific errors on a signal.
+
+```js
+import {Controller} from 'cerebral'
+import somethingHappened from './signals/somethingHappened'
+import httpFailed from './signals/httpFailed'
+import {HttpProviderError} from 'cerebral-provider-http'
+
+const Controller({
+  signals: {
+    somethingHappened: {
+      signal: somethingHappened,
+      catch: new Map([
+        [HttpProviderError, httpFailed]
+      ])
+    }
+  }
+})
+```
