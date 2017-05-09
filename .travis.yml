@@ -8,7 +8,7 @@ notifications:
   email: false
 before_script:
 - npm prune
-- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-provider-firebase|cerebral-provider-forms|cerebral-router|babel-*)'
+- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-provider-firebase|cerebral-provider-forms|cerebral-router|cerebral-module-shortcuts|babel-*)'
 - lerna bootstrap --scope @cerebral/codemods*
 after_success:
 - |
