@@ -216,17 +216,19 @@ class Controller extends FunctionTree {
 
     return signal.run
   }
-
-  addModule (path, module) {
-    const pathArray = path.split('.')
-    const moduleKey = pathArray.pop()
-    const parentModule = pathArray.reduce((currentModule, key) => {
+  getModule (path) {
+    const pathArray = Array.isArray(path) ? path : path.split('.')
+    return pathArray.reduce((currentModule, key) => {
       if (!currentModule.modules[key]) {
-        throwError(`The path "${pathArray.join('.')}" is invalid, can not add module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
+        throwError(`The path "${pathArray.join('.')}" is invalid, can not find module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
       }
       return currentModule.modules[key]
     }, this.module)
-
+  }
+  addModule (path, module) {
+    const pathArray = path.split('.')
+    const moduleKey = pathArray.pop()
+    const parentModule = this.getModule(pathArray)
     parentModule.modules[moduleKey] = new Module(this, path.split('.'), module)
 
     if (module.provider) {
@@ -235,7 +237,6 @@ class Controller extends FunctionTree {
 
     this.flush()
   }
-
   removeModule (path) {
     if (!path) {
       console.warn('Controller.removeModule requires a Module Path')
@@ -244,13 +245,7 @@ class Controller extends FunctionTree {
 
     const pathArray = path.split('.')
     const moduleKey = pathArray.pop()
-
-    const parentModule = pathArray.reduce((currentModule, key) => {
-      if (!currentModule.modules[key]) {
-        throwError(`The path "${pathArray.join('.')}" is invalid, can not remove module. Does the path "${pathArray.splice(0, path.length - 1).join('.')}" exist?`)
-      }
-      return currentModule.modules[key]
-    }, this.module)
+    const parentModule = this.getModule(pathArray)
 
     const module = parentModule.modules[moduleKey]
 
