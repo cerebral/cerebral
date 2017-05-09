@@ -1,7 +1,8 @@
 {
   "presets": ["es2015"],
   "plugins": [
-    ["version-transform", "babel-plugin-transform-builtin-extend", {
+    "version-transform",
+    ["babel-plugin-transform-builtin-extend", {
       "globals": ["Error"]
     }]
   ],

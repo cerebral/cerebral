@@ -233,7 +233,7 @@ export class Devtools {
     const message = JSON.stringify({
       type: 'init',
       source: 'ft',
-      version: VERSION
+      version: VERSION // eslint-disable-line
     })
 
     this.sendMessage(message)
@@ -265,7 +265,7 @@ export class Devtools {
     return this.safeStringify({
       type: type,
       source: 'ft',
-      version: VERSION,
+      version: VERSION, // eslint-disable-line
       data: data
     })
   }
