@@ -3,7 +3,6 @@ import {delay, throwError} from '../utils'
 import Path from 'function-tree/lib/Path'
 const PLACEHOLDER_INITIAL_MODEL = 'PLACEHOLDER_INITIAL_MODEL'
 const PLACEHOLDER_DEBUGGING_DATA = '$$DEBUGGING_DATA$$'
-const VERSION = 'v1'
 
 /*
   Connects to the Cerebral debugger
@@ -20,7 +19,6 @@ class Devtools {
     allowedTypes: [],
     doReconnect: true
   }) {
-    this.VERSION = VERSION
     this.debuggerComponentsMap = {}
     this.debuggerComponentDetailsId = 1
     this.storeMutations = typeof options.storeMutations === 'undefined' ? true : options.storeMutations
@@ -316,7 +314,7 @@ class Devtools {
     const message = JSON.stringify({
       type: 'bulk',
       source: 'c',
-      version: this.VERSION,
+      version: VERSION,
       data: {
         messages
       }
@@ -333,7 +331,7 @@ class Devtools {
     const message = JSON.stringify({
       type: 'init',
       source: 'c',
-      version: this.VERSION,
+      version: VERSION,
       data: {
         initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
       }
@@ -393,7 +391,7 @@ class Devtools {
     return JSON.stringify({
       type: type,
       source: 'c',
-      version: this.VERSION,
+      version: VERSION,
       data: data
     }).replace(`"${PLACEHOLDER_DEBUGGING_DATA}"`, mutationString)
   }

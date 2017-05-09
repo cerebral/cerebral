@@ -1,6 +1,5 @@
 import WebSocket from 'universal-websocket-client'
 import Path from '../Path'
-const VERSION = 'v1'
 
 export class Devtools {
   constructor (options = {
@@ -8,7 +7,6 @@ export class Devtools {
     reconnect: true
   }) {
     this.trees = []
-    this.VERSION = VERSION
     this.remoteDebugger = options.remoteDebugger || null
     this.backlog = []
     this.latestExecutionId = null
@@ -235,7 +233,7 @@ export class Devtools {
     const message = JSON.stringify({
       type: 'init',
       source: 'ft',
-      version: this.VERSION
+      version: VERSION
     })
 
     this.sendMessage(message)
@@ -267,7 +265,7 @@ export class Devtools {
     return this.safeStringify({
       type: type,
       source: 'ft',
-      version: this.VERSION,
+      version: VERSION,
       data: data
     })
   }
