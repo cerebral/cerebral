@@ -107,7 +107,7 @@ describe('resetForm', () => {
               ({props}) => {
                 errorCount++
                 assert.equal(props.error.name, 'Error')
-                assert.equal(props.error.message, 'Cerebral-Provider-Forms operator.resetForm: You have to use the STATE TAG as an argument')
+                assert.equal(props.error.message, 'Cerebral Forms - operator.resetForm: You have to use the STATE TAG as an argument')
               }
             ]]
           ])

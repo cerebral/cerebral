@@ -43,7 +43,7 @@ describe('setField', () => {
               ({props}) => {
                 errorCount++
                 assert.equal(props.error.name, 'Error')
-                assert.equal(props.error.message, 'Cerebral-Provider-Forms operator.setField: You have to use the STATE TAG as first argument')
+                assert.equal(props.error.message, 'Cerebral Forms - operator.setField: You have to use the STATE TAG as first argument')
               }
             ]]
           ])
