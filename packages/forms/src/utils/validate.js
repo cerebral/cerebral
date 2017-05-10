@@ -2,8 +2,7 @@ import rules from '../rules.js'
 
 export default function validate (form, value, validationRules = []) {
   const initialValidation = {
-    isValid: true,
-    failedRule: null
+    isValid: true
   }
 
   return validationRules.reduce((result, validationRule, index) => {
