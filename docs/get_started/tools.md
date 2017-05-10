@@ -1,22 +1,22 @@
 # Tools
 Cerebral comes with official and community made tools.
 
-## cerebral-forms
+## forms
 A simple and insightful way to handle the complexity of form validation.
 
-[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/cerebral-forms)
+[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/forms)
 
-## cerebral-module-useragent
+## useragent
 Produces state related to useragent, media, window size, network status etc.
 
-[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/cerebral-module-useragent)
+[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/useragent)
 
-##  cerebral-provider-firebase
+##  firebase
 A simplifying wrapper around firebase client, making developing firebase applications a breeze
 
-[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-firebase)
+[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/firebase)
 
-## cerebral-provider-http
+## http
 A JSON http provider with file upload and ability to abort requests
 
-[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/cerebral-provider-http)
+[Go to repo](https://github.com/cerebral/cerebral/tree/master/packages/http)

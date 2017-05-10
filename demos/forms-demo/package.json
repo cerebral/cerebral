@@ -1,12 +1,12 @@
 {
-  "name": "@cerebral/forms-demo",
+  "name": "cerebral-forms-demo",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "aphrodite": "^1.2.0",
     "cerebral": "^2.0.0-b",
-    "cerebral-provider-forms": "^1.0.0-b",
-    "cerebral-router": "^1.0.0-b",
+    "@cerebral/forms": "^1.0.0-b",
+    "@cerebral/router": "^1.0.0-b",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },

@@ -314,7 +314,7 @@ class Devtools {
     const message = JSON.stringify({
       type: 'bulk',
       source: 'c',
-      version: VERSION,
+      version: VERSION, // eslint-disable-line
       data: {
         messages
       }
@@ -331,7 +331,7 @@ class Devtools {
     const message = JSON.stringify({
       type: 'init',
       source: 'c',
-      version: VERSION,
+      version: VERSION, // eslint-disable-line
       data: {
         initialModel: this.initialModelString ? PLACEHOLDER_INITIAL_MODEL : initialModel
       }
@@ -391,7 +391,7 @@ class Devtools {
     return JSON.stringify({
       type: type,
       source: 'c',
-      version: VERSION,
+      version: VERSION, // eslint-disable-line
       data: data
     }).replace(`"${PLACEHOLDER_DEBUGGING_DATA}"`, mutationString)
   }

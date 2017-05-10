@@ -6,8 +6,8 @@
   "scripts": {
     "link": "link-parent-bin -s true && link-parent-bin -s true -c babel && link-parent-bin -s true -c demos && link-parent-bin -s true -c website",
     "setup": "lerna bootstrap",
-    "setup:packages": "lerna bootstrap --scope \"@(function-tree|cerebral*)\"",
-    "setup:babel": "lerna bootstrap --scope \"@(function-tree|cerebral*|babel*)\"",
+    "setup:packages": "lerna bootstrap --ignore \"@(cerebral-*|babel-*)\"",
+    "setup:babel": "lerna bootstrap --ignore cerebral-*",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
     "lint": "standard",

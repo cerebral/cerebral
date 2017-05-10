@@ -1,6 +1,6 @@
 import {set} from 'cerebral/operators'
 import {props, state} from 'cerebral/tags'
-import * as firebase from 'cerebral-provider-firebase/operators'
+import * as firebase from '@cerebral/firebase/operators'
 import firebaseInit from '../../app/signals/firebaseInit'
 import paths from '../../../common/Collection/paths'
 

@@ -22,7 +22,7 @@ export default controller
 
 ```js
 import {Controller} from 'cerebral'
-import {HttpProviderError} from 'cerebral-provider-http'
+import {HttpProviderError} from '@cerebral/http'
 
 const controller = Controller({
   catch: new Map([

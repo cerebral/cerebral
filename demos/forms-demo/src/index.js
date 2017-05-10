@@ -3,11 +3,11 @@ import {render} from 'react-dom'
 import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
-import Router from 'cerebral-router'
+import Router from '@cerebral/router'
 import app from './modules/app'
 import simple from './modules/simple'
 import App from './components/App'
-import FormsProvider from 'cerebral-provider-forms'
+import FormsProvider from '@cerebral/forms'
 
 const controller = Controller({
   router: Router({

@@ -37,7 +37,7 @@ lines, this unfortunately can't be avoided, so there may be some manual fixes re
 Run at the root of monorepo
 
 ```shell
-lerna bootstrap --scope @cerebral/codemods_1.x-2.x
+lerna bootstrap --scope cerebral-codemods_1.x-2.x
 ```
 
 For testing:
@@ -45,5 +45,5 @@ For testing:
 ```shell
 npm test # at codemods root
 # or
-lerna run test --scope @cerebral/codemods_1.x-2.x # at monorepo root
+lerna run test --scope cerebral-codemods_1.x-2.x # at monorepo root
 ```

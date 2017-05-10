@@ -6,4 +6,4 @@ Facebook released a boilerplating tool for React, called [create-react-app](http
 
 ## saitodisse/cerebral2-boilerplates
 
-Various scripts that uses [create-react-app](https://facebook.github.io/react/blog/2016/07/22/create-apps-with-no-configuration.html), yarn and some shell script to start a cerebral project based on cerebral's official examples: tutorial, demo, cerebral-forms demo and todomvc. (_tested on Linux, may work on Mac_)
+Various scripts that uses [create-react-app](https://facebook.github.io/react/blog/2016/07/22/create-apps-with-no-configuration.html), yarn and some shell script to start a cerebral project based on cerebral's official examples: tutorial, demo, forms-demo and todomvc. (_tested on Linux, may work on Mac_)

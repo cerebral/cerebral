@@ -3,7 +3,7 @@ Typically applications use a router. To instantiate the Cerebral router, install
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral-router'
+import Router from '@cerebral/router'
 
 const controller = Controller({
   router: Router({
@@ -22,7 +22,7 @@ Let us create a small app:
 
 ```js
 import {Controller} from 'cerebral'
-import Router from 'cerebral-router'
+import Router from '@cerebral/router'
 import HomeModule from './modules/home'
 import PostsModule from './modules/posts'
 
@@ -236,10 +236,10 @@ Traditional routers are a wrapper around your components and they manipulate wha
 
 This is a really good thing because most route changes require quite a few state changes and side effects, like server requests, to be run. This is exactly what signals do so well.
 
-Let us introduce **cerebral-router** to our project by adding an import to the top of our *controller.js*:
+Let us introduce **@cerebral/router** to our project by adding an import to the top of our *controller.js*:
 
 ```js
-import Router from 'cerebral-router'
+import Router from '@cerebral/router'
 
 ```
 

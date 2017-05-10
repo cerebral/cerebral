@@ -62,28 +62,28 @@
     ],
     "packages": [{
       "name": "router",
-      "path": "../../packages/cerebral-router/README"
+      "path": "../../packages/router/README"
     }, {
       "name": "http",
-      "path": "../../packages/cerebral-provider-http/README"
+      "path": "../../packages/http/README"
     }, {
       "name": "firebase",
-      "path": "../../packages/cerebral-provider-firebase/README"
+      "path": "../../packages/firebase/README"
     }, {
       "name": "useragent",
-      "path": "../../packages/cerebral-module-useragent/README"
+      "path": "../../packages/useragent/README"
     }, {
       "name": "forms",
-      "path": "../../packages/cerebral-provider-forms/README"
+      "path": "../../packages/forms/README"
     }, {
       "name": "storage",
-      "path": "../../packages/cerebral-provider-storage/README"
+      "path": "../../packages/storage/README"
     }, {
       "name": "function_tree",
       "path": "../../packages/function-tree/README"
     }, {
       "name": "firebase_admin",
-      "path": "../../packages/function-tree-firebase-admin/README"
+      "path": "../../packages/firebase-admin/README"
     }],
     "migration": [
       "../../docs/migration/migration"

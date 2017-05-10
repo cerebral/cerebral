@@ -1,0 +1,50 @@
+{
+  "name": "@cerebral/firebase-admin",
+  "version": "1.0.0-b",
+  "description": "Firebase admin execution and provider",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
+    "coverage": "nyc --reporter=lcov --reporter=json npm run test",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "faye-websocket": "^0.11.1",
+    "firebase": "^3.6.2",
+    "firebase-admin": "^4.0.4",
+    "firebase-queue": "^1.6.0",
+    "firebase-server": "^0.7.1",
+    "proxyquire": "^1.7.11"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral.git"
+  },
+  "keywords": [
+    "javascript",
+    "firebase",
+    "queue",
+    "function-tree"
+  ],
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "contributors": [
+    "Aleksey Guryanov <gurianov@gmail.com>"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/firebase-admin#readme",
+  "nyc": {
+    "exclude": [
+      "node_modules",
+      "lib",
+      "tests",
+      "**/*.test.js",
+      "**/testHelper.js"
+    ]
+  }
+}

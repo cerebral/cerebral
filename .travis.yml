@@ -8,8 +8,8 @@ notifications:
   email: false
 before_script:
 - npm prune
-- lerna bootstrap --scope '@(function-tree|cerebral|cerebral-forms|cerebral-provider-http|cerebral-provider-firebase|cerebral-provider-forms|cerebral-router|cerebral-module-shortcuts|babel-*)'
-- lerna bootstrap --scope @cerebral/codemods*
+- npm run setup:babel
+- lerna bootstrap --scope cerebral-codemods*
 after_success:
 - |
   git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral;

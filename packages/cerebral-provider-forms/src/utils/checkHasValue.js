@@ -1,6 +1,0 @@
-import validate from './validate'
-
-export default function checkHasValue (form, value, isValueRules) {
-  const result = validate(form, value, isValueRules)
-  return result.isValid
-}
