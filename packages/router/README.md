@@ -113,6 +113,55 @@ const controller = Controller({
 })
 ```
 
+### routes definition (compute)
+
+You can use compute to compute values to/from url.
+
+```js
+import {Controller} from 'cerebral'
+import Router from '@cerebral/router'
+import {props, state} from 'cerebral/tags'
+
+const controller = Controller({
+  modules: {
+    router: Router({
+      routes: [
+        {
+          path: '/settings/:tab',
+          // This maps a complex app state to the `opts` param in
+          // url query.
+          map: {
+            opts: compute(
+              state`projectId`,
+              state`user.lang`,
+              (projectId, lang) => ({projectId, lang})
+            )
+          },
+          // This parses the url query `opts` into two state values.
+          // It does a 'reverse map' hence the 'rmap' name.
+          rmap: {
+            'projectId': compute(
+              state`projectId`,
+              props`opts`,
+              (projectId, opts) => opts.projectId || projectId
+            ),
+            'user.lang': compute(
+              state`validLangs`,
+              props`opts`,
+              (validLangs, opts) => (
+                validLangs[opts.lang] ? opts.lang : 'en'
+              )
+            )
+          }
+        }
+      ],
+      query: true
+    })
+  }
+})
+```
+
+
 ### map state
 
 The `map` parameter let's you create a mapping between state and
@@ -120,15 +169,33 @@ url parameters. This works both ways: when you change the state,
 it sets the url from state and when the url changes, it triggers
 the state changes.
 
-Note that this automatic mapping is only active if the current url
-is active.
+This automatic mapping is only active if the current url
+is active. Note also that when you use state mapping, the 'signal'
+is optional.
 
-Note also that when you use state mapping, the 'signal' is optional.
+You can use a `compute` value here to run a computed in order to prepare
+the value passed to build the url.
+
+```js
+map: {
+  urlKey: compute(/* ... */)
+}
+```
+
+If you use a `compute` the router cannot map back from the url key to the
+state and you need to define a reverse map with `rmap`:
+
+```js
+rmap: {
+  'some.state': compute(props`urlKey`, (urlKey) => /* ... */),
+  'other.state': compute(props`urlKey`, (urlKey) => /* ... */)
+}
+```
 
 ### map props
 
-As soon as there is a 'map' entry, all parameters that we want to pass through must be present. So the `props` type is used for whitelisting. In the last example above, we want to enable the 'focus' query parameter
-and we have to whitelist 'tab' as well.
+As soon as there are `props` in the map entry, all parameters that we
+want to pass through must be present. So the `props` type is used for whitelisting.
 
 ### signal payload
 

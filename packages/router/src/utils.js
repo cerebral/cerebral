@@ -1,3 +1,7 @@
+import {Compute} from 'cerebral/lib/Compute'
+import DependencyTracker from 'cerebral/lib/DependencyTracker'
+import { dependencyMatch } from 'cerebral/lib/utils'
+
 function compatConfig (config, prev = '') {
   return [].concat(...Object.keys(config).map(key => {
     const conf = config[key]
@@ -12,7 +16,7 @@ export function flattenConfig (config, prev = '') {
   if (!Array.isArray(config)) {
     config = compatConfig(config)
   }
-  return config.reduce((flattened, {path, signal, map, routes}) => {
+  return config.reduce((flattened, {map, path, routes, rmap, signal}) => {
     if (routes) {
       Object.assign(flattened, flattenConfig(routes, prev + path))
     }
@@ -26,6 +30,17 @@ export function flattenConfig (config, prev = '') {
         conf.stateMapping = stateMapping
       }
 
+      const computedKeys = Object.keys(map).filter((key) => (map[key] instanceof Compute))
+      if (computedKeys.length) {
+        conf.computedMapping = computedKeys.reduce((mapping, key) => {
+          const tracker = new DependencyTracker(map[key])
+          // We have to wait until we have access to controller before
+          // doing the first run.
+          mapping[key] = { tracker, needsInit: true }
+          return mapping
+        }, {})
+      }
+
       const propsMapping = Object.keys(map).filter((key) => map[key].type === 'props')
       if (propsMapping.length) {
         conf.propsMapping = propsMapping
@@ -33,6 +48,20 @@ export function flattenConfig (config, prev = '') {
           throw new Error(`Cerebral router - route ${currentPath} has props mappings but no signal was defined.`)
         }
       }
+    }
+
+    const computedRmapKeys = Object.keys(rmap || {})
+    .filter((key) => rmap[key] instanceof Compute)
+
+    if (computedRmapKeys.length) {
+      conf.rmap = rmap
+      conf.computedRMapping = computedRmapKeys.reduce((mapping, key) => {
+        const tracker = new DependencyTracker(rmap[key])
+        // We have to wait until we have access to controller before
+        // doing the first run.
+        mapping[key] = { tracker, needsInit: true }
+        return mapping
+      }, {})
     }
 
     flattened[currentPath] = conf
@@ -65,4 +94,8 @@ export function hasChangedPath (changes, path) {
       return true
     }
   }
+}
+
+export function computeShouldChange (tracker, changed) {
+  return dependencyMatch(changed, tracker.stateTrackMap).length > 0
 }
