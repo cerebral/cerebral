@@ -1,4 +1,4 @@
-import {flattenConfig, getRoutesBySignal, hasChangedPath} from './utils'
+import {computeShouldChange, flattenConfig, hasChangedPath, getRoutesBySignal} from './utils'
 import {getChangedProps} from 'cerebral/lib/utils'
 
 export default class Router {
@@ -80,17 +80,28 @@ export default class Router {
     }
 
     event && event.preventDefault()
-    const {signal, map, stateMapping, propsMapping} = match
+    const {computedRMapping, map, propsMapping, signal, stateMapping} = match
     let payload = values
     const getters = {props: payload, state: this.stateGetter}
 
-    if (stateMapping) {
+    if (stateMapping || computedRMapping) {
       this.controller.runSignal('router.routed', [
         ({state, resolve}) => {
-          stateMapping.forEach((key) => {
-            const value = values[key]
-            state.set(resolve.path(map[key]), value === undefined ? null : value)
-          })
+          if (stateMapping) {
+            stateMapping.forEach((key) => {
+              const value = values[key]
+              state.set(resolve.path(map[key]), value === undefined ? null : value)
+            })
+          }
+          if (computedRMapping) {
+            Object.keys(computedRMapping).forEach(path => {
+              const {tracker} = computedRMapping[path]
+              tracker.run(this.stateGetter, values)
+
+              const value = tracker.value
+              state.set(path, value === undefined ? null : value)
+            })
+          }
         }
       ])
     }
@@ -141,17 +152,31 @@ export default class Router {
 
   onFlush (changed) {
     const {route, payload} = this.activeRoute
-    const {map, stateMapping} = this.routesConfig[route] || {}
-    if (!stateMapping) return
-
+    const {map, stateMapping, computedMapping} = this.routesConfig[route] || {}
+    if (!stateMapping && !computedMapping) return
     const getters = {props: payload, state: this.stateGetter}
     let shouldUpdate = false
 
     const resolvedMap = Object.keys(map || {}).reduce((resolved, key) => {
-      const path = map[key].getPath(getters)
-      const value = map[key].getValue(getters)
+      let value
 
-      shouldUpdate = shouldUpdate || (stateMapping.indexOf(key) >= 0 && hasChangedPath(changed, path))
+      if (computedMapping && computedMapping[key]) {
+        const trackerHandle = computedMapping[key]
+        const {needsInit, tracker} = trackerHandle
+
+        if (needsInit || computeShouldChange(tracker, changed)) {
+          trackerHandle.needsInit = false
+          tracker.run(this.stateGetter, payload)
+          shouldUpdate = true
+        }
+
+        value = tracker.value
+      } else {
+        const path = map[key].getPath(getters)
+        value = map[key].getValue(getters)
+
+        shouldUpdate = shouldUpdate || (stateMapping.indexOf(key) >= 0 && hasChangedPath(changed, path))
+      }
 
       if (!this.options.filterFalsy || value) {
         // Cerebral state only supports null and url-mapper only supports

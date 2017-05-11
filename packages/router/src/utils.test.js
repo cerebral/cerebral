@@ -1,9 +1,11 @@
 /* eslint-env mocha */
 /* eslint-disable no-console */
-const state = require('../../cerebral/src/tags').state
-const props = require('../../cerebral/src/tags').props
-const assert = require('assert')
-const {flattenConfig} = require('./utils')
+import * as assert from 'assert'
+// Cannot use require here or instanceof will not work.
+import {compute} from 'cerebral'
+import {state, props} from 'cerebral/tags'
+import DependencyTracker from 'cerebral/lib/DependencyTracker'
+import {computeShouldChange, flattenConfig} from './utils'
 
 describe('flattenConfig', () => {
   it('should handle object config', () => {
@@ -93,7 +95,7 @@ describe('flattenConfig', () => {
     })
   })
 
-  it('should parse map parameter', () => {
+  it('should parse map and rmap parameters', () => {
     const config = flattenConfig([
       {
         path: '/settings/:tab',
@@ -109,6 +111,15 @@ describe('flattenConfig', () => {
       {
         path: '/other/url',
         signal: 'other.signal'
+      },
+      {
+        path: '/compute/map',
+        map: {view: compute(() => true)},
+        signal: 'other.signal'
+      },
+      {
+        path: '/:foo',
+        rmap: {'some.path': compute(props`foo`, foo => foo + 'x')}
       }
     ])
     Object.keys(config).forEach(key => {
@@ -118,7 +129,40 @@ describe('flattenConfig', () => {
     assert.deepEqual(config, {
       '/settings/:tab': ['signal', 'map', 'propsMapping'],
       '/view/:view': ['signal', 'map', 'stateMapping'],
-      '/other/url': ['signal']
+      '/other/url': ['signal'],
+      '/compute/map': ['signal', 'map', 'computedMapping'],
+      '/:foo': ['signal', 'rmap', 'computedRMapping']
     })
+  })
+})
+
+describe('computeShouldChange', () => {
+  it('should compare changes with compute state track map', () => {
+    const tracker = new DependencyTracker(
+      compute(state`foo.bar`, () => '')
+    )
+    tracker.run(() => '', {})
+    assert.deepEqual(
+      [
+        [{path: ['foo', 'bar']}, {path: ['bar']}],
+        [{path: ['foo']}, {path: ['bar']}],
+        [{path: ['foo.bing']}],
+      ].map((changed, idx) => idx + '-' + computeShouldChange(tracker, changed)),
+      ['0-true', '1-true', '2-false']
+    )
+  })
+  it('should compare changes with ** in state path', () => {
+    const tracker = new DependencyTracker(
+      compute(state`foo.**`, () => '')
+    )
+    tracker.run(() => '', {})
+    assert.deepEqual(
+      [
+        [{path: ['foo', 'bar']}, {path: ['bar']}],
+        [{path: ['foo']}, {path: ['bar']}],
+        [{path: ['bong']}]
+      ].map((changed, idx) => idx + '-' + computeShouldChange(tracker, changed)),
+      [ '0-true', '1-true', '2-false']
+    )
   })
 })
