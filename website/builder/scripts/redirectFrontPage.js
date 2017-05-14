@@ -1,1 +1,1 @@
-window.location.href = 'docs/get_started'
+window.location.href = 'docs/introduction'

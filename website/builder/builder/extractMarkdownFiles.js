@@ -18,6 +18,16 @@ const compile = marksy({
             allowfullscreen />
         </div>
       )
+    },
+    Logo () {
+      return <div style={{
+        background: 'url(/images/cerebral.png)',
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'contain',
+        backgroundPosition: 'center',
+        width: '100%',
+        height: '50vh'
+      }} />
     }
   },
   a (props) {

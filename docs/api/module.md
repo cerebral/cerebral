@@ -1,4 +1,4 @@
-# Modules
+# Module
 
 A module is basically an object. Modules helps you structure your state and signals. You can think of them as namespaces for state and signals.
 

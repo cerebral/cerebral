@@ -1,4 +1,4 @@
-# From 1.x to 2.x
+# Migration
 
 When migrating from 1.x to 2.x you need to take the following under consideration.
 

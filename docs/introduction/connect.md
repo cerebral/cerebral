@@ -7,6 +7,22 @@ In Cerebral you connect state to components where you need it. This give some be
 3. Increased readability as every component explicitly tells you what state and signals it needs and where it gets it from
 4. You can safely move the component wherever you want without breaking chain of props passing
 
+When you render your application you use the **Container** component to expose the controller to the rest of your components...
+
+```js
+import React from 'react'
+import {render} from 'react-dom'
+import {Container} from 'cerebral/react'
+import controller from './controller'
+import App from './App'
+
+render((
+  <Container controller={controller}>
+    <App />
+  </Container>
+), document.querySelector('#app'))
+```
+
 When you connect a component like this...
 
 ```js
@@ -27,7 +43,7 @@ export default connect({
 )
 ```
 
-...the component will be registered to the root **Container** component which is used to expose the controller. The *Container* actually has a register of all connected components in your application. This information is passed to the debugger and whenever Cerebral flushes out changes made to different state paths, the *Container* will figure out what components should render.
+...the component will be registered to the root **Container** component. The *Container* actually has a register of all connected components in your application. This information is passed to the debugger and whenever Cerebral flushes out changes made to different state paths, the *Container* will figure out what components should render.
 
 All connected components are automatically optimized, meaning that they will only render if a parent component passes a changed prop or the *Container* tells it to render.
 
