@@ -42,14 +42,14 @@ controller.on('error', (error) => {})
 
 ## Methods
 
-### getState(path)
+### getState
 Returns state from the state tree
 
 ```js
 const someState = controller.getState('some.state')
 ```
 
-### getSignal(path)
+### getSignal
 Returns signal from Cerebral
 
 ```js
@@ -58,35 +58,35 @@ const someSignal = controller.getSignal('some.signal')
 someSignal({foo: 'bar'})
 ```
 
-### getModel()
+### getModel
 Returns the model (state tree) of Cerebral
 
 ```js
 const model = controller.getModel()
 ```
 
-### flush(force)
+### flush
 Flushes out changes to UI based on recent state changes, can be forced
 
 ```js
 controller.flush()
 ```
 
-### runSignal(name, definition, payload)
+### runSignal
 Allows you to run an arbitrary function tree definition
 
 ```js
 controller.runSignal('someSignal', [actionA, actionB], {foo: 'bar'})
 ```
 
-### addModule(path, module)
+### addModule
 Allows you to add modules to the controller after instantiation (lazy)
 
 ```js
 controller.addModule('someModule', module)
 ```
 
-### removeModule(path, module)
+### removeModule
 Allows you to remove modules from the controller
 
 ```js

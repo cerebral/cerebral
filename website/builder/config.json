@@ -19,31 +19,27 @@
     "docs": ["docs"]
   },
   "docs": {
-    "get_started": [
-      "../../docs/get_started/get_started",
-      "../../docs/get_started/the_architecture",
-      "../../docs/get_started/debugger",
-      "../../docs/get_started/resources",
-      "../../docs/get_started/counter",
-      "../../docs/get_started/todomvc"
-    ],
-    "developer_guide": [
-      "../../docs/developer_guide/introduction",
-      "../../docs/developer_guide/state",
-      "../../docs/developer_guide/connect",
-      "../../docs/developer_guide/signals",
-      "../../docs/developer_guide/actions",
-      "../../docs/developer_guide/operators",
-      "../../docs/developer_guide/factories",
-      "../../docs/developer_guide/paths",
-      "../../docs/developer_guide/compute",
-      "../../docs/developer_guide/routing",
-      "../../docs/developer_guide/organize",
-      "../../docs/developer_guide/providers",
-      "../../docs/developer_guide/errors",
-      "../../docs/developer_guide/test",
-      "../../docs/developer_guide/production",
-      "../../docs/developer_guide/collaborate"
+    "introduction": [
+      "../../docs/introduction/what_is_cerebral",
+      "../../docs/introduction/the_architecture",
+      "../../docs/introduction/install",
+      "../../docs/introduction/debugger",
+      "../../docs/introduction/view_type",
+      "../../docs/introduction/state",
+      "../../docs/introduction/connect",
+      "../../docs/introduction/signals",
+      "../../docs/introduction/actions",
+      "../../docs/introduction/operators",
+      "../../docs/introduction/factories",
+      "../../docs/introduction/paths",
+      "../../docs/introduction/compute",
+      "../../docs/introduction/routing",
+      "../../docs/introduction/organize",
+      "../../docs/introduction/providers",
+      "../../docs/introduction/errors",
+      "../../docs/introduction/test",
+      "../../docs/introduction/production",
+      "../../docs/introduction/collaborate"
     ],
     "api": [
       "../../docs/api/controller",
@@ -54,13 +50,13 @@
       "../../docs/api/tags",
       "../../docs/api/container",
       "../../docs/api/connect",
-      "../../docs/api/modules",
+      "../../docs/api/module",
       "../../docs/api/operators",
       "../../docs/api/providers",
       "../../docs/api/compute",
       "../../docs/api/statecontainer"
     ],
-    "packages": [{
+    "addons": [{
       "name": "router",
       "path": "../../packages/router/README"
     }, {
@@ -79,14 +75,19 @@
       "name": "storage",
       "path": "../../packages/storage/README"
     }, {
-      "name": "function_tree",
-      "path": "../../packages/function-tree/README"
-    }, {
       "name": "firebase_admin",
       "path": "../../packages/firebase-admin/README"
+    }, {
+      "name": "function_tree",
+      "path": "../../packages/function-tree/README"
     }],
-    "migration": [
-      "../../docs/migration/migration"
+    "resources": [
+      "../../docs/resources/cerebral_in_detail",
+      "../../docs/resources/boilerplates",
+      "../../docs/resources/migration",
+      "../../docs/resources/articles",
+      "../../docs/resources/videos",
+      "../../docs/resources/projects"
     ]
   }
 }

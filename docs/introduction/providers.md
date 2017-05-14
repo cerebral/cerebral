@@ -43,7 +43,9 @@ import {Controller, provide} from 'cerebral'
 const controller = Controller({
   providers: [
     provide('someProvider', {
-      foo: 'bar'
+      returnFoo() {
+        return 'foo'
+      }
     })
   ]
 })
@@ -55,7 +57,7 @@ Now this provider is available to any action:
 
 ```js
 function myAction ({someProvider}) {
-  someProvider.foo // "bar"
+  someProvider.returnFoo() // "foo"
 }
 ```
 

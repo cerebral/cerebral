@@ -39,7 +39,7 @@ class AddApp extends Inferno.Component {
     }
   }
   openDocs () {
-    shell.openExternal('https://cerebral.github.io/docs/get_started/debugger.html')
+    shell.openExternal('https://cerebral.github.io/docs/introduction/debugger.html')
   }
   render () {
     return (
