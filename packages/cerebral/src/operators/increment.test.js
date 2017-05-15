@@ -79,6 +79,40 @@ describe('operator.increment', () => {
     })
     assert.deepEqual(controller.getState(), { foo: 2 })
   })
+  it('should increment value to props from model', () => {
+    const controller = Controller({
+      state: {
+        foo: 2
+      },
+      signals: {
+        test: [
+          increment(props`value`, state`foo`),
+          ({ props }) => {
+            assert.equal(props.value, 3)
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')({
+      value: 1
+    })
+  })
+  it('should increment value to props from props', () => {
+    const controller = Controller({
+      signals: {
+        test: [
+          increment(props`value`, props`grabValue`),
+          ({ props }) => {
+            assert.equal(props.value, 3)
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')({
+      value: 1,
+      grabValue: 2
+    })
+  })
   it('should increment value to model from model', () => {
     const controller = Controller({
       state: {
