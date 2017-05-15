@@ -1,0 +1,241 @@
+import Path from '../Path'
+
+export class DevtoolsBase {
+  constructor ({
+    remoteDebugger = null,
+    reconnect = true,
+    reconnectInterval = 10000
+  } = {}) {
+    this.remoteDebugger = remoteDebugger
+    this.version = 0
+    if (!this.remoteDebugger) {
+      throw new Error(`Devtools: You have to pass in the "remoteDebugger" option`)
+    }
+    this.backlog = []
+    this.isConnected = false
+    this.ws = null
+    this.reconnectInterval = reconnectInterval
+    this.doReconnect = reconnect
+
+    this.sendInitial = this.sendInitial.bind(this)
+  }
+  createSocket () { }
+  /*
+    Sets up the listeners to Chrome Extension or remote debugger
+  */
+  addListeners () {
+    this.createSocket()
+    this.ws.onmessage = this.onMessage.bind(this)
+  }
+  onMessage (event) { }
+  reconnect () {
+    setTimeout(() => {
+      this.init()
+    }, this.reconnectInterval)
+  }
+  /*
+    The debugger might be ready or it might not. The initial communication
+    with the debugger requires a "ping" -> "pong" to identify that it
+    is ready to receive messages.
+    1. Debugger is open when app loads
+      - Devtools sends "ping"
+      - Debugger sends "pong"
+      - Devtools sends "init"
+    2. Debugger is opened after app load
+      - Debugger sends "ping"
+      - Devtools sends "init"
+  */
+  init () {
+    this.addListeners()
+    this.ws.onopen = () => {
+      this.ws.send(JSON.stringify({type: 'ping'}))
+    }
+    this.ws.onerror = () => {}
+    this.ws.onclose = () => {
+      this.isConnected = false
+
+      if (this.doReconnect) {
+        console.warn('Debugger application is not running on selected port... will reconnect automatically behind the scenes')
+        this.reconnect()
+      }
+    }
+  }
+  /*
+    Sends message to chrome extension or remote debugger
+  */
+  sendMessage (stringifiedMessage) {
+    this.ws.send(stringifiedMessage)
+  }
+  /*
+    Sends multiple message in one batch to debugger, causing debugger
+    also to synchronously run all updates before rendering
+  */
+  sendBulkMessage (messages, source) {
+    const message = JSON.stringify({
+      type: 'bulk',
+      source,
+      version: this.version, // eslint-disable-line
+      data: {
+        messages
+      }
+    })
+
+    this.sendMessage(message)
+  }
+  /*
+    Watches function tree for execution of signals. This is passed to
+    debugger to prevent time travelling when executing. It also tracks
+    latest executed signal for "remember" to know when signals can be
+    called again
+  */
+  watchExecution (tree, source) {
+    tree.on('start', (execution, payload) => {
+      const message = JSON.stringify({
+        type: 'executionStart',
+        source: source,
+        version: this.version,
+        data: {
+          execution: {
+            executionId: execution.id,
+            name: execution.name,
+            staticTree: execution.staticTree,
+            datetime: execution.datetime,
+            executedBy: (payload && payload._execution) ? payload._execution : null
+          }
+        }
+      })
+
+      this.sendExecutionMessage(message)
+    })
+    tree.on('end', (execution) => {
+      const message = JSON.stringify({
+        type: 'executionEnd',
+        source: source,
+        version: this.version,
+        data: {
+          execution: {
+            executionId: execution.id
+          }
+        }
+      })
+      this.latestExecutionId = execution.id
+
+      this.sendExecutionMessage(message)
+    })
+    tree.on('pathStart', (path, execution, funcDetails) => {
+      const message = JSON.stringify({
+        type: 'executionPathStart',
+        source: source,
+        version: this.version,
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            path
+          }
+        }
+      })
+
+      this.sendExecutionMessage(message)
+    })
+    tree.on('functionStart', (execution, funcDetails, payload) => {
+      const message = this.safeStringify({
+        type: 'execution',
+        source: source,
+        version: this.version,
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            payload,
+            data: null
+          }
+        }
+      })
+
+      this.sendExecutionMessage(message)
+    })
+    tree.on('functionEnd', (execution, funcDetails, payload, result) => {
+      if (!result || (result instanceof Path && !result.payload)) {
+        return
+      }
+
+      const message = this.safeStringify({
+        type: 'executionFunctionEnd',
+        source: source,
+        version: this.version,
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            output: result instanceof Path ? result.payload : result
+          }
+        }
+      })
+
+      this.sendExecutionMessage(message)
+    })
+    tree.on('error', (error, execution, funcDetails) => {
+      const message = JSON.stringify({
+        type: 'executionFunctionError',
+        source: source,
+        version: this.version,
+        data: {
+          execution: {
+            executionId: execution.id,
+            functionIndex: funcDetails.functionIndex,
+            error: {
+              name: error.name,
+              message: error.message,
+              stack: error.stack,
+              func: funcDetails.function.toString()
+            }
+          }
+        }
+      })
+
+      this.sendExecutionMessage(message)
+    })
+  }
+  safeStringify (object) {
+    const refs = []
+
+    return JSON.stringify(object, (key, value) => {
+      const isObject = (
+        typeof value === 'object' &&
+        value !== null &&
+        !Array.isArray(value)
+      )
+
+      if (isObject && refs.indexOf(value) > -1) {
+        return '[CIRCULAR]'
+      } else if (isObject) {
+        refs.push(value)
+      }
+
+      return value
+    })
+  }
+  sendExecutionMessage (message) {
+    if (this.isConnected) {
+      this.sendMessage(message)
+    } else {
+      this.backlog.push(message)
+    }
+  }
+  sendInitial () { }
+  createExecutionMessage (debuggingData, context, functionDetails, payload) { }
+  /*
+    Sends execution data to the debugger. Whenever a signal starts
+    it will send a message to the debugger, but any functions in the
+    function tree might also use this to send debugging data. Like when
+    mutations are done or any wrapped methods run.
+  */
+  sendExecutionData (debuggingData, context, functionDetails, payload) {
+    const message = this.createExecutionMessage(debuggingData, context, functionDetails, payload)
+
+    this.sendExecutionMessage(message)
+  }
+}
+
+export default DevtoolsBase
