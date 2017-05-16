@@ -51,7 +51,7 @@ describe('Devtools', () => {
     })
     assert.equal(controller.devtools.isConnected, false)
     setTimeout(() => {
-      assert.deepEqual(messages, ['ping', 'init', 'bulk', 'components'])
+      assert.deepEqual(messages, ['ping', 'init', 'components'])
       assert.equal(controller.devtools.isConnected, true)
       assert.equal(controller.devtools.reconnectInterval, 5000)
       assert.equal(controller.devtools.doReconnect, true)
@@ -137,7 +137,7 @@ describe('Devtools', () => {
     }, 400)
 
     setTimeout(() => {
-      assert.deepEqual(messages, ['ping', 'init', 'bulk', 'components'])
+      assert.deepEqual(messages, ['ping', 'init', 'components'])
       assert.equal(warnCount, 1)
       assert.equal(controller.devtools.isConnected, true)
       console.warn = originWarn
@@ -221,7 +221,7 @@ describe('Devtools', () => {
     assert.equal(TestUtils.findRenderedDOMComponentWithTag(tree, 'div').innerHTML, 'bar')
 
     setTimeout(() => {
-      assert.deepEqual(messageTypes, ['bulk', 'components'])
+      assert.deepEqual(messageTypes, ['components'])
       assert.equal(controller.devtools.isConnected, true)
 
       assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
@@ -233,10 +233,6 @@ describe('Devtools', () => {
       assert.deepEqual(messages.components.data.map.bar, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
       assert.deepEqual(messages.components.data.render, { components: [] })
 
-      assert.equal(messages.bulk.source, 'c')
-      assert.equal(messages.bulk.version, version)
-      assert.deepEqual(messages.bulk.data.messages, [])
-
       controller.getSignal('test')({
         foo: 'bar'
       })
@@ -245,7 +241,7 @@ describe('Devtools', () => {
       assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'TestComponent', renderCount: 1, id: 1 }])
       assert.equal(controller.devtools.debuggerComponentsMap.test, undefined)
 
-      assert.deepEqual(messageTypes, ['bulk', 'components', 'executionStart', 'execution', 'execution', 'executionPathStart', 'execution', 'executionFunctionEnd', 'executionEnd'])
+      assert.deepEqual(messageTypes, ['components', 'executionStart', 'execution', 'execution', 'executionPathStart', 'execution', 'executionFunctionEnd', 'executionEnd'])
       assert.ok(messages.executionStart.data.execution)
       assert.equal(messages.executionStart.source, 'c')
 
@@ -366,7 +362,7 @@ describe('Devtools', () => {
     setTimeout(() => {
       controller.getSignal('test')()
       assert.equal(errorCount, 1)
-      assert.deepEqual(messageTypes, ['bulk', 'components', 'components', 'executionStart', 'execution', 'executionFunctionError', 'executionStart', 'execution', 'executionEnd'])
+      assert.deepEqual(messageTypes, ['components', 'components', 'executionStart', 'execution', 'executionFunctionError', 'executionStart', 'execution', 'executionEnd'])
       mockServer.stop(done)
     }, 70)
   })
