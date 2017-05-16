@@ -35,5 +35,8 @@
       "**/*.test.js",
       "**/testHelper.js"
     ]
+  },
+  "devDependencies": {
+    "mock-socket": "^6.0.4"
   }
 }
