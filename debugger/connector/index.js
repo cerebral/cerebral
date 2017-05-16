@@ -10,6 +10,12 @@ const connector = {
       data: payload
     })
   },
+  checkVersion (cb) {
+    ipcRenderer.on('version', (event, versionChange) => {
+      cb(versionChange)
+    })
+    ipcRenderer.send('checkVersion')
+  },
   addPort (port, eventCallback) {
     if (addedPorts.indexOf(port) >= 0) {
       return

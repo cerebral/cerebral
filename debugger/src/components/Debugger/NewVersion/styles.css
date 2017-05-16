@@ -1,0 +1,21 @@
+.version {
+  position: fixed;
+  top: 50%;
+  margin-top: -200px;
+  margin-left: -200px;
+  left: 50%;
+  background-color: #FFF;
+  border: 1px solid #333;
+  z-index: 9999999;
+  width: 400px;
+  height: 400px;
+  box-shadow: 0 0 20px 5px rgba(0,0,0,0.1);
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.version .remind-me {
+  text-decoration: underline;
+  cursor: pointer;
+}
