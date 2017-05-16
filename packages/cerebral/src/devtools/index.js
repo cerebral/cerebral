@@ -160,10 +160,11 @@ export class Devtools extends DevtoolsBase {
 
     this.isResettingDebugger = true
     this.sendMessage(message)
-    this.sendBulkMessage(this.backlog, 'c')
+    if (this.backlog.length) {
+      this.sendBulkMessage(this.backlog, 'c')
+      this.backlog = []
+    }
     this.isResettingDebugger = false
-
-    this.backlog = []
 
     this.isConnected = true
 
