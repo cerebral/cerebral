@@ -264,7 +264,6 @@ class Controller extends FunctionTree {
 
     this.flush()
   }
-
 }
 
 export default function (...args) {

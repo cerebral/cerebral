@@ -88,7 +88,7 @@ class Model {
         const currentValue = currentState[key]
 
         cb(currentState[key], currentState, key)
-        if (currentState[key] !== currentValue || isComplexObject(currentState[key]) && isComplexObject(currentValue)) {
+        if (currentState[key] !== currentValue || (isComplexObject(currentState[key]) && isComplexObject(currentValue))) {
           this.changedPaths.push({
             path,
             forceChildPathUpdates
@@ -117,7 +117,7 @@ class Model {
         const currentValue = currentState[key]
         cb(currentState[key], currentState, key)
 
-        if (currentState[key] !== currentValue || isComplexObject(currentState[key]) && isComplexObject(currentValue)) {
+        if (currentState[key] !== currentValue || (isComplexObject(currentState[key]) && isComplexObject(currentValue))) {
           this.changedPaths.push({
             path,
             forceChildPathUpdates

@@ -66,9 +66,7 @@ Promise.all([
                 }))
               })
           })
-          .then(function () {
-            return
-          })
+          .then(function noop () {})
           .then(function () {
             return renders.map(function (render) {
               return writeFile(path.join('dist', `${render.fileName}.html`), render.content)

@@ -65,7 +65,6 @@ export class Form {
   getFields () {
     return getFormFields(this)
   }
-
 }
 
 export function computedField (fieldValueTag) {
