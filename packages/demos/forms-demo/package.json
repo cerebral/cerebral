@@ -1,0 +1,12 @@
+{
+  "name": "cerebral-forms-demo",
+  "private": true,
+  "dependencies": {
+    "aphrodite": "^1.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "eject": "react-scripts eject"
+  }
+}

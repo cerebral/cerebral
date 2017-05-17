@@ -34,8 +34,8 @@ The entire Cerebral codebase has been rewritten to encourage contributions. The 
 
 1. Clone the monorepo: `git clone https://github.com/cerebral/cerebral.git`
 2. In root: `npm install`
-3. Run `npm run setup:packages` which will build packages source code and link it together
-4. Run `npm run setup` if you need to set up whole repo (docs, demos, tutorials, debuggers)
+
+TODO: update instructions
 
 The packages are located under `packages` folder and there is **no need** to run `npm install` for each package.
 

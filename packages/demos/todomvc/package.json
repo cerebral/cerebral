@@ -1,0 +1,20 @@
+{
+  "name": "cerebral-todomvc",
+  "private": true,
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "homepage": "http://cerebral.github.io/todomvc/",
+  "contributors": [
+    "Aleksey Guryanov <gurianov@gmail.com>",
+    "Henri Hulski <henri.hulski@gazeta.pl>"
+  ],
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "todomvc-app-css": "^2.0.6",
+    "todomvc-common": "^1.0.2"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "prepublish": "npm run build"
+  }
+}
