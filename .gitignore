@@ -1,6 +1,6 @@
-node_modules
+/node_modules
+!packages/node_modules
 npm-debug.log
-lerna-debug.log
 coverage
 .nyc_output
 .DS_Store
@@ -11,4 +11,3 @@ website/builder/docs
 *darwin-x64
 **/yarn.lock
 **/yarn-error.log
-!/yarn.lock

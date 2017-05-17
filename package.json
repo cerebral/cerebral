@@ -1,25 +1,31 @@
 {
-  "name": "@cerebral/monorepo",
+  "name": "cerebral-monorepo",
   "private": true,
   "version": "0.0.1",
   "license": "MIT",
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "contributors": [
+    "Aleksey Guryanov <gurianov@gmail.com>"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cerebral/cerebral/issues"
+  },
+  "homepage": "http://cerebraljs.com",
   "scripts": {
-    "link": "link-parent-bin -s true && link-parent-bin -s true -c babel && link-parent-bin -s true -c demos && link-parent-bin -s true -c website",
-    "setup": "lerna bootstrap",
-    "setup:packages": "lerna bootstrap --ignore \"@(cerebral-*|babel-*)\"",
-    "setup:babel": "lerna bootstrap --ignore cerebral-*",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "commit": "git-cz",
     "lint": "standard",
     "pretest": "npm run lint",
-    "test": "lerna run test --ignore @cerebral/monorepo",
-    "coverage": "lerna run coverage --ignore @cerebral/monorepo",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "deploy": "cd website/publisher && npm run ci",
-    "postinstall": "npm run link"
+    "deploy": "cd website/publisher && npm run ci"
   },
   "dependencies": {
+    "addressbar": "^1.0.3",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
@@ -39,18 +45,21 @@
     "istanbul-combine": "^0.3.0",
     "jest": "^18.1.0",
     "jsdom": "^9.9.1",
-    "lerna": "^2.0.0-rc.4",
-    "link-parent-bin": "^0.1.1",
     "mocha": "^3.4.1",
     "mocha-jsdom": "^1.1.0",
+    "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
     "nyc": "^10.3.2",
+    "prop-types": "^15.5.10",
     "react": "^15.4.2",
     "react-addons-test-utils": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-scripts": "0.9.5",
     "shx": "^0.2.2",
-    "standard": "^8.6.0"
+    "standard": "^8.6.0",
+    "url-mapper": "^1.1.1",
+    "uuid": "^3.0.1",
+    "xhr-mock": "https://github.com/christianalfoni/xhr-mock.git"
   },
   "config": {
     "commitizen": {
@@ -63,7 +72,7 @@
   "standard": {
     "parser": "babel-eslint",
     "ignore": [
-      "**/node_modules/**",
+      "packages/demos/**/node_modules/**",
       "**/build/"
     ]
   }
