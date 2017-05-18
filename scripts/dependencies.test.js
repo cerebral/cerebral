@@ -5,7 +5,7 @@ const installCmd = 'npm install --save'
 
 const monodeps = monorepo.dependencies
 
-glob('packages/*/package.json', (er, files) => {
+glob('@(packages|demos)/*/package.json', (er, files) => {
   const packages = files.map(path => JSON.parse(fs.readFileSync(path)))
   /**
    * type: 'install' | 'conflict' | 'noop'

@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "addressbar": "1.0.3",
+    "aphrodite": "1.2.0",
     "babel-cli": "^6.23.0",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
@@ -32,7 +33,9 @@
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.23.0",
     "babel-register": "^6.23.0",
+    "bulma": "0.2.3",
     "chalk": "1.1.3",
+    "classnames": "2.2.5",
     "commitizen": "^2.9.6",
     "coveralls": "^2.12.0",
     "cross-env": "^5.0.0",
@@ -49,6 +52,7 @@
     "husky": "^0.13.2",
     "istanbul-combine": "^0.3.0",
     "jest": "^18.1.0",
+    "js-joda": "1.1.13",
     "jsdom": "^9.9.1",
     "lerna": "^2.0.0-rc.4",
     "link-parent-bin": "^0.1.1",
@@ -60,16 +64,19 @@
     "offline-js": "0.7.18",
     "proxyquire": "1.7.11",
     "raf": "3.3.0",
-    "react": "^15.4.2",
+    "react": "15.4.2",
     "react-addons-test-utils": "^15.4.2",
-    "react-dom": "^15.4.2",
+    "react-dom": "15.4.2",
     "react-scripts": "0.9.5",
     "shortway": "0.3.0",
     "shx": "^0.2.2",
     "standard": "^8.6.0",
+    "todomvc-app-css": "2.0.6",
+    "todomvc-common": "1.0.2",
     "ua-parser-js": "0.7.10",
     "universal-websocket-client": "1.0.1",
-    "url-mapper": "1.1.1"
+    "url-mapper": "1.1.1",
+    "uuid": "2.0.3"
   },
   "config": {
     "commitizen": {
