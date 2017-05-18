@@ -203,6 +203,8 @@ angular.component('myComponent', {
   template: '<div>{{foo}}</div>',
   controller: connect({
     foo: state`foo`
+  }, function MyController () {
+    // Optionally add custom behaviour to controller
   })
 })
 ```
