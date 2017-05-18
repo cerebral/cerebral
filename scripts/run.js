@@ -2,9 +2,10 @@ const fs = require('fs')
 const glob = require('glob')
 const path = require('path')
 const execa = require('execa')
+const action = process.argv[2] || 'test'
 
-function spawnTest (cwd, done) {
-  const task = execa('npm', ['run', 'test'], {cwd})
+function spawnCommand (cwd, done) {
+  const task = execa('npm', ['run', action], {cwd})
   task.stdout.pipe(process.stdout)
   task.stderr.pipe(process.stderr)
   task.then(
@@ -13,21 +14,26 @@ function spawnTest (cwd, done) {
   )
 }
 
+const noActionMessage = {
+  test: '   NO TESTS',
+  coverage: 'NO COVERAGE'
+}[action] || `NO ${action}`
+
 const log = {
-  noTests (name) {
-    console.log(`\x1b[30m\x1b[46m NO TESTS \x1b[0m - ${name}`)
+  noAction (name) {
+    console.log(`\x1b[30m\x1b[46m ${noActionMessage} \x1b[0m - ${name}`)
   },
   pass (name) {
-    console.log(`\x1b[30m\x1b[42m     PASS \x1b[0m - ${name}`)
+    console.log(`\x1b[30m\x1b[42m        PASS \x1b[0m - ${name}`)
   },
   fail (name) {
-    console.log(`\x1b[30m\x1b[41m     FAIL \x1b[0m - ${name}`)
+    console.log(`\x1b[30m\x1b[41m        FAIL \x1b[0m - ${name}`)
   }
 }
 
 function logResults (results) {
   console.log('')
-  console.log('***** TEST RESULTS *****\n')
+  console.log(`***** ${action} RESULTS *****\n`)
   Object.keys(log).forEach(type => {
     results[type].forEach(packageName => {
       log[type](packageName)
@@ -36,12 +42,12 @@ function logResults (results) {
 }
 
 glob('@(packages|demos)/*/package.json', (er, files) => {
-  const results = {pass: [], fail: [], noTests: [], count: 0}
+  const results = {pass: [], fail: [], noAction: [], count: 0}
 
   const packages = files.map(packagePath => {
     const info = JSON.parse(fs.readFileSync(packagePath))
-    const test = info.scripts.test
-    return ({name: info.name, path: path.dirname(packagePath), test})
+    const script = info.scripts[action]
+    return ({name: info.name, path: path.dirname(packagePath), script})
   }).filter(p => p)
 
   function done (name, err, result) {
@@ -59,13 +65,13 @@ glob('@(packages|demos)/*/package.json', (er, files) => {
     }
   }
 
-  packages.forEach(testInfo => {
-    if (!testInfo.test) {
+  packages.forEach(actionInfo => {
+    if (!actionInfo.script) {
       results.count += 1
-      results.noTests.push(testInfo.name)
+      results.noAction.push(actionInfo.name)
     } else {
-      spawnTest(testInfo.path,
-        (err, result) => done(testInfo.name, err, result)
+      spawnCommand(actionInfo.path,
+        (err, result) => done(actionInfo.name, err, result)
       )
     }
   })

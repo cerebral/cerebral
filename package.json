@@ -15,7 +15,7 @@
     "prelint": "npm run checkdeps",
     "pretest": "npm run lint",
     "test": "node ./scripts/all.test.js",
-    "coverage": "lerna run coverage --ignore cerebral-monorepo",
+    "coverage": "node ./scripts/run.js coverage",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
     "deploy": "cd website/publisher && npm run ci",
@@ -42,6 +42,7 @@
     "cz-customizable": "^4.0.0",
     "cz-customizable-ghooks": "^1.5.0",
     "eventemitter3": "2.0.2",
+    "execa": "^0.6.3",
     "faye-websocket": "0.11.1",
     "feature.js": "1.0.0",
     "firebase": "3.9.0",
@@ -92,8 +93,5 @@
       "**/node_modules/**",
       "**/build/"
     ]
-  },
-  "devDependencies": {
-    "execa": "^0.6.3"
   }
 }
