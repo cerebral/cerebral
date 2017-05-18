@@ -3,11 +3,11 @@
 ## install
 **NPM**
 
-`npm install @cerebral/storage@next --save --save-exact`
+`npm install @cerebral/storage --save`
 
 **YARN**
 
-`yarn add @cerebral/storage@next --exact`
+`yarn add @cerebral/storage`
 
 ## description
 This module exposes local storage or session storage as a provider,

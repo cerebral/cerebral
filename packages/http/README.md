@@ -3,11 +3,11 @@
 ## install
 **NPM**
 
-`npm install @cerebral/http@next --save --save-exact`
+`npm install @cerebral/http --save`
 
 **YARN**
 
-`yarn add @cerebral/http@next --exact`
+`yarn add @cerebral/http`
 
 ## description
 The HTTP provider exposes the ability to do HTTP requests both in actions and directly in signals. It supports **cors** and file upload, with progress handling. It default to **json**, but you can configure it to whatever you want.

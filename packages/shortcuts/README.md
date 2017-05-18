@@ -4,11 +4,11 @@
 
 **NPM**
 
-`npm install @cerebral/shortcuts@next --save --save-exact`
+`npm install @cerebral/shortcuts --save`
 
 **YARN**
 
-`yarn add @cerebral/shortcuts@next --exact`
+`yarn add @cerebral/shortcuts`
 
 ## description
 This is a tiny module that allows you to bind keyboard shortcuts to Cerebral signals.
