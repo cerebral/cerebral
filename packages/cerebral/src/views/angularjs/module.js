@@ -1,4 +1,3 @@
-import angular from 'angular'
 import {Controller, provide} from '../../'
 import View from '../View'
 
@@ -58,27 +57,27 @@ class CerebralScope {
   }
 }
 
-angular.module('cerebral', [])
-  .provider('cerebral', function () {
-    let config = null
+export default (angular) => {
+  angular.module('cerebral', [])
+    .provider('cerebral', function () {
+      let config = null
 
-    this.configure = function (controllerConfig) {
-      config = controllerConfig
-    }
-
-    this.$get = ['$injector', function ($injector) {
-      config.providers = (config.providers || [])
-        .concat((config.services || []).map((service) => {
-          return provide(service, $injector.get(service))
-        }))
-      const controller = new Controller(config)
-
-      return {
-        connect (ctrl, scope, depdendencies) {
-          return new CerebralScope(ctrl, scope, depdendencies, controller)
-        }
+      this.configure = function (controllerConfig) {
+        config = controllerConfig
       }
-    }]
-  })
 
-export default angular
+      this.$get = ['$injector', function ($injector) {
+        config.providers = (config.providers || [])
+          .concat((config.services || []).map((service) => {
+            return provide(service, $injector.get(service))
+          }))
+        const controller = new Controller(config)
+
+        return {
+          connect (ctrl, scope, depdendencies) {
+            return new CerebralScope(ctrl, scope, depdendencies, controller)
+          }
+        }
+      }]
+    })
+}
