@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/firebase#readme",
   "dependencies": {
-    "firebase": "^3.5.2"
+    "firebase": "^3.9.0"
   },
   "peerDependencies": {
     "cerebral": "^2.0.0-b"
