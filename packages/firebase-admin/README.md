@@ -121,6 +121,21 @@ function removeItem (context) {
 }
 ```
 
+## task
+If you are using the [firebase-queue](https://github.com/firebase/firebase-queue) and need to create tasks, you can do that with:
+
+*action*
+```js
+function someAction({ firebase, state }) {
+  return firebase.task('create_post', {
+    uid: state.get('app.user.uid'),
+    text: state.get('posts.newPostText')
+  })
+}
+```
+
+This will add a task at `queue/tasks`. There is no output from a resolved task, it just resolves when the action has been processed.
+
 ## QueueHandler
 The QueueHandler is responsible for registering Firebase Queues with your defined specs and what trees should run when new tasks arrive in Firebase. The QueueHandler also automatically authenticates the tasks using **verifyIdToken**.
 
