@@ -1,5 +1,5 @@
 {
-  "name": "@cerebral/monorepo",
+  "name": "cerebral-monorepo",
   "private": true,
   "version": "0.0.1",
   "license": "MIT",
@@ -14,8 +14,8 @@
     "lint": "standard",
     "prelint": "npm run checkdeps",
     "pretest": "npm run lint",
-    "test": "lerna run test --ignore @cerebral/monorepo",
-    "coverage": "lerna run coverage --ignore @cerebral/monorepo",
+    "test": "lerna run test --ignore cerebral-monorepo",
+    "coverage": "lerna run coverage --ignore cerebral-monorepo",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
     "deploy": "cd website/publisher && npm run ci",
