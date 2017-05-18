@@ -9,6 +9,7 @@ export {default as string} from './string'
 export {default as signal} from './signal'
 
 export {default as concat} from './concat'
+export {default as increment} from './increment'
 export {default as merge} from './merge'
 export {default as pop} from './pop'
 export {default as push} from './push'
