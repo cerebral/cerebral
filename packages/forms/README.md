@@ -3,11 +3,11 @@
 ## install
 **NPM**
 
-`npm install @cerebral/forms@next --save --save-exact`
+`npm install @cerebral/forms --save`
 
 **YARN**
 
-`yarn add @cerebral/forms@next --exact`
+`yarn add @cerebral/forms`
 
 ## description
 The forms provider allows you to easily compute forms based on a number of rules. Easily add new rules, error messages and, if you want, add whatever you want to your fields for custom logic.

@@ -13,11 +13,11 @@ To install Cerebral BETA you have to explicitly install Cerebral and its depende
 
 **NPM**
 
-`npm install cerebral@next --save --save-exact`
+`npm install cerebral@beta --save`
 
 **YARN**
 
-`yarn add cerebral@next --exact`
+`yarn add cerebral@beta`
 
 
 ## Choosing a view type
