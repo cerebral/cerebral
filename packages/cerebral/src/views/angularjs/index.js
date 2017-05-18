@@ -1,4 +1,2 @@
-import module from './module'
 export {default as connect} from './connect'
-
-export default module
+export {default as addModule} from './module'
