@@ -18,7 +18,7 @@ const {state, signal, props} = require('../../tags')
 const {compute} = require('../../')
 const {Container, StateContainer, connect, decorator} = require('./')
 
-describe.only('React', () => {
+describe('React', () => {
   describe('state container', () => {
     it('should be able to wrap app with container', () => {
       class TestComponent extends React.Component {

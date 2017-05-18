@@ -1,7 +1,6 @@
 import angular from 'angular'
 import {Controller, provide} from '../../'
 import View from '../View'
-let controller = null
 
 class CerebralScope {
   constructor (ctrl, scope, dependencies, controller) {
@@ -15,7 +14,7 @@ class CerebralScope {
         dependencies,
         mergeProps: null,
         props: this.props,
-        controller: controller,
+        controller,
         displayName: 'Unknown',
         onUpdate: this.onUpdate
       })
@@ -72,7 +71,7 @@ angular.module('cerebral', [])
         .concat((config.services || []).map((service) => {
           return provide(service, $injector.get(service))
         }))
-      controller = new Controller(config)
+      const controller = new Controller(config)
 
       return {
         connect (ctrl, scope, depdendencies) {

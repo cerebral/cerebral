@@ -8,9 +8,7 @@ class Container extends Component {
       throwError('You are not passing controller to Container')
     }
 
-    return {
-      controller: controller
-    }
+    return {controller}
   }
   render () {
     return this.props.children

@@ -3,9 +3,8 @@ import {createDummyController} from '../../utils'
 
 class StateContainer extends Component {
   getChildContext () {
-    const controller = createDummyController(this.props.state, this.props.signals)
     return {
-      controller: controller
+      controller: createDummyController(this.props.state, this.props.signals)
     }
   }
   render () {

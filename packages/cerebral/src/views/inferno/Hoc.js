@@ -15,7 +15,7 @@ class BaseComponent extends Component {
       dependencies,
       mergeProps,
       props,
-      controller: controller,
+      controller,
       displayName: name,
       onUpdate: this.onUpdate
     })
