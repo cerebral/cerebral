@@ -13,7 +13,6 @@
     "firebase": "^3.9.0",
     "firebase-admin": "^4.0.4",
     "firebase-queue": "^1.6.0",
-    "firebase-server": "^0.7.1",
     "proxyquire": "^1.7.11"
   },
   "directories": {
@@ -46,5 +45,8 @@
       "**/*.test.js",
       "**/testHelper.js"
     ]
+  },
+  "devDependencies": {
+    "firebase-server": "^0.7.1"
   }
 }
