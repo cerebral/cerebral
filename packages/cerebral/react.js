@@ -1,1 +1,1 @@
-module.exports = require('./lib/viewFactories/react')
+module.exports = require('./lib/views/react')

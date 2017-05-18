@@ -123,7 +123,7 @@ class Controller extends FunctionTree {
       if (this.devtools) {
         this.devtools.updateComponentsMap(component)
       }
-      component._updateFromState(changes, force)
+      component.onUpdate(changes, force)
     })
     const end = Date.now()
 

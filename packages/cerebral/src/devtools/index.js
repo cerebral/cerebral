@@ -223,7 +223,7 @@ export class Devtools extends DevtoolsBase {
     and send an event to debugger about initial registered components
   */
   extractComponentName (component) {
-    return component.constructor.displayName.replace('CerebralWrapping_', '')
+    return component._displayName.replace('CerebralWrapping_', '')
   }
   /*
     Updates the map the represents what active state paths and
