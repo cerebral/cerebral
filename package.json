@@ -14,7 +14,7 @@
     "lint": "standard",
     "prelint": "npm run checkdeps",
     "pretest": "npm run lint",
-    "test": "lerna run test --ignore cerebral-monorepo",
+    "test": "node ./scripts/all.test.js",
     "coverage": "lerna run coverage --ignore cerebral-monorepo",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
@@ -92,5 +92,8 @@
       "**/node_modules/**",
       "**/build/"
     ]
+  },
+  "devDependencies": {
+    "execa": "^0.6.3"
   }
 }
