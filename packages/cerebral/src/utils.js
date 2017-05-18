@@ -233,3 +233,31 @@ export function createResolver (getters) {
 }
 
 export const noop = () => {}
+
+/*
+  When testing and running on the server there is no need to
+  initialize all of Cerebral. So by not passing a controller
+  to this Container it will create a dummy version which inserts
+  state and mocks any signals when connecting the component.
+*/
+export function createDummyController (state = {}, signals = {}) {
+  const getState = (path) => {
+    return ensurePath(path).reduce((currentState, pathKey) => {
+      return currentState ? currentState[pathKey] : undefined
+    }, state)
+  }
+  return {
+    options: {},
+    on () {},
+    getState,
+    model: {
+      get: getState
+    },
+    getSignal (signal) {
+      return signals[signal] || (() => {})
+    },
+    componentDependencyStore: {
+      addEntity: noop
+    }
+  }
+}
