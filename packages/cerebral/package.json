@@ -37,5 +37,8 @@
       "**/*.test.js",
       "**/testHelper.js"
     ]
+  },
+  "devDependencies": {
+    "prop-types": "^15.5.10"
   }
 }

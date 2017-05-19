@@ -93,6 +93,7 @@
     "node-sass": "3.11.2",
     "npm-run-all": "^4.0.2",
     "nyc": "^10.3.2",
+    "prop-types": "15.5.10",
     "react-addons-test-utils": "^15.4.2",
     "react-scripts": "0.9.5",
     "shx": "^0.2.2",
