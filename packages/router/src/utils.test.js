@@ -146,7 +146,7 @@ describe('computeShouldChange', () => {
       [
         [{path: ['foo', 'bar']}, {path: ['bar']}],
         [{path: ['foo']}, {path: ['bar']}],
-        [{path: ['foo.bing']}],
+        [{path: ['foo.bing']}]
       ].map((changed, idx) => idx + '-' + computeShouldChange(tracker, changed)),
       ['0-true', '1-true', '2-false']
     )
@@ -162,7 +162,7 @@ describe('computeShouldChange', () => {
         [{path: ['foo']}, {path: ['bar']}],
         [{path: ['bong']}]
       ].map((changed, idx) => idx + '-' + computeShouldChange(tracker, changed)),
-      [ '0-true', '1-true', '2-false']
+      ['0-true', '1-true', '2-false']
     )
   })
 })
