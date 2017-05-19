@@ -1,6 +1,6 @@
 {
   "name": "@cerebral/router",
-  "version": "1.0.0-3-router-great-again",
+  "version": "1.0.0-b",
   "description": "An opinionated URL change handler for Cerebral",
   "main": "lib/index.js",
   "author": "Christian Alfoni <christianalfoni@gmail.com>",
