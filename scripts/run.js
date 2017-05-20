@@ -3,16 +3,58 @@ const glob = require('glob')
 const path = require('path')
 const execa = require('execa')
 const action = process.argv[2] || 'test'
+const group = process.argv[3] || 'all'
+const packagesGlob = require('./packagesGlob')[group]
+const symlinkDir = require('symlink-dir').default
+const rootBin = path.join(process.cwd(), 'node_modules', '.bin')
+// We have more then 10 execa processes.
+require('events').EventEmitter.defaultMaxListeners = 0
 
-function spawnCommand (cwd, done) {
-  const task = execa('npm', ['run', action], {cwd})
-  task.stdout.pipe(process.stdout)
-  task.stderr.pipe(process.stderr)
-  task.then(
-    (result) => done(null, result),
-    (err) => done(err)
-  )
+/** List of available commands.
+ */
+const commands = {
+  link (packagePath, done) {
+    const packageBin = path.join(packagePath, 'node_modules', '.bin')
+    symlinkDir(rootBin, packageBin)
+    .then(
+      () => done(null, true),
+      (err) => {
+        console.warn(`Cannot create symlink '${packageBin}' (there is a directory there probably).`)
+        done(err)
+      }
+    )
+  },
+  npm (cwd, done) {
+    const task = execa('npm', ['run', action], {cwd})
+    task.stdout.pipe(process.stdout)
+    task.stderr.pipe(process.stderr)
+    task.then(
+      (result) => done(null),
+      (err) => done(err)
+    )
+  }
 }
+
+const filters = {
+  link (info) {
+    return true
+  },
+  npm (info) {
+    return info.script
+  }
+}
+
+/** Which command to run for which action.
+ * Default command is `npm [action]` in the package directory.
+ */
+const commandNameFromAction = {
+  link: 'link',
+  default: 'npm'
+}
+
+const commandName = commandNameFromAction[action] || commandNameFromAction.default
+const spawnCommand = commands[commandName]
+const filter = filters[commandName]
 
 const noActionMessage = {
   test: '   NO TESTS',
@@ -41,7 +83,7 @@ function logResults (results) {
   })
 }
 
-glob('@(packages|demos)/*/package.json', (er, files) => {
+glob(packagesGlob, (er, files) => {
   const results = {pass: [], fail: [], noAction: [], count: 0}
 
   const packages = files.map(packagePath => {
@@ -50,7 +92,7 @@ glob('@(packages|demos)/*/package.json', (er, files) => {
     return ({name: info.name, path: path.dirname(packagePath), script})
   }).filter(p => p)
 
-  function done (name, err, result) {
+  function done (name, err) {
     results.count += 1
     if (err) {
       results.fail.push(name)
@@ -66,12 +108,12 @@ glob('@(packages|demos)/*/package.json', (er, files) => {
   }
 
   packages.forEach(actionInfo => {
-    if (!actionInfo.script) {
+    if (!filter(actionInfo)) {
       results.count += 1
       results.noAction.push(actionInfo.name)
     } else {
       spawnCommand(actionInfo.path,
-        (err, result) => done(actionInfo.name, err, result)
+        (err) => done(actionInfo.name, err)
       )
     }
   })
