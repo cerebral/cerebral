@@ -6,10 +6,6 @@ cache:
   - node_modules
 notifications:
   email: false
-before_script:
-- npm prune
-- npm run setup:babel
-- lerna bootstrap --scope cerebral-codemods*
 after_success:
 - |
   git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral;
@@ -26,11 +22,10 @@ after_success:
   fi
   if [[ $TRAVIS_BRANCH == 'next' && $TRAVIS_PULL_REQUEST == 'false' ]]; then
     # TODO: check changed path to decide if npm publish necessary
-    npm run link;
-    lerna bootstrap;
     echo //registry.npmjs.org/:_authToken=${NPM_TOKEN} > ~/.npmrc;
-    lerna publish -c --npm-tag next --yes --exact;
-    npm run deploy && echo 'Website updated.';
+    # TODO: implement publish script @gaspard
+    # lerna publish -c --npm-tag next --yes --exact;
+    # npm run deploy && echo 'Website updated.';
   fi
 branches:
   except:

@@ -1,13 +1,14 @@
 const glob = require('glob')
 const monorepo = require('../package.json')
 const fs = require('fs')
+const packagesGlob = require('./packagesGlob').all
 const dependencyTypes = ['dependencies', 'devDependencies']
 const installCmd = {
-  dependencies: 'npm install --save',
-  devDependencies: 'npm install --save-dev'
+  dependencies: 'npm install --save --save-exact',
+  devDependencies: 'npm install --save-dev --save-exact'
 }
 
-glob('@(packages|demos)/*/package.json', (er, files) => {
+glob(packagesGlob, (er, files) => {
   const packages = files.map(path => JSON.parse(fs.readFileSync(path)))
   /**
    * type: 'install' | 'conflict' | 'noop'
