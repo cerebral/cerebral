@@ -3,8 +3,10 @@
   "version": "1.0.0-b",
   "description": "HTTP provider for Cerebral 2",
   "main": "lib/index.js",
+  "typings": "./index.d.ts",
   "scripts": {
-    "test": "mocha --compilers js:babel-register \"src/**/*.test.js\"",
+    "test": "mocha --compilers js:babel-register \"src/**/*.test.js\" && npm run test_ts",
+    "test_ts": "mocha --timeout 5000 --compilers js:babel-register \"typescript/typescript.spec.js\"",
     "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"
   },
@@ -22,6 +24,9 @@
     "url": "https://github.com/cerebral/cerebral/issues"
   },
   "homepage": "https://github.com/cerebral/cerebral/tree/master/packages/http#readme",
+  "dependencies": {
+    "function-tree": "^0.5.0-b"
+  },
   "peerDependencies": {
     "cerebral": "^2.0.0-b"
   },

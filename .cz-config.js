@@ -12,6 +12,7 @@ module.exports = {
     {value: 'test', name: 'test:     Adding missing tests'},
     {value: 'chore', name: 'chore:    Changes to the build process or auxiliary tools\n            and libraries such as documentation generation'},
     {value: 'revert', name: 'revert:   Revert to a commit'},
+    {value: 'ts', name: 'ts:   Typescript/Typings related changes'},
     {value: 'WIP', name: 'WIP:      Work in progress'}
   ],
 

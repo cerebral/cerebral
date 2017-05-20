@@ -3,6 +3,7 @@
   "version": "1.0.0-b",
   "description": "Storage provider for Cerebral 2",
   "main": "lib/index.js",
+  "typings": "./index.d.ts",
   "scripts": {
     "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "prepublish": "npm run build"

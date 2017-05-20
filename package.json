@@ -97,6 +97,8 @@
     "react-scripts": "0.9.5",
     "shx": "^0.2.2",
     "standard": "^8.6.0",
+    "typescript": "2.3.2",
+    "typescript-definition-tester": "0.0.5",
     "xhr-mock": "1.9.0"
   }
 }

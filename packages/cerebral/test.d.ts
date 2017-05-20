@@ -1,0 +1,5 @@
+export function runCompute(compute, fixtures: any)
+export function runSignal(signal, fixtures: any, options: any)
+export function CerebralTest(fixtures: any, options: any)
+export function RunSignal(fixtures: any, options: any)
+export function runAction(action: Function, fixtures: any) 
