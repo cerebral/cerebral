@@ -89,6 +89,7 @@
     "link-parent-bin": "^0.1.1",
     "mocha": "^3.4.1",
     "mocha-jsdom": "^1.1.0",
+    "mock-socket": "6.0.4",
     "node-sass": "3.11.2",
     "npm-run-all": "^4.0.2",
     "nyc": "^10.3.2",

@@ -4,7 +4,7 @@
   "description": "When a function is not enough",
   "main": "lib/index.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-register 'src/**/*.test.js'",
+    "test": "mocha --compilers js:babel-register \"src/**/*.test.js\"",
     "test:watch": "npm run test -- --watch",
     "build": "cross-env BABEL_ENV=production babel src/ --out-dir=lib/ -s",
     "coverage": "nyc --reporter=lcov --reporter=json npm run test",
@@ -14,6 +14,9 @@
     "chalk": "^1.1.3",
     "eventemitter3": "^2.0.2",
     "universal-websocket-client": "^1.0.1"
+  },
+  "devDependencies": {
+    "mock-socket": "6.0.4"
   },
   "directories": {
     "test": "tests"
@@ -46,8 +49,5 @@
       "**/*.test.js",
       "**/testHelper.js"
     ]
-  },
-  "devDependencies": {
-    "mock-socket": "^6.0.4"
   }
 }
