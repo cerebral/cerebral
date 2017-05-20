@@ -41,7 +41,6 @@
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "shortway": "0.3.0",
-    "shx": "^0.2.2",
     "todomvc-app-css": "2.0.6",
     "todomvc-common": "1.0.2",
     "ua-parser-js": "0.7.10",
@@ -95,6 +94,7 @@
     "nyc": "^10.3.2",
     "react-addons-test-utils": "^15.4.2",
     "react-scripts": "0.9.5",
+    "shx": "^0.2.2",
     "standard": "^8.6.0",
     "xhr-mock": "1.9.0"
   }
