@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import Controller from '../Controller'
+import {Controller} from '../'
 import assert from 'assert'
 import { increment } from './'
 import { props, state, string } from '../tags'

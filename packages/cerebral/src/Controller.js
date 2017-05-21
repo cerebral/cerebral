@@ -265,6 +265,4 @@ class Controller extends FunctionTree {
   }
 }
 
-export default function (...args) {
-  return new Controller(...args)
-}
+export default Controller

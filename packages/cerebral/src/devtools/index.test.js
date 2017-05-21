@@ -6,7 +6,7 @@ import {state, signal} from '../tags'
 import {Container, connect} from '../views/react'
 import { WebSocket, Server } from 'mock-socket'
 import {Devtools} from './'
-import Controller from '../Controller'
+import {Controller} from '../'
 import React from 'react'
 import TestUtils from 'react-addons-test-utils'
 const version = VERSION // eslint-disable-line

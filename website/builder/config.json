@@ -54,7 +54,7 @@
       "../../docs/api/operators",
       "../../docs/api/providers",
       "../../docs/api/compute",
-      "../../docs/api/statecontainer"
+      "../../docs/api/universalcontroller"
     ],
     "addons": [{
       "name": "router",
