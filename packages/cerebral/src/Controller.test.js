@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import Controller from './Controller'
+import {Controller} from './'
 import assert from 'assert'
 
 describe('Controller', () => {
@@ -10,6 +10,16 @@ describe('Controller', () => {
       }
     })
     assert.deepEqual(controller.getState(), {foo: 'bar'})
+  })
+  it('should instantiate with universal state', () => {
+    window = {CEREBRAL_STATE: {foo: 'bar2'}}
+    const controller = new Controller({
+      state: {
+        foo: 'bar'
+      }
+    })
+    assert.deepEqual(controller.getState(), {foo: 'bar2'})
+    delete window.CEREBRAL_STATE
   })
   it('should warn devtools recommendation', () => {
     let warnCount = 0

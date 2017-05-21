@@ -1,0 +1,29 @@
+{
+  "name": "cerebral-universal",
+  "version": "0.0.0",
+  "private": true,
+  "author": "Christian Alfoni <christianalfoni@gmail.com>",
+  "homepage": "http://cerebral.github.io/todomvc/",
+  "contributors": [
+    "Henri Hulski <henri.hulski@gazeta.pl>"
+  ],
+  "dependencies": {
+    "cerebral": "^2.0.0-b",
+    "@cerebral/http": "^1.0.0-b",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2"
+  },
+  "scripts": {
+    "start": "concurrently --prefix \"[{name}]\" --names \"CLIENT,SERVER\" -c \"white.bold,gray.bold\" \"npm run start:client\" \"npm run start:server\"",
+    "start:client": "webpack-dev-server --port 3001",
+    "start:server": "babel-node server --presets es2015,react"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "concurrently": "^3.4.0",
+    "express": "^4.15.3",
+    "prop-types": "^15.5.10",
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
+  }
+}

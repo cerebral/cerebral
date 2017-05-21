@@ -1,5 +1,5 @@
 /* eslint-env mocha */
-import Controller from '../Controller'
+import {Controller} from '../'
 import assert from 'assert'
 import {toggle} from './'
 import {props, state} from '../tags'

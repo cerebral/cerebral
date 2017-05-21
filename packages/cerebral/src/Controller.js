@@ -92,6 +92,12 @@ class Controller extends FunctionTree {
 
     if (this.router) this.router.init()
 
+    if (typeof window !== 'undefined' && window.CEREBRAL_STATE) {
+      Object.keys(window.CEREBRAL_STATE).forEach((statePath) => {
+        this.model.set(statePath.split('.'), window.CEREBRAL_STATE[statePath])
+      })
+    }
+
     this.model.flush()
 
     this.emit('initialized')
@@ -266,6 +272,4 @@ class Controller extends FunctionTree {
   }
 }
 
-export default function (...args) {
-  return new Controller(...args)
-}
+export default Controller
