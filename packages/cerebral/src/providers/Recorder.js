@@ -53,7 +53,7 @@ export default function RecorderProvider (options = {}) {
     }
 
     function updateDebugger (method, path, args) {
-      if (context.debugger) {
+      if (context.debugger && typeof window !== 'undefined' && window.CustomEvent) {
         const event = new window.CustomEvent('cerebral2.client.message', {
           detail: JSON.stringify({
             type: 'recorderMutation',

@@ -13,9 +13,8 @@ const React = require('react')
 const ReactDOM = require('react-dom')
 const TestUtils = require('react-addons-test-utils')
 const assert = require('assert')
-const Controller = require('../../Controller').default
 const {state, signal, props} = require('../../tags')
-const {compute} = require('../../')
+const {Controller, compute} = require('../../')
 const {Container, StateContainer, connect, decorator} = require('./')
 
 describe('React', () => {

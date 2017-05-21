@@ -15,4 +15,4 @@ The second ingredient of developing an application is the UI and there is no dou
 ## Complex business logic
 The third ingredient of building applications is expressing business logic. Very typically in frameworks expressing business logic is done with plain methods. You call a method and off you go. Solutions like [RxJS](http://reactivex.io/rxjs/) can help you handle very complex asynchronous logic, but having a framework that gives you an opinionated and strict way of managing asynchronous code, side effects and general business logic is less common.
 
-> **Cerebral** helps you handle the complexity of each of these ingredients in an opinionated yet simple way
+> **Cerebral** helps you handle the complexity of each of these ingredients in an opinionated and simple way
