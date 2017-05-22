@@ -2,7 +2,7 @@
 import UniversalController from './UniversalController'
 import assert from 'assert'
 
-describe('UniversalController', () => {
+describe.only('UniversalController', () => {
   it('should track state changes', () => {
     const controller = new UniversalController({
       state: {
@@ -30,7 +30,7 @@ describe('UniversalController', () => {
     ])
     assert.equal(controller.getScript(), '<script>window.CEREBRAL_STATE = {"foo":"bar2"}</script>')
   })
-  it('should reset controller state and changes on every run', () => {
+  it('should throw error when using run twice', () => {
     const controller = new UniversalController({
       state: {
         foo: 'bar'
@@ -41,14 +41,12 @@ describe('UniversalController', () => {
         state.set('foo', state.get('foo') + '!')
       }
     ])
-    assert.equal(controller.getState('foo'), 'bar!')
-    assert.deepEqual(controller.changes, [{path: ['foo'], forceChildPathUpdates: true}])
-    controller.run([
-      function stateUpdate ({state}) {
-        state.set('foo', state.get('foo') + '!')
-      }
-    ])
-    assert.equal(controller.getState('foo'), 'bar!')
-    assert.deepEqual(controller.changes, [{path: ['foo'], forceChildPathUpdates: true}])
+    assert.throws(() => {
+      controller.run([
+        function stateUpdate ({state}) {
+          state.set('foo', state.get('foo') + '!')
+        }
+      ])
+    })
   })
 })

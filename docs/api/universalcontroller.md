@@ -1,4 +1,7 @@
 # Universal Controller
+The Universal Controller allows you to put your application in its initial state on the server. In combination with your chosen view layer you can now render the application on the server and show it near instantly in the context of the current user. When the client side application loads it will piggyback on the existing DOM and effectively rehydrate the minimal state from the server to make it up to date, meaning that the pure HTML responded from your server and the loading of the actual application is transparent.
+
+**Note** that when using JSX syntax it is wise to also transpile your server side code, which this example shows.
 
 ```js
 import {UniversalController} from 'cerebral'
@@ -42,10 +45,10 @@ controller.run([
 
 You can add any providers to the controller to do database fetching etc. inside this **run** execution. Think of it as a signal the updates the state of the app before rendering it on the server.
 
-**NOTE!** This method resets the state and previous changes of the controller, meaning that you can reuse the same controller multiple times.
+**NOTE!** You should instantiate the controller for each run you want to do.
 
 ### getScript
-When the client side application loads it will do its first render with the default state, meaning this might be out of sync with the updates done on the server. Using the **getScript** method you will get a script tag you can inject into the *HEAD* of the returned HTML. Cerebral will use this to bring your client side application state up to date with what was on the server.
+When the client side application loads it will do its first render with the default state, meaning that if the server updated the state this is now out of sync. Using the **getScript** method you will get a script tag you can inject into the *HEAD* of the returned HTML. Cerebral will use this to bring your client side application state up to date with the server.
 
 ```js
 import {UniversalController} from 'cerebral'
@@ -100,13 +103,14 @@ import loadApp from './loadApp'
 
 const server = express()
 const indexTemplate = fs.readFileSync('index.template.html').toString()
-const controller = UniversalController({
-  modules: {
-    app: appModule
-  }
-})
 
 server.get('/', (req, res) => {
+  const controller = UniversalController({
+    modules: {
+      app: appModule
+    }
+  })
+
   controller.run(loadApp, {
       query: req.query,
       useragent: req.headers['user-agent']
@@ -126,4 +130,4 @@ server.listen(3000)
 ```
 
 ## ES6 on server
-Take a look at the [demo application](https://github.com/cerebral/cerebral/tree/master/demos/universal) to see how you can run modern javascript, also with JSX, on the server. Demo does not include building for production, but you would typically use Webpack as normal for the client and just babel for the server. Or you can use Webpack there as well.
+Take a look at the [demo application](https://github.com/cerebral/cerebral/tree/master/demos/universal) to see how you can run modern javascript, also with JSX, on the server. Demo does not include building for production, but you would typically use Webpack as normal for the client and just babel for the server. Or you can use Webpack there as well. If you are not using JSX you will probably get away with no transpiling on the server.
