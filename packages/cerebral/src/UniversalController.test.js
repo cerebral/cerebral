@@ -2,7 +2,7 @@
 import UniversalController from './UniversalController'
 import assert from 'assert'
 
-describe.only('UniversalController', () => {
+describe('UniversalController', () => {
   it('should track state changes', () => {
     const controller = new UniversalController({
       state: {
