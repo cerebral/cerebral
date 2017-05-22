@@ -3,7 +3,7 @@
 const triggerUrlChange = require('./testHelper').triggerUrlChange
 
 // Have to require due to mocks (load correct order)
-const Controller = require('../../cerebral/src/Controller').default
+const Controller = require('../../cerebral/src/index').Controller
 const Router = require('../src').default
 const addressbar = require('addressbar')
 const assert = require('assert')

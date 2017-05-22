@@ -23,7 +23,7 @@ class UniversalController extends Controller {
     return `<script>window.CEREBRAL_STATE = ${state}</script>`
   }
   run (sequence, payload) {
-    if (this.hasRun) {
+    if (this.hasRun) {
       throwError('You can not run the universal controller more than once, create a new one')
     }
     this.hasRun = true

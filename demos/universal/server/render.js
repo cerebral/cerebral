@@ -25,13 +25,13 @@ export default function render (req) {
   })
 
   return controller.run(updateSequence, {
-      name: req.query.name
+    name: req.query.name
+  })
+    .then(() => {
+      return indexTemplate
+        .replace('{{CEREBRAL_SCRIPT}}', controller.getScript())
+        .replace('{{APP}}', renderToString(
+          <Container controller={controller}><App /></Container>
+        ))
     })
-      .then(() => {
-        return indexTemplate
-          .replace('{{CEREBRAL_SCRIPT}}', controller.getScript())
-          .replace('{{APP}}', renderToString(
-            <Container controller={controller}><App /></Container>
-          ))
-      })
 }
