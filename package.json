@@ -64,7 +64,7 @@
     ]
   },
   "devDependencies": {
-    "babel-cli": "^6.23.0",
+    "babel-cli": "6.24.1",
     "babel-core": "^6.23.1",
     "babel-eslint": "^7.1.1",
     "babel-jest": "^18.0.0",
@@ -74,11 +74,13 @@
     "babel-preset-react": "^6.23.0",
     "babel-register": "^6.23.0",
     "commitizen": "^2.9.6",
+    "concurrently": "3.4.0",
     "coveralls": "^2.12.0",
     "cross-env": "^5.0.0",
     "cz-customizable": "^4.0.0",
     "cz-customizable-ghooks": "^1.5.0",
     "execa": "^0.6.3",
+    "express": "4.15.3",
     "firebase-server": "0.7.1",
     "gh-pages": "1.0.0",
     "husky": "^0.13.2",
@@ -100,6 +102,8 @@
     "standard": "^8.6.0",
     "typescript": "2.3.2",
     "typescript-definition-tester": "0.0.5",
+    "webpack": "2.5.1",
+    "webpack-dev-server": "2.4.5",
     "xhr-mock": "1.9.0"
   }
 }
