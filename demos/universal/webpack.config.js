@@ -12,7 +12,7 @@ module.exports = {
       include: [path.resolve('client')],
       use: [{
         loader: require.resolve('babel-loader')
-      }],
+      }]
     }]
   }
 }
