@@ -10,11 +10,6 @@ import appModule from '../client/modules/app'
 import App from '../client/components/App'
 
 const indexTemplate = fs.readFileSync(path.resolve('server', 'index.template.html')).toString()
-const controller = UniversalController({
-  modules: {
-    app: appModule
-  }
-})
 const updateSequence = [
   when(props`name`), {
     true: set(state`app.name`, props`name`),
@@ -23,6 +18,12 @@ const updateSequence = [
 ]
 
 export default function render (req) {
+  const controller = UniversalController({
+    modules: {
+      app: appModule
+    }
+  })
+
   return controller.run(updateSequence, {
       name: req.query.name
     })
