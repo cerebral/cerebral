@@ -75,6 +75,12 @@ class Controller extends FunctionTree {
     })
     this.on('end', () => this.flush())
 
+    if (typeof window !== 'undefined' && window.CEREBRAL_STATE) {
+      Object.keys(window.CEREBRAL_STATE).forEach((statePath) => {
+        this.model.set(statePath.split('.'), window.CEREBRAL_STATE[statePath])
+      })
+    }
+
     if (this.devtools) {
       this.devtools.init(this)
     }
@@ -91,12 +97,6 @@ class Controller extends FunctionTree {
     this.getSignal = getSignal
 
     if (this.router) this.router.init()
-
-    if (typeof window !== 'undefined' && window.CEREBRAL_STATE) {
-      Object.keys(window.CEREBRAL_STATE).forEach((statePath) => {
-        this.model.set(statePath.split('.'), window.CEREBRAL_STATE[statePath])
-      })
-    }
 
     this.model.flush()
 
