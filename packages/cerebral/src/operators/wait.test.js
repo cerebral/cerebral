@@ -1,8 +1,7 @@
 /* eslint-env mocha */
-import {Controller} from '../'
+import {Controller, parallel} from '../'
 import assert from 'assert'
 import {wait} from './'
-import {parallel} from '../'
 
 describe('operator.wait', () => {
   it('should hold execution for set time', (done) => {

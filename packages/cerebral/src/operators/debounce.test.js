@@ -1,8 +1,7 @@
 /* eslint-env mocha */
-import {Controller} from '../'
+import {Controller, parallel} from '../'
 import assert from 'assert'
 import {debounce} from './'
-import {parallel} from '../'
 
 describe('operator.debounce', () => {
   it('should debounce execution', (done) => {

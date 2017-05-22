@@ -12,14 +12,14 @@ describe('Controller', () => {
     assert.deepEqual(controller.getState(), {foo: 'bar'})
   })
   it('should instantiate with universal state', () => {
-    window = {CEREBRAL_STATE: {foo: 'bar2'}}
+    window = {CEREBRAL_STATE: {foo: 'bar2'}} // eslint-disable-line
     const controller = new Controller({
       state: {
         foo: 'bar'
       }
     })
     assert.deepEqual(controller.getState(), {foo: 'bar2'})
-    delete window.CEREBRAL_STATE
+    delete window.CEREBRAL_STATE // eslint-disable-line
   })
   it('should warn devtools recommendation', () => {
     let warnCount = 0

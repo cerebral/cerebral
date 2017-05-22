@@ -1,6 +1,5 @@
 /* eslint-env mocha */
-import {compute} from './'
-import {Controller} from './'
+import {Controller, compute} from './'
 import {state, props} from './tags'
 import assert from 'assert'
 
