@@ -3,6 +3,7 @@
   "version": "1.0.0-b",
   "description": "A computed form",
   "main": "lib/index.js",
+  "typings": "./index.d.ts",
   "scripts": {
     "test": "mocha --compilers js:babel-register \"src/**/*.test.js\"",
     "test:watch": "npm run test -- --watch",
