@@ -1,6 +1,8 @@
 # What is Cerebral?
 
+```marksy
 <Logo />
+```
 
 > **Cerebral** is a JavaScript framework that helps you create complex, scalable and maintainable applications on any platform
 
