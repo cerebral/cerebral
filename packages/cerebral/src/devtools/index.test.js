@@ -3,7 +3,7 @@
 
 import assert from 'assert'
 import {state, signal} from '../tags'
-import {Container, connect} from '../viewFactories/react'
+import {Container, connect} from '../views/react'
 import { WebSocket, Server } from 'mock-socket'
 import {Devtools} from './'
 import Controller from '../Controller'
@@ -207,7 +207,7 @@ describe('Devtools', () => {
       foo: state`foo`,
       bar: state`bar`,
       test: signal`test`
-    }, (props) => {
+    }, function Test (props) {
       return (
         <div>{props.foo}</div>
       )
@@ -224,21 +224,21 @@ describe('Devtools', () => {
       assert.deepEqual(messageTypes, ['components'])
       assert.equal(controller.devtools.isConnected, true)
 
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'Test', renderCount: 0, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'Test', renderCount: 0, id: 1 }])
       assert.equal(controller.devtools.debuggerComponentsMap.test, undefined)
 
       assert.equal(messages.components.source, 'c')
-      assert.deepEqual(messages.components.data.map.foo, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
-      assert.deepEqual(messages.components.data.map.bar, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
+      assert.deepEqual(messages.components.data.map.foo, [{ name: 'Test', renderCount: 0, id: 1 }])
+      assert.deepEqual(messages.components.data.map.bar, [{ name: 'Test', renderCount: 0, id: 1 }])
       assert.deepEqual(messages.components.data.render, { components: [] })
 
       controller.getSignal('test')({
         foo: 'bar'
       })
 
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'TestComponent', renderCount: 1, id: 1 }])
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'TestComponent', renderCount: 1, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'Test', renderCount: 1, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'Test', renderCount: 1, id: 1 }])
       assert.equal(controller.devtools.debuggerComponentsMap.test, undefined)
 
       assert.deepEqual(messageTypes, ['components', 'executionStart', 'execution', 'execution', 'executionPathStart', 'execution', 'executionFunctionEnd', 'executionEnd'])
@@ -416,12 +416,11 @@ describe('Devtools', () => {
       foo: state`foo`,
       bar: state`bar`,
       test: signal`test`
-    }, (props) => {
+    }, function Test (props) {
       return (
         <div>{props.foo}</div>
       )
     })
-    TestComponent.displayName = 'TestComponent'
     const tree = TestUtils.renderIntoDocument((
       <Container controller={controller}>
         <TestComponent />
@@ -436,8 +435,8 @@ describe('Devtools', () => {
       })
       assert.equal(controller.devtools.isConnected, true)
 
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'TestComponent', renderCount: 0, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'Test', renderCount: 0, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'Test', renderCount: 0, id: 1 }])
       assert.equal(controller.devtools.debuggerComponentsMap.test, undefined)
 
       controller.getSignal('test')({
@@ -451,8 +450,8 @@ describe('Devtools', () => {
         foo: 'bar',
         bar: 'foo'
       })
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'TestComponent', renderCount: 1, id: 1 }])
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'TestComponent', renderCount: 1, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'Test', renderCount: 1, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'Test', renderCount: 1, id: 1 }])
       assert.equal(controller.devtools.debuggerComponentsMap.test, undefined)
     }, 70)
 
@@ -559,12 +558,11 @@ describe('Devtools', () => {
     const TestComponent = connect({
       foo: state`foo`,
       bar: state`bar`
-    }, (props) => {
+    }, function Test (props) {
       return (
         <div>{props.foo}</div>
       )
     })
-    TestComponent.displayName = 'TestComponent'
     const tree = TestUtils.renderIntoDocument((
       <Container controller={controller}>
         <TestComponent />
@@ -593,8 +591,8 @@ describe('Devtools', () => {
         foo: 'bar',
         bar: 'foo'
       })
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'TestComponent', renderCount: 2, id: 1 }])
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'TestComponent', renderCount: 2, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'Test', renderCount: 2, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'Test', renderCount: 2, id: 1 }])
       assert.equal(controller.devtools.debuggerComponentsMap.test, undefined)
       assert.equal(controller.devtools.mutations.length, 2)
       assert.equal(rememberCount, 0)
@@ -679,12 +677,11 @@ describe('Devtools', () => {
     const TestComponent = connect({
       foo: state`foo`,
       bar: state`bar`
-    }, (props) => {
+    }, function Test (props) {
       return (
         <div>{props.foo}</div>
       )
     })
-    TestComponent.displayName = 'TestComponent'
     const tree = TestUtils.renderIntoDocument((
       <Container controller={controller}>
         <TestComponent />
@@ -713,8 +710,8 @@ describe('Devtools', () => {
         foo: 'bar',
         bar: 'foo'
       })
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'TestComponent', renderCount: 2, id: 1 }])
-      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'TestComponent', renderCount: 2, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.foo, [{ name: 'Test', renderCount: 2, id: 1 }])
+      assert.deepEqual(controller.devtools.debuggerComponentsMap.bar, [{ name: 'Test', renderCount: 2, id: 1 }])
       assert.equal(controller.devtools.debuggerComponentsMap.test, undefined)
       assert.equal(controller.devtools.mutations.length, 2)
     }, 70)
@@ -767,12 +764,11 @@ describe('Devtools', () => {
     const TestComponent = connect({
       foo: state`foo`,
       bar: state`bar`
-    }, (props) => {
+    }, function Test (props) {
       return (
         <div>{props.foo}</div>
       )
     })
-    TestComponent.displayName = 'TestComponent'
     const tree = TestUtils.renderIntoDocument((
       <Container controller={controller}>
         <TestComponent />
