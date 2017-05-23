@@ -61,11 +61,16 @@ class View {
     }
   }
   onUnMount () {
-    this.controller.componentDependencyStore.removeEntity(this, Object.assign(
+    const depsMap = Object.assign(
       {},
       this.dependencyTrackersDependencyMaps.state,
       this.tagsDependencyMap
-    ))
+    )
+    this.controller.componentDependencyStore.removeEntity(this, depsMap)
+
+    if (this.controller.devtools) {
+      this.controller.devtools.updateComponentsMap(this, null, depsMap)
+    }
   }
   onPropsUpdate (props, nextProps) {
     const propsChanges = getChangedProps(props, nextProps)
@@ -133,6 +138,10 @@ class View {
       this.tagsDependencyMap
     )
     this.controller.componentDependencyStore.updateEntity(this, prevDepsMap, nextDepsMap)
+
+    if (this.controller.devtools) {
+      this.controller.devtools.updateComponentsMap(this, prevDepsMap, nextDepsMap)
+    }
   }
   /*
     Forces update of all computed
