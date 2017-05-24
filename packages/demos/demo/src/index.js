@@ -54,7 +54,7 @@ controller.getSignal('app.bootstrap')({})
 visibility.register(controller.getSignal('tasks.visibilityChanged'))
 
 render((
-  <Container controller={controller} >
+  <Container controller={controller}>
     <App />
   </Container>
 ), document.querySelector('#root'))

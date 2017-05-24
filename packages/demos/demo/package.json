@@ -27,9 +27,9 @@
   },
   "scripts": {
     "prestart": "npm run sass",
-    "start": "react-scripts start",
+    "start": "cross-env BABEL_ENV=development react-scripts start",
     "prebuild": "npm run sass",
-    "build": "react-scripts build",
+    "build": "cross-env BABEL_ENV=production react-scripts build",
     "sass": "node-sass src/scss/app.scss -o public/css/",
     "eject": "react-scripts eject",
     "prepublish": "npm run build"

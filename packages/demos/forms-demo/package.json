@@ -11,8 +11,8 @@
     "react-dom": "^15.4.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env BABEL_ENV=development react-scripts start",
+    "build": "cross-env BABEL_ENV=production react-scripts build",
     "eject": "react-scripts eject"
   }
 }
