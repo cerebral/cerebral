@@ -75,6 +75,15 @@ describe('Model', () => {
       assert.deepEqual(model.get(), {foo: 'bar'})
     })
   })
+  describe('TOGGLE', () => {
+    it('should be able to toggle value', () => {
+      const model = new Model({
+        foo: true
+      })
+      model.toggle(['foo'])
+      assert.deepEqual(model.get(), {foo: false})
+    })
+  })
   describe('PUSH', () => {
     it('should be able to push to array', () => {
       const model = new Model({

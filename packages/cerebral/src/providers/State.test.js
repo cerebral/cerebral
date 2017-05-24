@@ -36,6 +36,16 @@ describe('State', () => {
     controller.getSignal('foo')()
     assert.deepEqual(controller.getState(), {foo: ['baz']})
   })
+  it('should be able to TOGGLE state', () => {
+    const controller = new Controller({
+      state: {foo: false},
+      signals: {
+        foo: [({state}) => state.toggle('foo')]
+      }
+    })
+    controller.getSignal('foo')()
+    assert.deepEqual(controller.getState(), {foo: true})
+  })
   it('should be able to PUSH state', () => {
     const controller = new Controller({
       state: {
