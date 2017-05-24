@@ -1,7 +1,7 @@
 import Tag from './tags/Tag'
 import {Compute} from './Compute'
 
-export function getChangedProps (propsA, propsB) {
+export function getChangedProps (propsA = {}, propsB = {}) {
   const propsAKeys = Object.keys(propsA)
   const propsBKeys = Object.keys(propsB)
   const changedProps = []

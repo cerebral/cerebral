@@ -1,6 +1,7 @@
 import React from 'react'
 import {render} from 'react-dom'
 import {Controller} from 'cerebral'
+import {state} from 'cerebral/tags'
 import {Container} from 'cerebral/react'
 import FirebaseProvider from '@cerebral/firebase'
 import firebaseConfig from './firebaseConfig'
@@ -19,17 +20,20 @@ import user from './modules/user'
 // Components
 import App from './components/App'
 
+const router = Router({
+  routes: [
+    {
+      path: '/:view?',
+      map: {
+        view: state`app.$selectedView`
+      }
+    }
+  ],
+  onlyHash: true
+})
+
 const controller = Controller({
   devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
-  router: Router({
-    routes: {
-      '/': 'app.routed',
-      '/clients': 'clients.routed',
-      '/projects': 'projects.routed',
-      '/tasks': 'tasks.routed'
-    },
-    onlyHash: true
-  }),
 
   providers: [
     FirebaseProvider({config: firebaseConfig}),
@@ -40,6 +44,7 @@ const controller = Controller({
     app,
     clients,
     projects,
+    router,
     tasks,
     user
   }

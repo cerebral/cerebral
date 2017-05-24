@@ -5,8 +5,7 @@ import firebaseInit from './signals/firebaseInit'
 
 export default {
   state: {
-    $selectedView: 'Today',
-    $lang: 'en',
+    $selectedView: '',
     $loading: true
   },
   signals: {
@@ -30,9 +29,6 @@ export default {
     ],
     dismissNotificationClicked: [
       unset(state`app.$error`)
-    ],
-    routed: [
-      set(state`app.$selectedView`, 'Today')
     ],
     langOptionClicked: [
       set(state`user.lang`, props`lang`),

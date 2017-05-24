@@ -30,9 +30,6 @@ export default {
       set(state`clients.$phone`, props`phone`)
     ],
     removed: collection.removed,
-    routed: [
-      set(state`app.$selectedView`, 'Clients')
-    ],
     saveClicked: collection.update,
     trashClicked: collection.remove,
     updated: collection.updated,
