@@ -4,6 +4,7 @@ function StateProviderFactory () {
   const methods = [
     'get',
     'set',
+    'toggle',
     'push',
     'merge',
     'pop',

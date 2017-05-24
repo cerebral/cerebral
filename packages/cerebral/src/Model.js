@@ -166,6 +166,11 @@ class Model {
       parent[key] = value
     }, true)
   }
+  toggle (path) {
+    this.updateIn(path, (value, parent, key) => {
+      parent[key] = !value
+    })
+  }
   push (path, value) {
     this.verifyValue(value, path)
     this.updateIn(path, (array) => {

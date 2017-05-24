@@ -20,6 +20,8 @@ The only way to update the state of your application is in an action. Here is a 
 function someAction({state}) {
   // Set or replace a value
   state.set('some.path', 'someValue')
+  // Toggle a boolean value
+  state.toggle('some.path')
   // Unset a key and its value
   state.unset('some.path')
   // Merge the keys and their values into existing object. Handled as a
