@@ -140,7 +140,7 @@ class View {
     this.controller.componentDependencyStore.updateEntity(this, prevDepsMap, nextDepsMap)
 
     if (this.controller.devtools) {
-      this.controller.devtools.updateComponentsMap(this, prevDepsMap, nextDepsMap)
+      this.controller.devtools.updateComponentsMap(this, nextDepsMap, prevDepsMap)
     }
   }
   /*

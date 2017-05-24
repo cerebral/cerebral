@@ -24,7 +24,11 @@ import {Controller} from 'cerebral'
 import {Container} from 'cerebral/react'
 import App from './App'
 
-const controller = Controller({})
+const controller = Controller({
+  state: {
+    foo: 'bar'
+  }
+})
 
 render((
   <Container controller={controller}>
@@ -80,7 +84,11 @@ import {Controller} from 'cerebral'
 import {Container} from 'cerebral/inferno'
 import App from './App'
 
-const controller = Controller({})
+const controller = Controller({
+  state: {
+    foo: 'bar'
+  }
+})
 
 Inferno.render((
   <Container controller={controller}>
@@ -137,7 +145,11 @@ import {Controller} from 'cerebral'
 import {Container} from 'cerebral/preact'
 import App from './App'
 
-const controller = Controller({})
+const controller = Controller({
+  state: {
+    foo: 'bar'
+  }
+})
 
 render((
   <Container controller={controller}>
@@ -186,6 +198,10 @@ addModule(angular)
 angular.module('app', ['cerebral'])
   .config(function (cerebralProvider) {
     cerebralProvider.configure({
+      state: {
+        foo: 'bar'
+      },
+
       // Special controller property to expose core
       // angular services to your signals
       services: ['$http', '$timeout']
@@ -206,5 +222,61 @@ angular.component('myComponent', {
   }, function MyController () {
     // Optionally add custom behaviour to controller
   })
+})
+```
+
+## Vue
+[Website](https://vuejs.org/)
+
+### install
+
+**NPM**
+
+`npm install vue --save`
+
+**YARN**
+
+`yarn add vue`
+
+### instantiate
+```js
+import Vue from 'vue/dist/vue'
+import {Controller} from 'cerebral'
+import {Container, connect} from 'cerebral/vue'
+
+const controller = Controller({
+  state: {
+    foo: 'bar'
+  }
+})
+
+ var app = new Vue({
+  el: '#app',
+  components: {
+    container: Container(controller),
+    'my-component': MyComponent
+  }
+})
+```
+
+**Note!** The HTML of the root element must use the *container*:
+
+```html
+<div id="app">
+  <container>
+    <my-component></my-component>
+  </container>
+</div>
+```
+
+### connect
+```js
+import {connect} from 'cerebral/vue'
+import {state} from 'cerebral/tags'
+
+export default connect({
+  foo: state`foo`
+}, {
+  template: '<div>{{foo}}</div>'
 })
 ```
