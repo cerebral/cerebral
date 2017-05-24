@@ -125,7 +125,7 @@ export default connect({
 )
 ```
 
-## Preact
+## Preact (BETA)
 [Website](https://github.com/developit/preact)
 
 ### install
@@ -175,7 +175,7 @@ export default connect({
 )
 ```
 
-## Angularjs
+## Angularjs (BETA)
 [Website](https://angularjs.org/)
 
 ### install
@@ -225,7 +225,7 @@ angular.component('myComponent', {
 })
 ```
 
-## Vue
+## Vue (BETA)
 [Website](https://vuejs.org/)
 
 ### install
