@@ -6,7 +6,7 @@ export default function (target) {
 
     const path = resolve.path(target)
 
-    state.set(path, !state.get(path))
+    state.toggle(path)
   }
 
   toggle.displayName = `operator.toggle(${String(target)})`
