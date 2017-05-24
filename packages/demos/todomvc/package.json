@@ -22,8 +22,8 @@
     "extract-text-webpack-plugin": "^2.1.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "cross-env BABEL_ENV=development react-scripts start",
+    "build": "cross-env BABEL_ENV=production react-scripts build",
     "prepublish": "npm run build"
   }
 }
