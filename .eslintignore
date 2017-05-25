@@ -1,0 +1,7 @@
+packages/*/**/node_modules/**
+**/build/
+**/*.min.js
+**/bundle.js
+coverage/**
+vendor/**
+packages/codemods/1.x-2.x/__testfixtures__/**

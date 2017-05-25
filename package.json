@@ -11,13 +11,13 @@
     "coverage": "node ./scripts/run.js coverage",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
     "deploy": "cd website/publisher && npm run ci",
+    "format": "prettier-eslint --write \"**/*.js\"&&prettier-eslint --write \"packages/node_modules/**/*.js\"",
     "link": "node ./scripts/run.js link",
-    "lint": "standard",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
     "postinstall": "npm run setup",
     "postsetup": "npm run link",
-    "prelint": "npm run checkdeps",
-    "pretest": "npm run lint",
+    "precommit": "lint-staged",
+    "pretest": "npm run checkdeps",
     "setup": "node ./scripts/run.js prepublish nodemos",
     "test": "node ./scripts/run.js test"
   },
@@ -48,6 +48,12 @@
     "url-mapper": "1.1.1",
     "uuid": "2.0.3"
   },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-customizable"
@@ -56,23 +62,9 @@
       "config": ".cz-config.js"
     }
   },
-  "standard": {
-    "parser": "babel-eslint",
-    "noDefaultIgnore": true,
-    "ignore": [
-      "/node_modules/**",
-      "/packages/*/**/node_modules/**",
-      "**/build/",
-      "**/*.min.js",
-      "**/bundle.js",
-      "coverage/**",
-      "vendor/**"
-    ]
-  },
   "devDependencies": {
     "babel-cli": "6.24.1",
     "babel-core": "^6.24.1",
-    "babel-eslint": "^7.2.3",
     "babel-jest": "^20.0.3",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
     "babel-plugin-version-transform": "^1.0.0",
@@ -85,6 +77,16 @@
     "cross-env": "^5.0.0",
     "cz-customizable": "^4.0.0",
     "cz-customizable-ghooks": "^1.5.0",
+    "eslint": "^3.19.0",
+    "eslint-config-prettier": "^2.1.1",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-react": "^5.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^4.2.2",
+    "eslint-plugin-prettier": "^2.1.1",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^7.0.1",
+    "eslint-plugin-standard": "^3.0.1",
     "execa": "^0.6.3",
     "express": "4.15.3",
     "extract-text-webpack-plugin": "2.1.0",
@@ -94,17 +96,19 @@
     "istanbul-combine": "^0.3.0",
     "jest": "^18.1.0",
     "jsdom": "^9.9.1",
+    "lint-staged": "^3.4.2",
     "mocha": "^3.4.1",
     "mocha-jsdom": "^1.1.0",
     "mock-socket": "6.0.4",
     "node-sass": "4.5.3",
     "npm-run-all": "^4.0.2",
     "nyc": "^10.3.2",
+    "prettier": "^1.3.1",
+    "prettier-eslint-cli": "^4.0.2",
     "prop-types": "15.5.10",
     "react-addons-test-utils": "^15.4.2",
     "react-scripts": "^1.0.6",
     "shx": "^0.2.2",
-    "standard": "github:gaspard/standard#v8.6.0fix2",
     "symlink-dir": "^1.0.2",
     "typescript": "2.3.2",
     "typescript-definition-tester": "0.0.5",
