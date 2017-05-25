@@ -3,6 +3,8 @@ import {Controller} from 'cerebral'
 import FormsProvider from '.'
 import assert from 'assert'
 import rules from './rules'
+import {state} from 'cerebral/tags'
+import {computedField as field} from './form'
 
 describe('provider', () => {
   it('should be able to add rules', () => {
@@ -211,6 +213,31 @@ describe('provider', () => {
           ({forms}) => {
             const form = forms.get('form')
             assert.equal(form.name.value, 'Ben')
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+  })
+  it('should be able to use field computed with rules depending on form', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
+      state: {
+        form: {
+          name: {
+            value: 'Ben',
+            validationRules: ['equalsField:name2']
+          },
+          name2: {
+            value: 'Ben2'
+          }
+        }
+      },
+      signals: {
+        test: [
+          ({resolve}) => {
+            const fieldValue = resolve.value(field(state`form.name`))
+            assert.equal(fieldValue.isValid, false)
           }
         ]
       }
