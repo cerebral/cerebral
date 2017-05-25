@@ -1,265 +1,247 @@
 /* eslint-env mocha */
+import {Controller} from 'cerebral'
+import FormsProvider from '.'
 import assert from 'assert'
-import {runCompute} from 'cerebral/test'
+import rules from './rules'
 import {state} from 'cerebral/tags'
-import computedForm, {Form, Field} from './form'
+import {computedField as field} from './form'
 
-describe('form', () => {
-  it('should create fields with default state', () => {
-    let compute = {
-      state: {
-        form: {
-          name: {
-            value: 'Ben'
+describe('provider', () => {
+  it('should be able to add rules', () => {
+    const controller = Controller({
+      providers: [
+        FormsProvider({
+          rules: {
+            isBen (value) {
+              return value === 'Ben'
+            }
           }
-        }
-      }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    assert.ok(form instanceof Form)
-    assert.ok(form.name instanceof Field)
-    assert.equal(form.name.value, 'Ben')
-    assert.equal(form.name.isValid, true)
-  })
-  it('should warn when form value did not resolve to an object', () => {
-    const originWarn = console.warn
-    console.warn = function (...args) {
-      assert.equal(args[0], 'Cerebral Forms - Form value: state`form` did not resolve to an object')
-      originWarn.apply(this, args)
-      console.warn = originWarn
-    }
-    let compute = {
-      state: {
-        form: 'Ben'
-      }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    assert.deepEqual(form, {})
-  })
-  it('should validate initial form state', () => {
-    let compute = {
+        })
+      ],
       state: {
         form: {
           name: {
             value: 'Ben',
+            validationRules: ['isBen']
+          }
+        }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            const form = forms.get('form')
+            assert.equal(form.name.value, 'Ben')
+            assert.equal(form.name.isValid, true)
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+  })
+  it('should be able to update rules', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
+      state: {
+        form: {
+          name: {
+            value: 'Ben',
+            validationRules: ['isBen']
+          }
+        }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            forms.updateRules({
+              isBen (value) {
+                return value === 'Ben'
+              }
+            })
+          },
+          ({forms}) => {
+            const form = forms.get('form')
+            assert.equal(form.name.value, 'Ben')
+            assert.equal(form.name.isValid, true)
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+  })
+  it('should be able to set error messages', () => {
+    const controller = Controller({
+      providers: [
+        FormsProvider({
+          errorMessages: {
+            minLength (value, minLengthValue) {
+              assert.equal(value, 'Be')
+              assert.equal(minLengthValue, 3)
+
+              return `is length ${value.length}, should be ${minLengthValue}`
+            }
+          }
+        })
+      ],
+      state: {
+        form: {
+          name: {
+            value: 'Be',
+            validationRules: ['minLength:3']
+          }
+        }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            const form = forms.get('form')
+            assert.equal(form.name.value, 'Be')
+            assert.equal(form.name.isValid, false)
+            assert.equal(form.name.errorMessage, 'is length 2, should be 3')
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+    rules._errorMessages = {}
+  })
+  it('should be able to update error messages', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
+      state: {
+        form: {
+          name: {
+            value: 'Be',
+            validationRules: ['minLength:3']
+          }
+        }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            forms.updateErrorMessages({
+              minLength (value, minLengthValue) {
+                assert.equal(value, 'Be')
+                assert.equal(minLengthValue, 3)
+
+                return `is length ${value.length}, should be ${minLengthValue}`
+              }
+            })
+          },
+          ({forms}) => {
+            const form = forms.get('form')
+            assert.equal(form.name.value, 'Be')
+            assert.equal(form.name.isValid, false)
+            assert.equal(form.name.errorMessage, 'is length 2, should be 3')
+          }
+        ]
+      }
+    })
+    controller.getSignal('test')()
+    rules._errorMessages = {}
+  })
+  it('should be able to reset form', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
+      state: {
+        form: {
+          name: {
+            value: 'Be',
             defaultValue: 'Ben',
-            validationRules: ['minLength:4']
+            validationRules: ['minLength:3']
           }
         }
-      }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    assert.ok(form instanceof Form)
-    assert.ok(form.name instanceof Field)
-    assert.equal(form.name.value, 'Ben')
-    assert.equal(form.name.isValid, false)
-    assert.deepEqual(form.name.validationRules, ['minLength:4'])
-    assert.equal(form.name.requiredMessage, null)
-    assert.equal(form.name.hasValue, true)
-    assert.equal(form.name.isPristine, true)
-    assert.equal(form.name.failedRule.name, 'minLength')
-    assert.equal(form.name.failedRule.arg, 4)
-  })
-  it('should allow nested fields', () => {
-    let compute = {
-      state: {
-        form: {
-          address: {
-            street: {
-              value: ''
-            },
-            zipCode: {
-              value: ''
-            }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            forms.reset('form')
+            const form = forms.get('form')
+            assert.equal(form.name.value, 'Ben')
+            assert.equal(form.name.isValid, true)
           }
-        }
+        ]
       }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    assert.ok(form.address.street instanceof Field)
-    assert.ok(form.address.zipCode instanceof Field)
-    assert.equal(form.isValid, true)
-    assert.equal(form.address.street.isValid, true)
-    assert.equal(form.address.zipCode.isValid, true)
-  })
-  it('should allow list of fields', () => {
-    let compute = {
-      state: {
-        form: {
-          users: [{
-            value: ''
-          }, {
-            value: ''
-          }]
-        }
-      }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    assert.ok(form.users[0] instanceof Field)
-    assert.ok(form.users[1] instanceof Field)
-    assert.equal(form.isValid, true)
-    assert.equal(form.users[0].isValid, true)
-    assert.equal(form.users[1].isValid, true)
-  })
-  it('should convert to json', () => {
-    let compute = {
-      state: {
-        form: {
-          users: [{
-            value: 'Ben'
-          }, {
-            value: 'Dopey'
-          }]
-        }
-      }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    assert.deepEqual(form.toJSON(), {
-      users: ['Ben', 'Dopey']
     })
+    controller.getSignal('test')()
+    rules._errorMessages = {}
   })
-  it('should get invalid fields', () => {
-    let compute = {
+  it('should be able to convert to json', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
       state: {
         form: {
-          users: [{
-            value: 'Ben',
-            validationRules: ['minLength:5']
-          }, {
-            value: 'Dopey'
-          }]
+          name: {
+            value: 'Be'
+          }
         }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            assert.deepEqual(forms.toJSON('form'), {
+              name: 'Be'
+            })
+          }
+        ]
       }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    const invalidFields = form.getInvalidFields()
-    assert.equal(Object.keys(invalidFields)[0], 'users.0')
-    assert.equal(invalidFields['users.0'].value, 'Ben')
+    })
+    controller.getSignal('test')()
   })
-  it('should work with global props', () => {
-    let compute = {
+  it('should be able to work with DebuggerProvider', () => {
+    const DebuggerProviderFactory = () => {
+      function DebuggerProvider (context, functionDetails, payload, prevPayload) {
+        context.debugger = {
+          wrapProvider (providerKey) {
+            assert.equal(providerKey, 'forms')
+          }
+        }
+        return context
+      }
+      return DebuggerProvider
+    }
+    const controller = Controller({
+      providers: [DebuggerProviderFactory(), FormsProvider()],
       state: {
         form: {
           name: {
             value: 'Ben'
-          },
-          showErrors: false,
-          validationError: null
+          }
         }
+      },
+      signals: {
+        test: [
+          ({forms}) => {
+            const form = forms.get('form')
+            assert.equal(form.name.value, 'Ben')
+          }
+        ]
       }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    assert.ok(form instanceof Form)
-    assert.equal(form.showErrors, false)
-    assert.equal(form.validationError, null)
+    })
+    controller.getSignal('test')()
   })
-  it('should return all fields', () => {
-    let compute = {
+  it('should be able to use field computed with rules depending on form', () => {
+    const controller = Controller({
+      providers: [FormsProvider()],
       state: {
         form: {
-          someField: {
-            value: 'some field value'
+          name: {
+            value: 'Ben',
+            validationRules: ['equalsField:name2']
           },
-          otherField: {
-            value: 'some other field'
+          name2: {
+            value: 'Ben2'
           }
         }
-      }
-    }
-    const form = runCompute(computedForm(state`form`), compute)
-    const fields = form.getFields()
-    assert.equal(fields.someField.value, 'some field value')
-    assert.equal(Object.keys(fields).length, 2)
-  })
-  describe('validate', () => {
-    it('should validate using validationRules', () => {
-      let compute = {
-        state: {
-          form: {
-            name: {
-              value: 'Ben',
-              validationRules: ['isNumeric']
-            }
+      },
+      signals: {
+        test: [
+          ({resolve}) => {
+            const fieldValue = resolve.value(field(state`form.name`))
+            assert.equal(fieldValue.isValid, false)
           }
-        }
+        ]
       }
-      const form = runCompute(computedForm(state`form`), compute)
-      assert.equal(form.isValid, false)
     })
-    it('should validate with multiple rules', () => {
-      let compute = {
-        state: {
-          form: {
-            name: {
-              value: 'Ben',
-              validationRules: ['minLength:2', 'isNumeric']
-            }
-          }
-        }
-      }
-      const form = runCompute(computedForm(state`form`), compute)
-      assert.equal(form.isValid, false)
-      assert.equal(form.name.failedRule.name, 'isNumeric')
-      assert.equal(form.name.failedRule.arg, undefined)
-    })
-    it('should validate required value', () => {
-      let compute = {
-        state: {
-          form: {
-            name: {
-              value: '',
-              isRequired: true
-            }
-          }
-        }
-      }
-      const form = runCompute(computedForm(state`form`), compute)
-      assert.equal(form.isValid, false)
-    })
-    it('should validate required value using custom isValue rule', () => {
-      let compute = {
-        state: {
-          form: {
-            someField: {
-              value: [],
-              isRequired: true,
-              isValueRules: ['minLength:1']
-            }
-          }
-        }
-      }
-      const form = runCompute(computedForm(state`form`), compute)
-      assert.equal(form.isValid, false)
-    })
-    it('should validate using regexp', () => {
-      let compute = {
-        state: {
-          form: {
-            someField: {
-              value: 'foo',
-              isValueRules: [/foo/]
-            }
-          }
-        }
-      }
-      const form = runCompute(computedForm(state`form`), compute)
-      assert.equal(form.isValid, true)
-    })
-    it('should validate with global props', () => {
-      let compute = {
-        state: {
-          form: {
-            name: {
-              value: 'Ben',
-              validationRules: ['minLength:3']
-            },
-            showErrors: false,
-            validationError: null
-          }
-        }
-      }
-      const form = runCompute(computedForm(state`form`), compute)
-      assert.equal(form.isValid, true)
-    })
+    controller.getSignal('test')()
   })
 })
