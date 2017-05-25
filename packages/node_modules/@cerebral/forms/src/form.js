@@ -3,6 +3,7 @@ import runValidation from './utils/runValidation'
 import formToJSON from './helpers/formToJSON'
 import getInvalidFormFields from './helpers/getInvalidFormFields'
 import getFormFields from './helpers/getFormFields'
+import {state, props} from 'cerebral/tags'
 
 function createFields (source, form) {
   return Object.keys(source).reduce((fields, key) => {
@@ -70,12 +71,23 @@ export class Form {
 export function computedField (fieldValueTag) {
   return compute(
     fieldValueTag,
-    (fieldValue) => {
+    (fieldValue, get) => {
       if (!fieldValue || typeof fieldValue !== 'object') {
         console.warn(`Cerebral Forms - Field value: ${fieldValueTag} did not resolve to an object`)
         return {}
       }
-      const field = new Field(fieldValue, null)
+      const formPath = fieldValueTag.getPath({
+        state (path) {
+          return get(state`${path}`)
+        },
+        props (path) {
+          return get(props`${path}`)
+        }
+      })
+      const formPathArray = formPath.split('.')
+      formPathArray.pop()
+      const form = get(state`${formPathArray.join('.')}`)
+      const field = new Field(fieldValue, form)
       field._validate()
       return field
     }
