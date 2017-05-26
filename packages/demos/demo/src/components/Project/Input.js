@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {props, signal, state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { props, signal, state } from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 
 export default connect(
@@ -12,30 +12,46 @@ export default connect(
     // placeholderKey
     value: state`projects.$draft.${props`field`}`,
     valueChanged: signal`projects.formValueChanged`,
-    t: translations
+    t: translations,
   },
-  function Input ({autoFocus, enterPressed, escPressed, field, placeholderKey, value, valueChanged, t}) {
+  function Input({
+    autoFocus,
+    enterPressed,
+    escPressed,
+    field,
+    placeholderKey,
+    value,
+    valueChanged,
+    t,
+  }) {
     const onKeyDown = e => {
       switch (e.key) {
-        case 'Enter': enterPressed(); break
-        case 'Escape': escPressed(); break
-        default: break // noop
+        case 'Enter':
+          enterPressed()
+          break
+        case 'Escape':
+          escPressed()
+          break
+        default:
+          break // noop
       }
     }
 
     const onChange = e => {
-      valueChanged({key: field, value: e.target.value})
+      valueChanged({ key: field, value: e.target.value })
     }
 
     return (
-      <input className='input' type='text'
+      <input
+        className="input"
+        type="text"
         autoFocus={autoFocus}
         placeholder={t[placeholderKey]}
         onKeyDown={onKeyDown}
         onChange={onChange}
         value={value || ''}
         name={field}
-        />
+      />
     )
   }
 )

@@ -1,11 +1,11 @@
-module.exports = function (fileInfo, api) {
+module.exports = function(fileInfo, api) {
   const j = api.jscodeshift
   const root = j(fileInfo.source)
 
   const modelImports = root.find(j.ImportDeclaration, {
     source: {
-      value: 'cerebral/models/immutable'
-    }
+      value: 'cerebral/models/immutable',
+    },
   })
 
   if (!modelImports.length) {
@@ -18,8 +18,8 @@ module.exports = function (fileInfo, api) {
 
   const modelInstances = root.find(j.CallExpression, {
     callee: {
-      name: modelImportName
-    }
+      name: modelImportName,
+    },
   })
 
   const objectExpression = modelInstances.find(j.ObjectExpression)
@@ -30,7 +30,11 @@ module.exports = function (fileInfo, api) {
   const expressions = []
 
   expressions.push(
-    j.property('init', j.identifier('state'), modelInstances.get(0).node.arguments[0])
+    j.property(
+      'init',
+      j.identifier('state'),
+      modelInstances.get(0).node.arguments[0]
+    )
   )
 
   // Find any expressions that use the controller variable
@@ -39,9 +43,9 @@ module.exports = function (fileInfo, api) {
   let controller = root.find(j.VariableDeclarator, {
     init: {
       callee: {
-        name: 'Controller'
-      }
-    }
+        name: 'Controller',
+      },
+    },
   })
 
   if (controller.length) {
@@ -49,8 +53,8 @@ module.exports = function (fileInfo, api) {
   } else {
     controller = root.find(j.AssignmentExpression, {
       right: {
-        callee: { name: 'Controller' }
-      }
+        callee: { name: 'Controller' },
+      },
     })
 
     controllerVariableName = controller.get(0).node.left.name
@@ -61,38 +65,30 @@ module.exports = function (fileInfo, api) {
     expression: {
       callee: {
         object: {
-          name: controllerVariableName
-        }
-      }
-    }
+          name: controllerVariableName,
+        },
+      },
+    },
   })
 
-  controllerExpressions.forEach((exp) => {
+  controllerExpressions.forEach(exp => {
     // Fix the name
     const name = exp.value.expression.callee.property.name
-      .replace('add', '').toLowerCase()
+      .replace('add', '')
+      .toLowerCase()
 
     let expression = exp.value.expression.arguments[0]
 
     // Modules are now called, so let's conver them
     // to a call expression
     if (name === 'modules') {
-      expression.properties = expression.properties.map((propExp) => {
-        propExp.value = j.callExpression(
-          j.identifier(propExp.value.name),
-          []
-        )
+      expression.properties = expression.properties.map(propExp => {
+        propExp.value = j.callExpression(j.identifier(propExp.value.name), [])
         return propExp
       })
     }
 
-    expressions.push(
-      j.property(
-        'init',
-        j.identifier(name),
-        expression
-      )
-    )
+    expressions.push(j.property('init', j.identifier(name), expression))
 
     // Remove the existing separated version
     exp.prune()

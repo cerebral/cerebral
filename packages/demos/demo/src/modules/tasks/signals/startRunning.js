@@ -1,12 +1,12 @@
-import {set, unset} from 'cerebral/operators'
-import {props, state} from 'cerebral/tags'
+import { set, unset } from 'cerebral/operators'
+import { props, state } from 'cerebral/tags'
 import paths from '../../../common/Collection/paths'
 import save from '../../../common/Collection/signals/save'
 import updateNow from './updateNow'
 import now from '../compute/now'
 
 const moduleName = 'tasks'
-const {draftPath, errorPath} = paths(moduleName)
+const { draftPath, errorPath } = paths(moduleName)
 
 export default [
   set(state`tasks.$now`, now),
@@ -19,13 +19,12 @@ export default [
   set(props`key`, 'running'),
 
   // Save as running task in collection
-  ...save(moduleName), {
+  ...save(moduleName),
+  {
     success: [
       // Start running
-      ...updateNow
+      ...updateNow,
     ],
-    error: [
-      set(state`${errorPath}`)
-    ]
-  }
+    error: [set(state`${errorPath}`)],
+  },
 ]

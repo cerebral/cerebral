@@ -1,15 +1,15 @@
 /* globals describe it expect */
-import {transform} from 'babel-core'
+import { transform } from 'babel-core'
 import presetCerebral from '../index'
 
 const bableOptions = {
   babelrc: false,
-  presets: [presetCerebral]
+  presets: [presetCerebral],
 }
 
 const bableOptionsProxies = {
   babelrc: false,
-  presets: [[presetCerebral, {proxies: true}]]
+  presets: [[presetCerebral, { proxies: true }]],
 }
 
 describe('Preset transpiles cerebral specific syntax', () => {
@@ -19,7 +19,7 @@ describe('Preset transpiles cerebral specific syntax', () => {
 
       state\`hello.world\`;
     `
-    const {code: result} = transform(code, bableOptions)
+    const { code: result } = transform(code, bableOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -29,7 +29,7 @@ describe('Preset transpiles cerebral specific syntax', () => {
 
       state.hello.world;
     `
-    const {code: result} = transform(code, bableOptions)
+    const { code: result } = transform(code, bableOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -39,7 +39,7 @@ describe('Preset transpiles cerebral specific syntax', () => {
 
       state.hello.world;
     `
-    const {code: result} = transform(code, bableOptionsProxies)
+    const { code: result } = transform(code, bableOptionsProxies)
     expect(result).toMatchSnapshot()
   })
 
@@ -48,13 +48,13 @@ describe('Preset transpiles cerebral specific syntax', () => {
       import {state} from 'cerebral/proxies';
       state.hello.world;
     `
-    const {code: proxyResult} = transform(proxyCode, bableOptionsProxies)
+    const { code: proxyResult } = transform(proxyCode, bableOptionsProxies)
 
     const tagCode = `
       import {state} from 'cerebral/tags';
       state\`hello.world\`;
     `
-    const {code: tagResult} = transform(tagCode, bableOptions)
+    const { code: tagResult } = transform(tagCode, bableOptions)
 
     expect(proxyResult).toBe(tagResult)
   })

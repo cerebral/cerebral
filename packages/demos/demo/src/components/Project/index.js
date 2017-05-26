@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { state } from 'cerebral/tags'
 
 import ProjectCard from './card'
 import ProjectForm from './form'
@@ -13,9 +13,9 @@ import ProjectForm from './form'
 export default connect(
   {
     // FIXME: should be removed. Temporary to force update.
-    foo: state`projects.$draft.key`
+    foo: state`projects.$draft.key`,
   },
-  function Project ({isSelected, itemKey}) {
+  function Project({ isSelected, itemKey }) {
     if (isSelected) {
       return <ProjectForm itemKey={itemKey} />
     } else {

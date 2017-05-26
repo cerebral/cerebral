@@ -1,11 +1,12 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { state } from 'cerebral/tags'
 
-export default connect({
-  name: state`app.name`
-},
-  function App ({name}) {
+export default connect(
+  {
+    name: state`app.name`,
+  },
+  function App({ name }) {
     return (
       <div>
         <h1>Hello, {name}</h1>

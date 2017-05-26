@@ -1,12 +1,12 @@
 'use strict'
-module.exports = function (fileInfo, api) {
+module.exports = function(fileInfo, api) {
   const j = api.jscodeshift
   const root = j(fileInfo.source)
 
   const operatorsImport = root.find(j.ImportDeclaration, {
     source: {
-      value: 'cerebral/operators'
-    }
+      value: 'cerebral/operators',
+    },
   })
 
   if (!operatorsImport.length) {
@@ -18,30 +18,35 @@ module.exports = function (fileInfo, api) {
 
   // Generates an operator factory like so:
   // operatorName`path`
-  function generateOperator (operatorName, path) {
+  function generateOperator(operatorName, path) {
     return j.taggedTemplateExpression(
       j.identifier(operatorName),
       j.templateLiteral(
-        [j.templateElement({
-          cooked: path,
-          raw: path
-        }, false)],
+        [
+          j.templateElement(
+            {
+              cooked: path,
+              raw: path,
+            },
+            false
+          ),
+        ],
         []
       )
     )
   }
 
-  operatorsImport.find(j.ImportSpecifier)
-    .forEach(function (spec) {
-      const node = spec.get(0).node
-      const importedName = node.imported.name
+  operatorsImport.find(j.ImportSpecifier).forEach(function(spec) {
+    const node = spec.get(0).node
+    const importedName = node.imported.name
 
-      root.find(j.CallExpression, {
+    root
+      .find(j.CallExpression, {
         callee: {
-          name: importedName
-        }
+          name: importedName,
+        },
       })
-      .map(function (operator) {
+      .map(function(operator) {
         const node = operator.get(0).node
 
         if (importedName === 'copy') {
@@ -89,11 +94,13 @@ module.exports = function (fileInfo, api) {
         return operator
       })
 
-      return spec
-    })
+    return spec
+  })
 
   // Remove copy operator
-  operatorsImport.find(j.ImportSpecifier, { imported: { name: 'copy' } }).remove()
+  operatorsImport
+    .find(j.ImportSpecifier, { imported: { name: 'copy' } })
+    .remove()
 
   const tagNames = []
 
@@ -110,12 +117,12 @@ module.exports = function (fileInfo, api) {
   if (tagNames.length) {
     operatorsImport.at(operatorsImport.length - 1).insertAfter(
       j.importDeclaration(
-        tagNames.map((name) => {
+        tagNames.map(name => {
           return j.importSpecifier(j.identifier(name))
-        }
-      ),
-      j.stringLiteral('cerebral/tags')
-    ))
+        }),
+        j.stringLiteral('cerebral/tags')
+      )
+    )
   }
 
   operatorsImport.find(j.ImportSpecifier, { imported: { name: 'copy' } })

@@ -1,12 +1,12 @@
 /* globals describe it expect  */
-import {transform} from 'babel-core'
-import {Tag} from 'cerebral/tags'
+import { transform } from 'babel-core'
+import { Tag } from 'cerebral/tags'
 import plugin from '../index'
 
 const pluginOptions = {
   babelrc: false,
   presets: ['es2015'],
-  plugins: [plugin]
+  plugins: [plugin],
 }
 
 describe('Run optimized tags', () => {
@@ -15,7 +15,7 @@ describe('Run optimized tags', () => {
       import {state} from 'cerebral/tags';
       state\`hello.world\`;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     const tag = eval(result) // eslint-disable-line no-eval
     expect(tag).toBeInstanceOf(Tag)
     expect(tag).toMatchSnapshot()
@@ -29,14 +29,14 @@ describe('Run optimized tags', () => {
     const getters = {
       state: {
         a: {
-          c: 'Working!'
-        }
+          c: 'Working!',
+        },
       },
       input: {
-        b: 'c'
-      }
+        b: 'c',
+      },
     }
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     const tag = eval(result) // eslint-disable-line no-eval
     expect(tag).toMatchSnapshot()
     expect(tag).toBeInstanceOf(Tag)
@@ -54,12 +54,12 @@ describe('Run optimized tags', () => {
       state: {
         a: {
           c: {
-            2: 'Working!'
-          }
-        }
-      }
+            2: 'Working!',
+          },
+        },
+      },
     }
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     const tag = eval(result) // eslint-disable-line no-eval
     expect(tag).toBeInstanceOf(Tag)
     expect(tag.getValue(getters)).toEqual(getters.state.a.c[2])

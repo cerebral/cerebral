@@ -1,5 +1,5 @@
-import {set} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { set } from 'cerebral/operators'
+import { state } from 'cerebral/tags'
 import Collection from '../../common/Collection'
 
 import projectSelectorClose from './signals/projectSelectorClose'
@@ -10,8 +10,8 @@ const collection = Collection('projects', {
     key: 'no-project',
     name: 'no project',
     clientKey: 'no-client',
-    $isDefaultItem: true
-  }
+    $isDefaultItem: true,
+  },
 })
 
 export const init = collection.init
@@ -19,7 +19,7 @@ export const init = collection.init
 export default {
   state: {
     all: {},
-    $filter: ''
+    $filter: '',
   },
   signals: {
     addClicked: collection.newItem,
@@ -30,14 +30,12 @@ export default {
     filterEnterPressed: collection.newItem,
     formValueChanged: collection.updateDraft,
     penClicked: collection.edit,
-    projectTagClicked: [
-      set(state`projects.$showProjectSelector`, true)
-    ],
+    projectTagClicked: [set(state`projects.$showProjectSelector`, true)],
     removed: collection.removed,
     saveClicked: collection.update,
     selectorBackgroundClick: projectSelectorClose,
     selectorProjectClicked: projectSelectorSelect,
     trashClicked: collection.remove,
-    updated: collection.updated
-  }
+    updated: collection.updated,
+  },
 }

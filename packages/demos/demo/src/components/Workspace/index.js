@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { state } from 'cerebral/tags'
 
 import Clients from '../Clients'
 import Projects from '../Projects'
@@ -11,17 +11,17 @@ const VIEWS = {
   clients: Clients,
   projects: Projects,
   tasks: Tasks,
-  today: Today
+  today: Today,
 }
 
 export default connect(
   {
-    selectedView: state`app.$selectedView`
+    selectedView: state`app.$selectedView`,
   },
-  function Workspace ({selectedView}) {
+  function Workspace({ selectedView }) {
     const CurrentView = VIEWS[selectedView] || Today
     return (
-      <div className='section'>
+      <div className="section">
         <CurrentView />
       </div>
     )

@@ -16,16 +16,16 @@ export default {
   validationErrors: {
     signIn: {
       email: {
-        isEmail: 'Not a valid email'
+        isEmail: 'Not a valid email',
       },
       password: {
-        minLength: 'Password too short'
-      }
-    }
+        minLength: 'Password too short',
+      },
+    },
   },
   loginErrors: {
     'auth/email-already-in-use': 'The email address is already in use by another account.',
-    'auth/too-many-requests': 'We have blocked all requests from this device due to unusual activity. Try again later.'
+    'auth/too-many-requests': 'We have blocked all requests from this device due to unusual activity. Try again later.',
   },
   // Day of Week
   Dow0: 'Mon',
@@ -80,5 +80,5 @@ export default {
   // Project
   ProjectNameFilter: 'Project name...',
   // Generic
-  Add: 'Add'
+  Add: 'Add',
 }

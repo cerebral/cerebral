@@ -1,11 +1,11 @@
-import {StyleSheet} from 'aphrodite'
+import { StyleSheet } from 'aphrodite'
 
 const styles = StyleSheet.create({
   container: {
     color: '#999',
     fontWeight: 400,
     paddingLeft: 40,
-    display: 'inline-block'
+    display: 'inline-block',
   },
   innerContainer: {
     lineHeight: '47px',
@@ -13,12 +13,12 @@ const styles = StyleSheet.create({
     display: 'inline-block',
     ':hover': {
       borderBottom: '3px solid #499',
-      color: '#000'
-    }
+      color: '#000',
+    },
   },
   selected: {
-    borderBottom: '3px solid #499'
-  }
+    borderBottom: '3px solid #499',
+  },
 })
 
 export default styles

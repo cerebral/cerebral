@@ -16,16 +16,16 @@ export default {
   validationErrors: {
     signIn: {
       email: {
-        isEmail: 'Ingen giltig epost'
+        isEmail: 'Ingen giltig epost',
       },
       password: {
-        minLength: 'Lösenord är för kort'
-      }
-    }
+        minLength: 'Lösenord är för kort',
+      },
+    },
   },
   loginErrors: {
     'auth/email-already-in-use': 'Epostadressen används redan',
-    'auth/too-many-requests': 'Vi har blockat alla förfrågningar på grund av felaktig aktivitet. Försök igen senare.'
+    'auth/too-many-requests': 'Vi har blockat alla förfrågningar på grund av felaktig aktivitet. Försök igen senare.',
   },
   // Day of Week
   Dow0: 'Mån',
@@ -80,5 +80,5 @@ export default {
   // Project
   ProjectNameFilter: 'Projektnamn...',
   // Generic
-  Add: 'Lägg till'
+  Add: 'Lägg till',
 }

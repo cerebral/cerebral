@@ -1,7 +1,7 @@
 /* eslint-disable no-script-url */
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {signal, state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { signal, state } from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 
 import Login from '../Login'
@@ -17,29 +17,29 @@ export default connect(
     loading: state`app.$loading`,
     loggedIn: state`user.$loggedIn`,
     signOutClicked: signal`user.signOutClicked`,
-    t: translations
+    t: translations,
   },
-  function Demo ({currentUser, loading, loggedIn, signOutClicked, t}) {
+  function Demo({ currentUser, loading, loggedIn, signOutClicked, t }) {
     if (loading) {
       return null
     }
     if (!loggedIn) {
       return (
-        <div className='App'>
+        <div className="App">
           <Header />
           <Login />
         </div>
       )
     }
     return (
-      <div className='App'>
+      <div className="App">
         <Header />
-        <section className='section'>
+        <section className="section">
           <Notification />
-          <div className='container'>
-            <div className='columns'>
+          <div className="container">
+            <div className="columns">
               <Menu />
-              <div className='column'>
+              <div className="column">
                 <Timer />
                 <Workspace />
               </div>

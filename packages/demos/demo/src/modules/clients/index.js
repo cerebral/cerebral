@@ -1,13 +1,13 @@
-import {set} from 'cerebral/operators'
-import {props, state} from 'cerebral/tags'
+import { set } from 'cerebral/operators'
+import { props, state } from 'cerebral/tags'
 import Collection from '../../common/Collection'
 
 const collection = Collection('clients', {
   'no-client': {
     key: 'no-client',
     name: 'No client',
-    $isDefaultItem: true
-  }
+    $isDefaultItem: true,
+  },
 })
 
 export const init = collection.init
@@ -15,7 +15,7 @@ export const init = collection.init
 export default {
   state: {
     all: {},
-    $filter: ''
+    $filter: '',
   },
   signals: {
     addClicked: collection.newItem,
@@ -26,13 +26,11 @@ export default {
     filterEnterPressed: collection.newItem,
     formValueChanged: collection.updateDraft,
     penClicked: collection.edit,
-    phoneClicked: [
-      set(state`clients.$phone`, props`phone`)
-    ],
+    phoneClicked: [set(state`clients.$phone`, props`phone`)],
     removed: collection.removed,
     saveClicked: collection.update,
     trashClicked: collection.remove,
     updated: collection.updated,
-    uploadProgress: collection.uploadProgress
-  }
+    uploadProgress: collection.uploadProgress,
+  },
 }

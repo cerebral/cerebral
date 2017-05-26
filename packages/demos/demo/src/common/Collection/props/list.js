@@ -1,16 +1,16 @@
-import {signal, state} from 'cerebral/tags'
+import { signal, state } from 'cerebral/tags'
 import visibleKeys from '../compute/visibleKeys'
 import paths from '../paths'
 
-export default function connectProps (moduleName, extraprops) {
-  const {draftPath, filterPath} = paths(moduleName)
+export default function connectProps(moduleName, extraprops) {
+  const { draftPath, filterPath } = paths(moduleName)
   const props = {
     enterPressed: signal`${moduleName}.filterEnterPressed`,
     filter: state`${filterPath}`,
     onChange: signal`${moduleName}.filterChanged`,
     onClick: signal`${moduleName}.addClicked`,
     selectedKey: state`${draftPath}.key`,
-    visibleKeys: visibleKeys(moduleName)
+    visibleKeys: visibleKeys(moduleName),
   }
   if (extraprops) {
     return Object.assign(props, extraprops)

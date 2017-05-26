@@ -1,10 +1,10 @@
 /* globals describe it expect */
-import {transform} from 'babel-core'
+import { transform } from 'babel-core'
 import plugin from '../index'
 
 const pluginOptions = {
   babelrc: false,
-  plugins: [plugin]
+  plugins: [plugin],
 }
 
 describe('Transform proxies to template tags', () => {
@@ -13,7 +13,7 @@ describe('Transform proxies to template tags', () => {
       import {state} from 'cerebral/proxies';
       state.hello.world;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -22,7 +22,7 @@ describe('Transform proxies to template tags', () => {
       import {state} from 'cerebral/proxies';
       state.hello[state.world];
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -31,7 +31,7 @@ describe('Transform proxies to template tags', () => {
       import {state} from 'cerebral/proxies';
       (state) => state.hello[state.world];
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -40,7 +40,7 @@ describe('Transform proxies to template tags', () => {
       import {state as anotherName} from 'cerebral/proxies';
       (state) => anotherName.hello[anotherName.world];
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -58,7 +58,7 @@ describe('Transform proxies to template tags', () => {
       import {state} from 'cerebral/proxies';
       state.a[1+1]
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -67,7 +67,7 @@ describe('Transform proxies to template tags', () => {
       import {state} from 'other-module';
       state.hello.world;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -76,7 +76,7 @@ describe('Transform proxies to template tags', () => {
       import {state} from 'cerebral-proxy-tags';
       state.hello.world;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -85,7 +85,7 @@ describe('Transform proxies to template tags', () => {
       import {state} from 'cerebral/proxies';
       state.a['b']
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -96,7 +96,7 @@ describe('Transform proxies to template tags', () => {
       const b = 'b'
       state.a[a+b]
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -105,7 +105,7 @@ describe('Transform proxies to template tags', () => {
       import state from 'cerebral/proxies';
       state.hello.world;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 })

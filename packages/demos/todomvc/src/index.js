@@ -1,7 +1,7 @@
 import React from 'react'
-import {render} from 'react-dom'
+import { render } from 'react-dom'
 import controller from './controller'
-import {Container} from 'cerebral/react'
+import { Container } from 'cerebral/react'
 
 import 'todomvc-common/base.css'
 import 'todomvc-app-css/index.css'
@@ -9,8 +9,9 @@ import './styles.css'
 
 import App from './components/App'
 
-render((
+render(
   <Container controller={controller}>
     <App />
-  </Container>
-), document.querySelector('#root'))
+  </Container>,
+  document.querySelector('#root')
+)

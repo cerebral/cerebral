@@ -1,8 +1,8 @@
 import React from 'react'
-import {render} from 'react-dom'
-import {Controller} from 'cerebral'
-import {state} from 'cerebral/tags'
-import {Container} from 'cerebral/react'
+import { render } from 'react-dom'
+import { Controller } from 'cerebral'
+import { state } from 'cerebral/tags'
+import { Container } from 'cerebral/react'
 import FirebaseProvider from '@cerebral/firebase'
 import firebaseConfig from './firebaseConfig'
 import * as visibility from './helpers/visibility'
@@ -25,20 +25,17 @@ const router = Router({
     {
       path: '/:view?',
       map: {
-        view: state`app.$selectedView`
-      }
-    }
+        view: state`app.$selectedView`,
+      },
+    },
   ],
-  onlyHash: true
+  onlyHash: true,
 })
 
 const controller = Controller({
   devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
 
-  providers: [
-    FirebaseProvider({config: firebaseConfig}),
-    FormsProvider()
-  ],
+  providers: [FirebaseProvider({ config: firebaseConfig }), FormsProvider()],
 
   modules: {
     app,
@@ -46,15 +43,16 @@ const controller = Controller({
     projects,
     router,
     tasks,
-    user
-  }
+    user,
+  },
 })
 
 controller.getSignal('app.bootstrap')({})
 visibility.register(controller.getSignal('tasks.visibilityChanged'))
 
-render((
+render(
   <Container controller={controller}>
     <App />
-  </Container>
-), document.querySelector('#root'))
+  </Container>,
+  document.querySelector('#root')
+)

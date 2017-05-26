@@ -1,5 +1,5 @@
-import {v4} from 'uuid'
+import { v4 } from 'uuid'
 
-export default function (context) {
-  return {ref: v4()}
+export default function(context) {
+  return { ref: v4() }
 }

@@ -1,9 +1,10 @@
-function createUserWithEmailAndPassword ({firebase, path, state}) {
+function createUserWithEmailAndPassword({ firebase, path, state }) {
   const email = state.get('user.$signIn.email.value')
   const password = state.get('user.$signIn.password.value')
 
-  return firebase.createUserWithEmailAndPassword(email, password)
-    .then((result) => {
+  return firebase
+    .createUserWithEmailAndPassword(email, password)
+    .then(result => {
       if (result.error) {
         return path.error(result)
       }

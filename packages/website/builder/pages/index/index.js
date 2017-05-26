@@ -1,4 +1,4 @@
-function Index (props) {
+function Index(props) {
   return null
 }
 

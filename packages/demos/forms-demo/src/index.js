@@ -1,7 +1,7 @@
 import React from 'react'
-import {render} from 'react-dom'
-import {Controller} from 'cerebral'
-import {Container} from 'cerebral/react'
+import { render } from 'react-dom'
+import { Controller } from 'cerebral'
+import { Container } from 'cerebral/react'
 import Devtools from 'cerebral/devtools'
 import Router from '@cerebral/router'
 import app from './modules/app'
@@ -13,22 +13,21 @@ const controller = Controller({
   router: Router({
     routes: {
       '/': 'app.routed',
-      '/simple': 'simple.routed'
+      '/simple': 'simple.routed',
     },
-    onlyHash: true
+    onlyHash: true,
   }),
   devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
   modules: {
     app,
-    simple
+    simple,
   },
-  providers: [
-    FormsProvider()
-  ]
+  providers: [FormsProvider()],
 })
 
-render((
-  <Container controller={controller} >
+render(
+  <Container controller={controller}>
     <App />
-  </Container>
-), document.querySelector('#root'))
+  </Container>,
+  document.querySelector('#root')
+)

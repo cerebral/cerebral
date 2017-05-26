@@ -5,7 +5,7 @@ const packagesGlob = require('./packagesGlob').all
 const dependencyTypes = ['dependencies', 'devDependencies']
 const installCmd = {
   dependencies: 'npm install --save --save-exact',
-  devDependencies: 'npm install --save-dev --save-exact'
+  devDependencies: 'npm install --save-dev --save-exact',
 }
 
 glob(packagesGlob, (er, files) => {
@@ -45,7 +45,7 @@ glob(packagesGlob, (er, files) => {
               dependency,
               monoVersion,
               packages: {},
-              type: 'noop'
+              type: 'noop',
             }
           }
           update.packages[cerebralPackage.name] = packageExactVersion
@@ -64,20 +64,26 @@ glob(packagesGlob, (er, files) => {
       }
     })
 
-    const toInstall = Object.keys(operations).filter(k => operations[k].type === 'install').map(k => {
-      const op = operations[k]
-      return `${op.dependency}@${op.version}`
-    })
+    const toInstall = Object.keys(operations)
+      .filter(k => operations[k].type === 'install')
+      .map(k => {
+        const op = operations[k]
+        return `${op.dependency}@${op.version}`
+      })
 
-    const conflict = Object.keys(operations).filter(k => operations[k].type === 'conflict').map(k => {
-      return operations[k]
-    })
+    const conflict = Object.keys(operations)
+      .filter(k => operations[k].type === 'conflict')
+      .map(k => {
+        return operations[k]
+      })
 
     const success = conflict.length === 0 && toInstall.length === 0
 
     if (!success) {
       console.log('\n')
-      console.log(`************** ${dependencyType} TEST FAILED ****************`)
+      console.log(
+        `************** ${dependencyType} TEST FAILED ****************`
+      )
     }
 
     if (conflict.length) {

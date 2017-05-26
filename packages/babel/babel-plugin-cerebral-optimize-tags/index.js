@@ -1,33 +1,36 @@
 const importNames = ['cerebral/tags']
 const allowedImports = ['state', 'props', 'input', 'signal', 'string']
 
-function isValidImportLocation (location) {
+function isValidImportLocation(location) {
   return importNames.indexOf(location.toLowerCase()) >= 0
 }
 
-function isAllowedImport (importName) {
+function isAllowedImport(importName) {
   return allowedImports.indexOf(importName.toLowerCase()) >= 0
 }
 
-export default function ({types: t}) {
+export default function({ types: t }) {
   const optionsMap = {
     state: t.objectExpression([
-      t.objectProperty(t.stringLiteral('isStateDependency'), t.booleanLiteral(true))
+      t.objectProperty(
+        t.stringLiteral('isStateDependency'),
+        t.booleanLiteral(true)
+      ),
     ]),
     string: t.objectExpression([
-      t.objectProperty(t.stringLiteral('hasValue'), t.booleanLiteral(false))
-    ])
+      t.objectProperty(t.stringLiteral('hasValue'), t.booleanLiteral(false)),
+    ]),
   }
   return {
-    pre (path) {
+    pre(path) {
       // Used to track renaming imports in local file
       // eg. import { state as s } from 'cerebral/proxies';
       this.importedTagMap = new Map()
       this.tagId = path.scope.generateUidIdentifier('Tag')
     },
     visitor: {
-      ImportDeclaration (path) {
-        const {node: {source: {value}, source, $$processed}} = path
+      ImportDeclaration(path) {
+        const { node: { source: { value }, source, $$processed } } = path
         if (
           t.isStringLiteral(source) &&
           isValidImportLocation(value) &&
@@ -35,7 +38,10 @@ export default function ({types: t}) {
         ) {
           let foundImport = false
           // Verify that all imports are allowed and track the localName
-          for (const {imported: {name: importName} = {}, local: {name: localName}} of path.node.specifiers) {
+          for (const {
+            imported: { name: importName } = {},
+            local: { name: localName },
+          } of path.node.specifiers) {
             if (importName === undefined) {
               continue
             }
@@ -43,7 +49,9 @@ export default function ({types: t}) {
               foundImport = true
               this.importedTagMap.set(localName, importName)
             } else {
-              throw path.buildCodeFrameError(`The Tag "${importName}" can't be imported`)
+              throw path.buildCodeFrameError(
+                `The Tag "${importName}" can't be imported`
+              )
             }
           }
           if (!foundImport) {
@@ -58,21 +66,27 @@ export default function ({types: t}) {
           path.node.$$processed = true
         }
       },
-      TaggedTemplateExpression (path) {
-        const {node: {quasi: {quasis, expressions}, tag: {name: localName}}} = path
+      TaggedTemplateExpression(path) {
+        const {
+          node: { quasi: { quasis, expressions }, tag: { name: localName } },
+        } = path
         if (this.importedTagMap.has(localName)) {
           const name = this.importedTagMap.get(localName)
-          const options = optionsMap[name] ? optionsMap[name] : t.identifier('undefined')
+          const options = optionsMap[name]
+            ? optionsMap[name]
+            : t.identifier('undefined')
           const fnQuasis = quasis.map(e => t.stringLiteral(e.value.raw))
 
           path.replaceWith(
-            t.newExpression(
-              this.tagId,
-              [t.stringLiteral(name), options, t.arrayExpression(fnQuasis), t.arrayExpression(expressions)]
-            )
+            t.newExpression(this.tagId, [
+              t.stringLiteral(name),
+              options,
+              t.arrayExpression(fnQuasis),
+              t.arrayExpression(expressions),
+            ])
           )
         }
-      }
-    }
+      },
+    },
   }
 }

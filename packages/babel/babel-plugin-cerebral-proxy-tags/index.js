@@ -1,54 +1,58 @@
 const importNames = ['cerebral/proxies', 'cerebral-proxy-tags']
 const allowedImports = ['state', 'props', 'input', 'signal']
 
-function isValidImportLocation (location) {
+function isValidImportLocation(location) {
   return importNames.indexOf(location.toLowerCase()) >= 0
 }
 
-function isAllowedImport (importName) {
+function isAllowedImport(importName) {
   return allowedImports.indexOf(importName.toLowerCase()) >= 0
 }
 
-function isTagValidInThisScope (scope, name) {
+function isTagValidInThisScope(scope, name) {
   const binding = scope.getBinding(name)
   return binding && binding.kind === 'module'
 }
 
-function isPlainPropertyAccess (t, property, computed) {
-  return (t.isIdentifier(property) && computed === false) ||
-          (t.isLiteral(property) && property.value)
+function isPlainPropertyAccess(t, property, computed) {
+  return (
+    (t.isIdentifier(property) && computed === false) ||
+    (t.isLiteral(property) && property.value)
+  )
 }
 
-export default function ({types: t}) {
+export default function({ types: t }) {
   return {
-    pre () {
+    pre() {
       // Used to track renaming imports in local file
       // eg. import { state as s } from 'cerebral/proxies';
       this.importedTagSet = new Set()
     },
     visitor: {
-      ImportDeclaration (path) {
-        const {node: {source: {value}, source}} = path
-        if (
-          t.isStringLiteral(source) &&
-          isValidImportLocation(value)
-        ) {
+      ImportDeclaration(path) {
+        const { node: { source: { value }, source } } = path
+        if (t.isStringLiteral(source) && isValidImportLocation(value)) {
           // Verify that all imports are allowed and track the localName
-          for (const {imported: {name: importName} = {}, local: {name: localName}} of path.node.specifiers) {
+          for (const {
+            imported: { name: importName } = {},
+            local: { name: localName },
+          } of path.node.specifiers) {
             if (importName === undefined) {
               continue
             }
             if (isAllowedImport(importName)) {
               this.importedTagSet.add(localName)
             } else {
-              throw path.buildCodeFrameError(`The Tag "${importName}" can't be imported`)
+              throw path.buildCodeFrameError(
+                `The Tag "${importName}" can't be imported`
+              )
             }
           }
           // Change import to the real 'cerebral/tags';
           path.node.source.value = 'cerebral/tags'
         }
       },
-      MemberExpression (path) {
+      MemberExpression(path) {
         // Always use the innermost MemberExpression
         if (!t.isIdentifier(path.node.object)) {
           return
@@ -56,7 +60,10 @@ export default function ({types: t}) {
 
         const tagName = path.node.object.name
 
-        if (!this.importedTagSet.has(tagName) || !isTagValidInThisScope(path.scope, tagName)) {
+        if (
+          !this.importedTagSet.has(tagName) ||
+          !isTagValidInThisScope(path.scope, tagName)
+        ) {
           return
         }
 
@@ -70,14 +77,16 @@ export default function ({types: t}) {
 
         // Iterate trough all parents
         while (t.isMemberExpression(currentMember)) {
-          const {node: {property, computed}} = currentMember
+          const { node: { property, computed } } = currentMember
 
           // Plain id like state.a[1].b['test']
           if (isPlainPropertyAccess(t, property, computed)) {
             const value = t.isLiteral(property) ? property.value : property.name
-            quasi.push((quasi.length !== 0 || prevWasExpression ? '.' : '') + value)
+            quasi.push(
+              (quasi.length !== 0 || prevWasExpression ? '.' : '') + value
+            )
             prevWasExpression = false
-          // Nested expressions like state.a[state.b]
+            // Nested expressions like state.a[state.b]
           } else {
             quasi.push('.')
             expressions.push(property)
@@ -101,13 +110,13 @@ export default function ({types: t}) {
             t.templateLiteral(
               quasis.map(v => {
                 const str = v.join('')
-                return t.templateElement({raw: str, cooked: str})
+                return t.templateElement({ raw: str, cooked: str })
               }),
               expressions
             )
           )
         )
-      }
-    }
+      },
+    },
   }
 }

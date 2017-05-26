@@ -1,10 +1,10 @@
-import {StyleSheet} from 'aphrodite'
+import { StyleSheet } from 'aphrodite'
 
 const styles = StyleSheet.create({
   container: {
     position: 'fixed',
     bottom: 0,
-    width: '100%'
+    width: '100%',
   },
   errorPane: {
     height: 25,
@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#d64242',
     paddingTop: 6,
     paddingLeft: 10,
-    color: '#fff'
+    color: '#fff',
   },
   successPane: {
     height: 25,
@@ -22,12 +22,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#299a33',
     paddingTop: 6,
     paddingLeft: 10,
-    color: '#fff'
+    color: '#fff',
   },
   innerContainer: {
     height: 250,
     background: '#282c34',
-    overflowY: 'scroll'
+    overflowY: 'scroll',
   },
   pretty: {
     color: '#abb2bf',
@@ -35,8 +35,8 @@ const styles = StyleSheet.create({
     margin: 3,
     height: '100%',
     border: 'none',
-    width: '100%'
-  }
+    width: '100%',
+  },
 })
 
 export default styles
