@@ -515,3 +515,46 @@ const controller = Controller({
 
 export default controller
 ```
+
+## Router
+The router now defines its routes with an array
+
+### 1.x
+```js
+import Controller from 'cerebral'
+import Model from 'cerebral/model/immutable'
+import Router from 'cerebral-module-router'
+
+const controller = Controller(Model({}))
+
+controller.addModules({
+  modules: {
+    router: Router({
+      routes: {
+        '/': 'appRouted'
+      }
+    })
+  }
+})
+
+export default controller
+```
+
+### 2.x
+```js
+import Controller from 'cerebral'
+import Router from '@cerebral/router'
+
+const controller = Controller({
+  modules: {
+    router: Router({
+      routes: [{
+        path: '/',
+        signal: 'appRouted'
+      }]
+    })
+  }
+})
+
+export default controller
+```
