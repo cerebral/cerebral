@@ -243,18 +243,23 @@ import Router from '@cerebral/router'
 
 ```
 
-And go ahead by doing the router config as follows inside the controller:
+The router package is a Cerebral module, so we need to add it to the modules:
 ```js
 ...
 const controller = Controller({
   ...
-  router: Router({
-    routes: {
-      '/': 'homeClicked',
-      '/repos': 'reposClicked'
-    },
-    onlyHash: true
-  }),
+  modules: {
+    router: Router({
+      routes: [{
+        path: '/',
+        signal: 'homeClicked'
+      }, {
+        path: '/repos',
+        signal: 'reposClicked'
+      }],
+      onlyHash: true
+    })
+  },
   ...
 })
 ...
