@@ -6,6 +6,10 @@ cache:
   - node_modules
 notifications:
   email: false
+script:
+  - npm prune
+  - npm run lint
+  - npm test
 after_success:
 - |
   git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral;

@@ -1,4 +1,5 @@
 packages/*/**/node_modules/**
+packages/*/**/lib/**
 **/build/
 **/*.min.js
 **/bundle.js
