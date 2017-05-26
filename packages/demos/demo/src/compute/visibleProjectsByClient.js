@@ -1,5 +1,5 @@
-import {compute} from 'cerebral'
-import {state} from 'cerebral/tags'
+import { compute } from 'cerebral'
+import { state } from 'cerebral/tags'
 import visibleKeys from '../common/Collection/compute/visibleKeys'
 import paths from '../common/Collection/paths'
 
@@ -29,7 +29,7 @@ export default compute(
         result.push({
           key: clientKey,
           name: clients[clientKey].name,
-          projects: list
+          projects: list,
         })
       }
       list.push(project)

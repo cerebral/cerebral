@@ -1,9 +1,9 @@
-import {compute} from 'cerebral'
-import {state} from 'cerebral/tags'
-import {elapsedSeconds, sortDayString} from '../helpers/dateTime'
+import { compute } from 'cerebral'
+import { state } from 'cerebral/tags'
+import { elapsedSeconds, sortDayString } from '../helpers/dateTime'
 import paths from '../common/Collection/paths'
 
-const {collectionPath} = paths('tasks')
+const { collectionPath } = paths('tasks')
 
 export default compute(
   state`tasks.$now`,
@@ -25,22 +25,22 @@ export default compute(
         result.push({
           dayDate,
           date: task.startedAt,
-          tasks: list
+          tasks: list,
         })
       }
 
       if (!task.endedAt) {
         const elapsed = elapsedSeconds(task.startedAt, now)
-        list.push(Object.assign({}, task, {elapsed}))
+        list.push(Object.assign({}, task, { elapsed }))
       } else {
         list.push(task)
       }
     })
     result.forEach(day => {
       day.totalElapsed = day.tasks.reduce((sum, task) => sum + task.elapsed, 0)
-      day.tasks.sort((a, b) => a.startedAt <= b.startedAt ? 1 : -1)
+      day.tasks.sort((a, b) => (a.startedAt <= b.startedAt ? 1 : -1))
     })
-    result.sort((a, b) => a.dayDate <= b.dayDate ? 1 : -1)
+    result.sort((a, b) => (a.dayDate <= b.dayDate ? 1 : -1))
 
     return result
   }

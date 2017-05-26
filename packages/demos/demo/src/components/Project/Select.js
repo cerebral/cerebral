@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {props, signal, state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { props, signal, state } from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 
 export default connect(
@@ -11,22 +11,33 @@ export default connect(
     // placeholderKey
     value: state`projects.$draft.${props`field`}`,
     valueChanged: signal`projects.formValueChanged`,
-    t: translations
+    t: translations,
   },
-  function Input ({autoFocus, clients, field, placeholder, value, valueChanged, t}) {
+  function Input({
+    autoFocus,
+    clients,
+    field,
+    placeholder,
+    value,
+    valueChanged,
+    t,
+  }) {
     const onChange = e => {
-      valueChanged({key: field, value: e.target.value})
+      valueChanged({ key: field, value: e.target.value })
     }
 
-    const clientsList = Object.keys(clients).map(ref => clients[ref]).sort((a, b) => a <= b ? -1 : 1)
+    const clientsList = Object.keys(clients)
+      .map(ref => clients[ref])
+      .sort((a, b) => (a <= b ? -1 : 1))
 
     return (
-      <select className='select'
+      <select
+        className="select"
         placeholder={t[placeholder]}
         onChange={onChange}
         value={value || ''}
         name={field}
-        >
+      >
         {clientsList.map(c => (
           <option key={c.key} value={c.key}>
             {c.name}

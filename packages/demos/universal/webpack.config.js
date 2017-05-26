@@ -4,15 +4,19 @@ module.exports = {
   entry: path.resolve('client', 'index.js'),
   output: {
     filename: 'main.js',
-    publicPath: '/'
+    publicPath: '/',
   },
   module: {
-    rules: [{
-      test: /\.js?$/,
-      include: [path.resolve('client')],
-      use: [{
-        loader: require.resolve('babel-loader')
-      }]
-    }]
-  }
+    rules: [
+      {
+        test: /\.js?$/,
+        include: [path.resolve('client')],
+        use: [
+          {
+            loader: require.resolve('babel-loader'),
+          },
+        ],
+      },
+    ],
+  },
 }

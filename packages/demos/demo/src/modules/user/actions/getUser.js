@@ -1,6 +1,7 @@
-function getUser ({firebase, path}) {
-  return firebase.getUser()
-    .then((result) => {
+function getUser({ firebase, path }) {
+  return firebase
+    .getUser()
+    .then(result => {
       if (result.user) {
         return path.success(result)
       } else {

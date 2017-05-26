@@ -1,47 +1,40 @@
-import {set, when} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
-import {setField, resetForm} from '@cerebral/forms/operators'
+import { set, when } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
+import { setField, resetForm } from '@cerebral/forms/operators'
 
 export default {
   state: {
     form: {
       firstname: {
         value: '',
-        isRequired: true
+        isRequired: true,
       },
       lastname: {
         value: '',
-        isRequired: true
+        isRequired: true,
       },
       email: {
         value: '',
         validationRules: ['isEmail'],
         validationMessages: ['You must enter a valid email'],
-        isRequired: false
+        isRequired: false,
       },
-      showErrors: false
-    }
+      showErrors: false,
+    },
   },
   signals: {
-    routed: [
-      set(state`app.currentView`, 'Simple')
-    ],
+    routed: [set(state`app.currentView`, 'Simple')],
     fieldChanged: [
-      when(state`${props`settingsField`}.value`), {
+      when(state`${props`settingsField`}.value`),
+      {
         true: [
           set(state`app.settings.showErrors`, true),
-          setField(state`${props`field`}`, props`value`)
+          setField(state`${props`field`}`, props`value`),
         ],
-        false: [
-          set(state`${props`field`}.value`, props`value`)
-        ]
-      }
+        false: [set(state`${props`field`}.value`, props`value`)],
+      },
     ],
-    onSubmitted: [
-      set(state`app.settings.showErrors`, true)
-    ],
-    onReset: [
-      resetForm(state`${props`formPath`}`)
-    ]
-  }
+    onSubmitted: [set(state`app.settings.showErrors`, true)],
+    onReset: [resetForm(state`${props`formPath`}`)],
+  },
 }

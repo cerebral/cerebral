@@ -1,28 +1,32 @@
-import {debounce, set, when} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { debounce, set, when } from 'cerebral/operators'
+import { state } from 'cerebral/tags'
 import now from '../compute/now'
 
-const triggerAgain = ({controller}) => {
+const triggerAgain = ({ controller }) => {
   // We have to use setTimeout to not trigger signal in signal
   setTimeout(controller.getSignal('tasks.timeHasPassed'))
 }
 
 export default [
   set(state`tasks.$now`, now),
-  debounce(1000), {
+  debounce(1000),
+  {
     continue: [
-      when(state`tasks.$now`, state`tasks.$nowHidden`,
+      when(
+        state`tasks.$now`,
+        state`tasks.$nowHidden`,
         (now, hidden) => now && !hidden
-      ), {
+      ),
+      {
         true: [
           // Still running
-          triggerAgain
+          triggerAgain,
         ],
         false: [
           // Terminated or hidden
-        ]
-      }
+        ],
+      },
     ],
-    discard: []
-  }
+    discard: [],
+  },
 ]

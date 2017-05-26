@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {props, signal, state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { props, signal, state } from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 
 export default connect(
@@ -9,14 +9,31 @@ export default connect(
     escPressed: signal`clients.escPressed`,
     value: state`clients.$draft.${props`field`}`,
     valueChanged: signal`clients.formValueChanged`,
-    t: translations
+    t: translations,
   },
-  function Input ({autoFocus, enterPressed, escPressed, field, icon, placeholderKey, type, value, valueChanged, t, warning}) {
+  function Input({
+    autoFocus,
+    enterPressed,
+    escPressed,
+    field,
+    icon,
+    placeholderKey,
+    type,
+    value,
+    valueChanged,
+    t,
+    warning,
+  }) {
     const onKeyDown = e => {
       switch (e.key) {
-        case 'Enter': enterPressed(); break
-        case 'Escape': escPressed(); break
-        default: break // noop
+        case 'Enter':
+          enterPressed()
+          break
+        case 'Escape':
+          escPressed()
+          break
+        default:
+          break // noop
       }
     }
 
@@ -27,10 +44,10 @@ export default connect(
         // e.stopPropagation()
         // e.preventDefault()
         // $imageFile
-        valueChanged({key: `$${field}File`, value})
+        valueChanged({ key: `$${field}File`, value })
       } else {
         value = e.target.value
-        valueChanged({key: field, value})
+        valueChanged({ key: field, value })
       }
     }
 
@@ -38,16 +55,18 @@ export default connect(
 
     return (
       <p className={`control${icon ? ' has-icon' : ''}`}>
-        <input className={`input${warning ? ' is-danger' : ''}`} type={type || 'text'}
+        <input
+          className={`input${warning ? ' is-danger' : ''}`}
+          type={type || 'text'}
           autoFocus={autoFocus}
           placeholder={t[placeholderKey]}
           onKeyDown={onKeyDown}
           onChange={onChange}
-          value={type === 'file' ? '' : (value || '')}
+          value={type === 'file' ? '' : value || ''}
           name={field}
-          />
+        />
         {icon && <i className={`fa fa-${icon}`} />}
-        {warning && <span className='help is-warning'>{warning}</span>}
+        {warning && <span className="help is-warning">{warning}</span>}
       </p>
     )
   }

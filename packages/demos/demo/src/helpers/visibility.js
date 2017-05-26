@@ -14,21 +14,21 @@ if (typeof document.hidden !== 'undefined') {
 }
 
 const signals = []
-export const unregister = (signal) => {
+export const unregister = signal => {
   const idx = signals.indexOf(signal)
   if (idx >= 0) {
     signals.splice(idx, 1)
   }
 }
 
-export const register = (signal) => {
+export const register = signal => {
   unregister(signal)
   signals.push(signal)
 }
 
 const handleVisibilityChange = () => {
   const hidden = document[hiddenKey]
-  signals.forEach(signal => signal({visible: !hidden}))
+  signals.forEach(signal => signal({ visible: !hidden }))
 }
 
 document.addEventListener(visibilityChange, handleVisibilityChange, false)

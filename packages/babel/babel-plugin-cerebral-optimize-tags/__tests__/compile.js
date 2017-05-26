@@ -1,10 +1,10 @@
 /* globals describe it expect */
-import {transform} from 'babel-core'
+import { transform } from 'babel-core'
 import plugin from '../index'
 
 const pluginOptions = {
   babelrc: false,
-  plugins: [plugin]
+  plugins: [plugin],
 }
 
 describe('Transform tags to constructor calls', () => {
@@ -16,7 +16,7 @@ describe('Transform tags to constructor calls', () => {
 
       state\`hello.world\`;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -25,7 +25,7 @@ describe('Transform tags to constructor calls', () => {
       import {state} from 'cerebral/tags';
       (state) => state.notChanged();
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -34,7 +34,7 @@ describe('Transform tags to constructor calls', () => {
       import {state as anotherName} from 'cerebral/tags';
       (state) => anotherName\`hello.\${anotherName\`world\`}\`;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 
@@ -52,7 +52,7 @@ describe('Transform tags to constructor calls', () => {
       import state from 'cerebral/tags';
       state.hello.world;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(result).toMatchSnapshot()
   })
 })

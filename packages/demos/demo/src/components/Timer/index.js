@@ -1,8 +1,8 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {signal} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { signal } from 'cerebral/tags'
 import ProjectSelectorTag from '../ProjectSelectorTag'
-import {displayTaskDuration, isRunning} from '../../modules/tasks/helpers'
+import { displayTaskDuration, isRunning } from '../../modules/tasks/helpers'
 import runningTask from '../../compute/runningTask'
 import translations from '../../common/compute/translations'
 
@@ -12,38 +12,45 @@ export default connect(
     item: runningTask,
     onChange: signal`tasks.formValueChanged`,
     onClick: signal`tasks.startStopClicked`,
-    t: translations
+    t: translations,
   },
-  function Timer ({enterPressed, item, onChange, onClick, t}) {
+  function Timer({ enterPressed, item, onChange, onClick, t }) {
     const onKeyPress = e => {
       switch (e.key) {
-        case 'Enter': enterPressed(); break
-        default: break // noop
+        case 'Enter':
+          enterPressed()
+          break
+        default:
+          break // noop
       }
     }
 
     return (
-      <nav className='level'>
-        <div className='level-left'>
-          <div className='level-item'>
-            <p className='control has-addons'>
-              <input className='input' type='text' style={{width: 230}}
+      <nav className="level">
+        <div className="level-left">
+          <div className="level-item">
+            <p className="control has-addons">
+              <input
+                className="input"
+                type="text"
+                style={{ width: 230 }}
                 value={item.name || ''}
-                onChange={(e) => onChange({key: 'name', value: e.target.value})}
+                onChange={e => onChange({ key: 'name', value: e.target.value })}
                 onKeyPress={onKeyPress}
-                placeholder={t.WhatAreYouDoing} />
-              <button className='button' onClick={() => onClick()}>
+                placeholder={t.WhatAreYouDoing}
+              />
+              <button className="button" onClick={() => onClick()}>
                 {isRunning(item) ? 'Stop' : 'Start'}
               </button>
             </p>
           </div>
-          <div className='level-item'>
+          <div className="level-item">
             <ProjectSelectorTag itemKey={item.projectKey || 'no-project'} />
           </div>
         </div>
-        <div className='level-right'>
-          <div className='level-item'>
-            <h3 className='title is-4'>
+        <div className="level-right">
+          <div className="level-item">
+            <h3 className="title is-4">
               {displayTaskDuration(item)}
             </h3>
           </div>

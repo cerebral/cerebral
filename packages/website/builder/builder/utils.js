@@ -3,12 +3,12 @@ const path = require('path')
 const babel = require('babel-core')
 
 module.exports = {
-  fileExistsSync (path) {
+  fileExistsSync(path) {
     return fs.statSync(path).isFile()
   },
-  readDir (dirPath) {
-    return new Promise(function (resolve, reject) {
-      fs.readdir(path.resolve(dirPath), function (error, dirs) {
+  readDir(dirPath) {
+    return new Promise(function(resolve, reject) {
+      fs.readdir(path.resolve(dirPath), function(error, dirs) {
         if (error) {
           return reject(error)
         }
@@ -17,9 +17,9 @@ module.exports = {
       })
     })
   },
-  readFile (filePath) {
-    return new Promise(function (resolve, reject) {
-      fs.readFile(path.resolve(filePath), function (error, file) {
+  readFile(filePath) {
+    return new Promise(function(resolve, reject) {
+      fs.readFile(path.resolve(filePath), function(error, file) {
         if (error) {
           return reject(error)
         }
@@ -28,25 +28,31 @@ module.exports = {
       })
     })
   },
-  readScript (filePath) {
-    return new Promise(function (resolve, reject) {
-      babel.transformFile(filePath, {
-        presets: [require('babel-preset-es2015')]
-      }, function (err, result) {
-        if (err) {
-          return reject(err)
-        }
+  readScript(filePath) {
+    return new Promise(function(resolve, reject) {
+      babel.transformFile(
+        filePath,
+        {
+          presets: [require('babel-preset-es2015')],
+        },
+        function(err, result) {
+          if (err) {
+            return reject(err)
+          }
 
-        resolve(result.code)
-      })
+          resolve(result.code)
+        }
+      )
     })
   },
-  isUrl (string) {
-    return string.substr(0, 7) === 'http://' || string.substr(0, 8) === 'https://'
+  isUrl(string) {
+    return (
+      string.substr(0, 7) === 'http://' || string.substr(0, 8) === 'https://'
+    )
   },
-  writeFile (filePath, content) {
-    return new Promise(function (resolve, reject) {
-      fs.writeFile(path.resolve(filePath), content, 'utf-8', function (error) {
+  writeFile(filePath, content) {
+    return new Promise(function(resolve, reject) {
+      fs.writeFile(path.resolve(filePath), content, 'utf-8', function(error) {
         if (error) {
           return reject(error)
         }
@@ -55,9 +61,9 @@ module.exports = {
       })
     })
   },
-  emptyDir (dirPath) {
-    return new Promise(function (resolve, reject) {
-      fs.emptyDir(path.resolve(dirPath), function (error) {
+  emptyDir(dirPath) {
+    return new Promise(function(resolve, reject) {
+      fs.emptyDir(path.resolve(dirPath), function(error) {
         if (error) {
           return reject(error)
         }
@@ -66,9 +72,9 @@ module.exports = {
       })
     })
   },
-  copyDir (fromPath, toPath) {
-    return new Promise(function (resolve, reject) {
-      fs.copy(path.resolve(fromPath), path.resolve(toPath), function (error) {
+  copyDir(fromPath, toPath) {
+    return new Promise(function(resolve, reject) {
+      fs.copy(path.resolve(fromPath), path.resolve(toPath), function(error) {
         if (error) {
           return reject(error)
         }
@@ -77,12 +83,15 @@ module.exports = {
       })
     })
   },
-  extractRawText (docs) {
-    return Object.keys(docs).reduce(function (docsText, sectionKey) {
-      docsText[sectionKey] = Object.keys(docs[sectionKey]).reduce(function (subDocsText, subSectionKey) {
+  extractRawText(docs) {
+    return Object.keys(docs).reduce(function(docsText, sectionKey) {
+      docsText[sectionKey] = Object.keys(docs[sectionKey]).reduce(function(
+        subDocsText,
+        subSectionKey
+      ) {
         subDocsText[subSectionKey] = {
           raw: docs[sectionKey][subSectionKey].raw,
-          title: docs[sectionKey][subSectionKey].toc[0].title
+          title: docs[sectionKey][subSectionKey].toc[0].title,
         }
 
         return subDocsText
@@ -90,5 +99,5 @@ module.exports = {
 
       return docsText
     }, {})
-  }
+  },
 }

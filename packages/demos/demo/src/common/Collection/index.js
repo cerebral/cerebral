@@ -11,7 +11,7 @@ import updateDraft from './signals/updateDraft'
 import updateFilter from './signals/updateFilter'
 import uploadProgress from './signals/uploadProgress'
 
-export default function collection (moduleName, initState) {
+export default function collection(moduleName, initState) {
   return {
     create: create(moduleName),
     discardDraft: discardDraft(moduleName),
@@ -24,6 +24,6 @@ export default function collection (moduleName, initState) {
     removed: removed(moduleName),
     updateFilter: updateFilter(moduleName),
     updateDraft: updateDraft(moduleName),
-    uploadProgress: uploadProgress(moduleName)
+    uploadProgress: uploadProgress(moduleName),
   }
 }

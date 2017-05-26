@@ -1,6 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { state } from 'cerebral/tags'
 
 import ClientCard from './card'
 import ClientForm from './form'
@@ -13,9 +13,9 @@ import ClientForm from './form'
 export default connect(
   {
     // FIXME: should be removed. Temporary to force update.
-    foo: state`clients.$draft.key`
+    foo: state`clients.$draft.key`,
   },
-  function Client ({isSelected, itemKey}) {
+  function Client({ isSelected, itemKey }) {
     if (isSelected) {
       return <ClientForm itemKey={itemKey} />
     } else {

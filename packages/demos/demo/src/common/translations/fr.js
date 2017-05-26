@@ -5,7 +5,7 @@ export default {
   SiteTagLine: 'Une saisie des heures basée sur [Cerebral]',
   // Login, Auth
   pleaseSignIn: 'Veuillez vous authentifier',
-  createAccount: 'Création d\'un nouveau compte',
+  createAccount: "Création d'un nouveau compte",
   tryApplicationAnonymously: 'Essayer anonymement',
   Anonymous: 'Anonyme',
   loginEmailPlaceholder: 'Email',
@@ -16,16 +16,16 @@ export default {
   validationErrors: {
     signIn: {
       email: {
-        isEmail: 'Not a valid email'
+        isEmail: 'Not a valid email',
       },
       password: {
-        minLength: 'Password too short'
-      }
-    }
+        minLength: 'Password too short',
+      },
+    },
   },
   loginErrors: {
-    'auth/email-already-in-use': 'L\'adresse e-mail est déjà utilisée par un autre compte.',
-    'auth/too-many-requests': 'Nous avons bloqué toutes les demandes de ce périphérique en raison d\'une activité inhabituelle. Réessayez plus tard.'
+    'auth/email-already-in-use': "L'adresse e-mail est déjà utilisée par un autre compte.",
+    'auth/too-many-requests': "Nous avons bloqué toutes les demandes de ce périphérique en raison d'une activité inhabituelle. Réessayez plus tard.",
   },
   // Day of Week
   Dow0: 'Lun',
@@ -36,7 +36,7 @@ export default {
   Dow5: 'Sam',
   Dow6: 'Dim',
   // Special days
-  Today: 'Aujourd\'hui',
+  Today: "Aujourd'hui",
   dayago1: 'Hier',
   dayago2: 'Avant-hier',
   // Month names
@@ -70,7 +70,7 @@ export default {
   Save: 'Enregister',
   // Client
   ClientNamePlaceholder: 'Client name...',
-  CompanyName: 'Nom de l\'entreprise',
+  CompanyName: "Nom de l'entreprise",
   ImageUrl: 'Url image 64x64',
   Telephone: 'Téléphone',
   WebsiteUrl: 'Site web',
@@ -80,5 +80,5 @@ export default {
   // Project
   ProjectNameFilter: 'Nom du projet...',
   // Generic
-  Add: 'Add'
+  Add: 'Add',
 }

@@ -1,12 +1,12 @@
 /* globals describe it expect  */
-import {transform} from 'babel-core'
-import {Tag} from 'cerebral/tags'
+import { transform } from 'babel-core'
+import { Tag } from 'cerebral/tags'
 import plugin from '../index'
 
 const pluginOptions = {
   babelrc: false,
   presets: ['es2015'],
-  plugins: [plugin]
+  plugins: [plugin],
 }
 
 describe('Run transformed proxies', () => {
@@ -15,7 +15,7 @@ describe('Run transformed proxies', () => {
       import {state} from 'cerebral/proxies';
       state.hello.world;
     `
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     expect(eval(result)).toMatchSnapshot() // eslint-disable-line no-eval
   })
 
@@ -28,14 +28,14 @@ describe('Run transformed proxies', () => {
     const getters = {
       state: {
         a: {
-          c: 'Working!'
-        }
+          c: 'Working!',
+        },
       },
       input: {
-        b: 'c'
-      }
+        b: 'c',
+      },
     }
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     const tag = eval(result) // eslint-disable-line no-eval
     expect(tag).toMatchSnapshot()
     expect(tag).toBeInstanceOf(Tag)
@@ -55,12 +55,12 @@ describe('Run transformed proxies', () => {
       state: {
         a: {
           c: {
-            2: 'Working!'
-          }
-        }
-      }
+            2: 'Working!',
+          },
+        },
+      },
     }
-    const {code: result} = transform(code, pluginOptions)
+    const { code: result } = transform(code, pluginOptions)
     const tag = eval(result) // eslint-disable-line no-eval
     expect(tag).toBeInstanceOf(Tag)
     expect(tag.getValue(getters)).toEqual(getters.state.a.c[2])

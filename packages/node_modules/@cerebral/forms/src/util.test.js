@@ -14,7 +14,13 @@ describe('utils', () => {
   })
 
   it('should throw error for undefined validationRule', () => {
-    assert.throws(() => { checkHasValue(null, ' ', ['someValidationRule']) }, Error, 'Rule someValidationRule is not found')
+    assert.throws(
+      () => {
+        checkHasValue(null, ' ', ['someValidationRule'])
+      },
+      Error,
+      'Rule someValidationRule is not found'
+    )
   })
 
   it('should return true due to having a value', () => {

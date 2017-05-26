@@ -1,5 +1,5 @@
 export default {
   state: {
-    name: 'Anonymous'
-  }
+    name: 'Anonymous',
+  },
 }

@@ -1,11 +1,6 @@
 import React from 'react'
-import {connect} from 'cerebral/react'
+import { connect } from 'cerebral/react'
 
-export default connect(
-  {},
-  function Tasks (props) {
-    return (
-      <div>TODO</div>
-    )
-  }
-)
+export default connect({}, function Tasks(props) {
+  return <div>TODO</div>
+})

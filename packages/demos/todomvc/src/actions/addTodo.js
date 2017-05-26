@@ -1,7 +1,7 @@
-function addTodo ({state, uuid}) {
+function addTodo({ state, uuid }) {
   state.set(`todos.${uuid.v4()}`, {
     title: state.get('newTodoTitle'),
-    completed: false
+    completed: false,
   })
 }
 

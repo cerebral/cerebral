@@ -1,17 +1,17 @@
-module.exports = function (fileInfo, api) {
+module.exports = function(fileInfo, api) {
   const j = api.jscodeshift
   const root = j(fileInfo.source)
 
   const cerebralReactImport = root.find(j.ImportDeclaration, {
     source: {
-      value: 'cerebral/react'
-    }
+      value: 'cerebral/react',
+    },
   })
 
   const connectSpecifier = cerebralReactImport.find(j.ImportSpecifier, {
     imported: {
-      name: 'connect'
-    }
+      name: 'connect',
+    },
   })
 
   if (!connectSpecifier.length) {
@@ -20,9 +20,9 @@ module.exports = function (fileInfo, api) {
 
   const localName = connectSpecifier.get(0).node.local.name
 
-  function updateComputed (nodePath) {
+  function updateComputed(nodePath) {
     const node = nodePath.node
-    node.properties = node.properties.map(function (prop) {
+    node.properties = node.properties.map(function(prop) {
       if (j.CallExpression.check(prop.value)) {
         if (prop.value.arguments.length) {
           // If we have an object passed to the function,
@@ -49,25 +49,26 @@ module.exports = function (fileInfo, api) {
     return node
   }
 
-  root.find(j.CallExpression, {
-    callee: {
-      name: localName
-    }
-  })
-  .find(j.ObjectExpression)
-  .replaceWith(updateComputed)
+  root
+    .find(j.CallExpression, {
+      callee: {
+        name: localName,
+      },
+    })
+    .find(j.ObjectExpression)
+    .replaceWith(updateComputed)
 
-  root.find(j.ClassDeclaration)
-    .forEach(function (classDec) {
-      const decorators = classDec.get(0).node.decorators
-      j(decorators).find(j.CallExpression, {
+  root.find(j.ClassDeclaration).forEach(function(classDec) {
+    const decorators = classDec.get(0).node.decorators
+    j(decorators)
+      .find(j.CallExpression, {
         callee: {
-          name: localName
-        }
+          name: localName,
+        },
       })
       .find(j.ObjectExpression)
       .replaceWith(updateComputed)
-    })
+  })
 
   return root.toSource()
 }

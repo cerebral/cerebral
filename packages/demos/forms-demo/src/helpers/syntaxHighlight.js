@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
-export default function syntaxHighlight (json) {
+export default function syntaxHighlight(json) {
   const regExp = /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g
-  return json.replace(regExp, (match) => {
+  return json.replace(regExp, match => {
     var style = `color: #1177cd`
     if (/^"/.test(match)) {
       if (/:$/.test(match)) {

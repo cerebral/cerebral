@@ -1,6 +1,7 @@
-function signInAnonymously ({firebase, path, state}) {
-  return firebase.signInAnonymously()
-    .then((result) => {
+function signInAnonymously({ firebase, path, state }) {
+  return firebase
+    .signInAnonymously()
+    .then(result => {
       if (result.error) {
         return path.error(result)
       }

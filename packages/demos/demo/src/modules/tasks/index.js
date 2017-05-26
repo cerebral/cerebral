@@ -15,8 +15,8 @@ export default {
     all: {},
     $draft: {
       key: 'running',
-      projectKey: 'no-project'
-    }
+      projectKey: 'no-project',
+    },
   },
   signals: {
     enterPressed: startStopRunning,
@@ -25,6 +25,6 @@ export default {
     startStopClicked: startStopRunning,
     timeHasPassed: updateNow,
     updated,
-    visibilityChanged: startStopUpdateNow
-  }
+    visibilityChanged: startStopUpdateNow,
+  },
 }

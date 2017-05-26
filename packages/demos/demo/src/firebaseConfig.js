@@ -3,5 +3,5 @@ export default {
   authDomain: 'cerebral-demo.firebaseapp.com',
   databaseURL: 'https://cerebral-demo.firebaseio.com',
   storageBucket: 'cerebral-demo.appspot.com',
-  messagingSenderId: '403831873900'
+  messagingSenderId: '403831873900',
 }
