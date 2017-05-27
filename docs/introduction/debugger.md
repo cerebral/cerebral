@@ -27,7 +27,7 @@ const controller = Controller({
       Devtools({
         // If running standalone debugger. Some environments
         // might require 127.0.0.1 or computer IP address
-        remoteDebugger: 'localhost:8585',
+        host: 'localhost:8585',
 
         // By default the devtools tries to reconnect
         // to debugger when it can not be reached, but

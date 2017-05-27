@@ -9,7 +9,7 @@ const controller = Controller({
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools({
     // Connect to Electron debugger (external debugger). It will
     // fall back to chrome extension if unable to connect
-    remoteDebugger: 'localhost:8585',
+    host: 'localhost:8585',
 
     // By default the devtools tries to reconnect
     // to debugger when it can not be reached, but

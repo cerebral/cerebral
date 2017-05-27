@@ -19,7 +19,7 @@ import toggleAllChecked from './actions/toggleAllChecked'
 import clearCompletedTodos from './actions/clearCompletedTodos'
 
 const controller = Controller({
-  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
+  devtools: Devtools({ host: 'localhost:8787' }),
   // The router maps urls to signal execution
   router: Router({
     onlyHash: true,
