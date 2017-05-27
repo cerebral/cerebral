@@ -28,7 +28,7 @@ import Devtools from 'cerebral/devtools'
 
 const controller = Controller({
   devtools: Devtools({
-    remoteDebugger: '127.0.0.1:8585'
+    host: '127.0.0.1:8585'
   }),
   state: {
     title: 'Cerebral Tutorial'
