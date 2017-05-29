@@ -10,17 +10,17 @@ import App from './components/App'
 import FormsProvider from '@cerebral/forms'
 
 const controller = Controller({
-  router: Router({
-    routes: {
-      '/': 'app.routed',
-      '/simple': 'simple.routed',
-    },
-    onlyHash: true,
-  }),
-  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
+  devtools: Devtools({ host: 'localhost:8787' }),
   modules: {
     app,
     simple,
+    router: Router({
+      routes: {
+        '/': 'app.routed',
+        '/simple': 'simple.routed',
+      },
+      onlyHash: true,
+    }),
   },
   providers: [FormsProvider()],
 })
