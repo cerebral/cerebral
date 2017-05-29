@@ -20,74 +20,74 @@
   },
   "docs": {
     "introduction": [
-      "../../docs/introduction/what_is_cerebral",
-      "../../docs/introduction/the_architecture",
-      "../../docs/introduction/install",
-      "../../docs/introduction/debugger",
-      "../../docs/introduction/view_type",
-      "../../docs/introduction/state",
-      "../../docs/introduction/connect",
-      "../../docs/introduction/signals",
-      "../../docs/introduction/actions",
-      "../../docs/introduction/operators",
-      "../../docs/introduction/factories",
-      "../../docs/introduction/paths",
-      "../../docs/introduction/compute",
-      "../../docs/introduction/routing",
-      "../../docs/introduction/organize",
-      "../../docs/introduction/providers",
-      "../../docs/introduction/errors",
-      "../../docs/introduction/test",
-      "../../docs/introduction/production",
-      "../../docs/introduction/collaborate"
+      "../../../docs/introduction/what_is_cerebral",
+      "../../../docs/introduction/the_architecture",
+      "../../../docs/introduction/install",
+      "../../../docs/introduction/debugger",
+      "../../../docs/introduction/view_type",
+      "../../../docs/introduction/state",
+      "../../../docs/introduction/connect",
+      "../../../docs/introduction/signals",
+      "../../../docs/introduction/actions",
+      "../../../docs/introduction/operators",
+      "../../../docs/introduction/factories",
+      "../../../docs/introduction/paths",
+      "../../../docs/introduction/compute",
+      "../../../docs/introduction/routing",
+      "../../../docs/introduction/organize",
+      "../../../docs/introduction/providers",
+      "../../../docs/introduction/errors",
+      "../../../docs/introduction/test",
+      "../../../docs/introduction/production",
+      "../../../docs/introduction/collaborate"
     ],
     "api": [
-      "../../docs/api/controller",
-      "../../docs/api/action",
-      "../../docs/api/signal",
-      "../../docs/api/devtools",
-      "../../docs/api/state",
-      "../../docs/api/tags",
-      "../../docs/api/container",
-      "../../docs/api/connect",
-      "../../docs/api/module",
-      "../../docs/api/operators",
-      "../../docs/api/providers",
-      "../../docs/api/compute",
-      "../../docs/api/universalcontroller"
+      "../../../docs/api/controller",
+      "../../../docs/api/action",
+      "../../../docs/api/signal",
+      "../../../docs/api/devtools",
+      "../../../docs/api/state",
+      "../../../docs/api/tags",
+      "../../../docs/api/container",
+      "../../../docs/api/connect",
+      "../../../docs/api/module",
+      "../../../docs/api/operators",
+      "../../../docs/api/providers",
+      "../../../docs/api/compute",
+      "../../../docs/api/universalcontroller"
     ],
     "addons": [{
       "name": "router",
-      "path": "../../packages/router/README"
+      "path": "../../node_modules/@cerebral/router/README"
     }, {
       "name": "http",
-      "path": "../../packages/http/README"
+      "path": "../../node_modules/@cerebral/http/README"
     }, {
       "name": "firebase",
-      "path": "../../packages/firebase/README"
+      "path": "../../node_modules/@cerebral/firebase/README"
     }, {
       "name": "useragent",
-      "path": "../../packages/useragent/README"
+      "path": "../../node_modules/@cerebral/useragent/README"
     }, {
       "name": "forms",
-      "path": "../../packages/forms/README"
+      "path": "../../node_modules/@cerebral/forms/README"
     }, {
       "name": "storage",
-      "path": "../../packages/storage/README"
+      "path": "../../node_modules/@cerebral/storage/README"
     }, {
       "name": "firebase_admin",
-      "path": "../../packages/firebase-admin/README"
+      "path": "../../node_modules/@cerebral/firebase-admin/README"
     }, {
       "name": "function_tree",
-      "path": "../../packages/function-tree/README"
+      "path": "../../node_modules/function-tree/README"
     }],
     "resources": [
-      "../../docs/resources/cerebral_in_detail",
-      "../../docs/resources/boilerplates",
-      "../../docs/resources/migration",
-      "../../docs/resources/articles",
-      "../../docs/resources/videos",
-      "../../docs/resources/projects"
+      "../../../docs/resources/cerebral_in_detail",
+      "../../../docs/resources/boilerplates",
+      "../../../docs/resources/migration",
+      "../../../docs/resources/articles",
+      "../../../docs/resources/videos",
+      "../../../docs/resources/projects"
     ]
   }
 }

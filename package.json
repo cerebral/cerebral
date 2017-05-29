@@ -10,7 +10,7 @@
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "coverage": "node ./scripts/run.js coverage",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
-    "deploy": "cd website/publisher && npm run ci",
+    "deploy": "cd packages/website/publisher && npm run ci",
     "format": "npm run lint -- --fix",
     "link": "node ./scripts/run.js link",
     "lint": "eslint \"**/*.js\"",

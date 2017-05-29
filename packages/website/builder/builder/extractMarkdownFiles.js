@@ -94,9 +94,10 @@ module.exports = function() {
           subContent[key].raw = content
           subContent[
             key
-          ].githubUrl = `https://github.com/cerebral/cerebral/tree/master/${(contentName.path ||
-            contentName)
-            .replace('../../', '')}.md`
+          ].githubUrl = `https://github.com/cerebral/cerebral/tree/master/${(contentName.path || contentName)
+            // TODO: implement correct url generation
+            .replace('../../../', '')
+            .replace('../../', 'packages/')}.md`
 
           return subContent
         }, {})
