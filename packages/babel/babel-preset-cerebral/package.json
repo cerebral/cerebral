@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-cerebral",
-  "version": "1.0.0",
+  "version": "1.0.0-beta.3",
   "description": "Babel plugin that optimize tags into constructor calls",
   "main": "dist/index.js",
   "scripts": {
@@ -14,8 +14,8 @@
   "license": "MIT",
   "repository": "https://github.com/cerebral/cerebral/babel/babel-preset-cerebral",
   "dependencies": {
-    "babel-plugin-cerebral-proxy-tags": "^1.0.1",
-    "babel-plugin-cerebral-optimize-tags": "^1.0.0"
+    "babel-plugin-cerebral-proxy-tags": "^1.0.1-beta.3",
+    "babel-plugin-cerebral-optimize-tags": "^1.0.0-beta.3"
   },
   "files": [
     "dist"
