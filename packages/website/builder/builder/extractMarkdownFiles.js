@@ -1,6 +1,6 @@
 const React = require('react')
 const path = require('path')
-const marksy = require('marksy').marksy
+const marksy = require('marksy/components').marksy
 const { readFile, fileExistsSync } = require('./utils')
 const config = require('../config.json')
 
