@@ -1,12 +1,18 @@
 const glob = require('glob')
-const monorepo = require('../package.json')
 const fs = require('fs')
+const path = require('path')
 const packagesGlob = require('./packagesGlob').all
+const autofix = process.env.CI === true
+  ? false
+  : process.argv[2] === '--auto-fix'
 const dependencyTypes = ['dependencies', 'devDependencies']
 const installCmd = {
   dependencies: 'npm install --save --save-exact',
   devDependencies: 'npm install --save-dev --save-exact',
 }
+
+const monorepoPath = '../package.json'
+const monorepo = require(monorepoPath)
 
 glob(packagesGlob, (er, files) => {
   const packages = files.map(path => JSON.parse(fs.readFileSync(path)))
@@ -24,6 +30,7 @@ glob(packagesGlob, (er, files) => {
   }, {})
 
   let allSuccess = true
+  let noConflict = true
 
   dependencyTypes.forEach(dependencyType => {
     const operations = {}
@@ -66,10 +73,7 @@ glob(packagesGlob, (er, files) => {
 
     const toInstall = Object.keys(operations)
       .filter(k => operations[k].type === 'install')
-      .map(k => {
-        const op = operations[k]
-        return `${op.dependency}@${op.version}`
-      })
+      .map(k => operations[k])
 
     const conflict = Object.keys(operations)
       .filter(k => operations[k].type === 'conflict')
@@ -94,15 +98,41 @@ glob(packagesGlob, (er, files) => {
     }
 
     if (toInstall.length) {
-      console.log('')
-      console.log(`************** ${dependencyType} TO INSTALL **************`)
-      console.log('')
-      console.log(`${installCmd[dependencyType]} ${toInstall.join(' ')}`)
-      console.log('')
+      if (autofix) {
+        const dependencies = monorepo[dependencyType] || {}
+        toInstall.forEach(info => {
+          dependencies[info.dependency] = info.version
+        })
+        monorepo[dependencyType] = dependencies
+        console.log('')
+        console.log(`************** ${dependencyType} UPDATE **************`)
+        console.log('')
+        console.log(toInstall.map(info => `${info.dependency}@${info.version}`))
+      } else {
+        console.log('')
+        console.log(
+          `************** ${dependencyType} TO INSTALL **************`
+        )
+        console.log('')
+        console.log(
+          `${installCmd[dependencyType]} ${toInstall
+            .map(info => `${info.dependency}@${info.version}`)
+            .join(' ')}`
+        )
+        console.log('')
+      }
     }
 
-    allSuccess = allSuccess && success
+    noConflict = noConflict && conflict.length === 0
+    allSuccess = allSuccess && (success || (autofix && noConflict))
   })
 
+  if (autofix && noConflict) {
+    fs.writeFileSync(
+      path.resolve(__dirname, monorepoPath),
+      JSON.stringify(monorepo, null, 2) + '\n',
+      'utf-8'
+    )
+  }
   process.exit(allSuccess ? 0 : -1)
 })
