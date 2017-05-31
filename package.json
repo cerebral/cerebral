@@ -23,6 +23,8 @@
     "test": "node ./scripts/run.js test"
   },
   "dependencies": {
+    "@types/react": "^15.0.25",
+    "@types/react-dom": "^15.5.0",
     "addressbar": "1.0.3",
     "aphrodite": "1.2.0",
     "bulma": "0.2.3",
