@@ -4,9 +4,7 @@ Cerebral has a powerful development tool. It knows about all the state in your a
 
 Because Cerebral can run on different environments and you might want to manage multiple apps, the debugger is a standalone application. This also opens up for further helpful tools beyond just debugging. It is an [Electron](https://electron.atom.io/) application that connects to your application through websockets. You can add multiple apps to it and if you are using function-tree on the server you can even merge execution data on client and the server.
 
-## Download
-**[Download and extract the zip for your target OS](https://github.com/cerebral/cerebral-debugger/releases)** (Mac, Linux and Windows). The debugger will automatically notify you and self-update.
-
+[Download the Debugger](https://github.com/cerebral/cerebral-debugger/releases) for your target OS: Mac, Windows or Linux. The debugger will automatically notify you and self-update.
 
 ## Initialize
 You initialize the devtools by adding it to the controller.
