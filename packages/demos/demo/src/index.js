@@ -33,7 +33,7 @@ const router = Router({
 })
 
 const controller = Controller({
-  devtools: Devtools({ remoteDebugger: 'localhost:8787' }),
+  devtools: Devtools({ host: 'localhost:8787' }),
 
   providers: [FirebaseProvider({ config: firebaseConfig }), FormsProvider()],
 

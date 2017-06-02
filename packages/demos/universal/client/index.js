@@ -8,7 +8,7 @@ import appModule from './modules/app'
 
 const controller = Controller({
   devtools: Devtools({
-    remoteDebugger: 'localhost:8787',
+    host: 'localhost:8787',
   }),
   modules: {
     app: appModule,
