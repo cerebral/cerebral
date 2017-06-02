@@ -18,16 +18,20 @@ const filesToWatch = Object.keys(config.docs).reduce((files, sectionKey) => {
   )
 }, [])
 
+console.log(filesToWatch)
+
 let docs
 let pages
 
 const watcher = chokidar.watch(filesToWatch, {
   persistent: true,
+  useFsEvents: false,
 })
 
 watcher.on('change', updateDocsAndPages)
 
 function updateDocsAndPages() {
+  console.log('Updating docs')
   return Promise.all([extractMarkdownFiles(), extractPages()]).then(function(
     results
   ) {
