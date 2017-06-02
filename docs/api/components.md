@@ -1,12 +1,7 @@
-# Views
-Cerebral supports numerous view layers. They conceptually work the same way, but has different implementation details. Choose the view layer that makes sense to you and your team.
-
-**Cerebrals documentation uses React**
+# Components
 
 ## React
 [Website](https://facebook.github.io/react/)
-
-### install
 
 **NPM**
 
@@ -16,7 +11,6 @@ Cerebral supports numerous view layers. They conceptually work the same way, but
 
 `yarn add react react-dom babel-preset-react`
 
-### instantiate
 ```js
 import React from 'react'
 import {render} from 'react-dom'
@@ -37,37 +31,61 @@ render((
 ), document.querySelector('#app'))
 ```
 
-### connect
 ```js
 import React from 'react'
 import {connect} from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import {state, signal} from 'cerebral/tags'
 
 // Stateless
 export default connect({
-  foo: state`foo`
+  foo: state`foo`,
+  click: signal`clicked`
 },
-  function MyComponent ({foo}) {
-    return <div>{foo}</div>
+  function MyComponent ({foo, click}) {
+    return <div onClick={() => click()}>{foo}</div>
   }
 )
 
 // Stateful
 export default connect({
-  foo: state`foo`
+  foo: state`foo`,
+  click: signal`clicked`
 },
   class MyComponent extends React.Component {
     render () {
-      return <div>{this.props.foo}</div>
+      return <div onClick={() => this.props.click()}>{this.props.foo}</div>
     }
   }
 )
 ```
 
+You can add an additional function to connect that gives you full control of properties of the component and dependencies. The returned object from this function will be the exact props passed into the component.
+
+```js
+import React from 'react'
+import {connect} from 'cerebral/react'
+import {signal, state} from 'cerebral/tags'
+
+export default connect({
+  foo: signal`app.foo`,
+  clicked: signal`app.somethingClicked`
+}, (dependencyProps, ownProps, resolve) => {
+  return {}
+},
+  function App(props) {
+
+  }
+)
+```
+
+**dependencyProps** are the props you connected.
+
+**props** are the props passed into the component by the parent.
+
+**resolve** allows you to resolve computed etc., just like resolve in actions.
+
 ## Inferno
 [Website](http://infernojs.org/)
-
-### install
 
 **NPM**
 
@@ -77,7 +95,6 @@ export default connect({
 
 `yarn add inferno inferno-component inferno-create-element babel-plugin-inferno`
 
-### instantiate
 ```js
 import Inferno from 'react'
 import {Controller} from 'cerebral'
@@ -97,29 +114,30 @@ Inferno.render((
 ), document.querySelector('#app'))
 ```
 
-### connect
 ```js
 import Inferno from 'inferno'
 import Component from 'inferno-component'
 import {connect} from 'cerebral/inferno'
-import {state} from 'cerebral/tags'
+import {state, signal} from 'cerebral/tags'
 
 // Stateless
 export default connect({
-  foo: state`foo`
+  foo: state`foo`,
+  click: signal`clicked`
 },
-  function MyComponent ({foo}) {
-    return <div>{foo}</div>
+  function MyComponent ({foo, click}) {
+    return <div onClick={() => click()}>{foo}</div>
   }
 )
 
 // Stateful
 export default connect({
-  foo: state`foo`
+  foo: state`foo`,
+  click: signal`clicked`
 },
   class MyComponent extends Component {
     render () {
-      return <div>{this.props.foo}</div>
+      return <div onClick={() => this.props.click()}>{this.props.foo}</div>
     }
   }
 )
@@ -127,8 +145,6 @@ export default connect({
 
 ## Preact (BETA)
 [Website](https://github.com/developit/preact)
-
-### install
 
 **NPM**
 
@@ -138,7 +154,6 @@ export default connect({
 
 `yarn add preact babel-plugin-transform-react-jsx`
 
-### instantiate
 ```js
 import {h, render} from 'preact'
 import {Controller} from 'cerebral'
@@ -158,18 +173,18 @@ render((
 ), document.querySelector('#app'))
 ```
 
-### connect
 ```js
 import {h, Component} from 'preact'
 import {connect} from 'cerebral/preact'
-import {state} from 'cerebral/tags'
+import {state, signal} from 'cerebral/tags'
 
 export default connect({
-  foo: state`foo`
+  foo: state`foo`,
+  click: signal`clicked`
 },
   class MyComponent extends Component {
-    render ({foo}) {
-      return <div>{foo}</div>
+    render ({foo, click}) {
+      return <div onClick={() => click()}>{foo}</div>
     }
   }
 )
@@ -177,8 +192,6 @@ export default connect({
 
 ## Angularjs (BETA)
 [Website](https://angularjs.org/)
-
-### install
 
 **NPM**
 
@@ -188,7 +201,6 @@ export default connect({
 
 `yarn add angular`
 
-### instantiate
 ```js
 import angular from 'angular'
 import {addModule} from 'cerebral/angularjs'
@@ -209,16 +221,16 @@ angular.module('app', ['cerebral'])
   })
 ```
 
-### connect
 ```js
 import angular from 'angular'
 import {connect} from 'cerebral/angularjs'
-import {state} from 'cerebral/tags'
+import {state, signal} from 'cerebral/tags'
 
 angular.component('myComponent', {
-  template: '<div>{{foo}}</div>',
+  template: '<div ng-click="click()">{{foo}}</div>',
   controller: connect({
-    foo: state`foo`
+    foo: state`foo`,
+    click: signal`clicked`
   }, function MyController () {
     // Optionally add custom behaviour to controller
   })
@@ -228,8 +240,6 @@ angular.component('myComponent', {
 ## Vue (BETA)
 [Website](https://vuejs.org/)
 
-### install
-
 **NPM**
 
 `npm install vue --save`
@@ -238,7 +248,6 @@ angular.component('myComponent', {
 
 `yarn add vue`
 
-### instantiate
 ```js
 import Vue from 'vue/dist/vue'
 import {Controller} from 'cerebral'
@@ -269,14 +278,51 @@ const controller = Controller({
 </div>
 ```
 
-### connect
 ```js
 import {connect} from 'cerebral/vue'
+import {state, signal} from 'cerebral/tags'
+
+export default connect({
+  foo: state`foo`,
+  click: signal`clicked`
+}, {
+  template: '<div v-on:click="click()">{{foo}}</div>'
+})
+```
+
+## Composing dependencies
+You can compose your dependencies with other tags. Like collect state based on a property passed to the component. Or maybe grab state based on some other state.
+```js
+import React from 'react'
+import {connect} from 'cerebral/react'
+import {state, props} from 'cerebral/tags'
+
+export default connect({
+  isLoading: state`${props`module`}.isLoading`
+},
+  function App(props) {
+    props.isLoading
+  }
+)
+```
+
+## Optimize rendering
+Due to Cerebrals "render on path change" it is possible to optimize component rendering.
+
+```js
+import React from 'react'
+import {connect} from 'cerebral/react'
 import {state} from 'cerebral/tags'
 
 export default connect({
-  foo: state`foo`
-}, {
-  template: '<div>{{foo}}</div>'
-})
+  list: state`app.array.*`,
+  map: state`app.map.*`,
+},
+  function App (props) {
+    props.list // [0, 1, 2, 3]
+    props.map // ['foo', 'bar']
+  }
+)
 ```
+
+This component will only render when any keys are added or removed, meaning that nested change to a child does not cause a new render.
