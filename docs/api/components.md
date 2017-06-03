@@ -67,13 +67,17 @@ import {connect} from 'cerebral/react'
 import {signal, state} from 'cerebral/tags'
 
 export default connect({
-  foo: signal`app.foo`,
+  foo: state`app.foo`,
   clicked: signal`app.somethingClicked`
 }, (dependencyProps, ownProps, resolve) => {
-  return {}
+  const path = resolve.path(state`entities.foo.{ownProps}`) // we can resolve values or path here. Note: it's not tracked as dependency
+  return {
+    foo: `Label: ${foo}`,                                   // values from state could be transformed here
+    onClick: (e) => clicked({ id: ownProps.id })            // signals calls could be bound here, so component uses it as general callback
+  }
 },
-  function App(props) {
-
+  function App({foo, onClick}) {
+    return <div onClick={onClick}>{foo}</div>
   }
 )
 ```
@@ -183,7 +187,7 @@ export default connect({
   click: signal`clicked`
 },
   class MyComponent extends Component {
-    render ({foo, click}) {
+    render ({foo, click}) {
       return <div onClick={() => click()}>{foo}</div>
     }
   }
