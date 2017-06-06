@@ -1,0 +1,128 @@
+{
+  "projectName": "cerebral",
+  "projectOwner": "christianalfoni",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": true,
+  "contributors": [
+    {
+      "login": "christianalfoni",
+      "name": "Christian Alfoni",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/3956929?v=3",
+      "profile": "http://www.christianalfoni.com",
+      "contributions": [
+        "code",
+        "doc",
+        "tutorial",
+        "blog",
+        "tool"
+      ]
+    },
+    {
+      "login": "Guria",
+      "name": "Aleksey Guryanov",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/36270?v=3",
+      "profile": "http://twitter.com/GuriaFS",
+      "contributions": [
+        "code",
+        "infra",
+        "tool"
+      ]
+    },
+    {
+      "login": "henri-hulski",
+      "name": "Henri Hulski",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/7619824?v=3",
+      "profile": "http://openhomeo.info",
+      "contributions": [
+        "code",
+        "infra",
+        "tool"
+      ]
+    },
+    {
+      "login": "gaspard",
+      "name": "Gaspard Bucher",
+      "avatar_url": "https://avatars3.githubusercontent.com/u/21707?v=3",
+      "profile": "http://feature-space.com",
+      "contributions": [
+        "code",
+        "infra",
+        "tool"
+      ]
+    },
+    {
+      "login": "edgesoft",
+      "name": "Mathias Nilsson",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6061720?v=3",
+      "profile": "http://www.edgesoft.se",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "reflog",
+      "name": "Eli Yukelzon",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/109876?v=3",
+      "profile": "https://github.com/reflog",
+      "contributions": [
+        "code",
+        "test",
+        "tutorial"
+      ]
+    },
+    {
+      "login": "yusufsafak",
+      "name": "yusufsafak",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/747214?v=3",
+      "profile": "https://github.com/yusufsafak",
+      "contributions": [
+        "code",
+        "test"
+      ]
+    },
+    {
+      "login": "maxfrigge",
+      "name": "maxfrigge",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/11060313?v=3",
+      "profile": "https://github.com/maxfrigge",
+      "contributions": [
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "fopsdev",
+      "name": "Philipp Knecht",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5448300?v=3",
+      "profile": "http://www.itflies.ch",
+      "contributions": [
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "garth",
+      "name": "Garth Williams",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/4643?v=3",
+      "profile": "http://wi.llia.ms",
+      "contributions": [
+        "code",
+        "doc",
+        "test"
+      ]
+    },
+    {
+      "login": "bdjnk",
+      "name": "Michael Plotke",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/620722?v=3",
+      "profile": "https://github.com/bdjnk",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ]
+}
