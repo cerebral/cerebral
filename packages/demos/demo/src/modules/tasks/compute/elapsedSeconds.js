@@ -1,7 +1,5 @@
 import { compute } from 'cerebral'
-import {
-  elapsedSeconds as computeElapsedSeconds,
-} from '../../../helpers/dateTime'
+import { elapsedSeconds as computeElapsedSeconds } from '../../../helpers/dateTime'
 
 export default function(startedAtTag, endedAtTag) {
   const elapsedSeconds = compute(

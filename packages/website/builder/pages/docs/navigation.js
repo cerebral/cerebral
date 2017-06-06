@@ -7,7 +7,9 @@ function Navigation(props) {
       return (
         <li
           key={index}
-          className={`docs-navigation-item${props.sectionName === sectionKey ? ' active' : ''}`}
+          className={`docs-navigation-item${props.sectionName === sectionKey
+            ? ' active'
+            : ''}`}
         >
           <a href={`/docs/${sectionKey}`}>{sectionKey.replace('_', ' ')}</a>
           <div className="underline" />

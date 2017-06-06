@@ -33,7 +33,7 @@ export default connect(
             <div className="SelectorLeft">
               <div className="menu">
                 <ul className="menu-list">
-                  {LANG_OPTS.map(lang => (
+                  {LANG_OPTS.map(lang =>
                     <li
                       key={lang[0]}
                       onClick={() => onOptionClick({ lang: lang[0] })}
@@ -42,7 +42,7 @@ export default connect(
                         {lang[1]}
                       </a>
                     </li>
-                  ))}
+                  )}
                 </ul>
               </div>
             </div>

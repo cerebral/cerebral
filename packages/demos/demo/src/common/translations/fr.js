@@ -24,8 +24,10 @@ export default {
     },
   },
   loginErrors: {
-    'auth/email-already-in-use': "L'adresse e-mail est déjà utilisée par un autre compte.",
-    'auth/too-many-requests': "Nous avons bloqué toutes les demandes de ce périphérique en raison d'une activité inhabituelle. Réessayez plus tard.",
+    'auth/email-already-in-use':
+      "L'adresse e-mail est déjà utilisée par un autre compte.",
+    'auth/too-many-requests':
+      "Nous avons bloqué toutes les demandes de ce périphérique en raison d'une activité inhabituelle. Réessayez plus tard.",
   },
   // Day of Week
   Dow0: 'Lun',
