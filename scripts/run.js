@@ -7,8 +7,11 @@ const group = process.argv[3] || 'all'
 const packagesGlob = require('./packagesGlob')[group]
 const symlinkDir = require('symlink-dir').default
 const rootBin = path.join(process.cwd(), 'node_modules', '.bin')
-// We have more then 10 execa processes.
-require('events').EventEmitter.defaultMaxListeners = 0
+const runSerial = process.env['TEST_MODE'] === 'serial' && action === 'test'
+if (!runSerial) {
+  // We have more then 10 execa processes.
+  require('events').EventEmitter.defaultMaxListeners = 0
+}
 
 /** List of available commands.
  */
@@ -94,7 +97,7 @@ glob(packagesGlob, (er, files) => {
     })
     .filter(p => p)
 
-  function done(name, err) {
+  function done(name, err, next) {
     results.count += 1
     if (err) {
       results.fail.push(name)
@@ -106,15 +109,31 @@ glob(packagesGlob, (er, files) => {
       logResults(results)
       console.log('')
       process.exit(results.fail.length > 0 ? -1 : 0)
+    } else if (next) {
+      next()
     }
   }
 
-  packages.forEach(actionInfo => {
-    if (!filter(actionInfo)) {
-      results.count += 1
-      results.noAction.push(actionInfo.name)
-    } else {
-      spawnCommand(actionInfo.path, err => done(actionInfo.name, err))
-    }
-  })
+  const actions = packages
+    .filter(actionInfo => {
+      if (!filter(actionInfo)) {
+        results.count += 1
+        results.noAction.push(actionInfo.name)
+        return false
+      } else {
+        return true
+      }
+    })
+    .map(
+      actionInfo =>
+        function(next) {
+          spawnCommand(actionInfo.path, err => done(actionInfo.name, err, next))
+        }
+    )
+
+  if (runSerial) {
+    actions.reduce((prev, fun) => () => fun(prev), () => {})()
+  } else {
+    actions.forEach(fun => fun())
+  }
 })

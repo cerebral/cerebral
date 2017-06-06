@@ -6,6 +6,8 @@ cache:
   - node_modules
 notifications:
   email: false
+env:
+  - TEST_MODE=serial
 script:
   - npm prune
   - npm run lint
