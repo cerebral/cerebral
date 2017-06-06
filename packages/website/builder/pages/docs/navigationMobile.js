@@ -9,7 +9,9 @@ function Navigation(props) {
           return (
             <li
               key={index}
-              className={`docs-navigation-item${props.sectionName === sectionKey ? ' active' : ''} mobile`}
+              className={`docs-navigation-item${props.sectionName === sectionKey
+                ? ' active'
+                : ''} mobile`}
             >
               <a href={`/docs/${sectionKey}`}>{sectionKey.replace('_', ' ')}</a>
               {props.sectionName === sectionKey

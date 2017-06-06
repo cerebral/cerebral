@@ -42,11 +42,11 @@ export default connect(
             </header>
             <div className="card-content">
               <div className="menu">
-                {projectsByClient.map(client => (
+                {projectsByClient.map(client =>
                   <div key={client.name}>
                     <p className="menu-label">{client.name}</p>
                     <ul className="menu-list">
-                      {client.projects.map(project => (
+                      {client.projects.map(project =>
                         <li
                           key={project.key}
                           onClick={() =>
@@ -57,15 +57,17 @@ export default connect(
                         >
                           &nbsp;&nbsp;
                           <span
-                            className={`tag ${project.key === selectedProject ? 'is-primary' : ''}`}
+                            className={`tag ${project.key === selectedProject
+                              ? 'is-primary'
+                              : ''}`}
                           >
                             {project.name}
                           </span>
                         </li>
-                      ))}
+                      )}
                     </ul>
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>

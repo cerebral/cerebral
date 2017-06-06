@@ -14,9 +14,8 @@
           subSectionKey
         ) {
           const regexp = new RegExp(value, 'g')
-          const matches = (text[sectionKey][subSectionKey].raw.match(
-            regexp
-          ) || []).length
+          const matches = (text[sectionKey][subSectionKey].raw.match(regexp) ||
+            []).length
 
           if (matches) {
             return subSectionResults.concat({

@@ -30,14 +30,16 @@ export default connect(
     return (
       <div className="column is-2">
         <aside className="menu">
-          {MENUS.map(menu => (
+          {MENUS.map(menu =>
             <div key={menu.name}>
               <p className="menu-label">{t[menu.name]}</p>
               <ul className="menu-list">
-                {menu.entries.map(entry => (
+                {menu.entries.map(entry =>
                   <li key={entry.name}>
                     <a
-                      className={`${selectedView === entry.name ? 'is-active' : ''}`}
+                      className={`${selectedView === entry.name
+                        ? 'is-active'
+                        : ''}`}
                       href={`${entry.url}`}
                     >
                       <span className="icon is-small">
@@ -46,10 +48,10 @@ export default connect(
                       &nbsp;{t[entry.name]}
                     </a>
                   </li>
-                ))}
+                )}
               </ul>
             </div>
-          ))}
+          )}
         </aside>
       </div>
     )

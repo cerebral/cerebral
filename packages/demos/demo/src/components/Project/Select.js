@@ -38,11 +38,11 @@ export default connect(
         value={value || ''}
         name={field}
       >
-        {clientsList.map(c => (
+        {clientsList.map(c =>
           <option key={c.key} value={c.key}>
             {c.name}
           </option>
-        ))}
+        )}
       </select>
     )
   }

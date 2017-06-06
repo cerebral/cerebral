@@ -24,8 +24,10 @@ export default {
     },
   },
   loginErrors: {
-    'auth/email-already-in-use': 'The email address is already in use by another account.',
-    'auth/too-many-requests': 'We have blocked all requests from this device due to unusual activity. Try again later.',
+    'auth/email-already-in-use':
+      'The email address is already in use by another account.',
+    'auth/too-many-requests':
+      'We have blocked all requests from this device due to unusual activity. Try again later.',
   },
   // Day of Week
   Dow0: 'Mon',

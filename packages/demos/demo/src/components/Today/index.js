@@ -13,7 +13,7 @@ export default connect(
   function Tasks({ projects, tasksByDay }) {
     return (
       <div className="section">
-        {tasksByDay.map(day => (
+        {tasksByDay.map(day =>
           <table key={day.dayDate} className="table" style={{ width: '100%' }}>
             <thead>
               <tr>
@@ -26,7 +26,7 @@ export default connect(
               </tr>
             </thead>
             <tbody>
-              {day.tasks.map(task => (
+              {day.tasks.map(task =>
                 <tr key={task.key}>
                   <td style={{ width: 60 }}>
                     {displayTime(task.startedAt)}
@@ -43,10 +43,10 @@ export default connect(
                     {displayElapsed(task.elapsed)}
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
-        ))}
+        )}
       </div>
     )
   }

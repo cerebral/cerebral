@@ -25,7 +25,8 @@ export default {
   },
   loginErrors: {
     'auth/email-already-in-use': 'Epostadressen används redan',
-    'auth/too-many-requests': 'Vi har blockat alla förfrågningar på grund av felaktig aktivitet. Försök igen senare.',
+    'auth/too-many-requests':
+      'Vi har blockat alla förfrågningar på grund av felaktig aktivitet. Försök igen senare.',
   },
   // Day of Week
   Dow0: 'Mån',
@@ -69,7 +70,8 @@ export default {
   Review: 'Granska',
   Save: 'Spara',
   // Client
-  UnsavedClientChanges: 'Du har inte sparat alla ändringar för klienten. Vill du spara dem ?',
+  UnsavedClientChanges:
+    'Du har inte sparat alla ändringar för klienten. Vill du spara dem ?',
   CompanyName: 'Kundnamn',
   ImageUrl: '64x64 bild url',
   Telephone: 'Telefon',

@@ -1,5 +1,4 @@
-import createUserWithEmailAndPassword
-  from '../actions/createUserWithEmailAndPassword'
+import createUserWithEmailAndPassword from '../actions/createUserWithEmailAndPassword'
 import initNewUser from './initNewUser'
 import { isValidForm } from '@cerebral/forms/operators'
 import { state } from 'cerebral/tags'

@@ -26,8 +26,10 @@ export default connect(
       <div>
         <span style={{ fontSize: 24, fontWeight: 400 }}>Simple Example</span>
         <div style={{ marginTop: 5, paddingTop: 20, fontSize: 13 }}>
-          This is a simple example with three fields where firstname and lastname is required. Email is not required but if
-          you fill in a value it must be validated as an email. The form result will be showed in the panel at the bottom.
+          This is a simple example with three fields where firstname and
+          lastname is required. Email is not required but if
+          you fill in a value it must be validated as an email. The form result
+          will be showed in the panel at the bottom.
         </div>
         <div style={{ marginTop: 40 }}>
           {Object.keys(form.getFields()).map((field, index) => {

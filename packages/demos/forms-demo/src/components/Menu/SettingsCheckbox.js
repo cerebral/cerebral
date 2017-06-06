@@ -19,7 +19,9 @@ export default connect(
               field: path,
               value: !value,
             })}
-        /> {field.description}
+        />
+        {' '}
+        {field.description}
       </div>
     )
   }
