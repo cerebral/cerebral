@@ -22,7 +22,7 @@ export default connect(
           </strong>
         </span>
         <ul className="filters">
-          {filters.map(filterName => (
+          {filters.map(filterName =>
             <li key={filterName}>
               <a
                 onClick={() =>
@@ -34,7 +34,7 @@ export default connect(
                 {filterName}
               </a>
             </li>
-          ))}
+          )}
         </ul>
         {!!counts.completed &&
           <button

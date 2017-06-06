@@ -47,11 +47,11 @@ export default connect(
           </div>
         </div>
         <div className="columns is-multiline">
-          {visibleKeys.map(key => (
+          {visibleKeys.map(key =>
             <div key={key} className="column">
               <Project itemKey={key} isSelected={key === selectedKey} />
             </div>
-          ))}
+          )}
         </div>
       </div>
     )
