@@ -23,7 +23,8 @@
     "test": "node ./scripts/run.js test"
   },
   "dependencies": {
-    "@types/react": "^15.0.25",
+    "@types/eventemitter3": "^1.2.0",
+    "@types/react": "^15.0.27",
     "@types/react-dom": "^15.5.0",
     "addressbar": "1.0.3",
     "aphrodite": "1.2.0",
