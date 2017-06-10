@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build:demos": "node ./scripts/run.js prepublish demos",
-    "checkdeps": "node ./scripts/dependencies.test.js",
+    "checkdeps": "node ./scripts/check.dependencies.js --auto-fix",
     "commit": "git-cz",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "coverage": "node ./scripts/run.js coverage",
