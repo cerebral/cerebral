@@ -71,7 +71,7 @@ export default connect({
 )
 ```
 
-To get more in-depth information about `connect` function, please visit the [API chapter](http://cerebraljs.com/docs/api/connect.html).
+To get more in-depth information about `connect` function, please visit the [API chapter](http://cerebraljs.com/docs/api/components.html).
 
 ## Tutorial
 
