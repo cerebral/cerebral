@@ -235,9 +235,15 @@ angular.component('myComponent', {
   controller: connect({
     foo: state`foo`,
     click: signal`clicked`
-  }, 'myComponent', function MyController () {
+  }, 'MyComponent', ['cerebral', function MyController (cerebral) {
+
+    // In some cases you might need access to cerebral's controller.
+    // You can inject the cerebral angular service and
+    // access it's controller property anywhere in your app
+    cerebral.controller.getSignal('mySignal')()
+
     // Optionally add custom behaviour to controller
-  })
+  }])
 })
 ```
 Since angular doesn't expose the component name,
