@@ -23,9 +23,6 @@
     "test": "node ./scripts/run.js test"
   },
   "dependencies": {
-    "@types/eventemitter3": "^1.2.0",
-    "@types/react": "^15.0.27",
-    "@types/react-dom": "^15.5.0",
     "addressbar": "1.0.3",
     "aphrodite": "1.2.0",
     "bulma": "0.2.3",
@@ -67,6 +64,9 @@
     }
   },
   "devDependencies": {
+    "@types/eventemitter3": "^1.2.0",
+    "@types/react": "^15.0.27",
+    "@types/react-dom": "^15.5.0",
     "babel-cli": "6.24.1",
     "babel-core": "^6.24.1",
     "babel-jest": "^20.0.3",
