@@ -235,11 +235,23 @@ angular.component('myComponent', {
   controller: connect({
     foo: state`foo`,
     click: signal`clicked`
-  }, function MyController () {
+  }, 'myComponent', function MyController () {
     // Optionally add custom behaviour to controller
   })
 })
 ```
+Since angular doesn't expose the component name,
+you will need to provide one to `connect` for the
+component to be given a name in cerebral.
+
+You can call connect in the following ways:
+```
+connect(dependencies)
+connect(dependencies, name)
+connect(dependencies, controller)
+connect(dependencies, name, controller)
+```
+
 
 ## Vue (BETA)
 [Website](https://vuejs.org/)
