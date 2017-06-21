@@ -26,6 +26,10 @@ const controller = Controller({
     // state dependencies or signals above the set number  
     bigComponentsWarning: 5,
 
+    // Warnings when passing objects and arrays as props to child
+    // components. They should rather be connected directly
+    warnStateProps: true,
+
     // In addition to these basic JavaScript types: Object, Array, String, Number
     // and Boolean, types of File, FileList, Blob, ImageData and RegExp is allowed to be stored in state
     // tree. You can add additional types if you know what you are doing :)
