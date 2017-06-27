@@ -45,14 +45,14 @@ The signals tab in the debugger gives you a chronological list of signals trigge
 ## Mutations
 The mutations tab gives you a chronological list of mutations performed. Since signals can be asynchronous, mutations might happen cross signals. In this list you can double click a mutation to time travel to that point in time.
 
-![signals](/images/mutations.png)
+![mutations](/images/mutations.png)
 
 ## Components
 The components tab gives you a list of all currently connected components in your app and what state dependencies they have. You also have a list of latest renders. This list contains what paths changed and what components was affected by the change.
 
-![signals](/images/components.png)
+![components](/images/components.png)
 
 ## State tree
 The state tree tab gives you complete overview of the state of your application. You can explore it and make changes to the state directly to see how it affects your application.
 
-![signals](/images/state_tree.png)
+![state tree](/images/state_tree.png)
