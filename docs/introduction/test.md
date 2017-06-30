@@ -116,26 +116,16 @@ it('should increment numbers in state', () => {
 
 ## Signals
 
-### runSignal
-
-The `runSignal` test helper accepts the `signal` (chain of actions or signal name) and `fixture` arguments and returns a promise. `runSignal` is designed to be called one time, to test calling multiple signals in a single test see the `RunSignal` factory below.
+The `CerebralTest` factory returns runSignal, setState and getState functions.
 
 ```js
-runSignal(signal, fixture, options).then((result) => {})
+const cerebral = CerebralTest(fixture, options)
+cerebral.setState(path, value)
+cerebral.runSignal(signal, props).then((result) => {})
+const value = cerebral.getState(path)
 ```
 
-The optional `fixture` argument should be an object that contains any of the following:
-
-```js
-{
-  state: {}, // test state
-  props: {}, // props passed to the signal
-  // any other options that can be passed to the
-  // cerebral controller, including signals, modules, router, providers...
-}
-```
-
-If the `signal` argument is passed as a string, then the signal must be defined within the fixtures.
+The `fixture` argument will be passed to the cerebral controller so can contain the same properties (state, signals, modules, etc...).
 
 The optional `options` argument contain the the following options:
 
@@ -145,63 +135,7 @@ When `recordActions: true` is specified each action will record its props/output
 
 The `result` object passed when the promise resolves contains `state`, `controller` and an object for each named action in the signal chain with the same name as the actions with `props` and `output` properties.
 
-```
-{
-  state,
-  controller,
-  '2': {
-    props: {
-      // props data
-    },
-    output: {
-      // action output data
-    }
-  },
-  '1': {
-    props: {
-      // props data
-    },
-    output: {
-      // action output data
-    }
-  }
-}
-```
-
-#### Example
-
-```js
-import {runSignal} from 'cerebral/test'
-
-// the buttonClicked signal has two actions: validateForm and updateIsValid
-import buttonClicked from './buttonClick'
-
-it('should handle button clicks', () => {
-  const fixture = {
-    state: { isValid: false },
-    props: { buttonName: 'submit' }
-  }
-  return runSignal(buttonClicked, fixture, {recordActions: 'byName'})
-    .then(({validateForm, updateIsValid, state}) => {
-      assert.equal(validateForm.props.buttonName, 'submit')
-      assert.equal(updateIsValid.props.isValid, true)
-      assert.equal(state.isValid, true)
-    })
-})
-```
-
-### CerebralTest factory
-
-The `CerebralTest` factory returns runSignal, setState and getState functions that can be called many times without resetting the controller in between.
-
-```js
-const cerebral = CerebralTest(fixture, options)
-cerebral.setState(path, value)
-cerebral.runSignal(signal, props).then((result) => {})
-const value = cerebral.getState(path)
-```
-
-#### Example
+### Example
 
 ```js
 import {CerebralTest} from 'cerebral/test'
@@ -215,7 +149,7 @@ it('should accumulate a count', () => {
   cerebral.setState('math.count', 0)
   return cerebral.runSignal('math.plusOne').then(({state}) => {
     assert.equal(state.math.count, 1)
-    return cerebral.runSignal('math.plusTwo').then(() => {
+    return cerebral.runSignal('math.plus', {value: 2}).then(() => {
       assert.equal(cerebral.getState('math.count'), 3)
     })
   })
