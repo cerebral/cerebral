@@ -1,6 +1,8 @@
 # Module
 
-A module is basically an object. Modules helps you structure your state and signals. You can think of them as namespaces for state and signals.
+Modules help you structure your state and signals into logical units. You can think of them as namespaces for state and signals.
+
+# Module object
 
 ```js
 export default {
@@ -15,6 +17,20 @@ export default {
 }
 ```
 
+You attach a module simply by referencing it:
+
+```js
+import {Controller} from 'cerebral'
+import FeedModule from './modules/Feed'
+
+const controller = Controller({
+  modules: {
+    feed: FeedModule
+  }
+})
+```
+
+# Module function
 It is also possible to define a module using a function.
 
 ```js
@@ -32,15 +48,30 @@ export default (module) => {
 }
 ```
 
-You attach a module simply by referencing it:
+
+# Module factory
+With the use of a factory it is possible to make reusable modules.
+
+```js
+export default (options) => (module) => {
+  return {
+    state: {
+      location: options.of
+    }
+  }
+}
+```
+
+You then configure the module when you attach it:
 
 ```js
 import {Controller} from 'cerebral'
-import FeedModule from './modules/Feed'
+import Map from './modules/Map'
 
 const controller = Controller({
   modules: {
-    feed: FeedModule
+    map1: Mop({of: 'Europe'}),
+    map2: Mop({of: 'Africa'})
   }
 })
 ```
