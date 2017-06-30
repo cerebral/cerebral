@@ -28,7 +28,7 @@ const Controller({
 })
 ```
 
-Or you define them with modules:
+Or you can attach them to modules:
 
 ```js
 import somethingHappened from './signals/somethingHappened'
