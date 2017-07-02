@@ -20,8 +20,7 @@ const controller = UniversalController({
 ```
 
 ## Methods
-### run and runSequence
-#### run
+### runSequence
 If you need to update the state of the controller you can run a signal execution for doing so:
 
 ```js
@@ -34,7 +33,7 @@ const controller = UniversalController({
   }
 })
 
-controller.run([
+controller.runSequence([
   function myAction ({state, props}) {
     state.set('app.isAwesome', props.isAwesome)
   }
@@ -46,19 +45,30 @@ controller.run([
   })
 ```
 
-#### runSequence
 You can run a predefined signal, which is defined inside a controller module as well:
 ```js
-...
-const aModuleSignal = controller.module.signals.awesomeSignal.signal
+const controller = new UniversalController({
+  modules: {
+    app: {
+      ...,
+      signals: {
+        aSignal: [
+          function myAction ({state, props}) {
+            state.set('app.isAwesome', props.isAwesome)
+          }
+        ],
+      },
+    },
+  },
+})
+
 controller
-  .runSequence(aModuleSignal, {isAwesome: true})
+  .runSequence('app.aSignal', {isAwesome: true})
   .then(() => {
     // I am done running
   })
 ```
 
-#### Notes
 You can add any providers to the controller to do database fetching etc. inside this **run** execution. Think of it as a signal the updates the state of the app before rendering it on the server.
 
 **NOTE!** You should instantiate the controller for each run you want to do.
