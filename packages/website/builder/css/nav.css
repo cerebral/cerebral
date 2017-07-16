@@ -33,8 +33,9 @@
   box-sizing: border-box;
 }
 #nav_mobile-title {
-  overflow: scroll;
+  overflow: hidden;
   white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 /* === navigation === */
