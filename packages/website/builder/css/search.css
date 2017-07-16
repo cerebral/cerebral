@@ -1,0 +1,36 @@
+
+#nav_search {
+  padding: 5px;
+  flex: 1;
+}
+#nav_search > input {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  color: gray;
+  text-indent: 5px;
+  font-size: 14px;
+}
+
+#search-result {
+  position: absolute;
+  z-index: 4;
+  background-color: white;
+  border: 1px solid lightgray;
+  border-radius: 3px;
+  top: 50px;
+  box-shadow: 1px 1px 3px 0 lightgray;
+}
+
+.docs-search-result-item {
+  display: block;
+  padding: 0 10px;
+  padding: 5px 10px;
+}
+
+.docs-search-result-item span {
+  color: #333;
+  font-size: 14px;
+}
