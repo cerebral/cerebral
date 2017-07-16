@@ -1,22 +1,17 @@
 ;(function() {
   window.addEventListener('click', function(event) {
-    document.querySelector('.docs-navigation-float.mobile').style.display =
-      'none'
+    document.getElementById('nav').classList.remove('show')
+  })
+  document.getElementById('nav').addEventListener('click', function(event) {
+    event.stopPropagation()
   })
   document
-    .querySelector('.docs-navigation-float.mobile')
+    .getElementById('hamburger')
     .addEventListener('click', function(event) {
       event.stopPropagation()
-    })
-  document
-    .querySelector('#hamburger')
-    .addEventListener('click', function(event) {
-      event.stopPropagation()
-      document.querySelector('.docs-navigation-float.mobile').style.display =
-        'block'
+      document.getElementById('nav').classList.toggle('show')
     })
   window.onhashchange = function() {
-    document.querySelector('.docs-navigation-float.mobile').style.display =
-      'none'
+    document.getElementById('nav').classList.remove('show')
   }
 })()
