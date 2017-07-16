@@ -4,13 +4,14 @@ import Doc from './doc'
 
 function Docs(props) {
   const doc = props.docs[props.sectionName][props.docName]
+  const title = `${props.sectionName} ▸ ${doc.toc[0].title}`
 
   return (
     <div id="docs-container">
       <div id="nav_mobile-header">
         <div id="hamburger" />
-        <div id="nav_mobile-title">
-          {`${props.sectionName} ▸ ${doc.toc[0].title}`}
+        <div id="nav_mobile-title" title={title}>
+          {title}
         </div>
       </div>
       <Nav
