@@ -94,10 +94,6 @@
   font-size: 0.9em;
 }
 
-#nav li {
-  padding: 0.1em 0;
-}
-
 #nav > ul a {
   display: inline-block;
   width: 100%;
@@ -110,7 +106,7 @@
   position: relative;
   z-index: 1;
   border-radius: 10em;
-  line-height: 22px;
+  line-height: 25px;
 }
 .nav_link.nav_open > a {
   font-weight: bold;
@@ -125,8 +121,8 @@
   opacity: 0;
   z-index: 3;
   cursor: pointer;
-  width: 22px;
-  height: 22px;
+  width: 25px;
+  height: 25px;
   margin: 0;
   border: none !important;
 }
@@ -143,8 +139,8 @@
   z-index: 2;
   cursor: pointer;
   border-radius: 10em;
-  width: 22px;
-  height: 22px;
+  width: 25px;
+  height: 25px;
 }
 .nav_toggle + .nav_toggle-label::before {
   content: '+';
