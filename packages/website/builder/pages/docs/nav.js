@@ -121,6 +121,21 @@ function Navigation(props) {
     )
   }
 
+  function Footer() {
+    return (
+      <div id="nav_footer">
+        <div id="nav_flag">beta</div>
+        <a
+          id="nav_old-site"
+          target="_new"
+          href="http://cerebral-website.herokuapp.com/"
+        >
+          old website
+        </a>
+      </div>
+    )
+  }
+
   return (
     <div id="nav">
       <Header />
@@ -129,6 +144,7 @@ function Navigation(props) {
         docName={props.docName}
         sectionName={props.sectionName}
       />
+      <Footer />
     </div>
   )
 }
