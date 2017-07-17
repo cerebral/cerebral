@@ -38,6 +38,31 @@
   text-overflow: ellipsis;
 }
 
+#nav_footer {
+  padding-top: 5px;
+  flex: 0 0 25px;
+  overflow: hidden;
+}
+#nav_flag {
+  display: inline-block;
+  position: relative;
+	bottom: -3px;
+	left: 0px;
+  width: 48px;
+  height: 23px;
+  margin: 0 10px;
+	line-height: 23px;
+  text-align: center;
+  background: #DD4A68;
+	border: 1px solid white;
+	outline: 2px solid #DD4A68;
+  color: white;
+}
+#nav_old-site {
+  color: #DD4A68;
+  font-size: smaller;
+}
+
 /* === navigation === */
 
 #nav {
@@ -79,6 +104,7 @@
   margin: 0;
   padding-left: 20px;
   display: none;
+  flex: 1 0;
 }
 #nav > ul {
   padding: 10px 20px 10px 2px;
