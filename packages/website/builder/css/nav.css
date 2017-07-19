@@ -56,7 +56,6 @@
   padding: 1px;
   border: 2px solid #DD4A68;
   color: white;
-  border-bottom: initial;
   background-clip: content-box;
 }
 #nav_old-site {
@@ -181,11 +180,8 @@
   box-shadow: inset 1px 1px 1px 0 lightgray;
 }
 
-#nav .nav_toggle:checked ~ ul:first-of-type ul {
-  display: none;
-}
 #nav .nav_toggle:checked ~ ul:first-of-type {
-  display: block !important;
+  display: block;
 }
 
 /* === buttons === */
