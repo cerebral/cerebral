@@ -16,7 +16,7 @@
       "prism"
     ],
     "index": ["index"],
-    "docs": ["docs"]
+    "docs": ["docs", "nav", "search"]
   },
   "docs": {
     "introduction": [
