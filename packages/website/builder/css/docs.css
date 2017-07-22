@@ -22,25 +22,6 @@ blockquote {
   height: 100%;
 }
 
-#docs-container pre {
-  display: flex;
-  padding: 0;
-  background: white;
-}
-#docs-container pre > code {
-  display: block;
-  flex: 1;
-  max-width: 700px; /* 70 chars */
-  padding: 10px 15px;
-  margin: 20px auto 40px;
-  border-radius: 3px;
-  background-color: #fafafa;
-  color: #333;
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 24px;
-}
-
 .docs-doc {
   overflow: auto;
   flex: 4;
@@ -51,8 +32,7 @@ blockquote {
   max-width: 800px;
   min-height: calc(100vh - 210px);
   padding-bottom: 60px;
-  padding-left: 20px;
-  margin-right: 40px;
+  margin: auto;
 }
 .docs-doc-content li {
   margin-top: 10px;
@@ -61,7 +41,7 @@ blockquote {
 .docs-doc-edit {
   position: absolute;
   right: 0;
-  top: 60px;
+  top: 30px;
 }
 
 @media (max-width: 850px) {

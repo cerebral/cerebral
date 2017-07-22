@@ -9,6 +9,7 @@ const indexHtml = fs
   .readFileSync(path.resolve('index.template.html'))
   .toString()
 const config = require('../config.json')
+const compile = require('./compile')
 
 module.exports = function({ pageName, Page, docs, sectionName, docName }) {
   return Promise.all([renderScripts(pageName), renderCss(pageName)])
@@ -24,6 +25,7 @@ module.exports = function({ pageName, Page, docs, sectionName, docName }) {
             sectionName={sectionName}
             docName={docName}
             docs={docs}
+            compile={compile}
           />
         ),
         css,

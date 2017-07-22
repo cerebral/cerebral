@@ -70,9 +70,9 @@ function Navigation(props) {
                 defaultChecked={open}
               />
               <span className="nav_toggle-label" />
-              <div className={`nav_link ${open ? 'nav_open' : ''}`}>
+              <div className={`nav_link nav_main ${open ? 'nav_open' : ''}`}>
                 <a href={`/docs/${sectionKey}`}>
-                  {sectionKey.replace('_', ' ').toUpperCase()}
+                  {sectionKey.replace('_', ' ')}
                 </a>
               </div>
               <Pages
@@ -100,6 +100,7 @@ function Navigation(props) {
   function Header() {
     return (
       <div id="nav_header">
+        <Search />
         <a
           href="https://github.com/cerebral/cerebral"
           className="nav_button"
@@ -116,22 +117,7 @@ function Navigation(props) {
         >
           <div className="nav_button-discord" />
         </a>
-        <Search />
-      </div>
-    )
-  }
-
-  function Footer() {
-    return (
-      <div id="nav_footer">
         <div id="nav_flag">beta</div>
-        <a
-          id="nav_old-site"
-          target="_new"
-          href="http://cerebral-website.herokuapp.com/"
-        >
-          old website
-        </a>
       </div>
     )
   }
@@ -144,7 +130,6 @@ function Navigation(props) {
         docName={props.docName}
         sectionName={props.sectionName}
       />
-      <Footer />
     </div>
   )
 }

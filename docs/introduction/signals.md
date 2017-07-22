@@ -1,40 +1,194 @@
 # Signals
 
-You trigger a signal when something happens in your application. For example a button is clicked, but also if a websocket connection receives a message. The signal runs the business logic of your application. You compose together state changes, side effects and other logic in one coherent flow. The signals of Cerebral are named in past tense. So typically you would name a signal **inputChanged** or **mounted**. Going through this guide you will see what benefits this approach gives you. To trigger a signal you call it just like you would call a function, the difference is that you start a function-tree execution.
+You trigger a signal when something happens in your application. For example a button is clicked, but also if a websocket connection receives a message. The signal runs the business logic of your application. You compose together state changes, side effects and other logic in one coherent flow.
+
+This is an example of a signal added to the root of the controller:
+
+```js
+import {Controller} from 'controller'
+import someAction from './actions/someAction'
+
+const controller = Controller({
+  signals: {
+    somethingHappened: [
+      someAction
+    ]
+  }
+})
+
+// Typically you do not extract signals directly like
+// this, but it shows you that a signal is just a function
+// you call
+const signal = controller.getSignal('somethingHappened')
+signal()
+```
+
+You will learn later how you can use **modules** to encapsulate signals with state.
 
 Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the functions in this tree **actions**.
 
-You can define this execution tree with a single action:
+## Operators
+
+Although you will need to create actions in your application, most of your logic can be expressed using what we call operators. Instead of referencing a function to run, you rather call a function that returns a function. This is what we generally in programming call function factories and you will use them a lot. The included function factories in Cerebral are called **operators**. They typically make state changes, but can also control execution flow and even time.
+
+The most common operators you will use changes the state of your application.
 
 ```js
-function myAction () {}
-
-export default myAction
-```
-
-Or you can group them together in a *sequence* using an array:
-
-```js
-function actionA () {}
-function actionB () {}
+import {set} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
 
 export default [
-  actionA,
-  actionB
+  set(state`foo`, 'bar')
 ]
 ```
 
-In a sequence Cerebral runs one action after the other synchronously. When an action returns a promise it will hold until the promise resolves and then continue the sequence.
+With the help of [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals) we are able to express that we want to set the state path **foo** to have the value **"bar"**.
+
+And this is how you go about using operators:
+
+```js
+import {merge, push, pop} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
+
+export default [
+  merge(state`some.object`, {foo: 'bar'}),
+  push(state`some.list`, 'foo'),
+  pop(state`some.otherList`)
+]
+```
+
+[Open this BIN](https://www.webpackbin.com/bins/-KpZAMSt49LlQHNhguls) to play around with some operators. Please feel free to use the same bin to test out the concepts reading on.
+
+## Paths
+It is possible to diverge execution down specific paths. For example some included operators requires you to define paths:
+
+```js
+import {when, equals} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
+
+export default [
+  when(state`app.isAwesome`), {
+    true: [],
+    false: []
+  },
+  equals(state`user.role`), {
+    admin: [],
+    user: [],
+    otherwise: []
+  }
+]
+```
+
+When you build custom actions you can also define your own paths of execution.
+
+## Props
+
+When a signal is executed props can be passed into it. That means every action in the defined signal has access to these props. For example we trigger a signal:
+
+```js
+someSignal({
+  foo: 'bar'
+})
+```
+
+Now the whole flow of execution has access to **props.foo**. With operators and also inside your custom actions you have access to these props.
+
+```js
+import {set} from 'cerebral/operators'
+import {state, props} from 'cerebral/tags'
+
+export default [
+  set(state`foo`, props`foo`)
+]
+```
+
+## Actions
+
+An action is just a function. What makes an action different from a normal function though is that it receives only one argument, created by Cerebral. It is called the **context**. Actions are "low level" and imperative. There is no declarative code without some imperative code behind it. In Cerebral most of the imperative action code is already written for you, but sometimes you need to write custom logic. That is when you write your own action.
+
+```js
+function iAmAnAction (context) {
+
+}
+```
+
+Whatever side effect you need to run, even a state change, you do it from the context. It means you do not need any API to define an action or import any other modules to define business logic. This makes actions highly testable and easy to write.
+
+Here is an example of an action changing the state of the application:
+
+```js
+function iAmAnAction ({state}) {
+  state.set('foo', 'bar')
+}
+```
+
+Or using props:
+
+```js
+function iAmAnAction ({state, props}) {
+  state.set('foo', props.foo)
+}
+```
+
+### Update props
+You update the props on the signal by returning an object from the action. This object will be merged with existing props.
+
+```js
+function iAmAnAction () {
+  return {
+    newProp: 'someValue'
+  }
+}
+```
+
+### Async
+When actions return a promise the signal will hold execution until it is resolved. any resolved values will be merged in with props.
+
+```js
+function iAmAnAction () {
+  return new Promise((resolve) => {
+    resolve({
+      newProp: 'someValue'
+    })
+  })
+}
+```
+
+### Paths
+If an action is defined with paths in a signal, these paths will be available in the action.
+
+```js
+[
+  isAwesome, {
+    true: [],
+    false: []
+  }
+]
+```
+
+Since this action is followed by a paths definition, you have access to these paths inside the **isAwesome** action.
+
+```js
+function isAwesome ({state, path}) {
+  if (state.get('isAwesome')) {
+    return path.true()
+  }
+
+  return path.false()
+}
+```
+
+You now call the path as defined, and you can optionally pass it an object which will be merged with the current props. Make sure you **return** the path from the action!
 
 ## Parallel execution
-You can also run these actions in parallel. You do that by using the **parallel** function:
+You can run actions in parallel. You do that by using the **parallel** function:
 
 ```js
 import {parallel} from 'cerebral'
 
-function actionA () {}
-function actionB () {}
-function actionC () {}
+function actionA () {...}
+function actionB () {...}
+function actionC () {...}
 
 export default [
   parallel([
@@ -45,7 +199,7 @@ export default [
 ]
 ```
 
-If actionA returns a promise actionB will still be run instantly, meaning that they run in parallel. When both actionA and actionB is done, actionC is run.
+If *actionA* returns a promise *actionB* will still be run instantly, meaning that they run in parallel. When both *actionA* and *actionB* is done, *actionC* is run.
 
 ## Composing
 Actions and a sequence of actions can be composed into other sequences of actions. This is a powerful concept that allows you to decouple a lot of your logic and compose it together wherever it is needed:
@@ -58,140 +212,24 @@ function actionB () {}
 
 export default [
   actionA,
-  otherActions,
+  otherActions, // [actionC, actionD, actionE]
   actionB
 ]
 ```
 
 Cerebral will now run this as one signal, first running *actionA*, then whatever is expressed in *otherActions* and then run *actionB* last. The debugger will even show otherActions as its own sequence of actions, meaning that composition is visualized in the debugger. If you want you could even name this otherActions sequence, giving even more debugging information.
 
-## Running a signal
-To run a signal you can grab it from the controller:
-
+*otherActions.js*
 ```js
-import {Controller} from 'controller'
-import someActions from './actions/someActions'
+import {sequence} from 'cerebral'
 
-const controller = Controller({
-  signals: {
-    somethingHappened: someActions
-  }
-})
+function actionC () {}
+function actionD () {}
+function actionE () {}
 
-const signal = controller.getSignal('somethingHappened')
-signal()
+export default sequence('otherActions', [
+  actionC,
+  actionD,
+  actionE
+])
 ```
-
-This signal triggers synchronously and you can pass it a payload.
-
-```js
-// ...
-signal({
-  foo: 'bar'
-})
-```
-
-This payload is brought into the signal execution and acts as the **props** of the signal. Typically you will not trigger signals manually this way, but rather from within a component.
-
-```js
-// ...
-import {signal} from 'cerebral/tags'
-
-connect({
-  somethingHappened: signal`app.somethingHappened`
-},
-  function MyComponent (props) {
-    return <button onClick={() => props.somethingHappened()}>Click me</button>
-  }
-)
-```
-
-The payload passed to a signal is typically the core value types of JavaScript. Object, Array, String, Number or Boolean. It is also possible to pass in some special value types, like files. For a full list of supported value types, check the [state API documentation](../api/state.md).
-
-## Tutorial
-**Before you start,** [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KdBGyGo09NxQfRWSNOb)
-
-Defining state and user interfaces is more about describing how something should look, rather than how it should update. Updates are the tricky part, this is where we usually introduce complexity in our applications.
-
-Cerebral allows you to describe updates the same way you describe state and user interfaces, in a declarative manner. We call them **signals** and they will help you handle complexity both in code and in your head.
-
-### Adding a signal
-Let us add a signal to our **Controller** in *controller.js*:
-
-```js
-...
-function updateSubtitle ({state}) {
-  state.set('subTitle', 'Updating some state')
-}
-
-const controller = Controller({
-  devtools:  Devtools({
-    host: '127.0.0.1:8585'
-  }),
-  state: {
-    title: 'Hello from Cerebral!',
-    subTitle: 'Working on my state management'
-  },
-  signals: {
-    buttonClicked: updateSubtitle
-  }
-})
-...
-```
-We now defined a signal named **buttonClicked**. The signal tells us "what happened to make this signal run". What we want to happen when this signal triggers is to update the **subTitle** in our state with a static value. We do this by pointing to our *subTitle* function. Normally you would define this signal in a separate file.
-
-As you can see functions in a signal receives an argument, which we [destructure](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment) to grab the *state*. The argument itself is called the **context**. So **state** is on the **context**, as we can see here:
-
-```js
-...
-function updateSubtitle ({state}) {
-  state.set('subTitle', 'Updating some state')
-}
-...
-```
-
-### Trigger the change
-Please take a closer look at *App.js*:
-
-```js
-...
-connect({
-  title: state`title`,
-  subTitle: state`subTitle`
-},
-  ...
-)
-```
-As you can see the App-Component depends on **subTitle**. That means it will render automatically whenever **subTitle** changes.
-
-To trigger the signal we need to wire up a click-handler on a button and add our signal **buttonClicked** to the **connect(..)** method:
-
-*App.js*
-```js
-import React from 'react'
-import {connect} from 'cerebral/react'
-import {state, signal} from 'cerebral/tags'
-
-export default connect({
-  title: state`title`,
-  subTitle: state`subTitle`,
-  buttonClicked: signal`buttonClicked`
-},
-  function App ({title, subTitle, buttonClicked}) {
-    return (
-      <div>
-        <h1>{title}</h1>
-        <h2>{subTitle}</h2>
-        <button onClick={() => buttonClicked()}>
-          Update state
-        </button>
-      </div>
-    )
-  }
-)
-```
-Now click it and take a look at the debugger. You will see the debugger list the execution of the signal, with information about what happened. This is also a tool the Cerebral debugger provides to give you insight into your application. Very handy for example when you need to dig into a **complex application** after not touching it for a long time, introduce a new team member to the application or debug complex execution flows.
-
-So changing the *subTitle* is kind of a silly state change on a button click. Let's introduce a very simple "Toast"-Component. It has already been added for you on the next chapter.
-
-If it did not work try jumping to the next chapter or [shout at us on Discord](https://discord.gg/0kIweV4bd2bwwsvH).

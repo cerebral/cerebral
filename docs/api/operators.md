@@ -1,6 +1,8 @@
 # Operators
 You can call operators to create actions for you. These actions will help you change state and control the flow of execution.
 
+Read more about operators in the [Cerebral in depth - Operators](https://www.jsblog.io/articles/christianalfoni/cerebral_in_depth_operators) article.
+
 ## State operators
 
 The methods for changing state within actions is also available as operators. All state operators support using both **state** and **props** tags as values.
@@ -202,7 +204,7 @@ path to isolate the actions to be run:
 import {wait} from 'cerebral/operators'
 import {parallel} from 'cerebral'
 
-export default 
+export default
   someAction,
   parallel('my parallel with wait', [
     wait(200), {

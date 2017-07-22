@@ -1,7 +1,8 @@
 html, body {
   background-color: #FFF;
   margin: 0;
-  font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
+  font-family: 'Helvetica Neue', 'Source Sans Pro', Arial, sans-serif;
+  line-height: 24px;
   color: #333;
   height: 100%;
 }
@@ -12,6 +13,9 @@ html, body {
 
 .button {
   box-sizing: border-box;
+  outline: none;
+  border: 0;
+  cursor: pointer;
   background-color: #007299;
   padding: 10px 15px;
   border-radius: 3px;
@@ -23,6 +27,7 @@ html, body {
   margin: 0 10px;
   min-width: 150px;
   display: inline-block;
+  text-align: center;
 }
 
 .button:hover {
@@ -41,7 +46,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  padding-top: 60px;
+  padding-top: 30px;
   margin-top: 0;
   font-weight: normal;
   color: #333;
@@ -69,4 +74,23 @@ h3, h4, h5, h6 {
     right: -30px;
     transform: rotate(45deg);
   }
+}
+
+pre {
+  display: flex;
+  padding: 0;
+  background: white !important;
+}
+pre > code {
+  display: block;
+  flex: 1;
+  max-width: 700px; /* 70 chars */
+  padding: 10px 15px;
+  margin: 20px auto;
+  border-radius: 3px;
+  background-color: #fafafa !important;
+  color: #333 !important;
+  font-family: monospace !important;
+  font-size: 14px;
+  line-height: 24px;
 }

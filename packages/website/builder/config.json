@@ -1,11 +1,8 @@
 {
   "title": "Cerebral Docs",
   "scripts": {
-    "index": [
-      "redirectFrontPage"
-    ],
+    "index": [],
     "docs": [
-      "https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js",
       "search",
       "mobile"
     ]
@@ -15,42 +12,34 @@
       "main",
       "prism"
     ],
-    "index": ["index"],
+    "index": ["index", "docs"],
     "docs": ["docs", "nav", "search"]
   },
   "docs": {
     "introduction": [
-      "../../../docs/introduction/what_is_cerebral",
       "../../../docs/introduction/the_architecture",
       "../../../docs/introduction/install",
       "../../../docs/introduction/debugger",
       "../../../docs/introduction/state",
-      "../../../docs/introduction/components",
       "../../../docs/introduction/signals",
-      "../../../docs/introduction/actions",
-      "../../../docs/introduction/operators",
-      "../../../docs/introduction/factories",
-      "../../../docs/introduction/paths",
-      "../../../docs/introduction/compute",
-      "../../../docs/introduction/routing",
-      "../../../docs/introduction/organize",
       "../../../docs/introduction/providers",
+      "../../../docs/introduction/modules",
       "../../../docs/introduction/errors",
-      "../../../docs/introduction/test",
-      "../../../docs/introduction/production",
-      "../../../docs/introduction/collaborate"
+      "../../../docs/introduction/components",
+      "../../../docs/introduction/compute",
+      "../../../docs/introduction/test"
     ],
     "api": [
-      "../../../docs/api/controller",
-      "../../../docs/api/action",
-      "../../../docs/api/signal",
       "../../../docs/api/devtools",
+      "../../../docs/api/controller",
       "../../../docs/api/state",
+      "../../../docs/api/signal",
       "../../../docs/api/tags",
-      "../../../docs/api/components",
-      "../../../docs/api/module",
       "../../../docs/api/operators",
+      "../../../docs/api/action",
+      "../../../docs/api/module",
       "../../../docs/api/providers",
+      "../../../docs/api/components",
       "../../../docs/api/compute",
       "../../../docs/api/universalcontroller"
     ],

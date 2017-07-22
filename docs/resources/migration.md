@@ -117,7 +117,7 @@ export default {
 The biggest change to Cerebral 2.x is the operators. You can read more about them in the Operators docs. They have become very powerful and you can create your own operators. Operators in Cerebral 2.x has been moved into core Cerebral. You can still use the old operators if you want by installing them via npm.
 
 ```js
-npm install cerebral-operators --save
+npm install cerebral-operators
 ```
 
 The new operators now use tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
