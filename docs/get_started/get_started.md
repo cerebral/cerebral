@@ -13,11 +13,7 @@ To install Cerebral BETA you have to explicitly install Cerebral and its depende
 
 **NPM**
 
-`npm install cerebral@beta --save`
-
-**YARN**
-
-`yarn add cerebral@beta`
+`npm install cerebral@beta`
 
 
 ## Choosing a view type
@@ -27,15 +23,9 @@ Choose React if you want a huge ecosystem of shared components and documentation
 
 **NPM**
 
-`npm install react react-dom babel-preset-react --save`
+`npm install react react-dom babel-preset-react`
 
-`npm install inferno inferno-component babel-plugin-inferno --save`
-
-**YARN**
-
-`yarn add react react-dom babel-preset-react`
-
-`yarn add inferno inferno-component babel-plugin-inferno`
+`npm install inferno inferno-component babel-plugin-inferno`
 
 ## Hello world
 *controller.js*

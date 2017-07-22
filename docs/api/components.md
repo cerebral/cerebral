@@ -5,11 +5,7 @@
 
 **NPM**
 
-`npm install react react-dom babel-preset-react --save`
-
-**YARN**
-
-`yarn add react react-dom babel-preset-react`
+`npm install react react-dom babel-preset-react`
 
 ```js
 import React from 'react'
@@ -93,11 +89,7 @@ export default connect({
 
 **NPM**
 
-`npm install inferno inferno-component inferno-create-element babel-plugin-inferno --save`
-
-**YARN**
-
-`yarn add inferno inferno-component inferno-create-element babel-plugin-inferno`
+`npm install inferno inferno-component inferno-create-element babel-plugin-inferno`
 
 ```js
 import Inferno from 'react'
@@ -152,11 +144,7 @@ export default connect({
 
 **NPM**
 
-`npm install preact babel-plugin-transform-react-jsx --save`
-
-**YARN**
-
-`yarn add preact babel-plugin-transform-react-jsx`
+`npm install preact babel-plugin-transform-react-jsx`
 
 ```js
 import {h, render} from 'preact'
@@ -199,11 +187,7 @@ export default connect({
 
 **NPM**
 
-`npm install angular --save`
-
-**YARN**
-
-`yarn add angular`
+`npm install angular`
 
 ```js
 import angular from 'angular'
@@ -251,7 +235,7 @@ you will need to provide one to `connect` for the
 component to be given a name in cerebral.
 
 You can call connect in the following ways:
-```
+```js
 connect(dependencies)
 connect(dependencies, name)
 connect(dependencies, controller)
@@ -264,11 +248,7 @@ connect(dependencies, name, controller)
 
 **NPM**
 
-`npm install vue --save`
-
-**YARN**
-
-`yarn add vue`
+`npm install vue`
 
 ```js
 import Vue from 'vue/dist/vue'

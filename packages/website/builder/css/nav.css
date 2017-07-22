@@ -38,25 +38,30 @@
   text-overflow: ellipsis;
 }
 
+#nav_search {
+  height: 30px;
+}
+
 #nav_footer {
   padding-top: 10px;
-  flex: 0 0 25px;
+  padding-bottom: 10px;
   overflow: hidden;
   display: flex;
   align-items: center;
 }
 #nav_flag {
-  align-self: flex-start;
-  height: 30px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 48px;
-  margin: 0 10px;
+  margin: 0 5px;
   line-height: 22px;
   text-align: center;
   background: #DD4A68;
   padding: 1px;
   border: 2px solid #DD4A68;
   color: white;
-  background-clip: content-box;
 }
 #nav_old-site {
   color: #DD4A68;
@@ -71,7 +76,9 @@
   flex-direction: column;
   line-height: initial;
   border-right: 1px solid lightgray;
+  background-color: #FAFAFA;
 }
+
 
 @media (max-width: 850px) {
 
@@ -102,7 +109,7 @@
 #nav ul {
   list-style: none;
   margin: 0;
-  padding-left: 20px;
+  padding-left: 10px;
   display: none;
   flex: 1 0;
 }
@@ -123,7 +130,12 @@
 #nav > ul a {
   display: inline-block;
   width: 100%;
+  color: #333;
   padding: 0 8px;
+}
+
+#nav > ul a:hover {
+  color: #666;
 }
 
 .nav_link {
@@ -137,9 +149,7 @@
 }
 .nav_link.nav_open > a {
   font-weight: bold;
-}
-.nav_toggle:hover ~ .nav_link:first-of-type {
-  box-shadow: inset 0 -1px 1px 0 lightgray;
+  color: #0086b3 !important;
 }
 
 .nav_toggle {
@@ -177,7 +187,6 @@
 }
 .nav_toggle:hover + .nav_toggle-label {
   color: gray;
-  box-shadow: inset 1px 1px 1px 0 lightgray;
 }
 
 #nav .nav_toggle:checked ~ ul:first-of-type {
@@ -188,8 +197,10 @@
 
 #nav_header {
   display: flex;
+  align-items: center;
   padding: 5px;
   flex: 0 0 40px;
+  border-bottom: 1px solid #EAEAEA;
 }
 
 .nav_button > div {
@@ -205,4 +216,8 @@
 }
 .nav_button-discord {
   background-image: url(/images/discord.png);
+}
+
+.nav_main > a {
+  text-decoration: underline;
 }

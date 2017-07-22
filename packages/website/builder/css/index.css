@@ -1,26 +1,57 @@
 .index-container {
-  background-color: #00a1c9;
+  /* background-color: #00a1c9; */
+  padding: 20px;
   text-align: center;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
-
-.index-top {
-  flex: 3;
-  margin: 20px 0;
-}
-
-.index-bottom {
-  flex: 1;
-  margin: 20px 0;
 }
 
 .index-title {
   font-size: 100px;
   font-weight: 700;
-  color: rgba(255,255,255, 0.5);
+  color: #333;
+}
+
+.index-container .docs-doc {
+  overflow: visible;
+  text-align: left;
+  font-size: 1.25em;
+  line-height: 30px;
+}
+
+.index-buttons {
+  display: flex;
+  margin: 15px;
+  justify-content: center;
+}
+
+.index-example-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.index-example-row > div {
+  flex: 1;
+}
+
+.index-example-row > div:first-child {
+  margin-right: 5px;
+}
+
+.index-example-row > div:last-child {
+  margin-left: 5px;
+}
+
+@media (max-width: 850px) {
+  .index-example-row {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.index-container .docs-doc-content {
+  min-height: auto;
 }
 
 .index-subtitle {

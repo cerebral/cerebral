@@ -12,6 +12,7 @@
   color: gray;
   text-indent: 5px;
   font-size: 14px;
+  outline: none;
 }
 
 #search-result {
@@ -19,8 +20,9 @@
   z-index: 4;
   background-color: white;
   border: 1px solid lightgray;
-  border-radius: 3px;
-  top: 50px;
+  border-bottom-right-radius: : 3px;
+  border-bottom-left-radius: : 3px;
+  top: 38px;
   box-shadow: 1px 1px 3px 0 lightgray;
 }
 

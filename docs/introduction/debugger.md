@@ -4,38 +4,8 @@ Cerebral has a powerful development tool. It knows about all the state in your a
 
 Because Cerebral can run on different environments and you might want to manage multiple apps, the debugger is a standalone application. This also opens up for further helpful tools beyond just debugging. It is an [Electron](https://electron.atom.io/) application that connects to your application through websockets. You can add multiple apps to it and if you are using function-tree on the server you can even merge execution data on client and the server.
 
+## Install
 [Download the Debugger](https://github.com/cerebral/cerebral-debugger/releases) for your target OS: Mac, Windows or Linux. The debugger will automatically notify you and self-update.
-
-## Initialize
-You initialize the devtools by adding it to the controller.
-
-```js
-import {Controller} from 'cerebral'
-import Devtools from 'cerebral/devtools'
-
-const controller = Controller({
-  // You do not want to run the devtools in production as it
-  // requires a bit of processing and memory to send data from
-  // your application
-  devtools: (
-    process.env.NODE_ENV === 'production' ?
-      null
-    :
-      Devtools({
-        // If running standalone debugger. Some environments
-        // might require 127.0.0.1 or computer IP address
-        host: 'localhost:8585',
-
-        // By default the devtools tries to reconnect
-        // to debugger when it can not be reached, but
-        // you can turn it off
-        reconnect: true
-      })
-  )
-})
-
-export default controller
-```
 
 ## Signals
 The signals tab in the debugger gives you a chronological list of signals triggered. Every signal tells you what actions were run, what mutations were run related to the action and what other side effects like HTTP and Firebase was triggered. You will also see how your signals are composed together in different action groups, parallel execution.
@@ -56,3 +26,36 @@ The components tab gives you a list of all currently connected components in you
 The state tree tab gives you complete overview of the state of your application. You can explore it and make changes to the state directly to see how it affects your application.
 
 ![state tree](/images/state_tree.png)
+
+## Initialize
+You initialize the devtools by adding it to the controller.
+
+```js
+import {Controller} from 'cerebral'
+import Devtools from 'cerebral/devtools'
+
+// You do not want to load or run the devtools in production as it
+// requires a bit of processing and memory to send data from
+// your application
+const Devtools = (
+  process.env.NODE_ENV === 'production' ?
+    null
+  :
+    require('cerebral/devtools').default
+)
+
+const controller = Controller({
+  devtools: Devtools && Devtools({
+    // If running standalone debugger. Some environments
+    // might require 127.0.0.1 or computer IP address
+    host: 'localhost:8585',
+
+    // By default the devtools tries to reconnect
+    // to debugger when it can not be reached, but
+    // you can turn it off
+    reconnect: true
+  })
+})
+
+export default controller
+```

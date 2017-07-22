@@ -1,52 +1,18 @@
 # Actions
 
-A signal runs actions and actions are actually just functions. These functions receive one argument, created by Cerebral. It is called the **context**:
+An action is just a function. What makes an action different from a normal function though is that it in any situation receives only one argument, created by Cerebral. It is called the **context**. Actions are "low level" and imperative. There is no declarative code without some imperative code behind it. In Cerebral most of the imperative action code is already available to you, but sometimes you need to write custom logic. That is when you write your own action.
 
 ```js
 function iAmAnAction (context) {}
 ```
 
-Whatever you need to define the logic of an action is on the context. It means you do not need any API to define an action or import any other modules to define business logic. This makes actions highly testable and easy to write.
+Whatever side effect you need to run, even a state change, you do from the context. It means you do not need any API to define an action or import any other modules to define business logic. This makes actions highly testable and easy to write.
 
-Typically you use actions to change the state of the application or run other side effects:
-
-```js
-// With destructuring
-function iAmAnAction ({props, state}) {
-  state.set('some.path', props.someValue)
-}
-
-// Without destructuring
-function iAmAnAction (context) {
-  context.state.set('some.path', context.props.someValue)
-}
-```
-
-
-## The context
-So the context is just an object. A new context is created for every action run and it is populated by what we call **providers**. There are default providers in Cerebral that exposes **props** and **path**, as seen in above example. There are also other default providers, you can add new providers by installing extra packages and you can even create your own. You will learn more about providers later.
-
-## Update props
-You update the props on the signal by returning an object from the action. This object will be merged with existing props.
+Here is an example of an action changing the state of the application:
 
 ```js
-function iAmAnAction () {
-  return {
-    newProp: 'someValue'
-  }
-}
-```
-
-## Async
-When actions return a promise the signal will hold execution until it is resolved. any resolved values will be merged in with props.
-
-```js
-function iAmAnAction () {
-  return new Promise((resolve) => {
-    resolve({
-      newProp: 'someValue'
-    })
-  })
+function iAmAnAction ({state}) {
+  state.set('some.path', 'foo')
 }
 ```
 

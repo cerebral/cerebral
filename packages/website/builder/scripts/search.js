@@ -14,15 +14,20 @@
           subSectionKey
         ) {
           const regexp = new RegExp(value, 'g')
-          const matches = (text[sectionKey][subSectionKey].raw.match(regexp) ||
-            []).length
+          const matches = []
+          let match = null
+          while (
+            (match = regexp.exec(text[sectionKey][subSectionKey].raw)) != null
+          ) {
+            matches.push(match)
+          }
 
-          if (matches) {
+          if (matches.length) {
             return subSectionResults.concat({
               section: sectionKey,
               subSection: subSectionKey,
               title: text[sectionKey][subSectionKey].title,
-              matches,
+              matches: matches.length,
             })
           }
 
@@ -42,16 +47,26 @@
     })
 
     const searchResult = document.querySelector('#search-result')
-
+    const fiveFirst = results.splice(0, 5)
     searchResult.innerHTML = ''
-    results.splice(0, 5).forEach(function(result) {
+    if (fiveFirst.length) {
+      fiveFirst.forEach(function(result) {
+        const resultEl = document.createElement('a')
+
+        resultEl.className = 'docs-search-result-item'
+        resultEl.innerHTML = `<span>${result.section}</span> - ${result.title}`
+        resultEl.href = `/docs/${result.section}/${result.subSection}.html`
+        searchResult.appendChild(resultEl)
+      })
+    } else {
       const resultEl = document.createElement('a')
 
       resultEl.className = 'docs-search-result-item'
-      resultEl.innerHTML = `<span>${result.section}</span> - ${result.title}`
-      resultEl.href = `/docs/${result.section}/${result.subSection}.html`
+      resultEl.innerHTML = `<span>No result</span>`
+      resultEl.href = ''
       searchResult.appendChild(resultEl)
-    })
+    }
+
     searchResult.style.display = 'block'
   }
 
