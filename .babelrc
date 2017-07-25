@@ -1,0 +1,15 @@
+{
+  "presets": ["es2015"],
+  "env": {
+    "production": {
+      "ignore": [
+        "**/*.test.js"
+      ]
+    }
+  },
+  "plugins": [
+    ["module-alias", [
+      { "src": "../../src", "expose": "repo-cooker" }
+    ]]
+  ]
+}
