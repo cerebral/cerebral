@@ -4,6 +4,7 @@
 // tree to run with `repo-cooker publish`. extra arguments could be parsed and putted in props
 import { cooker } from './cooker'
 import * as cook from 'repo-cooker/actions'
+import releaseNotesTemplate from './releaseNotesTemplate'
 
 cooker.run('publish', [
   cook.getLatestReleaseHash,
@@ -21,7 +22,7 @@ cooker.run('publish', [
   cook.resetRepository,
   cook.tagCurrentCommit,
   cook.pushTagToRemote,
-  cook.createReleaseNotes(release => `some release notes`),
+  cook.createReleaseNotes(releaseNotesTemplate),
   cook.createGithubRelease,
   cook.fireworks,
 ])

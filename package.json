@@ -6,7 +6,7 @@
   "scripts": {
     "build:demos": "node ./scripts/run.js prepublish demos",
     "checkdeps": "node ./scripts/check.dependencies.js --auto-fix",
-    "release": "GITHUB_TOKEN=6c028ae3f8ed45737c9d6e5657e1aea0af9c2a4f babel-node ./scripts/release/index.js",
+    "release": "babel-node ./scripts/release/index.js",
     "commit": "git-cz",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "coverage": "node ./scripts/run.js coverage",
