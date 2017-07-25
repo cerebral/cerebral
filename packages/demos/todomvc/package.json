@@ -8,9 +8,9 @@
     "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
   "dependencies": {
-    "cerebral": "^2.0.0-b",
-    "@cerebral/router": "^1.0.0-b",
-    "@cerebral/storage": "^1.0.0-b",
+    "cerebral": "next",
+    "@cerebral/router": "next",
+    "@cerebral/storage": "next",
     "classnames": "^2.2.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
