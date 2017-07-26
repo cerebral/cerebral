@@ -69,7 +69,7 @@ controller
   })
 ```
 
-You can add any providers to the controller to do database fetching etc. inside this **run** execution. Think of it as a signal the updates the state of the app before rendering it on the server.
+You can add any providers to the controller to do database fetching etc. inside this **runSequence** execution. Think of it as a signal the updates the state of the app before rendering it on the server.
 
 **NOTE!** You should instantiate the controller for each run you want to do.
 
