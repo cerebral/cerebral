@@ -1,4 +1,5 @@
 # Compute
+Computes calculate and cache derived state values. Using computes helps to keep logic out of the application view components, can improve performance and make applications easier to test.
 
 ```js
 import {compute} from 'cerebral'
@@ -8,11 +9,11 @@ export default compute(
   state`user.name`,
   (name) => {
     return `Hi ${name}`
-  }  
+  }
 )
 ```
 
-A compute takes any number and type of arguments, where each argument is passed to the next function argument.
+A compute takes any number and type of arguments, where each argument is passed to the next function argument (**compute function**). Tag and compute arguments will be resolved to a value when the compute executes, all other arguments are forwarded. The **compute functions** are called whenever the compute is executed, all preceding values (resolved or forwarded) will be passed with an additional **get** argument.
 
 ```js
 import {compute} from 'cerebral'
