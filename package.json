@@ -6,6 +6,7 @@
   "scripts": {
     "build:demos": "node ./scripts/run.js prepublish demos",
     "checkdeps": "node ./scripts/check.dependencies.js --auto-fix",
+    "release": "babel-node ./scripts/release/index.js",
     "commit": "git-cz",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "coverage": "node ./scripts/run.js coverage",
@@ -26,6 +27,7 @@
     "@types/eventemitter3": "1.2.0",
     "addressbar": "1.0.3",
     "aphrodite": "1.2.0",
+    "babel-plugin-module-alias": "^1.6.0",
     "bulma": "0.2.3",
     "chalk": "1.1.3",
     "classnames": "2.2.5",
