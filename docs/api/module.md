@@ -53,7 +53,7 @@ export default (module) => {
 With the use of a factory it is possible to make reusable modules.
 
 ```js
-export default (options) => (module) => {
+export default (options) =>  {
   return {
     state: {
       location: options.of
@@ -66,12 +66,12 @@ You then configure the module when you attach it:
 
 ```js
 import {Controller} from 'cerebral'
-import Map from './modules/Map'
+import Location from './modules/Location'
 
 const controller = Controller({
   modules: {
-    map1: Mop({of: 'Europe'}),
-    map2: Mop({of: 'Africa'})
+    location1: Location({of: 'Europe'}),
+    location2: Location({of: 'Africa'})
   }
 })
 ```
