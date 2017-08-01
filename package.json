@@ -53,7 +53,9 @@
     "url-mapper": "1.1.1",
     "uuid": "2.0.3",
     "chokidar": "1.6.1",
-    "prism": "4.1.2"
+    "prism": "4.1.2",
+    "mobx": "3.2.0",
+    "mobx-state-tree": "0.9.1"
   },
   "lint-staged": {
     "*.js": [
