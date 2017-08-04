@@ -13,21 +13,13 @@ cooker.run('publish', [
   cook.parseCommits,
   cook.groupCommitsByPackage,
   cook.evaluateSemverByPackage,
-  ({ config }) => ({
-    semverByPackage: Object.assign(
-      {},
-      ...Object.keys(config.packagesPaths).map(name => ({
-        [name]: 'major',
-      }))
-    ),
-  }),
   cook.relatedPackagesByPackage,
   cook.getCurrentVersionByPackage,
   cook.evaluateNewVersionByPackage,
   cook.writeVersionsToPackages,
   cook.runNpmScript('prepublish'),
   cook.publishUnderTemporaryNpmTag,
-  cook.mapTemporaryNpmTagToLatest,
+  cook.mapTemporaryNpmTagTo('latest'),
   cook.resetRepository,
   cook.tagCurrentCommit,
   cook.pushTagToRemote,
