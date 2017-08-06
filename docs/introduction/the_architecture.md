@@ -14,7 +14,16 @@ Where to store the state of an application is a highly debated subject. Should w
 {
   auth: {
     isLoggedIn: false,
-    user: {}
+    user: {
+      prefs: {
+        style: 'light'
+      },
+      friends: [],
+      info: {
+        email: '',
+        name: ''
+      }
+    }
   },
   posts: {
     list: [],
@@ -27,9 +36,9 @@ With this approach we get some benefits not possible with other approaches.
 
 1. **Simple and consistent API** - Typically a state update changes a value, pushes an item in a list or merges an object into another. With a single state tree we can create an API that does exactly that:
 ```js
-state.set('user.prefs.style', 'dark')
-state.push('user.friends', 'Joe')
-state.merge('user.info', {
+state.set('auth.user.prefs.style', 'dark')
+state.push('auth.user.friends', 'Joe')
+state.merge('auth.user.info', {
     email: 'cheetah@jungle.com',
     name: 'Cheetah'
 })
@@ -50,7 +59,7 @@ Since Cerebral stores all the state of the application in a single state tree we
 
 ```js
 connect({
-  userName: state`app.user.name`
+  userName: state`auth.user.info.name`
 },
   function User(props) {
     props.userName // "some name" (value stored in 'app.user.name')
