@@ -13,12 +13,17 @@ script:
   - npm run lint
   - npm test
 before_install:
-  - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+  - |
+    if [[ $TRAVIS_SECURE_ENV_VARS == 'true' ]]; then
+      echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+    fi
 after_success:
 - |
-  git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral;
-  git config --global user.email "cerebraljs@gmail.com";
-  git config --global user.name "Cerebral JS";
+  if [[ $TRAVIS_SECURE_ENV_VARS == 'true' ]]; then
+    git remote add auth https://cerebraljs:${GH_TOKEN}@github.com/cerebral/cerebral;
+    git config --global user.email "cerebraljs@gmail.com";
+    git config --global user.name "Cerebral JS";
+  fi
   if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_PULL_REQUEST == 'true' ]]; then
     npm run coverage;
     npm run coverage:upload;
