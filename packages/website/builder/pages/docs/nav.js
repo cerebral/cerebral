@@ -10,6 +10,8 @@ function Navigation(props) {
     return (
       <ul>
         {toc.map(function(item, index) {
+          const href = `${path}#${item.id}`
+
           return (
             <li key={index}>
               {item.children.length > 0 &&
@@ -17,7 +19,9 @@ function Navigation(props) {
               {item.children.length > 0 &&
                 <span className="nav_toggle-label" />}
               <div className="nav_link">
-                <a href={`${path}#${item.id}`}>{item.title}</a>
+                <a href={href}>
+                  {item.title}
+                </a>
               </div>
               <Headings toc={item.children} path={path} />
             </li>
@@ -71,8 +75,8 @@ function Navigation(props) {
               />
               <span className="nav_toggle-label" />
               <div className={`nav_link nav_main ${open ? 'nav_open' : ''}`}>
-                <a href={`/docs/${sectionKey}`}>
-                  {sectionKey.replace('_', ' ')}
+                <a href={`/docs/${sectionKey}/index.html`}>
+                  {sectionKey.replace('_', ' ').toUpperCase()}
                 </a>
               </div>
               <Pages
@@ -117,7 +121,6 @@ function Navigation(props) {
         >
           <div className="nav_button-discord" />
         </a>
-        <div id="nav_flag">beta</div>
       </div>
     )
   }

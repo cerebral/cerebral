@@ -71,12 +71,12 @@ Writing **declaratively**:
 
 \`\`\`js
 [
-  set(state\`isLoadingUser\`, true),
+  set(state\`user.isLoading\`, true),
   httpGet('/user'), {
-    success: set(state\`user\`, props\`user\`),
-    error: set(state\`error\`, props\`error\`)
+    success: set(state\`user.data\`, props\`user\`),
+    error: set(state\`user.error\`, props\`error\`)
   },
-  set(state\`isLoadingUser\`, false),
+  set(state\`user.isLoading\`, false),
 ]
 \`\`\`
         `).tree
@@ -107,14 +107,19 @@ function getUser() {
           </div>
           {
             props.compile(`
-You might think this example tries to highlight "less lines of code", but that is just a result of reaching for the following properties:
+You might think this example tries to highlight "less lines of code", but it is actually about reaching for these properties:
 
 - **Composability**
 - **Readability**
 - **Reusability**
 - **Testability**
 
-All these properties makes **better code** and the declarative approach inherits all of them by default, where the imperative approach does not. **Read on to learn more about how Cerebral enforces these properties in your codebase**.
+All these properties makes **better code** and **scalable code**. The declarative approach inherits all of these properties by default. In addition to this
+it allows us to build developer tools:
+
+![debugger](/images/debugger.gif)
+
+> *Read on to learn more about how Cerebral enforces scalable code and gives you insight into the inner workings of your app*
 `).tree
           }
           <div className="index-buttons">
