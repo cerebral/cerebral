@@ -130,12 +130,11 @@
 #nav > ul a {
   display: inline-block;
   width: 100%;
-  color: #333;
   padding: 0 8px;
 }
 
 #nav > ul a:hover {
-  color: #666;
+  color: #004c66;
 }
 
 .nav_link {
@@ -150,6 +149,9 @@
 .nav_link.nav_open > a {
   font-weight: bold;
   color: #0086b3 !important;
+}
+.nav_link.nav_link_selected > a {
+  text-decoration: underline;
 }
 
 .nav_toggle {
@@ -178,6 +180,7 @@
   border-radius: 10em;
   width: 25px;
   height: 25px;
+  color: #999;
 }
 .nav_toggle + .nav_toggle-label::before {
   content: '+';
@@ -186,7 +189,7 @@
   content: '-';
 }
 .nav_toggle:hover + .nav_toggle-label {
-  color: gray;
+  color: #333;
 }
 
 #nav .nav_toggle:checked ~ ul:first-of-type {
@@ -216,8 +219,4 @@
 }
 .nav_button-discord {
   background-image: url(/images/discord.png);
-}
-
-.nav_main > a {
-  text-decoration: underline;
 }

@@ -32,7 +32,7 @@ blockquote {
   max-width: 800px;
   min-height: calc(100vh - 210px);
   padding-bottom: 60px;
-  margin: auto;
+  margin: 0 60px;
 }
 .docs-doc-content li {
   margin-top: 10px;
