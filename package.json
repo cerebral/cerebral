@@ -6,8 +6,7 @@
   "scripts": {
     "build:demos": "node ./scripts/run.js prepublish demos",
     "checkdeps": "node ./scripts/check.dependencies.js --auto-fix",
-    "release:master": "babel-node ./scripts/release/master.js",
-    "release:next": "babel-node ./scripts/release/next.js",
+    "release": "babel-node ./scripts/release/index.js",
     "commit": "git-cz",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "coverage": "node ./scripts/run.js coverage",
@@ -45,6 +44,7 @@
     "raf": "3.3.0",
     "react": "15.4.2",
     "react-dom": "15.4.2",
+    "repo-cooker": "^1.0.0",
     "shortway": "0.3.0",
     "todomvc-app-css": "2.0.6",
     "todomvc-common": "1.0.2",
