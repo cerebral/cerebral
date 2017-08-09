@@ -17,9 +17,12 @@ notifications:
 env:
   - TEST_MODE=serial
 script:
-  - npm prune
-  - npm run lint
-  - npm test
+- |
+  if [[ $SKIP_TESTS != 'true' ]]; then
+    npm prune
+    npm run lint
+    npm test
+  fi
 after_success:
 - |
   if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_PULL_REQUEST == 'true' ]]; then
