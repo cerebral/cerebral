@@ -30,7 +30,7 @@ after_success:
     npm run coverage:upload;
   fi
   if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'next' ]] && [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then
-    echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
+    printf "//registry.npmjs.org/:_authToken=$NPM_TOKEN\n" > ~/.npmrc
     npm run release -- --publish
   fi
 branches:
