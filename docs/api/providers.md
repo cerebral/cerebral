@@ -84,7 +84,7 @@ function GreetProviderFactory (options = {}) {
 
   // The function that is run by Cerebral, providing the context
   // for you to attach your provider to
-  function GreetProvider (context) => {
+  function GreetProvider (context) {
     context.greet = cachedProvider = (cachedProvider || createProvider(context))
 
     // You can wrap the provider with the debugger
