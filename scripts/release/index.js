@@ -3,7 +3,7 @@ import { cooker } from './cooker'
 import * as cook from 'repo-cooker/actions'
 import releaseNotesTemplate from './releaseNotesTemplate'
 
-cooker.run('publish', [
+cooker.cook('publish', [
   cook.getLatestReleaseHash,
   cook.getHistoryFromHash,
   cook.getRawCommitsFromHistory,
