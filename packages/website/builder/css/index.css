@@ -12,17 +12,33 @@
   color: #333;
 }
 
+.index-release {
+  text-align: center;
+  font-size: 0.75em;
+}
+
 .index-container .docs-doc {
   overflow: visible;
   text-align: left;
   font-size: 1.25em;
   line-height: 30px;
+  margin: 0 auto;
 }
 
 .index-buttons {
   display: flex;
   margin: 15px;
   justify-content: center;
+}
+
+.index-youtube {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.index-youtube iframe {
+  border: 1px solid #333;
 }
 
 .index-example-row {

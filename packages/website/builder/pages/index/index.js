@@ -130,6 +130,19 @@ it allows us to build developer tools:
               api
             </a>
           </div>
+          <div className="index-youtube">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/beeoRPsXzNs"
+              frameborder="0"
+              allowfullscreen
+            />
+          </div>
+          <div className="index-release">
+            Released under the MIT License
+            Copyright © 2017 Christian Alfoni
+          </div>
         </div>
       </div>
     </div>
