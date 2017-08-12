@@ -38,6 +38,7 @@ cooker.cook('publish', [
       cook.pushTagToRemote,
       cook.createReleaseNotes(releaseNotesTemplate),
       cook.createGithubRelease,
+      cook.runNpmScript('deploy'),
     ],
     otherwise: [],
   },
