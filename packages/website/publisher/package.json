@@ -15,5 +15,10 @@
     "ci": "run-s clean build deploy"
   },
   "author": "Alexey Gurianov <gurianov@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "gh-pages": "^1.0.0",
+    "npm-run-all": "^4.0.2",
+    "shx": "^0.2.2"
+  }
 }
