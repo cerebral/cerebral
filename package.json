@@ -19,6 +19,7 @@
     "postinstall": "npm run setup",
     "postsetup": "npm run link",
     "precommit": "lint-staged",
+    "predeploy": "node ./scripts/run.js prepublish demos",
     "pretest": "npm run checkdeps",
     "setup": "node ./scripts/run.js prepublish nodemos",
     "test": "node ./scripts/run.js test"
@@ -50,7 +51,9 @@
     "ua-parser-js": "0.7.10",
     "universal-websocket-client": "1.0.1",
     "url-mapper": "1.1.1",
-    "uuid": "2.0.3"
+    "uuid": "2.0.3",
+    "chokidar": "1.6.1",
+    "prism": "4.1.2"
   },
   "lint-staged": {
     "*.js": [
@@ -110,20 +113,26 @@
     "mocha": "^3.4.1",
     "mock-socket": "6.0.4",
     "node-sass": "4.5.3",
-    "npm-run-all": "^4.0.2",
+    "npm-run-all": "4.0.2",
     "nyc": "^10.3.2",
     "preact": "8.1.0",
     "prettier": "1.4.2",
     "prop-types": "15.5.10",
     "react-addons-test-utils": "^15.4.2",
     "react-scripts": "^1.0.6",
-    "shx": "^0.2.2",
+    "shx": "0.2.2",
     "symlink-dir": "^1.0.2",
     "typescript": "2.3.2",
     "typescript-definition-tester": "0.0.5",
     "vue": "2.3.3",
     "webpack": "2.5.1",
     "webpack-dev-server": "2.4.5",
-    "xhr-mock": "1.9.0"
+    "xhr-mock": "1.9.0",
+    "babel-watch": "2.0.5",
+    "fs-extra": "2.0.0",
+    "marksy": "4.0.0",
+    "prismjs": "1.6.0",
+    "string-template": "1.0.0",
+    "yargs": "6.6.0"
   }
 }
