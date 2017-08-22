@@ -44,6 +44,8 @@ function someAction({state}) {
 }
 ```
 
+**NOTE!** You should not change state directly in your actions or components. This will not be tracked by Cerebral. That means a render will not be triggered and the debugger will not know about it. Treat your state as if it was immutable and only change it using the **state API**.
+
 ## Special values support
 When building an application you often need to keep things like files and blobs in your state for further processing. Cerebral supports these kinds of values because they will never change, or changing them can be used with existing state API. This is the list of supported types:
 
