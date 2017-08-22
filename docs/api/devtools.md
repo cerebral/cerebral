@@ -19,9 +19,6 @@ const controller = Controller({
     // Time travel
     storeMutations: true,
 
-    // Warnings on mutating outside "state" API
-    preventExternalMutations: true,
-
     // Shows a warning when you have components with number of
     // state dependencies or signals above the set number  
     bigComponentsWarning: 5,
