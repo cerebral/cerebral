@@ -44,7 +44,7 @@
     "raf": "3.3.0",
     "react": "15.4.2",
     "react-dom": "15.4.2",
-    "repo-cooker": "^1.0.3",
+    "repo-cooker": "latest",
     "shortway": "0.3.0",
     "todomvc-app-css": "2.0.6",
     "todomvc-common": "1.0.2",
