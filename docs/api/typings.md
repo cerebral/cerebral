@@ -2,15 +2,15 @@
 
 ## Actions
 ```typescript
-import { Action, ActionChain, ActionContext, ActionFactory, ActionChain } from 'cerebral'
+import { Action, ActionChain, ActionFactory, ActionChain } from 'cerebral'
 
 const actionFactory: ActionFactory = (foo: string) => {
-    return ({state, props}: ActionContext) => {
+    return ({state, props}) => {
         // manage state and props
     })
 }
 
-const simpleAction: Action = ({ state, props }: ActionContext) => {
+const simpleAction: Action = ({ state, props }) => {
     // manage state and props
 }
 
