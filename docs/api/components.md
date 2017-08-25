@@ -341,6 +341,75 @@ export default connect({
 })
 ```
 
+## Angular 2/4 (BETA)
+[Website](https://angular.io/)
+
+**NPM**
+
+`npm install angular`
+
+```js
+import {NgModule} from '@angular/core'
+import {BrowserModule} from '@angular/platform-browser'
+import {CerebralService} from 'cerebral/angular'
+import {AppComponent}  from './app.component.ts'
+
+const cerebralInitialStore = {
+  state: {
+    myName: 'Momo',
+  }
+}
+
+@NgModule({
+  imports:      [ BrowserModule ],
+  declarations: [ AppComponent ],
+  bootstrap:    [ AppComponent ],
+  providers: [
+     {
+      provide: CerebralService,
+      useFactory: () => {
+        return new CerebralService(cerebralInitialStore)
+      }
+    },
+  ]
+})
+export class AppModule {}
+```
+
+```js
+import {Component, ChangeDetectorRef} from '@angular/core'
+import {state, signal} from 'cerebral/tags'
+import {Cerebral} from 'cerebral/angular'
+import {CerebralService} from 'cerebral/angular'
+
+@Component({ 
+  selector: 'app-component',
+  template: `
+    <div (click)="onClick()">{{foo}}</div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush // disable angular change detection
+})
+@Cerebral({
+  myName: state`foo`,
+  onClick: signal`mySignal`
+})
+export class AppComponent {
+  constructor(private ref: ChangeDetectorRef, private cerebral: CerebralService) { // needed by the decorator to trigger change detection
+    // In some cases you might need access to cerebral's controller.
+    this.cerebral.getSignal('onClick')()
+    
+    // Optionally add custom behaviour to controller
+  }
+}
+```
+
+You can use cerebral controller anywhere in your app like in services/providers.
+By importing CerebralServiceInstance from app.module.ts like this.
+```js
+import {CerebralService} from 'cerebral/angular'
+CerebralService.controller.getSignal('onClick')()
+```
+
 ## Composing dependencies
 You can compose your dependencies with other tags. Like collect state based on a property passed to the component. Or maybe grab state based on some other state.
 ```js
