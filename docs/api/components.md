@@ -377,11 +377,28 @@ export function startCerebral() {
   ]
 })
 export class AppModule {}
+
+```
+
+```js
+// special types for angular somewhere in myapp used below in your component/services file
+// by doing this Angular and typescript will not complain about string literals compatibility
+import { signal as originalSignal, state as originalState, Tag } from 'cerebral/tags'
+
+interface MySignal {
+  (path: any[], ...values: any[]): Tag
+}
+export const signal = <MySignal> <any> originalSignal
+
+interface MyState {
+  (path: any[], ...values: any[]): Tag
+}
+export const state = <MyState> <any> originalState
 ```
 
 ```js
 import {Component, ChangeDetectorRef} from '@angular/core'
-import {state, signal} from 'cerebral/tags'
+import {state, signal} from 'myapp'
 import {Cerebral} from 'cerebral/angular'
 import {CerebralService} from 'cerebral/angular'
 
