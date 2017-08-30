@@ -393,8 +393,8 @@ import {CerebralService} from 'cerebral/angular'
   changeDetection: ChangeDetectionStrategy.OnPush // disable angular change detection
 })
 @Cerebral({
-  myName: state`foo`,
-  onClick: signal`mySignal`
+  myName: state(['foo']),
+  onClick: signal(['mySignal'])
 })
 export class AppComponent {
   constructor(private ref: ChangeDetectorRef, private cerebral: CerebralService) { // needed by the decorator to trigger change detection
