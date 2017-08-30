@@ -24,6 +24,10 @@
     "setup": "node ./scripts/run.js prepublish nodemos",
     "test": "node ./scripts/run.js test"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cerebral/cerebral.git"
+  },
   "dependencies": {
     "@types/eventemitter3": "1.2.0",
     "addressbar": "1.0.3",
