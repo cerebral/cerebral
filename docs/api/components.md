@@ -360,6 +360,11 @@ const cerebralInitialStore = {
   }
 }
 
+// AOT support
+export function startCerebral() {
+  return new CerebralService(cerebralInitialStore)
+}
+
 @NgModule({
   imports:      [ BrowserModule ],
   declarations: [ AppComponent ],
@@ -367,9 +372,7 @@ const cerebralInitialStore = {
   providers: [
      {
       provide: CerebralService,
-      useFactory: () => {
-        return new CerebralService(cerebralInitialStore)
-      }
+      useFactory: startCerebral
     },
   ]
 })

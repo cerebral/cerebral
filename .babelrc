@@ -1,6 +1,5 @@
 {
   "presets": ["es2015"],
-  "plugins": ["version-transform", "transform-decorators-legacy"],
   "env": {
     "production": {
       "ignore": [
