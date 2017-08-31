@@ -353,6 +353,7 @@ import {NgModule} from '@angular/core'
 import {BrowserModule} from '@angular/platform-browser'
 import {CerebralService} from 'cerebral/angular'
 import {AppComponent}  from './app.component.ts'
+import {SomeAngularService} from './some-service' //some angular service provider
 
 const cerebralInitialStore = {
   state: {
@@ -361,7 +362,24 @@ const cerebralInitialStore = {
 }
 
 // AOT support
-export function startCerebral() {
+export function startCerebral(someService: SomeAngularService) {
+  
+  function ServiceProvider(context) {
+      context.someService = {
+        sayHello: someService.hello,
+        sayBye: someService.bye
+      }
+  
+      if (context.debugger) {
+        context.debugger.wrapProvider('someService')
+      }
+      return context
+    }
+  
+  cerebralStore.providers = [
+    ServiceProvider
+  ]
+  
   return new CerebralService(cerebralInitialStore)
 }
 
@@ -372,7 +390,10 @@ export function startCerebral() {
   providers: [
      {
       provide: CerebralService,
-      useFactory: startCerebral
+      useFactory: startCerebral,
+      deps: [
+        SomeAngularService
+      ]
     },
   ]
 })
