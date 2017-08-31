@@ -1,17 +1,18 @@
 # Components
 
 ## React
-[Website](https://facebook.github.io/react/)
+
+[React](https://facebook.github.io/react) view for cerebral.
 
 **NPM**
 
-`npm install react react-dom babel-preset-react`
+`npm install @cerebral/react react react-dom babel-preset-react`
 
 ```js
 import React from 'react'
 import {render} from 'react-dom'
 import {Controller} from 'cerebral'
-import {Container} from 'cerebral/react'
+import {Container} from '@cerebral/react'
 import App from './App'
 
 const controller = Controller({
@@ -29,8 +30,8 @@ render((
 
 ```js
 import React from 'react'
-import {connect} from 'cerebral/react'
 import {state, signal} from 'cerebral/tags'
+import {connect} from '@cerebral/react'
 
 // Stateless
 export default connect({
@@ -59,8 +60,8 @@ You can add an additional function to connect that gives you full control of pro
 
 ```js
 import React from 'react'
-import {connect} from 'cerebral/react'
 import {signal, state} from 'cerebral/tags'
+import {connect} from '@cerebral/react'
 
 export default connect({
   foo: state`app.foo`,
@@ -83,6 +84,50 @@ export default connect({
 **props** are the props passed into the component by the parent.
 
 **resolve** allows you to resolve computed etc., just like resolve in actions.
+
+## TypeScript
+
+If you use TypeScript, you can type your component props with connect:
+
+```ts
+import React from 'react'
+import {state, signal} from 'cerebral/tags'
+import {connect} from '@cerebral/react'
+
+// connected props
+interface Props {
+  click (): void
+  foo: string
+}
+
+// component props such as <MyComponent name='foobar' />
+interface EProps {
+  name: string
+}
+
+// Stateless
+export default connect<Props, EProps>({
+  foo: state`foo`,
+  click: signal`clicked`
+},
+  // TypeScript now knows about foo and click props
+  function MyComponent ({foo, click}) {
+    return <div onClick={() => click()}>{foo}</div>
+  }
+)
+
+// Stateful
+export default connect<Props, EProps>({
+  foo: state`foo`,
+  click: signal`clicked`
+},
+  class MyComponent extends React.Component<Props, EProps> {
+    render () {
+      return <div onClick={() => this.props.click()}>{this.props.foo}</div>
+    }
+  }
+)
+```
 
 ## Inferno
 [Website](http://infernojs.org/)
