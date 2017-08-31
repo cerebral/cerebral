@@ -1,11 +1,9 @@
 # Install
 To install Cerebral you need to use the Node Package Manager. NPM is part of [Node](https://nodejs.org/en/), so please install that on your computer first. You should install Node version 5 or later.
 
-To install Cerebral BETA you have to explicitly install Cerebral:
+Install from command line:
 
-**NPM**
-
-`npm install cerebral@beta`
+`npm install cerebral`
 
 ## Boilerplate
 
