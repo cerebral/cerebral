@@ -1,5 +1,5 @@
 # Cerebral
-A state controller with its own debugger
+A declarative state and side effects management solution for popular JavaScript frameworks
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
@@ -11,17 +11,8 @@ A state controller with its own debugger
 
 ## Documentation
 
-* [Cerebral v1 documentation website](http://cerebral-website.herokuapp.com/)
-* [Cerebral v2 beta documentation website](http://www.cerebraljs.com/)
-
-## Try out Cerebral 2
-To try out Cerebral 2 you can install any package with:
-
-`npm install {cerebralPackage}@beta --save`
-
-For packages which are scoped with `@cerebral/` `@beta` can be omitted.
-
-This will install the latest version of that package. New versions are automatically deployed whenever pull requests are merged into master.
+* [Current Cerebral (2.x and up)](http://www.cerebraljs.com/)
+* [Previous Cerebral (1.x)](http://cerebral-website.herokuapp.com/)
 
 ## Contribute
 The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
