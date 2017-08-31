@@ -22,6 +22,17 @@ Concatenate a value to an array
 concat(state`some.list`, ['foo', 'bar'])
 ```
 
+### increment
+
+Increment an integer value by another integer value into an array. The default increment is 1, and a negative value effectively does a decrement.
+
+```js
+increment(state`some.integer`)
+increment(state`some.integer`, -5)
+increment(state`some.integer`, state`some.otherInteger`)
+increment(state`some.integer`, props`some.otherInteger`)
+```
+
 ### merge
 
 Merge objects into existing value. If no value exists, an empty object will be created. Merge supports using operator tags on key values:
@@ -98,37 +109,9 @@ Unshift a value into an array (adds the element at the start of the array).
 unshift(state`some.list`, 'foo')
 ```
 
-### increment
-
-Increment an integer value by another integer value into an array. The default increment is 1, and a negative value effectively does a decrement.
-
-```js
-increment(state`some.integer`)
-increment(state`some.integer`, -5)
-increment(state`some.integer`, state`some.otherInteger`)
-increment(state`some.integer`, props`some.otherInteger`)
-```
-
 ## Flow control operators
 
 These operators help control the execution flow.
-
-### equals
-
-This operator chooses a specific path based on the provided value.
-
-```js
-import {equals} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
-
-export default [
-  equals(state`user.role`), {
-    admin: [],
-    user: [],
-    otherwise: [] // When no match
-  }
-],
-```
 
 ### debounce
 
@@ -182,6 +165,23 @@ export default [
   // ... user log in, etc
   ...showNotification('User logged in', 5000)
 ]
+```
+
+### equals
+
+This operator chooses a specific path based on the provided value.
+
+```js
+import {equals} from 'cerebral/operators'
+import {state} from 'cerebral/tags'
+
+export default [
+  equals(state`user.role`), {
+    admin: [],
+    user: [],
+    otherwise: [] // When no match
+  }
+],
 ```
 
 ### wait
