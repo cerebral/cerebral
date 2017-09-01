@@ -186,16 +186,17 @@ export default connect({
 ```
 
 ## Preact (BETA)
-[Website](https://github.com/developit/preact)
+
+[Preact](https://github.com/developit/preact) view for cerebral.
 
 **NPM**
 
-`npm install preact babel-plugin-transform-react-jsx`
+`npm install @cerebral/preact preact babel-preset-preact`
 
 ```js
 import {h, render} from 'preact'
 import {Controller} from 'cerebral'
-import {Container} from 'cerebral/preact'
+import {Container} from '@cerebral/preact'
 import App from './App'
 
 const controller = Controller({
@@ -213,7 +214,7 @@ render((
 
 ```js
 import {h, Component} from 'preact'
-import {connect} from 'cerebral/preact'
+import {connect} from '@cerebral/preact'
 import {state, signal} from 'cerebral/tags'
 
 export default connect({
