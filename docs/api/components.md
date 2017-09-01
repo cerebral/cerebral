@@ -291,16 +291,17 @@ connect(dependencies, name, controller)
 
 
 ## Vue (BETA)
-[Website](https://vuejs.org/)
+
+[Vue.js](https://vuejs.org) view for cerebral.
 
 **NPM**
 
-`npm install vue`
+`npm install @cerebral/vue vue`
 
 ```js
 import Vue from 'vue/dist/vue'
 import {Controller} from 'cerebral'
-import {Container, connect} from 'cerebral/vue'
+import {Container, connect} from '@cerebral/vue'
 
 const controller = Controller({
   state: {
@@ -328,7 +329,7 @@ const controller = Controller({
 ```
 
 ```js
-import {connect} from 'cerebral/vue'
+import {connect} from '@cerebral/vue'
 import {state, signal} from 'cerebral/tags'
 
 export default connect({
