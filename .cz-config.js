@@ -42,8 +42,8 @@ module.exports = {
     {name: 'react'},
     {name: 'inferno'},
     {name: 'preact'},
-    {name: 'angular'},
-    {name: 'vue'}
+    {name: 'vue'},
+    {name: 'angular'}
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
