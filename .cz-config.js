@@ -38,7 +38,12 @@ module.exports = {
     {name: 'firebase-admin'},
     {name: 'storage'},
     {name: 'website'},
-    {name: 'tutorial'}
+    {name: 'tutorial'},
+    {name: 'react'},
+    {name: 'inferno'},
+    {name: 'preact'},
+    {name: 'angular'},
+    {name: 'vue'}
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'

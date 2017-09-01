@@ -130,16 +130,17 @@ export default connect<Props, EProps>({
 ```
 
 ## Inferno
-[Website](http://infernojs.org/)
+
+[Inferno](http://infernojs.org) view for cerebral.
 
 **NPM**
 
-`npm install inferno inferno-component inferno-create-element babel-plugin-inferno`
+`npm install @cerebral/inferno inferno inferno-component inferno-create-element babel-plugin-inferno`
 
 ```js
-import Inferno from 'react'
+import Inferno from 'inferno'
 import {Controller} from 'cerebral'
-import {Container} from 'cerebral/inferno'
+import {Container} from '@cerebral/inferno'
 import App from './App'
 
 const controller = Controller({
@@ -158,7 +159,7 @@ Inferno.render((
 ```js
 import Inferno from 'inferno'
 import Component from 'inferno-component'
-import {connect} from 'cerebral/inferno'
+import {connect} from '@cerebral/inferno'
 import {state, signal} from 'cerebral/tags'
 
 // Stateless
