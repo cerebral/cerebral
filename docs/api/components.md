@@ -230,15 +230,16 @@ export default connect({
 ```
 
 ## Angularjs (BETA)
-[Website](https://angularjs.org/)
+
+[Angularjs](https://angularjs.org) view for cerebral.
 
 **NPM**
 
-`npm install angular`
+`npm install @cerebral/angularjs angular`
 
 ```js
 import angular from 'angular'
-import {addModule} from 'cerebral/angularjs'
+import {addModule} from '@cerebral/angularjs'
 
 addModule(angular)
 
@@ -258,7 +259,7 @@ angular.module('app', ['cerebral'])
 
 ```js
 import angular from 'angular'
-import {connect} from 'cerebral/angularjs'
+import {connect} from '@cerebral/angularjs'
 import {state, signal} from 'cerebral/tags'
 
 angular.component('myComponent', {
