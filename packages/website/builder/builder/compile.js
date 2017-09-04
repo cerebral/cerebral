@@ -1,9 +1,11 @@
 const React = require('react')
 const Prism = require('prismjs')
 const prismJsx = require('./prismJsx')
+const prismJsxTs = require('./prismJsxTs')
 const marksy = require('marksy/components').marksy
 
 prismJsx(Prism)
+prismJsxTs(Prism)
 
 module.exports = marksy({
   createElement: React.createElement,
