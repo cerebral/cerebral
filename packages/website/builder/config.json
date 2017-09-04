@@ -43,6 +43,22 @@
       "../../../docs/api/tags",
       "../../../docs/api/universalcontroller"
     ],
+    "views": [{
+      "name": "react",
+      "path": "../../node_modules/@cerebral/react/README"
+    }, {
+      "name": "vue",
+      "path": "../../node_modules/@cerebral/vue/README"
+    }, {
+      "name": "inferno",
+      "path": "../../node_modules/@cerebral/inferno/README"
+    }, {
+      "name": "preact",
+      "path": "../../node_modules/@cerebral/preact/README"
+    }, {
+      "name": "angularjs",
+      "path": "../../node_modules/@cerebral/angularjs/README"
+    }],
     "addons": [{
       "name": "function-tree",
       "path": "../../node_modules/function-tree/README"
