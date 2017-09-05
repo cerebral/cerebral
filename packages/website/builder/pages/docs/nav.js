@@ -15,7 +15,11 @@ function Navigation(props) {
           return (
             <li key={index}>
               {item.children.length > 0 &&
-                <input className="nav_toggle" type="checkbox" defaultChecked />}
+                <input
+                  className={`nav_toggle`}
+                  type="checkbox"
+                  defaultChecked={false}
+                />}
               {item.children.length > 0 &&
                 <span className="nav_toggle-label" />}
               <div className="nav_link">
@@ -44,9 +48,9 @@ function Navigation(props) {
             <li key={index}>
               {page.children.length > 0 &&
                 <input
-                  className="nav_toggle"
+                  className={`nav_toggle ${open ? 'nav_toggle_extended' : ''}`}
                   type="checkbox"
-                  defaultChecked={open}
+                  defaultChecked={false}
                 />}
               {page.children.length > 0 &&
                 <span className="nav_toggle-label" />}

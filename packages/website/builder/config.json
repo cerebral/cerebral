@@ -31,43 +31,42 @@
       "../../../docs/introduction/test"
     ],
     "api": [
-      "../../../docs/api/devtools",
-      "../../../docs/api/controller",
-      "../../../docs/api/state",
-      "../../../docs/api/signal",
-      "../../../docs/api/tags",
-      "../../../docs/api/operators",
       "../../../docs/api/action",
-      "../../../docs/api/module",
-      "../../../docs/api/providers",
-      "../../../docs/api/components",
       "../../../docs/api/compute",
+      "../../../docs/api/controller",
+      "../../../docs/api/devtools",
+      "../../../docs/api/module",
+      "../../../docs/api/operators",
+      "../../../docs/api/providers",
+      "../../../docs/api/signal",
+      "../../../docs/api/state",
+      "../../../docs/api/tags",
       "../../../docs/api/universalcontroller"
     ],
     "addons": [{
-      "name": "router",
-      "path": "../../node_modules/@cerebral/router/README"
-    }, {
-      "name": "http",
-      "path": "../../node_modules/@cerebral/http/README"
-    }, {
       "name": "firebase",
       "path": "../../node_modules/@cerebral/firebase/README"
-    }, {
-      "name": "useragent",
-      "path": "../../node_modules/@cerebral/useragent/README"
-    }, {
-      "name": "forms",
-      "path": "../../node_modules/@cerebral/forms/README"
-    }, {
-      "name": "storage",
-      "path": "../../node_modules/@cerebral/storage/README"
     }, {
       "name": "firebase_admin",
       "path": "../../node_modules/@cerebral/firebase-admin/README"
     }, {
-      "name": "function_tree",
-      "path": "../../node_modules/function-tree/README"
+      "name": "forms",
+      "path": "../../node_modules/@cerebral/forms/README"
+    }, {
+      "name": "http",
+      "path": "../../node_modules/@cerebral/http/README"
+    }, {
+      "name": "storage",
+      "path": "../../node_modules/@cerebral/storage/README"
+    }, {
+      "name": "shortcuts",
+      "path": "../../node_modules/@cerebral/shortcuts/README"
+    }, {
+      "name": "router",
+      "path": "../../node_modules/@cerebral/router/README"
+    }, {
+      "name": "useragent",
+      "path": "../../node_modules/@cerebral/useragent/README"
     }],
     "resources": [
       "../../../docs/resources/cerebral_in_detail",

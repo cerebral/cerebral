@@ -13,6 +13,14 @@ function setLinkHighlight(forceLink) {
   if (link && link.parentNode.className.indexOf('nav_open') === -1) {
     link.parentNode.className += ' nav_link_selected'
   }
+
+  if (
+    existingLink &&
+    existingLink.childNodes[0] === link &&
+    link.parentNode.parentNode.childNodes[0].tagName === 'INPUT'
+  ) {
+    link.parentNode.parentNode.childNodes[0].click()
+  }
 }
 
 if (location.hash) {
