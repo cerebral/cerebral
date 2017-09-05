@@ -346,14 +346,17 @@ export default connect({
 
 **NPM**
 
-`npm install angular`
+`npm install @cerebral/angular @angular/core @angular/platform-browser babel-plugin-transform-decorators-legacy`
+
 
 ```js
 import {NgModule} from '@angular/core'
 import {BrowserModule} from '@angular/platform-browser'
-import {CerebralService} from 'cerebral/angular'
+import {CerebralService} from '@cerebral/angular'
 import {AppComponent}  from './app.component.ts'
 import {SomeAngularService} from './some-service' //some angular service provider
+
+
 
 const cerebralInitialStore = {
   state: {
@@ -379,10 +382,7 @@ export function startCerebral(someService: SomeAngularService) {
   cerebralStore.providers = [
     ServiceProvider
   ]
-  
-  return new CerebralService(cerebralInitialStore)
-}
-
+})
 @NgModule({
   imports:      [ BrowserModule ],
   declarations: [ AppComponent ],
@@ -391,37 +391,34 @@ export function startCerebral(someService: SomeAngularService) {
      {
       provide: CerebralService,
       useFactory: startCerebral,
-      deps: [
-        SomeAngularService
-      ]
+      deps: [SomeAngularService]
     },
   ]
 })
 export class AppModule {}
-
 ```
 
-```js
+``` 
 // special types for angular somewhere in myapp used below in your component/services file
-// by doing this Angular and typescript will not complain about string literals compatibility
+// by doing this Angular and typescript will not complain about string literals compatibility for AOT
 import { signal as originalSignal, state as originalState, Tag } from 'cerebral/tags'
 
-interface MySignal {
+interface CerebralAngularSignal {
   (path: any[], ...values: any[]): Tag
 }
-export const signal = <MySignal> <any> originalSignal
 
-interface MyState {
+interface CerebralAngularState {
   (path: any[], ...values: any[]): Tag
 }
-export const state = <MyState> <any> originalState
+
+export const signal = <CerebralAngularSignal> <any> originalSignal
+export const state = <CerebralAngularState> <any> originalState
 ```
 
 ```js
 import {Component, ChangeDetectorRef} from '@angular/core'
-import {state, signal} from 'myapp'
-import {Cerebral} from 'cerebral/angular'
-import {CerebralService} from 'cerebral/angular'
+import {state, signal} from 'myapp'  // note above
+import {Cerebral, CerebralService} from '@cerebral/angular'
 
 @Component({ 
   selector: 'app-component',
@@ -431,13 +428,13 @@ import {CerebralService} from 'cerebral/angular'
   changeDetection: ChangeDetectionStrategy.OnPush // disable angular change detection
 })
 @Cerebral({
-  myName: state(['foo']),
+  myName: state(['foo']), // notice array instead of template string literals to allow AOT
   onClick: signal(['mySignal'])
 })
 export class AppComponent {
   constructor(private ref: ChangeDetectorRef, private cerebral: CerebralService) { // needed by the decorator to trigger change detection
     // In some cases you might need access to cerebral's controller.
-    this.cerebral.getSignal('onClick')()
+    this.cerebral.controller.getSignal('onClick')()
     
     // Optionally add custom behaviour to controller
   }
