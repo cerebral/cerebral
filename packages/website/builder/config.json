@@ -44,6 +44,9 @@
       "../../../docs/api/universalcontroller"
     ],
     "addons": [{
+      "name": "function-tree",
+      "path": "../../node_modules/function-tree/README"
+    }, {
       "name": "firebase",
       "path": "../../node_modules/@cerebral/firebase/README"
     }, {
