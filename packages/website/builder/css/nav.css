@@ -165,6 +165,9 @@
   margin: 0;
   border: none !important;
 }
+.nav_toggle.nav_toggle_extended {
+  width: 100%;
+}
 .nav_toggle-label {
   display: flex;
   align-items: center;
