@@ -15,7 +15,7 @@
     "format": "npm run lint -- --fix",
     "link": "node ./scripts/run.js link",
     "lint": "eslint \"**/*.js\"",
-    "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json babel/**/coverage/*.json",
+    "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "postinstall": "npm run setup",
     "postsetup": "npm run link",
     "precommit": "lint-staged",
