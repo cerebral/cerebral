@@ -11,6 +11,18 @@ cooker.cook('publish', [
   cook.groupCommitsByPackage,
   cook.evaluateSemverByPackage,
   cook.relatedPackagesByPackage,
+  // Temporary cleanup of circular deps
+  // To be removed on [DEPRECATION] cleanup
+  ({ props: { relatedPackagesByPackage } }) => {
+    const views = ['angularjs', 'inferno', 'preact', 'react', 'vue'].map(
+      k => `@cerebral/${k}`
+    )
+    relatedPackagesByPackage[
+      'cerebral'
+    ].dependencies = relatedPackagesByPackage['cerebral'].dependencies.filter(
+      key => !views.includes(key)
+    )
+  },
   cook.getCurrentVersionByPackage,
   cook.evaluateNewVersionByPackage,
   cook.byBranch,
