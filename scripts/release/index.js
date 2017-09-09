@@ -17,11 +17,10 @@ cooker.cook('publish', [
     const views = ['angularjs', 'inferno', 'preact', 'react', 'vue'].map(
       k => `@cerebral/${k}`
     )
-    relatedPackagesByPackage[
+    relatedPackagesByPackage['cerebral'] = relatedPackagesByPackage[
       'cerebral'
-    ].dependencies = relatedPackagesByPackage['cerebral'].dependencies.filter(
-      key => !views.includes(key)
-    )
+    ].filter(key => !views.includes(key))
+    return { relatedPackagesByPackage }
   },
   cook.getCurrentVersionByPackage,
   cook.evaluateNewVersionByPackage,
