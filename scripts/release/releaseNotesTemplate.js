@@ -53,9 +53,7 @@ ${feat.map(Package)}
 }
 
 export default release => {
-  return `# ${release.name}
-
-${writeBreaks(release.breaks)}
+  return `${writeBreaks(release.breaks)}
 ${writeFixes(release.fix)}
 ${writeFeat(release.feat)}
 
