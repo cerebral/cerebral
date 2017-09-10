@@ -18,7 +18,7 @@ function Index(props) {
         <div className="docs-doc-content">
           {
             props.compile(`
-> A declarative **state and side effects management** solution for popular JavaScript frameworks
+> Declarative **state and side effects management** for popular JavaScript frameworks
 `).tree
           }
           <div className="index-buttons">
@@ -134,7 +134,7 @@ it allows us to build developer tools:
             <iframe
               width="560"
               height="315"
-              src="https://www.youtube.com/embed/ougdxFD4BZQ"
+              src="https://www.youtube.com/embed/mYkM8CiVsXw"
               frameborder="0"
               allowfullscreen
             />
