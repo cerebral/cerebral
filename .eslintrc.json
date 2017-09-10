@@ -29,6 +29,7 @@
         "semi": false
       }
     ],
-    "standard/computed-property-even-spacing": "off"
+    "standard/computed-property-even-spacing": "off",
+    "jsx-a11y/href-no-hash": "off"
   }
 }
