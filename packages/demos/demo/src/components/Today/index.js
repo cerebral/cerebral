@@ -35,7 +35,7 @@ export default connect(
                     {task.name}
                   </td>
                   <td style={{ width: 160 }}>
-                    <a href="#">
+                    <a href="">
                       {projects[task.projectKey].name}
                     </a>
                   </td>
