@@ -21,7 +21,7 @@
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "concurrently": "^3.4.0",
-    "express": "^4.15.3",
+    "express": "^4.15.4",
     "prop-types": "^15.5.10",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"

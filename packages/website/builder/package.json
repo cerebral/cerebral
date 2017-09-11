@@ -12,7 +12,7 @@
   "license": "ISC",
   "devDependencies": {
     "babel-watch": "^2.0.5",
-    "express": "^4.15.3",
+    "express": "^4.15.4",
     "fs-extra": "^2.0.0",
     "marksy": "^4.0.0",
     "prismjs": "^1.6.0",
