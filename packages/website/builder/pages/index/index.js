@@ -10,7 +10,7 @@ function Index(props) {
           backgroundSize: 'contain',
           backgroundPosition: 'center',
           width: '100%',
-          height: '50vh',
+          height: '25vh',
         }}
       />
       <h1 className="index-title">Cerebral</h1>
