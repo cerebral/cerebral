@@ -44,6 +44,9 @@
       "../../../docs/api/universalcontroller"
     ],
     "views": [{
+      "name": "angular",
+      "path": "../../node_modules/@cerebral/angular/README"
+    }, {
       "name": "angularjs",
       "path": "../../node_modules/@cerebral/angularjs/README"
     }, {
