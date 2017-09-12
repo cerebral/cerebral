@@ -125,6 +125,14 @@ function Navigation(props) {
         >
           <div className="nav_button-discord" />
         </a>
+        <a
+          href="https://twitter.com/cerebraljs"
+          className="nav_button"
+          target="_new"
+          title="Chat"
+        >
+          <div className="nav_button-twitter" />
+        </a>
       </div>
     )
   }
@@ -132,6 +140,9 @@ function Navigation(props) {
   return (
     <div id="nav">
       <Header />
+      <div className="nav-backToFront">
+        <a href="/"><small>⬅</small> front page</a>
+      </div>
       <Sections
         docs={props.docs}
         docName={props.docName}
