@@ -66,6 +66,9 @@
       "name": "function-tree",
       "path": "../../node_modules/function-tree/README"
     }, {
+      "name": "baobab",
+      "path": "../../node_modules/@cerebral/baobab/README"
+    }, {
       "name": "firebase",
       "path": "../../node_modules/@cerebral/firebase/README"
     }, {
@@ -77,6 +80,9 @@
     }, {
       "name": "http",
       "path": "../../node_modules/@cerebral/http/README"
+    }, {
+      "name": "mobx-state-tree",
+      "path": "../../node_modules/@cerebral/mobx-state-tree/README"
     }, {
       "name": "storage",
       "path": "../../node_modules/@cerebral/storage/README"
