@@ -235,6 +235,11 @@
   text-indent: 0;
 }
 
+#nav .nav_toggle-label.nav_home::before {
+  content: '⌂';
+  padding-right: 5px !important;
+}
+
 #nav .nav_toggle-label.nav_section::before {
   padding-right: 10px;
 }
