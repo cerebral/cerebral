@@ -29,6 +29,15 @@ function Index(props) {
               api
             </a>
           </div>
+          <div className="index-youtube">
+            <iframe
+              width="560"
+              height="315"
+              src="https://www.youtube.com/embed/mYkM8CiVsXw"
+              frameborder="0"
+              allowfullscreen
+            />
+          </div>
           <div className="index-example-row">
             <div>
               {
@@ -129,15 +138,6 @@ it allows us to build developer tools:
             <a href="/docs/api" className="button">
               api
             </a>
-          </div>
-          <div className="index-youtube">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/mYkM8CiVsXw"
-              frameborder="0"
-              allowfullscreen
-            />
           </div>
           <div className="index-release">
             Released under the MIT License
