@@ -76,31 +76,39 @@ function Navigation(props) {
   function Sections(props) {
     return (
       <ul>
-        {Object.keys(props.docs).map(function(sectionKey, index) {
-          const open = props.sectionName === sectionKey
-          return (
-            <li key={index} className={`nav_item ${open ? 'nav_open' : ''}`}>
-              <input
-                id={sectionKey}
-                className="nav_toggle"
-                type="checkbox"
-                defaultChecked={open}
-              />
-              <label
-                htmlFor={sectionKey}
-                className="nav_toggle-label nav_section"
-              >
-                {sectionKey.replace('_', ' ').toUpperCase()}
-              </label>
-              <Pages
-                docName={props.docName}
-                sectionKey={sectionKey}
-                sectionOpen={open}
-                pages={props.docs[sectionKey]}
-              />
-            </li>
-          )
-        })}
+        {[
+          <li key={'home'} className="nav_item">
+            <label className="nav_toggle-label nav_section nav_home">
+              <a href="/">HOME</a>
+            </label>
+          </li>,
+        ].concat(
+          Object.keys(props.docs).map(function(sectionKey, index) {
+            const open = props.sectionName === sectionKey
+            return (
+              <li key={index} className={`nav_item ${open ? 'nav_open' : ''}`}>
+                <input
+                  id={sectionKey}
+                  className="nav_toggle"
+                  type="checkbox"
+                  defaultChecked={open}
+                />
+                <label
+                  htmlFor={sectionKey}
+                  className="nav_toggle-label nav_section"
+                >
+                  {sectionKey.replace('_', ' ').toUpperCase()}
+                </label>
+                <Pages
+                  docName={props.docName}
+                  sectionKey={sectionKey}
+                  sectionOpen={open}
+                  pages={props.docs[sectionKey]}
+                />
+              </li>
+            )
+          })
+        )}
       </ul>
     )
   }
