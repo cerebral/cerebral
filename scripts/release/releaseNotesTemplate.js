@@ -19,7 +19,7 @@ function Package(item) {
 }
 
 function writeBreaks(breaks) {
-  if (!breaks.length) {
+  if (!breaks) {
     return ''
   }
 
@@ -31,7 +31,7 @@ ${breaks.map(Package).join('\n')}
 }
 
 function writeFixes(fix) {
-  if (!fix.length) {
+  if (!fix) {
     return ''
   }
 
@@ -43,7 +43,7 @@ ${fix.map(Package).join('\n')}
 }
 
 function writeFeat(feat) {
-  if (!feat.length) {
+  if (!feat) {
     return ''
   }
 
@@ -55,7 +55,7 @@ ${feat.map(Package).join('\n')}
 }
 
 function writeDocs(docs) {
-  if (!docs.length) {
+  if (!docs) {
     return ''
   }
 
@@ -67,7 +67,7 @@ ${docs.map(Package).join('\n')}
 }
 
 function writeChore(chore) {
-  if (!chore.length) {
+  if (!chore) {
     return ''
   }
 
