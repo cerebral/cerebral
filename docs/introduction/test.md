@@ -87,7 +87,7 @@ The optional `fixture` argument should be an object that contains any of the fol
 
 The `result` object passed when the promise resolves contains `state`, `controller`, `props` and `output` properties.
 
-```
+```js
 {
   state,
   controller,
