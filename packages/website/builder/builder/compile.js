@@ -28,14 +28,63 @@ module.exports = marksy({
       )
     },
   },
-  a(props) {
-    return (
-      <a
-        href={props.href}
-        target={props.href.substr(0, 4) === 'http' ? 'new' : null}
-      >
-        {props.children}
-      </a>
-    )
+  elements: {
+    a(props) {
+      return (
+        <a
+          href={props.href}
+          target={props.href.substr(0, 4) === 'http' ? 'new' : null}
+        >
+          {props.children}
+        </a>
+      )
+    },
+    h1(props) {
+      return (
+        <h1 id={props.id}>
+          {props.children}
+        </h1>
+      )
+    },
+    h2(props) {
+      return (
+        <h2 id={props.id}>
+          {props.children}
+          <a href={`#${props.id}`}>∞</a>
+        </h2>
+      )
+    },
+    h3(props) {
+      return (
+        <h3 id={props.id}>
+          {props.children}
+          <a href={`#${props.id}`}>∞</a>
+        </h3>
+      )
+    },
+    h4(props) {
+      return (
+        <h4 id={props.id}>
+          {props.children}
+          <a href={`#${props.id}`}>∞</a>
+        </h4>
+      )
+    },
+    h5(props) {
+      return (
+        <h5 id={props.id}>
+          {props.children}
+          <a href={`#${props.id}`}>∞</a>
+        </h5>
+      )
+    },
+    h6(props) {
+      return (
+        <h6 id={props.id}>
+          {props.children}
+          <a href={`#${props.id}`}>∞</a>
+        </h6>
+      )
+    },
   },
 })

@@ -14,6 +14,11 @@ blockquote {
   line-height: 32px;
 }
 
+h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a {
+  position: absolute;
+  left: -30px;
+}
+
 
 #docs-container {
   position: relative;

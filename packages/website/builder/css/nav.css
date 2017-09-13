@@ -109,22 +109,41 @@
 #nav ul {
   list-style: none;
   margin: 0;
-  padding-left: 10px;
+  padding-left: 0;
   display: none;
   flex: 1 0;
 }
 #nav > ul {
-  padding: 10px 20px 10px 2px;
+  padding: 0;
   display: block;
   overflow-y: auto;
   position: relative;
+}
+#nav > ul > li {
+  border-top: 1px solid #EAEAEA;
 }
 #nav > ul > li:last-child {
   padding-bottom: 10px;
 }
 
 #nav ul ul {
+  border-bottom: 1px solid #EAEAEA;
   font-size: 0.9em;
+  background-color: #FFF;
+}
+
+
+#nav ul ul ul {
+  border-top: 1px solid #EAEAEA;
+  padding-left: 10px;
+  background-color: #FAFAFA;
+}
+
+#nav ul ul ul ul {
+  border-top: 0;
+  border-bottom: 0;
+  padding-left: 10px;
+  background-color: #FAFAFA;
 }
 
 #nav > ul a {
@@ -133,30 +152,60 @@
   padding: 0 8px;
 }
 
-#nav > ul a:hover {
+#nav > ul label:hover {
   color: #004c66;
+}
+
+.nav_item {
+  color: #0086b3;
+}
+
+.nav_page {
+  display: inline-block;
+}
+
+.nav_item label {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: #FFF;
+  cursor: pointer;
+  margin: 0;
+  flex: 1;
+  cursor: pointer;
+  height: 25px;
+}
+
+.page_item label.nav_page {
+  background-color: #FFF;
+  height: 20px;
+}
+
+.page_item label.nav_sublink {
+  background-color: #FAFAFA;
+  height: 15px;
 }
 
 .nav_link {
   display: inline-block;
-  width: 100%;
   height: 25px;
   position: relative;
   z-index: 1;
-  border-radius: 10em;
   line-height: 25px;
 }
-.nav_link.nav_open > a {
+
+
+.page_item.nav_open > label > a, .nav_link.nav_open > a {
   font-weight: bold;
   color: #0086b3 !important;
 }
+
 .nav_link.nav_link_selected > a {
   text-decoration: underline;
 }
 
 .nav_toggle {
   position: absolute;
-  right: 20px;
   opacity: 0;
   z-index: 3;
   cursor: pointer;
@@ -164,39 +213,52 @@
   height: 25px;
   margin: 0;
   border: none !important;
+  right: 0;
 }
-.nav_toggle.nav_toggle_extended {
-  width: 100%;
+
+#nav .nav_toggle-label-empty > a {
+  padding-left: 25px;
 }
-.nav_toggle-label {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  right: 20px;
-  font-family: monospace;
-  font-weight: bold;
-  font-size: small;
-  color: lightgray;
-  z-index: 2;
-  cursor: pointer;
-  border-radius: 10em;
-  width: 25px;
-  height: 25px;
-  color: #999;
+
+#nav .nav_toggle-label-empty.nav_sublink > a {
+  padding-left: 20px;
 }
-.nav_toggle + .nav_toggle-label::before {
+
+#nav .nav_toggle-label::before {
+  position: relative;
+  display: inline-block;
   content: '+';
+  color: #CACACA;
+  padding-right: 5px;
+  width: 15px;
+  top: -2px;
+  text-indent: 0;
 }
-.nav_toggle:checked + .nav_toggle-label::before {
+
+#nav .nav_toggle-label.nav_home::before {
+  content: '⌂';
+  padding-right: 5px !important;
+}
+
+#nav .nav_toggle-label.nav_section::before {
+  padding-right: 10px;
+}
+
+#nav .nav_toggle:checked + .nav_toggle-label::before {
+  position: relative;
+  display: inline-block;
   content: '-';
-}
-.nav_toggle:hover + .nav_toggle-label {
-  color: #333;
+  color: #CACACA;
+  width: 15px;
+  top: -2px;
 }
 
 #nav .nav_toggle:checked ~ ul:first-of-type {
   display: block;
+}
+
+#nav .nav_toggle:checked + .nav_toggle-label {
+  font-weight: bold;
 }
 
 /* === buttons === */
@@ -212,8 +274,8 @@
 .nav_button > div {
   background-size: contain;
   background-repeat: no-repeat;
-  width: 30px;
-  height: 30px;
+  width: 25px;
+  height: 25px;
   margin: 5px;
 }
 
@@ -222,4 +284,11 @@
 }
 .nav_button-discord {
   background-image: url(/images/discord.png);
+}
+.nav_button-twitter {
+  background-image: url(/images/twitter.png);
+}
+
+.nav-backToFront {
+  padding: 5px 10px;
 }

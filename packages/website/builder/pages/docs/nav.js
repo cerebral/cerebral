@@ -16,17 +16,21 @@ function Navigation(props) {
             <li key={index}>
               {item.children.length > 0 &&
                 <input
-                  className={`nav_toggle`}
+                  id={href}
+                  className="nav_toggle"
                   type="checkbox"
                   defaultChecked={false}
                 />}
-              {item.children.length > 0 &&
-                <span className="nav_toggle-label" />}
-              <div className="nav_link">
-                <a href={href}>
-                  {item.title}
-                </a>
-              </div>
+              <label
+                htmlFor={href}
+                className={`${item.children.length
+                  ? 'nav_toggle-label'
+                  : 'nav_toggle-label-empty'} nav_sublink`}
+              >
+                {item.children.length
+                  ? item.title
+                  : <a href={href}>{item.title}</a>}
+              </label>
               <Headings toc={item.children} path={path} />
             </li>
           )
@@ -45,18 +49,22 @@ function Navigation(props) {
             : `/docs/${props.sectionKey}/${pageKey}.html`
           const open = pageKey === props.docName && props.sectionOpen
           return (
-            <li key={index}>
+            <li key={index} className={`page_item ${open ? 'nav_open' : ''}`}>
               {page.children.length > 0 &&
                 <input
-                  className={`nav_toggle ${open ? 'nav_toggle_extended' : ''}`}
+                  id={path}
+                  className="nav_toggle"
                   type="checkbox"
-                  defaultChecked={false}
+                  defaultChecked={open}
                 />}
-              {page.children.length > 0 &&
-                <span className="nav_toggle-label" />}
-              <div className={`nav_link ${open ? 'nav_open' : ''}`}>
+              <label
+                htmlFor={path}
+                className={`${page.children.length
+                  ? 'nav_toggle-label'
+                  : 'nav_toggle-label-empty'} nav_link nav_page`}
+              >
                 <a href={path}>{page.title}</a>
-              </div>
+              </label>
               <Headings toc={page.children} path={path} />
             </li>
           )
@@ -68,30 +76,39 @@ function Navigation(props) {
   function Sections(props) {
     return (
       <ul>
-        {Object.keys(props.docs).map(function(sectionKey, index) {
-          const open = props.sectionName === sectionKey
-          return (
-            <li key={index}>
-              <input
-                className="nav_toggle"
-                type="checkbox"
-                defaultChecked={open}
-              />
-              <span className="nav_toggle-label" />
-              <div className={`nav_link nav_main ${open ? 'nav_open' : ''}`}>
-                <a href={`/docs/${sectionKey}/index.html`}>
+        {[
+          <li key={'home'} className="nav_item">
+            <label className="nav_toggle-label nav_section nav_home">
+              <a href="/">HOME</a>
+            </label>
+          </li>,
+        ].concat(
+          Object.keys(props.docs).map(function(sectionKey, index) {
+            const open = props.sectionName === sectionKey
+            return (
+              <li key={index} className={`nav_item ${open ? 'nav_open' : ''}`}>
+                <input
+                  id={sectionKey}
+                  className="nav_toggle"
+                  type="checkbox"
+                  defaultChecked={open}
+                />
+                <label
+                  htmlFor={sectionKey}
+                  className="nav_toggle-label nav_section"
+                >
                   {sectionKey.replace('_', ' ').toUpperCase()}
-                </a>
-              </div>
-              <Pages
-                docName={props.docName}
-                sectionKey={sectionKey}
-                sectionOpen={open}
-                pages={props.docs[sectionKey]}
-              />
-            </li>
-          )
-        })}
+                </label>
+                <Pages
+                  docName={props.docName}
+                  sectionKey={sectionKey}
+                  sectionOpen={open}
+                  pages={props.docs[sectionKey]}
+                />
+              </li>
+            )
+          })
+        )}
       </ul>
     )
   }
@@ -124,6 +141,14 @@ function Navigation(props) {
           title="Chat"
         >
           <div className="nav_button-discord" />
+        </a>
+        <a
+          href="https://twitter.com/cerebraljs"
+          className="nav_button"
+          target="_new"
+          title="Chat"
+        >
+          <div className="nav_button-twitter" />
         </a>
       </div>
     )
