@@ -54,10 +54,36 @@ ${feat.map(Package).join('\n')}
 `
 }
 
+function writeDocs(docs) {
+  if (!docs.length) {
+    return ''
+  }
+
+  return `
+## documentation
+${docs.map(Package).join('\n')}
+---
+`
+}
+
+function writeChore(chore) {
+  if (!chore.length) {
+    return ''
+  }
+
+  return `
+## ${chore.length} ${chore.length === 1 ? 'chore' : 'chores'}
+${chore.map(Package).join('\n')}
+---
+`
+}
+
 export default release => {
-  return `${writeBreaks(release.breaks)}
-${writeFixes(release.fix)}
-${writeFeat(release.feat)}
+  return `${writeBreaks(release.summary.breaks)}
+${writeFixes(release.summary.fix)}
+${writeFeat(release.summary.feat)}
+${writeDocs(release.summary.docs)}
+${writeChore(release.summary.chore)}
 
 With :heart: from the Cerebral Team!
 `
