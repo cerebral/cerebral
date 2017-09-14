@@ -27,9 +27,7 @@ function Navigation(props) {
                   ? 'nav_toggle-label'
                   : 'nav_toggle-label-empty'} nav_sublink`}
               >
-                {item.children.length
-                  ? item.title
-                  : <a href={href}>{item.title}</a>}
+                <a href={href}>{item.title}</a>
               </label>
               <Headings toc={item.children} path={path} />
             </li>
