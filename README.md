@@ -63,6 +63,21 @@ When you make a code change you should create a branch first. When the code is c
 
 This will give you a guide to creating a commit message. Then you just push and create a pull request as normal on Github.
 
+### Release process
+
+- Review and merge PRs into `next` branch. It is safe to use "Update branch", the commit created by Github will not be part of `next` history
+- If changes to `repo-cooker`, clean Travis NPM cache
+- From command line:
+```sh
+$ git checkout next
+$ git pull
+￼$ npm run release      # and check release notes
+￼$ git checkout master
+$ git pull
+￼$ git merge next
+￼$ git push
+```
+
 [npm-image]: https://img.shields.io/npm/v/cerebral.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral
 [travis-image]: https://img.shields.io/travis/cerebral/cerebral.svg?style=flat
