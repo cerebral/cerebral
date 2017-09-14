@@ -45,6 +45,7 @@
     "firebase-queue": "1.6.0",
     "js-joda": "1.1.13",
     "match-media": "0.2.0",
+    "md5": "^2.2.1",
     "mobx": "3.2.0",
     "mobx-state-tree": "0.9.1",
     "offline-js": "0.7.18",

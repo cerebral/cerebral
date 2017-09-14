@@ -1,90 +1,161 @@
-function Commit(item) {
-  return `
-  - ${item.summary} ${item.issues.length
-    ? '(' + item.issues.join(', ') + ')'
-    : ''} - *${item.author.name}*
-    ${item.breaks
-      .map(item => {
-        return `- ${item}`
-      })
-      .join('\n')}
-`
-}
+import md5 from 'md5'
 
-function Package(item) {
-  return `
-#### ${item.name} - ${item.version}
-  ${item.commits.map(Commit).join('\n')}
-`
-}
+function createNewVersionsTable(release) {
+  const entries = Object.keys(release.newVersionByPackage)
+    .filter(packageName => {
+      return (
+        release.currentVersionByPackage[packageName] !==
+        release.newVersionByPackage[packageName]
+      )
+    })
+    .map(packageName => {
+      return `| ${packageName} | ${release.currentVersionByPackage[
+        packageName
+      ]} | ${release.newVersionByPackage[packageName]} |`
+    })
 
-function writeBreaks(breaks) {
-  if (!breaks.length) {
+  if (!entries.length) {
     return ''
   }
 
-  return `
-## ${breaks.length} breaking
-${breaks.map(Package).join('\n')}
----
+  return `## Updated packages
+
+| package | from version | to version |
+|:---|:---|:---|
+${entries.join('\n')}
 `
 }
 
-function writeFixes(fix) {
-  if (!fix.length) {
-    return ''
-  }
+function byPackageName(a, b) {
+  if (a.packageName > b.packageName) return 1
+  else if (a.packageName < b.packageName) return -1
+  else return 0
+}
 
-  return `
-## ${fix.length} ${fix.length === 1 ? 'fix' : 'fixes'}
-${fix.map(Package).join('\n')}
----
+const typeHeaders = {
+  feat: ':fire: Feature change',
+  fix: ':bug: Bug fixes',
+  docs: ':paperclip: Documentation',
+  chore: ':wrench: Chores',
+  style: ':pencil2: Styling',
+  refactor: ':mag: Refactors',
+  perf: ':runner: Performance',
+  test: ':vertical_traffic_light: Tests',
+  ts: ':pencil: Typescript',
+}
+
+function createChangeTable(type, release) {
+  const entries = release.summary[type]
+    .reduce((allEntries, summary) => {
+      return allEntries.concat(
+        summary.commits.map(commit => {
+          return {
+            packageName: summary.name,
+            summary: commit.summary,
+            issues: commit.issues,
+            hash: commit.hash,
+            authorName: commit.author.name,
+            authorEmail: commit.author.email,
+          }
+        })
+      )
+    }, [])
+    .sort(byPackageName)
+
+  return `## ${typeHeaders[type]}
+| package | summary | commit | issues | author | |
+|:---|:---|:---|:---|:---|---|
+${entries
+    .map(entry => {
+      return `| ${entry.packageName} | ${entry.summary} | ${entry.hash} | ${entry.issues.join(
+        ', '
+      )} | ${entry.authorName} | ![${entry.authorName}](https://www.gravatar.com/avatar/${md5(
+        entry.authorEmail
+      )}?s=40) |`
+    })
+    .join('\n')}
 `
 }
 
-function writeFeat(feat) {
-  if (!feat.length) {
+function createBreakingTable(type, release) {
+  const entries = release.summary[type]
+    .reduce((allEntries, summary) => {
+      const onlyBreaking = summary.commits.filter(
+        commit => commit.breaks.length
+      )
+
+      // Mutate in place (easier :))
+      summary.commits = summary.commits.filter(commit => !commit.breaks.length)
+
+      return allEntries.concat(
+        onlyBreaking.map(commit => {
+          return {
+            packageName: summary.name,
+            summary: commit.summary,
+            issues: commit.issues,
+            hash: commit.hash,
+            authorName: commit.author.name,
+            authorEmail: commit.author.email,
+          }
+        })
+      )
+    }, [])
+    .sort(byPackageName)
+
+  if (!entries.length) {
     return ''
   }
 
-  return `
-## ${feat.length} ${feat.length === 1 ? 'feature' : 'features'}
-${feat.map(Package).join('\n')}
----
+  return `## :rotating_light: Breaking
+| package | summary | commit | issues | author | |
+|:---|:---|:---|:---|:---|---|
+${entries
+    .map(entry => {
+      return `| ${entry.packageName} | ${entry.summary} | ${entry.hash} | ${entry.issues.join(
+        ', '
+      )} | ${entry.authorName} | ![${entry.authorName}](https://www.gravatar.com/avatar/${md5(
+        entry.authorEmail
+      )}?s=40) |`
+    })
+    .join('\n')}
 `
 }
 
-function writeDocs(docs) {
-  if (!docs.length) {
+function createOtherTable(release) {
+  if (!release.commitsWithoutPackage.length) {
     return ''
   }
 
-  return `
-## documentation
-${docs.map(Package).join('\n')}
----
-`
-}
-
-function writeChore(chore) {
-  if (!chore.length) {
-    return ''
-  }
-
-  return `
-## ${chore.length} ${chore.length === 1 ? 'chore' : 'chores'}
-${chore.map(Package).join('\n')}
----
+  return `## :relieved: Other
+| summary | commit | issues | author | |
+|:---|:---|:---|:---|---|
+${release.commitsWithoutPackage
+    .map(entry => {
+      return `| ${entry.summary} | ${entry.hash} | ${entry.issues.join(
+        ', '
+      )} | ${entry.author.name} | ![${entry.author
+        .email}](https://www.gravatar.com/avatar/${md5(
+        entry.author.email
+      )}?s=40) |`
+    })
+    .join('\n')}
 `
 }
 
 export default release => {
-  return `${writeBreaks(release.summary.breaks)}
-${writeFixes(release.summary.fix)}
-${writeFeat(release.summary.feat)}
-${writeDocs(release.summary.docs)}
-${writeChore(release.summary.chore)}
+  const breaking = Object.keys(release.summary).map(type =>
+    createBreakingTable(type, release)
+  )
+  const changes = Object.keys(release.summary).map(type =>
+    createChangeTable(type, release)
+  )
 
-With :heart: from the Cerebral Team!
+  const other = createOtherTable(release)
+
+  return `
+${createNewVersionsTable(release)}
+${breaking.join('\n')}
+${changes.join('\n')}
+${other}
 `
 }
