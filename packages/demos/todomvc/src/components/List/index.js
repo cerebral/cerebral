@@ -1,6 +1,6 @@
 import React from 'react'
 import Todo from '../Todo'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import { state, signal } from 'cerebral/tags'
 import computedIsAllChecked from '../../computed/isAllChecked'
 import computedTodosUid from '../../computed/visibleTodosUids'

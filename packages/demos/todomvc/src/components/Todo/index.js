@@ -1,6 +1,6 @@
 import React from 'react'
 import classnames from 'classnames'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import { state, signal, props } from 'cerebral/tags'
 
 export default connect(
