@@ -11,6 +11,7 @@
     "cerebral": "next",
     "@cerebral/router": "next",
     "@cerebral/storage": "next",
+    "@cerebral/react": "next",
     "classnames": "^2.2.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",

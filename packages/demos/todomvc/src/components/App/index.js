@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
