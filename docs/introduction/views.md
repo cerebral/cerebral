@@ -1,15 +1,15 @@
-# Components
+# Views
 
-In Cerebral you connect state to components where you need it. This give some benefits:
+In Cerebral you connect state to components (views) where you need it. This give some benefits:
 
 1. Cerebral will optimize the component
 2. The debugger will know about this component and visualize its state dependencies and when it renders
 3. Increased readability as every component explicitly tells you what state and signals it needs and where it gets it from
 4. You can safely move the component wherever you want without breaking chain of props passing
 
-Cerebral supports numerous view layers. They conceptually work the same way, but has different implementation details. Choose the view layer that makes sense to you and your team. We will move on using **React**, but have a look at the API section to find more out about **Inferno**, **AngularJS**, **Preact** and **Vue**.
+Cerebral supports numerous view layers. They conceptually work the same way, but has different implementation details. Choose the view layer that makes sense to you and your team. We will move on using **React**, but have a look at the VIEWS section to find out more about the other supported views.
 
-When you render your application you use the **Container** component to expose the controller to the rest of your components...
+When you render your application you use the **Container** component, or similar, to expose the controller to the rest of your components...
 
 ```js
 import React from 'react'
@@ -49,4 +49,4 @@ export default connect({
 
 All connected components are automatically optimized, meaning that they will only render if a parent component passes a changed prop or Cerebral explicitly tells it to render.
 
-To get more in-depth information about **connect**, please visit the [API chapter](http://cerebraljs.com/docs/api/components.html).
+To get more in-depth information about **connect**, please visit the [VIEWS section](http://cerebraljs.com/docs/views).
