@@ -26,7 +26,7 @@
       "../../../docs/introduction/providers",
       "../../../docs/introduction/modules",
       "../../../docs/introduction/errors",
-      "../../../docs/introduction/components",
+      "../../../docs/introduction/views",
       "../../../docs/introduction/compute",
       "../../../docs/introduction/test"
     ],
