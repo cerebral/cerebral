@@ -1,6 +1,6 @@
 import React from 'react'
 import { css } from 'aphrodite'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import { state } from 'cerebral/tags'
 import MenuItem from './MenuItem'
 import SettingsCheckbox from './SettingsCheckbox'

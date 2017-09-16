@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import { signal, state } from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 import Input from './Input'

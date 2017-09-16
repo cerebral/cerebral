@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import { signal } from 'cerebral/tags'
 import projectWithDetails from '../../compute/projectWithDetails'
 import { displayElapsed } from '../../helpers/dateTime'

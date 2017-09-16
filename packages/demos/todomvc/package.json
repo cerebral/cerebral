@@ -8,10 +8,9 @@
     "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
   "dependencies": {
-    "cerebral": "next",
+    "@cerebral/react": "next",
     "@cerebral/router": "next",
     "@cerebral/storage": "next",
-    "@cerebral/react": "next",
     "classnames": "^2.2.5",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
@@ -23,8 +22,8 @@
     "extract-text-webpack-plugin": "^2.1.0"
   },
   "scripts": {
-    "start": "cross-env BABEL_ENV=development react-scripts start",
     "build": "cross-env BABEL_ENV=production react-scripts build",
-    "prepublish": "npm run build"
+    "prepublish": "npm run build",
+    "start": "cross-env BABEL_ENV=development react-scripts start"
   }
 }

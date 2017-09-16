@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import listProps from '../../common/Collection/props/list'
 import translations from '../../common/compute/translations'
 

@@ -8,8 +8,8 @@
     "Henri Hulski <henri.hulski@gazeta.pl>"
   ],
   "dependencies": {
-    "cerebral": "next",
     "@cerebral/http": "next",
+    "@cerebral/react": "next",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
