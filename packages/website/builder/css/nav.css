@@ -149,7 +149,7 @@
 #nav > ul a {
   display: inline-block;
   width: 100%;
-  padding: 0 8px;
+  padding: 0 15px;
 }
 
 #nav > ul label:hover {
@@ -165,6 +165,7 @@
 }
 
 .nav_item label {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 5px 10px;
@@ -184,6 +185,10 @@
 .page_item label.nav_sublink {
   background-color: #FAFAFA;
   height: 15px;
+}
+
+.page_item label.nav_sublink.nav_toggle-label a {
+
 }
 
 .nav_link {
@@ -216,27 +221,19 @@
   right: 0;
 }
 
-#nav .nav_toggle-label-empty > a {
-  padding-left: 25px;
-}
-
-#nav .nav_toggle-label-empty.nav_sublink > a {
-  padding-left: 20px;
-}
-
 #nav .nav_toggle-label::before {
-  position: relative;
-  display: inline-block;
+  position: absolute;
   content: '+';
   color: #CACACA;
-  padding-right: 5px;
   width: 15px;
-  top: -2px;
+  top: 1px;
   text-indent: 0;
 }
 
 #nav .nav_toggle-label.nav_home::before {
+  position: absolute;
   content: '⌂';
+  top: 7px;
   padding-right: 5px !important;
 }
 
@@ -245,12 +242,11 @@
 }
 
 #nav .nav_toggle:checked + .nav_toggle-label::before {
-  position: relative;
-  display: inline-block;
+  position: absolute;
   content: '-';
   color: #CACACA;
   width: 15px;
-  top: -2px;
+  top: 1px;
 }
 
 #nav .nav_toggle:checked ~ ul:first-of-type {
@@ -259,6 +255,10 @@
 
 #nav .nav_toggle:checked + .nav_toggle-label {
   font-weight: bold;
+}
+
+#nav ul ul ul .nav_toggle-label::before, #nav ul ul ul .nav_toggle:checked + .nav_toggle-label::before {
+  top: 3px;
 }
 
 /* === buttons === */
