@@ -38,6 +38,9 @@ after_success:
     printf "//registry.npmjs.org/:_authToken=$NPM_TOKEN\n" > ~/.npmrc
     npm install repo-cooker
     npm run release -- --publish
+    if [[ $TRAVIS_BRANCH == 'master' ]]; then
+      npm run deploy
+    fi
   fi
 branches:
   except:
