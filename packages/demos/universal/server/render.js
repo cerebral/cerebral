@@ -5,7 +5,7 @@ import { renderToString } from 'react-dom/server'
 import { UniversalController } from 'cerebral'
 import { set, when } from 'cerebral/operators'
 import { state, props } from 'cerebral/tags'
-import { Container } from 'cerebral/react'
+import { Container } from '@cerebral/react'
 import appModule from '../client/modules/app'
 import App from '../client/components/App'
 

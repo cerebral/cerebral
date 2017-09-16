@@ -1,6 +1,6 @@
 /* eslint-disable no-script-url */
 import React from 'react'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import { signal, state } from 'cerebral/tags'
 import translations from '../../common/compute/translations'
 

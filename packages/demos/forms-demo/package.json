@@ -3,16 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "aphrodite": "^1.2.0",
-    "cerebral": "next",
     "@cerebral/forms": "next",
+    "@cerebral/react": "next",
     "@cerebral/router": "next",
+    "aphrodite": "^1.2.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2"
   },
   "scripts": {
-    "start": "cross-env BABEL_ENV=development react-scripts start",
     "build": "cross-env BABEL_ENV=production react-scripts build",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start": "cross-env BABEL_ENV=development react-scripts start"
   }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { connect } from 'cerebral/react'
+import { connect } from '@cerebral/react'
 import translations from '../../common/compute/translations'
 import { displayDate } from '../../helpers/dateTime'
 

@@ -11,15 +11,15 @@
     "Julio Saito <saitodisse@gmail.com>"
   ],
   "devDependencies": {
-    "node-sass": "^4.5.3",
-    "extract-text-webpack-plugin": "^2.1.0"
+    "extract-text-webpack-plugin": "^2.1.0",
+    "node-sass": "^4.5.3"
   },
   "dependencies": {
-    "bulma": "^0.2.3",
-    "cerebral": "next",
-    "@cerebral/forms": "next",
-    "@cerebral/router": "next",
     "@cerebral/firebase": "next",
+    "@cerebral/forms": "next",
+    "@cerebral/react": "next",
+    "@cerebral/router": "next",
+    "bulma": "^0.2.3",
     "js-joda": "^1.1.13",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
