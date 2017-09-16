@@ -67,7 +67,7 @@ import {provide} from 'cerebral'
 export default {
   state: {},
   signals: {},
-  providers: provide('whatevah', {
+  provider: provide('whatevah', {
     foo() {},
     bar() {}
   })
