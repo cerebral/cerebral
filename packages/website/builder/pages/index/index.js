@@ -80,12 +80,12 @@ Writing **declaratively**:
 
 \`\`\`js
 [
-  set(state\`user.isLoading\`, true),
-  httpGet('/user'), {
-    success: set(state\`user.data\`, props\`user\`),
-    error: set(state\`user.error\`, props\`error\`)
+  setLoading(true),
+  getUser, {
+    success: setUser,
+    error: setError
   },
-  set(state\`user.isLoading\`, false),
+  setLoading(false),
 ]
 \`\`\`
         `).tree
