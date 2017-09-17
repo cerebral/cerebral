@@ -1,5 +1,9 @@
 # Modules
 
+```marksy
+<Youtube url="https://www.youtube.com/embed/QJnDxez9qtY" />
+```
+
 As your application grows it is a good idea to organize the logic, not just in files, but also in code. The Cerebral modules can be looked at as namespaces for logic. While they do encapsulate, they do not isolate. That means any module can change the state of any other module.
 
 A module is just an object where you will mostly use the **state** and **signals** property.
