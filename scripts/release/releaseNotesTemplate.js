@@ -127,11 +127,12 @@ function createOtherTable(release) {
   }
 
   return `## :relieved: Other
-| summary | commit | issues | author | |
-|:---|:---|:---|:---|---|
+| type | summary | commit | issues | author | |
+|---|:---|:---|:---|:---|---|
 ${release.commitsWithoutPackage
     .map(entry => {
-      return `| ${entry.summary} | ${entry.hash} | ${entry.issues.join(
+      return `| ${entry.type} (${entry.scope ||
+        'monorepo'}) | ${entry.summary} | ${entry.hash} | ${entry.issues.join(
         ', '
       )} | ${entry.author.name} | ![${entry.author
         .email}](https://www.gravatar.com/avatar/${md5(
@@ -143,6 +144,7 @@ ${release.commitsWithoutPackage
 }
 
 export default release => {
+  console.log(release)
   const breaking = Object.keys(release.summary).map(type =>
     createBreakingTable(type, release)
   )
