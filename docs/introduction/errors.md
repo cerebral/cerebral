@@ -1,5 +1,9 @@
 # Errors
 
+```marksy
+<Youtube url="https://www.youtube.com/embed/UdVjsKQLybw" />
+```
+
 Handling complex asynchronous flows is a challenging task for error handling. If things are not done correctly errors can be swallowed and you will have a hard time figuring out why your application does not work.
 
 Error handling in Cerebral signals are done for you. Wherever you throw an error, it will be caught correctly and thrown to the console unless you have explicitly said you want to handle it. And even when you do explicitly handle it Cerebral will still show the error in the debugger as a **caught** error, meaning you can never go wrong. The action in question is highlighted red, you will see the error message, the code related and even what executed related to you catching the error.

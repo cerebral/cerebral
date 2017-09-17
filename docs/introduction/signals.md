@@ -1,5 +1,9 @@
 # Signals
 
+```marksy
+<Youtube url="https://www.youtube.com/embed/o2ULoHp22BE" />
+```
+
 You trigger a signal when something happens in your application. For example a button is clicked, but also if a websocket connection receives a message. The signal runs the business logic of your application. You compose together state changes, side effects and other logic in one coherent flow.
 
 This is an example of a signal added to the root of the controller:
