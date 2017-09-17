@@ -39,7 +39,10 @@ cooker.cook('publish', [
       cook.createReleaseNotes(releaseNotesTemplate),
       cook.createGithubRelease,
     ],
-    otherwise: [],
+    otherwise: [
+      cook.createReleaseNotes(releaseNotesTemplate),
+      ({ props }) => console.log(props.releaseNotes),
+    ],
   },
   cook.fireworks,
 ])
