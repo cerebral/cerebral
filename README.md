@@ -71,7 +71,9 @@ This will give you a guide to creating a commit message. Then you just push and 
 ```sh
 $ git checkout next
 $ git pull
-￼$ npm run release      # and check release notes
+$ npm install # make sure any new dependencies are installed
+$ npm install repo-cooker # needed to test release, make sure you have latest
+￼$ npm run release # and check release notes
 ￼$ git checkout master
 $ git pull
 ￼$ git merge next
