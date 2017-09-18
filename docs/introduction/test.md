@@ -15,8 +15,18 @@ import Foo from './Foo'
 describe('<Foo />', () => {
   it('allows us to set props', () => {
     const controller = Controller({
+      // set test fixture state
       state: {
         foo: 'bar'
+      },
+      // set test fixture dummy signals needed by components
+      signals: {
+        rootSignalName: []
+      }
+      moduleName: {
+        signals: {
+          moduleSignalName: []
+        }
       }
     })
     const wrapper = mount(
@@ -30,6 +40,8 @@ describe('<Foo />', () => {
 ```
 
 This approach allows you to pass down state wherever you want and ensure the components render as expected.
+
+> If you want to test that signals are called, then you can add a mock action to the dummy signals and check that it was called
 
 ## Computes
 
@@ -54,13 +66,12 @@ The optional `fixture` argument should be an object that contains any of the fol
 import {props, state} from 'cerebral/tags'
 import {runCompute} from 'cerebral/test'
 
-import Multiply from './Multiply'
+import multiply from './multiply'
 
 it('should multiply by the specified number', () => {
-  const multiply = Multiply(state`number`, props`number`)
   const result = runCompute(multiply, {
     state: { number: 5 },
-    props: { number: 2 }
+    props: { multiplyBy: 2 }
   })
   assert.equal(result, 10)
 })
@@ -106,11 +117,9 @@ The `result` object passed when the promise resolves contains `state`, `controll
 import {state} from 'cerebral/tags'
 import {runAction} from 'cerebral/test'
 
-import Increment from './Increment'
+import increment from './increment'
 
 it('should increment numbers in state', () => {
-  const increment = Increment(state`number`)
-
   return runAction(increment, { state: { number: 1 } })
     .then(({state}) => assert.equal(state.number, 2))
 })
