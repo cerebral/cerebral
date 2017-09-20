@@ -63,7 +63,7 @@ function createChangeTable(type, release) {
     .sort(byPackageName)
 
   return `## ${typeHeaders[type]}
-| package | summary | commit | issues | author | |
+| package | summary | commit | issues | author | gravatar |
 |:---|:---|:---|:---|:---|---|
 ${entries
     .map(entry => {
@@ -107,7 +107,7 @@ function createBreakingTable(type, release) {
   }
 
   return `## :rotating_light: Breaking
-| package | summary | commit | issues | author | |
+| package | summary | commit | issues | author | gravatar |
 |:---|:---|:---|:---|:---|---|
 ${entries
     .map(entry => {
@@ -127,7 +127,7 @@ function createOtherTable(release) {
   }
 
   return `## :relieved: Other
-| type | summary | commit | issues | author | |
+| type | summary | commit | issues | author | gravatar |
 |---|:---|:---|:---|:---|---|
 ${release.commitsWithoutPackage
     .map(entry => {
