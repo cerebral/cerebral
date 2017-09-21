@@ -127,7 +127,20 @@ cerebral.runSignal(signal, props).then((result) => {})
 const value = cerebral.getState(path)
 ```
 
-The `fixture` argument will be passed to the cerebral controller so can contain the same properties (state, signals, modules, etc...).
+The `fixture` argument will be passed to the cerebral controller so can contain the same properties (state, signals, modules, etc...). Note that state initialized in a module takes precedence over the state property of a fixture. Example:
+
+```js
+const fixture = {
+  state: {
+    app: {    
+      showNavigation: true    
+    }
+  },
+  modules: {
+    app // if app initializes showNavigation as false, this will override the previous setting
+  }
+}
+```
 
 The optional `options` argument contain the the following options:
 
