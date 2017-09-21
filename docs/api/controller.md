@@ -11,7 +11,11 @@ const controller = Controller({
   signals: {},
 
   // Defines the top level modules
-  modules: {}
+  modules: {},
+
+  // A map of state changes to run before instantiation,
+  // where the key is the path and value is the state value
+  stateChanges: {}
 })
 
 export default controller

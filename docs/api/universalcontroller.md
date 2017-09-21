@@ -89,6 +89,32 @@ const controller = UniversalController({
 controller.setState('app.foo', 123)
 ```
 
+### getChanges
+Returns a map of the changes made.
+
+```js
+const controller = new UniversalController({
+  modules: {
+    app: {
+      ...,
+      signals: {
+        aSignal: [
+          function myAction ({state, props}) {
+            state.set('app.isAwesome', props.isAwesome)
+          }
+        ],
+      },
+    },
+  },
+})
+
+controller
+  .runSequence('app.aSignal', {isAwesome: true})
+  .then(() => {
+    controller.getChanges() // {"app.isAwesome": true}
+  })
+```
+
 ### getScript
 When the client side application loads it will do its first render with the default state, meaning that if the server updated the state this is now out of sync. Using the **getScript** method you will get a script tag you can inject into the *HEAD* of the returned HTML. Cerebral will use this to bring your client side application state up to date with the server.
 
