@@ -7,14 +7,17 @@
 }
 
 .index-title {
-  font-size: 82px;
+  font-size: 4em;
   font-weight: 700;
   color: #333;
 }
 
 .index-release {
   text-align: center;
-  font-size: 0.75em;
+  font-size: 0.8em;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
 }
 
 .index-container .docs-doc {
@@ -59,10 +62,28 @@
 }
 
 @media (max-width: 850px) {
+  .index-container {
+    padding: 0;
+    box-sizing: border-box;
+  }
   .index-example-row {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+  .index-container .docs-doc {
+    width: 100%;
+    font-size: 1em;
+  }
+  .index-container .docs-doc-content {
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+  }
+  .index-container .docs-doc-content blockquote {
+    font-size: 22px;
+    line-height: 22px;
+    margin: 5px;
   }
 }
 

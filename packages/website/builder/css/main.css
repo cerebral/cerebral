@@ -74,15 +74,22 @@ h3, h4, h5, h6 {
     right: -30px;
     transform: rotate(45deg);
   }
+
+  iframe {
+    width: 280px;
+    height: 180px;
+  }
 }
 
 pre {
-  display: flex;
   padding: 0;
   background: white !important;
+  overflow: hidden;
+  width: 100%;
 }
 pre > code {
   display: block;
+  overflow-x: scroll;
   flex: 1;
   max-width: 700px; /* 70 chars */
   padding: 10px 15px;
