@@ -34,8 +34,8 @@ function Index(props) {
               width="560"
               height="315"
               src="https://www.youtube.com/embed/mYkM8CiVsXw"
-              frameborder="0"
-              allowfullscreen
+              frameBorder="0"
+              allowFullScreen
             />
           </div>
           <div className="index-example-row">
