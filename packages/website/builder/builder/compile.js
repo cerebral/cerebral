@@ -21,8 +21,8 @@ module.exports = marksy({
             width="560"
             height="315"
             src={props.url}
-            frameborder="0"
-            allowfullscreen
+            frameBorder="0"
+            allowFullScreen
           />
         </div>
       )
