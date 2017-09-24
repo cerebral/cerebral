@@ -144,12 +144,11 @@ ${release.commitsWithoutPackage
 }
 
 export default release => {
-  console.log(release)
   const breaking = Object.keys(release.summary).map(type =>
     createBreakingTable(type, release)
   )
-  const changes = Object.keys(release.summary).map(type =>
-    createChangeTable(type, release)
+  const changes = Object.keys(typeHeaders).map(
+    type => (release.summary[type] ? createChangeTable(type, release) : '')
   )
 
   const other = createOtherTable(release)
