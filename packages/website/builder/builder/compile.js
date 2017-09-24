@@ -27,6 +27,23 @@ module.exports = marksy({
         </div>
       )
     },
+    CodeSandbox(props) {
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <iframe
+            src={props.url}
+            style={{
+              width: '100%',
+              height: '500px',
+              border: '0',
+              borderRadius: '4px',
+              overflow: 'hidden',
+            }}
+            sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+          />
+        </div>
+      )
+    },
   },
   elements: {
     a(props) {
