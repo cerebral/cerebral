@@ -55,7 +55,7 @@ export default [
 ]
 ```
 
-The compute signature is very flexible. It allows you to put in any number of arguments which will be evaluated. For example here we go an grab some state and props, before using their values to produce a new value.
+The compute signature is very flexible. It allows you to put in any number of arguments which will be evaluated. For example here we go and grab some state and props, before using their values to produce a new value.
 
 ```js
 import {compute} from 'cerebral'
