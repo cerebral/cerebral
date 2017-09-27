@@ -99,6 +99,13 @@ controller.removeModule('someModule')
 
 ## Events
 
+### initialized:model
+Triggers when Cerebral model has initialized.
+
+```js
+controller.on('initialized:model', () => {})
+```
+
 ### initialized
 Triggers when Cerebral controller has initialized.
 
