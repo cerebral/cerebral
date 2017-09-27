@@ -40,7 +40,6 @@ const controller = Controller({
 
 Note that some tools has a very complex API that is difficult for Cerebral to analyze. With these kinds of tools it is a better idea to create your own provider, exposing APIs that you actually use from the original tool.
 
-## Creating a provider
 You can use providers for pretty much anything, though typically it is to handle some kind of side effect. Examples of providers is [@cerebral/storage](https://github.com/cerebral/cerebral/tree/master/packages/storage), [@cerebral/firebase](https://github.com/cerebral/cerebral/tree/master/packages/firebase) and [@cerebral/http](https://github.com/cerebral/cerebral/tree/master/packages/http).
 
 To use a provider with Cerebral you put it in the providers array:
@@ -54,6 +53,8 @@ const controller = Controller({
   ]
 })
 ```
+
+## Creating a provider
 
 The **provide** factory helps you add your own providers in a simple way:
 

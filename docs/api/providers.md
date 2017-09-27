@@ -2,7 +2,57 @@
 
 Providers are functions that runs before any action in any signal. Their purpose is to define and sometimes manipulate the context passed into every action. The providers run before every action, meaning that each action has a unique context object.
 
-Providers are created with a function:
+There are three levels of abstraction to create a provider. Choose the one that makes sense to you.
+
+## 1. Object with methods
+This is the simplest version of a provider where you do not need access to anything else in Cerebral. This provider is automatically wrapped by the debugger, where available.
+
+```js
+export default {
+  greet() {
+    return 'hello'
+  }
+}
+```
+
+```js
+import {Controller, provide} from 'cerebral'
+import greeter from './providers/greeter'
+
+export default Controller({
+  providers: [
+    provide('greeter', greeter)
+  ]
+})
+```
+
+## 2. Function
+When using a function you get access to the context. That means you can grab static stuff from the context, typically trigger a signal. This provider is automatically wrapped by the debugger, where available.
+
+```js
+export default (context) => {
+  return {
+    triggerSignalOnEvent(signalPath, event) {
+      window.addEventListener(event, () => {
+        context.controller.getSignal(signalPath)()
+      })
+    }
+  }
+}
+```
+
+```js
+import {Controller, provide} from 'cerebral'
+import trigger from './providers/trigger'
+
+export default Controller({
+  providers: [
+    provide('trigger', trigger)
+  ]
+})
+```
+
+## 3. Low level
 
 ```js
 function MyProvider (context, functionDetails, payload, prevPayload) {
@@ -55,50 +105,4 @@ function MyProvider (context) {
 
   return context
 }
-```
-
-## Example provider
-
-```js
-// We create a factory, allowing you to pass in options to it
-function GreetProviderFactory (options = {}) {
-  // We use a variable to cache the created provider
-  let cachedProvider = null
-
-  // Just some custom code to handle an option
-  let exclamationMarks = ''
-
-  for (let x = 0; x < options.numberOfExclamationMarks || 0; x++) {
-    exclamationMarks += '!'
-  }
-
-  // This is the function that creates the provider,
-  // typically just an object with some methods
-  function createProvider (context) {
-    return {
-      hello (name) {
-        return `Hello, ${name}${exclamationMarks}`
-      }
-    }
-  }
-
-  // The function that is run by Cerebral, providing the context
-  // for you to attach your provider to
-  function GreetProvider (context) {
-    context.greet = cachedProvider = (cachedProvider || createProvider(context))
-
-    // You can wrap the provider with the debugger
-    // to show information about its usage in the debugger
-    if (context.debugger) {
-      context.debugger.wrapProvider('greet')
-    }
-
-    // Always return the context after mutating it
-    return context
-  }
-
-  return GreetProvider
-}
-
-export default GreetProviderFactory
 ```
