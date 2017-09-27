@@ -92,6 +92,7 @@ function createBreakingTable(type, release) {
           return {
             packageName: summary.name,
             summary: commit.summary,
+            breaks: commit.breaks,
             issues: commit.issues,
             hash: commit.hash,
             authorName: commit.author.name,
@@ -111,7 +112,9 @@ function createBreakingTable(type, release) {
 |:---|:---|:---|:---|:---|---|
 ${entries
     .map(entry => {
-      return `| ${entry.packageName} | ${entry.summary} | ${entry.hash} | ${entry.issues.join(
+      return `| ${entry.packageName} | ${entry.summary} <ul>${entry.breaks
+        .map(text => `<li>*${text}*</li>`)
+        .join('\n')}</ul> | ${entry.hash} | ${entry.issues.join(
         ', '
       )} | ${entry.authorName} | ![${entry.authorName}](https://www.gravatar.com/avatar/${md5(
         entry.authorEmail
