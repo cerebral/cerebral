@@ -21,14 +21,13 @@ function Navigation(props) {
                   type="checkbox"
                   defaultChecked={false}
                 />}
-              <label
-                htmlFor={href}
-                className={`${item.children.length
-                  ? 'nav_toggle-label'
-                  : 'nav_toggle-label-empty'} nav_sublink`}
+              <a
+                className={`nav_toggle-label nav_item-name nav_sublink
+                  ${item.children.length ? '' : 'nav_childless'}`}
+                href={href}
               >
-                <a href={href}>{item.title}</a>
-              </label>
+                {item.title}
+              </a>
               <Headings toc={item.children} path={path} />
             </li>
           )
@@ -55,14 +54,13 @@ function Navigation(props) {
                   type="checkbox"
                   defaultChecked={open}
                 />}
-              <label
-                htmlFor={path}
-                className={`${page.children.length
-                  ? 'nav_toggle-label'
-                  : 'nav_toggle-label-empty'} nav_link nav_page`}
+              <a
+                className={`nav_toggle-label nav_item-name nav_link nav_page
+                  ${page.children.length ? '' : 'nav_childless'}`}
+                href={path}
               >
-                <a href={path}>{page.title}</a>
-              </label>
+                {page.title}
+              </a>
               <Headings toc={page.children} path={path} />
             </li>
           )
@@ -75,28 +73,28 @@ function Navigation(props) {
     return (
       <ul>
         {[
-          <li key={'home'} className="nav_item">
-            <label className="nav_toggle-label nav_section nav_home">
-              <a href="/">HOME</a>
-            </label>
+          <li key={'home'}>
+            <a href="/" className="nav_item-name nav_section nav_home">
+              HOME
+            </a>
           </li>,
         ].concat(
           Object.keys(props.docs).map(function(sectionKey, index) {
             const open = props.sectionName === sectionKey
             return (
-              <li key={index} className={`nav_item ${open ? 'nav_open' : ''}`}>
+              <li
+                key={index}
+                className={`section-item ${open ? 'nav_open' : ''}`}
+              >
                 <input
                   id={sectionKey}
                   className="nav_toggle"
                   type="checkbox"
                   defaultChecked={open}
                 />
-                <label
-                  htmlFor={sectionKey}
-                  className="nav_toggle-label nav_section"
-                >
-                  <a>{sectionKey.replace('_', ' ').toUpperCase()}</a>
-                </label>
+                <div className="nav_item-name nav_section">
+                  {sectionKey.replace('_', ' ').toUpperCase()}
+                </div>
                 <Pages
                   docName={props.docName}
                   sectionKey={sectionKey}
