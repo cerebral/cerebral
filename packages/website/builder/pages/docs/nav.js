@@ -46,7 +46,10 @@ function Navigation(props) {
             : `/docs/${props.sectionKey}/${pageKey}.html`
           const open = pageKey === props.docName && props.sectionOpen
           return (
-            <li key={index} className={`page_item ${open ? 'nav_open' : ''}`}>
+            <li
+              key={index}
+              className={`nav_page-item ${open ? 'nav_open' : ''}`}
+            >
               {page.children.length > 0 &&
                 <input
                   id={path}
@@ -84,7 +87,7 @@ function Navigation(props) {
             return (
               <li
                 key={index}
-                className={`section-item ${open ? 'nav_open' : ''}`}
+                className={`nav_section-item ${open ? 'nav_open' : ''}`}
               >
                 <input
                   id={sectionKey}
