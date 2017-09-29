@@ -179,6 +179,10 @@
   color: #cacaca;
 }
 
+.nav_toggle:hover + .nav_toggle-label::before {
+  color: #333333;
+}
+
 .nav_toggle-label:not(.nav_childless)::before {
   content: '+';
 }

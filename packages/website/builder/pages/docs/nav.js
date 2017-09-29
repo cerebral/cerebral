@@ -78,7 +78,7 @@ function Navigation(props) {
         {[
           <li key={'home'}>
             <a href="/" className="nav_item-name nav_section nav_home">
-              HOME
+              HOME &nbsp;<small>⤣</small>
             </a>
           </li>,
         ].concat(
