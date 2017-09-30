@@ -130,6 +130,10 @@ Declarative code also allows us to build developer tools that gives you valuable
 
 ![debugger](/images/debugger.gif)
 
+Take a look at a real project using Cerebral, [WebpackBin](https://www.webpackbin.com). It is completely open source and the [code can be explored here](https://github.com/cerebral/webpackbin).
+
+![webpackbin](/images/webpackbin.png)
+
 > *Read on to learn more about how Cerebral enforces scalable code and gives you insight into the inner workings of your app*
 `).tree
           }
@@ -143,7 +147,7 @@ Declarative code also allows us to build developer tools that gives you valuable
           </div>
           <div className="index-release">
             Released under the MIT License
-            Copyright © 2017 Christian Alfoni
+            Copyright © 2017 Cerebral Github Organisation
           </div>
         </div>
       </div>

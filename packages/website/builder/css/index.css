@@ -6,6 +6,11 @@
   flex-direction: column;
 }
 
+.index-container img {
+  border-radius: 0;
+  border: 0;
+}
+
 .index-title {
   font-size: 4em;
   font-weight: 700;
