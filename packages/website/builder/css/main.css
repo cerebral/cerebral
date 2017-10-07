@@ -89,8 +89,7 @@ pre {
 }
 pre > code {
   display: block;
-  overflow-x: scroll;
-  flex: 1;
+  overflow-x: auto;
   max-width: 700px; /* 70 chars */
   padding: 10px 15px;
   margin: 20px auto;
