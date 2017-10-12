@@ -47,7 +47,7 @@
     "match-media": "0.2.0",
     "md5": "^2.2.1",
     "mobx": "3.2.0",
-    "mobx-state-tree": "0.9.1",
+    "mobx-state-tree": "1.0.0",
     "offline-js": "0.7.18",
     "prism": "4.1.2",
     "proxyquire": "1.7.11",
