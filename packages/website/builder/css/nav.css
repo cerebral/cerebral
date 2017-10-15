@@ -95,14 +95,13 @@
   position: relative;
 }
 #nav > ul > li {
-  border-top: 1px solid #eaeaea;
+  border-bottom: 1px solid #eaeaea;
 }
 #nav > ul > li:last-child {
-  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 #nav ul ul {
-  border-bottom: 1px solid #eaeaea;
   font-size: 0.9em;
   background-color: #ffffff;
   line-height: 0.9;
@@ -111,6 +110,7 @@
 
 
 #nav ul ul ul {
+  border-bottom: 1px solid #eaeaea;
   border-top: 1px solid #eaeaea;
   padding-left: 10px;
   background-color: #fafafa;
@@ -165,11 +165,12 @@
 
 .nav_toggle,
 .nav_toggle-label::before {
-  font-family: monospace;
+  font-family: "Courier New", monospace;
   cursor: pointer;
   margin: 0;
   border: none !important;
   font-size: inherit;
+  font-weight: normal;
 }
 
 .nav_toggle-label::before {
@@ -188,7 +189,7 @@
 }
 
 .nav_toggle:checked + .nav_toggle-label:not(.nav_childless)::before {
-  content: '-';
+  content: '−';
 }
 
 #nav .nav_toggle:checked ~ ul:first-of-type {
@@ -201,6 +202,19 @@
 
 .nav_section-item > .nav_toggle {
   width: 100%;
+}
+
+.nav_section-item > .nav_toggle:hover + .nav_section::after {
+  content: '+';
+  padding: 0 .5em;
+  color: #cacaca;
+  position: absolute;
+  right: 0;
+  font-family: "Courier New", monospace;
+}
+
+.nav_section-item > .nav_toggle:checked:hover + .nav_section::after {
+  content: '−';
 }
 
 /* === buttons === */
