@@ -1,6 +1,7 @@
 html, body {
   background-color: #FFF;
   margin: 0;
+  font-size: 16px;
   font-family: 'Helvetica Neue', 'Source Sans Pro', Arial, sans-serif;
   line-height: 24px;
   color: #333;

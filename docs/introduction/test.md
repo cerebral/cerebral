@@ -127,13 +127,18 @@ it('should increment numbers in state', () => {
 
 ## Signals
 
-The `CerebralTest` factory returns runSignal, setState and getState functions.
+The `CerebralTest` factory returns runSignal, setState and getState functions as well as the controller.
 
 ```js
 const cerebral = CerebralTest(fixture, options)
 cerebral.setState(path, value)
 cerebral.runSignal(signal, props).then((result) => {})
 const value = cerebral.getState(path)
+const wrapper = mount(
+  <Container controller={cerebral.controller}>
+    <Login />
+  </Container>
+)
 ```
 
 The `fixture` argument will be passed to the cerebral controller so can contain the same properties (state, signals, modules, etc...). Note that state initialized in a module takes precedence over the state property of a fixture. Example:
