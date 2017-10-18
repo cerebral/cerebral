@@ -123,10 +123,16 @@ You might think this example tries to highlight "less lines of code", but it is 
 - **Reusability**
 - **Testability**
 
-All these properties makes **better code** and **scalable code**. The declarative approach inherits all of these properties by default. In addition to this
-it allows us to build developer tools:
+All these properties makes **better code** and **scalable code**. The declarative approach inherits all of these properties by default.
+You can read more about declarative code in this short blog post, [Business logic as a data structure](https://www.jsblog.io/articles/christianalfoni/business_logic_as_a_data_structure).
+
+Declarative code also allows us to build developer tools that gives you valuable information:
 
 ![debugger](/images/debugger.gif)
+
+Take a look at a real project using Cerebral, [WebpackBin](https://www.webpackbin.com). It is completely open source and the [code can be explored here](https://github.com/cerebral/webpackbin).
+
+![webpackbin](/images/webpackbin.png)
 
 > *Read on to learn more about how Cerebral enforces scalable code and gives you insight into the inner workings of your app*
 `).tree
@@ -141,7 +147,7 @@ it allows us to build developer tools:
           </div>
           <div className="index-release">
             Released under the MIT License
-            Copyright © 2017 Christian Alfoni
+            Copyright © 2017 Cerebral Github Organisation
           </div>
         </div>
       </div>

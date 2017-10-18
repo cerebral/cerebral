@@ -143,7 +143,7 @@ notifications where a previous notification should be cancelled by a new one.
 import {debounce, set, unset} from 'cerebral/operators'
 import {state} from 'cerebral/tags'
 
-const sharedDebounce = debounce.share()
+const sharedDebounce = debounce.shared()
 function showNotificationFactory(message, ms) {
   return [
     set(state`notification`, message),

@@ -95,7 +95,7 @@ function Navigation(props) {
                   htmlFor={sectionKey}
                   className="nav_toggle-label nav_section"
                 >
-                  {sectionKey.replace('_', ' ').toUpperCase()}
+                  <a>{sectionKey.replace('_', ' ').toUpperCase()}</a>
                 </label>
                 <Pages
                   docName={props.docName}
