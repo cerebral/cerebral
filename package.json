@@ -151,7 +151,6 @@
     "ts-node": "3.3.0",
     "typescript": "2.5.2",
     "typescript-definition-tester": "0.0.5",
-    "typings": "2.1.1",
     "vue": "2.3.3",
     "webpack": "2.5.1",
     "webpack-dev-server": "2.4.5",
