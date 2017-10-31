@@ -77,8 +77,8 @@ function Navigation(props) {
       <ul>
         {[
           <li key={'home'}>
-            <a href="/" className="nav_item-name nav_section nav_home">
-              HOME &nbsp;<small>⤣</small>
+            <a href="/" id="nav_home" className="nav_item-name nav_section">
+              HOME &nbsp;<span className="icon-out-arrow" />
             </a>
           </li>,
         ].concat(

@@ -101,3 +101,20 @@ pre > code {
   font-size: 14px;
   line-height: 24px;
 }
+
+@font-face {
+    font-family: 'cerebral icons';
+    src: url('/images/cerebral-icons.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+[class*='icon-']:before{
+	display: inline-block;
+   font-family: 'cerebral icons';
+   font-style: normal;
+   font-weight: normal;
+   line-height: 1;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale
+}
+.icon-out-arrow:before{content:'\0041';}
