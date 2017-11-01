@@ -11,6 +11,11 @@ const controller = Controller({
     // fall back to chrome extension if unable to connect
     host: 'localhost:8585',
 
+    // By default devtools connects to "ws://". This option should be set to true
+    // when browser operates on https. Follow debugger instructions for
+    // further configuration
+    https: false,
+
     // By default the devtools tries to reconnect
     // to debugger when it can not be reached, but
     // you can turn it off

@@ -59,3 +59,5 @@ const controller = Controller({
 
 export default controller
 ```
+
+There are additional options you can read about in the API section.
