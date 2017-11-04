@@ -52,6 +52,16 @@ export default Controller({
 })
 ```
 
+**Note!** When reusing providers like *http* and others in your own provider, you can call **direct** to avoid the debugger registering both providers.
+
+```js
+provide('api', ({ http }) => ({
+  get() {
+    return http.get.direct('/items')
+  }
+}))
+```
+
 ## 3. Low level
 
 ```js
