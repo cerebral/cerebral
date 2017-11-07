@@ -20,7 +20,7 @@ All these can be accessed inside an action:
 function someAction ({props, state, controller, resolve}) {}
 ```
 
-The [devtools](/introduction/devtools) also adds its own provider called **debugger**.
+The [devtools](/docs/api/devtools) also adds its own provider called **debugger**.
 
 ## Adding a provider
 If you are using libraries where you want access to everything they provide you can simply add them as a provider using an object:
@@ -40,7 +40,7 @@ const controller = Controller({
 
 Note that some tools has a very complex API that is difficult for Cerebral to analyze. With these kinds of tools it is a better idea to create your own provider, exposing APIs that you actually use from the original tool.
 
-You can use providers for pretty much anything, though typically it is to handle some kind of side effect. Examples of providers is [@cerebral/storage](https://github.com/cerebral/cerebral/tree/master/packages/storage), [@cerebral/firebase](https://github.com/cerebral/cerebral/tree/master/packages/firebase) and [@cerebral/http](https://github.com/cerebral/cerebral/tree/master/packages/http).
+You can use providers for pretty much anything, though typically it is to handle some kind of side effect. Examples of providers is [@cerebral/storage](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/storage), [@cerebral/firebase](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/firebase) and [@cerebral/http](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/http).
 
 To use a provider with Cerebral you put it in the providers array:
 

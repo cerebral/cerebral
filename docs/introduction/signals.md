@@ -29,7 +29,7 @@ signal()
 
 You will learn later how you can use **modules** to encapsulate signals with state.
 
-Cerebral uses the [function-tree](https://github.com/cerebral/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the functions in this tree **actions**.
+Cerebral uses the [function-tree](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral world we call the functions in this tree **actions**.
 
 ## Operators
 

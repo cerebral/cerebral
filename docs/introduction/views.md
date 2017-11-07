@@ -49,4 +49,4 @@ export default connect({
 
 All connected components are automatically optimized, meaning that they will only render if a parent component passes a changed prop or Cerebral explicitly tells it to render.
 
-To get more in-depth information about **connect**, please visit the [VIEWS section](http://cerebraljs.com/docs/views).
+To get more in-depth information about **connect**, please visit the [VIEWS section](/docs/views/react.html#@cerebral/react-connect).
