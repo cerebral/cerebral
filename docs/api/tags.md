@@ -14,4 +14,5 @@ This allows you to express signals and component dependencies more effectively. 
 - **state** - Used in signals and connect to target state
 - **props** - Used in signals to target payload and in connect to target component props
 - **signal** - Used in signals and connect to target a signal
+- **signals** - Used in connect to target all the signals of the specified module
 - **string** - Used in signals to evaluate a composed string
