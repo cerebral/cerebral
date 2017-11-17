@@ -1,4 +1,5 @@
 # Articles
+- [Business logic as a data structure](https://www.jsblog.io/articles/christianalfoni/business_logic_as_a_data_structure)
 - [Function-Tree](http://www.christianalfoni.com/articles/2017_04_16_The-second-case-for-function-tree)
 - [Cerebral 2](http://www.christianalfoni.com/articles/2017_03_19_Cerebral-2)
 - [The story of Cerebral](http://medium.com/p/5793c08db2cc)

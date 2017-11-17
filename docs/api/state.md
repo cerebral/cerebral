@@ -4,11 +4,13 @@
 The only way to get state in your application is by connecting it to a component or grabbing it in an action.
 
 ```js
-function someAction({state}) {
+function someAction({ state, module }) {
   // Get all state
   const allState = state.get()
   // Get by path
   const stateAtSomePath = state.get('some.path')
+  // Get from module running this signal
+  const moduleState = module.get('isLoading')
 }
 ```
 
@@ -17,7 +19,7 @@ function someAction({state}) {
 The only way to update the state of your application is in an action. Here is a list of all possible state mutations you can do:
 
 ```js
-function someAction({state}) {
+function someAction({ state, module }) {
   // Concats passed array to existing array
   state.concat('some.path', ['someValueA', 'someValueB'])
   // Increment value at given path (default increment is 1)
@@ -43,10 +45,14 @@ function someAction({state}) {
   state.unset('some.path')
   // Puts the value at the beginning of the array
   state.unshift('some.path', 'someValue')
+
+  // Module has the same API surface, though the path is relative
+  // to the module path running this action
+  module.set('foo', 'bar')
 }
 ```
 
-**NOTE!** You should not change state directly in your actions or components. This will not be tracked by Cerebral. That means a render will not be triggered and the debugger will not know about it. Treat your state as if it was immutable and only change it using the **state API**.
+**NOTE!** You should not extract state and change it directly in your actions or components. This will not be tracked by Cerebral. That means a render will not be triggered and the debugger will not know about it. Treat your state as if it was immutable and only change it using the **state API**.
 
 ## Special values support
 When building an application you often need to keep things like files and blobs in your state for further processing. Cerebral supports these kinds of values because they will never change, or changing them can be used with existing state API. This is the list of supported types:

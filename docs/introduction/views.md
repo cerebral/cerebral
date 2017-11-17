@@ -13,8 +13,8 @@ When you render your application you use the **Container** component, or similar
 
 ```js
 import React from 'react'
-import {render} from 'react-dom'
-import {Container} from '@cerebral/react'
+import { render } from 'react-dom'
+import { Container } from '@cerebral/react'
 import controller from './controller'
 import App from './App'
 
@@ -29,8 +29,8 @@ When you connect a component like this...
 
 ```js
 import React from 'react'
-import {connect} from '@cerebral/react'
-import {state} from 'cerebral/tags'
+import { connect } from '@cerebral/react'
+import { state } from 'cerebral/tags'
 
 export default connect({
   title: state`title`

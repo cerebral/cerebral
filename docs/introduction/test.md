@@ -3,35 +3,32 @@
 Cerebral makes it easy to test your application components and business logic.
 
 ## Components
-The **Container** you use to expose Cerebral to your components can also be used when testing.
+The **Container** you use to expose Cerebral to your components can also be used when testing. This is beneficial if you want to test
+a section of your UI interacts correctly with the controller.
 
 ```js
 import React from 'react'
-import {mount} from 'enzyme'
-import {Container} from '@cerebral/react'
+import { mount } from 'enzyme'
+import assert from 'assert'
+import { Container } from '@cerebral/react'
+import { Controller, Module } from 'cerebral'
 
-import Foo from './Foo'
+import Button from './Button'
 
-describe('<Foo />', () => {
-  it('allows us to set props', () => {
-    const controller = Controller({
-      // set test fixture state
+describe('<Button />', () => {
+  it('should pass foo state on click', () => {
+    const testModule = Module({
       state: {
         foo: 'bar'
       },
-      // set test fixture dummy signals needed by components
       signals: {
-        rootSignalName: []
-      }
-      moduleName: {
-        signals: {
-          moduleSignalName: []
-        }
-      }
+        clicked: ({ props }) => assert.equal(props.foo, 'bar')
+      }  
     })
+    const controller = Controller(app)
     const wrapper = mount(
       <Container controller={controller}>
-        <Foo />
+        <Button />
       </Container>
     )
     expect(wrapper.find('.foo')).to.have.length(1)
@@ -39,32 +36,13 @@ describe('<Foo />', () => {
 })
 ```
 
-This approach allows you to pass down state wherever you want and ensure the components render as expected.
-
-> If you want to test that signals are called, then you can add a mock action to the dummy signals and check that it was called
-
 ## Computes
 
 The `runCompute` test helper accepts the `compute` and `fixture` arguments and returns the compute output.
 
 ```js
-const result = runCompute(compute, fixture)
-```
-
-The optional `fixture` argument should be an object that contains any of the following:
-
-```js
-{
-  state: {}, // test state
-  props: {}  // props passed to the computed
-}
-```
-
-### Example
-
-```js
-import {props, state} from 'cerebral/tags'
-import {runCompute} from 'cerebral/test'
+import { props, state } from 'cerebral/tags'
+import { runCompute } from 'cerebral/test'
 
 import multiply from './multiply'
 
@@ -73,6 +51,7 @@ it('should multiply by the specified number', () => {
     state: { number: 5 },
     props: { multiplyBy: 2 }
   })
+
   assert.equal(result, 10)
 })
 ```
@@ -82,18 +61,15 @@ it('should multiply by the specified number', () => {
 The `runAction` test helper accepts the `action` and `fixture` arguments and returns a promise.
 
 ```js
-runAction(action, fixture).then((result) => {})
-```
+import {state} from 'cerebral/tags'
+import {runAction} from 'cerebral/test'
 
-The optional `fixture` argument should be an object that contains any of the following:
+import increment from './increment'
 
-```js
-{
-  state: {}, // test state
-  props: {}, // props passed to the action
-  // any other options that can be passed to the
-  // cerebral controller, including router, providers...
-}
+it('should increment numbers in state', () => {
+  return runAction(increment, { state: { number: 1 } })
+    .then(({state}) => assert.equal(state.number, 2))
+})
 ```
 
 The `result` object passed when the promise resolves contains `state`, `controller`, `props` and `output` properties.
@@ -111,76 +87,80 @@ The `result` object passed when the promise resolves contains `state`, `controll
 }
 ```
 
-### Example
+## Signals
+
+The `CerebralTest` factory returns `runSignal`, `setState` and `getState` functions as well as the controller.
 
 ```js
-import {state} from 'cerebral/tags'
-import {runAction} from 'cerebral/test'
+import { CerebralTest } from 'cerebral/test'
+import math from './math'
 
-import increment from './increment'
+it('should accumulate a count', () => {
+  const cerebral = CerebralTest({
+    modules: {
+      math
+    }
+  })
 
-it('should increment numbers in state', () => {
-  return runAction(increment, { state: { number: 1 } })
-    .then(({state}) => assert.equal(state.number, 2))
+  cerebral.setState('math.count', 0)
+
+  return cerebral.runSignal('math.plusOne')
+    .then(({ state }) => {
+      assert.equal(state.math.count, 1)
+
+      return cerebral.runSignal('math.plus', { value: 2 })
+        .then(() => {
+          assert.equal(cerebral.getState('math.count'), 3)
+        })
+  })
 })
 ```
 
-## Signals
-
-The `CerebralTest` factory returns runSignal, setState and getState functions as well as the controller.
-
-```js
-const cerebral = CerebralTest(fixture, options)
-cerebral.setState(path, value)
-cerebral.runSignal(signal, props).then((result) => {})
-const value = cerebral.getState(path)
-const wrapper = mount(
-  <Container controller={cerebral.controller}>
-    <Login />
-  </Container>
-)
-```
-
-The `fixture` argument will be passed to the cerebral controller so can contain the same properties (state, signals, modules, etc...). Note that state initialized in a module takes precedence over the state property of a fixture. Example:
+Note that state initialized in a module takes precedence over the state property of a fixture. Example:
 
 ```js
 const fixture = {
+  // Override default state in modules
   state: {
     app: {    
       showNavigation: true    
     }
   },
   modules: {
-    app // if app initializes showNavigation as false, this will override the previous setting
+    app
   }
 }
 ```
 
+### Options
 The optional `options` argument contain the the following options:
 
 `recordActions: true|false|'byName'`
 
-When `recordActions: true` is specified each action will record its props/output against its index within the signal action chain. When `recordActions: 'byName'` is specified each action will record its output against an named property in the result.
-
-The `result` object passed when the promise resolves contains `state`, `controller` and an object for each named action in the signal chain with the same name as the actions with `props` and `output` properties.
-
-### Example
-
 ```js
-import {CerebralTest} from 'cerebral/test'
+import { CerebralTest } from 'cerebral/test'
+import math from './math'
 
 it('should accumulate a count', () => {
   const cerebral = CerebralTest({
     modules: {
-      math: math()
+      math
     }
+  }, {
+    recordActions: 'byName'
   })
+
   cerebral.setState('math.count', 0)
-  return cerebral.runSignal('math.plusOne').then(({state}) => {
-    assert.equal(state.math.count, 1)
-    return cerebral.runSignal('math.plus', {value: 2}).then(() => {
-      assert.equal(cerebral.getState('math.count'), 3)
-    })
+
+  return cerebral.runSignal('math.plusOne', {
+    incrementBy: 1
+  })
+    .then(({ increment }) => {
+      assert.equal(increment.props.incrementBy, 1)
   })
 })
 ```
+
+When `recordActions: true` is specified each action will record its props/output against its index within the signal action chain. When `recordActions: 'byName'` is specified each action will record its output against an named property in the result.
+
+The `result` object passed when the promise resolves contains `state`, `controller` and an object for each named action in the signal chain with the same name as the actions with `props` and `output` properties.

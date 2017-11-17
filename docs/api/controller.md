@@ -1,47 +1,18 @@
 # Controller
 
 ```js
-import {Controller} from 'cerebral'
+import { Controller } from 'cerebral'
+import app from './app'
 
-const controller = Controller({
-  // Defines the top level state
-  state: {},
-
-  // Defines the top level signals
-  signals: {},
-
-  // Defines the top level modules
-  modules: {},
-
+export default Controller(app, {
+  // The devtools
+  devtools: null,
+  // Also throws errors to console, even if they are caught
+  throwToConsole: true,
   // A map of state changes to run before instantiation,
   // where the key is the path and value is the state value
   stateChanges: {}
 })
-
-export default controller
-```
-
-## Errors
-
-
-```js
-import {Controller} from 'cerebral'
-import {HttpProviderError} from '@cerebral/http'
-
-const controller = Controller({
-  catch: new Map([
-    [HttpProviderError, someCustomCatchHandlerSequence],
-    [Error, someCatchHandlerSequence]
-  ])
-})
-
-export default controller
-```
-
-You can also define a global error handler. This error handler will be called no matter if an error is caught or not. Useful for tracking failures in production.
-
-```js
-controller.on('error', (error) => {})
 ```
 
 ## Methods
@@ -195,4 +166,11 @@ Triggered whenever Cerebral travels back in time. Passes the timestamp it travel
 
 ```js
 controller.on('remember', (datetime) => {})
+```
+
+### mutation
+Triggered whenever Cerebral mutated the state
+
+```js
+controller.on('mutation', (mutation) => {})
 ```

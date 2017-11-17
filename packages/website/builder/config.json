@@ -21,13 +21,14 @@
       "../../../docs/introduction/the_architecture",
       "../../../docs/introduction/install",
       "../../../docs/introduction/debugger",
+      "../../../docs/introduction/modules",
       "../../../docs/introduction/state",
       "../../../docs/introduction/signals",
       "../../../docs/introduction/providers",
-      "../../../docs/introduction/modules",
       "../../../docs/introduction/errors",
       "../../../docs/introduction/views",
       "../../../docs/introduction/compute",
+      "../../../docs/introduction/patterns",
       "../../../docs/introduction/test"
     ],
     "api": [
@@ -35,6 +36,7 @@
       "../../../docs/api/compute",
       "../../../docs/api/controller",
       "../../../docs/api/devtools",
+      "../../../docs/api/error",
       "../../../docs/api/module",
       "../../../docs/api/operators",
       "../../../docs/api/providers",
