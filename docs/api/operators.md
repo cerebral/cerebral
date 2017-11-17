@@ -5,13 +5,13 @@ Read more about operators in the [Cerebral in depth - Operators](https://www.jsb
 
 ## State operators
 
-The methods for changing state within actions is also available as operators. All state operators support using both **state** and **props** tags as values.
+The methods for changing state within actions is also available as operators. All state operators support using **state**, **module** and **props** tags as values.
 
 All operators are imported as members of the 'cerebral/operators' module. For example, this imports **state** and **set**:
 
 ```js
-import {set} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { set } from 'cerebral/operators'
+import { state } from 'cerebral/tags'
 ```
 
 ### concat
@@ -126,7 +126,7 @@ empty because debounce is a flow operator that routes the flow depending on
 time and action trigger.
 
 ```js
-import {debounce} 'cerebral/operators'
+import { debounce } 'cerebral/operators'
 
 export default [
   debounce(200), {
@@ -140,8 +140,8 @@ export default [
 notifications where a previous notification should be cancelled by a new one.
 
 ```js
-import {debounce, set, unset} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { debounce, set, unset } from 'cerebral/operators'
+import { state } from 'cerebral/tags'
 
 const sharedDebounce = debounce.shared()
 function showNotificationFactory(message, ms) {
@@ -172,8 +172,8 @@ export default [
 This operator chooses a specific path based on the provided value.
 
 ```js
-import {equals} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { equals } from 'cerebral/operators'
+import { state } from 'cerebral/tags'
 
 export default [
   equals(state`user.role`), {
@@ -189,7 +189,7 @@ export default [
 Wait for the given time in milliseconds and then continue chain.
 
 ```js
-import {wait} from 'cerebral/operators'
+import { wait } from 'cerebral/operators'
 
 export default [
   wait(200),
@@ -201,8 +201,8 @@ If you need to wait while executing in parallel, you should use a `continue`
 path to isolate the actions to be run:
 
 ```js
-import {wait} from 'cerebral/operators'
-import {parallel} from 'cerebral'
+import { wait } from 'cerebral/operators'
+import { parallel } from 'cerebral'
 
 export default
   someAction,
@@ -220,7 +220,7 @@ export default
 Run signal path depending on a truth value or function evaluation.
 
 ```js
-import {when} from 'cerebral/operators'
+import { when } from 'cerebral/operators'
 
 export default [
   when(state`foo.isAwesome`), {
@@ -239,8 +239,8 @@ When used with a truth function, the `when` operator supports more then a single
 "value" argument. The truth function must come last.
 
 ```js
-import {when} from 'cerebral/operators'
-import {props, state} from 'cerebral/tags'
+import { when } from 'cerebral/operators'
+import { props, state } from 'cerebral/tags'
 
 export default [
   when(state`clients.$draft.key`, props`key`,

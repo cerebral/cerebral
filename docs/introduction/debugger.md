@@ -32,22 +32,19 @@ You initialize the devtools by adding it to the controller.
 
 ```js
 import {Controller} from 'cerebral'
+import app from './app'
 import Devtools from 'cerebral/devtools'
 
-// You do not want to load or run the devtools in production as it
-// requires a bit of processing and memory to send data from
-// your application
-const Devtools = (
-  process.env.NODE_ENV === 'production' ?
-    null
-  :
-    require('cerebral/devtools').default
-)
 
-const controller = Controller({
-  devtools: Devtools && Devtools({
-    // If running standalone debugger. Some environments
-    // might require 127.0.0.1 or computer IP address
+
+// You do not want to load or run the devtools in production as it
+// requires processing and memory to send data from
+// your application. "IS_DEVELOPING", or similar,  can be made available
+// in your build flow
+let devtools = null
+if (IS_DEVELOPING) {
+  devtools = require('cerebral/devtools').default({
+    // Some environments might require 127.0.0.1 or computer IP address
     host: 'localhost:8585',
 
     // By default the devtools tries to reconnect
@@ -55,6 +52,11 @@ const controller = Controller({
     // you can turn it off
     reconnect: true
   })
+}
+
+
+const controller = Controller(app, {
+  devtools
 })
 
 export default controller

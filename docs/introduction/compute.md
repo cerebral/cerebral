@@ -4,9 +4,9 @@ Normally you use state directly from the state tree, but sometimes you need to c
 Cerebral allows you to compute state that can be used in multiple contexts. Let us look at the signature:
 
 ```js
-import {compute} from 'cerebral'
+import { Compute } from 'cerebral'
 
-export default compute(() => {
+export default Compute(() => {
   return 'foo'
 })
 ```
@@ -25,10 +25,10 @@ You can use it with operators in a signal:
 
 ```js
 import computedFoo from '../computedFoo'
-import {set} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { set } from 'cerebral/operators'
+import { state } from 'cerebral/tags'
 
-export default [
+export const mySequence = [
   set(state`foo`, computedFoo)
 ]
 ```
@@ -38,7 +38,7 @@ Or you can resolve it inside an action if you need to:
 ```js
 import computedFoo from '../computedFoo'
 
-function myAction ({resolve}) {
+export function myAction ({resolve}) {
   const foo = resolve.value(computedFoo)
 }
 ```
@@ -47,10 +47,10 @@ You can even compose it into a Tag:
 
 ```js
 import computedFoo from '../computedFoo'
-import {state} from 'cerebral/tags'
-import {set} from 'cerebral/operators'
+import { state } from 'cerebral/tags'
+import { set } from 'cerebral/operators'
 
-export default [
+export const mySequence = [
   set(state`${computedFoo}.bar`, 'baz')
 ]
 ```
@@ -58,10 +58,10 @@ export default [
 The compute signature is very flexible. It allows you to put in any number of arguments which will be evaluated. For example here we go and grab some state and props, before using their values to produce a new value.
 
 ```js
-import {compute} from 'cerebral'
-import {state, props} from 'cerebral/tags'
+import { Compute } from 'cerebral'
+import { state, props } from 'cerebral/tags'
 
-export default compute(state`foo`, props`bar`, (foo, bar) => {
+export default Compute(state`foo`, props`bar`, (foo, bar) => {
   return foo + bar
 })
 ```
@@ -69,10 +69,10 @@ export default compute(state`foo`, props`bar`, (foo, bar) => {
 We can even keep adding arguments and produce yet another value:
 
 ```js
-import {compute} from 'cerebral'
-import {state, props} from 'cerebral/tags'
+import { Compute } from 'cerebral'
+import { state, props } from 'cerebral/tags'
 
-export default compute(
+export default Compute(
   state`foo`,
   props`bar`,
   (foo, bar) => {
@@ -88,10 +88,10 @@ export default compute(
 That means you can compose computeds, lets try by splitting them up into two:
 
 ```js
-import {compute} from 'cerebral'
-import {state, props} from 'cerebral/tags'
+import { Compute } from 'cerebral'
+import { state, props } from 'cerebral/tags'
 
-const fooBar = compute(
+const fooBar = Compute(
   state`foo`,
   props`bar`,
   (foo, bar) => {
@@ -99,14 +99,14 @@ const fooBar = compute(
   }
 )
 
-const fooBarBaz = compute(
+const fooBarBaz = Compute(
   state`baz`,
   (computedFooBar, baz) => {
     return computedFooBar + baz
   }
 )
 
-export default compute(fooBar, fooBarBaz)
+export default Compute(fooBar, fooBarBaz)
 ```
 
 There is one last thing to computeds and that is the **get** argument, which is always the last argument passed into the callback of a computed. This argument can be used to manually extract state and props, very useful to optimize computed lists.
@@ -115,10 +115,10 @@ For example we have items with an array of user ids. We create a computed taking
 
 
 ```js
-import {compute} from 'cerebral'
-import {state, props} from 'cerebral/tags'
+import { Compute } from 'cerebral'
+import { state, props } from 'cerebral/tags'
 
-const computedItemUsers = compute(
+const computedItemUsers = Compute(
   state`items.${props`itemKey`}`,
   (item, get) => {
     return item.userIds.map((userId) => get(state`users.${userId}`))
@@ -135,7 +135,7 @@ It uses the *itemKey* property from the component to grab the actual item. It th
 
 ```js
 connect({
-  item: compute(filteredList, onlyAwesome)
+  item: Compute(filteredList, onlyAwesome)
 })
 ```
 

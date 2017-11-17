@@ -4,8 +4,9 @@ You can pass some options to the devtools to balance the processing and memory f
 ```js
 import {Controller} from 'cerebral'
 import Devtools from 'cerebral/devtools'
+import app from './app'
 
-const controller = Controller({
+export default Controller(app, {
   devtools: process.env.NODE_ENV === 'production' ? null : Devtools({
     // Connect to Electron debugger (external debugger). It will
     // fall back to chrome extension if unable to connect

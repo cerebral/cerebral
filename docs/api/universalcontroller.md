@@ -6,17 +6,10 @@ Read more about server side rendering in the [Cerebral in depth - SSR](https://w
 **Note** that when using JSX syntax it is wise to also transpile your server side code, which this example shows.
 
 ```js
-import {UniversalController} from 'cerebral'
-import appModule from '../client/modules/app'
+import { UniversalController } from 'cerebral'
+import app from './app'
 
-const controller = UniversalController({
-  // Same API as Controller
-  // Here loading the same modules as the
-  // client loads
-  modules: {
-    app: appModule
-  }
-})
+const controller = UniversalController(app)
 ```
 
 ## Methods
@@ -24,17 +17,13 @@ const controller = UniversalController({
 If you need to update the state of the controller you can run a signal execution for doing so:
 
 ```js
-import {UniversalController} from 'cerebral'
-import appModule from '../client/modules/app'
+import { UniversalController } from 'cerebral'
+import app from './app'
 
-const controller = UniversalController({
-  modules: {
-    app: appModule
-  }
-})
+const controller = UniversalController(app)
 
 controller.runSequence([
-  function myAction ({state, props}) {
+  function myAction ({ state, props }) {
     state.set('app.isAwesome', props.isAwesome)
   }
 ], {
@@ -47,20 +36,10 @@ controller.runSequence([
 
 You can run a predefined signal, which is defined inside a controller module as well:
 ```js
-const controller = new UniversalController({
-  modules: {
-    app: {
-      ...,
-      signals: {
-        aSignal: [
-          function myAction ({state, props}) {
-            state.set('app.isAwesome', props.isAwesome)
-          }
-        ],
-      },
-    },
-  },
-})
+import { UniversalController } from 'cerebral'
+import app from './app'
+
+const controller = UniversalController(app)
 
 controller
   .runSequence('app.aSignal', {isAwesome: true})
@@ -69,22 +48,16 @@ controller
   })
 ```
 
-You can add any providers to the controller to do database fetching etc. inside this **runSequence** execution. Think of it as a signal the updates the state of the app before rendering it on the server.
-
 **NOTE!** You should instantiate the controller for each run you want to do.
 
 ### setState
 Finally, you can (synchronously) set a value inside the state directly, using a path:
 
 ```js
-import {UniversalController} from 'cerebral'
-import appModule from '../client/modules/app'
+import { UniversalController } from 'cerebral'
+import app from './app'
 
-const controller = UniversalController({
-  modules: {
-    app: appModule
-  }
-})
+const controller = UniversalController(app)
 
 controller.setState('app.foo', 123)
 ```
@@ -93,20 +66,10 @@ controller.setState('app.foo', 123)
 Returns a map of the changes made.
 
 ```js
-const controller = new UniversalController({
-  modules: {
-    app: {
-      ...,
-      signals: {
-        aSignal: [
-          function myAction ({state, props}) {
-            state.set('app.isAwesome', props.isAwesome)
-          }
-        ],
-      },
-    },
-  },
-})
+import { UniversalController } from 'cerebral'
+import app from './app'
+
+const controller = UniversalController(app)
 
 controller
   .runSequence('app.aSignal', {isAwesome: true})
@@ -119,8 +82,8 @@ controller
 When the client side application loads it will do its first render with the default state, meaning that if the server updated the state this is now out of sync. Using the **getScript** method you will get a script tag you can inject into the *HEAD* of the returned HTML. Cerebral will use this to bring your client side application state up to date with the server.
 
 ```js
-import {UniversalController} from 'cerebral'
-import appModule from '../client/modules/app'
+import { UniversalController } from 'cerebral'
+import app from './app'
 import fs from 'fs'
 
 /*
@@ -136,14 +99,10 @@ import fs from 'fs'
 */
 const indexTemplate = fs.readFileSync('index.template.html').toString()
 
-const controller = UniversalController({
-  modules: {
-    app: appModule
-  }
-})
+const controller = UniversalController(app)
 
 controller.run([
-  function myAction ({state, props}) {
+  function myAction ({ state, props }) {
     state.set('app.isAwesome', props.isAwesome)
   }
 ], {
@@ -162,10 +121,10 @@ Depending on the view layer of your choice you can bring all of this together:
 import React from 'react'
 import express from 'express'
 import fs from 'fs'
-import {renderToString} from 'react-dom/server'
-import {UniversalController} from 'cerebral'
-import {Container} from 'cerebral/react'
-import appModule from '../client/modules/app'
+import { renderToString } from 'react-dom/server'
+import { UniversalController } from 'cerebral'
+import { Container } from 'cerebral/react'
+import app from '../client/app'
 import App from '../client/components/App'
 import loadApp from './loadApp'
 
@@ -173,11 +132,7 @@ const server = express()
 const indexTemplate = fs.readFileSync('index.template.html').toString()
 
 server.get('/', (req, res) => {
-  const controller = UniversalController({
-    modules: {
-      app: appModule
-    }
-  })
+  const controller = UniversalController(app)
 
   controller.run(loadApp, {
       query: req.query,

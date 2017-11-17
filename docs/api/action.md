@@ -28,7 +28,7 @@ someSignal({
 The first action will receive the payload passed into the signal.
 
 ```js
-function actionA ({props}) {
+function actionA ({ props }) {
   props // {foo: "bar"}
 
   return {
@@ -40,7 +40,7 @@ function actionA ({props}) {
 By returning a new object the next action will see an extended payload:
 
 ```js
-function actionB ({props}) {
+function actionB ({ props }) {
   props // {foo: "bar", bar: "baz"}
 }
 ```
@@ -51,7 +51,7 @@ So returning an object from actions, either directly or from a promise, extends 
 To change the state of your application you use the state API. It is available to every action.
 
 ```js
-function setSomething ({state}) {
+function setSomething ({ state }) {
   state.set('some.path.foo', 'bar')
 }
 ```
@@ -71,6 +71,16 @@ This is the one core concept of Cerebral that gives all its power. This simple a
 2. Track mutations so that it can inform components depending on the changes
 3. Only allow mutations through the API, and nowhere else in the application (using freezing during development)
 
+## Module
+This is the same as **state**, though the path already points to the module running the signal. So you give a relative path.
+
+```js
+function setSomething ({ module }) {
+  // Already points to some.module
+  module.set('foo', 'bar')
+}
+```
+
 ## Path
 The path on the context is only available if there is actually expressed a path after the action in question:
 
@@ -82,19 +92,19 @@ import actionC from '../actions/actionC'
 export default [
   actionA,
   actionB, {
-    foo: [actionC]
+    foo: actionC
   }
 ]
 ```
 
-In this scenario only *actionB* has the path on its context. As explained in **Chains and paths**, the path allows you to diverge execution of the signal.
+In this scenario only *actionB* has the path on its context.
 
 ## Resolve
-When you ramp up your game with Cerebral you will most certainly take more advantage of **tags** and **computed** in your actions, typically related to action factories. To resolve an argument passed to a factory you can use resolve:
+**Tags** and **Compute** needs resolving. In most scenarios you do not have to think about this, but you might want to do this manually in an action. This is typically related to action factories. To resolve an argument passed to a factory you can use resolve:
 
 ```js
 function someActionFactory(someArgument) {
-  function someAction ({resolve}) {
+  function someAction ({ resolve }) {
     // The argument can be anything, even plain values
     const value = resolve.value(someArgument)
   }
@@ -107,7 +117,7 @@ You can also use resolve to check the value type and extract for example the pat
 
 ```js
 function someActionFactory(someArgument) {
-  function someAction ({resolve}) {
+  function someAction ({ resolve }) {
     if (resolve.isTag(someArgument)) {
       const path = resolve.path(someArgument)
     }
@@ -122,12 +132,5 @@ function someActionFactory(someArgument) {
 You have access to the controller instance on the context:
 
 ```js
-function someAction ({controller}) {}
-```
-
-## Execution
-You have access to function tree execution as well. This holds information about the current execution, mostly used by the devtools to inform the debugger.
-
-```js
-function someAction ({execution}) {}
+function someAction ({ controller }) {}
 ```

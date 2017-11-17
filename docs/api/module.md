@@ -1,40 +1,42 @@
 # Module
 
-Modules help you structure your state and signals into logical units. You can think of them as namespaces for state and signals.
+Modules are the core building blocks of your application. This is where you define state, signals, other modules etc.
 
 # Module object
 
 ```js
-export default {
+import { Module } from 'cerebral'
+
+export default Module({
   // Define module state, namespaced by module path
   state: {},
   // Define module signals, namespaced by module path
   signals: {},
   // Define submodules, namespaced by module path
   modules: {},
-  // Add a global provider when module instantiates
-  provider(context, functionDetails, payload) {}
-}
+  // Add a global providers when module instantiates
+  providers: {},
+  // Add error catchers
+  catch: []
+})
 ```
 
-You attach a module simply by referencing it:
+You add the root module to the controller:
 
 ```js
-import {Controller} from 'cerebral'
-import FeedModule from './modules/Feed'
+import { Controller } from 'cerebral'
+import app from './app'
 
-const controller = Controller({
-  modules: {
-    feed: FeedModule
-  }
-})
+export default Controller(app)
 ```
 
 # Module function
 It is also possible to define a module using a function.
 
 ```js
-export default (module) => {
+import { Module } from 'cerebral'
+
+export default Module((module) => {
   module.name // Name of module
   module.path // Full path to module
   module.controller // The controller the module is attached to
@@ -43,9 +45,10 @@ export default (module) => {
     state: {},
     signals: {},
     modules: {},
-    provider(context, functionDetails, payload) {}
+    providers: {},
+    catch: []
   }
-}
+})
 ```
 
 
@@ -53,19 +56,21 @@ export default (module) => {
 With the use of a factory it is possible to make reusable modules.
 
 ```js
-export default (options) =>  {
-  return {
+import { Module } from 'cerebral'
+
+export default (options) => {
+  return Module({
     state: {
       location: options.of
     }
-  }
+  })
 }
 ```
 
 You then configure the module when you attach it:
 
 ```js
-import {Controller} from 'cerebral'
+import { Controller } from 'cerebral'
 import Location from './modules/Location'
 
 const controller = Controller({
