@@ -23,8 +23,8 @@ export default Controller({
 })
 ```
 
-You can also add a provider using a function. This will expose the "raw context", meaning you can call other providers in your returned methods.
-When using a function you get access to the context. That means you can grab static stuff from the context, typically trigger a signal. This provider is automatically wrapped by the debugger, where available.
+You also have access to the context inside your provider. This will allow you to leverage existing providers. The context is exposed as `this.context`. This keeps the API concise and under the hood we can do prototypal optimizations.
+
 
 ```js
 import { Provider } from 'cerebral'
@@ -33,7 +33,7 @@ export default Provider((context) => {
   return {
     triggerSignalOnNativeEvent(event, signalPath) {
       window.addEventListener(event, () => {
-        context.controller.getSignal(signalPath)()
+        this.context.controller.getSignal(signalPath)()
       })
     }
   }
