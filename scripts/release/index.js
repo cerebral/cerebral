@@ -19,6 +19,10 @@ cooker.cook('publish', [
       'newVersionByPackage',
       version => `${version}-${Date.now()}`
     ),
+    canary: cook.remap(
+      'newVersionByPackage',
+      version => `${version}-${Date.now()}`
+    ),
     otherwise: [],
   },
   cook.writeVersionsToPackages,
@@ -28,6 +32,7 @@ cooker.cook('publish', [
   {
     master: cook.mapTemporaryNpmTagTo('latest'),
     next: cook.mapTemporaryNpmTagTo('next'),
+    canary: cook.mapTemporaryNpmTagTo('canary'),
     otherwise: [],
   },
   cook.resetRepository,
