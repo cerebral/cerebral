@@ -28,7 +28,8 @@
       "../../../docs/introduction/errors",
       "../../../docs/introduction/views",
       "../../../docs/introduction/compute",
-      "../../../docs/introduction/test"
+      "../../../docs/introduction/test",
+      "../../../docs/introduction/typescript"
     ],
     "api": [
       "../../../docs/api/action",
