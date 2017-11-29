@@ -67,7 +67,7 @@ export default Module({
 
 **It does not matter what module exposes the provider, all providers are global. That means any provider defined is available in any action in the application.**
 
-You can use providers for pretty much anything, though typically it is to handle some kind of side effect. Examples of providers is [@cerebral/storage](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/storage), [@cerebral/firebase](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/firebase) and [@cerebral/http](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/http).
+You can use providers for pretty much anything, though typically it is to handle some kind of side effect. Examples of providers are [@cerebral/storage](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/storage), [@cerebral/firebase](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/firebase) and [@cerebral/http](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/http).
 
 
 Play around with creating a provider on [this BIN](https://www.webpackbin.com/bins/-KpZNE-A-_O7hjIGqVnL).

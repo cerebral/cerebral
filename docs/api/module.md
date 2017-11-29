@@ -1,6 +1,6 @@
 # Module
 
-Modules are the core building blocks of your application. This is where you define state, signals, other modules etc.
+Modules are the core building blocks of your application. This is where you define state, signals, submodules etc.
 
 # Module object
 

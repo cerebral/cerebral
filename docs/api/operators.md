@@ -5,7 +5,7 @@ Read more about operators in the [Cerebral in depth - Operators](https://www.jsb
 
 ## State operators
 
-The methods for changing state within actions is also available as operators. All state operators support using **state**, **module** and **props** tags as values.
+The methods for changing state within actions are also available as operators. All state operators support using **state**, **module** and **props** tags as values.
 
 All operators are imported as members of the 'cerebral/operators' module. For example, this imports **state** and **set**:
 
