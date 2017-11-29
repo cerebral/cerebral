@@ -9,11 +9,17 @@ state`items.${state`currentItemKey`}`
 state`items.${props`itemKey`}`
 ```
 
-This allows you to express signals and component dependencies more effectively. There are 4 tags in Cerebral.
+There are 6 tags in Cerebral.
 
 - **state** - Used in signals and connect to target state
-- **module** - Used in signals and connect to target state of the module running the signal
+- **module** - Used in signals to target state of the module running the signal
 - **props** - Used in signals to target payload and in connect to target component props
 - **signal** - Used in signals and connect to target a signal
 - **signals** - Used in connect to target all the signals of the specified module
 - **string** - Used in signals to evaluate a composed string
+
+## Compatability
+
+- **operators**: state, module, props, signal and string
+- **connect**: state, props, signal and signals
+- **compute**: state and props
