@@ -105,6 +105,9 @@
       "../../../docs/resources/articles",
       "../../../docs/resources/videos",
       "../../../docs/resources/projects"
+    ],
+    "migration": [
+      "../../../docs/migration/4_0"
     ]
   }
 }

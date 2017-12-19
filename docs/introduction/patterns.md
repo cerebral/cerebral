@@ -1,5 +1,7 @@
 # Patterns
 
+The patterns explained here are not "one or the other". You can mix and match whatever makes sense to you and your project.
+
 ## Declarative for the win
 
 ### File structure

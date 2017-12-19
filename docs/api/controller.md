@@ -2,8 +2,9 @@
 
 ```js
 import { Controller } from 'cerebral'
-import app from './app'
+import app from './app' // The root module
 
+// Signature changed since version 4.0
 export default Controller(app, {
   // The devtools
   devtools: null,
@@ -169,6 +170,7 @@ controller.on('remember', (datetime) => {})
 ```
 
 ### mutation
+*since version 4.0*
 Triggered whenever Cerebral mutated the state
 
 ```js

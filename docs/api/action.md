@@ -97,7 +97,7 @@ export default [
 ]
 ```
 
-In this scenario only *actionB* has the path on its context.
+In this scenario only *actionB* has the path on its context. That means in any action you can check if path is available and what paths can be taken by looking at its keys.
 
 ## Resolve
 **Tags** and **Compute** needs resolving. In most scenarios you do not have to think about this, but you might want to do this manually in an action. This is typically related to action factories. To resolve an argument passed to a factory you can use resolve:

@@ -2,7 +2,7 @@
 Computes calculate and cache derived state values. Using computes helps to keep logic out of the application view components, can improve performance and make applications easier to test.
 
 ```js
-import { Compute } from 'cerebral'
+import { Compute } from 'cerebral' // upperCase since version 4.0
 import { state } from 'cerebral/tags'
 
 export default Compute(
