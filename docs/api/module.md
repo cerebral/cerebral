@@ -1,4 +1,5 @@
 # Module
+*since version 4.0*
 
 Modules are the core building blocks of your application. This is where you define state, signals, submodules etc.
 

@@ -9,8 +9,6 @@ state`items.${state`currentItemKey`}`
 state`items.${props`itemKey`}`
 ```
 
-There are 6 tags in Cerebral.
-
 - **state** - Used in signals and connect to target state
 - **module** - Used in signals to target state of the module running the signal
 - **props** - Used in signals to target payload and in connect to target component props
