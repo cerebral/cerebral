@@ -77,28 +77,34 @@ ${entries
 `
 }
 
-function createBreakingTable(type, release) {
-  const entries = release.summary[type]
-    .reduce((allEntries, summary) => {
-      const onlyBreaking = summary.commits.filter(
-        commit => commit.breaks.length
-      )
+function createBreakingTable(release) {
+  const entries = Object.keys(release.summary)
+    .reduce((allTypes, type) => {
+      return allTypes.concat(
+        release.summary[type].reduce((allEntries, summary) => {
+          const onlyBreaking = summary.commits.filter(
+            commit => commit.breaks.length
+          )
 
-      // Mutate in place (easier :))
-      summary.commits = summary.commits.filter(commit => !commit.breaks.length)
+          // Mutate in place (easier :))
+          summary.commits = summary.commits.filter(
+            commit => !commit.breaks.length
+          )
 
-      return allEntries.concat(
-        onlyBreaking.map(commit => {
-          return {
-            packageName: summary.name,
-            summary: commit.summary,
-            breaks: commit.breaks,
-            issues: commit.issues,
-            hash: commit.hash,
-            authorName: commit.author.name,
-            authorEmail: commit.author.email,
-          }
-        })
+          return allEntries.concat(
+            onlyBreaking.map(commit => {
+              return {
+                packageName: summary.name,
+                summary: commit.summary,
+                breaks: commit.breaks,
+                issues: commit.issues,
+                hash: commit.hash,
+                authorName: commit.author.name,
+                authorEmail: commit.author.email,
+              }
+            })
+          )
+        }, [])
       )
     }, [])
     .sort(byPackageName)
@@ -114,7 +120,7 @@ ${entries
     .map(entry => {
       return `| ${entry.packageName} | ${entry.summary} <ul>${entry.breaks
         .map(text => `<li>*${text}*</li>`)
-        .join('\n')}</ul> | ${entry.hash} | ${entry.issues.join(
+        .join('')}</ul> | ${entry.hash} | ${entry.issues.join(
         ', '
       )} | ${entry.authorName} | ![${entry.authorName}](https://www.gravatar.com/avatar/${md5(
         entry.authorEmail
@@ -148,7 +154,7 @@ ${release.commitsWithoutPackage
 
 export default release => {
   const breaking = Object.keys(release.summary).map(type =>
-    createBreakingTable(type, release)
+    createBreakingTable(release)
   )
   const changes = Object.keys(typeHeaders).map(
     type => (release.summary[type] ? createChangeTable(type, release) : '')
