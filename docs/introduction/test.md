@@ -96,21 +96,17 @@ import { CerebralTest } from 'cerebral/test'
 import math from './math'
 
 it('should accumulate a count', () => {
-  const cerebral = CerebralTest({
-    modules: {
-      math
-    }
-  })
+  const cerebral = CerebralTest(math) // Expects a Module
 
-  cerebral.setState('math.count', 0)
+  cerebral.setState('count', 0)
 
-  return cerebral.runSignal('math.plusOne')
+  return cerebral.runSignal('plusOne')
     .then(({ state }) => {
       assert.equal(state.math.count, 1)
 
-      return cerebral.runSignal('math.plus', { value: 2 })
+      return cerebral.runSignal('plus', { value: 2 })
         .then(() => {
-          assert.equal(cerebral.getState('math.count'), 3)
+          assert.equal(cerebral.getState('count'), 3)
         })
   })
 })
@@ -142,17 +138,13 @@ import { CerebralTest } from 'cerebral/test'
 import math from './math'
 
 it('should accumulate a count', () => {
-  const cerebral = CerebralTest({
-    modules: {
-      math
-    }
-  }, {
+  const cerebral = CerebralTest(math, {
     recordActions: 'byName'
   })
 
-  cerebral.setState('math.count', 0)
+  cerebral.setState('count', 0)
 
-  return cerebral.runSignal('math.plusOne', {
+  return cerebral.runSignal('plusOne', {
     incrementBy: 1
   })
     .then(({ increment }) => {
