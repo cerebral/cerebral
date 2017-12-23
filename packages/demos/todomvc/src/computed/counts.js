@@ -1,8 +1,8 @@
-import { compute } from 'cerebral'
+import { Compute } from 'cerebral'
 import { state } from 'cerebral/tags'
 import computedVisibleTodosUids from './visibleTodosUids'
 
-export default compute(
+export default Compute(
   state`todos`,
   computedVisibleTodosUids,
   (todos, visibleTodosUids, get) => {
