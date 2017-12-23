@@ -1,7 +1,7 @@
-import { compute } from 'cerebral'
+import { Compute } from 'cerebral'
 import { state } from 'cerebral/tags'
 
-export default compute(state`todos`, state`filter`, (todos, filter) => {
+export default Compute(state`todos`, state`filter`, (todos, filter) => {
   return Object.keys(todos).filter(uid => {
     return (
       filter === 'all' ||
