@@ -102,7 +102,7 @@ it('should accumulate a count', () => {
 
   return cerebral.runSignal('plusOne')
     .then(({ state }) => {
-      assert.equal(state.math.count, 1)
+      assert.equal(state.count, 1)
 
       return cerebral.runSignal('plus', { value: 2 })
         .then(() => {
