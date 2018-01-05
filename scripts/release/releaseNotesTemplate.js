@@ -139,6 +139,14 @@ function createOtherTable(release) {
 | type | summary | commit | issues | author | gravatar |
 |---|:---|:---|:---|:---|---|
 ${release.commitsWithoutPackage
+    .stort((commitA, commitB) => {
+      const typeA = commitA.type.toUpperCase()
+      const typeB = commitB.type.toUpperCase()
+
+      if (typeA < typeB) return -1
+      if (typeA > typeB) return 1
+      return 0
+    })
     .map(entry => {
       return `| ${entry.type} (${entry.scope ||
         'monorepo'}) | ${entry.summary} | ${entry.hash} | ${entry.issues.join(
