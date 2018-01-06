@@ -8,7 +8,7 @@ import app from './app' // The root module
 export default Controller(app, {
   // The devtools
   devtools: null,
-  // Also throws errors to console, even if they are caught
+  // Also logs error handling to console.
   throwToConsole: true,
   // A map of state changes to run before instantiation,
   // where the key is the path and value is the state value
