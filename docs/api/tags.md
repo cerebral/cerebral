@@ -16,7 +16,7 @@ state`items.${props`itemKey`}`
 - **signals** - Used in connect to target all the signals of the specified module
 - **string** - Used in signals to evaluate a composed string
 
-## Compatability
+## Compatibility
 
 - **operators**: state, module, props, signal and string
 - **connect**: state, props, signal and signals
