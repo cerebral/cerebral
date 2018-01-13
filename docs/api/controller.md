@@ -131,7 +131,7 @@ controller.on('functionStart', (execution, functionDetails, payload) => {})
 Triggered whenever Cerebral ends executing an action.
 
 ```js
-controller.on('functionEnd', (execution, functionDetails, payload) => {})
+controller.on('functionEnd', (execution, functionDetails, payload, result) => {})
 ```
 
 ### asyncFunction
