@@ -24,6 +24,7 @@
   "scripts": {
     "build": "cross-env BABEL_ENV=production react-scripts build",
     "prepublish": "npm run build",
-    "start": "cross-env BABEL_ENV=development react-scripts start"
+    "start": "cross-env BABEL_ENV=development react-scripts start",
+    "test": "jest"
   }
 }
