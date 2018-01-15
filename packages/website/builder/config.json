@@ -43,6 +43,7 @@
       "../../../docs/api/signal",
       "../../../docs/api/state",
       "../../../docs/api/tags",
+      "../../../docs/api/test",
       "../../../docs/api/universalcontroller"
     ],
     "views": [{
