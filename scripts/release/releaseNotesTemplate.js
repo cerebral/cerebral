@@ -139,9 +139,9 @@ function createOtherTable(release) {
 | type | summary | commit | issues | author | gravatar |
 |---|:---|:---|:---|:---|---|
 ${release.commitsWithoutPackage
-    .stort((commitA, commitB) => {
-      const typeA = commitA.type.toUpperCase()
-      const typeB = commitB.type.toUpperCase()
+    .sort((commitA, commitB) => {
+      const typeA = (commitA.type || '').toUpperCase()
+      const typeB = (commitB.type || '').toUpperCase()
 
       if (typeA < typeB) return -1
       if (typeA > typeB) return 1
