@@ -44,7 +44,8 @@ module.exports = {
     {name: 'preact'},
     {name: 'vue'},
     {name: 'angular'},
-    {name: 'mobx'}
+    {name: 'mobx'},
+    {name: 'fluent'}
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
