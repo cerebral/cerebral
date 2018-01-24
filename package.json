@@ -47,7 +47,7 @@
     "js-joda": "1.1.13",
     "match-media": "0.2.0",
     "md5": "^2.2.1",
-    "mobx": "3.2.0",
+    "mobx": "3.4.1",
     "mobx-state-tree": "1.0.0",
     "offline-js": "0.7.18",
     "prism": "4.1.2",
@@ -85,7 +85,7 @@
     "@angular/platform-browser-dynamic": "4.3.6",
     "@types/express": "4.0.37",
     "@types/jsdom": "^11.0.4",
-    "@types/mocha": "2.2.43",
+    "@types/mocha": "2.2.47",
     "@types/node": "8.0.28",
     "@types/react": "16.0.34",
     "@types/react-dom": "16.0.3",
@@ -157,6 +157,7 @@
     "webpack-dev-server": "2.4.5",
     "xhr-mock": "1.9.0",
     "yargs": "6.6.0",
-    "zone.js": "0.8.17"
+    "zone.js": "0.8.17",
+    "@types/assert": "0.0.31"
   }
 }
