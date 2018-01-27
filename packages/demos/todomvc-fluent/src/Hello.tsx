@@ -6,6 +6,21 @@ export default connect<{ baz: string }>()
       foo: state.foo,
       runMe: signals.test
   }))
-  .to(function Hello ({ foo, baz, runMe }) {
-    return <h1>Hello there! {baz}</h1>;
-  });
+  .to(
+    class Hello extends React.Component {
+      render () {
+        return <h1>Hello </h1>
+      }
+    }
+  );
+
+  /*
+    function Hello ({ foo, runMe }) {
+      return <h1>Hello</h1>
+    }
+    class Hello extends React.Component {
+      render () {
+        return <h1>Hello </h1>
+      }
+    }
+  */
