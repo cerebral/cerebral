@@ -13,7 +13,7 @@ const controller = Controller<State, Signals>(app, {
 
 setTimeout(
   () => {
-    controller.signals.test({});
+    controller.signals.test();
   },
   1000
 );

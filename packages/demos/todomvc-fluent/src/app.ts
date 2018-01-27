@@ -1,23 +1,18 @@
-import { Module, Sequence } from '@cerebral/fluent';
+import { Module, Sequence, FluentConnectFactory } from '@cerebral/fluent';
 
 export type State = {
   foo: string
 };
 
 export type Signals = {
-  test: (props: {}) => void
+  test: (props?: void) => void
 };
 
 export type Context = {
   state: State
 };
 
-export type Connector<Props = {}> = {
-  state: State,
-  props: Props
-};
-
-const testSequence = Sequence<Context, {}>(s => s
+const testSequence = Sequence<Context, void>(s => s
   .action(function test ({ state }) {
     state.foo = 'bar2';
   })
@@ -31,3 +26,7 @@ export default Module<State, Signals>({
     test: testSequence
   }
 });
+
+export function connect<TProps>() {
+  return FluentConnectFactory<TProps, State, Signals>();
+}
