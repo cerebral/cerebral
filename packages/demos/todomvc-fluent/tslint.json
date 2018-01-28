@@ -33,7 +33,7 @@
         "no-arg": true,
         "no-bitwise": true,
         "no-console": [
-            true,
+            false,
             "log",
             "error",
             "debug",
@@ -48,7 +48,7 @@
         "no-duplicate-variable": true,
         "no-empty": true,
         "no-eval": true,
-        "no-shadowed-variable": true,
+        "no-shadowed-variable": false,
         "no-string-literal": true,
         "no-switch-case-fall-through": true,
         "no-trailing-whitespace": false,
