@@ -1,9 +1,9 @@
 import { State } from './types';
 
-export function counts (state: State) {
-  return state.visibleTodosUids.reduce(
+export function counts (this: State) {
+  return this.visibleTodosUids.get().reduce(
     (counts, uid) => {
-      const todo = state.todos.get(uid);
+      const todo = this.todos.get(uid);
 
       if (todo && todo.completed) {
         counts.completed++;
@@ -18,29 +18,28 @@ export function counts (state: State) {
     {
       completed: 0,
       remaining: 0,
-      total: state.todos.values().length,
-      visible: state.visibleTodosUids.length,
+      total: this.todos.values().length,
+      visible: this.visibleTodosUids.get().length,
     }
   );
 }
-export function  visibleTodosUids (state: State): string[] {
-  return state.todos.keys().filter(uid => {
-    const todo = state.todos.get(uid);
+export function  visibleTodosUids (this: State): string[] {
+  return this.todos.keys().filter(uid => {
+    const todo = this.todos.get(uid);
 
     return (
-      state.filter === 'all' ||
-      (state.filter === 'completed' && todo && todo.completed) ||
-      (state.filter === 'active' && todo && !todo.completed)
+      this.filter === 'all' ||
+      (this.filter === 'completed' && todo && todo.completed) ||
+      (this.filter === 'active' && todo && !todo.completed)
     );
   });
 }
-export function  isAllChecked (state: State) {
+export function  isAllChecked (this: State) {
   return (
-    state.visibleTodosUids.filter(uid => {
-      const todo = state.todos.get(uid);
+    this.visibleTodosUids.get().filter(uid => {
+      const todo = this.todos.get(uid);
 
       return todo && !todo.completed;
-    }).length === 0 && state.visibleTodosUids.length !== 0
+    }).length === 0 && this.visibleTodosUids.get().length !== 0
   );
 }
-

@@ -3,15 +3,27 @@ import * as classnames from 'classnames';
 import { connect } from '../globals';
 
 export default connect<{ uid: string, isEditing: boolean }>()
-  .with(({ state, props, signals }) => ({
-    todo: state.todos.get(props.uid),
-    todoDoubleClicked: signals.todoDoubleClicked,
-    newTitleChanged: signals.todoNewTitleChanged,
-    newTitleSubmitted: signals.todoNewTitleSubmitted,
-    toggleCompletedChanged: signals.toggleTodoCompletedChanged,
-    removeTodoClicked: signals.removeTodoClicked,
-    newTitleAborted: signals.todoNewTitleAborted
-  }))
+  .with(({ state, props, signals }) => {
+    const todo = state.todos.get(props.uid) || {
+      title: '',
+      editedTitle: '',
+      completed: false
+    };
+
+    return {
+      todo: {
+        title: todo.title,
+        completed: todo.completed,
+        editedTitle: todo.editedTitle
+      },
+      todoDoubleClicked: signals.todoDoubleClicked,
+      newTitleChanged: signals.todoNewTitleChanged,
+      newTitleSubmitted: signals.todoNewTitleSubmitted,
+      toggleCompletedChanged: signals.toggleTodoCompletedChanged,
+      removeTodoClicked: signals.removeTodoClicked,
+      newTitleAborted: signals.todoNewTitleAborted
+    };
+  })
   .to(
     function Todo({
       uid,
@@ -24,10 +36,6 @@ export default connect<{ uid: string, isEditing: boolean }>()
       removeTodoClicked,
       newTitleAborted,
     }) {
-      if (!todo) {
-        return null;
-      }
-
       return (
         <li
           className={classnames({
