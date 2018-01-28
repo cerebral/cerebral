@@ -2,11 +2,13 @@ import * as React from 'react';
 import { connect } from '../globals';
 
 export default connect()
-  .with(({ state, signals }) => ({
-    title: state.newTodoTitle,
-    titleChanged: signals.newTodoTitleChanged,
-    submitted: signals.newTodoSubmitted
-  }))
+  .with(({ state, signals }) => {
+    return {
+      title: state.newTodoTitle,
+      titleChanged: signals.newTodoTitleChanged,
+      submitted: signals.newTodoSubmitted
+    };
+  })
   .to(
     function NewTodo({ title, titleChanged, submitted }) {
       return (
