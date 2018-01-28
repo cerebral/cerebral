@@ -1,0 +1,25 @@
+body {
+  margin: 0 !important;
+  min-width: inherit !important;
+  max-width: inherit !important;
+}
+
+#todoapp-wrapper {
+  margin: 0 auto;
+  min-width: 230px;
+  max-width: 550px;
+}
+
+a {
+  cursor: pointer;
+}
+
+.toggle-all {
+  position: absolute;
+  top: -55px;
+  left: -12px;
+  width: 60px;
+  height: 34px;
+  text-align: center;
+  border: none;
+}

@@ -13,12 +13,12 @@ export function removeTodo ({ state, props }: Context<{ uid: string }>) {
 }
 
 export function toggleAllChecked ({ state }: Context) {
-  const isAllChecked = state.isAllChecked;
-  state.visibleTodosUids.forEach(uid => {
+  const isAllChecked = state.isAllChecked.get();
+  state.visibleTodosUids.get().forEach(uid => {
     const todo = state.todos.get(uid);
 
     if (todo) {
-      todo.completed = isAllChecked;
+      todo.completed = !isAllChecked;
     }
   });
 }

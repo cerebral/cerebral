@@ -1,7 +1,7 @@
-import { Module, ObservableMap } from '@cerebral/fluent';
+import { Module, ObservableMap, Computed } from '@cerebral/fluent';
 import * as sequences from './sequences';
 import * as providers from './providers';
-import { counts, isAllChecked, visibleTodosUids} from './getters';
+import { counts, isAllChecked, visibleTodosUids } from './getters';
 import { State, Signals } from './types';
 
 export default Module<State, Signals>({
@@ -10,9 +10,9 @@ export default Module<State, Signals>({
     todos: ObservableMap({}),
     filter: 'all',
     editingUid: null,
-    get visibleTodosUids (): string[] { return visibleTodosUids(this) },
-    counts,
-    isAllChecked
+    visibleTodosUids: Computed(visibleTodosUids),
+    counts: Computed(counts),
+    isAllChecked: Computed(isAllChecked)
   },
   signals: {
     rootRouted: sequences.redirectToAll,

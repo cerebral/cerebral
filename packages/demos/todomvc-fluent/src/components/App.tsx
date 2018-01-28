@@ -6,7 +6,7 @@ import TodosFooter from './Footer';
 
 export default connect()
   .with(({ state }) => ({
-    counts: state.counts
+    counts: state.counts.get()
   }))
   .to(
     function App({ counts }) {

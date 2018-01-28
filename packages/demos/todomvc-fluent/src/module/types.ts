@@ -1,4 +1,4 @@
-import { ObservableMap, SignalWithPayload, Signal } from '@cerebral/fluent';
+import { ObservableMap, SignalWithPayload, Signal, ComputedValue } from '@cerebral/fluent';
 
 type Todo = {
   title: string,
@@ -11,14 +11,14 @@ export type State = {
   todos: ObservableMap<Todo>,
   filter: string,
   editingUid: string | null,
-  counts: {
+  counts: ComputedValue<{
     completed: number,
     remaining: number,
     total: number,
     visible: number
-  },
-  visibleTodosUids: string[],
-  isAllChecked: boolean
+  }>,
+  visibleTodosUids: ComputedValue<string[]>,
+  isAllChecked: ComputedValue<boolean>
 };
 
 export type Signals = {
