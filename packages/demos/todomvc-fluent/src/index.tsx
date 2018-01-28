@@ -2,10 +2,10 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import Devtools from 'cerebral/devtools';
 import { Controller, Container } from '@cerebral/fluent';
-import Hello from './Hello';
-import root from './root';
+import App from './components/App';
+import module from './module';
 
-const controller = Controller(root, {
+const controller = Controller(module, {
   devtools: Devtools({
     host: 'localhost:8686'
   })
@@ -13,7 +13,7 @@ const controller = Controller(root, {
 
 render(
   <Container controller={controller}>
-    <Hello baz="hoho" />,
+    <App />,
   </Container>,
   document.getElementById('root')
 );
