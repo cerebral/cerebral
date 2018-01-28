@@ -7,7 +7,7 @@ const filters = ['All', 'Active', 'Completed'];
 export default connect()
   .with(({ state, signals }) => ({
     filter: state.filter,
-    counts: state.counts,
+    counts: state.counts.get(),
     filterClicked: signals.filterClicked,
     clearCompletedClicked: signals.clearCompletedClicked
   }))

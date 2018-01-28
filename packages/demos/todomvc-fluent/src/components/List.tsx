@@ -5,8 +5,8 @@ import { connect } from '../globals';
 export default connect()
   .with(({ state, signals }) => ({
     editingUid: state.editingUid,
-    isAllChecked: state.isAllChecked,
-    todosUids: state.visibleTodosUids,
+    isAllChecked: state.isAllChecked.get(),
+    todosUids: state.visibleTodosUids.get(),
     toggleAllChanged: signals.toggleAllChanged
   }))
   .to(
@@ -14,6 +14,7 @@ export default connect()
       return (
         <section className="main">
           <input
+            id="toggle-all"
             className="toggle-all"
             type="checkbox"
             checked={isAllChecked}
