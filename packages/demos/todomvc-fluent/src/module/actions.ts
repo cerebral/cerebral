@@ -8,7 +8,7 @@ export function changeNewTodoTitle ({ state, props }: Context<{ title: string }>
   state.newTodoTitle = props.title;
 }
 
-export function removeTodo ({ state, props, path }: Context<{ uid: string }>) {
+export function removeTodo ({ state, props }: Context<{ uid: string }>) {
   state.todos.delete(props.uid);
 }
 
