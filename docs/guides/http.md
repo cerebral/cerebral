@@ -9,9 +9,15 @@ import {Module} from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
 export default Module({
+<<<<<<< HEAD
   providers: {
     http: HttpProvider()
   }
+=======
+  providers: [
+    HttpProvider()
+  ]
+>>>>>>> docs(fluent): add initial docs for fluent
 })
 ```
 
@@ -30,14 +36,23 @@ import {Module} from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
 export default Module({
+<<<<<<< HEAD
   providers: {
     http: HttpProvider({
+=======
+  providers: [
+    HttpProvider({
+>>>>>>> docs(fluent): add initial docs for fluent
       headers: {
         'Authorization': 'token whatevah'
       },
       withCredentials: true
     })
+<<<<<<< HEAD
   }
+=======
+  ]
+>>>>>>> docs(fluent): add initial docs for fluent
 })
 ```
 
@@ -192,9 +207,15 @@ import HttpProvider, {HttpProviderError} from '@cerebral/http'
 import httpErrorThrown from './signals/httpErrorThrown'
 
 export default Module({
+<<<<<<< HEAD
   providers: {
     http: HttpProvider()
   },
+=======
+  providers: [
+    HttpProvider()
+  ],
+>>>>>>> docs(fluent): add initial docs for fluent
   catch: [
     [HttpProviderError, httpErrorThrown]
   ]
@@ -321,4 +342,8 @@ export default Provider({
 })
 ```
 
+<<<<<<< HEAD
 The operators of http provider though makes it a natural choice when working with Cerebral.
+=======
+The operators of http provider though makes it a natural choice when working with Cerebral.
+>>>>>>> docs(fluent): add initial docs for fluent
