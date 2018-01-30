@@ -32,9 +32,8 @@ export const changeFilter = Sequence<Context, { filter: string }>(s => s
 
 export const submitNewTodo = Sequence<Context, void>(s => s
   .pathsAction(actions.hasNewTodoTitle)
-  .paths({
-    true: s => s
-      .action(actions.addTodo).action(actions.clearTodoTitle),
+  .paths({ 
+    true: s => s.action(actions.addTodo, actions.clearTodoTitle),
     false: s => s
   })
 );
