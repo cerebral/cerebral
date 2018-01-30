@@ -1,4 +1,4 @@
-import { ConnectFactory, IContext, IContextWithPaths } from '@cerebral/fluent';
+import { ConnectFactory, IContext, IContextWithPaths, IContextWithNoDataPaths } from '@cerebral/fluent';
 import { State, Signals } from './module/types';
 import { Provider as RouterProvider } from '@cerebral/router';
 
@@ -14,6 +14,10 @@ export interface Context<Props = {}> extends IContext<Props>, Providers {
 }
 
 export interface ContextWithPaths<Props, Paths> extends IContextWithPaths<Props, Paths>, Providers {
+  state: State;
+}
+
+export interface ContextWithNoDataPaths<Props, Paths> extends IContextWithNoDataPaths<Props, Paths>, Providers {
   state: State;
 }
 

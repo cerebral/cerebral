@@ -1,4 +1,4 @@
-import { Context, ContextWithPaths } from '../globals';
+import { Context, ContextWithNoDataPaths } from '../globals';
 
 export function redirectToAll ({ router }: Context) {
   router.redirect('/all');
@@ -44,12 +44,12 @@ export function changeFilter({ state, props }: Context<{ filter: string }>) {
   state.filter = props.filter;
 }
 
-export function hasNewTodoTitle ({ state, path}: ContextWithPaths<void, { true: {}, false: {} }>) {
+export function hasNewTodoTitle ({ state, path}: ContextWithNoDataPaths<void, { true: void, false: void }>): void {
   if (state.newTodoTitle) {
-    return path.true({});
+    return path.true();
   }
 
-  return path.false({});
+  return path.false();
 }
 
 export function addTodo ({ state, props, id }: Context) {
@@ -87,13 +87,13 @@ export function abortEditingTodo ({ state, props }: Context<{ uid: string }>) {
   }
 }
 
-export function whenEditedTitle ({ state, props, path }: ContextWithPaths<{ uid: string }, { true: {}, false: {} }>) {
+export function whenEditedTitle ({ state, props, path }: ContextWithNoDataPaths<{ uid: string }, { true: void, false: void }>): void {
   const todo = state.todos.get(props.uid);
   if (todo && todo.editedTitle) {
-    return path.true({});
+    return path.true();
   }
 
-  return path.false({});
+  return path.false();
 }
 
 export function updateTodoTitle ({ state, props }: Context<{ uid: string }>) {
