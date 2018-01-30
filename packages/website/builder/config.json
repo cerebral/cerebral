@@ -31,6 +31,14 @@
       "../../../docs/introduction/patterns",
       "../../../docs/introduction/test"
     ],
+    "guides": [
+      "../../../docs/guides/composing",
+      "../../../docs/guides/http",
+      "../../../docs/guides/operators",
+      "../../../docs/guides/routing",
+      "../../../docs/guides/ssr",
+      "../../../docs/guides/typescript"
+    ],
     "api": [
       "../../../docs/api/action",
       "../../../docs/api/compute",
@@ -77,6 +85,9 @@
     }, {
       "name": "firebase_admin",
       "path": "../../node_modules/@cerebral/firebase-admin/README"
+    }, {
+      "name": "fluent",
+      "path": "../../node_modules/@cerebral/fluent/README"
     }, {
       "name": "forms",
       "path": "../../node_modules/@cerebral/forms/README"
