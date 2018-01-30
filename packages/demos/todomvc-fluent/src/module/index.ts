@@ -1,7 +1,7 @@
 import { Module, ObservableMap, Computed } from '@cerebral/fluent';
 import * as sequences from './sequences';
 import * as providers from './providers';
-import { counts, isAllChecked, visibleTodosUids } from './getters';
+import { counts, isAllChecked, visibleTodosUids } from './computed';
 import { State, Signals } from './types';
 
 export default Module<State, Signals>({
