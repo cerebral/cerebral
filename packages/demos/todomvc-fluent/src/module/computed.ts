@@ -1,4 +1,4 @@
-import { State } from './types';
+import { State } from './state';
 
 export function counts (state: State) {
   return state.visibleTodosUids.get().reduce(
