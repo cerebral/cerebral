@@ -7,7 +7,7 @@ export default connect()
     editingUid: state.editingUid,
     isAllChecked: state.isAllChecked.get(),
     todosUids: state.visibleTodosUids.get(),
-    toggleAllChanged: signals.toggleAllChanged
+    toggleAllChanged: signals.toggleAllChecked
   }))
   .to(
     function List({ editingUid, isAllChecked, todosUids, toggleAllChanged }) {

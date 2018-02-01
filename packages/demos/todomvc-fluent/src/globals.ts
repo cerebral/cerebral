@@ -1,5 +1,6 @@
-import { ConnectFactory, IContext, IContextWithPaths, IContextWithNoDataPaths } from '@cerebral/fluent';
-import { State, Signals } from './module/types';
+import { ConnectFactory, IContext, IContextWithPaths, IContextWithNoDataPaths, SequenceFactory, SequenceWithPropsFactory } from '@cerebral/fluent';
+import { State } from './module/state';
+import { Signals } from './module/';
 import { Provider as RouterProvider } from '@cerebral/router';
 
 type Providers = {
@@ -9,18 +10,23 @@ type Providers = {
   router: RouterProvider
 };
 
-export interface Context<Props = {}> extends IContext<Props>, Providers {
+export interface SignalContext<Props = {}> extends IContext<Props>, Providers {
   state: State;
 }
 
-export interface ContextWithPaths<Props, Paths> extends IContextWithPaths<Props, Paths>, Providers {
+export interface ActionContext<Props = {}> extends SignalContext<Props> {}
+
+export interface ActionContextWithPaths<Props, Paths> extends IContextWithPaths<Props, Paths>, Providers {
   state: State;
 }
 
-export interface ContextWithNoDataPaths<Props, Paths> extends IContextWithNoDataPaths<Props, Paths>, Providers {
+export interface ActionContextWithNoDataPaths<Props, Paths> extends IContextWithNoDataPaths<Props, Paths>, Providers {
   state: State;
 }
 
 export function connect<TProps>() {
   return ConnectFactory<TProps, State, Signals>();
 }
+
+export const Sequence = (<TOutput = {}>() => SequenceFactory<SignalContext, TOutput>())();
+export const SequenceWithProps = (<TProps, TOutput = TProps>() => SequenceWithPropsFactory<SignalContext, TProps, TOutput>())();
