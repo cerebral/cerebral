@@ -8,8 +8,8 @@ export default connect()
   .with(({ state, signals }) => ({
     filter: state.filter,
     counts: state.counts.get(),
-    filterClicked: signals.filterClicked,
-    clearCompletedClicked: signals.clearCompletedClicked
+    filterClicked: signals.changeFilter,
+    clearCompletedClicked: signals.clearCompletedTodos
   }))
   .to(
     function Footer({ filter, counts, filterClicked, clearCompletedClicked }) {

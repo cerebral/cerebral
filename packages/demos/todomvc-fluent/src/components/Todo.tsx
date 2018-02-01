@@ -16,12 +16,12 @@ export default connect<{ uid: string, isEditing: boolean }>()
         completed: todo.completed,
         editedTitle: todo.editedTitle
       },
-      todoDoubleClicked: signals.todoDoubleClicked,
-      newTitleChanged: signals.todoNewTitleChanged,
-      newTitleSubmitted: signals.todoNewTitleSubmitted,
-      toggleCompletedChanged: signals.toggleTodoCompletedChanged,
-      removeTodoClicked: signals.removeTodoClicked,
-      newTitleAborted: signals.todoNewTitleAborted
+      todoDoubleClicked: signals.editTodo,
+      newTitleChanged: signals.changeTodoTitle,
+      newTitleSubmitted: signals.submitTodoTitle,
+      toggleCompletedChanged: signals.toggleTodoCompleted,
+      removeTodoClicked: signals.removeTodo,
+      newTitleAborted: signals.abortEdit
     };
   })
   .to(

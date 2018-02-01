@@ -5,8 +5,8 @@ export default connect()
   .with(({ state, signals }) => {
     return {
       title: state.newTodoTitle,
-      titleChanged: signals.newTodoTitleChanged,
-      submitted: signals.newTodoSubmitted
+      titleChanged: signals.changeNewTodoTitle,
+      submitted: signals.submitNewTodo
     };
   })
   .to(
