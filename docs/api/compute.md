@@ -39,7 +39,7 @@ That last argument of each function is **get**, it allows you to manually extrac
 import { Compute } from 'cerebral'
 import { state, props } from 'cerebral/tags'
 
-export default compute(
+export default Compute(
   state`user.id`,
   (userId, get) => {
     return get(state`projects.${userId}`).length > get(props`limit`)
