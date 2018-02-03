@@ -30,7 +30,8 @@
       "../../../docs/introduction/views",
       "../../../docs/introduction/compute",
       "../../../docs/introduction/patterns",
-      "../../../docs/introduction/test"
+      "../../../docs/introduction/test",
+      "../../../docs/introduction/typescript"
     ],
     "contribute": [
       "../../../docs/contribute/introduction",
