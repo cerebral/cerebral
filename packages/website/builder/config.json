@@ -29,7 +29,8 @@
       "../../../docs/introduction/views",
       "../../../docs/introduction/compute",
       "../../../docs/introduction/patterns",
-      "../../../docs/introduction/test"
+      "../../../docs/introduction/test",
+      "../../../docs/introduction/typescript"
     ],
     "guides": [
       "../../../docs/guides/composing",
@@ -111,7 +112,6 @@
       "path": "../../node_modules/@cerebral/useragent/README"
     }],
     "resources": [
-      "../../../docs/resources/cerebral_in_detail",
       "../../../docs/resources/boilerplates",
       "../../../docs/resources/migration",
       "../../../docs/resources/articles",

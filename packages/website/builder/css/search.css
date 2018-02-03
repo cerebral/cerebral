@@ -2,6 +2,9 @@
 #nav_search {
   padding: 5px;
   flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 10px;
 }
 #nav_search > input {
   width: 100%;
@@ -13,6 +16,7 @@
   text-indent: 5px;
   font-size: 14px;
   outline: none;
+  width: 200px;
 }
 
 #search-result {
@@ -20,9 +24,9 @@
   z-index: 4;
   background-color: white;
   border: 1px solid lightgray;
-  border-bottom-right-radius: : 3px;
-  border-bottom-left-radius: : 3px;
-  top: 38px;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  top: 39px;
   box-shadow: 1px 1px 3px 0 lightgray;
 }
 
