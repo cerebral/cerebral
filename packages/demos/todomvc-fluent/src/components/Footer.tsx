@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from '../globals';
+import { connect } from '../fluent';
 import * as classnames from 'classnames';
 
 const filters = ['All', 'Active', 'Completed'];

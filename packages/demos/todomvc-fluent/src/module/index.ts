@@ -1,14 +1,34 @@
-import { Module } from '@cerebral/fluent';
-import { initialState, State } from './state';
-import * as sequences from './sequences';
+import { Module, Computed, Dictionary } from '@cerebral/fluent';
+import Router from '@cerebral/router';
+import * as signals from './sequences';
 import * as providers from './providers';
+import { ModuleState, Todo } from './types';
+import { counts, isAllChecked, visibleTodosUids } from './computed';
 
-export type Signals = {
-  [key in keyof typeof sequences]: typeof sequences[key]
+const router = Router({
+  onlyHash: true,
+  query: true,
+  routes: [
+    { path: '/', signal: 'redirectToAll' },
+    { path: '/:filter', signal: 'changeFilter' },
+  ],
+});
+
+const state: ModuleState = {
+  newTodoTitle: '',
+  todos: Dictionary<Todo>({}),
+  filter: 'all',
+  editingUid: null,
+  visibleTodosUids: Computed(visibleTodosUids),
+  counts: Computed(counts),
+  isAllChecked: Computed(isAllChecked)
 };
 
-export default Module<State, Signals>({
-  state: initialState,
-  signals: sequences,
+export default Module({
+  state,
+  signals,
+  modules: {
+    router
+  },
   providers
 });

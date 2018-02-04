@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Todo from './Todo';
-import { connect } from '../globals';
+import { connect } from '../fluent';
 
 export default connect()
   .with(({ state, signals }) => ({
