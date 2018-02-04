@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as classnames from 'classnames';
-import { connect } from '../globals';
+import { connect } from '../fluent';
 
 export default connect<{ uid: string, isEditing: boolean }>()
   .with(({ state, props, signals }) => {

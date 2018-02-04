@@ -1,7 +1,7 @@
-import { sequence, sequenceWithProps } from '../globals';
+import { sequence, sequenceWithProps } from '../fluent';
 import * as actions from './actions';
 
-export const redirectToAll = sequenceWithProps<{ filter: string }>(s => s
+export const redirectToAll = sequence(s => s
   .action(actions.redirectToAll)
 );
 

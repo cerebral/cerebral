@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { connect } from '../globals';
+import { connect } from '../fluent';
 import NewTodo from './NewTodo';
 import TodosList from './List';
 import TodosFooter from './Footer';
