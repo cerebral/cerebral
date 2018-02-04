@@ -24,9 +24,6 @@ export interface BranchWithNoDataContext<Paths, Props = {}> extends IBranchWithN
   state: State;
 }
 
-export function connect<TProps>() {
-  return ConnectFactory<TProps, State, Signals>();
-}
-
-export const Sequence = (<TOutput = {}>() => SequenceFactory<SignalContext, TOutput>())();
-export const SequenceWithProps = (<TProps, TOutput = TProps>() => SequenceWithPropsFactory<SignalContext, TProps, TOutput>())();
+export const connect = ConnectFactory<State, Signals>();
+export const sequence = SequenceFactory<SignalContext>();
+export const sequenceWithProps = SequenceWithPropsFactory<SignalContext>();
