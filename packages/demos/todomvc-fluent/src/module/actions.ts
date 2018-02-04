@@ -1,4 +1,4 @@
-import { ActionContext, ActionContextWithNoDataPaths } from '../globals';
+import { ActionContext, BranchWithNoDataContext } from '../globals';
 
 export function redirectToAll ({ router }: ActionContext) {
   router.redirect('/all');
@@ -44,7 +44,7 @@ export function changeFilter({ state, props }: ActionContext<{ filter: string }>
   state.filter = props.filter;
 }
 
-export function hasNewTodoTitle ({ state, path}: ActionContextWithNoDataPaths<{}, { true: void, false: void }>): void {
+export function hasNewTodoTitle ({ state, path}: BranchWithNoDataContext<{ true: void, false: void }>): void {
   if (state.newTodoTitle) {
     return path.true();
   }
@@ -87,7 +87,7 @@ export function abortEditingTodo ({ state, props }: ActionContext<{ uid: string 
   }
 }
 
-export function whenEditedTitle ({ state, props, path }: ActionContextWithNoDataPaths<{ uid: string }, { true: void, false: void }>): void {
+export function whenEditedTitle ({ state, props, path }: BranchWithNoDataContext<{ true: void, false: void }, { uid: string }>): void {
   const todo = state.todos.get(props.uid);
   if (todo && todo.editedTitle) {
     return path.true();
