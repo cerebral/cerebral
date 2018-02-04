@@ -13,10 +13,9 @@ Instantiate the **Controller** exposed by `fluent`:
 ```ts
 import Devtools from 'cerebral/devtools'
 import { Controller } from '@cerebral/fluent`
-import { app } from './app'
-import { State, Signals } from './app/types'
+import * as app from './app'
 
-export const controller = Controller<State, Signals>(app, {
+export const controller = Controller<app.State, app.Signals>(app.module, {
   devtools: Devtools(...)
 })
 ```
@@ -47,30 +46,98 @@ render(
 )
 ```
 
+## Creating the fluent file
+
+To ease development it is recommended to create a **fluent.ts** file which configures your application. This is an example of such a file:
+
+```ts
+import { IContext, IBranchContext, SequenceFactory, SequenceWithPropsFactory, ConnectFactory } from '@cerebral/fluent'
+import { State, Signals, Providers } from './app'
+
+// This interface is used when you define actions
+export interface Context<Props> extends IContext<Props>, Providers {
+  state: State
+}
+
+// This interface is used when you define actions that returns a path
+export interface BranchContext<Paths, Props> extends IBranchContext<Paths, Props>, Providers {
+  state: State
+}
+
+// This function is used to connect components to Cerebral
+export function connect<Props>() {
+  return ConnectFactory<Props, State, Signals>();
+}
+
+// This function is used to define sequences. You can optionally define
+// what you expect the final props to look like. This is useful when composing
+// one sequence into an other
+export function sequense<ReturnProps = {}>() {
+  return SequenceFactory<Context, Output>()
+}
+
+// This function is used to define sequences that expect to receive some initial
+// props. You can optionally define what you expect the final props to look like
+export function sequenseWithProps<Props, ReturnProps = Props>() {
+  return SequenceWithPropsFactory<Context, Props, ReturnProps>()
+}
+```
+
 ## Creating the app module
 
-Your main module is typically a "manager". It means it is used to configure your general application. There are two parts to this:
-
-1. The module file that composes together all your modules and providers. It also exposes the function that your components will use to connect to the state and the signals of the app
-
-2. The types file which is where you compose together all the state and signals types from your modules. It also exports context types for your sequences and actions
+The main application module is really no different than the other modules, but it usually holds the providers as well. What to take notice of here is how we compose in the state and signals types of sub modules.
 
 *src/app/index.ts*
 ```ts
 import { Module, ConnectFactory } from '@cerebral/fluent'
-import { moduleA } from './modules/moduleA'
-import { moduleB } from './modules/moduleB'
+import * as a from './modules/a'
+import * as b from './modules/b'
+import * as signals from './sequences'
 import HttpProvider from '@cerebral/http'
-import { State, Signals } from './types'
 
-export function connect<Props>() {
-  return ConnectFactory<Props, State, Signals>()
+// We export the type of providers added
+export type Providers = {
+  http: HttpProvider
 }
 
-export const app = Module({
+// We export the state of this module a long
+// with the state of any submodules
+export type State = ModuleState & {
+  a: a.State,
+  b: b.State
+}
+
+// We export the signals of this module a long
+// with the signals of any submodules
+export type Signals = ModuleSignals & {
+  a: a.Signals,
+  b: b.Signals
+}
+
+// This is an implicit way to define the signals type
+// based on the import above from the "sequences" file
+type ModuleSignals = {
+  [key in keyof typeof signals]: typeof signals[key]
+}
+
+// Define this modules state
+type ModuleState = {
+  isLoading: boolean
+}
+
+// Define the initial state as a constant to get
+// better error reporting when inserting wrong state
+const state: ModuleState = {
+  isLoading: true
+}
+
+// Define the module as normal
+export const module = Module({
+  state,
+  signals,
   modules: {
-    moduleA,
-    moduleB
+    a: a.module,
+    b: b.module
   },
   providers: {
     http: HttpProvider()
@@ -78,92 +145,16 @@ export const app = Module({
 })
 ```
 
-*src/app/types.ts*
-```ts
-import { FluentContext, FluentContextWithPaths } from '@cerebral/fluent'
-import HttpProvider from '@cerebral/http'
-import { State as ModuleAState, Signals as ModuleASignals } from './modules/moduleA/types'
-import { State as ModuleBState, Signals as ModuleBSignals } from './modules/moduleB/ types'
-
-export type State = {
-  moduleA: ModuleAState,
-  moduleB: ModuleBState
-}
-
-export type Signals = {
-  moduleA: ModuleASignals,
-  moduleB: ModuleBSignals
-}
-
-export type Providers = {
-  http: HttpProvider
-}
-
-export interface Context<Props> extends FluentContext<Props>, Providers {
-  state: State
-}
-
-export interface ContextWithPaths<Props, Paths> extends FluentContextWithPaths<Props, Paths>, Providers {
-  state: State
-}
-```
-
-The two contexts you define will be used by sequences and actions to ensure type safety. Notice that they both extend the **Providers** that we also defined.
-
-## Creating domain specific module
-
-A domain specific module is basically a module that holds state and signals related to some domain in your application. For example **admin**.
-
-*src/app/modules/admin/index.ts*
-```ts
-import { Module, FluentMap } from '@cerebral/fluent'
-import { State, Signals } from './types'
-import * as sequences from './sequences'
-
-const state: State = {
-  isLoadingUsers: false,
-  isSubmittingNewUser: false,
-  users: FluentMap({}),
-  newUserName: ''
-}
-
-const signals: Signals = {
-  newUserNameChanged: sequences.changeNewUserName,
-  newUserNameSubmitted: sequences.submitNewUser
-}
-
-export const admin = Module({
-  state,
-  signals
-})
-```
-
-By defining your state and signals on their own constants you will get more specific error reporting form typescript.
-
-*src/app/modules/admin/types.ts*
-```ts
-import { FluentMap, Signal, SignalWithPayload } from '@cerebral/fluent'
-
-export type State = {
-  isLoadingUsers: boolean,
-  isSubmittingNewUser: boolean,
-  users: FluentMap<User>,
-  newUserName: string
-}
-
-export type Signals = {
-  newUserNameChanged: SignalWithPayload<{ name: string }>,
-  newUserSubmitted: Signal
-}
-```
+The other modules are created the exact same way as this module, composing in any submodules they might have. You might want to split the types into its own **types.ts** file and that is perfectly okay. Just notice that we export **State** as the composed state of any submodules, while **ModuleState** is the state for the specific module.
 
 ## Creating sequences
 
 ```ts
-import { Sequence } from '@cerebral/fluent'
-import { Context } from '../../types'
+// It is recommended to create an alias to your fluent
+// file for easier imports
+import { sequenceWithProps } from 'fluent'
 
-export const changeNewUserName = Sequence<Context, { name: string }>(
+export const changeNewUserName = sequenceWithProps<{ name: string }>(
   s => s
   .action(({ state, props }) => { state.newUserName = props.name })
 )
@@ -172,17 +163,16 @@ export const changeNewUserName = Sequence<Context, { name: string }>(
 This sequence gives you full type safety and autosuggestions. If anything is changed you will be notified about any breaking changes. Though inlining actions like this works it is always a good idea to separate them out.
 
 ```ts
-import { Sequence } from '@cerebral/fluent'
-import { Context } from '../../types'
+import { sequence, sequenceWithProps } from 'fluent'
 import * as actions from './actions'
 
-export const changeNewUserName = Sequence<Context, { name: string }>(s => s
+export const changeNewUserName = sequenceWithProps<{ name: string }>(s => s
   .action(actions.changeNewUserName)
 )
 
-export const changeNewUserName = Sequence<Context, { name: string }>(s => s
+export const submitUser = sequence(s => s
   .action(actions.setSubmittingUser(true))
-  .pathsAction(actions.submitNewUser)
+  .branch(actions.submitNewUser)
   .paths({
     success: s => s
       .action(actions.addNewUser),
@@ -196,7 +186,7 @@ export const changeNewUserName = Sequence<Context, { name: string }>(s => s
 ## Creating actions
 
 ```ts
-import { Context, ContextWithPaths } from '../../types'
+import { Context, BranchContext } from '../../types'
 
 // Now you have made this function composable with any
 // other sequence, meaning that you can safely reuse it
@@ -206,13 +196,12 @@ export function changeNewUserName ({ state, props }: Context<{ name: string }>) 
   state.newUserName = props.name
 }
 
-type User = {
-  userName: string
-}
-
-// With the ContextWithPaths type you ensure that this action has
+// With the BranchContext type you ensure that this action has
 // the defined paths available in the sequence it is composed into
-export function submitNewUser ({ state, http, path }: ContextWithPaths<void, { success: { user: User }, error: void }>) {
+export function submitNewUser ({ state, http, path }: BranchContext<{
+  success: { user: { userName: string } },
+  error: {}
+  }>) {
   return http.post('/users', {
     userName: state.newUserName
   })
