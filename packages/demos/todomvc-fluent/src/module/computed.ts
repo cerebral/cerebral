@@ -1,6 +1,6 @@
-import { State } from './state';
+import { ModuleState } from './types';
 
-export function counts (state: State) {
+export function counts (state: ModuleState) {
   return state.visibleTodosUids.get().reduce(
     (counts, uid) => {
       const todo = state.todos.get(uid);
@@ -23,7 +23,7 @@ export function counts (state: State) {
     }
   );
 }
-export function  visibleTodosUids (state: State): string[] {
+export function  visibleTodosUids (state: ModuleState): string[] {
   return state.todos.keys().filter(uid => {
     const todo = state.todos.get(uid);
 
@@ -34,7 +34,7 @@ export function  visibleTodosUids (state: State): string[] {
     );
   });
 }
-export function  isAllChecked (state: State) {
+export function  isAllChecked (state: ModuleState) {
   return (
     state.visibleTodosUids.get().filter(uid => {
       const todo = state.todos.get(uid);

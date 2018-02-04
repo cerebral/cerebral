@@ -1,18 +1,18 @@
-import { ActionContext, BranchWithNoDataContext } from '../globals';
+import { Context, BranchContext } from '../fluent';
 
-export function redirectToAll ({ router }: ActionContext) {
+export function redirectToAll ({ router }: Context) {
   router.redirect('/all');
 }
 
-export function changeNewTodoTitle ({ state, props }: ActionContext<{ title: string }>) {
+export function changeNewTodoTitle ({ state, props }: Context<{ title: string }>) {
   state.newTodoTitle = props.title;
 }
 
-export function removeTodo ({ state, props }: ActionContext<{ uid: string }>) {
+export function removeTodo ({ state, props }: Context<{ uid: string }>) {
   state.todos.delete(props.uid);
 }
 
-export function toggleAllChecked ({ state }: ActionContext) {
+export function toggleAllChecked ({ state }: Context) {
   const isAllChecked = state.isAllChecked.get();
   state.visibleTodosUids.get().forEach(uid => {
     const todo = state.todos.get(uid);
@@ -23,14 +23,14 @@ export function toggleAllChecked ({ state }: ActionContext) {
   });
 }
 
-export function toggleTodoCompleted ({ state, props }: ActionContext<{ uid: string }>) {
+export function toggleTodoCompleted ({ state, props }: Context<{ uid: string }>) {
   const todo = state.todos.get(props.uid);
   if (todo) {
     todo.completed = !todo.completed;
   }
 }
 
-export function clearCompletedTodos({ state }: ActionContext) {
+export function clearCompletedTodos({ state }: Context) {
   state.todos.keys().forEach(uid => {
     const todo = state.todos.get(uid);
 
@@ -40,19 +40,19 @@ export function clearCompletedTodos({ state }: ActionContext) {
   });
 }
 
-export function changeFilter({ state, props }: ActionContext<{ filter: string }>) {
+export function changeFilter({ state, props }: Context<{ filter: string }>) {
   state.filter = props.filter;
 }
 
-export function hasNewTodoTitle ({ state, path}: BranchWithNoDataContext<{ true: void, false: void }>): void {
+export function hasNewTodoTitle ({ state, path}: BranchContext<{ true: {}, false: {} }>) {
   if (state.newTodoTitle) {
-    return path.true();
+    return path.true({});
   }
 
-  return path.false();
+  return path.false({});
 }
 
-export function addTodo ({ state, props, id }: ActionContext) {
+export function addTodo ({ state, props, id }: Context) {
   state.todos.set(id.create(), {
     title: state.newTodoTitle,
     completed: false,
@@ -60,18 +60,18 @@ export function addTodo ({ state, props, id }: ActionContext) {
   });
 }
 
-export function clearTodoTitle ({ state }: ActionContext) {
+export function clearTodoTitle ({ state }: Context) {
   state.newTodoTitle = '';
 }
 
-export function changeTodoTitle ({ state, props }: ActionContext<{ uid: string, title: string }>) {
+export function changeTodoTitle ({ state, props }: Context<{ uid: string, title: string }>) {
   const todo = state.todos.get(props.uid);
   if (todo) {
     todo.editedTitle = props.title;
   }
 }
 
-export function editTodo ({ state, props }: ActionContext<{ uid: string }>) {
+export function editTodo ({ state, props }: Context<{ uid: string }>) {
   const todo = state.todos.get(props.uid);
   if (todo) {
     todo.editedTitle = todo.title;
@@ -79,7 +79,7 @@ export function editTodo ({ state, props }: ActionContext<{ uid: string }>) {
   }
 }
 
-export function abortEditingTodo ({ state, props }: ActionContext<{ uid: string }>) {
+export function abortEditingTodo ({ state, props }: Context<{ uid: string }>) {
   const todo = state.todos.get(props.uid);
   if (todo) {
     todo.editedTitle = '';
@@ -87,16 +87,16 @@ export function abortEditingTodo ({ state, props }: ActionContext<{ uid: string 
   }
 }
 
-export function whenEditedTitle ({ state, props, path }: BranchWithNoDataContext<{ true: void, false: void }, { uid: string }>): void {
+export function whenEditedTitle ({ state, props, path }: BranchContext<{ true: {}, false: {} }, { uid: string }>) {
   const todo = state.todos.get(props.uid);
   if (todo && todo.editedTitle) {
-    return path.true();
+    return path.true({});
   }
 
-  return path.false();
+  return path.false({});
 }
 
-export function updateTodoTitle ({ state, props }: ActionContext<{ uid: string }>) {
+export function updateTodoTitle ({ state, props }: Context<{ uid: string }>) {
   const todo = state.todos.get(props.uid);
   if (todo) {
     todo.title = todo.editedTitle;
