@@ -1,4 +1,4 @@
-import { ConnectFactory, IContext, IContextWithPaths, IContextWithNoDataPaths, SequenceFactory, SequenceWithPropsFactory } from '@cerebral/fluent';
+import { ConnectFactory, IContext, IBranchContext, IBranchWithNoDataContext, SequenceFactory, SequenceWithPropsFactory } from '@cerebral/fluent';
 import { State } from './module/state';
 import { Signals } from './module/';
 import { Provider as RouterProvider } from '@cerebral/router';
@@ -16,11 +16,11 @@ export interface SignalContext<Props = {}> extends IContext<Props>, Providers {
 
 export interface ActionContext<Props = {}> extends SignalContext<Props> {}
 
-export interface ActionContextWithPaths<Props, Paths> extends IContextWithPaths<Props, Paths>, Providers {
+export interface BranchContext<Paths, Props = {}> extends IBranchContext<Paths, Props>, Providers {
   state: State;
 }
 
-export interface ActionContextWithNoDataPaths<Props, Paths> extends IContextWithNoDataPaths<Props, Paths>, Providers {
+export interface BranchWithNoDataContext<Paths, Props = {}> extends IBranchWithNoDataContext<Paths, Props>, Providers {
   state: State;
 }
 
