@@ -64,7 +64,7 @@
   display: block;
   overflow-y: auto;
   position: relative;
-  padding-top: 80px;
+  padding-top: 100px;
 }
 
 #nav > ul > li:last-child {
@@ -202,13 +202,13 @@
   position: fixed;
   display: flex;
   align-items: center;
-  padding: 5px 10px;
+  padding: 20px;
   box-sizing: border-box;
   flex: 0 0 40px;
   top: 0;
   left: 0;
   width: 100%;
-  height: 50px;
+  height: 75px;
   z-index: 10;
   background-color: rgba(255, 255, 255, 0.9);
 }

@@ -12,10 +12,10 @@ Instantiate the **Controller** exposed by `fluent`:
 
 ```ts
 import Devtools from 'cerebral/devtools'
-import { Controller } from '@cerebral/fluent`
-import * as app from './app'
+import { Controller } from '@cerebral/fluent'
+import { State, Signals } from './app/types'
 
-export const controller = Controller<app.State, app.Signals>(app.module, {
+export const controller = Controller<State, Signals>(app.module, {
   devtools: Devtools(...)
 })
 ```
@@ -52,7 +52,7 @@ To ease development it is recommended to create a **fluent.ts** file which confi
 
 ```ts
 import { IContext, IBranchContext, SequenceFactory, SequenceWithPropsFactory, ConnectFactory } from '@cerebral/fluent'
-import { State, Signals, Providers } from './app'
+import { State, Signals, Providers } from './app/types'
 
 // This interface is used when you define actions
 export interface Context<Props> extends IContext<Props>, Providers {
@@ -65,110 +65,117 @@ export interface BranchContext<Paths, Props> extends IBranchContext<Paths, Props
 }
 
 // This function is used to connect components to Cerebral
-export function connect<Props>() {
-  return ConnectFactory<Props, State, Signals>();
-}
+export const connect = ConnectFactory<State, Signals>();
 
 // This function is used to define sequences. You can optionally define
 // what you expect the final props to look like. This is useful when composing
 // one sequence into an other
-export function sequense<ReturnProps = {}>() {
-  return SequenceFactory<Context, Output>()
-}
+export const sequence = SequenceFactory<Context>();
 
 // This function is used to define sequences that expect to receive some initial
 // props. You can optionally define what you expect the final props to look like
-export function sequenseWithProps<Props, ReturnProps = Props>() {
-  return SequenceWithPropsFactory<Context, Props, ReturnProps>()
-}
+export const sequenceWithProps = SequenceWithPropsFactory<Context>();
 ```
 
-## Creating the app module
+## Creating a module types file
 
-The main application module is really no different than the other modules, but it usually holds the providers as well. What to take notice of here is how we compose in the state and signals types of sub modules.
+You will typically create a separate file for the types. This will hold the types for the state, signals and providers of a given module. The types file will also ensure composition with any submodules.
 
-*src/app/index.ts*
+*src/app/types.ts*
 ```ts
-import { Module, ConnectFactory } from '@cerebral/fluent'
-import * as a from './modules/a'
-import * as b from './modules/b'
+import { Dictionary, ComputedValue } from '@cerebral/fluent'
+import { Provider as RouterProvider } from '@cerebral/router'
+import * as a from './modules/a/types'
+import * as b from './modules/b/types'
 import * as signals from './sequences'
-import HttpProvider from '@cerebral/http'
 
-// We export the type of providers added
-export type Providers = {
-  http: HttpProvider
-}
+export type ModuleState = {
+  foo: string,
+  stringDictionary: Dictionary<string>,
+  isAwesome: ComputedValue<boolean>
+};
 
-// We export the state of this module a long
-// with the state of any submodules
 export type State = ModuleState & {
   a: a.State,
   b: b.State
-}
+};
 
-// We export the signals of this module a long
-// with the signals of any submodules
+export type ModuleSignals = {
+  [key in keyof typeof signals]: typeof signals[key]
+};
+
 export type Signals = ModuleSignals & {
   a: a.Signals,
   b: b.Signals
-}
+};
 
-// This is an implicit way to define the signals type
-// based on the import above from the "sequences" file
-type ModuleSignals = {
-  [key in keyof typeof signals]: typeof signals[key]
+export interface Providers extends a.Providers, b.Providers {
+  router: RouterProvider;
 }
+```
 
-// Define this modules state
-type ModuleState = {
-  isLoading: boolean
-}
+As you can see this file is all about bringing the types together. Inititally the ones for this module, but also exampled here bringing in the types of any submodules.
 
-// Define the initial state as a constant to get
-// better error reporting when inserting wrong state
+## Creating the app module
+
+*src/app/index.ts*
+```ts
+import { Module, Dictionary, Computed } from '@cerebral/fluent'
+import Router from '@cerebral/router'
+import * as a from './modules/a'
+import * as b from './modules/b'
+import * as signals from './sequences'
+import * as computed from './computed'
+import { ModuleState } from './types'
+
 const state: ModuleState = {
-  isLoading: true
+  foo: 'bar',
+  stringDictionary: Dictionary({
+    foo: 'bar',
+    bar: 'baz'
+  }),
+  isAwesome: Computed(computed.isAwesome)
 }
 
-// Define the module as normal
 export const module = Module({
   state,
   signals,
   modules: {
     a: a.module,
-    b: b.module
-  },
-  providers: {
-    http: HttpProvider()
+    b: b.module,
+    router: Router({...})
   }
 })
 ```
-
-The other modules are created the exact same way as this module, composing in any submodules they might have. You might want to split the types into its own **types.ts** file and that is perfectly okay. Just notice that we export **State** as the composed state of any submodules, while **ModuleState** is the state for the specific module.
 
 ## Creating sequences
 
 ```ts
 // It is recommended to create an alias to your fluent
-// file for easier imports
-import { sequenceWithProps } from 'fluent'
+// file for easier imports. Use the babel alias plugin:
+// https://www.npmjs.com/package/babel-plugin-module-alias
+import { sequence } from 'fluent'
 
-export const changeNewUserName = sequenceWithProps<{ name: string }>(
-  s => s
-  .action(({ state, props }) => { state.newUserName = props.name })
+export const changeFoo = sequence(s => s
+  .action(({ state }) => { state.foo = 'bar2' })
 )
 ```
 
-This sequence gives you full type safety and autosuggestions. If anything is changed you will be notified about any breaking changes. Though inlining actions like this works it is always a good idea to separate them out.
+This sequence gives you full type safety and autosuggestions. If anything is changed you will be notified about any breaking changes. Though inlining actions like this works it is recommended to split them out. The reason is that your sequences will read better and you actions will be composable with other sequences by default.
 
 ```ts
-import { sequence, sequenceWithProps } from 'fluent'
+import { sequence } from 'fluent'
 import * as actions from './actions'
 
-export const changeNewUserName = sequenceWithProps<{ name: string }>(s => s
-  .action(actions.changeNewUserName)
+export const changeFoo = sequence(s => s
+  .action(actions.changeFoo)
 )
+```
+
+You can branch out to paths by using the **branch** method:
+
+```ts
+import { sequence } from 'fluent'
 
 export const submitUser = sequence(s => s
   .action(actions.setSubmittingUser(true))
@@ -183,15 +190,65 @@ export const submitUser = sequence(s => s
 )
 ```
 
+If your sequence expects to have props available you can define that:
+
+```ts
+import { sequenceWithProps } from 'fluent'
+import * as actions from './actions'
+
+export const changeFoo = sequenceWithProps<{ foo: string }>(s => s
+  .action(actions.changeFoo)
+)
+```
+
+You can also define expected props to be produced through the sequence:
+
+```ts
+import { sequence, sequenceWithProps } from 'fluent'
+import * as actions from './actions'
+
+export const doThis = sequence<{ foo: string }>(s => s
+  // This action must return { foo: 'some string' } for the
+  // sequence to be valid
+  .action(actions.doSomething)
+)
+
+export const changeFoo = sequenceWithProps<{ foo: string }, { bar: number }>(s => s
+  // This action must return { bar: 123 } to give a valid sequence
+  .action(actions.changeFoo)
+)
+```
+
+Any sequences used as signals will require the signal to be called with the defined props, for example:
+
+```ts
+import { sequence, sequenceWithProps } from 'fluent'
+import * as actions from './actions'
+
+export const doThis = sequenceWithProps<{ foo: string }>(s => s
+  .action(actions.doSomething)
+)
+```
+
+When you call the signal it will require you to call it with:
+
+```ts
+signals.doThis({
+  foo: 'bar'
+})
+```
+
 ## Creating actions
 
 ```ts
-import { Context, BranchContext } from '../../types'
+import { Context, BranchContext } from 'fluent'
+import { User } from './types'
 
 // Now you have made this function composable with any
 // other sequence, meaning that you can safely reuse it
 // wherever you want and instantly be notified is there is a mismatch,
 // for example that the action will indeed not receive the name property
+// by a previous action, sequence or calling the signal
 export function changeNewUserName ({ state, props }: Context<{ name: string }>) {
   state.newUserName = props.name
 }
@@ -199,7 +256,7 @@ export function changeNewUserName ({ state, props }: Context<{ name: string }>) 
 // With the BranchContext type you ensure that this action has
 // the defined paths available in the sequence it is composed into
 export function submitNewUser ({ state, http, path }: BranchContext<{
-  success: { user: { userName: string } },
+  success: { user: User },
   error: {}
   }>) {
   return http.post('/users', {
@@ -210,10 +267,106 @@ export function submitNewUser ({ state, http, path }: BranchContext<{
 }
 ```
 
+The **Context** does not require you to define props. The **BranchContext** takes a second type argument which would be the props used by the action.
+
 ## Connecting components
+
+The **connect** factory you defined in the *fluent.ts* file is used to connect to components like this:
+
+```ts
+import * as React from 'react'
+import { connect } from 'fluent'
+
+type ExternalProps {
+  foo: string
+}
+
+export default connect<ExternalProps>()
+  .with(({ state, signals, props }) => ({
+    foo: state.foo,
+    onClick: signals.doThis
+  }))
+  .to(
+    function MyComponent ({ foo, onClick }) {
+      return <div></div>
+    }
+  )
+```
+
+The **ExternalProps** are used when the component receives props from a parent. This is optional. It is important to take notice that the **with** method has to return the exact observable values you are using in your component. Meaning that:
+
+```ts
+import * as React from 'react'
+import { connect } from 'fluent'
+
+export default connect()
+  .with(({ state }) => ({
+    user: state.user
+  }))
+  .to(
+    function UserName ({ user }) {
+      return <div>{user.name}</div>
+    }
+  )
+```
+
+would actually not work. You would have to:
+
+```ts
+import * as React from 'react'
+import { connect } from 'fluent'
+
+export default connect()
+  .with(({ state }) => ({
+    user: { name: state.user.name }
+  }))
+  .to(
+    function UserName ({ user }) {
+      return <div>{user.name}</div>
+    }
+  )
+```
+
+This is because you have to grab (observe) the values being used in the component. This has the benfit of being explicit and allows for easy extending the connect to work with other view layers. You could also do:
+
+```ts
+import * as React from 'react'
+import { connect } from 'fluent'
+
+export default connect()
+  .with(({ state }) => ({
+    user: { ...state.user }
+  }))
+  .to(
+    function UserName ({ user }) {
+      return <div>{user.name}</div>
+    }
+  )
+```
+
+As this would indeed "get" all the properties on the user, starting to observe them.
+
+To connect to a class:
+
+```ts
+import * as React from 'react'
+import { connect } from 'fluent'
+
+export default connect()
+  .with(({ state }) => ({
+    user: { ...state.user }
+  }))
+  .toClass(props =>
+    class UserName extends React.Component<typeof props> {
+      render () {
+        return <div>{this.props.user.name}</div>
+      }
+    }
+  )
+```
+
+Connecting to a class gives a callback with the prop which you can **typeof** into the component class. This gives type safety and auto suggestions on the props in the component itself.
 
 ## Computing values
 
-## Fluent Map
-
-## Scaling up
+## Dictionary
