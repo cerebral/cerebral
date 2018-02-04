@@ -1,4 +1,4 @@
-import { ObservableMap, ComputedValue, Computed } from '@cerebral/fluent';
+import { Dictionary, ComputedValue, Computed } from '@cerebral/fluent';
 import { counts, isAllChecked, visibleTodosUids } from './computed';
 
 export type Todo = {
@@ -9,7 +9,7 @@ export type Todo = {
 
 export type State = {
   newTodoTitle: string,
-  todos: ObservableMap<Todo>,
+  todos: Dictionary<Todo>,
   filter: string,
   editingUid: string | null,
   counts: ComputedValue<{
@@ -24,7 +24,7 @@ export type State = {
 
 export const initialState: State = {
   newTodoTitle: '',
-  todos: ObservableMap<Todo>({}),
+  todos: Dictionary<Todo>({}),
   filter: 'all',
   editingUid: null,
   visibleTodosUids: Computed(visibleTodosUids),

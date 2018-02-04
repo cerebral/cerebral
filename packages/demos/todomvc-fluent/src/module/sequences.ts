@@ -30,7 +30,7 @@ export const changeFilter = SequenceWithProps<{ filter: string }>(s => s
 );
 
 export const submitNewTodo = Sequence(s => s
-  .pathsAction(actions.hasNewTodoTitle)
+  .branch(actions.hasNewTodoTitle)
   .paths({ 
     true: s => s.action(actions.addTodo, actions.clearTodoTitle),
     false: s => s
@@ -50,7 +50,7 @@ export const abortEdit = SequenceWithProps<{ uid: string}>(s => s
 );
 
 export const submitTodoTitle = SequenceWithProps<{ uid: string }>(s => s
-  .pathsAction(actions.whenEditedTitle)
+  .branch(actions.whenEditedTitle)
   .paths({
     true: s => s.action(actions.updateTodoTitle),
     false: s => s
