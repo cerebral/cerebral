@@ -1,12 +1,20 @@
 import { ConnectFactory, IContext, IBranchContext, SequenceFactory, SequenceWithPropsFactory } from '@cerebral/fluent';
-import { State, Signals, Providers } from './module/types';
+import { Provider as RouterProvider } from '@cerebral/router';
+import { State, Signals } from './module/types';
+
+interface Providers {
+	id: {
+		create(): string;
+	};
+	router: RouterProvider;
+}
 
 export interface Context<Props = {}> extends IContext<Props>, Providers {
-  state: State;
+	state: State;
 }
 
 export interface BranchContext<Paths, Props = {}> extends IBranchContext<Paths, Props>, Providers {
-  state: State;
+	state: State;
 }
 
 export const connect = ConnectFactory<State, Signals>();
