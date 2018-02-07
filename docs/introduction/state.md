@@ -36,4 +36,6 @@ export default Controller(app)
 
 Later you will learn more about **modules** which help you structure your application.
 
-If you want to see this in action, install the debugger and [load this BIN on Webpackbin](https://www.webpackbin.com/bins/-KpZ7xmFJK6WD44uAoUx).
+```marksy
+<CodeSandbox url="https://codesandbox.io/embed/oqx7po71nz?view=editor" />
+```

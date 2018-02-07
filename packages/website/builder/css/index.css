@@ -107,13 +107,3 @@
   font-weight: 400;
   color: #FFF;
 }
-
-.logo {
-  background: url("/images/cerebral.png");
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  display: inline-block;
-  width: 200px;
-  height: 200px;
-}

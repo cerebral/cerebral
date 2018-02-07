@@ -53,4 +53,6 @@ export default {
 }
 ```
 
-To play around with modules [have a look at this BIN](https://www.webpackbin.com/bins/-Kp_1KYmZOBjswsaTUAC).
+```marksy
+<CodeSandbox url="https://codesandbox.io/embed/q4qz00wkp6?view=editor" />
+```

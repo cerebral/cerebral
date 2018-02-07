@@ -31,6 +31,13 @@
       "../../../docs/introduction/patterns",
       "../../../docs/introduction/test"
     ],
+    "guides": [
+      "../../../docs/guides/composing",
+      "../../../docs/guides/http",
+      "../../../docs/guides/operators",
+      "../../../docs/guides/routing",
+      "../../../docs/guides/ssr"
+    ],
     "api": [
       "../../../docs/api/action",
       "../../../docs/api/compute",
@@ -100,7 +107,6 @@
       "path": "../../node_modules/@cerebral/useragent/README"
     }],
     "resources": [
-      "../../../docs/resources/cerebral_in_detail",
       "../../../docs/resources/boilerplates",
       "../../../docs/resources/migration",
       "../../../docs/resources/articles",

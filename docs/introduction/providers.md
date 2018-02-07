@@ -69,7 +69,8 @@ export default Module({
 
 You can use providers for pretty much anything, though typically it is to handle some kind of side effect. Examples of providers are [@cerebral/storage](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/storage), [@cerebral/firebase](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/firebase) and [@cerebral/http](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/@cerebral/http).
 
-
-Play around with creating a provider on [this BIN](https://www.webpackbin.com/bins/-KpZNE-A-_O7hjIGqVnL).
-
 As mentioned above we use providers to separate side effects from execution, allowing us to provide our own custom API to our application.
+
+```marksy
+<CodeSandbox url="https://codesandbox.io/embed/mq5k42x5nj?view=editor" />
+```
