@@ -70,7 +70,7 @@ It is possible to diverge execution down specific paths.
 import * as actions from './actions'
 
 export const initialize = [
-  actions.getUser, {
+  actions.getUser: {
     success: actions.setUser,
     error: actions.setError
   }
