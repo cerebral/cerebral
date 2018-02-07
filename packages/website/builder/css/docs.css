@@ -42,6 +42,7 @@ h1:hover > a, h2:hover > a, h3:hover > a, h4:hover > a, h5:hover > a, h6:hover >
 .docs-doc {
   overflow: auto;
   flex: 4;
+  padding-top: 70px;
 }
 
 .docs-doc-content {

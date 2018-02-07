@@ -66,4 +66,6 @@ export class AuthError extends CerebralError {
 }
 ```
 
-To play around with modules [have a look at this BIN](https://www.webpackbin.com/bins/-Kp_358GlWxIbpMRTWm1).
+```marksy
+<CodeSandbox url="https://codesandbox.io/embed/61902m93w3?view=editor" />
+```
