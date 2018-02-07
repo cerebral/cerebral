@@ -75,39 +75,31 @@ function Navigation(props) {
   function Sections(props) {
     return (
       <ul>
-        {[
-          <li key={'home'}>
-            <a href="/" id="nav_home" className="nav_item-name nav_section">
-              HOME &nbsp;<span className="icon-out-arrow" />
-            </a>
-          </li>,
-        ].concat(
-          Object.keys(props.docs).map(function(sectionKey, index) {
-            const open = props.sectionName === sectionKey
-            return (
-              <li
-                key={index}
-                className={`nav_section-item ${open ? 'nav_open' : ''}`}
-              >
-                <input
-                  id={sectionKey}
-                  className="nav_toggle"
-                  type="checkbox"
-                  defaultChecked={open}
-                />
-                <div className="nav_item-name nav_section">
-                  {sectionKey.replace('_', ' ').toUpperCase()}
-                </div>
-                <Pages
-                  docName={props.docName}
-                  sectionKey={sectionKey}
-                  sectionOpen={open}
-                  pages={props.docs[sectionKey]}
-                />
-              </li>
-            )
-          })
-        )}
+        {Object.keys(props.docs).map(function(sectionKey, index) {
+          const open = props.sectionName === sectionKey
+          return (
+            <li
+              key={index}
+              className={`nav_section-item ${open ? 'nav_open' : ''}`}
+            >
+              <input
+                id={sectionKey}
+                className="nav_toggle"
+                type="checkbox"
+                defaultChecked={open}
+              />
+              <div className="nav_item-name nav_toggle-label nav_section">
+                {sectionKey.replace('_', ' ').toUpperCase()}
+              </div>
+              <Pages
+                docName={props.docName}
+                sectionKey={sectionKey}
+                sectionOpen={open}
+                pages={props.docs[sectionKey]}
+              />
+            </li>
+          )
+        })}
       </ul>
     )
   }
@@ -124,6 +116,8 @@ function Navigation(props) {
   function Header() {
     return (
       <div id="nav_header">
+        <a className="logo" href="/" />
+        <span style={{ fontSize: '24px' }}>Cerebral</span>
         <Search />
         <a
           href="https://github.com/cerebral/cerebral"
@@ -132,6 +126,7 @@ function Navigation(props) {
           title="GitHub"
         >
           <div className="nav_button-github" />
+          Open repo
         </a>
         <a
           href="https://discord.gg/0kIweV4bd2bwwsvH"
@@ -140,6 +135,7 @@ function Navigation(props) {
           title="Chat"
         >
           <div className="nav_button-discord" />
+          Talk to us
         </a>
         <a
           href="https://twitter.com/cerebraljs"
@@ -148,6 +144,7 @@ function Navigation(props) {
           title="Chat"
         >
           <div className="nav_button-twitter" />
+          Tweet about Cerebral
         </a>
       </div>
     )

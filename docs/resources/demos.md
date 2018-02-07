@@ -1,9 +1,9 @@
 # Demos
 
-## Webpackbin
-The webpack bin service is built with Cerebral.
+## Codesandbox.io
+This service is built with Cerebral.
 
-[Open Webpackbin](https://www.webpackbin.com)
+[Open Codesandbox](https://www.codesandbox.io)
 
 ## From hangouts
 The Cerebral community has a lot of hangouts and during those hangouts a lot of demos has been given. Here are some of them:

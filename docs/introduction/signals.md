@@ -215,4 +215,6 @@ export const mySequence = [
 ]
 ```
 
-[Open this BIN](https://www.webpackbin.com/bins/-KpZAMSt49LlQHNhguls) to play around with some operators. Please feel free to use the same bin to test out the concepts reading on.
+```marksy
+<CodeSandbox url="https://codesandbox.io/embed/pm6lp6o4pj?view=editor" />
+```
