@@ -1,18 +1,16 @@
-import { Module, Computed, Dictionary } from '@cerebral/fluent';
+import { Module, Computed, Dictionary, pathFor } from '@cerebral/fluent';
 import Router from '@cerebral/router';
 import * as signals from './sequences';
 import * as providers from './providers';
 import { State, Todo, Signals } from './types';
 import { counts, isAllChecked, visibleTodosUids } from './computed';
 
-const nameof = <T>(name: keyof T) => name;
-
 const router = Router({
   onlyHash: true,
   query: true,
   routes: [
-    { path: '/', signal: nameof<Signals>('redirectToAll') },
-    { path: '/:filter', signal: nameof<Signals>('changeFilter') }
+    { path: '/', signal: pathFor<Signals>(x => x.redirectToAll) },
+    { path: '/:filter', signal: pathFor<Signals>(x => x.changeFilter) }
   ]
 });
 
