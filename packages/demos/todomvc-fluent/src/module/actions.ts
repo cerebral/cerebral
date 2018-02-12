@@ -44,14 +44,6 @@ export function changeFilter({ state, props }: Context<{ filter: string }>) {
   state.filter = props.filter;
 }
 
-export function hasNewTodoTitle ({ state, path}: BranchContext<{ true: {}, false: {} }>) {
-  if (state.newTodoTitle) {
-    return path.true({});
-  }
-
-  return path.false({});
-}
-
 export function addTodo ({ state, props, id }: Context) {
   state.todos.set(id.create(), {
     title: state.newTodoTitle,

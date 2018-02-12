@@ -30,7 +30,7 @@ export const changeFilter = sequenceWithProps<{ filter: string }>(s => s
 );
 
 export const submitNewTodo = sequence(s => s
-  .branch(actions.hasNewTodoTitle)
+  .when(x => !!x.state.newTodoTitle)
   .paths({ 
     true: s => s.action(actions.addTodo, actions.clearTodoTitle),
     false: s => s
