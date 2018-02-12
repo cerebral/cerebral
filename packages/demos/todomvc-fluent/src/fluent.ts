@@ -1,14 +1,14 @@
 import { ConnectFactory, IContext, IBranchContext, SequenceFactory, SequenceWithPropsFactory } from '@cerebral/fluent';
 import { Provider as RouterProvider } from '@cerebral/router';
 import { State, Signals } from './module/types';
-import { HttpModule } from '@cerebral/http';
+import { HttpProvider } from '@cerebral/http';
 
 interface Providers {
   id: {
     create(): string;
   };
   router: RouterProvider;
-  http: HttpModule;
+  http: HttpProvider;
 }
 
 export interface Context<Props = {}> extends IContext<Props>, Providers {
