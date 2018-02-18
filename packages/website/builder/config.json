@@ -5,7 +5,8 @@
     "docs": [
       "search",
       "mobile",
-      "hashToggleLinks"
+      "hashToggleLinks",
+      "issues"
     ]
   },
   "css": {
@@ -30,6 +31,10 @@
       "../../../docs/introduction/compute",
       "../../../docs/introduction/patterns",
       "../../../docs/introduction/test"
+    ],
+    "contribute": [
+      "../../../docs/contribute/introduction",
+      "../../../docs/contribute/issues"
     ],
     "guides": [
       "../../../docs/guides/composing",
