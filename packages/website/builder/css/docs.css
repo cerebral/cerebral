@@ -78,3 +78,26 @@ h1:hover > a, h2:hover > a, h3:hover > a, h4:hover > a, h5:hover > a, h6:hover >
     display: none;
   }
 }
+
+.issues {
+  list-style-type: none;
+  padding: 0;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.issues > li {
+  margin-bottom: 20px;
+}
+
+.issues > li small {
+  font-size: 14px;
+}
+
+.issues-label {
+  padding: 2px 5px;
+  border-radius: 2px;
+  margin-right: 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
