@@ -9,9 +9,9 @@ import {Module} from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
 export default Module({
-  providers: [
-    HttpProvider()
-  ]
+  providers: {
+    http: HttpProvider()
+  }
 })
 ```
 
@@ -30,14 +30,14 @@ import {Module} from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
 export default Module({
-  providers: [
-    HttpProvider({
+  providers: {
+    http: HttpProvider({
       headers: {
         'Authorization': 'token whatevah'
       },
       withCredentials: true
     })
-  ]
+  }
 })
 ```
 
@@ -192,9 +192,9 @@ import HttpProvider, {HttpProviderError} from '@cerebral/http'
 import httpErrorThrown from './signals/httpErrorThrown'
 
 export default Module({
-  providers: [
-    HttpProvider()
-  ],
+  providers: {
+    http: HttpProvider()
+  },
   catch: [
     [HttpProviderError, httpErrorThrown]
   ]
