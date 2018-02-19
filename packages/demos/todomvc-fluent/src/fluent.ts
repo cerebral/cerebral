@@ -9,18 +9,12 @@ interface Providers {
   };
   router: RouterProvider;
   http: HttpProvider;
-}
-
-export interface Context<Props = {}> extends IContext<Props>, Providers {
   state: State;
 }
 
-export interface BranchContext<Paths, Props = {}> extends IBranchContext<Paths, Props>, Providers {
-  state: State;
-}
+export type Context<TProps = {}> = IContext<TProps> & Providers;
+export type BranchContext<TPaths, TProps = {}> = IBranchContext<TPaths, TProps> & Providers;
 
 export const connect = ConnectFactory<State, Signals>();
-
 export const sequence = SequenceFactory<Context>();
-
 export const sequenceWithProps = SequenceWithPropsFactory<Context>();
