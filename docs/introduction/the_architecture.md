@@ -81,3 +81,11 @@ This is where Cerebral differs most from other approaches to application develop
 The point is, updating state can be a very complex flow of operations. This is often where spaghetti code comes from, and we use abstractions to hide it. The problem with abstractions hiding too much logic is that it becomes rigid, making it difficult to reuse logic and compose existing logic together in new ways.
 
 To handle everything from a simple toggle to very complex operations, Cerebral has the concept of **signals**. Signals allows you to compose functions together into a **flow**. You can define different execution paths based on whatever you want (a status code, an error, some state, etc). This allows you to write decoupled code, while still bringing everything together in the form of a higher abstraction which helps developers understand how things relate to one another (in what order they will run, when they will run, etc). Under the hood, signals are based on [function-tree](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/function-tree), a project that came out of the initial experimentations in the first version of Cerebral.
+
+## Demo
+
+To get straight into some code, have a look at this sandbox:
+
+```marksy
+<CodeSandbox url="https://codesandbox.io/embed/l4q49q73nq?view=preview" />
+```
