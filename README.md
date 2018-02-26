@@ -84,9 +84,9 @@ $ git pull
 [npm-url]: https://npmjs.org/package/cerebral
 [travis-image]: https://img.shields.io/travis/cerebral/cerebral.svg?style=flat
 [travis-url]: https://travis-ci.org/cerebral/cerebral
-[coverage-image]: https://coveralls.io/repos/github/cerebral/cerebral/badge.svg
+[coverage-image]: https://img.shields.io/coveralls/github/cerebral/cerebral.svg?style=flat
 [coverage-url]: https://coveralls.io/github/cerebral/cerebral
-[bithound-image]: https://www.bithound.io/github/cerebral/cerebral/badges/score.svg
+[bithound-image]: https://img.shields.io/bithound/code/github/cerebral/cerebral.svg
 [bithound-url]: https://www.bithound.io/github/cerebral/cerebral
 [commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg
 [commitizen-url]: http://commitizen.github.io/cz-cli/
