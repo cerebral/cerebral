@@ -86,9 +86,9 @@ $ git pull
 [travis-url]: https://travis-ci.org/cerebral/cerebral
 [coverage-image]: https://img.shields.io/coveralls/github/cerebral/cerebral.svg?style=flat
 [coverage-url]: https://coveralls.io/github/cerebral/cerebral
-[bithound-image]: https://img.shields.io/bithound/code/github/cerebral/cerebral.svg
+[bithound-image]: https://img.shields.io/bithound/code/github/cerebral/cerebral.svg?style=flat
 [bithound-url]: https://www.bithound.io/github/cerebral/cerebral
-[commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg
+[commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat
 [commitizen-url]: http://commitizen.github.io/cz-cli/
-[discord-image]: https://img.shields.io/badge/discord-join%20chat-blue.svg
+[discord-image]: https://img.shields.io/badge/discord-join%20chat-blue.svg?style=flat
 [discord-url]: https://discord.gg/0kIweV4bd2bwwsvH
