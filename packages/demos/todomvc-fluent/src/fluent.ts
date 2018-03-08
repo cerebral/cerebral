@@ -10,6 +10,7 @@ interface Providers {
   router: RouterProvider;
   http: HttpProvider;
   state: State;
+  module: State;
 }
 
 export type Context<TProps = {}> = IContext<TProps> & Providers;
