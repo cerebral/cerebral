@@ -14,13 +14,14 @@ function Navigation(props) {
 
           return (
             <li key={index}>
-              {item.children.length > 0 &&
+              {item.children.length > 0 && (
                 <input
                   id={href}
                   className="nav_toggle"
                   type="checkbox"
                   defaultChecked={false}
-                />}
+                />
+              )}
               <a
                 className={`nav_toggle-label nav_item-name nav_sublink
                   ${item.children.length ? '' : 'nav_childless'}`}
@@ -41,22 +42,24 @@ function Navigation(props) {
       <ul>
         {Object.keys(props.pages).map((pageKey, index) => {
           const page = props.pages[pageKey].toc[0]
-          const path = index === 0
-            ? `/docs/${props.sectionKey}/index.html`
-            : `/docs/${props.sectionKey}/${pageKey}.html`
+          const path =
+            index === 0
+              ? `/docs/${props.sectionKey}/index.html`
+              : `/docs/${props.sectionKey}/${pageKey}.html`
           const open = pageKey === props.docName && props.sectionOpen
           return (
             <li
               key={index}
               className={`nav_page-item ${open ? 'nav_open' : ''}`}
             >
-              {page.children.length > 0 &&
+              {page.children.length > 0 && (
                 <input
                   id={path}
                   className="nav_toggle"
                   type="checkbox"
                   defaultChecked={open}
-                />}
+                />
+              )}
               <a
                 className={`nav_toggle-label nav_item-name nav_link nav_page
                   ${page.children.length ? '' : 'nav_childless'}`}

@@ -46,7 +46,7 @@ export default connect(
             onClick={() => removeTodoClicked({ uid })}
           />
         </div>
-        {isEditing &&
+        {isEditing && (
           <form
             onSubmit={e => {
               e.preventDefault()
@@ -60,7 +60,8 @@ export default connect(
               onBlur={() => newTitleSubmitted({ uid })}
               onChange={e => newTitleChanged({ uid, title: e.target.value })}
             />
-          </form>}
+          </form>
+        )}
       </li>
     )
   }

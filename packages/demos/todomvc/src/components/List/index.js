@@ -21,9 +21,7 @@ export default connect(
           checked={isAllChecked}
           onChange={() => toggleAllChanged()}
         />
-        <label htmlFor="toggle-all">
-          Mark all as complete
-        </label>
+        <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
           {todosUids.map((todoUid, index) => {
             const isEditing = todoUid === editingUid

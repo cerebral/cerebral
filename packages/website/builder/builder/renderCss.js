@@ -8,9 +8,9 @@ module.exports = function(pageName) {
     : defaultCss
 
   return css.reduce(function(cssTags, cssContent) {
-    const tag = `<link rel="stylesheet" href="${isUrl(cssContent)
-      ? cssContent
-      : `/${cssContent}.css`}" />`
+    const tag = `<link rel="stylesheet" href="${
+      isUrl(cssContent) ? cssContent : `/${cssContent}.css`
+    }" />`
 
     return `${cssTags}\n${tag}`
   }, '')

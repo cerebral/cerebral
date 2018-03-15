@@ -57,11 +57,7 @@ module.exports = marksy({
       )
     },
     h1(props) {
-      return (
-        <h1 id={props.id}>
-          {props.children}
-        </h1>
-      )
+      return <h1 id={props.id}>{props.children}</h1>
     },
     h2(props) {
       return (

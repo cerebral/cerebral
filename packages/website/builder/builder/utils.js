@@ -95,7 +95,8 @@ module.exports = {
         }
 
         return subDocsText
-      }, {})
+      },
+      {})
 
       return docsText
     }, {})

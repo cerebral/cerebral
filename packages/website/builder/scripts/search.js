@@ -32,9 +32,11 @@
           }
 
           return subSectionResults
-        }, [])
+        },
+        [])
       )
-    }, [])
+    },
+    [])
 
     results.sort(function(resultA, resultB) {
       if (resultA.matches > resultB.matches) {
