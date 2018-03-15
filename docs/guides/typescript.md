@@ -22,6 +22,7 @@ A typical **tsconfig.json** looks like this:
     "target": "es5",
     "sourceMap": true,
     "strict": true,
+    "strictPropertyInitialization": false,
     "jsx": "react"
   },
   "exclude": ["node_modules"]
@@ -165,7 +166,7 @@ const state: State = {
   // Just a normal state value
   foo: 'bar',
   // Dynamic objects, meaning you want to add/remove
-  // keys will need to be a Dictionary. 
+  // keys will need to be a Dictionary.
   stringDictionary: Dictionary({}),
   // Computed values receives both the module state and the
   // root state. Normally you will use this for computational things like
