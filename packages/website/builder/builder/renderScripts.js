@@ -8,9 +8,9 @@ module.exports = function(pageName) {
     : defaultScripts
 
   return scripts.reduce(function(scripTags, script) {
-    const tag = `<script src="${isUrl(script)
-      ? script
-      : `/${script}.js`}"></script>`
+    const tag = `<script src="${
+      isUrl(script) ? script : `/${script}.js`
+    }"></script>`
 
     return `${scripTags}\n${tag}`
   }, '')

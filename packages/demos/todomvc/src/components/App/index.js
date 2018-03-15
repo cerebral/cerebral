@@ -22,9 +22,7 @@ export default connect(
           {!!counts.total && <TodosFooter />}
         </section>
         <footer className="info">
-          <p>
-            Double-click to edit a todo
-          </p>
+          <p>Double-click to edit a todo</p>
           <p>
             Credits:
             <a href="http://christianalfoni.com">Christian Alfoni</a>,

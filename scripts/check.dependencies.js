@@ -2,9 +2,8 @@ const glob = require('glob')
 const fs = require('fs')
 const path = require('path')
 const packagesGlob = require('./packagesGlob').all
-const autofix = process.env.CI === true
-  ? false
-  : process.argv[2] === '--auto-fix'
+const autofix =
+  process.env.CI === true ? false : process.argv[2] === '--auto-fix'
 const dependencyTypes = ['dependencies', 'devDependencies']
 const installCmd = {
   dependencies: 'npm install --save --save-exact',

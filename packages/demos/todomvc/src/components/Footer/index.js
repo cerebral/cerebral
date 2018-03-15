@@ -22,11 +22,12 @@ export default connect(
           </strong>
         </span>
         <ul className="filters">
-          {filters.map(filterName =>
+          {filters.map(filterName => (
             <li key={filterName}>
               <a
                 onClick={() =>
-                  filterClicked({ filter: filterName.toLowerCase() })}
+                  filterClicked({ filter: filterName.toLowerCase() })
+                }
                 className={classnames({
                   selected: filter === filterName.toLowerCase(),
                 })}
@@ -34,15 +35,16 @@ export default connect(
                 {filterName}
               </a>
             </li>
-          )}
+          ))}
         </ul>
-        {!!counts.completed &&
+        {!!counts.completed && (
           <button
             className="clear-completed"
             onClick={() => clearCompletedClicked()}
           >
             Clear completed ({counts.completed})
-          </button>}
+          </button>
+        )}
       </footer>
     )
   }
