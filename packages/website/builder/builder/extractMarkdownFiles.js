@@ -26,9 +26,9 @@ module.exports = function() {
         ) {
           const name = contentName.name || path.basename(contentName)
           const key = subIndex === 0 ? 'index' : name
-          const content = (fileContents[index][subIndex].match(
-            /\[.*?]\(.*?\)/g
-          ) || [])
+          const content = (
+            fileContents[index][subIndex].match(/\[.*?]\(.*?\)/g) || []
+          )
             .map(markdownLink => {
               return markdownLink.match(/\((.*)\)/).pop()
             })
@@ -52,14 +52,16 @@ module.exports = function() {
           subContent[key].raw = content
           subContent[
             key
-          ].githubUrl = `https://github.com/cerebral/cerebral/tree/next/${(contentName.path ||
-            contentName)
+          ].githubUrl = `https://github.com/cerebral/cerebral/tree/next/${(
+            contentName.path || contentName
+          )
             // TODO: implement correct url generation
             .replace('../../../', '')
             .replace('../../', 'packages/')}.md`
 
           return subContent
-        }, {})
+        },
+        {})
 
         return contentTree
       }, {})

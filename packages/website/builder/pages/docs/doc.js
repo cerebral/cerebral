@@ -6,7 +6,9 @@ function Doc(props) {
       <div className="docs-doc-content">
         {props.doc}
         <div className="docs-doc-edit">
-          <a href={props.githubUrl} target="_new">Edit on Github</a>
+          <a href={props.githubUrl} target="_new">
+            Edit on Github
+          </a>
         </div>
       </div>
     </div>

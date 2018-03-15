@@ -91,9 +91,10 @@ updateDocsAndPages().then(() => {
       return res.send(404)
     }
 
-    const pageName = !req.params[0] || req.params[0] === '/'
-      ? 'index'
-      : path.basename(req.params[0], '.html')
+    const pageName =
+      !req.params[0] || req.params[0] === '/'
+        ? 'index'
+        : path.basename(req.params[0], '.html')
     const Page = pages[pageName]
 
     render({
