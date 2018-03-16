@@ -29,6 +29,10 @@
         "semi": false
       }
     ],
-    "standard/computed-property-even-spacing": "off"
+    "standard/computed-property-even-spacing": "off",
+    "linebreak-style": [
+      "error",
+      "unix"
+    ]
   }
 }
