@@ -50,13 +50,6 @@ export const abortEdit = sequenceWithProps<{ uid: string }>(s =>
 export const submitTodoTitle = sequenceWithProps<{ uid: string }>(s =>
   s
     .branch(actions.whenEditedTitle)
-    // .branch<{ true: {}, false: {} }>(x => {
-    //   const todo = x.state.todos.get(x.props.uid);
-    //   if (todo && todo.editedTitle) {
-    //     return x.path.true({});
-    //   }
-    //   return x.path.false({});
-    // })
     .paths({
       true: s => s.action(actions.updateTodoTitle),
       false: s => s,
