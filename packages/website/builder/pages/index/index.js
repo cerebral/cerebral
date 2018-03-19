@@ -146,8 +146,8 @@ Take a look at a real project using Cerebral, [Codesandbox.io](https://www.codes
             </a>
           </div>
           <div className="index-release">
-            Released under the MIT License Copyright © 2017 Cerebral Github
-            Organisation
+            Released under the MIT License<br />
+            Copyright © {new Date().getFullYear()} Cerebral Github Organisation
           </div>
         </div>
       </div>
