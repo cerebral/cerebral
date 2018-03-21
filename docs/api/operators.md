@@ -126,7 +126,7 @@ empty because debounce is a flow operator that routes the flow depending on
 time and action trigger.
 
 ```js
-import { debounce } 'cerebral/operators'
+import { debounce } from 'cerebral/operators'
 
 export default [
   debounce(200), {
