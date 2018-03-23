@@ -1,6 +1,7 @@
 # Typescript usage
 
 ## Actions
+
 ```typescript
 import { Action, ActionChain, ActionFactory, ActionChain } from 'cerebral'
 
@@ -21,53 +22,56 @@ const actionArray: ActionChain = [
 ```
 
 ## Computed
+
 ```typescript
-import { Computed, compute, ValueResolver } from 'cerebral';
-import { state } from 'cerebral/tags';
+import { Computed, compute, ValueResolver } from 'cerebral'
+import { state } from 'cerebral/tags'
 
 const someComputed: Computed = compute(
-    state`foo`,
-    (foo: string, get: ValueResolver) => ({
-      bar: foo + get(state`bar`)
-    })
+  state`foo`,
+  (foo: string, get: ValueResolver) => ({
+    bar: foo + get(state`bar`)
+  })
 )
 ```
 
 ## Signals
+
 ```typescript
-import { SignalChain } from 'cerebral';
+import { SignalChain } from 'cerebral'
 
 const someSignal: SignalChain = [
-    actionFactory,
-    simpleAction,
-    someComputed,
-    actionArray
+  actionFactory,
+  simpleAction,
+  someComputed,
+  actionArray
 ]
 ```
 
 ## Modules
+
 ```typescript
-import { Module } from 'cerebral';
+import { Module } from 'cerebral'
 
 export const module1: Module = {
-    state: { foo: 'bar' },
-    signals: {
-      foo: [someAction]
-    }
+  state: { foo: 'bar' },
+  signals: {
+    foo: [someAction]
   }
-  
-export const module2: Module = (module) => {
-    module.name = 'module2'
-    return {
-        state: {
-            foo: 'bar'
-        }
-    }
 }
 
+export const module2: Module = module => {
+  module.name = 'module2'
+  return {
+    state: {
+      foo: 'bar'
+    }
+  }
+}
 ```
 
-## Controller 
+## Controller
+
 ```typescript
 import { Controller, ControllerClass, Signal, StateModel } from 'cerebral'
 
@@ -77,11 +81,11 @@ const controller: ControllerClass = Controller({
     someSignal
   },
   modules: {
-    module1, module2
+    module1,
+    module2
   }
 })
 
 const someSignalCallable: Signal = controller.getSignal('someSignal')
 const stateModel: StateModel = controller.getModel()
-
 ```

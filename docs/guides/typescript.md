@@ -95,64 +95,71 @@ file for easier imports. This can be done in your **tsconfig.json** file:
 From now on when we point to `'fluent'` it is this file:
 
 ```ts
-import { IContext, IBranchContext, SequenceFactory, SequenceWithPropsFactory, ConnectFactory } from '@cerebral/fluent'
-import { Provider as RouterProvider } from '@cerebral/router';
+import {
+  IContext,
+  IBranchContext,
+  SequenceFactory,
+  SequenceWithPropsFactory,
+  ConnectFactory
+} from '@cerebral/fluent'
+import { Provider as RouterProvider } from '@cerebral/router'
 import { State, Signals } from './app/types'
 
 // Create an interface where you compose your providers together
 interface Providers {
-  router: RouterProvider,
+  router: RouterProvider
   state: State
 }
 
 // Create a type used with your sequences and actions
-export type Context<Props = {}> = IContext<Props> & Providers;
+export type Context<Props = {}> = IContext<Props> & Providers
 
 // This type is used when you define actions that returns a path
-export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> & Providers;
+export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> &
+  Providers
 
 // This function is used to connect components to Cerebral
-export const connect = ConnectFactory<State, Signals>();
+export const connect = ConnectFactory<State, Signals>()
 
 // This function is used to define sequences
-export const sequence = SequenceFactory<Context>();
+export const sequence = SequenceFactory<Context>()
 
 // This function is used to define sequences that expect to receive some initial
 // props
-export const sequenceWithProps = SequenceWithPropsFactory<Context>();
+export const sequenceWithProps = SequenceWithPropsFactory<Context>()
 ```
 
 ## Creating a module with types
 
 You will typically create a separate file for the types. This will hold the types for the state and signals of the given module.
 
-*src/app/types.ts*
+_src/app/types.ts_
+
 ```ts
 import { Dictionary, ComputedValue } from '@cerebral/fluent'
 import * as signals from './sequences'
 
 // This is a shortcut where all exported sequences are
 // defined as signals
-export type Signals = {
-  [key in keyof typeof signals]: typeof signals[key]
-};
+export type Signals = { [key in keyof typeof signals]: typeof signals[key] }
 
 // Alternatively you would have to do this for each signal
 export type Signals = {
   doThis: typeof signals.doThis
-};
+}
 
 export type State = {
-  foo: string,
-  stringDictionary: Dictionary<string>,
-  isAwesome: ComputedValue<boolean>,
+  foo: string
+  stringDictionary: Dictionary<string>
+  isAwesome: ComputedValue<boolean>
   upperFoo: string
-};
+}
 ```
 
 ## Creating the app module
 
-*src/app/index.ts*
+_src/app/index.ts_
+
 ```ts
 import { Module, Dictionary, Computed } from '@cerebral/fluent'
 import Router from '@cerebral/router'
@@ -194,42 +201,48 @@ export const module = Module({
 
 By defining your state in its own variable you will get easier to read error reporting from Typescript.
 
-
 ## Scaling up to submodules
 
 The module definition above has two custom submodules. When you have submodules you will need to compose in the complete state and signals. You do this in the **fluent** file like this:
 
 ```ts
-import { IContext, IBranchContext, SequenceFactory, SequenceWithPropsFactory, ConnectFactory } from '@cerebral/fluent'
-import { Provider as RouterProvider } from '@cerebral/router';
-import * as app from  './app/types'
+import {
+  IContext,
+  IBranchContext,
+  SequenceFactory,
+  SequenceWithPropsFactory,
+  ConnectFactory
+} from '@cerebral/fluent'
+import { Provider as RouterProvider } from '@cerebral/router'
+import * as app from './app/types'
 import * as admin from './app/modules/admin/types'
 import * as dashboard from './app/modules/dashboard/types'
 
 type State = app.State & {
-  admin: admin.State,
+  admin: admin.State
   dashboard: dashboard.State
 }
 
 type Signals = app.Signals & {
-  admin: admin.Signals,
+  admin: admin.Signals
   dashboard: dashboard.Signals
 }
 
 interface Providers {
-  router: RouterProvider,
+  router: RouterProvider
   state: State
 }
 
-export type Context<Props> = IContext<Props> & Providers;
+export type Context<Props> = IContext<Props> & Providers
 
-export type BranchContext<Paths, Props> = IBranchContext<Paths, Props> & Providers;
+export type BranchContext<Paths, Props> = IBranchContext<Paths, Props> &
+  Providers
 
-export const connect = ConnectFactory<State, Signals>();
+export const connect = ConnectFactory<State, Signals>()
 
-export const sequence = SequenceFactory<Context>();
+export const sequence = SequenceFactory<Context>()
 
-export const sequenceWithProps = SequenceWithPropsFactory<Context>();
+export const sequenceWithProps = SequenceWithPropsFactory<Context>()
 ```
 
 The **fluent** file is where you describe your complete application with types.
@@ -240,8 +253,10 @@ The **fluent** file is where you describe your complete application with types.
 // remember this is alias to the fluent.ts file
 import { sequence } from 'fluent'
 
-export const changeFoo = sequence(s => s
-  .action(({ state }) => { state.foo = 'bar2' })
+export const changeFoo = sequence(s =>
+  s.action(({ state }) => {
+    state.foo = 'bar2'
+  })
 )
 ```
 
@@ -251,9 +266,7 @@ This sequence gives you full type safety and autosuggestions. If anything is cha
 import { sequence } from 'fluent'
 import * as actions from './actions'
 
-export const changeFoo = sequence(s => s
-  .action(actions.changeFoo)
-)
+export const changeFoo = sequence(s => s.action(actions.changeFoo))
 ```
 
 You can branch out to paths by using the **branch** method:
@@ -261,16 +274,15 @@ You can branch out to paths by using the **branch** method:
 ```ts
 import { sequence } from 'fluent'
 
-export const submitUser = sequence(s => s
-  .action(actions.setSubmittingUser(true))
-  .branch(actions.submitNewUser)
-  .paths({
-    success: s => s
-      .action(actions.addNewUser),
-    error: s => s
-      .action(actions.showError)
-  })
-  .action(actions.setSubmittingUser(false))
+export const submitUser = sequence(s =>
+  s
+    .action(actions.setSubmittingUser(true))
+    .branch(actions.submitNewUser)
+    .paths({
+      success: s => s.action(actions.addNewUser),
+      error: s => s.action(actions.showError)
+    })
+    .action(actions.setSubmittingUser(false))
 )
 ```
 
@@ -280,8 +292,8 @@ If your sequence expects to have props available you can define that:
 import { sequenceWithProps } from 'fluent'
 import * as actions from './actions'
 
-export const changeFoo = sequenceWithProps<{ foo: string }>(s => s
-  .action(actions.changeFoo)
+export const changeFoo = sequenceWithProps<{ foo: string }>(s =>
+  s.action(actions.changeFoo)
 )
 ```
 
@@ -291,15 +303,18 @@ You can also define expected props to be produced through the sequence:
 import { sequence, sequenceWithProps } from 'fluent'
 import * as actions from './actions'
 
-export const doThis = sequence<{ foo: string }>(s => s
-  // This action must return { foo: 'some string' } for the
-  // sequence to be valid
-  .action(actions.doSomething)
+export const doThis = sequence<{ foo: string }>(s =>
+  s
+    // This action must return { foo: 'some string' } for the
+    // sequence to be valid
+    .action(actions.doSomething)
 )
 
-export const changeFoo = sequenceWithProps<{ foo: string }, { bar: number }>(s => s
-  // This action must return { bar: 123 } to give a valid sequence
-  .action(actions.changeFoo)
+export const changeFoo = sequenceWithProps<{ foo: string }, { bar: number }>(
+  s =>
+    s
+      // This action must return { bar: 123 } to give a valid sequence
+      .action(actions.changeFoo)
 )
 ```
 
@@ -309,8 +324,8 @@ Any sequences used as signals will require the signal to be called with the defi
 import { sequence, sequenceWithProps } from 'fluent'
 import * as actions from './actions'
 
-export const doThis = sequenceWithProps<{ foo: string }>(s => s
-  .action(actions.doSomething)
+export const doThis = sequenceWithProps<{ foo: string }>(s =>
+  s.action(actions.doSomething)
 )
 ```
 
@@ -334,20 +349,25 @@ import { User } from './types'
 // for example that the action will indeed not receive the name property
 // by a previous action, sequence or calling the signal
 // Context<Props>
-export function changeNewUserName ({ state, props }: Context<{ name: string }>) {
+export function changeNewUserName({ state, props }: Context<{ name: string }>) {
   state.newUserName = props.name
 }
 
 // With the BranchContext type you ensure that this action has
 // the defined paths available in the sequence it is composed into
 // BranchContext<Paths, Props>
-export function submitNewUser ({ state, http, path }: BranchContext<{
-  success: { user: User },
+export function submitNewUser({
+  state,
+  http,
+  path
+}: BranchContext<{
+  success: { user: User }
   error: {}
-  }>) {
-  return http.post('/users', {
-    userName: state.newUserName
-  })
+}>) {
+  return http
+    .post('/users', {
+      userName: state.newUserName
+    })
     .then(response => path.success({ user: response.result }))
     .catch(() => path.error({}))
 }
@@ -357,7 +377,7 @@ Both **Context** and **BranchContext** as optional **Props**.
 
 ## Connecting components
 
-The **connect** factory you defined in the *fluent.ts* file is used to connect to components like this:
+The **connect** factory you defined in the _fluent.ts_ file is used to connect to components like this:
 
 ```ts
 import * as React from 'react'
@@ -389,11 +409,9 @@ export default connect()
   .with(({ state }) => ({
     user: state.user
   }))
-  .to(
-    function UserName ({ user }) {
-      return <div>{user.name}</div>
-    }
-  )
+  .to(function UserName({ user }) {
+    return <div>{user.name}</div>
+  })
 ```
 
 would actually not work. You would have to:
@@ -406,11 +424,9 @@ export default connect()
   .with(({ state }) => ({
     user: { name: state.user.name }
   }))
-  .to(
-    function UserName ({ user }) {
-      return <div>{user.name}</div>
-    }
-  )
+  .to(function UserName({ user }) {
+    return <div>{user.name}</div>
+  })
 ```
 
 This is because you have to grab (observe) the values being used in the component. This has the benfit of being explicit and allows for easy extending the connect to work with other view layers. You could also do:
@@ -423,11 +439,9 @@ export default connect()
   .with(({ state }) => ({
     user: { ...state.user }
   }))
-  .to(
-    function UserName ({ user }) {
-      return <div>{user.name}</div>
-    }
-  )
+  .to(function UserName({ user }) {
+    return <div>{user.name}</div>
+  })
 ```
 
 As this would indeed "get" all the properties on the user, starting to observe them.
@@ -442,24 +456,26 @@ export default connect()
   .with(({ state }) => ({
     user: { ...state.user }
   }))
-  .toClass(props =>
-    class UserName extends React.Component<typeof props> {
-      render () {
-        return <div>{this.props.user.name}</div>
+  .toClass(
+    props =>
+      class UserName extends React.Component<typeof props> {
+        render() {
+          return <div>{this.props.user.name}</div>
+        }
       }
-    }
   )
 ```
 
 Connecting to a class gives a callback with the prop which you can **typeof** into the component class. This gives type safety and auto suggestions on the props in the component itself.
 
 ## Dictionary
+
 Typically your state objects are used to define other specifc state, like:
 
 ```ts
 type State = {
   settings: {
-    isAwesome: boolean,
+    isAwesome: boolean
     hasBananas: boolean
   }
 }
@@ -480,7 +496,7 @@ type User = {
 }
 
 type State = {
-  users: { [id: string] : User}
+  users: { [id: string]: User }
 }
 
 const state: State = {
@@ -509,7 +525,7 @@ const state: State = {
 The dictionary is an **ObservableMap** from Mobx. It has its own API surface:
 
 ```ts
-function someAction ({ state }) {
+function someAction({ state }) {
   const user = state.users.get('123')
   state.users.set('123', { name: 'John ' })
   state.users.delete('123')
@@ -529,7 +545,7 @@ Typically you will just use a getter when you are deriving state:
 
 ```ts
 type State = {
-  foo: string,
+  foo: string
   upperFoo: string
 }
 
@@ -547,7 +563,7 @@ There is really no computational power needed to do this. When you have more com
 import * as getters from './getters'
 
 type State = {
-  foo: string,
+  foo: string
   upperFoo: string
 }
 

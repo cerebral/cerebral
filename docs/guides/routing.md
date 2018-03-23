@@ -8,20 +8,23 @@ Every event in your application triggers a signal that normally leads to one or 
 
 The router is its own package, **@cerebral/router**. You instantiate it simply by adding it to the root Cerebral module:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
+import { Module } from 'cerebral'
 import Router from '@cerebral/router'
 
 const router = Router({
-  routes: [{
-    path: '/',
-    signal: 'rootRouted' 
-  }]
+  routes: [
+    {
+      path: '/',
+      signal: 'rootRouted'
+    }
+  ]
 })
 
 export default Module({
-  modules: {router}
+  modules: { router }
 })
 ```
 
@@ -31,37 +34,42 @@ This means that when the root url is hit the signal **rootRouted** will trigger.
 
 Let us imagine that our application has 2 pages:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
+import { Module } from 'cerebral'
 import Router from 'cerebral-router'
 
 const router = Router({
-  routes: [{
-    path: '/',
-    signal: 'rootRouted'
-  }, {
-    path: '/items',
-    signal: 'itemsRouted'
-  }]
+  routes: [
+    {
+      path: '/',
+      signal: 'rootRouted'
+    },
+    {
+      path: '/items',
+      signal: 'itemsRouted'
+    }
+  ]
 })
 
 export default Module({
-  modules: {router}
+  modules: { router }
 })
 ```
 
 How do we make our components render each page? Well, first of all we need a state that tells our components what page to display. Let us also add the two signals which will set the correct page:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
-import {set} from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { Module } from 'cerebral'
+import { set } from 'cerebral/operators'
+import { state } from 'cerebral/tags'
 import router from './router'
 
 export default Module({
-  modules: {router},
+  modules: { router },
   state: {
     currentPage: 'home'
   },
@@ -74,11 +82,12 @@ export default Module({
 
 As you can see we moved the router to its own file, this is recommended. We now have state that represents what page we are on, let us use it in a component to display the correct page:
 
-*App.js*
+_App.js_
+
 ```js
 import React from 'react'
-import {connect} from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { state } from 'cerebral/tags'
 
 import Home from './Home'
 import Items from './Items'
@@ -88,12 +97,13 @@ const pages = {
   items: Items
 }
 
-export default connect({
-  currentPage: state`currentPage`
-},
-  function App ({currentPage}) {
+export default connect(
+  {
+    currentPage: state`currentPage`
+  },
+  function App({ currentPage }) {
     const Page = pages[currentPage]
-    
+
     return (
       <div>
         <Page />
@@ -109,16 +119,17 @@ The url triggers an event, which triggers a signal, which sets the application i
 
 The great thing about urls firing off signals is that you can run any side effect you need, also deciding when the page change actually occurs. Lets say the items page needed to grab the items to be listed. We add a couple of new states related to this and update our signal:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
-import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
-import HttpProvider, {httpGet} from '@cerebral/http/operators'
+import { Module } from 'cerebral'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
+import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
 
 export default Module({
-  modules: {router},
+  modules: { router },
   providers: {
     http: HttpProvider()
   },
@@ -142,16 +153,17 @@ export default Module({
 
 So now we change the page immediately and we indicate that we are loading the items before getting them. But we could flip this around:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
-import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
-import HttpProvider, {httpGet} from '@cerebral/http/operators'
+import { Module } from 'cerebral'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
+import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
 
 export default Module({
-  modules: {router},
+  modules: { router },
   providers: {
     http: HttpProvider()
   },
@@ -181,23 +193,21 @@ This already shows you the flexibility of treating url changes as events in your
 
 Factories is an important concept in Cerebral and we can clean up our code a little bit:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
-import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
-import HttpProvider, {httpGet} from '@cerebral/http/operators'
+import { Module } from 'cerebral'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
+import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
 
-function changePage (page, continueSequence = []) {
-  return [
-    set(state`currentPage`, page),
-    continueSequence
-  ]
+function changePage(page, continueSequence = []) {
+  return [set(state`currentPage`, page), continueSequence]
 }
 
 export default Module({
-  modules: {router},
+  modules: { router },
   providers: {
     http: HttpProvider()
   },
@@ -224,18 +234,20 @@ We have now created a factory that allows us to define what page to change to. W
 
 We have already looked at how to load data on a specific url event, the **/items** url, where we load the items. But sometimes you want to load some initial data no matter what url is triggered. We could implement this logic into **changePage** like this:
 
-*changePage.js*
-```js
-import {set, when} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
-import {httpGet} from '@cerebral/http/operators'
+_changePage.js_
 
-function changePage (page, continueSequence = []) {
+```js
+import { set, when } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
+import { httpGet } from '@cerebral/http/operators'
+
+function changePage(page, continueSequence = []) {
   return [
     set(state`currentPage`, page),
-    when(state`hasLoadedInitialData`), {
-      'true': continueSequence,
-      'false': [
+    when(state`hasLoadedInitialData`),
+    {
+      true: continueSequence,
+      false: [
         httpGet('/initialdata'),
         set(state`initialData`, props`result`),
         set(state`hasLoadedInitialData`, true),
@@ -250,19 +262,20 @@ export default changePage
 
 But you might not want to load initial data on all page changes. Maybe you have a welcome page, or an about page. Going directly to those should not load the initial data. To solve it you would just create a separate factory for it:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
-import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
-import HttpProvider, {httpGet} from '@cerebral/http/operators'
+import { Module } from 'cerebral'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
+import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
 import changePage from './factories/changePage'
 import withInitialData from './factories/withInitialData'
 import itemsRouted from './signals/itemsRouted'
 
 export default Module({
-  modules: {router},
+  modules: { router },
   providers: {
     http: HttpProvider()
   },
@@ -284,9 +297,10 @@ export default Module({
 
 In our simple application we want the user to be authenticated only when moving to **/items**.
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
+import { Module } from 'cerebral'
 import router from './router'
 import HttpProvider from '@cerebral/http/operators'
 import changePage from './factories/changePage'
@@ -294,7 +308,7 @@ import authenticate from './factories/authenticate'
 import itemsRouted from './signals/itemsRouted'
 
 export default Module({
-  modules: {router},
+  modules: { router },
   providers: {
     http: HttpProvider()
   },
@@ -313,17 +327,19 @@ export default Module({
 
 As you can see we again use a factory, only we wrap **changePage**. That way we do not even change the page if the authentication fails. The authenticate factory could look something like this:
 
-*authenticate.js*
-```js
-import {set, when} from 'cerebral/operators'
-import {redirect} from '@cerebral/router/operators'
-import {state} from 'cerebral/tags'
+_authenticate.js_
 
-function authenticate (continueSequence) {
+```js
+import { set, when } from 'cerebral/operators'
+import { redirect } from '@cerebral/router/operators'
+import { state } from 'cerebral/tags'
+
+function authenticate(continueSequence) {
   return [
-    when(state`user`), {
-      'true': continueSequence,
-      'false': redirect('/')
+    when(state`user`),
+    {
+      true: continueSequence,
+      false: redirect('/')
     }
   ]
 }
@@ -337,9 +353,10 @@ We just check to see if we have a user and continue the sequence of actions if w
 
 So what if we wanted to bind a route to show a single item? The single item is not a page by its own, it is a modal inside our **items** page. The way we solve this is simply by composing. We run the same logic as opening the **items** and then we add the logic for opening a single item:
 
-*app/index.js*
+_app/index.js_
+
 ```js
-import {Module} from 'cerebral'
+import { Module } from 'cerebral'
 import router from './router'
 import HttpProvider from '@cerebral/http'
 import changePage from './factories/changePage'
@@ -348,7 +365,7 @@ import itemsRouted from './signals/itemsRouted'
 import itemRouted from './signals/itemRouted'
 
 export default Module({
-  modules: {router},
+  modules: { router },
   providers: {
     http: HttpProvider()
   },
@@ -368,21 +385,26 @@ export default Module({
 })
 ```
 
-*router.js*
+_router.js_
+
 ```js
 import Router from '@cerebral/router'
 
 export default Router({
-  routes: [{
-    path: '/',
-    signal: 'rootRouted'
-  }, {
-    path: '/items',
-    signal: 'itemsRouted'
-  }, {
-    path: '/items/:id',
-    signal: 'itemRouted'
-  }]
+  routes: [
+    {
+      path: '/',
+      signal: 'rootRouted'
+    },
+    {
+      path: '/items',
+      signal: 'itemsRouted'
+    },
+    {
+      path: '/items/:id',
+      signal: 'itemRouted'
+    }
+  ]
 })
 ```
 
@@ -392,12 +414,13 @@ There are thousands of way to handle urls, related side effects and UI. The Cere
 
 So a fancy feature of routing is to transition one route to the next with an animation. This is not integrated into the Cerebral router, because there is no need to. You would handle this like any state transition. For example with a React Transition Group we could change our **App** component to animate between the pages instead:
 
-*App.js*
+_App.js_
+
 ```jsx
 import React from 'react'
 import CSSTransitionGroup from 'react-transition-group/CSSTransitionGroup'
-import {connect} from 'cerebral/react'
-import {state} from 'cerebral/tags'
+import { connect } from 'cerebral/react'
+import { state } from 'cerebral/tags'
 
 import Home from './Home'
 import Items from './Items'
@@ -407,12 +430,13 @@ const pages = {
   items: Items
 }
 
-export default connect({
-  currentPage: state`currentPage`
-},
-  function App ({currentPage}) {
+export default connect(
+  {
+    currentPage: state`currentPage`
+  },
+  function App({ currentPage }) {
     const Page = pages[currentPage]
-    
+
     return (
       <div>
         <CSSTransitionGroup

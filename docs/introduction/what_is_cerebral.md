@@ -21,13 +21,14 @@ It makes perfect sense for us to write our UIs in a declarative manner. The reas
 But what about our business logic, can we get the same benefits there? This is how business logic can be expressed **declaratively**:
 
 ```js
-[
+;[
   set(state`isLoadingUser`, true),
-  httpGet('/user'), {
+  httpGet('/user'),
+  {
     success: set(state`user`, props`user`),
     error: set(state`error`, props`error`)
   },
-  set(state`isLoadingUser`, false),
+  set(state`isLoadingUser`, false)
 ]
 ```
 
@@ -36,12 +37,13 @@ Instead of:
 ```js
 function getUser() {
   this.isLoading = true
-  ajax.get('/user')
-    .then((user) => {
+  ajax
+    .get('/user')
+    .then(user => {
       this.data = user
       this.isLoading = false
     })
-    .catch((error) => {
+    .catch(error => {
       this.error = error
       this.isLoading = false
     })
@@ -50,9 +52,9 @@ function getUser() {
 
 You might think this example tries to highlight "less lines of code", but that is just a result of these core properties:
 
-- Composability
-- Readability
-- Reusability
-- Testability
+* Composability
+* Readability
+* Reusability
+* Testability
 
 All these properties makes **better code**, there is no question about that, and the way we achieve it is through declarative code. **Read on to learn more about how Cerebral enforces these properties in your codebase**.

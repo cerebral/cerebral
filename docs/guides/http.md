@@ -5,7 +5,7 @@ Most application needs some sort of standard requests going to a server, even us
 ## Configuring the provider
 
 ```js
-import {Module} from 'cerebral'
+import { Module } from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
 export default Module({
@@ -18,7 +18,7 @@ export default Module({
 By default you really do not have to configure anything. By adding the provider we are ready to make requests inside our actions:
 
 ```js
-function someAction ({http}) {
+function someAction({ http }) {
   return http.get('/something')
 }
 ```
@@ -26,14 +26,14 @@ function someAction ({http}) {
 You might need to set some default headers, or maybe you need to pass cookies to 3rd party urls:
 
 ```js
-import {Module} from 'cerebral'
+import { Module } from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
 export default Module({
   providers: {
     http: HttpProvider({
       headers: {
-        'Authorization': 'token whatevah'
+        Authorization: 'token whatevah'
       },
       withCredentials: true
     })
@@ -41,14 +41,14 @@ export default Module({
 })
 ```
 
-This configuration makes sure every request has an *Authorization* header and cookies are passed to any request, also outside the origin.
+This configuration makes sure every request has an _Authorization_ header and cookies are passed to any request, also outside the origin.
 
 ## Per request configuration
 
 These options are also available when doing specific requests. For example we want to post some data using the older url encoded format:
 
 ```js
-function getUser({http, state}) {
+function getUser({ http, state }) {
   return http.post('/user', state.get('form'), {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
@@ -72,29 +72,27 @@ When you make a request with the HTTP provider it will return an object of:
 When using an action you typically want to name the result and output it to the signal execution:
 
 ```js
-function getUser({http}) {
-  return http.get('/user')
-    .then(({result}) => ({user: result}))
+function getUser({ http }) {
+  return http.get('/user').then(({ result }) => ({ user: result }))
 }
 ```
 
 You might also want to diverge execution based on the status:
 
 ```js
-function getUser({http, path}) {
-  return http.get('/user')
-    .then(({status, result}) => {
-      switch (status) {
-        case 404:
-          return path.notFound()
-        case 401:
-          return path.unauthorized()
-        case 200:
-          return path.success({user: result})
-        default:
-          return path.error()
-      }
-    })
+function getUser({ http, path }) {
+  return http.get('/user').then(({ status, result }) => {
+    switch (status) {
+      case 404:
+        return path.notFound()
+      case 401:
+        return path.unauthorized()
+      case 200:
+        return path.success({ user: result })
+      default:
+        return path.error()
+    }
+  })
 }
 ```
 
@@ -103,39 +101,34 @@ function getUser({http, path}) {
 Operators allows you to handle HTTP requests directly in the sequence of actions:
 
 ```js
-import {httpGet} from '@cerebral/http/operators'
+import { httpGet } from '@cerebral/http/operators'
 
-export default [
-  httpGet('/user')
-]
+export default [httpGet('/user')]
 ```
 
 The operator outputs the response to the signal, meaning that **status**, **result** and **headers** will now be available for the next actions. That means you could easily combine this with a Cerebral operator:
 
 ```js
-import {httpGet} from '@cerebral/http/operators'
-import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
+import { httpGet } from '@cerebral/http/operators'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
 
-export default [
-  httpGet('/user'),
-  set(state`app.user`, props`response.result`)
-]
+export default [httpGet('/user'), set(state`app.user`, props`response.result`)]
 ```
 
 The HTTP operators are actually pretty smart. You can optionally use paths to diverge execution. So if you wanted to speficially handle **success** and **error**, you could do this instead:
 
 ```js
-import {httpGet} from '@cerebral/http/operators'
-import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
+import { httpGet } from '@cerebral/http/operators'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
 
 export default [
-  httpGet('/user'), {
+  httpGet('/user'),
+  {
     success: set(state`app.user`, props`response.result`),
     error: set(state`app.error`, props`response.result`)
   }
-
 ]
 ```
 
@@ -160,13 +153,11 @@ export default [
 When using operators it is quite restrictive to use a static url, you might want to build the url based on some state, or maybe a property passed into the signal. You can use tags for this:
 
 ```js
-import {httpGet} from '@cerebral/http/operators'
-import {set} from 'cerebral/operators'
-import {state, string} from 'cerebral/tags'
+import { httpGet } from '@cerebral/http/operators'
+import { set } from 'cerebral/operators'
+import { state, string } from 'cerebral/tags'
 
-export default [
-  httpGet(string`/items/${state`app.currentItem.id`}`)
-]
+export default [httpGet(string`/items/${state`app.currentItem.id`}`)]
 ```
 
 ## Catching errors
@@ -174,30 +165,25 @@ export default [
 Now, it is encouraged that you write your sequences of actions vertically for readability. So when you do:
 
 ```js
-import {httpGet} from '@cerebral/http/operators'
-import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
+import { httpGet } from '@cerebral/http/operators'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/tags'
 
-export default [
-  httpGet('/user'),
-  set(state`app.user`, props`response.result`)
-]
+export default [httpGet('/user'), set(state`app.user`, props`response.result`)]
 ```
 
 You will need a way to handle errors. The HTTP provider actually throws an error in this scenario if something goes wrong and you can catch that error in either a signal specific error handler or a global. Typically you want a global error handler, so let us explore that:
 
 ```js
-import {Module} from 'controller'
-import HttpProvider, {HttpProviderError} from '@cerebral/http'
+import { Module } from 'controller'
+import HttpProvider, { HttpProviderError } from '@cerebral/http'
 import httpErrorThrown from './signals/httpErrorThrown'
 
 export default Module({
   providers: {
     http: HttpProvider()
   },
-  catch: [
-    [HttpProviderError, httpErrorThrown]
-  ]
+  catch: [[HttpProviderError, httpErrorThrown]]
 })
 ```
 
@@ -224,16 +210,17 @@ The data you get passed in is something similar to:
 Sometimes you might need to abort requests, a typical example of this is typeahead. Let us just write out an example here first:
 
 ```js
-import {set} from 'cerebral/operators'
-import {state, props, string} from 'cerebral/tags'
-import {httpGet, httpAbort} from '@cerebral/http'
-
-[
+import { set } from 'cerebral/operators'
+import { state, props, string } from 'cerebral/tags'
+import { httpGet, httpAbort } from '@cerebral/http'
+;[
   set(state`searchValue`, props`value`),
   httpAbort('/search*'),
-  debounce(250), {
+  debounce(250),
+  {
     continue: [
-      httpGet(string`/search?value=${state`searchValue`}`), {
+      httpGet(string`/search?value=${state`searchValue`}`),
+      {
         success: set(state`searchResult`, props`response.result`),
         error: [],
         abort: []
@@ -253,19 +240,17 @@ You can also upload files from your signals. Either a file you pass in as props 
 Upload a file is as simple as:
 
 ```js
-import {httpUploadFile} from '@cerebral/http/operators'
-import {props} from 'cerebral/tags'
+import { httpUploadFile } from '@cerebral/http/operators'
+import { props } from 'cerebral/tags'
 
-export default [
-  httpUploadFile('/upload', props`file`)
-]
+export default [httpUploadFile('/upload', props`file`)]
 ```
 
 Typically with file upload you want to track the upload progress. You can do this by passing the path of a progress signal you have created as an option:
 
 ```js
-import {httpUploadFile} from '@cerebral/http/operators'
-import {props} from 'cerebral/tags'
+import { httpUploadFile } from '@cerebral/http/operators'
+import { props } from 'cerebral/tags'
 
 export default [
   httpUploadFile('/upload', props`file`, {
@@ -285,8 +270,8 @@ The progress signal will get the payload of:
 Additional options for setting the name, passing additional data and headers are also available:
 
 ```js
-import {httpUploadFile} from '@cerebral/http/operators'
-import {props} from 'cerebral/tags'
+import { httpUploadFile } from '@cerebral/http/operators'
+import { props } from 'cerebral/tags'
 
 export default [
   httpUploadFile('/upload', props`file`, {
@@ -301,22 +286,23 @@ export default [
 You can of course choose to do this at action level instead. It is the same api:
 
 ```js
-function uploadFile ({props, http}) {
+function uploadFile({ props, http }) {
   return http.uploadFile('/upload', props.file)
 }
 ```
 
 ## Summary
+
 The Cerebral http provider is a simple provider that gives you access to the most common functionality. You can use any other http library if you want to by just exposing it as a provider. For example:
 
 ```js
-import {Provider} from 'cerebral'
+import { Provider } from 'cerebral'
 import axios from 'axios'
 
 export default Provider({
   get(...args) {
     return axios.get(...args)
-  },
+  }
   // And so on
 })
 ```

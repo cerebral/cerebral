@@ -1,4 +1,5 @@
 # Operators
+
 You can call operators to create actions for you. These actions will help you change state and control the flow of execution.
 
 Read more about operators in the [Cerebral in depth - Operators](https://www.jsblog.io/articles/christianalfoni/cerebral_in_depth_operators) article.
@@ -65,8 +66,7 @@ push(state`some.list`, 'foo')
 Set a target value in the state or props.
 
 ```js
-set(state`foo.bar`, true),
-set(props`foo`, true)
+set(state`foo.bar`, true), set(props`foo`, true)
 ```
 
 ### shift
@@ -129,10 +129,11 @@ time and action trigger.
 import { debounce } from 'cerebral/operators'
 
 export default [
-  debounce(200), {
+  debounce(200),
+  {
     continue: [runThisAction],
     discard: []
-  },
+  }
 ]
 ```
 
@@ -147,7 +148,8 @@ const sharedDebounce = debounce.shared()
 function showNotificationFactory(message, ms) {
   return [
     set(state`notification`, message),
-    sharedDebounce(ms), {
+    sharedDebounce(ms),
+    {
       continue: [unset(state`notification`)],
       discard: []
     }
@@ -191,10 +193,7 @@ Wait for the given time in milliseconds and then continue chain.
 ```js
 import { wait } from 'cerebral/operators'
 
-export default [
-  wait(200),
-  doSomethingAfterWaiting
-]
+export default [wait(200), doSomethingAfterWaiting]
 ```
 
 If you need to wait while executing in parallel, you should use a `continue`
@@ -223,12 +222,14 @@ Run signal path depending on a truth value or function evaluation.
 import { when } from 'cerebral/operators'
 
 export default [
-  when(state`foo.isAwesome`), {
+  when(state`foo.isAwesome`),
+  {
     true: [],
     false: []
   },
   // You can also pass your own function
-  when(state`foo.isAwesome`, (value) => value.length === 3 ), {
+  when(state`foo.isAwesome`, value => value.length === 3),
+  {
     true: [],
     false: []
   }
@@ -243,9 +244,12 @@ import { when } from 'cerebral/operators'
 import { props, state } from 'cerebral/tags'
 
 export default [
-  when(state`clients.$draft.key`, props`key`,
+  when(
+    state`clients.$draft.key`,
+    props`key`,
     (draftKey, updatedKey) => draftKey === updatedKey
-  ), {
+  ),
+  {
     true: [
       // Another person edited client, reset form to new value
       set(state`clients.$draft`, props`value`)

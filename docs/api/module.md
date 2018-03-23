@@ -1,5 +1,6 @@
 # Module
-*since version 4.0*
+
+_since version 4.0_
 
 Modules are the core building blocks of your application. This is where you define state, signals, submodules etc.
 
@@ -32,12 +33,13 @@ export default Controller(app)
 ```
 
 # Module function
+
 It is also possible to define a module using a function.
 
 ```js
 import { Module } from 'cerebral'
 
-export default Module((module) => {
+export default Module(module => {
   module.name // Name of module
   module.path // Full path to module
   module.controller // The controller the module is attached to
@@ -52,14 +54,14 @@ export default Module((module) => {
 })
 ```
 
-
 # Module factory
+
 With the use of a factory it is possible to make reusable modules.
 
 ```js
 import { Module } from 'cerebral'
 
-export default (options) => {
+export default options => {
   return Module({
     state: {
       location: options.of
@@ -76,8 +78,8 @@ import Location from './modules/Location'
 
 const controller = Controller({
   modules: {
-    location1: Location({of: 'Europe'}),
-    location2: Location({of: 'Africa'})
+    location1: Location({ of: 'Europe' }),
+    location2: Location({ of: 'Africa' })
   }
 })
 ```
