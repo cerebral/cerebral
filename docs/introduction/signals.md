@@ -9,9 +9,7 @@
 An action is just a function. What makes an action different from a normal function though is that it receives only one argument, created by Cerebral. It is called the **context**. Actions are "low level" and imperative. There is no declarative code without some imperative code behind it.
 
 ```js
-export function iAmAnAction (context) {
-
-}
+export function iAmAnAction(context) {}
 ```
 
 Whatever side effect you need to run or state changes that needs to be made, you do it from the context. It means you do not need any API to define an action or import any other modules to define business logic. This makes actions highly testable and easy to write.
@@ -19,7 +17,7 @@ Whatever side effect you need to run or state changes that needs to be made, you
 Here is an example of an action changing the state of the application:
 
 ```js
-export function iAmAnAction ({ state }) {
+export function iAmAnAction({ state }) {
   state.set('foo', 'bar')
 }
 ```
@@ -27,7 +25,7 @@ export function iAmAnAction ({ state }) {
 Or running an http request:
 
 ```js
-export function iAmAnAction ({ http }) {
+export function iAmAnAction({ http }) {
   return http.get('/user')
 }
 ```
@@ -37,19 +35,17 @@ export function iAmAnAction ({ http }) {
 You trigger a signal when something happens in your application. For example a button is clicked, but also if a websocket connection receives a message. The signal runs one or more **sequences** of business logic. The sequences compose together actions which runs state changes, side effects and other logic in one coherent flow.
 
 This is an example of a sequence that grabs a user and sets it.
+
 ```js
 import * as actions from './actions'
 
-export const initialize = [
-  actions.getUser,
-  actions.setUser,
-]
+export const initialize = [actions.getUser, actions.setUser]
 ```
 
 Signals are added to your application in the modules:
 
 ```js
-import { Module } from 'cereral'
+import { Module } from 'cereral'
 import * as sequences from './sequences'
 
 export default Module({
@@ -61,16 +57,16 @@ export default Module({
 
 Cerebral uses the [function-tree](https://github.com/cerebral/cerebral/tree/master/packages/node_modules/function-tree) project to implement its signals. A function-tree allows you to define a tree of functions to be executed. In Cerebral we call these **actions**.
 
-
-
 ## Paths
+
 It is possible to diverge execution down specific paths.
 
 ```js
 import * as actions from './actions'
 
 export const initialize = [
-  actions.getUser, {
+  actions.getUser,
+  {
     success: actions.setUser,
     error: actions.setError
   }
@@ -80,10 +76,11 @@ export const initialize = [
 The **getUser** action could look like this:
 
 ```js
-export function getUser ({ http, path }) {
-  return http.get('/user')
+export function getUser({ http, path }) {
+  return http
+    .get('/user')
     .then(response => path.success({ user: response.result }))
-    .catch(error => path.error({ error }))
+    .catch(error => path.error({ error }))
 }
 ```
 
@@ -94,16 +91,17 @@ When a signal is executed a payload can be passed into it, called **props**. Tha
 Imagine a signal is triggered from a component with the payload `{foo: 'bar'}`. Now the whole flow of the signal has access to **props.foo**. An action in this signal could now use this prop to for example update the state of the application.
 
 ```js
-export function updateFoo ({ state, props }) {
+export function updateFoo({ state, props }) {
   state.set('foo', props.foo)
 }
 ```
 
 ### Update props
+
 You update the props on the signal by returning an object from the action. This object will be merged with existing props.
 
 ```js
-export function iAmAnAction () {
+export function iAmAnAction() {
   return {
     newProp: 'someValue'
   }
@@ -111,11 +109,12 @@ export function iAmAnAction () {
 ```
 
 ### Async
+
 When actions return a promise the signal will hold execution until it is resolved. any resolved values will be merged in with props.
 
 ```js
-export function iAmAnAction () {
-  return new Promise((resolve) => {
+export function iAmAnAction() {
+  return new Promise(resolve => {
     resolve({
       newProp: 'someValue'
     })
@@ -126,14 +125,15 @@ export function iAmAnAction () {
 You can also use `async` functions:
 
 ```js
-export async function iAmAnAction ({ http }) {
+export async function iAmAnAction({ http }) {
   const response = await http.get('/user')
 
-  return { user: response.result }
+  return { user: response.result }
 }
 ```
 
 ## Parallel execution
+
 You can run actions in parallel. You do that by using the **parallel** function:
 
 ```js
@@ -141,37 +141,29 @@ import { parallel } from 'cerebral'
 import * as actions from './actions'
 
 export const mySequence = [
-  parallel([
-    actions.actionA,
-    actions.actionB
-  ]),
+  parallel([actions.actionA, actions.actionB]),
   actions.actionC
 ]
 ```
 
-If *actionA* returns a promise *actionB* will still be run instantly, meaning that they run in parallel. When both *actionA* and *actionB* is done, *actionC* is run.
+If _actionA_ returns a promise _actionB_ will still be run instantly, meaning that they run in parallel. When both _actionA_ and _actionB_ is done, _actionC_ is run.
 
 ## Composing
+
 Actions and a sequence of actions can be composed into other sequences of actions. This is a powerful concept that allows you to decouple a lot of your logic and compose it together wherever it is needed:
 
 ```js
 import * as actions from './actions'
 
-export const authenticate = [
-  actions.getUser,
-  actions.setUser
-]
+export const authenticate = [actions.getUser, actions.setUser]
 
-export const initialize = [
-  authenticate,
-  actions.setCurrentPage
-]
+export const initialize = [authenticate, actions.setCurrentPage]
 ```
 
 The debugger will show **authenticate** as its own sequence, meaning that composition is visualized in the debugger. If you want you could even name this authenticate sequence, giving even more debugging information.
 
 ```js
-import { sequence } from 'cerebral'
+import { sequence } from 'cerebral'
 import * as actions from './actions'
 
 export const authenticate = sequence('authenticate', [
@@ -179,10 +171,7 @@ export const authenticate = sequence('authenticate', [
   actions.setUser
 ])
 
-export const initialize = [
-  authenticate,
-  actions.setCurrentPage
-]
+export const initialize = [authenticate, actions.setCurrentPage]
 ```
 
 ## Operators
@@ -195,9 +184,7 @@ The most common operators you will use changes the state of your application.
 import { set } from 'cerebral/operators'
 import { state } from 'cerebral/tags'
 
-export const mySequence = [
-  set(state`foo`, 'bar')
-]
+export const mySequence = [set(state`foo`, 'bar')]
 ```
 
 With the help of [tagged template literals](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals) we are able to express that we want to set the state path **foo** to have the value **"bar"**.
@@ -206,10 +193,10 @@ And this is how you go about using operators:
 
 ```js
 import { merge, push, pop } from 'cerebral/operators'
-import {state} from 'cerebral/tags'
+import { state } from 'cerebral/tags'
 
 export const mySequence = [
-  merge(state`some.object`, {foo: 'bar'}),
+  merge(state`some.object`, { foo: 'bar' }),
   push(state`some.list`, 'foo'),
   pop(state`some.otherList`)
 ]

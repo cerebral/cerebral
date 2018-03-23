@@ -20,6 +20,7 @@ This will alter code directly, so be sure that your code
 has been versioned before attempting the mod.
 
 eg:
+
 ```shell
 jscodeshift -t cerebral/codemods/1.x-2.x/operators.js path/to/your/src
 ```

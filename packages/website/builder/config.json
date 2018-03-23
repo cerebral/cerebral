@@ -2,18 +2,10 @@
   "title": "Cerebral Docs",
   "scripts": {
     "index": [],
-    "docs": [
-      "search",
-      "mobile",
-      "hashToggleLinks",
-      "issues"
-    ]
+    "docs": ["search", "mobile", "hashToggleLinks", "issues"]
   },
   "css": {
-    "*": [
-      "main",
-      "prism"
-    ],
+    "*": ["main", "prism"],
     "index": ["index", "docs"],
     "docs": ["docs", "nav", "search"]
   },
@@ -60,62 +52,82 @@
       "../../../docs/api/test",
       "../../../docs/api/universalcontroller"
     ],
-    "views": [{
-      "name": "angular",
-      "path": "../../node_modules/@cerebral/angular/README"
-    }, {
-      "name": "angularjs",
-      "path": "../../node_modules/@cerebral/angularjs/README"
-    }, {
-      "name": "inferno",
-      "path": "../../node_modules/@cerebral/inferno/README"
-    }, {
-      "name": "preact",
-      "path": "../../node_modules/@cerebral/preact/README"
-    }, {
-      "name": "react",
-      "path": "../../node_modules/@cerebral/react/README"
-    }, {
-      "name": "vue",
-      "path": "../../node_modules/@cerebral/vue/README"
-    }],
-    "addons": [{
-      "name": "function-tree",
-      "path": "../../node_modules/function-tree/README"
-    }, {
-      "name": "baobab",
-      "path": "../../node_modules/@cerebral/baobab/README"
-    }, {
-      "name": "firebase",
-      "path": "../../node_modules/@cerebral/firebase/README"
-    }, {
-      "name": "firebase_admin",
-      "path": "../../node_modules/@cerebral/firebase-admin/README"
-    }, {
-      "name": "fluent",
-      "path": "../../node_modules/@cerebral/fluent/README"
-    }, {
-      "name": "forms",
-      "path": "../../node_modules/@cerebral/forms/README"
-    }, {
-      "name": "http",
-      "path": "../../node_modules/@cerebral/http/README"
-    }, {
-      "name": "mobx-state-tree",
-      "path": "../../node_modules/@cerebral/mobx-state-tree/README"
-    }, {
-      "name": "storage",
-      "path": "../../node_modules/@cerebral/storage/README"
-    }, {
-      "name": "shortcuts",
-      "path": "../../node_modules/@cerebral/shortcuts/README"
-    }, {
-      "name": "router",
-      "path": "../../node_modules/@cerebral/router/README"
-    }, {
-      "name": "useragent",
-      "path": "../../node_modules/@cerebral/useragent/README"
-    }],
+    "views": [
+      {
+        "name": "angular",
+        "path": "../../node_modules/@cerebral/angular/README"
+      },
+      {
+        "name": "angularjs",
+        "path": "../../node_modules/@cerebral/angularjs/README"
+      },
+      {
+        "name": "inferno",
+        "path": "../../node_modules/@cerebral/inferno/README"
+      },
+      {
+        "name": "preact",
+        "path": "../../node_modules/@cerebral/preact/README"
+      },
+      {
+        "name": "react",
+        "path": "../../node_modules/@cerebral/react/README"
+      },
+      {
+        "name": "vue",
+        "path": "../../node_modules/@cerebral/vue/README"
+      }
+    ],
+    "addons": [
+      {
+        "name": "function-tree",
+        "path": "../../node_modules/function-tree/README"
+      },
+      {
+        "name": "baobab",
+        "path": "../../node_modules/@cerebral/baobab/README"
+      },
+      {
+        "name": "firebase",
+        "path": "../../node_modules/@cerebral/firebase/README"
+      },
+      {
+        "name": "firebase_admin",
+        "path": "../../node_modules/@cerebral/firebase-admin/README"
+      },
+      {
+        "name": "fluent",
+        "path": "../../node_modules/@cerebral/fluent/README"
+      },
+      {
+        "name": "forms",
+        "path": "../../node_modules/@cerebral/forms/README"
+      },
+      {
+        "name": "http",
+        "path": "../../node_modules/@cerebral/http/README"
+      },
+      {
+        "name": "mobx-state-tree",
+        "path": "../../node_modules/@cerebral/mobx-state-tree/README"
+      },
+      {
+        "name": "storage",
+        "path": "../../node_modules/@cerebral/storage/README"
+      },
+      {
+        "name": "shortcuts",
+        "path": "../../node_modules/@cerebral/shortcuts/README"
+      },
+      {
+        "name": "router",
+        "path": "../../node_modules/@cerebral/router/README"
+      },
+      {
+        "name": "useragent",
+        "path": "../../node_modules/@cerebral/useragent/README"
+      }
+    ],
     "resources": [
       "../../../docs/resources/boilerplates",
       "../../../docs/resources/migration",
@@ -123,8 +135,6 @@
       "../../../docs/resources/videos",
       "../../../docs/resources/projects"
     ],
-    "migration": [
-      "../../../docs/migration/4_0"
-    ]
+    "migration": ["../../../docs/migration/4_0"]
   }
 }

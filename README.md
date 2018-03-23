@@ -1,4 +1,5 @@
 # Cerebral
+
 A declarative state and side effects management solution for popular JavaScript frameworks
 
 [![NPM version][npm-image]][npm-url]
@@ -15,16 +16,19 @@ A declarative state and side effects management solution for popular JavaScript 
 * [Previous Cerebral (1.x)](http://cerebral-website.herokuapp.com/)
 
 ## Contribute
+
 The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
 
-1. Clone the monorepo: `git clone https://github.com/cerebral/cerebral.git`
-2. In root: `npm install`
+1.  Clone the monorepo: `git clone https://github.com/cerebral/cerebral.git`
+2.  In root: `npm install`
 
 The packages are located under `packages` folder and there is **no need** to run `npm install` for each package.
 
 ### Using monorepo for your own apps
+
 If you want to use Cerebral 2 directly from your cloned repo, you can create a symlinks for following
 directories into the `node_modules` directory of your app:
+
 * `packages/node_modules/cerebral`
 * `packages/node_modules/function-tree`
 * `packages/node_modules/@cerebral`
@@ -45,9 +49,11 @@ $ unlink node_modules/cerebral
 ```
 
 ### Running demos
+
 Go to the respective `packages/demos/some-demo-folder` and run `npm start`
 
 ### Testing
+
 You can run all tests in all packages from root:
 
 `npm test`
@@ -57,6 +63,7 @@ Or you can run tests for specific packages by going to package root and do the s
 `npm test`
 
 ### Changing the code
+
 When you make a code change you should create a branch first. When the code is changed and backed up by a test you can commit it from **the root** using:
 
 `npm run commit`
@@ -65,9 +72,10 @@ This will give you a guide to creating a commit message. Then you just push and 
 
 ### Release process
 
-- Review and merge PRs into `next` branch. It is safe to use "Update branch", the commit created by Github will not be part of `next` history
-- If changes to `repo-cooker`, clean Travis NPM cache
-- From command line:
+* Review and merge PRs into `next` branch. It is safe to use "Update branch", the commit created by Github will not be part of `next` history
+* If changes to `repo-cooker`, clean Travis NPM cache
+* From command line:
+
 ```sh
 $ git checkout next
 $ git pull

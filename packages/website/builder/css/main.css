@@ -1,5 +1,6 @@
-html, body {
-  background-color: #FFF;
+html,
+body {
+  background-color: #fff;
   margin: 0;
   font-size: 15px;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
@@ -24,7 +25,7 @@ html, body {
   height: 50px;
   line-height: 30px;
   font-size: 22px;
-  color: #FFF;
+  color: #fff;
   text-decoration: none;
   margin: 0 10px;
   min-width: 150px;
@@ -34,7 +35,7 @@ html, body {
 
 .button:hover {
   background-color: #0086b3;
-  color: #FFF;
+  color: #fff;
 }
 
 a {
@@ -47,25 +48,32 @@ a:hover {
   color: #004c66;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   padding-top: 30px;
   margin-top: 0;
   font-weight: normal;
   color: #333;
 }
 
-h3, h4, h5, h6 {
+h3,
+h4,
+h5,
+h6 {
   font-weight: bold;
 }
-
 
 .beta {
   position: fixed;
   top: 10px;
   left: -30px;
   transform: rotate(-45deg);
-  background-color: #DD4A68;
-  color: #FFF;
+  background-color: #dd4a68;
+  color: #fff;
   padding: 5px 40px;
   z-index: 90;
 }
@@ -104,24 +112,26 @@ pre > code {
 }
 
 @font-face {
-    font-family: 'cerebral icons';
-    src: url('/images/cerebral-icons.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+  font-family: 'cerebral icons';
+  src: url('/images/cerebral-icons.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
-[class*='icon-']:before{
-	display: inline-block;
-   font-family: 'cerebral icons';
-   font-style: normal;
-   font-weight: normal;
-   line-height: 1;
-   -webkit-font-smoothing: antialiased;
-   -moz-osx-font-smoothing: grayscale
+[class*='icon-']:before {
+  display: inline-block;
+  font-family: 'cerebral icons';
+  font-style: normal;
+  font-weight: normal;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
-.icon-out-arrow:before{content:'\0041';}
+.icon-out-arrow:before {
+  content: '\0041';
+}
 
 .logo {
-  background: url("/images/cerebral.png");
+  background: url('/images/cerebral.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

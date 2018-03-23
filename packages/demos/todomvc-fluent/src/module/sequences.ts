@@ -48,10 +48,8 @@ export const abortEdit = sequenceWithProps<{ uid: string }>(s =>
 )
 
 export const submitTodoTitle = sequenceWithProps<{ uid: string }>(s =>
-  s
-    .branch(actions.whenEditedTitle)
-    .paths({
-      true: s => s.action(actions.updateTodoTitle),
-      false: s => s,
-    })
+  s.branch(actions.whenEditedTitle).paths({
+    true: s => s.action(actions.updateTodoTitle),
+    false: s => s,
+  })
 )

@@ -11,6 +11,7 @@ Error handling in Cerebral signals are done for you. Wherever you throw an error
 ![debugger error](/images/debugger_error.png)
 
 ## Catching errors
+
 You catch errors in module:
 
 ```js
@@ -23,9 +24,7 @@ export default Module({
   signals: {
     somethingHappened: sequences.doSomething
   },
-  catch: [
-    [FirebaseProviderError, sequences.catchFirebaseError]
-  ]
+  catch: [[FirebaseProviderError, sequences.catchFirebaseError]]
 })
 ```
 
@@ -43,10 +42,11 @@ We basically tell the module that we are interested in any errors thrown by the 
 ```
 
 ## Creating an error type
+
 Cerebral ships with a base error class of **CerebralError**. It extends **Error** and adds some functionality to give more details about the error and show it correctly in the debugger. You can extend this error class to create your own error types.
 
 ```js
-import { CerebralError } from 'cerebral'
+import { CerebralError } from 'cerebral'
 
 export class AppError extends CerebralError {}
 ```
@@ -54,7 +54,7 @@ export class AppError extends CerebralError {}
 You can extend the error with your own name and props.
 
 ```js
-import { CerebralError } from 'cerebral'
+import { CerebralError } from 'cerebral'
 
 export class AuthError extends CerebralError {
   constructor(message, code) {

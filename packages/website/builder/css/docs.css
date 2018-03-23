@@ -1,4 +1,3 @@
-
 img {
   width: 100%;
   margin: 0 auto;
@@ -14,23 +13,37 @@ blockquote {
   line-height: 32px;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   position: relative;
   padding-left: 30px;
   margin-left: -30px;
 }
 
-h1 > a, h2 > a, h3 > a, h4 > a, h5 > a, h6 > a {
+h1 > a,
+h2 > a,
+h3 > a,
+h4 > a,
+h5 > a,
+h6 > a {
   position: absolute;
   left: 5px;
   bottom: 2px;
   display: none;
 }
 
-h1:hover > a, h2:hover > a, h3:hover > a, h4:hover > a, h5:hover > a, h6:hover > a {
+h1:hover > a,
+h2:hover > a,
+h3:hover > a,
+h4:hover > a,
+h5:hover > a,
+h6:hover > a {
   display: block;
 }
-
 
 #docs-container {
   position: relative;
@@ -63,7 +76,6 @@ h1:hover > a, h2:hover > a, h3:hover > a, h4:hover > a, h5:hover > a, h6:hover >
 }
 
 @media (max-width: 850px) {
-
   #docs-container {
     flex-direction: column;
   }

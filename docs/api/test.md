@@ -43,7 +43,9 @@ Snapshot(app)
 Runs a signal with an optional payload. It returns a promise, passing the snapshot.
 
 ```js
-Snapshot(app).run('some.signal', { foo: 'bar' }).then(snapshot => {})
+Snapshot(app)
+  .run('some.signal', { foo: 'bar' })
+  .then(snapshot => {})
 ```
 
 ### mutate
@@ -67,7 +69,10 @@ Snapshot(app).mock('someProvider.someMethod', 'someReturnedValue')
 Mocks out a provider with a returned promise that resolves with an optional value.
 
 ```js
-Snapshot(app).mockResolvedPromise('someProvider.someMethod', 'someReturnedValue')
+Snapshot(app).mockResolvedPromise(
+  'someProvider.someMethod',
+  'someReturnedValue'
+)
 ```
 
 ### mockRejectedPromise
@@ -75,12 +80,16 @@ Snapshot(app).mockResolvedPromise('someProvider.someMethod', 'someReturnedValue'
 Mocks out a provider with a returned promise that rejects with an optional value.
 
 ```js
-Snapshot(app).mockRejectedPromise('someProvider.someMethod', 'someReturnedValue')
+Snapshot(app).mockRejectedPromise(
+  'someProvider.someMethod',
+  'someReturnedValue'
+)
 ```
 
 ## Assertion
 
 ### Components
+
 The **Container** you use to expose Cerebral to your components can also be used when testing. This is beneficial if you want to test
 a section of your UI interacts correctly with the controller.
 
@@ -101,7 +110,7 @@ describe('<Button />', () => {
       },
       signals: {
         clicked: ({ props }) => assert.equal(props.foo, 'bar')
-      }  
+      }
     })
     const controller = Controller(app)
     const wrapper = mount(
@@ -139,14 +148,15 @@ it('should multiply by the specified number', () => {
 The `runAction` test helper accepts the `action` and `fixture` arguments and returns a promise.
 
 ```js
-import {state} from 'cerebral/tags'
-import {runAction} from 'cerebral/test'
+import { state } from 'cerebral/tags'
+import { runAction } from 'cerebral/test'
 
 import increment from './increment'
 
 it('should increment numbers in state', () => {
-  return runAction(increment, { state: { number: 1 } })
-    .then(({state}) => assert.equal(state.number, 2))
+  return runAction(increment, { state: { number: 1 } }).then(({ state }) =>
+    assert.equal(state.number, 2)
+  )
 })
 ```
 
@@ -178,14 +188,12 @@ it('should accumulate a count', () => {
 
   cerebral.setState('count', 0)
 
-  return cerebral.runSignal('plusOne')
-    .then(({ state }) => {
-      assert.equal(state.count, 1)
+  return cerebral.runSignal('plusOne').then(({ state }) => {
+    assert.equal(state.count, 1)
 
-      return cerebral.runSignal('plus', { value: 2 })
-        .then(() => {
-          assert.equal(cerebral.getState('count'), 3)
-        })
+    return cerebral.runSignal('plus', { value: 2 }).then(() => {
+      assert.equal(cerebral.getState('count'), 3)
+    })
   })
 })
 ```
@@ -196,8 +204,8 @@ Note that state initialized in a module takes precedence over the state property
 const fixture = {
   // Override default state in modules
   state: {
-    app: {    
-      showNavigation: true    
+    app: {
+      showNavigation: true
     }
   },
   modules: {
@@ -207,6 +215,7 @@ const fixture = {
 ```
 
 #### Options
+
 The optional `options` argument contain the the following options:
 
 `recordActions: true|false|'byName'`
@@ -222,12 +231,13 @@ it('should accumulate a count', () => {
 
   cerebral.setState('count', 0)
 
-  return cerebral.runSignal('plusOne', {
-    incrementBy: 1
-  })
+  return cerebral
+    .runSignal('plusOne', {
+      incrementBy: 1
+    })
     .then(({ increment }) => {
       assert.equal(increment.props.incrementBy, 1)
-  })
+    })
 })
 ```
 
