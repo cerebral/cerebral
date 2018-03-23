@@ -11,40 +11,16 @@
     "node": true,
     "es6": true
   },
-  "plugins": [
-    "prettier"
-  ],
-  "extends": [
-    "standard",
-    "standard-jsx",
-    "prettier",
-    "prettier/react"
-  ],
+  "extends": ["standard", "standard-jsx", "plugin:prettier/recommended"],
   "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "trailingComma": "es5",
-        "singleQuote": true,
-        "semi": false
-      }
-    ],
     "standard/computed-property-even-spacing": "off",
-    "linebreak-style": [
-      "error",
-      "unix"
-    ]
+    "linebreak-style": ["error", "unix"]
   },
   "overrides": [
     {
-      "files": [
-        "*.ts",
-        "*.tsx"
-      ],
+      "files": ["*.ts", "*.tsx"],
       "parser": "typescript-eslint-parser",
-      "plugins": [
-        "typescript"
-      ],
+      "plugins": ["typescript"],
       "rules": {
         "import/export": "off",
         "no-dupe-class-members": "off",
