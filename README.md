@@ -76,7 +76,7 @@ $ npm install --no-save repo-cooker # needed to test release, make sure you have
 ￼$ npm run release # and check release notes
 ￼$ git checkout master
 $ git pull
-￼$ git merge next
+￼$ git merge --ff-only next
 ￼$ git push
 ```
 
