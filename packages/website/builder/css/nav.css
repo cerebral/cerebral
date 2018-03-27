@@ -172,19 +172,6 @@
   width: 100%;
 }
 
-.nav_section-item > .nav_toggle:hover + .nav_section::after {
-  content: '+';
-  padding: 0 0.5em;
-  color: #cacaca;
-  position: absolute;
-  right: 0;
-  font-family: monospace, monospace;
-}
-
-.nav_section-item > .nav_toggle:checked:hover + .nav_section::after {
-  content: '−';
-}
-
 #nav_home {
   padding-left: 15px;
 }
@@ -225,7 +212,7 @@
 .nav_button {
   display: flex;
   align-items: center;
-  margin-right: 10px;
+  margin-left: 20px;
   color: #333;
 }
 

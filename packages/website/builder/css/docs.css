@@ -55,7 +55,6 @@ h6:hover > a {
 .docs-doc {
   overflow: auto;
   flex: 4;
-  padding-top: 70px;
 }
 
 .docs-doc-content {
@@ -112,4 +111,20 @@ h6:hover > a {
   margin-right: 10px;
   font-size: 14px;
   font-weight: bold;
+}
+
+@media (min-width: 851px) {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    padding-top: 100px;
+    margin-top: -70px;
+  }
+
+  .docs-doc {
+    padding-top: 70px;
+  }
 }
