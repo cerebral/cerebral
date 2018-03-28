@@ -6,7 +6,6 @@
   "scripts": {
     "build:demos": "node ./scripts/run.js prepublish demos",
     "checkdeps": "node ./scripts/check.dependencies.js --auto-fix",
-    "release": "babel-node ./scripts/release/index.js",
     "commit": "git-cz",
     "commitmsg": "node ./node_modules/cz-customizable-ghooks/lib/index.js .git/COMMIT_EDITMSG",
     "coverage": "node ./scripts/run.js coverage",
@@ -21,6 +20,7 @@
     "precommit": "lint-staged",
     "predeploy": "node ./scripts/run.js prepublish demos",
     "pretest": "npm run checkdeps",
+    "release": "babel-node ./scripts/release/index.js",
     "setup": "node ./scripts/run.js prepublish nodemos",
     "test": "node ./scripts/run.js test"
   },
@@ -121,7 +121,6 @@
     "eslint-config-prettier": "^2.9.0",
     "eslint-config-standard": "^11.0.0",
     "eslint-config-standard-jsx": "^5.0.0",
-    "eslint-config-standard-react": "^6.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-prettier": "^2.6.0",

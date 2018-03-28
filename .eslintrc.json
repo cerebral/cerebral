@@ -11,9 +11,14 @@
     "node": true,
     "es6": true
   },
-  "extends": ["standard", "standard-jsx", "plugin:prettier/recommended"],
+  "extends": [
+    "standard",
+    "standard-jsx",
+    "plugin:prettier/recommended",
+    "prettier/react",
+    "prettier/standard"
+  ],
   "rules": {
-    "standard/computed-property-even-spacing": "off",
     "linebreak-style": ["error", "unix"]
   },
   "overrides": [
