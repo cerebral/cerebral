@@ -6,7 +6,7 @@ Because Cerebral can run on different environments and you might want to manage 
 
 ## Install
 
-[Download the Debugger](https://github.com/cerebral/cerebral-debugger/releases) for your target OS: Mac, Windows or Linux. The debugger will automatically notify you and self-update.
+[Download the Debugger](https://github.com/cerebral/cerebral-debugger/releases) for your target OS: Mac, Windows or Linux. The debugger will automatically notify you and self-update. On Linux auto-update works only for the [snap](https://snapcraft.io) package.
 
 ## Signals
 
