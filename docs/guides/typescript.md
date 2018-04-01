@@ -119,6 +119,12 @@ export type Context<Props = {}> = IContext<Props> & Providers
 export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> &
   Providers
 
+// This type is used to expose the state and signal typings to the components
+export type WithCerebral = {
+  store?: State
+  signals?: Signals
+}
+
 // This function is used to connect components to Cerebral and observing accessed state
 export const connect = <Props>() => {
   return (Component: IReactComponent<Props>): IReactComponent<Props> =>
@@ -241,6 +247,11 @@ export type Context<Props> = IContext<Props> & Providers
 
 export type BranchContext<Paths, Props> = IBranchContext<Paths, Props> &
   Providers
+
+export type WithCerebral = {
+  store?: State
+  signals?: Signals
+}
 
 export const connect = <Props>() => {
   return (Component: IReactComponent<Props>): IReactComponent<Props> =>
