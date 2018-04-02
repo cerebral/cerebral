@@ -11,7 +11,7 @@
     "coverage": "node ./scripts/run.js coverage",
     "coverage:upload": "cat ./coverage/lcov.info | coveralls",
     "deploy": "cd packages/website/publisher && npm run ci",
-    "format": "npm run lint -- --fix && prettier --write \"**/*.md\" \"**/*.css\" \"**/*.json\"",
+    "format": "npm run lint -- --fix && prettier --write --with-node-modules \"**/*.md\" \"**/*.css\" \"**/*.json\"",
     "link": "node ./scripts/run.js link",
     "lint": "eslint \"**/*.js\" \"**/*.ts\" \"**/*.tsx\"",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
@@ -68,7 +68,7 @@
       "git add"
     ],
     "*.{md,css,json}": [
-      "prettier --write",
+      "prettier --write --with-node-modules",
       "git add"
     ]
   },
