@@ -57,24 +57,25 @@ controller.signals
 
 ## Exposing the controller to React
 
-You expose the controller using the **Container** from **fluent**:
+You will need to inject the state and signals of the Cerebral controller into your view layer of choice. Since the state store is based on **Mobx** you will need to use
+a relevant bindings. For example [mobx-react](https://github.com/mobxjs/mobx-react) as shown in this example.
 
 ```ts
 import * as React from 'react'
 import { render } from 'react-dom'
 import { controller } from './controller'
-import { Container } from '@cerebral/fluent'
+import { Provider } from 'mobx-react'
 import { App } from './components/App'
 
 render(
-  <Container controller={controller}>
+  <Provider store={controller.state} signals={controller.signals}>
     <App />
   </Container>,
   document.querySelector('#app')
 )
 ```
 
-You will later see examples of how you actually connect components.
+You can inject this however you want, this is just an example. You will see later how you actually provide the state and signals to the components.
 
 ## Creating the fluent file
 
@@ -99,9 +100,9 @@ import {
   IContext,
   IBranchContext,
   SequenceFactory,
-  SequenceWithPropsFactory,
-  ConnectFactory
+  SequenceWithPropsFactory
 } from '@cerebral/fluent'
+import { inject, observer, IReactComponent } from 'mobx-react'
 import { Provider as RouterProvider } from '@cerebral/router'
 import { State, Signals } from './app/types'
 
@@ -118,8 +119,17 @@ export type Context<Props = {}> = IContext<Props> & Providers
 export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> &
   Providers
 
-// This function is used to connect components to Cerebral
-export const connect = ConnectFactory<State, Signals>()
+// This type is used to expose the state and signal typings to the components
+export type WithCerebral = {
+  store?: State
+  signals?: Signals
+}
+
+// This function is used to connect components to Cerebral and observing accessed state
+export const connect = <Props>() => {
+  return (Component: IReactComponent<Props>): IReactComponent<Props> =>
+    inject('store', 'signals')(observer(Component))
+}
 
 // This function is used to define sequences
 export const sequence = SequenceFactory<Context>()
@@ -210,9 +220,9 @@ import {
   IContext,
   IBranchContext,
   SequenceFactory,
-  SequenceWithPropsFactory,
-  ConnectFactory
+  SequenceWithPropsFactory
 } from '@cerebral/fluent'
+import { inject, observer, IReactComponent } from 'mobx-react'
 import { Provider as RouterProvider } from '@cerebral/router'
 import * as app from './app/types'
 import * as admin from './app/modules/admin/types'
@@ -238,7 +248,15 @@ export type Context<Props> = IContext<Props> & Providers
 export type BranchContext<Paths, Props> = IBranchContext<Paths, Props> &
   Providers
 
-export const connect = ConnectFactory<State, Signals>()
+export type WithCerebral = {
+  store?: State
+  signals?: Signals
+}
+
+export const connect = <Props>() => {
+  return (Component: IReactComponent<Props>): IReactComponent<Props> =>
+    inject('store', 'signals')(observer(Component))
+}
 
 export const sequence = SequenceFactory<Context>()
 
@@ -383,90 +401,41 @@ The **connect** factory you defined in the _fluent.ts_ file is used to connect t
 import * as React from 'react'
 import { connect } from 'fluent'
 
-type ExternalProps {
+type Props {
   foo: string
 }
 
-export default connect<ExternalProps>()
-  .with(({ state, signals, props }) => ({
-    foo: state.foo,
-    onClick: signals.doThis
-  }))
-  .to(
-    function MyComponent ({ foo, onClick }) {
-      return <div></div>
-    }
-  )
+const MyComponent: React.SFC<Props> = ({ store, signals }) => (
+  <div onClick={() => signals.somethingClicked()}>{store.some.state}</div>
+)
+
+export default connect<Props>()
 ```
 
-The **ExternalProps** are used when the component receives props from a parent. This is optional. It is important to take notice that the **with** method has to return the exact observable values you are using in your component. Meaning that:
+The **Props** are used when the component receives props from a parent. This is optional. It would be similar with a component class:
 
 ```ts
 import * as React from 'react'
 import { connect } from 'fluent'
 
-export default connect()
-  .with(({ state }) => ({
-    user: state.user
-  }))
-  .to(function UserName({ user }) {
-    return <div>{user.name}</div>
-  })
+type Props {
+  foo: string
+}
+
+class MyComponent extends React.Component<Props> {
+  render () {
+    const { store, signals } = this.props
+
+    return (
+      <div onClick={() => signals.somethingClicked()}>{store.some.state}</div>
+    )
+  }
+}
+
+export default connect<Props>()
 ```
 
-would actually not work. You would have to:
-
-```ts
-import * as React from 'react'
-import { connect } from 'fluent'
-
-export default connect()
-  .with(({ state }) => ({
-    user: { name: state.user.name }
-  }))
-  .to(function UserName({ user }) {
-    return <div>{user.name}</div>
-  })
-```
-
-This is because you have to grab (observe) the values being used in the component. This has the benfit of being explicit and allows for easy extending the connect to work with other view layers. You could also do:
-
-```ts
-import * as React from 'react'
-import { connect } from 'fluent'
-
-export default connect()
-  .with(({ state }) => ({
-    user: { ...state.user }
-  }))
-  .to(function UserName({ user }) {
-    return <div>{user.name}</div>
-  })
-```
-
-As this would indeed "get" all the properties on the user, starting to observe them.
-
-To connect to a class:
-
-```ts
-import * as React from 'react'
-import { connect } from 'fluent'
-
-export default connect()
-  .with(({ state }) => ({
-    user: { ...state.user }
-  }))
-  .toClass(
-    props =>
-      class UserName extends React.Component<typeof props> {
-        render() {
-          return <div>{this.props.user.name}</div>
-        }
-      }
-  )
-```
-
-Connecting to a class gives a callback with the prop which you can **typeof** into the component class. This gives type safety and auto suggestions on the props in the component itself.
+Mobx will automatically track whatever state you access. That means you do not have to think about optimizations related to what state is connected. The only thing to keep in mind is that small components are good. So big components accessing a lot of state should be split up into smaller components.
 
 ## Dictionary
 
