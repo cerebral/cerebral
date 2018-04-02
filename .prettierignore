@@ -1,2 +1,11 @@
 package-lock.json
 package.json
+**/dist
+**/lib
+**/es
+**/build
+**/coverage
+**/.nyc_output
+/packages/website/builder/docs
+/node_modules
+/packages/*/**/node_modules
