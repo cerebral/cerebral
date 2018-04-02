@@ -8,6 +8,3 @@ packages/*/**/dist/
 **/coverage/
 **/vendor/
 packages/codemods/1.x-2.x/__testfixtures__/
-packages/node_modules/function-tree/src/fluent/*.js
-packages/node_modules/@cerebral/fluent/src/*.js
-packages/*/**/*.d.ts
