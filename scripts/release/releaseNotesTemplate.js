@@ -2,13 +2,13 @@ import md5 from 'md5'
 
 function createNewVersionsTable(release) {
   const entries = Object.keys(release.newVersionByPackage)
-    .filter(packageName => {
+    .filter((packageName) => {
       return (
         release.currentVersionByPackage[packageName] !==
         release.newVersionByPackage[packageName]
       )
     })
-    .map(packageName => {
+    .map((packageName) => {
       return `| ${packageName} | ${
         release.currentVersionByPackage[packageName]
       } | ${release.newVersionByPackage[packageName]} |`
@@ -48,7 +48,7 @@ function createChangeTable(type, release) {
   const entries = release.summary[type]
     .reduce((allEntries, summary) => {
       return allEntries.concat(
-        summary.commits.map(commit => {
+        summary.commits.map((commit) => {
           return {
             packageName: summary.name,
             summary: commit.summary,
@@ -66,7 +66,7 @@ function createChangeTable(type, release) {
 | package | summary | commit | issues | author | gravatar |
 |:---|:---|:---|:---|:---|---|
 ${entries
-    .map(entry => {
+    .map((entry) => {
       return `| ${entry.packageName} | ${entry.summary} | ${
         entry.hash
       } | ${entry.issues.join(', ')} | ${entry.authorName} | ![${
@@ -83,16 +83,16 @@ function createBreakingTable(release) {
       return allTypes.concat(
         release.summary[type].reduce((allEntries, summary) => {
           const onlyBreaking = summary.commits.filter(
-            commit => commit.breaks.length
+            (commit) => commit.breaks.length
           )
 
           // Mutate in place (easier :))
           summary.commits = summary.commits.filter(
-            commit => !commit.breaks.length
+            (commit) => !commit.breaks.length
           )
 
           return allEntries.concat(
-            onlyBreaking.map(commit => {
+            onlyBreaking.map((commit) => {
               return {
                 packageName: summary.name,
                 summary: commit.summary,
@@ -117,9 +117,9 @@ function createBreakingTable(release) {
 | package | summary | commit | issues | author | gravatar |
 |:---|:---|:---|:---|:---|---|
 ${entries
-    .map(entry => {
+    .map((entry) => {
       return `| ${entry.packageName} | ${entry.summary} <ul>${entry.breaks
-        .map(text => `<li>*${text}*</li>`)
+        .map((text) => `<li>*${text}*</li>`)
         .join('')}</ul> | ${entry.hash} | ${entry.issues.join(', ')} | ${
         entry.authorName
       } | ![${entry.authorName}](https://www.gravatar.com/avatar/${md5(
@@ -147,7 +147,7 @@ ${release.commitsWithoutPackage
       if (typeA > typeB) return 1
       return 0
     })
-    .map(entry => {
+    .map((entry) => {
       return `| ${entry.type} (${entry.scope || 'monorepo'}) | ${
         entry.summary
       } | ${entry.hash} | ${entry.issues.join(', ')} | ${
@@ -160,12 +160,12 @@ ${release.commitsWithoutPackage
 `
 }
 
-export default release => {
-  const breaking = Object.keys(release.summary).map(type =>
+export default (release) => {
+  const breaking = Object.keys(release.summary).map((type) =>
     createBreakingTable(release)
   )
   const changes = Object.keys(typeHeaders).map(
-    type => (release.summary[type] ? createChangeTable(type, release) : '')
+    (type) => (release.summary[type] ? createChangeTable(type, release) : '')
   )
 
   const other = createOtherTable(release)

@@ -17,11 +17,11 @@ cooker.cook('publish', [
   {
     next: cook.remap(
       'newVersionByPackage',
-      version => `${version}-${Date.now()}`
+      (version) => `${version}-${Date.now()}`
     ),
     canary: cook.remap(
       'newVersionByPackage',
-      version => `${version}-${Date.now()}`
+      (version) => `${version}-${Date.now()}`
     ),
     otherwise: [],
   },

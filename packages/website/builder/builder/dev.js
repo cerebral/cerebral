@@ -12,7 +12,7 @@ const host = process.env.HOST || 'localhost'
 const port = process.env.PORT || 3000
 const filesToWatch = Object.keys(config.docs).reduce((files, sectionKey) => {
   return files.concat(
-    config.docs[sectionKey].map(file =>
+    config.docs[sectionKey].map((file) =>
       path.resolve((file.path || file) + '.md')
     )
   )

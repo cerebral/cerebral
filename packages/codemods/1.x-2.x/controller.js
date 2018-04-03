@@ -71,7 +71,7 @@ module.exports = function(fileInfo, api) {
     },
   })
 
-  controllerExpressions.forEach(exp => {
+  controllerExpressions.forEach((exp) => {
     // Fix the name
     const name = exp.value.expression.callee.property.name
       .replace('add', '')
@@ -82,7 +82,7 @@ module.exports = function(fileInfo, api) {
     // Modules are now called, so let's conver them
     // to a call expression
     if (name === 'modules') {
-      expression.properties = expression.properties.map(propExp => {
+      expression.properties = expression.properties.map((propExp) => {
         propExp.value = j.callExpression(j.identifier(propExp.value.name), [])
         return propExp
       })

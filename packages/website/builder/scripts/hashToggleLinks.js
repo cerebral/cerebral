@@ -1,4 +1,4 @@
-document.querySelector('#nav').addEventListener('click', event => {
+document.querySelector('#nav').addEventListener('click', (event) => {
   const node = event.target
 
   if (

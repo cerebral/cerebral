@@ -59,7 +59,7 @@ export default connect<{ uid: string; isEditing: boolean }>()
         </div>
         {isEditing && (
           <form
-            onSubmit={e => {
+            onSubmit={(e) => {
               e.preventDefault()
               newTitleSubmitted({ uid })
             }}
@@ -69,7 +69,7 @@ export default connect<{ uid: string; isEditing: boolean }>()
               className="edit"
               value={isEditing ? todo.editedTitle : todo.title}
               onBlur={() => newTitleSubmitted({ uid })}
-              onChange={e => newTitleChanged({ uid, title: e.target.value })}
+              onChange={(e) => newTitleChanged({ uid, title: e.target.value })}
             />
           </form>
         )}

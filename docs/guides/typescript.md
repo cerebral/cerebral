@@ -253,7 +253,7 @@ The **fluent** file is where you describe your complete application with types.
 // remember this is alias to the fluent.ts file
 import { sequence } from 'fluent'
 
-export const changeFoo = sequence(s =>
+export const changeFoo = sequence((s) =>
   s.action(({ state }) => {
     state.foo = 'bar2'
   })
@@ -266,7 +266,7 @@ This sequence gives you full type safety and autosuggestions. If anything is cha
 import { sequence } from 'fluent'
 import * as actions from './actions'
 
-export const changeFoo = sequence(s => s.action(actions.changeFoo))
+export const changeFoo = sequence((s) => s.action(actions.changeFoo))
 ```
 
 You can branch out to paths by using the **branch** method:
@@ -274,13 +274,13 @@ You can branch out to paths by using the **branch** method:
 ```ts
 import { sequence } from 'fluent'
 
-export const submitUser = sequence(s =>
+export const submitUser = sequence((s) =>
   s
     .action(actions.setSubmittingUser(true))
     .branch(actions.submitNewUser)
     .paths({
-      success: s => s.action(actions.addNewUser),
-      error: s => s.action(actions.showError)
+      success: (s) => s.action(actions.addNewUser),
+      error: (s) => s.action(actions.showError)
     })
     .action(actions.setSubmittingUser(false))
 )
@@ -292,7 +292,7 @@ If your sequence expects to have props available you can define that:
 import { sequenceWithProps } from 'fluent'
 import * as actions from './actions'
 
-export const changeFoo = sequenceWithProps<{ foo: string }>(s =>
+export const changeFoo = sequenceWithProps<{ foo: string }>((s) =>
   s.action(actions.changeFoo)
 )
 ```
@@ -303,7 +303,7 @@ You can also define expected props to be produced through the sequence:
 import { sequence, sequenceWithProps } from 'fluent'
 import * as actions from './actions'
 
-export const doThis = sequence<{ foo: string }>(s =>
+export const doThis = sequence<{ foo: string }>((s) =>
   s
     // This action must return { foo: 'some string' } for the
     // sequence to be valid
@@ -311,7 +311,7 @@ export const doThis = sequence<{ foo: string }>(s =>
 )
 
 export const changeFoo = sequenceWithProps<{ foo: string }, { bar: number }>(
-  s =>
+  (s) =>
     s
       // This action must return { bar: 123 } to give a valid sequence
       .action(actions.changeFoo)
@@ -324,7 +324,7 @@ Any sequences used as signals will require the signal to be called with the defi
 import { sequence, sequenceWithProps } from 'fluent'
 import * as actions from './actions'
 
-export const doThis = sequenceWithProps<{ foo: string }>(s =>
+export const doThis = sequenceWithProps<{ foo: string }>((s) =>
   s.action(actions.doSomething)
 )
 ```
@@ -368,7 +368,7 @@ export function submitNewUser({
     .post('/users', {
       userName: state.newUserName
     })
-    .then(response => path.success({ user: response.result }))
+    .then((response) => path.success({ user: response.result }))
     .catch(() => path.error({}))
 }
 ```
@@ -457,7 +457,7 @@ export default connect()
     user: { ...state.user }
   }))
   .toClass(
-    props =>
+    (props) =>
       class UserName extends React.Component<typeof props> {
         render() {
           return <div>{this.props.user.name}</div>

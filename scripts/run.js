@@ -20,7 +20,7 @@ const commands = {
     const packageBin = path.join(packagePath, 'node_modules', '.bin')
     symlinkDir(rootBin, packageBin).then(
       () => done(null, true),
-      err => {
+      (err) => {
         console.warn(
           `Cannot create symlink '${packageBin}' (there is a directory there probably).`
         )
@@ -32,7 +32,7 @@ const commands = {
     const task = execa('npm', ['run', action], { cwd })
     task.stdout.pipe(process.stdout)
     task.stderr.pipe(process.stderr)
-    task.then(result => done(null), err => done(err))
+    task.then((result) => done(null), (err) => done(err))
   },
 }
 
@@ -79,8 +79,8 @@ const log = {
 function logResults(results) {
   console.log('')
   console.log(`***** ${action} RESULTS *****\n`)
-  Object.keys(log).forEach(type => {
-    results[type].forEach(packageName => {
+  Object.keys(log).forEach((type) => {
+    results[type].forEach((packageName) => {
       log[type](packageName)
     })
   })
@@ -90,12 +90,12 @@ glob(packagesGlob, (er, files) => {
   const results = { pass: [], fail: [], noAction: [], count: 0 }
 
   const packages = files
-    .map(packagePath => {
+    .map((packagePath) => {
       const info = JSON.parse(fs.readFileSync(packagePath))
       const script = info.scripts[action]
       return { name: info.name, path: path.dirname(packagePath), script }
     })
-    .filter(p => p)
+    .filter((p) => p)
 
   function done(name, err, next) {
     results.count += 1
@@ -115,7 +115,7 @@ glob(packagesGlob, (er, files) => {
   }
 
   const actions = packages
-    .filter(actionInfo => {
+    .filter((actionInfo) => {
       if (!filter(actionInfo)) {
         results.count += 1
         results.noAction.push(actionInfo.name)
@@ -125,15 +125,17 @@ glob(packagesGlob, (er, files) => {
       }
     })
     .map(
-      actionInfo =>
+      (actionInfo) =>
         function(next) {
-          spawnCommand(actionInfo.path, err => done(actionInfo.name, err, next))
+          spawnCommand(actionInfo.path, (err) =>
+            done(actionInfo.name, err, next)
+          )
         }
     )
 
   if (runSerial) {
     actions.reduce((prev, fun) => () => fun(prev), () => {})()
   } else {
-    actions.forEach(fun => fun())
+    actions.forEach((fun) => fun())
   }
 })

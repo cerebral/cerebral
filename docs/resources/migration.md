@@ -83,7 +83,7 @@ In 1.x you would create your own module like this
 
 ```js
 // 1.x
-export default module => {
+export default (module) => {
   module.addState({
     items: [],
     newItemTitle: '',
@@ -242,7 +242,7 @@ In Cerebral 2 you you must resolve or reject a returned promise.
 
 ```js
 function myAction({ path }) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(() => {
       resolve({
         /* optional output */
@@ -299,7 +299,7 @@ In 1.x you could add services that would be available to you in the actions. Typ
 ```js
 import someExternalApi from 'some-external-api'
 
-export default (options = {}) => module => {
+export default (options = {}) => (module) => {
   if (!options.apiKey) {
     throw new Error('This service needs an apiKey')
   }

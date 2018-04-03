@@ -5,7 +5,7 @@ export function toggleAllChecked({ state, resolve }) {
   const isCompleted = !resolve.value(computedIsAllChecked)
   const currentTodosUids = resolve.value(computedVisibleTodosUids)
 
-  currentTodosUids.forEach(uid => {
+  currentTodosUids.forEach((uid) => {
     state.set(`todos.${uid}.completed`, isCompleted)
   })
 }
@@ -20,7 +20,7 @@ export function addTodo({ state, id }) {
 export function clearCompletedTodos({ state }) {
   const todos = state.get('todos')
 
-  Object.keys(todos).forEach(uid => {
+  Object.keys(todos).forEach((uid) => {
     if (todos[uid].completed) {
       state.unset(`todos.${uid}`)
     }

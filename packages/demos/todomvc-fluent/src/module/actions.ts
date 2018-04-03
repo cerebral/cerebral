@@ -17,7 +17,7 @@ export function removeTodo({ state, props }: Context<{ uid: string }>) {
 
 export function toggleAllChecked({ state }: Context) {
   const isAllChecked = state.isAllChecked.get()
-  state.visibleTodosUids.get().forEach(uid => {
+  state.visibleTodosUids.get().forEach((uid) => {
     const todo = state.todos.get(uid)
 
     if (todo) {
@@ -37,7 +37,7 @@ export function toggleTodoCompleted({
 }
 
 export function clearCompletedTodos({ state }: Context) {
-  state.todos.keys().forEach(uid => {
+  state.todos.keys().forEach((uid) => {
     const todo = state.todos.get(uid)
 
     if (todo && todo.completed) {

@@ -22,7 +22,7 @@ It is recommended to use [JEST](https://facebook.github.io/jest/). Just paste wh
 test('should filter on all', () => {
   return Snapshot(app) // app is the root module
     .run('filterClicked', { filter: 'all' })
-    .then(snapshot => {
+    .then((snapshot) => {
       expect(snapshot.get()).toMatchSnapshot()
     })
 })
@@ -45,7 +45,7 @@ Runs a signal with an optional payload. It returns a promise, passing the snapsh
 ```js
 Snapshot(app)
   .run('some.signal', { foo: 'bar' })
-  .then(snapshot => {})
+  .then((snapshot) => {})
 ```
 
 ### mutate

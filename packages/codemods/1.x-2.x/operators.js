@@ -117,7 +117,7 @@ module.exports = function(fileInfo, api) {
   if (tagNames.length) {
     operatorsImport.at(operatorsImport.length - 1).insertAfter(
       j.importDeclaration(
-        tagNames.map(name => {
+        tagNames.map((name) => {
           return j.importSpecifier(j.identifier(name))
         }),
         j.stringLiteral('cerebral/tags')

@@ -13,7 +13,7 @@ export default connect()
     return (
       <form
         id="todo-form"
-        onSubmit={e => {
+        onSubmit={(e) => {
           e.preventDefault()
           submitted()
         }}
@@ -23,7 +23,7 @@ export default connect()
           autoComplete="off"
           placeholder="What needs to be done?"
           value={title || ''}
-          onChange={e => titleChanged({ title: e.target.value })}
+          onChange={(e) => titleChanged({ title: e.target.value })}
         />
       </form>
     )

@@ -25,7 +25,7 @@ export default connect()
           </strong>
         </span>
         <ul className="filters">
-          {filters.map(filterName => (
+          {filters.map((filterName) => (
             <li key={filterName}>
               <a
                 onClick={() =>

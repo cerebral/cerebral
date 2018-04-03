@@ -29,10 +29,10 @@ module.exports = function() {
           const content = (
             fileContents[index][subIndex].match(/\[.*?]\(.*?\)/g) || []
           )
-            .map(markdownLink => {
+            .map((markdownLink) => {
               return markdownLink.match(/\((.*)\)/).pop()
             })
-            .filter(filePath => {
+            .filter((filePath) => {
               try {
                 return fileExistsSync(path.resolve('docs', dir, filePath))
               } catch (e) {

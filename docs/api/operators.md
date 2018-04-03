@@ -228,7 +228,7 @@ export default [
     false: []
   },
   // You can also pass your own function
-  when(state`foo.isAwesome`, value => value.length === 3),
+  when(state`foo.isAwesome`, (value) => value.length === 3),
   {
     true: [],
     false: []

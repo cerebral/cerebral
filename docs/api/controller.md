@@ -99,7 +99,7 @@ controller.on('initialized', () => {})
 Triggered whenever Cerebral flushes out changes to the UI. Passes a map of changes.
 
 ```js
-controller.on('flush', changes => {})
+controller.on('flush', (changes) => {})
 ```
 
 ### start
@@ -196,7 +196,7 @@ controller.on('parallelEnd', (execution, payload, functionsExecutedCount) => {})
 Triggered whenever Cerebral travels back in time. Passes the timestamp it travelled to.
 
 ```js
-controller.on('remember', datetime => {})
+controller.on('remember', (datetime) => {})
 ```
 
 ### mutation
@@ -205,5 +205,5 @@ _since version 4.0_
 Triggered whenever Cerebral mutated the state
 
 ```js
-controller.on('mutation', mutation => {})
+controller.on('mutation', (mutation) => {})
 ```
