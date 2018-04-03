@@ -24,7 +24,7 @@ export function counts(state: State) {
   )
 }
 export function visibleTodosUids(state: State): string[] {
-  return state.todos.keys().filter(uid => {
+  return state.todos.keys().filter((uid) => {
     const todo = state.todos.get(uid)
 
     return (
@@ -36,7 +36,7 @@ export function visibleTodosUids(state: State): string[] {
 }
 export function isAllChecked(state: State) {
   return (
-    state.visibleTodosUids.get().filter(uid => {
+    state.visibleTodosUids.get().filter((uid) => {
       const todo = state.todos.get(uid)
 
       return todo && !todo.completed

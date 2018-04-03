@@ -157,10 +157,10 @@ function httpGetFactory(url) {
     if (path) {
       return http
         .get(resolve.value(url))
-        .then(response => {
+        .then((response) => {
           return path.success({ response })
         })
-        .catch(error => {
+        .catch((error) => {
           return path.error({ error })
         })
     } else {
@@ -182,12 +182,12 @@ function httpGetFactory(url) {
     if (path) {
       return http
         .get(resolve.value(url))
-        .then(response => {
+        .then((response) => {
           return path[response.status]
             ? path[response.status]({ response })
             : path.success({ response })
         })
-        .catch(error => {
+        .catch((error) => {
           return path[error.status]
             ? path[error.status]({ error })
             : path.error({ error })

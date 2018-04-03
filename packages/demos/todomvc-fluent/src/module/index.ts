@@ -9,8 +9,8 @@ const router = Router({
   onlyHash: true,
   query: true,
   routes: [
-    { path: '/', signal: pathFor<Signals>(x => x.redirectToAll) },
-    { path: '/:filter', signal: pathFor<Signals>(x => x.changeFilter) },
+    { path: '/', signal: pathFor<Signals>((x) => x.redirectToAll) },
+    { path: '/:filter', signal: pathFor<Signals>((x) => x.changeFilter) },
   ],
 })
 

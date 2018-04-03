@@ -4,7 +4,7 @@ import computedVisibleTodosUids from './visibleTodosUids'
 
 export default Compute(computedVisibleTodosUids, (visibleTodosUids, get) => {
   return (
-    visibleTodosUids.filter(uid => {
+    visibleTodosUids.filter((uid) => {
       const todo = get(state`todos.${uid}`)
 
       return !todo.completed

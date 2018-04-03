@@ -190,6 +190,6 @@ With promises you just return it the same way:
 function myAction({ someProvider, path }) {
   return someProvider
     .doAsync()
-    .then(result => path.bananas({ data: result.data }))
+    .then((result) => path.bananas({ data: result.data }))
 }
 ```

@@ -60,7 +60,7 @@ export const module1: Module = {
   }
 }
 
-export const module2: Module = module => {
+export const module2: Module = (module) => {
   module.name = 'module2'
   return {
     state: {

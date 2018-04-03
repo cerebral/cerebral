@@ -39,7 +39,7 @@ It is also possible to define a module using a function.
 ```js
 import { Module } from 'cerebral'
 
-export default Module(module => {
+export default Module((module) => {
   module.name // Name of module
   module.path // Full path to module
   module.controller // The controller the module is attached to
@@ -61,7 +61,7 @@ With the use of a factory it is possible to make reusable modules.
 ```js
 import { Module } from 'cerebral'
 
-export default options => {
+export default (options) => {
   return Module({
     state: {
       location: options.of

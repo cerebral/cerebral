@@ -6,7 +6,7 @@ Computes calculate and cache derived state values. Using computes helps to keep 
 import { Compute } from 'cerebral' // upperCase since version 4.0
 import { state } from 'cerebral/tags'
 
-export default Compute(state`user.name`, name => {
+export default Compute(state`user.name`, (name) => {
   return `Hi ${name}`
 })
 ```

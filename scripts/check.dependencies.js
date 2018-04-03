@@ -14,7 +14,7 @@ const monorepoPath = '../package.json'
 const monorepo = require(monorepoPath)
 
 glob(packagesGlob, (er, files) => {
-  const packages = files.map(path => JSON.parse(fs.readFileSync(path)))
+  const packages = files.map((path) => JSON.parse(fs.readFileSync(path)))
   /**
    * type: 'install' | 'conflict' | 'noop'
    * dependency: dependency
@@ -31,13 +31,13 @@ glob(packagesGlob, (er, files) => {
   let allSuccess = true
   let noConflict = true
 
-  dependencyTypes.forEach(dependencyType => {
+  dependencyTypes.forEach((dependencyType) => {
     const operations = {}
-    packages.forEach(cerebralPackage => {
+    packages.forEach((cerebralPackage) => {
       const dependencies = cerebralPackage[dependencyType]
       const monodeps = monorepo[dependencyType]
       if (dependencies) {
-        Object.keys(dependencies).forEach(dependency => {
+        Object.keys(dependencies).forEach((dependency) => {
           if (cerebralPackages[dependency]) {
             // ignore
             return
@@ -71,12 +71,12 @@ glob(packagesGlob, (er, files) => {
     })
 
     const toInstall = Object.keys(operations)
-      .filter(k => operations[k].type === 'install')
-      .map(k => operations[k])
+      .filter((k) => operations[k].type === 'install')
+      .map((k) => operations[k])
 
     const conflict = Object.keys(operations)
-      .filter(k => operations[k].type === 'conflict')
-      .map(k => {
+      .filter((k) => operations[k].type === 'conflict')
+      .map((k) => {
         return operations[k]
       })
 
@@ -93,20 +93,22 @@ glob(packagesGlob, (er, files) => {
       console.log('')
       console.log(`************** ${dependencyType} CONFLICT ****************`)
       console.log('')
-      conflict.forEach(c => console.log(JSON.stringify(c, null, 2)))
+      conflict.forEach((c) => console.log(JSON.stringify(c, null, 2)))
     }
 
     if (toInstall.length) {
       if (autofix) {
         const dependencies = monorepo[dependencyType] || {}
-        toInstall.forEach(info => {
+        toInstall.forEach((info) => {
           dependencies[info.dependency] = info.version
         })
         monorepo[dependencyType] = dependencies
         console.log('')
         console.log(`************** ${dependencyType} UPDATE **************`)
         console.log('')
-        console.log(toInstall.map(info => `${info.dependency}@${info.version}`))
+        console.log(
+          toInstall.map((info) => `${info.dependency}@${info.version}`)
+        )
       } else {
         console.log('')
         console.log(
@@ -115,7 +117,7 @@ glob(packagesGlob, (er, files) => {
         console.log('')
         console.log(
           `${installCmd[dependencyType]} ${toInstall
-            .map(info => `${info.dependency}@${info.version}`)
+            .map((info) => `${info.dependency}@${info.version}`)
             .join(' ')}`
         )
         console.log('')

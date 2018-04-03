@@ -6,10 +6,10 @@ module.exports = function(fileInfo, api) {
 
   root
     .find(j.ArrayExpression)
-    .filter(expression => {
+    .filter((expression) => {
       return expression.parent.value.type === 'ArrayExpression'
     })
-    .forEach(expression => {
+    .forEach((expression) => {
       addImport = true
       expression.replace(
         j.callExpression(j.identifier('parallel'), [

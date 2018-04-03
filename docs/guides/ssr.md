@@ -204,7 +204,7 @@ app.get('/', (req, res) => {
 
   db
     .getUser()
-    .then(user => {
+    .then((user) => {
       return controller.run(setInitialState, { user })
     })
     .then(() => {

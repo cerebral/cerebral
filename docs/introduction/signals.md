@@ -79,8 +79,8 @@ The **getUser** action could look like this:
 export function getUser({ http, path }) {
   return http
     .get('/user')
-    .then(response => path.success({ user: response.result }))
-    .catch(error => path.error({ error }))
+    .then((response) => path.success({ user: response.result }))
+    .catch((error) => path.error({ error }))
 }
 ```
 
@@ -114,7 +114,7 @@ When actions return a promise the signal will hold execution until it is resolve
 
 ```js
 export function iAmAnAction() {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     resolve({
       newProp: 'someValue'
     })
