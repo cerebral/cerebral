@@ -1,0 +1,42 @@
+{
+  "name": "babel-plugin-cerebral-optimize-tags",
+  "version": "1.0.0-beta.3",
+  "description": "Babel plugin that optimize tags into constructor calls",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "npm test -- --watch",
+    "build": "cross-env BABEL_ENV=production babel -d dist ./*.js",
+    "coverage": "npm test -- --coverage",
+    "prepublish": "npm run build"
+  },
+  "author": "Fabrice Weinberg <Fabrice@weinberg.me>",
+  "license": "MIT",
+  "repository": "https://github.com/cerebral/cerebral/babel/babel-plugin-cerebral-optimize-tags",
+  "devDependencies": {
+    "cerebral": "^2.0.0-beta.3"
+  },
+  "files": [
+    "dist"
+  ],
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
+  "jest": {
+    "coverageReporters": [
+      "json",
+      "text",
+      "lcov"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "branches": 95,
+        "functions": 95,
+        "lines": 95,
+        "statements": 95
+      }
+    }
+  }
+}
