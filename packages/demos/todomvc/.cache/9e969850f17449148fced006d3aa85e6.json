@@ -1,0 +1,902 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    { "name": "react", "loc": { "line": 1, "column": 18 } },
+    { "name": "@cerebral/react", "loc": { "line": 2, "column": 24 } },
+    { "name": "cerebral/tags", "loc": { "line": 3, "column": 30 } },
+    { "name": "../../computed/counts", "loc": { "line": 4, "column": 19 } },
+    { "name": "classnames", "loc": { "line": 5, "column": 23 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral(['filter'], ['filter']),\n    _templateObject2 = _taggedTemplateLiteral(['filterClicked'], ['filterClicked']),\n    _templateObject3 = _taggedTemplateLiteral(['clearCompletedClicked'], ['clearCompletedClicked']);\n\nvar _react = require('react');\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _react3 = require('@cerebral/react');\n\nvar _tags = require('cerebral/tags');\n\nvar _counts = require('../../computed/counts');\n\nvar _counts2 = _interopRequireDefault(_counts);\n\nvar _classnames = require('classnames');\n\nvar _classnames2 = _interopRequireDefault(_classnames);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nvar filters = ['All', 'Active', 'Completed'];\n\nexports.default = (0, _react3.connect)({\n    filter: (0, _tags.state)(_templateObject),\n    counts: _counts2.default,\n    filterClicked: (0, _tags.signal)(_templateObject2),\n    clearCompletedClicked: (0, _tags.signal)(_templateObject3)\n}, function Footer(_ref) {\n    var filter = _ref.filter,\n        counts = _ref.counts,\n        filterClicked = _ref.filterClicked,\n        clearCompletedClicked = _ref.clearCompletedClicked;\n\n    return _react2.default.createElement(\n        'footer',\n        { className: 'footer' },\n        _react2.default.createElement(\n            'span',\n            { className: 'todo-count' },\n            _react2.default.createElement(\n                'strong',\n                null,\n                counts.remaining,\n                ' ',\n                counts.remaining === 1 ? 'item' : 'items',\n                ' left'\n            )\n        ),\n        _react2.default.createElement(\n            'ul',\n            { className: 'filters' },\n            filters.map(function (filterName) {\n                return _react2.default.createElement(\n                    'li',\n                    { key: filterName },\n                    _react2.default.createElement(\n                        'a',\n                        {\n                            onClick: function onClick() {\n                                return filterClicked({ filter: filterName.toLowerCase() });\n                            },\n                            className: (0, _classnames2.default)({\n                                selected: filter === filterName.toLowerCase()\n                            })\n                        },\n                        filterName\n                    )\n                );\n            })\n        ),\n        !!counts.completed && _react2.default.createElement(\n            'button',\n            { className: 'clear-completed', onClick: function onClick() {\n                    return clearCompletedClicked();\n                } },\n            'Clear completed (',\n            counts.completed,\n            ')'\n        )\n    );\n});",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 11, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 15, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 2, "column": 0 }
+        },
+        {
+          "generated": { "line": 17, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 19, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 4, "column": 0 }
+        },
+        {
+          "generated": { "line": 23, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "generated": { "line": 31, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "filters",
+          "generated": { "line": 31, "column": 4 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 6 }
+        },
+        {
+          "generated": { "line": 31, "column": 14 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 16 }
+        },
+        {
+          "generated": { "line": 31, "column": 15 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 18 }
+        },
+        {
+          "generated": { "line": 31, "column": 20 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 16 }
+        },
+        {
+          "generated": { "line": 31, "column": 22 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 25 }
+        },
+        {
+          "generated": { "line": 31, "column": 30 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 16 }
+        },
+        {
+          "generated": { "line": 31, "column": 32 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 35 }
+        },
+        {
+          "generated": { "line": 31, "column": 43 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 16 }
+        },
+        {
+          "generated": { "line": 31, "column": 44 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "generated": { "line": 33, "column": 18 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 9, "column": 15 }
+        },
+        {
+          "generated": { "line": 33, "column": 39 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 10, "column": 4 }
+        },
+        {
+          "name": "filter",
+          "generated": { "line": 34, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 11, "column": 8 }
+        },
+        {
+          "generated": { "line": 34, "column": 45 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 10, "column": 4 }
+        },
+        {
+          "name": "counts",
+          "generated": { "line": 35, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 12, "column": 8 }
+        },
+        {
+          "generated": { "line": 35, "column": 28 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 10, "column": 4 }
+        },
+        {
+          "name": "filterClicked",
+          "generated": { "line": 36, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 13, "column": 8 }
+        },
+        {
+          "generated": { "line": 36, "column": 54 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 10, "column": 4 }
+        },
+        {
+          "name": "clearCompletedClicked",
+          "generated": { "line": 37, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 14, "column": 8 }
+        },
+        {
+          "generated": { "line": 38, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 10, "column": 4 }
+        },
+        {
+          "generated": { "line": 38, "column": 1 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 9, "column": 15 }
+        },
+        {
+          "generated": { "line": 38, "column": 3 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 4 }
+        },
+        {
+          "name": "Footer",
+          "generated": { "line": 38, "column": 12 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 13 }
+        },
+        {
+          "generated": { "line": 38, "column": 18 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 4 }
+        },
+        {
+          "generated": { "line": 38, "column": 25 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "generated": { "line": 39, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "filter",
+          "generated": { "line": 39, "column": 8 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 22 }
+        },
+        {
+          "generated": { "line": 39, "column": 14 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "filter",
+          "generated": { "line": 39, "column": 22 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 22 }
+        },
+        {
+          "generated": { "line": 39, "column": 28 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "generated": { "line": 40, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "counts",
+          "generated": { "line": 40, "column": 8 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 30 }
+        },
+        {
+          "generated": { "line": 40, "column": 14 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "counts",
+          "generated": { "line": 40, "column": 22 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 30 }
+        },
+        {
+          "generated": { "line": 40, "column": 28 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "generated": { "line": 41, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "filterClicked",
+          "generated": { "line": 41, "column": 8 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 38 }
+        },
+        {
+          "generated": { "line": 41, "column": 21 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "filterClicked",
+          "generated": { "line": 41, "column": 29 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 38 }
+        },
+        {
+          "generated": { "line": 41, "column": 42 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "generated": { "line": 42, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "clearCompletedClicked",
+          "generated": { "line": 42, "column": 8 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 53 }
+        },
+        {
+          "generated": { "line": 42, "column": 29 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "name": "clearCompletedClicked",
+          "generated": { "line": 42, "column": 37 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 53 }
+        },
+        {
+          "generated": { "line": 42, "column": 58 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 16, "column": 78 }
+        },
+        {
+          "generated": { "line": 44, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 17, "column": 8 }
+        },
+        {
+          "generated": { "line": 44, "column": 11 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 45, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 46, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 46, "column": 10 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 20 }
+        },
+        {
+          "generated": { "line": 46, "column": 21 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 30 }
+        },
+        {
+          "generated": { "line": 46, "column": 29 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 47, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 19, "column": 16 }
+        },
+        {
+          "generated": { "line": 48, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 19, "column": 16 }
+        },
+        {
+          "generated": { "line": 49, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 19, "column": 16 }
+        },
+        {
+          "generated": { "line": 49, "column": 14 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 19, "column": 22 }
+        },
+        {
+          "generated": { "line": 49, "column": 25 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 19, "column": 32 }
+        },
+        {
+          "generated": { "line": 49, "column": 37 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 19, "column": 16 }
+        },
+        {
+          "generated": { "line": 50, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 51, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 52, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "name": "counts",
+          "generated": { "line": 53, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 25 }
+        },
+        {
+          "name": "remaining",
+          "generated": { "line": 53, "column": 23 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 32 }
+        },
+        {
+          "generated": { "line": 53, "column": 32 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 54, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "name": "counts",
+          "generated": { "line": 55, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 44 }
+        },
+        {
+          "name": "remaining",
+          "generated": { "line": 55, "column": 23 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 51 }
+        },
+        {
+          "generated": { "line": 55, "column": 32 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 44 }
+        },
+        {
+          "generated": { "line": 55, "column": 37 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 65 }
+        },
+        {
+          "generated": { "line": 55, "column": 38 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 44 }
+        },
+        {
+          "generated": { "line": 55, "column": 41 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 69 }
+        },
+        {
+          "generated": { "line": 55, "column": 47 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 44 }
+        },
+        {
+          "generated": { "line": 55, "column": 50 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 21, "column": 78 }
+        },
+        {
+          "generated": { "line": 55, "column": 57 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 56, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 57, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 58, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 19, "column": 16 }
+        },
+        {
+          "generated": { "line": 58, "column": 9 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 59, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 60, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 61, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 61, "column": 14 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 24, "column": 20 }
+        },
+        {
+          "generated": { "line": 61, "column": 25 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 24, "column": 30 }
+        },
+        {
+          "generated": { "line": 61, "column": 34 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "name": "filters",
+          "generated": { "line": 62, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 21 }
+        },
+        {
+          "name": "map",
+          "generated": { "line": 62, "column": 20 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 29 }
+        },
+        {
+          "generated": { "line": 62, "column": 23 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 21 }
+        },
+        {
+          "generated": { "line": 62, "column": 24 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 33 }
+        },
+        {
+          "name": "filterName",
+          "generated": { "line": 62, "column": 34 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 34 }
+        },
+        {
+          "generated": { "line": 62, "column": 44 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 33 }
+        },
+        {
+          "generated": { "line": 63, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 33 }
+        },
+        {
+          "generated": { "line": 63, "column": 23 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 26, "column": 24 }
+        },
+        {
+          "generated": { "line": 64, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 26, "column": 24 }
+        },
+        {
+          "generated": { "line": 65, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 26, "column": 24 }
+        },
+        {
+          "generated": { "line": 65, "column": 22 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 26, "column": 28 }
+        },
+        {
+          "name": "filterName",
+          "generated": { "line": 65, "column": 27 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 26, "column": 33 }
+        },
+        {
+          "generated": { "line": 65, "column": 37 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 26, "column": 24 }
+        },
+        {
+          "generated": { "line": 66, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 27, "column": 28 }
+        },
+        {
+          "generated": { "line": 67, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 27, "column": 28 }
+        },
+        {
+          "generated": { "line": 68, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 27, "column": 28 }
+        },
+        {
+          "generated": { "line": 69, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 32 }
+        },
+        {
+          "generated": { "line": 69, "column": 37 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 41 }
+        },
+        {
+          "generated": { "line": 70, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 41 }
+        },
+        {
+          "name": "filterClicked",
+          "generated": { "line": 70, "column": 39 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 47 }
+        },
+        {
+          "generated": { "line": 70, "column": 53 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 61 }
+        },
+        {
+          "name": "filter",
+          "generated": { "line": 70, "column": 55 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 63 }
+        },
+        {
+          "name": "filterName",
+          "generated": { "line": 70, "column": 63 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 71 }
+        },
+        {
+          "name": "toLowerCase",
+          "generated": { "line": 70, "column": 74 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 82 }
+        },
+        {
+          "generated": { "line": 70, "column": 85 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 71 }
+        },
+        {
+          "generated": { "line": 70, "column": 87 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 61 }
+        },
+        {
+          "generated": { "line": 70, "column": 89 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 47 }
+        },
+        {
+          "generated": { "line": 70, "column": 90 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 41 }
+        },
+        {
+          "generated": { "line": 71, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 28, "column": 41 }
+        },
+        {
+          "generated": { "line": 71, "column": 29 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 27, "column": 28 }
+        },
+        {
+          "generated": { "line": 72, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 29, "column": 32 }
+        },
+        {
+          "generated": { "line": 72, "column": 39 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 29, "column": 43 }
+        },
+        {
+          "generated": { "line": 72, "column": 65 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 29, "column": 54 }
+        },
+        {
+          "name": "selected",
+          "generated": { "line": 73, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 30, "column": 36 }
+        },
+        {
+          "name": "filter",
+          "generated": { "line": 73, "column": 42 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 30, "column": 46 }
+        },
+        {
+          "name": "filterName",
+          "generated": { "line": 73, "column": 53 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 30, "column": 57 }
+        },
+        {
+          "name": "toLowerCase",
+          "generated": { "line": 73, "column": 64 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 30, "column": 68 }
+        },
+        {
+          "generated": { "line": 73, "column": 75 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 30, "column": 57 }
+        },
+        {
+          "generated": { "line": 74, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 29, "column": 54 }
+        },
+        {
+          "generated": { "line": 74, "column": 29 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 29, "column": 43 }
+        },
+        {
+          "generated": { "line": 75, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 27, "column": 28 }
+        },
+        {
+          "name": "filterName",
+          "generated": { "line": 76, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 33, "column": 33 }
+        },
+        {
+          "generated": { "line": 77, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 27, "column": 28 }
+        },
+        {
+          "generated": { "line": 78, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 26, "column": 24 }
+        },
+        {
+          "generated": { "line": 78, "column": 17 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 33 }
+        },
+        {
+          "generated": { "line": 79, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 33 }
+        },
+        {
+          "generated": { "line": 79, "column": 13 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 25, "column": 21 }
+        },
+        {
+          "generated": { "line": 80, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 80, "column": 9 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 81, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 38, "column": 17 }
+        },
+        {
+          "generated": { "line": 81, "column": 9 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 38, "column": 18 }
+        },
+        {
+          "name": "counts",
+          "generated": { "line": 81, "column": 10 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 38, "column": 19 }
+        },
+        {
+          "name": "completed",
+          "generated": { "line": 81, "column": 17 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 38, "column": 26 }
+        },
+        {
+          "generated": { "line": 81, "column": 26 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 38, "column": 17 }
+        },
+        {
+          "generated": { "line": 81, "column": 30 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 82, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 83, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 83, "column": 14 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 28 }
+        },
+        {
+          "generated": { "line": 83, "column": 25 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 38 }
+        },
+        {
+          "generated": { "line": 83, "column": 42 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 83, "column": 44 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 56 }
+        },
+        {
+          "generated": { "line": 83, "column": 53 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 65 }
+        },
+        {
+          "generated": { "line": 84, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 65 }
+        },
+        {
+          "name": "clearCompletedClicked",
+          "generated": { "line": 84, "column": 27 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 71 }
+        },
+        {
+          "generated": { "line": 84, "column": 50 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 65 }
+        },
+        {
+          "generated": { "line": 85, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 65 }
+        },
+        {
+          "generated": { "line": 85, "column": 17 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 86, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "name": "counts",
+          "generated": { "line": 87, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 40, "column": 42 }
+        },
+        {
+          "name": "completed",
+          "generated": { "line": 87, "column": 19 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 40, "column": 49 }
+        },
+        {
+          "generated": { "line": 87, "column": 28 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 88, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 89, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 90, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 90, "column": 5 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 17, "column": 8 }
+        },
+        {
+          "generated": { "line": 91, "column": 0 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 45, "column": 5 }
+        },
+        {
+          "generated": { "line": 91, "column": 1 },
+          "source": "src/components/Footer/index.js",
+          "original": { "line": 9, "column": 15 }
+        }
+      ],
+      "sources": {
+        "src/components/Footer/index.js":
+          "import React from 'react';\nimport { connect } from '@cerebral/react';\nimport { state, signal } from 'cerebral/proxy';\nimport counts from '../../computed/counts';\nimport classnames from 'classnames';\n\nconst filters = [ 'All', 'Active', 'Completed' ];\n\nexport default connect(\n    {\n        filter: state.filter,\n        counts,\n        filterClicked: signal.filterClicked,\n        clearCompletedClicked: signal.clearCompletedClicked\n    },\n    function Footer({ filter, counts, filterClicked, clearCompletedClicked }) {\n        return (\n            <footer className=\"footer\">\n                <span className=\"todo-count\">\n                    <strong>\n                        {counts.remaining} {counts.remaining === 1 ? 'item' : 'items'} left\n                    </strong>\n                </span>\n                <ul className=\"filters\">\n                    {filters.map((filterName) => (\n                        <li key={filterName}>\n                            <a\n                                onClick={() => filterClicked({ filter: filterName.toLowerCase() })}\n                                className={classnames({\n                                    selected: filter === filterName.toLowerCase()\n                                })}\n                            >\n                                {filterName}\n                            </a>\n                        </li>\n                    ))}\n                </ul>\n                {!!counts.completed && (\n                    <button className=\"clear-completed\" onClick={() => clearCompletedClicked()}>\n                        Clear completed ({counts.completed})\n                    </button>\n                )}\n            </footer>\n        );\n    }\n);\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "efe13ff442639c69b1eb8b373b8cf752",
+  "cacheData": { "env": {} }
+}

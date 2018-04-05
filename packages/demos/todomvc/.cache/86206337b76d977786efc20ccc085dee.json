@@ -1,0 +1,257 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    { "name": "cerebral", "loc": { "line": 1, "column": 24 } },
+    { "name": "cerebral/tags", "loc": { "line": 2, "column": 22 } },
+    { "name": "./visibleTodosUids", "loc": { "line": 3, "column": 37 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral(['todos.', ''], ['todos.', '']);\n\nvar _cerebral = require('cerebral');\n\nvar _tags = require('cerebral/tags');\n\nvar _visibleTodosUids = require('./visibleTodosUids');\n\nvar _visibleTodosUids2 = _interopRequireDefault(_visibleTodosUids);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nexports.default = (0, _cerebral.Compute)(_visibleTodosUids2.default, function (visibleTodosUids, get) {\n    return visibleTodosUids.filter(function (uid) {\n        var todo = get((0, _tags.state)(_templateObject, uid));\n\n        return !todo.completed;\n    }).length === 0 && visibleTodosUids.length !== 0;\n});",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 9, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 11, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 2, "column": 0 }
+        },
+        {
+          "generated": { "line": 13, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 21, "column": 18 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 15 }
+        },
+        {
+          "generated": { "line": 21, "column": 69 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 49 }
+        },
+        {
+          "name": "visibleTodosUids",
+          "generated": { "line": 21, "column": 79 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 50 }
+        },
+        {
+          "generated": { "line": 21, "column": 95 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 49 }
+        },
+        {
+          "name": "get",
+          "generated": { "line": 21, "column": 97 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 68 }
+        },
+        {
+          "generated": { "line": 21, "column": 100 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 49 }
+        },
+        {
+          "generated": { "line": 21, "column": 102 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 76 }
+        },
+        {
+          "generated": { "line": 22, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 6, "column": 4 }
+        },
+        {
+          "name": "visibleTodosUids",
+          "generated": { "line": 22, "column": 11 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "name": "filter",
+          "generated": { "line": 22, "column": 28 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 25 }
+        },
+        {
+          "generated": { "line": 22, "column": 34 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "generated": { "line": 22, "column": 35 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 32 }
+        },
+        {
+          "name": "uid",
+          "generated": { "line": 22, "column": 45 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 33 }
+        },
+        {
+          "generated": { "line": 22, "column": 48 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 32 }
+        },
+        {
+          "generated": { "line": 22, "column": 50 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 41 }
+        },
+        {
+          "generated": { "line": 23, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 8, "column": 12 }
+        },
+        {
+          "name": "todo",
+          "generated": { "line": 23, "column": 12 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 8, "column": 18 }
+        },
+        {
+          "name": "get",
+          "generated": { "line": 23, "column": 19 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 8, "column": 25 }
+        },
+        {
+          "name": "uid",
+          "generated": { "line": 23, "column": 57 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 8, "column": 41 }
+        },
+        {
+          "generated": { "line": 23, "column": 60 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 8, "column": 25 }
+        },
+        {
+          "generated": { "line": 23, "column": 62 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 8, "column": 12 }
+        },
+        {
+          "generated": { "line": 25, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 10, "column": 12 }
+        },
+        {
+          "generated": { "line": 25, "column": 15 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 10, "column": 19 }
+        },
+        {
+          "name": "todo",
+          "generated": { "line": 25, "column": 16 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 10, "column": 20 }
+        },
+        {
+          "name": "completed",
+          "generated": { "line": 25, "column": 21 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 10, "column": 25 }
+        },
+        {
+          "generated": { "line": 25, "column": 30 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 10, "column": 12 }
+        },
+        {
+          "generated": { "line": 26, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 11, "column": 9 }
+        },
+        {
+          "generated": { "line": 26, "column": 5 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 26, "column": 7 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 11, "column": 11 }
+        },
+        {
+          "generated": { "line": 26, "column": 13 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "generated": { "line": 26, "column": 18 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 11, "column": 22 }
+        },
+        {
+          "generated": { "line": 26, "column": 19 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "name": "visibleTodosUids",
+          "generated": { "line": 26, "column": 23 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 11, "column": 27 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 26, "column": 40 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 11, "column": 44 }
+        },
+        {
+          "generated": { "line": 26, "column": 46 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 11, "column": 27 }
+        },
+        {
+          "generated": { "line": 26, "column": 51 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 11, "column": 55 }
+        },
+        {
+          "generated": { "line": 26, "column": 52 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 6, "column": 4 }
+        },
+        {
+          "generated": { "line": 27, "column": 0 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 13, "column": 1 }
+        },
+        {
+          "generated": { "line": 27, "column": 1 },
+          "source": "src/computed/isAllChecked.js",
+          "original": { "line": 5, "column": 15 }
+        }
+      ],
+      "sources": {
+        "src/computed/isAllChecked.js":
+          "import { Compute } from 'cerebral';\nimport { state } from 'cerebral/proxy';\nimport computedVisibleTodosUids from './visibleTodosUids';\n\nexport default Compute(computedVisibleTodosUids, (visibleTodosUids, get) => {\n    return (\n        visibleTodosUids.filter((uid) => {\n            const todo = get(state.todos[uid]);\n\n            return !todo.completed;\n        }).length === 0 && visibleTodosUids.length !== 0\n    );\n});\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "37b63cd6d5b1b4dbcd994e4aa32e1f2b",
+  "cacheData": { "env": {} }
+}

@@ -1,0 +1,513 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    { "name": "cerebral", "loc": { "line": 1, "column": 23 } },
+    { "name": "./sequences", "loc": { "line": 2, "column": 27 } },
+    { "name": "./providers", "loc": { "line": 3, "column": 19 } },
+    { "name": "./modules", "loc": { "line": 4, "column": 32 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _cerebral = require('cerebral');\n\nvar _sequences = require('./sequences');\n\nvar sequences = _interopRequireWildcard(_sequences);\n\nvar _providers = require('./providers');\n\nvar _modules = require('./modules');\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nexports.default = (0, _cerebral.Module)({\n    state: {\n        newTodoTitle: '',\n        todos: {},\n        filter: 'all',\n        editingUid: null\n    },\n    signals: {\n        rootRouted: sequences.redirectToAll,\n        newTodoTitleChanged: sequences.changeNewTodoTitle,\n        newTodoSubmitted: sequences.submitNewTodo,\n        todoNewTitleChanged: sequences.changeTodoTitle,\n        todoNewTitleSubmitted: sequences.submitTodoTitle,\n        removeTodoClicked: sequences.removeTodo,\n        todoDoubleClicked: sequences.editTodo,\n        toggleAllChanged: sequences.toggleAllChecked,\n        toggleTodoCompletedChanged: sequences.toggleTodoCompleted,\n        todoNewTitleAborted: sequences.abortEdit,\n        clearCompletedClicked: sequences.clearCompletedTodos,\n        filterClicked: sequences.changeFilter\n    },\n    providers: {\n        id: _providers.id\n    },\n    modules: {\n        router: _modules.router,\n        storage: _modules.storage\n    }\n});",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 7, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 9, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 2, "column": 0 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 11, "column": 4 },
+          "source": "src/app/index.js",
+          "original": { "line": 2, "column": 12 }
+        },
+        {
+          "generated": { "line": 13, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 15, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 4, "column": 0 }
+        },
+        {
+          "generated": { "line": 19, "column": 18 },
+          "source": "src/app/index.js",
+          "original": { "line": 6, "column": 15 }
+        },
+        {
+          "generated": { "line": 19, "column": 40 },
+          "source": "src/app/index.js",
+          "original": { "line": 6, "column": 22 }
+        },
+        {
+          "name": "state",
+          "generated": { "line": 20, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 7, "column": 4 }
+        },
+        {
+          "generated": { "line": 20, "column": 11 },
+          "source": "src/app/index.js",
+          "original": { "line": 7, "column": 11 }
+        },
+        {
+          "name": "newTodoTitle",
+          "generated": { "line": 21, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 8, "column": 8 }
+        },
+        {
+          "generated": { "line": 21, "column": 22 },
+          "source": "src/app/index.js",
+          "original": { "line": 8, "column": 22 }
+        },
+        {
+          "generated": { "line": 21, "column": 24 },
+          "source": "src/app/index.js",
+          "original": { "line": 7, "column": 11 }
+        },
+        {
+          "name": "todos",
+          "generated": { "line": 22, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 9, "column": 8 }
+        },
+        {
+          "generated": { "line": 22, "column": 15 },
+          "source": "src/app/index.js",
+          "original": { "line": 9, "column": 15 }
+        },
+        {
+          "generated": { "line": 22, "column": 17 },
+          "source": "src/app/index.js",
+          "original": { "line": 7, "column": 11 }
+        },
+        {
+          "name": "filter",
+          "generated": { "line": 23, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 10, "column": 8 }
+        },
+        {
+          "generated": { "line": 23, "column": 16 },
+          "source": "src/app/index.js",
+          "original": { "line": 10, "column": 16 }
+        },
+        {
+          "generated": { "line": 23, "column": 21 },
+          "source": "src/app/index.js",
+          "original": { "line": 7, "column": 11 }
+        },
+        {
+          "name": "editingUid",
+          "generated": { "line": 24, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 11, "column": 8 }
+        },
+        {
+          "generated": { "line": 24, "column": 20 },
+          "source": "src/app/index.js",
+          "original": { "line": 11, "column": 20 }
+        },
+        {
+          "generated": { "line": 25, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 7, "column": 11 }
+        },
+        {
+          "generated": { "line": 25, "column": 5 },
+          "source": "src/app/index.js",
+          "original": { "line": 6, "column": 22 }
+        },
+        {
+          "name": "signals",
+          "generated": { "line": 26, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 4 }
+        },
+        {
+          "generated": { "line": 26, "column": 13 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "rootRouted",
+          "generated": { "line": 27, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 14, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 27, "column": 20 },
+          "source": "src/app/index.js",
+          "original": { "line": 14, "column": 20 }
+        },
+        {
+          "name": "redirectToAll",
+          "generated": { "line": 27, "column": 30 },
+          "source": "src/app/index.js",
+          "original": { "line": 14, "column": 30 }
+        },
+        {
+          "generated": { "line": 27, "column": 43 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "newTodoTitleChanged",
+          "generated": { "line": 28, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 15, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 28, "column": 29 },
+          "source": "src/app/index.js",
+          "original": { "line": 15, "column": 29 }
+        },
+        {
+          "name": "changeNewTodoTitle",
+          "generated": { "line": 28, "column": 39 },
+          "source": "src/app/index.js",
+          "original": { "line": 15, "column": 39 }
+        },
+        {
+          "generated": { "line": 28, "column": 57 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "newTodoSubmitted",
+          "generated": { "line": 29, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 16, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 29, "column": 26 },
+          "source": "src/app/index.js",
+          "original": { "line": 16, "column": 26 }
+        },
+        {
+          "name": "submitNewTodo",
+          "generated": { "line": 29, "column": 36 },
+          "source": "src/app/index.js",
+          "original": { "line": 16, "column": 36 }
+        },
+        {
+          "generated": { "line": 29, "column": 49 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "todoNewTitleChanged",
+          "generated": { "line": 30, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 17, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 30, "column": 29 },
+          "source": "src/app/index.js",
+          "original": { "line": 17, "column": 29 }
+        },
+        {
+          "name": "changeTodoTitle",
+          "generated": { "line": 30, "column": 39 },
+          "source": "src/app/index.js",
+          "original": { "line": 17, "column": 39 }
+        },
+        {
+          "generated": { "line": 30, "column": 54 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "todoNewTitleSubmitted",
+          "generated": { "line": 31, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 18, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 31, "column": 31 },
+          "source": "src/app/index.js",
+          "original": { "line": 18, "column": 31 }
+        },
+        {
+          "name": "submitTodoTitle",
+          "generated": { "line": 31, "column": 41 },
+          "source": "src/app/index.js",
+          "original": { "line": 18, "column": 41 }
+        },
+        {
+          "generated": { "line": 31, "column": 56 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "removeTodoClicked",
+          "generated": { "line": 32, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 19, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 32, "column": 27 },
+          "source": "src/app/index.js",
+          "original": { "line": 19, "column": 27 }
+        },
+        {
+          "name": "removeTodo",
+          "generated": { "line": 32, "column": 37 },
+          "source": "src/app/index.js",
+          "original": { "line": 19, "column": 37 }
+        },
+        {
+          "generated": { "line": 32, "column": 47 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "todoDoubleClicked",
+          "generated": { "line": 33, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 20, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 33, "column": 27 },
+          "source": "src/app/index.js",
+          "original": { "line": 20, "column": 27 }
+        },
+        {
+          "name": "editTodo",
+          "generated": { "line": 33, "column": 37 },
+          "source": "src/app/index.js",
+          "original": { "line": 20, "column": 37 }
+        },
+        {
+          "generated": { "line": 33, "column": 45 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "toggleAllChanged",
+          "generated": { "line": 34, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 21, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 34, "column": 26 },
+          "source": "src/app/index.js",
+          "original": { "line": 21, "column": 26 }
+        },
+        {
+          "name": "toggleAllChecked",
+          "generated": { "line": 34, "column": 36 },
+          "source": "src/app/index.js",
+          "original": { "line": 21, "column": 36 }
+        },
+        {
+          "generated": { "line": 34, "column": 52 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "toggleTodoCompletedChanged",
+          "generated": { "line": 35, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 22, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 35, "column": 36 },
+          "source": "src/app/index.js",
+          "original": { "line": 22, "column": 36 }
+        },
+        {
+          "name": "toggleTodoCompleted",
+          "generated": { "line": 35, "column": 46 },
+          "source": "src/app/index.js",
+          "original": { "line": 22, "column": 46 }
+        },
+        {
+          "generated": { "line": 35, "column": 65 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "todoNewTitleAborted",
+          "generated": { "line": 36, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 23, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 36, "column": 29 },
+          "source": "src/app/index.js",
+          "original": { "line": 23, "column": 29 }
+        },
+        {
+          "name": "abortEdit",
+          "generated": { "line": 36, "column": 39 },
+          "source": "src/app/index.js",
+          "original": { "line": 23, "column": 39 }
+        },
+        {
+          "generated": { "line": 36, "column": 48 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "clearCompletedClicked",
+          "generated": { "line": 37, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 24, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 37, "column": 31 },
+          "source": "src/app/index.js",
+          "original": { "line": 24, "column": 31 }
+        },
+        {
+          "name": "clearCompletedTodos",
+          "generated": { "line": 37, "column": 41 },
+          "source": "src/app/index.js",
+          "original": { "line": 24, "column": 41 }
+        },
+        {
+          "generated": { "line": 37, "column": 60 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "name": "filterClicked",
+          "generated": { "line": 38, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 25, "column": 8 }
+        },
+        {
+          "name": "sequences",
+          "generated": { "line": 38, "column": 23 },
+          "source": "src/app/index.js",
+          "original": { "line": 25, "column": 23 }
+        },
+        {
+          "name": "changeFilter",
+          "generated": { "line": 38, "column": 33 },
+          "source": "src/app/index.js",
+          "original": { "line": 25, "column": 33 }
+        },
+        {
+          "generated": { "line": 39, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "generated": { "line": 39, "column": 5 },
+          "source": "src/app/index.js",
+          "original": { "line": 6, "column": 22 }
+        },
+        {
+          "name": "providers",
+          "generated": { "line": 40, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 27, "column": 4 }
+        },
+        {
+          "generated": { "line": 40, "column": 15 },
+          "source": "src/app/index.js",
+          "original": { "line": 27, "column": 15 }
+        },
+        {
+          "name": "id",
+          "generated": { "line": 41, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 28, "column": 8 }
+        },
+        {
+          "generated": { "line": 42, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 27, "column": 15 }
+        },
+        {
+          "generated": { "line": 42, "column": 5 },
+          "source": "src/app/index.js",
+          "original": { "line": 6, "column": 22 }
+        },
+        {
+          "name": "modules",
+          "generated": { "line": 43, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 30, "column": 4 }
+        },
+        {
+          "generated": { "line": 43, "column": 13 },
+          "source": "src/app/index.js",
+          "original": { "line": 30, "column": 13 }
+        },
+        {
+          "name": "router",
+          "generated": { "line": 44, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 31, "column": 8 }
+        },
+        {
+          "generated": { "line": 44, "column": 31 },
+          "source": "src/app/index.js",
+          "original": { "line": 30, "column": 13 }
+        },
+        {
+          "name": "storage",
+          "generated": { "line": 45, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 32, "column": 8 }
+        },
+        {
+          "generated": { "line": 46, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 30, "column": 13 }
+        },
+        {
+          "generated": { "line": 47, "column": 0 },
+          "source": "src/app/index.js",
+          "original": { "line": 6, "column": 22 }
+        },
+        {
+          "generated": { "line": 47, "column": 1 },
+          "source": "src/app/index.js",
+          "original": { "line": 6, "column": 15 }
+        }
+      ],
+      "sources": {
+        "src/app/index.js":
+          "import { Module } from 'cerebral';\nimport * as sequences from './sequences';\nimport { id } from './providers';\nimport { router, storage } from './modules';\n\nexport default Module({\n    state: {\n        newTodoTitle: '',\n        todos: {},\n        filter: 'all',\n        editingUid: null\n    },\n    signals: {\n        rootRouted: sequences.redirectToAll,\n        newTodoTitleChanged: sequences.changeNewTodoTitle,\n        newTodoSubmitted: sequences.submitNewTodo,\n        todoNewTitleChanged: sequences.changeTodoTitle,\n        todoNewTitleSubmitted: sequences.submitTodoTitle,\n        removeTodoClicked: sequences.removeTodo,\n        todoDoubleClicked: sequences.editTodo,\n        toggleAllChanged: sequences.toggleAllChecked,\n        toggleTodoCompletedChanged: sequences.toggleTodoCompleted,\n        todoNewTitleAborted: sequences.abortEdit,\n        clearCompletedClicked: sequences.clearCompletedTodos,\n        filterClicked: sequences.changeFilter\n    },\n    providers: {\n        id\n    },\n    modules: {\n        router,\n        storage\n    }\n});\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "a2c2135b18f87356e97cb910651a0788",
+  "cacheData": { "env": {} }
+}

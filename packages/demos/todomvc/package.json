@@ -1,30 +1,30 @@
 {
-  "name": "cerebral-todomvc",
-  "version": "0.0.0",
-  "private": true,
-  "author": "Christian Alfoni <christianalfoni@gmail.com>",
-  "homepage": "http://cerebral.github.io/todomvc/",
-  "contributors": [
-    "Henri Hulski <henri.hulski@gazeta.pl>"
-  ],
-  "dependencies": {
-    "@cerebral/react": "next",
-    "@cerebral/router": "next",
-    "@cerebral/storage": "next",
-    "classnames": "^2.2.5",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "todomvc-app-css": "^2.1.0",
-    "todomvc-common": "^1.0.4",
-    "uuid": "^3.1.0"
-  },
-  "scripts": {
-    "build": "cross-env BABEL_ENV=production react-scripts build",
-    "prepublish": "npm run build",
-    "start": "cross-env BABEL_ENV=development react-scripts start",
-    "test": "jest"
-  },
-  "devDependencies": {
-    "react-scripts": "^1.1.1"
-  }
+    "name": "cerebral-todomvc",
+    "version": "0.0.0",
+    "private": true,
+    "author": "Christian Alfoni <christianalfoni@gmail.com>",
+    "homepage": "http://cerebral.github.io/todomvc/",
+    "contributors": [
+        "Henri Hulski <henri.hulski@gazeta.pl>"
+    ],
+    "dependencies": {
+        "@cerebral/react": "next",
+        "@cerebral/router": "next",
+        "@cerebral/storage": "next",
+        "classnames": "^2.2.5",
+        "react": "^16.2.0",
+        "react-dom": "^16.2.0",
+        "todomvc-app-css": "^2.1.0",
+        "todomvc-common": "^1.0.4",
+        "uuid": "^3.1.0"
+    },
+    "scripts": {
+        "build": "parcel build index.html",
+        "prepublish": "npm run build",
+        "start": "parcel serve index.html",
+        "test": "jest"
+    },
+    "devDependencies": {
+        "parcel-bundler": "^1.7.0"
+    }
 }

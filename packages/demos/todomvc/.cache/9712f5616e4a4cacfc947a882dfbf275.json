@@ -1,0 +1,156 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    { "name": "react", "loc": { "line": 1, "column": 18 } },
+    { "name": "react-dom", "loc": { "line": 2, "column": 23 } },
+    { "name": "./controller", "loc": { "line": 3, "column": 23 } },
+    { "name": "@cerebral/react", "loc": { "line": 4, "column": 26 } },
+    { "name": "todomvc-common/base.css", "loc": { "line": 6, "column": 7 } },
+    { "name": "todomvc-app-css/index.css", "loc": { "line": 7, "column": 7 } },
+    { "name": "./styles.css", "loc": { "line": 8, "column": 7 } },
+    { "name": "./components/App", "loc": { "line": 10, "column": 16 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nvar _react = require('react');\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _reactDom = require('react-dom');\n\nvar _controller = require('./controller');\n\nvar _controller2 = _interopRequireDefault(_controller);\n\nvar _react3 = require('@cerebral/react');\n\nrequire('todomvc-common/base.css');\n\nrequire('todomvc-app-css/index.css');\n\nrequire('./styles.css');\n\nvar _App = require('./components/App');\n\nvar _App2 = _interopRequireDefault(_App);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\n(0, _reactDom.render)(_react2.default.createElement(\n    _react3.Container,\n    { controller: _controller2.default },\n    _react2.default.createElement(_App2.default, null)\n), document.querySelector('#root'));",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 3, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 7, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 2, "column": 0 }
+        },
+        {
+          "generated": { "line": 9, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 13, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 4, "column": 0 }
+        },
+        {
+          "generated": { "line": 15, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 6, "column": 0 }
+        },
+        {
+          "generated": { "line": 17, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "generated": { "line": 19, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 8, "column": 0 }
+        },
+        {
+          "generated": { "line": 21, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 10, "column": 0 }
+        },
+        {
+          "generated": { "line": 27, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 12, "column": 0 }
+        },
+        {
+          "generated": { "line": 27, "column": 22 },
+          "source": "src/index.js",
+          "original": { "line": 13, "column": 4 }
+        },
+        {
+          "generated": { "line": 28, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 13, "column": 4 }
+        },
+        {
+          "generated": { "line": 29, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 13, "column": 4 }
+        },
+        {
+          "generated": { "line": 29, "column": 6 },
+          "source": "src/index.js",
+          "original": { "line": 13, "column": 15 }
+        },
+        {
+          "generated": { "line": 29, "column": 38 },
+          "source": "src/index.js",
+          "original": { "line": 13, "column": 4 }
+        },
+        {
+          "generated": { "line": 30, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 14, "column": 8 }
+        },
+        {
+          "generated": { "line": 31, "column": 0 },
+          "source": "src/index.js",
+          "original": { "line": 13, "column": 4 }
+        },
+        {
+          "generated": { "line": 31, "column": 1 },
+          "source": "src/index.js",
+          "original": { "line": 12, "column": 0 }
+        },
+        {
+          "name": "document",
+          "generated": { "line": 31, "column": 3 },
+          "source": "src/index.js",
+          "original": { "line": 16, "column": 4 }
+        },
+        {
+          "name": "querySelector",
+          "generated": { "line": 31, "column": 12 },
+          "source": "src/index.js",
+          "original": { "line": 16, "column": 13 }
+        },
+        {
+          "generated": { "line": 31, "column": 25 },
+          "source": "src/index.js",
+          "original": { "line": 16, "column": 4 }
+        },
+        {
+          "generated": { "line": 31, "column": 26 },
+          "source": "src/index.js",
+          "original": { "line": 16, "column": 27 }
+        },
+        {
+          "generated": { "line": 31, "column": 33 },
+          "source": "src/index.js",
+          "original": { "line": 16, "column": 4 }
+        },
+        {
+          "generated": { "line": 31, "column": 34 },
+          "source": "src/index.js",
+          "original": { "line": 12, "column": 0 }
+        }
+      ],
+      "sources": {
+        "src/index.js":
+          "import React from 'react';\nimport { render } from 'react-dom';\nimport controller from './controller';\nimport { Container } from '@cerebral/react';\n\nimport 'todomvc-common/base.css';\nimport 'todomvc-app-css/index.css';\nimport './styles.css';\n\nimport App from './components/App';\n\nrender(\n    <Container controller={controller}>\n        <App />\n    </Container>,\n    document.querySelector('#root')\n);\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "5bb1cb366df448362ea6afa22a14b2f5",
+  "cacheData": { "env": {} }
+}

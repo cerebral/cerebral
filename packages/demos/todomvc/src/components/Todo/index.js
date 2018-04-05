@@ -1,17 +1,17 @@
 import React from 'react'
 import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, signal, props } from 'cerebral/tags'
+import { state, signal, props } from 'cerebral/proxy'
 
 export default connect(
   {
-    todo: state`todos.${props`uid`}`,
-    todoDoubleClicked: signal`todoDoubleClicked`,
-    newTitleChanged: signal`todoNewTitleChanged`,
-    newTitleSubmitted: signal`todoNewTitleSubmitted`,
-    toggleCompletedChanged: signal`toggleTodoCompletedChanged`,
-    removeTodoClicked: signal`removeTodoClicked`,
-    newTitleAborted: signal`todoNewTitleAborted`,
+    todo: state.todos[props.uid],
+    todoDoubleClicked: signal.todoDoubleClicked,
+    newTitleChanged: signal.todoNewTitleChanged,
+    newTitleSubmitted: signal.todoNewTitleSubmitted,
+    toggleCompletedChanged: signal.toggleTodoCompletedChanged,
+    removeTodoClicked: signal.removeTodoClicked,
+    newTitleAborted: signal.todoNewTitleAborted,
   },
   function Todo({
     uid,

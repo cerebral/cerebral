@@ -1,0 +1,127 @@
+{
+  "dependencies": [
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    { "name": "cerebral", "loc": { "line": 1, "column": 27 } },
+    { "name": "cerebral/devtools", "loc": { "line": 2, "column": 21 } },
+    { "name": "./app", "loc": { "line": 3, "column": 16 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _cerebral = require('cerebral');\n\nvar _devtools = require('cerebral/devtools');\n\nvar _devtools2 = _interopRequireDefault(_devtools);\n\nvar _app = require('./app');\n\nvar _app2 = _interopRequireDefault(_app);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar controller = (0, _cerebral.Controller)(_app2.default, {\n  devtools: (0, _devtools2.default)({ host: 'localhost:8686' })\n});\n\nexports.default = controller;",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 7, "column": 0 },
+          "source": "src/controller.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 9, "column": 0 },
+          "source": "src/controller.js",
+          "original": { "line": 2, "column": 0 }
+        },
+        {
+          "generated": { "line": 13, "column": 0 },
+          "source": "src/controller.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 19, "column": 0 },
+          "source": "src/controller.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "controller",
+          "generated": { "line": 19, "column": 4 },
+          "source": "src/controller.js",
+          "original": { "line": 5, "column": 6 }
+        },
+        {
+          "generated": { "line": 19, "column": 17 },
+          "source": "src/controller.js",
+          "original": { "line": 5, "column": 19 }
+        },
+        {
+          "generated": { "line": 19, "column": 58 },
+          "source": "src/controller.js",
+          "original": { "line": 5, "column": 35 }
+        },
+        {
+          "name": "devtools",
+          "generated": { "line": 20, "column": 0 },
+          "source": "src/controller.js",
+          "original": { "line": 6, "column": 2 }
+        },
+        {
+          "generated": { "line": 20, "column": 12 },
+          "source": "src/controller.js",
+          "original": { "line": 6, "column": 12 }
+        },
+        {
+          "generated": { "line": 20, "column": 36 },
+          "source": "src/controller.js",
+          "original": { "line": 6, "column": 21 }
+        },
+        {
+          "name": "host",
+          "generated": { "line": 20, "column": 38 },
+          "source": "src/controller.js",
+          "original": { "line": 6, "column": 23 }
+        },
+        {
+          "generated": { "line": 20, "column": 44 },
+          "source": "src/controller.js",
+          "original": { "line": 6, "column": 29 }
+        },
+        {
+          "generated": { "line": 20, "column": 60 },
+          "source": "src/controller.js",
+          "original": { "line": 6, "column": 21 }
+        },
+        {
+          "generated": { "line": 20, "column": 62 },
+          "source": "src/controller.js",
+          "original": { "line": 6, "column": 12 }
+        },
+        {
+          "generated": { "line": 21, "column": 0 },
+          "source": "src/controller.js",
+          "original": { "line": 5, "column": 35 }
+        },
+        {
+          "generated": { "line": 21, "column": 1 },
+          "source": "src/controller.js",
+          "original": { "line": 5, "column": 19 }
+        },
+        {
+          "generated": { "line": 21, "column": 2 },
+          "source": "src/controller.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "controller",
+          "generated": { "line": 23, "column": 18 },
+          "source": "src/controller.js",
+          "original": { "line": 9, "column": 15 }
+        }
+      ],
+      "sources": {
+        "src/controller.js":
+          "import { Controller } from 'cerebral'\nimport Devtools from 'cerebral/devtools'\nimport app from './app'\n\nconst controller = Controller(app, {\n  devtools: Devtools({ host: 'localhost:8686' }),\n})\n\nexport default controller\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "ab9da605d56e92503e4a00434360a196",
+  "cacheData": { "env": {} }
+}

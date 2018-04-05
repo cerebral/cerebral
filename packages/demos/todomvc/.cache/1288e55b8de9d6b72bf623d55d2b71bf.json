@@ -1,0 +1,745 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/react/package.json",
+      "includedInParent": true,
+      "mtime": 1522871063000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/react/.babelrc",
+      "includedInParent": true,
+      "mtime": 1510689741000
+    },
+    { "name": "react", "loc": { "line": 11, "column": 21 } },
+    { "name": "cerebral", "loc": { "line": 15, "column": 24 } },
+    { "name": "prop-types", "loc": { "line": 17, "column": 25 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nexports.default = HOC;\n\nvar _react = require('react');\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _cerebral = require('cerebral');\n\nvar _propTypes = require('prop-types');\n\nvar _propTypes2 = _interopRequireDefault(_propTypes);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }\n\nvar BaseComponent = function (_React$Component) {\n  _inherits(BaseComponent, _React$Component);\n\n  function BaseComponent(dependencies, mergeProps, props, controller, name) {\n    _classCallCheck(this, BaseComponent);\n\n    var _this = _possibleConstructorReturn(this, (BaseComponent.__proto__ || Object.getPrototypeOf(BaseComponent)).call(this, props));\n\n    if (!controller) {\n      (0, _cerebral.throwError)('Can not find controller, did you remember to use the Container component? Read more at: http://cerebraljs.com/docs/api/components.html#react');\n    }\n\n    _this.onUpdate = _this.onUpdate.bind(_this);\n    _this.view = new _cerebral.View({\n      dependencies: dependencies,\n      mergeProps: mergeProps,\n      props: props,\n      controller: controller,\n      displayName: name,\n      onUpdate: _this.onUpdate\n    });\n    return _this;\n  }\n  /*\n    Register the component to the dependency store with its\n    state tracker and tags state dependencies\n  */\n\n\n  _createClass(BaseComponent, [{\n    key: 'componentWillMount',\n    value: function componentWillMount() {\n      this.view.mount();\n    }\n    /*\n      We only allow forced render by change of props passed\n      or Container tells it to render\n    */\n\n  }, {\n    key: 'shouldComponentUpdate',\n    value: function shouldComponentUpdate() {\n      return false;\n    }\n    /*\n      If received props differ, we need to update any\n      StateTrackers and tags, cause they might be using\n      props to define a state dependency\n    */\n\n  }, {\n    key: 'componentWillReceiveProps',\n    value: function componentWillReceiveProps(nextProps) {\n      var hasUpdate = this.view.onPropsUpdate(this.props, nextProps);\n      if (hasUpdate) {\n        this.forceUpdate();\n      }\n    }\n    /*\n      Unregister with existing state dependencies\n    */\n\n  }, {\n    key: 'componentWillUnmount',\n    value: function componentWillUnmount() {\n      this.view.unMount();\n    }\n  }, {\n    key: 'onUpdate',\n    value: function onUpdate(stateChanges, force) {\n      this.view.updateFromState(stateChanges, this.props, force);\n      this.forceUpdate();\n    }\n  }]);\n\n  return BaseComponent;\n}(_react2.default.Component);\n\nfunction HOC(dependencies, mergeProps, Component) {\n  var CerebralComponent = function (_BaseComponent) {\n    _inherits(CerebralComponent, _BaseComponent);\n\n    function CerebralComponent(props, context) {\n      _classCallCheck(this, CerebralComponent);\n\n      return _possibleConstructorReturn(this, (CerebralComponent.__proto__ || Object.getPrototypeOf(CerebralComponent)).call(this, dependencies, mergeProps, props, context.controller, Component.displayName || Component.name));\n    }\n\n    _createClass(CerebralComponent, [{\n      key: 'toJSON',\n      value: function toJSON() {\n        return this.view._displayName;\n      }\n    }, {\n      key: 'render',\n      value: function render() {\n        return _react2.default.createElement(Component, this.view.getProps(this.props));\n      }\n    }]);\n\n    return CerebralComponent;\n  }(BaseComponent);\n\n  CerebralComponent.displayName = 'CerebralWrapping_' + (Component.displayName || Component.name);\n\n  CerebralComponent.contextTypes = {\n    controller: _propTypes2.default.object\n  };\n\n  return CerebralComponent;\n}\n//# sourceMappingURL=Hoc.js.map",
+    "map": {
+      "mappings": [
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 23, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 24, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 25, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 26, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 27, "column": 0 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 28, "column": 0 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 29, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 30, "column": 0 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 31, "column": 0 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 32, "column": 0 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 33, "column": 0 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 34, "column": 0 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 35, "column": 0 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 36, "column": 0 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 37, "column": 0 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 38, "column": 0 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 39, "column": 0 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 40, "column": 0 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 41, "column": 0 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 42, "column": 0 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 43, "column": 0 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 44, "column": 0 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 45, "column": 0 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 46, "column": 0 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 47, "column": 0 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 48, "column": 0 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 49, "column": 0 },
+          "generated": { "line": 49, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 50, "column": 0 },
+          "generated": { "line": 50, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 51, "column": 0 },
+          "generated": { "line": 51, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 52, "column": 0 },
+          "generated": { "line": 52, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 53, "column": 0 },
+          "generated": { "line": 53, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 54, "column": 0 },
+          "generated": { "line": 54, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 55, "column": 0 },
+          "generated": { "line": 55, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 56, "column": 0 },
+          "generated": { "line": 56, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 57, "column": 0 },
+          "generated": { "line": 57, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 58, "column": 0 },
+          "generated": { "line": 58, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 59, "column": 0 },
+          "generated": { "line": 59, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 60, "column": 0 },
+          "generated": { "line": 60, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 61, "column": 0 },
+          "generated": { "line": 61, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 62, "column": 0 },
+          "generated": { "line": 62, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 63, "column": 0 },
+          "generated": { "line": 63, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 64, "column": 0 },
+          "generated": { "line": 64, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 65, "column": 0 },
+          "generated": { "line": 65, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 66, "column": 0 },
+          "generated": { "line": 66, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 67, "column": 0 },
+          "generated": { "line": 67, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 68, "column": 0 },
+          "generated": { "line": 68, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 69, "column": 0 },
+          "generated": { "line": 69, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 70, "column": 0 },
+          "generated": { "line": 70, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 71, "column": 0 },
+          "generated": { "line": 71, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 72, "column": 0 },
+          "generated": { "line": 72, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 73, "column": 0 },
+          "generated": { "line": 73, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 74, "column": 0 },
+          "generated": { "line": 74, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 75, "column": 0 },
+          "generated": { "line": 75, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 76, "column": 0 },
+          "generated": { "line": 76, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 77, "column": 0 },
+          "generated": { "line": 77, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 78, "column": 0 },
+          "generated": { "line": 78, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 79, "column": 0 },
+          "generated": { "line": 79, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 80, "column": 0 },
+          "generated": { "line": 80, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 81, "column": 0 },
+          "generated": { "line": 81, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 82, "column": 0 },
+          "generated": { "line": 82, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 83, "column": 0 },
+          "generated": { "line": 83, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 84, "column": 0 },
+          "generated": { "line": 84, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 85, "column": 0 },
+          "generated": { "line": 85, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 86, "column": 0 },
+          "generated": { "line": 86, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 87, "column": 0 },
+          "generated": { "line": 87, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 88, "column": 0 },
+          "generated": { "line": 88, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 89, "column": 0 },
+          "generated": { "line": 89, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 90, "column": 0 },
+          "generated": { "line": 90, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 91, "column": 0 },
+          "generated": { "line": 91, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 92, "column": 0 },
+          "generated": { "line": 92, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 93, "column": 0 },
+          "generated": { "line": 93, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 94, "column": 0 },
+          "generated": { "line": 94, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 95, "column": 0 },
+          "generated": { "line": 95, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 96, "column": 0 },
+          "generated": { "line": 96, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 97, "column": 0 },
+          "generated": { "line": 97, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 98, "column": 0 },
+          "generated": { "line": 98, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 99, "column": 0 },
+          "generated": { "line": 99, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 100, "column": 0 },
+          "generated": { "line": 100, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 101, "column": 0 },
+          "generated": { "line": 101, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 102, "column": 0 },
+          "generated": { "line": 102, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 103, "column": 0 },
+          "generated": { "line": 103, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 104, "column": 0 },
+          "generated": { "line": 104, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 105, "column": 0 },
+          "generated": { "line": 105, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 106, "column": 0 },
+          "generated": { "line": 106, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 107, "column": 0 },
+          "generated": { "line": 107, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 108, "column": 0 },
+          "generated": { "line": 108, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 109, "column": 0 },
+          "generated": { "line": 109, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 110, "column": 0 },
+          "generated": { "line": 110, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 111, "column": 0 },
+          "generated": { "line": 111, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 112, "column": 0 },
+          "generated": { "line": 112, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 113, "column": 0 },
+          "generated": { "line": 113, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 114, "column": 0 },
+          "generated": { "line": 114, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 115, "column": 0 },
+          "generated": { "line": 115, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 116, "column": 0 },
+          "generated": { "line": 116, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 117, "column": 0 },
+          "generated": { "line": 117, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 118, "column": 0 },
+          "generated": { "line": 118, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 119, "column": 0 },
+          "generated": { "line": 119, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 120, "column": 0 },
+          "generated": { "line": 120, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 121, "column": 0 },
+          "generated": { "line": 121, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 122, "column": 0 },
+          "generated": { "line": 122, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 123, "column": 0 },
+          "generated": { "line": 123, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 124, "column": 0 },
+          "generated": { "line": 124, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 125, "column": 0 },
+          "generated": { "line": 125, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 126, "column": 0 },
+          "generated": { "line": 126, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 127, "column": 0 },
+          "generated": { "line": 127, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 128, "column": 0 },
+          "generated": { "line": 128, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 129, "column": 0 },
+          "generated": { "line": 129, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 130, "column": 0 },
+          "generated": { "line": 130, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 131, "column": 0 },
+          "generated": { "line": 131, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 132, "column": 0 },
+          "generated": { "line": 132, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 133, "column": 0 },
+          "generated": { "line": 133, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 134, "column": 0 },
+          "generated": { "line": 134, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 135, "column": 0 },
+          "generated": { "line": 135, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 136, "column": 0 },
+          "generated": { "line": 136, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 137, "column": 0 },
+          "generated": { "line": 137, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 138, "column": 0 },
+          "generated": { "line": 138, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 139, "column": 0 },
+          "generated": { "line": 139, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/lib/Hoc.js",
+          "original": { "line": 140, "column": 0 },
+          "generated": { "line": 140, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/@cerebral/react/lib/Hoc.js":
+          "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nexports.default = HOC;\n\nvar _react = require('react');\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _cerebral = require('cerebral');\n\nvar _propTypes = require('prop-types');\n\nvar _propTypes2 = _interopRequireDefault(_propTypes);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }\n\nvar BaseComponent = function (_React$Component) {\n  _inherits(BaseComponent, _React$Component);\n\n  function BaseComponent(dependencies, mergeProps, props, controller, name) {\n    _classCallCheck(this, BaseComponent);\n\n    var _this = _possibleConstructorReturn(this, (BaseComponent.__proto__ || Object.getPrototypeOf(BaseComponent)).call(this, props));\n\n    if (!controller) {\n      (0, _cerebral.throwError)('Can not find controller, did you remember to use the Container component? Read more at: http://cerebraljs.com/docs/api/components.html#react');\n    }\n\n    _this.onUpdate = _this.onUpdate.bind(_this);\n    _this.view = new _cerebral.View({\n      dependencies: dependencies,\n      mergeProps: mergeProps,\n      props: props,\n      controller: controller,\n      displayName: name,\n      onUpdate: _this.onUpdate\n    });\n    return _this;\n  }\n  /*\n    Register the component to the dependency store with its\n    state tracker and tags state dependencies\n  */\n\n\n  _createClass(BaseComponent, [{\n    key: 'componentWillMount',\n    value: function componentWillMount() {\n      this.view.mount();\n    }\n    /*\n      We only allow forced render by change of props passed\n      or Container tells it to render\n    */\n\n  }, {\n    key: 'shouldComponentUpdate',\n    value: function shouldComponentUpdate() {\n      return false;\n    }\n    /*\n      If received props differ, we need to update any\n      StateTrackers and tags, cause they might be using\n      props to define a state dependency\n    */\n\n  }, {\n    key: 'componentWillReceiveProps',\n    value: function componentWillReceiveProps(nextProps) {\n      var hasUpdate = this.view.onPropsUpdate(this.props, nextProps);\n      if (hasUpdate) {\n        this.forceUpdate();\n      }\n    }\n    /*\n      Unregister with existing state dependencies\n    */\n\n  }, {\n    key: 'componentWillUnmount',\n    value: function componentWillUnmount() {\n      this.view.unMount();\n    }\n  }, {\n    key: 'onUpdate',\n    value: function onUpdate(stateChanges, force) {\n      this.view.updateFromState(stateChanges, this.props, force);\n      this.forceUpdate();\n    }\n  }]);\n\n  return BaseComponent;\n}(_react2.default.Component);\n\nfunction HOC(dependencies, mergeProps, Component) {\n  var CerebralComponent = function (_BaseComponent) {\n    _inherits(CerebralComponent, _BaseComponent);\n\n    function CerebralComponent(props, context) {\n      _classCallCheck(this, CerebralComponent);\n\n      return _possibleConstructorReturn(this, (CerebralComponent.__proto__ || Object.getPrototypeOf(CerebralComponent)).call(this, dependencies, mergeProps, props, context.controller, Component.displayName || Component.name));\n    }\n\n    _createClass(CerebralComponent, [{\n      key: 'toJSON',\n      value: function toJSON() {\n        return this.view._displayName;\n      }\n    }, {\n      key: 'render',\n      value: function render() {\n        return _react2.default.createElement(Component, this.view.getProps(this.props));\n      }\n    }]);\n\n    return CerebralComponent;\n  }(BaseComponent);\n\n  CerebralComponent.displayName = 'CerebralWrapping_' + (Component.displayName || Component.name);\n\n  CerebralComponent.contextTypes = {\n    controller: _propTypes2.default.object\n  };\n\n  return CerebralComponent;\n}\n//# sourceMappingURL=Hoc.js.map"
+      },
+      "lineCount": 140
+    }
+  },
+  "hash": "77f04ccdf9aa3135d91bb991a6c0ec38",
+  "cacheData": { "env": {} }
+}
