@@ -138,7 +138,7 @@
     "inferno-create-element": "^4.0.3",
     "inferno-shared": "^4.0.4",
     "istanbul-combine": "^0.3.0",
-    "jest": "22.1.1",
+    "jest": "22.4.3",
     "jsdom": "^11.5.1",
     "lint-staged": "^7.0.0",
     "marksy": "4.0.0",
@@ -164,6 +164,7 @@
     "vue": "2.3.3",
     "xhr-mock": "2.1.0",
     "yargs": "6.6.0",
-    "zone.js": "0.8.17"
+    "zone.js": "0.8.17",
+    "parcel-bundler": "1.7.0"
   }
 }
