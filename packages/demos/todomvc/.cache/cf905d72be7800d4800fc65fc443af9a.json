@@ -1,0 +1,1640 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/router/package.json",
+      "includedInParent": true,
+      "mtime": 1522871063000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/router/.babelrc",
+      "includedInParent": true,
+      "mtime": 1510689741000
+    },
+    { "name": "cerebral", "loc": { "line": 9, "column": 24 } },
+    { "name": "cerebral/internal", "loc": { "line": 11, "column": 24 } },
+    { "name": "./utils", "loc": { "line": 13, "column": 21 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nvar _cerebral = require('cerebral');\n\nvar _internal = require('cerebral/internal');\n\nvar _utils = require('./utils');\n\nfunction _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nvar Router = function () {\n  function Router(controller, addressbar, mapper, options) {\n    var _this = this;\n\n    _classCallCheck(this, Router);\n\n    this.controller = controller;\n    this.addressbar = addressbar;\n    this.mapper = mapper;\n    this.options = (0, _utils.verifyOptions)(options);\n    this.activeRoute = {};\n    this.stateGetter = this.controller.getState.bind(this.controller);\n\n    this.providers = {\n      router: (0, _cerebral.Provider)({\n        getUrl: this.getUrl.bind(this),\n        getPath: this.getPath.bind(this),\n        getValues: this.getValues.bind(this),\n        getOrigin: this.getOrigin.bind(this),\n        setUrl: this.setUrl.bind(this),\n        goTo: this.goTo.bind(this),\n        redirect: this.redirect.bind(this),\n        redirectToSignal: this.redirectToSignal.bind(this),\n        reload: this.reload.bind(this)\n      })\n    };\n\n    if (!this.options.baseUrl && options.onlyHash) {\n      // autodetect baseUrl\n      this.options.baseUrl = addressbar.pathname;\n    }\n    this.options.baseUrl = this.options.baseUrl + (this.options.onlyHash ? '#' : '');\n\n    controller.on('initialized', function () {\n      _this.routesConfig = (0, _utils.flattenConfig)(options.routes);\n      _this.routesBySignal = (0, _utils.getRoutesBySignal)(_this.routesConfig);\n\n      addressbar.on('change', _this.onUrlChange.bind(_this));\n      controller.on('start', _this.onSignalStart.bind(_this));\n      controller.on('flush', _this.onFlush.bind(_this));\n\n      if (!options.preventAutostart) {\n        _this.onUrlChange();\n      }\n    });\n  }\n\n  _createClass(Router, [{\n    key: 'addRoutes',\n    value: function addRoutes(routes) {\n      this.options.routes = [].concat(_toConsumableArray(routes), _toConsumableArray(this.options.routes));\n      this.routesConfig = (0, _utils.flattenConfig)(this.options.routes);\n      this.routesBySignal = (0, _utils.getRoutesBySignal)(this.routesConfig, this.controller);\n    }\n  }, {\n    key: 'getRoutablePart',\n    value: function getRoutablePart(url) {\n      var path = url.replace(this.addressbar.origin, '');\n      if (path[0] !== '/') {\n        path = '/' + path;\n      }\n      if (this.options.onlyHash && !~path.indexOf('#')) {\n        // treat hash absense as root route\n        path = path + '#/';\n      }\n      return path.indexOf(this.options.baseUrl) === 0 ? path.replace(this.options.baseUrl, '') : null;\n    }\n  }, {\n    key: 'onUrlChange',\n    value: function onUrlChange(event) {\n      var _this2 = this;\n\n      var url = this.getRoutablePart(event ? event.target.value : this.addressbar.value);\n      if (url === null) return;\n\n      var match = void 0,\n          route = void 0,\n          values = void 0;\n      try {\n        var mapped = this.mapper.map(url, this.routesConfig) || {};\n        match = mapped.match;\n        route = mapped.route;\n        values = mapped.values;\n      } catch (err) {\n        throw new Error('Could not parse url (' + err + ').');\n      }\n\n      if (!match) {\n        if (this.options.allowEscape) return;\n\n        event && event.preventDefault();\n        console.warn('Cerebral router - No route matched ' + url + ', navigation was prevented. Please verify url or catch unmatched routes with a \"/*\" route.'); // eslint-disable-line no-console\n        return;\n      }\n\n      event && event.preventDefault();\n      var _match = match,\n          computedRMapping = _match.computedRMapping,\n          map = _match.map,\n          propsMapping = _match.propsMapping,\n          signal = _match.signal,\n          stateMapping = _match.stateMapping;\n\n      // remove undefined values from payload\n      // TODO: can be replaced with next line when fixed in url-mapper\n      // let payload = values\n\n      var payload = Object.keys(values).reduce(function (cleanedPayload, key) {\n        if (values[key] !== undefined) {\n          cleanedPayload[key] = values[key];\n        }\n        return cleanedPayload;\n      }, {});\n\n      var getters = { props: payload, state: this.stateGetter };\n\n      if (stateMapping || computedRMapping) {\n        this.controller.runSignal('router.routed', [function (_ref) {\n          var state = _ref.state,\n              resolve = _ref.resolve;\n\n          if (stateMapping) {\n            stateMapping.forEach(function (key) {\n              var value = values[key] || state.get(resolve.path(map[key]));\n              state.set(resolve.path(map[key]), value === undefined ? null : value);\n            });\n          }\n          if (computedRMapping) {\n            Object.keys(computedRMapping).forEach(function (path) {\n              var tracker = computedRMapping[path].tracker;\n\n              tracker.run(_this2.stateGetter, values);\n\n              var value = tracker.value;\n              state.set(path, value === undefined ? null : value);\n            });\n          }\n        }]);\n      }\n\n      if (propsMapping) {\n        payload = propsMapping.reduce(function (mappedPayload, key) {\n          mappedPayload[map[key].getPath(getters)] = values[key] || null;\n          return mappedPayload;\n        }, {});\n      }\n\n      var prevSignal = (this.routesConfig[this.activeRoute.route] || {}).signal;\n      if (signal && (prevSignal !== signal || (0, _internal.getChangedProps)(payload || {}, this.activeRoute.payload || {}))) {\n        this.controller.getSignal(signal)(payload);\n      }\n\n      this.activeRoute = { route: route, payload: payload };\n    }\n  }, {\n    key: 'onSignalStart',\n    value: function onSignalStart(execution, payload) {\n      var _this3 = this;\n\n      var route = this.routesBySignal[execution.name];\n      if (!route) return;\n\n      var map = this.routesConfig[route].map;\n\n      var getters = { props: payload, state: this.stateGetter\n\n        // resolve mappings on current props and state\n      };var url = this.mapper.stringify(route, map ? Object.keys(map || {}).reduce(function (resolved, key) {\n        var value = map[key].getValue(getters);\n\n        if (_this3.options.filterFalsy && !value) {\n          return resolved;\n        }\n\n        resolved[key] = value;\n        return resolved;\n      }, {}) : payload);\n\n      this.setUrl(url);\n\n      this.activeRoute = { route: route, payload: payload };\n    }\n  }, {\n    key: 'onFlush',\n    value: function onFlush(changed) {\n      var _this4 = this;\n\n      var _activeRoute = this.activeRoute,\n          route = _activeRoute.route,\n          payload = _activeRoute.payload;\n\n      var _ref2 = this.routesConfig[route] || {},\n          map = _ref2.map,\n          stateMapping = _ref2.stateMapping,\n          computedMapping = _ref2.computedMapping;\n\n      if (!stateMapping && !computedMapping) return;\n      var getters = { props: payload, state: this.stateGetter };\n      var shouldUpdate = false;\n\n      var resolvedMap = Object.keys(map || {}).reduce(function (resolved, key) {\n        var value = void 0;\n\n        if (computedMapping && computedMapping[key]) {\n          var trackerHandle = computedMapping[key];\n          var needsInit = trackerHandle.needsInit,\n              tracker = trackerHandle.tracker;\n\n\n          if (needsInit || (0, _utils.computeShouldChange)(tracker, changed)) {\n            trackerHandle.needsInit = false;\n            tracker.run(_this4.stateGetter, payload);\n            shouldUpdate = true;\n          }\n\n          value = tracker.value;\n        } else {\n          var path = map[key].getPath(getters);\n          value = map[key].getValue(getters);\n\n          shouldUpdate = shouldUpdate || stateMapping.indexOf(key) >= 0 && (0, _utils.hasChangedPath)(changed, path);\n        }\n\n        if (!_this4.options.filterFalsy || value) {\n          // Cerebral state only supports null and url-mapper only supports\n          // undefined: so we map from one to the other here.\n          resolved[key] = value === null ? undefined : value;\n        }\n\n        return resolved;\n      }, {});\n\n      if (shouldUpdate) {\n        this.setUrl(this.mapper.stringify(route, Object.assign({}, resolvedMap)));\n      }\n    }\n  }, {\n    key: 'setUrl',\n    value: function setUrl(url) {\n      this.addressbar.value = this.options.baseUrl + url || '/';\n    }\n  }, {\n    key: 'getUrl',\n    value: function getUrl() {\n      return this.addressbar.value;\n    }\n  }, {\n    key: 'getPath',\n    value: function getPath() {\n      return this.addressbar.value.replace(this.addressbar.origin + this.options.baseUrl, '').split('?')[0];\n    }\n  }, {\n    key: 'getValues',\n    value: function getValues() {\n      var url = this.getRoutablePart(this.addressbar.value);\n      var mapped = this.mapper.map(url, this.routesConfig) || {};\n\n      return mapped.values;\n    }\n  }, {\n    key: 'getOrigin',\n    value: function getOrigin() {\n      return this.addressbar.origin;\n    }\n  }, {\n    key: 'goTo',\n    value: function goTo(url) {\n      this.addressbar.value = this.options.baseUrl + url;\n      this.onUrlChange();\n    }\n  }, {\n    key: 'redirect',\n    value: function redirect(url) {\n      this.addressbar.value = {\n        value: this.options.baseUrl + url,\n        replace: true\n      };\n\n      this.onUrlChange();\n    }\n  }, {\n    key: 'redirectToSignal',\n    value: function redirectToSignal(signalName, payload) {\n      var route = this.routesBySignal[signalName];\n      if (!route) {\n        console.warn('redirectToSignal: signal \\'' + signalName + '\\' not bound to route.');\n      }\n      this.controller.getSignal(signalName)(payload);\n    }\n  }, {\n    key: 'reload',\n    value: function reload() {\n      this.redirect(this.getUrl());\n    }\n  }]);\n\n  return Router;\n}();\n\nexports.default = Router;\n//# sourceMappingURL=router.js.map",
+    "map": {
+      "mappings": [
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 23, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 24, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 25, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 26, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 27, "column": 0 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 28, "column": 0 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 29, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 30, "column": 0 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 31, "column": 0 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 32, "column": 0 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 33, "column": 0 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 34, "column": 0 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 35, "column": 0 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 36, "column": 0 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 37, "column": 0 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 38, "column": 0 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 39, "column": 0 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 40, "column": 0 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 41, "column": 0 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 42, "column": 0 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 43, "column": 0 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 44, "column": 0 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 45, "column": 0 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 46, "column": 0 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 47, "column": 0 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 48, "column": 0 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 49, "column": 0 },
+          "generated": { "line": 49, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 50, "column": 0 },
+          "generated": { "line": 50, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 51, "column": 0 },
+          "generated": { "line": 51, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 52, "column": 0 },
+          "generated": { "line": 52, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 53, "column": 0 },
+          "generated": { "line": 53, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 54, "column": 0 },
+          "generated": { "line": 54, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 55, "column": 0 },
+          "generated": { "line": 55, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 56, "column": 0 },
+          "generated": { "line": 56, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 57, "column": 0 },
+          "generated": { "line": 57, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 58, "column": 0 },
+          "generated": { "line": 58, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 59, "column": 0 },
+          "generated": { "line": 59, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 60, "column": 0 },
+          "generated": { "line": 60, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 61, "column": 0 },
+          "generated": { "line": 61, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 62, "column": 0 },
+          "generated": { "line": 62, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 63, "column": 0 },
+          "generated": { "line": 63, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 64, "column": 0 },
+          "generated": { "line": 64, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 65, "column": 0 },
+          "generated": { "line": 65, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 66, "column": 0 },
+          "generated": { "line": 66, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 67, "column": 0 },
+          "generated": { "line": 67, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 68, "column": 0 },
+          "generated": { "line": 68, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 69, "column": 0 },
+          "generated": { "line": 69, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 70, "column": 0 },
+          "generated": { "line": 70, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 71, "column": 0 },
+          "generated": { "line": 71, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 72, "column": 0 },
+          "generated": { "line": 72, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 73, "column": 0 },
+          "generated": { "line": 73, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 74, "column": 0 },
+          "generated": { "line": 74, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 75, "column": 0 },
+          "generated": { "line": 75, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 76, "column": 0 },
+          "generated": { "line": 76, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 77, "column": 0 },
+          "generated": { "line": 77, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 78, "column": 0 },
+          "generated": { "line": 78, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 79, "column": 0 },
+          "generated": { "line": 79, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 80, "column": 0 },
+          "generated": { "line": 80, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 81, "column": 0 },
+          "generated": { "line": 81, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 82, "column": 0 },
+          "generated": { "line": 82, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 83, "column": 0 },
+          "generated": { "line": 83, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 84, "column": 0 },
+          "generated": { "line": 84, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 85, "column": 0 },
+          "generated": { "line": 85, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 86, "column": 0 },
+          "generated": { "line": 86, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 87, "column": 0 },
+          "generated": { "line": 87, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 88, "column": 0 },
+          "generated": { "line": 88, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 89, "column": 0 },
+          "generated": { "line": 89, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 90, "column": 0 },
+          "generated": { "line": 90, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 91, "column": 0 },
+          "generated": { "line": 91, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 92, "column": 0 },
+          "generated": { "line": 92, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 93, "column": 0 },
+          "generated": { "line": 93, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 94, "column": 0 },
+          "generated": { "line": 94, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 95, "column": 0 },
+          "generated": { "line": 95, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 96, "column": 0 },
+          "generated": { "line": 96, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 97, "column": 0 },
+          "generated": { "line": 97, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 98, "column": 0 },
+          "generated": { "line": 98, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 99, "column": 0 },
+          "generated": { "line": 99, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 100, "column": 0 },
+          "generated": { "line": 100, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 101, "column": 0 },
+          "generated": { "line": 101, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 102, "column": 0 },
+          "generated": { "line": 102, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 103, "column": 0 },
+          "generated": { "line": 103, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 104, "column": 0 },
+          "generated": { "line": 104, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 105, "column": 0 },
+          "generated": { "line": 105, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 106, "column": 0 },
+          "generated": { "line": 106, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 107, "column": 0 },
+          "generated": { "line": 107, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 108, "column": 0 },
+          "generated": { "line": 108, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 109, "column": 0 },
+          "generated": { "line": 109, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 110, "column": 0 },
+          "generated": { "line": 110, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 111, "column": 0 },
+          "generated": { "line": 111, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 112, "column": 0 },
+          "generated": { "line": 112, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 113, "column": 0 },
+          "generated": { "line": 113, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 114, "column": 0 },
+          "generated": { "line": 114, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 115, "column": 0 },
+          "generated": { "line": 115, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 116, "column": 0 },
+          "generated": { "line": 116, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 117, "column": 0 },
+          "generated": { "line": 117, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 118, "column": 0 },
+          "generated": { "line": 118, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 119, "column": 0 },
+          "generated": { "line": 119, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 120, "column": 0 },
+          "generated": { "line": 120, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 121, "column": 0 },
+          "generated": { "line": 121, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 122, "column": 0 },
+          "generated": { "line": 122, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 123, "column": 0 },
+          "generated": { "line": 123, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 124, "column": 0 },
+          "generated": { "line": 124, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 125, "column": 0 },
+          "generated": { "line": 125, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 126, "column": 0 },
+          "generated": { "line": 126, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 127, "column": 0 },
+          "generated": { "line": 127, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 128, "column": 0 },
+          "generated": { "line": 128, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 129, "column": 0 },
+          "generated": { "line": 129, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 130, "column": 0 },
+          "generated": { "line": 130, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 131, "column": 0 },
+          "generated": { "line": 131, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 132, "column": 0 },
+          "generated": { "line": 132, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 133, "column": 0 },
+          "generated": { "line": 133, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 134, "column": 0 },
+          "generated": { "line": 134, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 135, "column": 0 },
+          "generated": { "line": 135, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 136, "column": 0 },
+          "generated": { "line": 136, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 137, "column": 0 },
+          "generated": { "line": 137, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 138, "column": 0 },
+          "generated": { "line": 138, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 139, "column": 0 },
+          "generated": { "line": 139, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 140, "column": 0 },
+          "generated": { "line": 140, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 141, "column": 0 },
+          "generated": { "line": 141, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 142, "column": 0 },
+          "generated": { "line": 142, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 143, "column": 0 },
+          "generated": { "line": 143, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 144, "column": 0 },
+          "generated": { "line": 144, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 145, "column": 0 },
+          "generated": { "line": 145, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 146, "column": 0 },
+          "generated": { "line": 146, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 147, "column": 0 },
+          "generated": { "line": 147, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 148, "column": 0 },
+          "generated": { "line": 148, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 149, "column": 0 },
+          "generated": { "line": 149, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 150, "column": 0 },
+          "generated": { "line": 150, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 151, "column": 0 },
+          "generated": { "line": 151, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 152, "column": 0 },
+          "generated": { "line": 152, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 153, "column": 0 },
+          "generated": { "line": 153, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 154, "column": 0 },
+          "generated": { "line": 154, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 155, "column": 0 },
+          "generated": { "line": 155, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 156, "column": 0 },
+          "generated": { "line": 156, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 157, "column": 0 },
+          "generated": { "line": 157, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 158, "column": 0 },
+          "generated": { "line": 158, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 159, "column": 0 },
+          "generated": { "line": 159, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 160, "column": 0 },
+          "generated": { "line": 160, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 161, "column": 0 },
+          "generated": { "line": 161, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 162, "column": 0 },
+          "generated": { "line": 162, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 163, "column": 0 },
+          "generated": { "line": 163, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 164, "column": 0 },
+          "generated": { "line": 164, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 165, "column": 0 },
+          "generated": { "line": 165, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 166, "column": 0 },
+          "generated": { "line": 166, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 167, "column": 0 },
+          "generated": { "line": 167, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 168, "column": 0 },
+          "generated": { "line": 168, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 169, "column": 0 },
+          "generated": { "line": 169, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 170, "column": 0 },
+          "generated": { "line": 170, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 171, "column": 0 },
+          "generated": { "line": 171, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 172, "column": 0 },
+          "generated": { "line": 172, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 173, "column": 0 },
+          "generated": { "line": 173, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 174, "column": 0 },
+          "generated": { "line": 174, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 175, "column": 0 },
+          "generated": { "line": 175, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 176, "column": 0 },
+          "generated": { "line": 176, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 177, "column": 0 },
+          "generated": { "line": 177, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 178, "column": 0 },
+          "generated": { "line": 178, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 179, "column": 0 },
+          "generated": { "line": 179, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 180, "column": 0 },
+          "generated": { "line": 180, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 181, "column": 0 },
+          "generated": { "line": 181, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 182, "column": 0 },
+          "generated": { "line": 182, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 183, "column": 0 },
+          "generated": { "line": 183, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 184, "column": 0 },
+          "generated": { "line": 184, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 185, "column": 0 },
+          "generated": { "line": 185, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 186, "column": 0 },
+          "generated": { "line": 186, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 187, "column": 0 },
+          "generated": { "line": 187, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 188, "column": 0 },
+          "generated": { "line": 188, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 189, "column": 0 },
+          "generated": { "line": 189, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 190, "column": 0 },
+          "generated": { "line": 190, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 191, "column": 0 },
+          "generated": { "line": 191, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 192, "column": 0 },
+          "generated": { "line": 192, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 193, "column": 0 },
+          "generated": { "line": 193, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 194, "column": 0 },
+          "generated": { "line": 194, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 195, "column": 0 },
+          "generated": { "line": 195, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 196, "column": 0 },
+          "generated": { "line": 196, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 197, "column": 0 },
+          "generated": { "line": 197, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 198, "column": 0 },
+          "generated": { "line": 198, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 199, "column": 0 },
+          "generated": { "line": 199, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 200, "column": 0 },
+          "generated": { "line": 200, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 201, "column": 0 },
+          "generated": { "line": 201, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 202, "column": 0 },
+          "generated": { "line": 202, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 203, "column": 0 },
+          "generated": { "line": 203, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 204, "column": 0 },
+          "generated": { "line": 204, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 205, "column": 0 },
+          "generated": { "line": 205, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 206, "column": 0 },
+          "generated": { "line": 206, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 207, "column": 0 },
+          "generated": { "line": 207, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 208, "column": 0 },
+          "generated": { "line": 208, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 209, "column": 0 },
+          "generated": { "line": 209, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 210, "column": 0 },
+          "generated": { "line": 210, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 211, "column": 0 },
+          "generated": { "line": 211, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 212, "column": 0 },
+          "generated": { "line": 212, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 213, "column": 0 },
+          "generated": { "line": 213, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 214, "column": 0 },
+          "generated": { "line": 214, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 215, "column": 0 },
+          "generated": { "line": 215, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 216, "column": 0 },
+          "generated": { "line": 216, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 217, "column": 0 },
+          "generated": { "line": 217, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 218, "column": 0 },
+          "generated": { "line": 218, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 219, "column": 0 },
+          "generated": { "line": 219, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 220, "column": 0 },
+          "generated": { "line": 220, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 221, "column": 0 },
+          "generated": { "line": 221, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 222, "column": 0 },
+          "generated": { "line": 222, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 223, "column": 0 },
+          "generated": { "line": 223, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 224, "column": 0 },
+          "generated": { "line": 224, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 225, "column": 0 },
+          "generated": { "line": 225, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 226, "column": 0 },
+          "generated": { "line": 226, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 227, "column": 0 },
+          "generated": { "line": 227, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 228, "column": 0 },
+          "generated": { "line": 228, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 229, "column": 0 },
+          "generated": { "line": 229, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 230, "column": 0 },
+          "generated": { "line": 230, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 231, "column": 0 },
+          "generated": { "line": 231, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 232, "column": 0 },
+          "generated": { "line": 232, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 233, "column": 0 },
+          "generated": { "line": 233, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 234, "column": 0 },
+          "generated": { "line": 234, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 235, "column": 0 },
+          "generated": { "line": 235, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 236, "column": 0 },
+          "generated": { "line": 236, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 237, "column": 0 },
+          "generated": { "line": 237, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 238, "column": 0 },
+          "generated": { "line": 238, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 239, "column": 0 },
+          "generated": { "line": 239, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 240, "column": 0 },
+          "generated": { "line": 240, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 241, "column": 0 },
+          "generated": { "line": 241, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 242, "column": 0 },
+          "generated": { "line": 242, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 243, "column": 0 },
+          "generated": { "line": 243, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 244, "column": 0 },
+          "generated": { "line": 244, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 245, "column": 0 },
+          "generated": { "line": 245, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 246, "column": 0 },
+          "generated": { "line": 246, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 247, "column": 0 },
+          "generated": { "line": 247, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 248, "column": 0 },
+          "generated": { "line": 248, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 249, "column": 0 },
+          "generated": { "line": 249, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 250, "column": 0 },
+          "generated": { "line": 250, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 251, "column": 0 },
+          "generated": { "line": 251, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 252, "column": 0 },
+          "generated": { "line": 252, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 253, "column": 0 },
+          "generated": { "line": 253, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 254, "column": 0 },
+          "generated": { "line": 254, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 255, "column": 0 },
+          "generated": { "line": 255, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 256, "column": 0 },
+          "generated": { "line": 256, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 257, "column": 0 },
+          "generated": { "line": 257, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 258, "column": 0 },
+          "generated": { "line": 258, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 259, "column": 0 },
+          "generated": { "line": 259, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 260, "column": 0 },
+          "generated": { "line": 260, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 261, "column": 0 },
+          "generated": { "line": 261, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 262, "column": 0 },
+          "generated": { "line": 262, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 263, "column": 0 },
+          "generated": { "line": 263, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 264, "column": 0 },
+          "generated": { "line": 264, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 265, "column": 0 },
+          "generated": { "line": 265, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 266, "column": 0 },
+          "generated": { "line": 266, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 267, "column": 0 },
+          "generated": { "line": 267, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 268, "column": 0 },
+          "generated": { "line": 268, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 269, "column": 0 },
+          "generated": { "line": 269, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 270, "column": 0 },
+          "generated": { "line": 270, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 271, "column": 0 },
+          "generated": { "line": 271, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 272, "column": 0 },
+          "generated": { "line": 272, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 273, "column": 0 },
+          "generated": { "line": 273, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 274, "column": 0 },
+          "generated": { "line": 274, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 275, "column": 0 },
+          "generated": { "line": 275, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 276, "column": 0 },
+          "generated": { "line": 276, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 277, "column": 0 },
+          "generated": { "line": 277, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 278, "column": 0 },
+          "generated": { "line": 278, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 279, "column": 0 },
+          "generated": { "line": 279, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 280, "column": 0 },
+          "generated": { "line": 280, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 281, "column": 0 },
+          "generated": { "line": 281, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 282, "column": 0 },
+          "generated": { "line": 282, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 283, "column": 0 },
+          "generated": { "line": 283, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 284, "column": 0 },
+          "generated": { "line": 284, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 285, "column": 0 },
+          "generated": { "line": 285, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 286, "column": 0 },
+          "generated": { "line": 286, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 287, "column": 0 },
+          "generated": { "line": 287, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 288, "column": 0 },
+          "generated": { "line": 288, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 289, "column": 0 },
+          "generated": { "line": 289, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 290, "column": 0 },
+          "generated": { "line": 290, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 291, "column": 0 },
+          "generated": { "line": 291, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 292, "column": 0 },
+          "generated": { "line": 292, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 293, "column": 0 },
+          "generated": { "line": 293, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 294, "column": 0 },
+          "generated": { "line": 294, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 295, "column": 0 },
+          "generated": { "line": 295, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 296, "column": 0 },
+          "generated": { "line": 296, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 297, "column": 0 },
+          "generated": { "line": 297, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 298, "column": 0 },
+          "generated": { "line": 298, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 299, "column": 0 },
+          "generated": { "line": 299, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 300, "column": 0 },
+          "generated": { "line": 300, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 301, "column": 0 },
+          "generated": { "line": 301, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 302, "column": 0 },
+          "generated": { "line": 302, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 303, "column": 0 },
+          "generated": { "line": 303, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 304, "column": 0 },
+          "generated": { "line": 304, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 305, "column": 0 },
+          "generated": { "line": 305, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 306, "column": 0 },
+          "generated": { "line": 306, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 307, "column": 0 },
+          "generated": { "line": 307, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 308, "column": 0 },
+          "generated": { "line": 308, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 309, "column": 0 },
+          "generated": { "line": 309, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 310, "column": 0 },
+          "generated": { "line": 310, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 311, "column": 0 },
+          "generated": { "line": 311, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 312, "column": 0 },
+          "generated": { "line": 312, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 313, "column": 0 },
+          "generated": { "line": 313, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 314, "column": 0 },
+          "generated": { "line": 314, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 315, "column": 0 },
+          "generated": { "line": 315, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 316, "column": 0 },
+          "generated": { "line": 316, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 317, "column": 0 },
+          "generated": { "line": 317, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 318, "column": 0 },
+          "generated": { "line": 318, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/lib/router.js",
+          "original": { "line": 319, "column": 0 },
+          "generated": { "line": 319, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/@cerebral/router/lib/router.js":
+          "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nvar _cerebral = require('cerebral');\n\nvar _internal = require('cerebral/internal');\n\nvar _utils = require('./utils');\n\nfunction _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nvar Router = function () {\n  function Router(controller, addressbar, mapper, options) {\n    var _this = this;\n\n    _classCallCheck(this, Router);\n\n    this.controller = controller;\n    this.addressbar = addressbar;\n    this.mapper = mapper;\n    this.options = (0, _utils.verifyOptions)(options);\n    this.activeRoute = {};\n    this.stateGetter = this.controller.getState.bind(this.controller);\n\n    this.providers = {\n      router: (0, _cerebral.Provider)({\n        getUrl: this.getUrl.bind(this),\n        getPath: this.getPath.bind(this),\n        getValues: this.getValues.bind(this),\n        getOrigin: this.getOrigin.bind(this),\n        setUrl: this.setUrl.bind(this),\n        goTo: this.goTo.bind(this),\n        redirect: this.redirect.bind(this),\n        redirectToSignal: this.redirectToSignal.bind(this),\n        reload: this.reload.bind(this)\n      })\n    };\n\n    if (!this.options.baseUrl && options.onlyHash) {\n      // autodetect baseUrl\n      this.options.baseUrl = addressbar.pathname;\n    }\n    this.options.baseUrl = this.options.baseUrl + (this.options.onlyHash ? '#' : '');\n\n    controller.on('initialized', function () {\n      _this.routesConfig = (0, _utils.flattenConfig)(options.routes);\n      _this.routesBySignal = (0, _utils.getRoutesBySignal)(_this.routesConfig);\n\n      addressbar.on('change', _this.onUrlChange.bind(_this));\n      controller.on('start', _this.onSignalStart.bind(_this));\n      controller.on('flush', _this.onFlush.bind(_this));\n\n      if (!options.preventAutostart) {\n        _this.onUrlChange();\n      }\n    });\n  }\n\n  _createClass(Router, [{\n    key: 'addRoutes',\n    value: function addRoutes(routes) {\n      this.options.routes = [].concat(_toConsumableArray(routes), _toConsumableArray(this.options.routes));\n      this.routesConfig = (0, _utils.flattenConfig)(this.options.routes);\n      this.routesBySignal = (0, _utils.getRoutesBySignal)(this.routesConfig, this.controller);\n    }\n  }, {\n    key: 'getRoutablePart',\n    value: function getRoutablePart(url) {\n      var path = url.replace(this.addressbar.origin, '');\n      if (path[0] !== '/') {\n        path = '/' + path;\n      }\n      if (this.options.onlyHash && !~path.indexOf('#')) {\n        // treat hash absense as root route\n        path = path + '#/';\n      }\n      return path.indexOf(this.options.baseUrl) === 0 ? path.replace(this.options.baseUrl, '') : null;\n    }\n  }, {\n    key: 'onUrlChange',\n    value: function onUrlChange(event) {\n      var _this2 = this;\n\n      var url = this.getRoutablePart(event ? event.target.value : this.addressbar.value);\n      if (url === null) return;\n\n      var match = void 0,\n          route = void 0,\n          values = void 0;\n      try {\n        var mapped = this.mapper.map(url, this.routesConfig) || {};\n        match = mapped.match;\n        route = mapped.route;\n        values = mapped.values;\n      } catch (err) {\n        throw new Error('Could not parse url (' + err + ').');\n      }\n\n      if (!match) {\n        if (this.options.allowEscape) return;\n\n        event && event.preventDefault();\n        console.warn('Cerebral router - No route matched ' + url + ', navigation was prevented. Please verify url or catch unmatched routes with a \"/*\" route.'); // eslint-disable-line no-console\n        return;\n      }\n\n      event && event.preventDefault();\n      var _match = match,\n          computedRMapping = _match.computedRMapping,\n          map = _match.map,\n          propsMapping = _match.propsMapping,\n          signal = _match.signal,\n          stateMapping = _match.stateMapping;\n\n      // remove undefined values from payload\n      // TODO: can be replaced with next line when fixed in url-mapper\n      // let payload = values\n\n      var payload = Object.keys(values).reduce(function (cleanedPayload, key) {\n        if (values[key] !== undefined) {\n          cleanedPayload[key] = values[key];\n        }\n        return cleanedPayload;\n      }, {});\n\n      var getters = { props: payload, state: this.stateGetter };\n\n      if (stateMapping || computedRMapping) {\n        this.controller.runSignal('router.routed', [function (_ref) {\n          var state = _ref.state,\n              resolve = _ref.resolve;\n\n          if (stateMapping) {\n            stateMapping.forEach(function (key) {\n              var value = values[key] || state.get(resolve.path(map[key]));\n              state.set(resolve.path(map[key]), value === undefined ? null : value);\n            });\n          }\n          if (computedRMapping) {\n            Object.keys(computedRMapping).forEach(function (path) {\n              var tracker = computedRMapping[path].tracker;\n\n              tracker.run(_this2.stateGetter, values);\n\n              var value = tracker.value;\n              state.set(path, value === undefined ? null : value);\n            });\n          }\n        }]);\n      }\n\n      if (propsMapping) {\n        payload = propsMapping.reduce(function (mappedPayload, key) {\n          mappedPayload[map[key].getPath(getters)] = values[key] || null;\n          return mappedPayload;\n        }, {});\n      }\n\n      var prevSignal = (this.routesConfig[this.activeRoute.route] || {}).signal;\n      if (signal && (prevSignal !== signal || (0, _internal.getChangedProps)(payload || {}, this.activeRoute.payload || {}))) {\n        this.controller.getSignal(signal)(payload);\n      }\n\n      this.activeRoute = { route: route, payload: payload };\n    }\n  }, {\n    key: 'onSignalStart',\n    value: function onSignalStart(execution, payload) {\n      var _this3 = this;\n\n      var route = this.routesBySignal[execution.name];\n      if (!route) return;\n\n      var map = this.routesConfig[route].map;\n\n      var getters = { props: payload, state: this.stateGetter\n\n        // resolve mappings on current props and state\n      };var url = this.mapper.stringify(route, map ? Object.keys(map || {}).reduce(function (resolved, key) {\n        var value = map[key].getValue(getters);\n\n        if (_this3.options.filterFalsy && !value) {\n          return resolved;\n        }\n\n        resolved[key] = value;\n        return resolved;\n      }, {}) : payload);\n\n      this.setUrl(url);\n\n      this.activeRoute = { route: route, payload: payload };\n    }\n  }, {\n    key: 'onFlush',\n    value: function onFlush(changed) {\n      var _this4 = this;\n\n      var _activeRoute = this.activeRoute,\n          route = _activeRoute.route,\n          payload = _activeRoute.payload;\n\n      var _ref2 = this.routesConfig[route] || {},\n          map = _ref2.map,\n          stateMapping = _ref2.stateMapping,\n          computedMapping = _ref2.computedMapping;\n\n      if (!stateMapping && !computedMapping) return;\n      var getters = { props: payload, state: this.stateGetter };\n      var shouldUpdate = false;\n\n      var resolvedMap = Object.keys(map || {}).reduce(function (resolved, key) {\n        var value = void 0;\n\n        if (computedMapping && computedMapping[key]) {\n          var trackerHandle = computedMapping[key];\n          var needsInit = trackerHandle.needsInit,\n              tracker = trackerHandle.tracker;\n\n\n          if (needsInit || (0, _utils.computeShouldChange)(tracker, changed)) {\n            trackerHandle.needsInit = false;\n            tracker.run(_this4.stateGetter, payload);\n            shouldUpdate = true;\n          }\n\n          value = tracker.value;\n        } else {\n          var path = map[key].getPath(getters);\n          value = map[key].getValue(getters);\n\n          shouldUpdate = shouldUpdate || stateMapping.indexOf(key) >= 0 && (0, _utils.hasChangedPath)(changed, path);\n        }\n\n        if (!_this4.options.filterFalsy || value) {\n          // Cerebral state only supports null and url-mapper only supports\n          // undefined: so we map from one to the other here.\n          resolved[key] = value === null ? undefined : value;\n        }\n\n        return resolved;\n      }, {});\n\n      if (shouldUpdate) {\n        this.setUrl(this.mapper.stringify(route, Object.assign({}, resolvedMap)));\n      }\n    }\n  }, {\n    key: 'setUrl',\n    value: function setUrl(url) {\n      this.addressbar.value = this.options.baseUrl + url || '/';\n    }\n  }, {\n    key: 'getUrl',\n    value: function getUrl() {\n      return this.addressbar.value;\n    }\n  }, {\n    key: 'getPath',\n    value: function getPath() {\n      return this.addressbar.value.replace(this.addressbar.origin + this.options.baseUrl, '').split('?')[0];\n    }\n  }, {\n    key: 'getValues',\n    value: function getValues() {\n      var url = this.getRoutablePart(this.addressbar.value);\n      var mapped = this.mapper.map(url, this.routesConfig) || {};\n\n      return mapped.values;\n    }\n  }, {\n    key: 'getOrigin',\n    value: function getOrigin() {\n      return this.addressbar.origin;\n    }\n  }, {\n    key: 'goTo',\n    value: function goTo(url) {\n      this.addressbar.value = this.options.baseUrl + url;\n      this.onUrlChange();\n    }\n  }, {\n    key: 'redirect',\n    value: function redirect(url) {\n      this.addressbar.value = {\n        value: this.options.baseUrl + url,\n        replace: true\n      };\n\n      this.onUrlChange();\n    }\n  }, {\n    key: 'redirectToSignal',\n    value: function redirectToSignal(signalName, payload) {\n      var route = this.routesBySignal[signalName];\n      if (!route) {\n        console.warn('redirectToSignal: signal \\'' + signalName + '\\' not bound to route.');\n      }\n      this.controller.getSignal(signalName)(payload);\n    }\n  }, {\n    key: 'reload',\n    value: function reload() {\n      this.redirect(this.getUrl());\n    }\n  }]);\n\n  return Router;\n}();\n\nexports.default = Router;\n//# sourceMappingURL=router.js.map"
+      },
+      "lineCount": 319
+    }
+  },
+  "hash": "549fec795e4880461aa3de2237a7e682",
+  "cacheData": { "env": {} }
+}

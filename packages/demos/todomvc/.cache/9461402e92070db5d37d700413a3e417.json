@@ -1,0 +1,281 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/node_modules/classnames/package.json",
+      "includedInParent": true,
+      "mtime": 1522949592000
+    }
+  ],
+  "generated": {
+    "js":
+      "/*!\n  Copyright (c) 2016 Jed Watson.\n  Licensed under the MIT License (MIT), see\n  http://jedwatson.github.io/classnames\n*/\n/* global define */\n\n(function () {\n\t'use strict';\n\n\tvar hasOwn = {}.hasOwnProperty;\n\n\tfunction classNames () {\n\t\tvar classes = [];\n\n\t\tfor (var i = 0; i < arguments.length; i++) {\n\t\t\tvar arg = arguments[i];\n\t\t\tif (!arg) continue;\n\n\t\t\tvar argType = typeof arg;\n\n\t\t\tif (argType === 'string' || argType === 'number') {\n\t\t\t\tclasses.push(arg);\n\t\t\t} else if (Array.isArray(arg)) {\n\t\t\t\tclasses.push(classNames.apply(null, arg));\n\t\t\t} else if (argType === 'object') {\n\t\t\t\tfor (var key in arg) {\n\t\t\t\t\tif (hasOwn.call(arg, key) && arg[key]) {\n\t\t\t\t\t\tclasses.push(key);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn classes.join(' ');\n\t}\n\n\tif (typeof module !== 'undefined' && module.exports) {\n\t\tmodule.exports = classNames;\n\t} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {\n\t\t// register as 'classnames', consistent with npm package name\n\t\tdefine('classnames', [], function () {\n\t\t\treturn classNames;\n\t\t});\n\t} else {\n\t\twindow.classNames = classNames;\n\t}\n}());\n",
+    "map": {
+      "mappings": [
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 23, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 24, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 25, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 26, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 27, "column": 0 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 28, "column": 0 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 29, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 30, "column": 0 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 31, "column": 0 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 32, "column": 0 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 33, "column": 0 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 34, "column": 0 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 35, "column": 0 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 36, "column": 0 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 37, "column": 0 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 38, "column": 0 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 39, "column": 0 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 40, "column": 0 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 41, "column": 0 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 42, "column": 0 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 43, "column": 0 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 44, "column": 0 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 45, "column": 0 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 46, "column": 0 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 47, "column": 0 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 48, "column": 0 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source": "node_modules/classnames/index.js",
+          "original": { "line": 49, "column": 0 },
+          "generated": { "line": 49, "column": 0 }
+        }
+      ],
+      "sources": {
+        "node_modules/classnames/index.js":
+          "/*!\n  Copyright (c) 2016 Jed Watson.\n  Licensed under the MIT License (MIT), see\n  http://jedwatson.github.io/classnames\n*/\n/* global define */\n\n(function () {\n\t'use strict';\n\n\tvar hasOwn = {}.hasOwnProperty;\n\n\tfunction classNames () {\n\t\tvar classes = [];\n\n\t\tfor (var i = 0; i < arguments.length; i++) {\n\t\t\tvar arg = arguments[i];\n\t\t\tif (!arg) continue;\n\n\t\t\tvar argType = typeof arg;\n\n\t\t\tif (argType === 'string' || argType === 'number') {\n\t\t\t\tclasses.push(arg);\n\t\t\t} else if (Array.isArray(arg)) {\n\t\t\t\tclasses.push(classNames.apply(null, arg));\n\t\t\t} else if (argType === 'object') {\n\t\t\t\tfor (var key in arg) {\n\t\t\t\t\tif (hasOwn.call(arg, key) && arg[key]) {\n\t\t\t\t\t\tclasses.push(key);\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\treturn classes.join(' ');\n\t}\n\n\tif (typeof module !== 'undefined' && module.exports) {\n\t\tmodule.exports = classNames;\n\t} else if (typeof define === 'function' && typeof define.amd === 'object' && define.amd) {\n\t\t// register as 'classnames', consistent with npm package name\n\t\tdefine('classnames', [], function () {\n\t\t\treturn classNames;\n\t\t});\n\t} else {\n\t\twindow.classNames = classNames;\n\t}\n}());\n"
+      },
+      "lineCount": 49
+    }
+  },
+  "hash": "90960985844fb44806cbf547da02785e",
+  "cacheData": { "env": {} }
+}

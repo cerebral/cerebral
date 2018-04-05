@@ -1,0 +1,396 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/node_modules/prop-types/package.json",
+      "includedInParent": true,
+      "mtime": 1522096885000
+    },
+    { "name": "fbjs/lib/emptyFunction", "loc": { "line": 10, "column": 28 } },
+    { "name": "fbjs/lib/invariant", "loc": { "line": 11, "column": 24 } },
+    {
+      "name": "./lib/ReactPropTypesSecret",
+      "loc": { "line": 12, "column": 35 }
+    }
+  ],
+  "generated": {
+    "js":
+      "/**\n * Copyright (c) 2013-present, Facebook, Inc.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE file in the root directory of this source tree.\n */\n\n'use strict';\n\nvar emptyFunction = require('fbjs/lib/emptyFunction');\nvar invariant = require('fbjs/lib/invariant');\nvar ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');\n\nmodule.exports = function() {\n  function shim(props, propName, componentName, location, propFullName, secret) {\n    if (secret === ReactPropTypesSecret) {\n      // It is still safe when called from React.\n      return;\n    }\n    invariant(\n      false,\n      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +\n      'Use PropTypes.checkPropTypes() to call them. ' +\n      'Read more at http://fb.me/use-check-prop-types'\n    );\n  };\n  shim.isRequired = shim;\n  function getShim() {\n    return shim;\n  };\n  // Important!\n  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.\n  var ReactPropTypes = {\n    array: shim,\n    bool: shim,\n    func: shim,\n    number: shim,\n    object: shim,\n    string: shim,\n    symbol: shim,\n\n    any: shim,\n    arrayOf: getShim,\n    element: shim,\n    instanceOf: getShim,\n    node: shim,\n    objectOf: getShim,\n    oneOf: getShim,\n    oneOfType: getShim,\n    shape: getShim,\n    exact: getShim\n  };\n\n  ReactPropTypes.checkPropTypes = emptyFunction;\n  ReactPropTypes.PropTypes = ReactPropTypes;\n\n  return ReactPropTypes;\n};\n",
+    "map": {
+      "mappings": [
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 23, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 24, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 25, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 26, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 27, "column": 0 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 28, "column": 0 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 29, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 30, "column": 0 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 31, "column": 0 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 32, "column": 0 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 33, "column": 0 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 34, "column": 0 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 35, "column": 0 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 36, "column": 0 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 37, "column": 0 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 38, "column": 0 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 39, "column": 0 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 40, "column": 0 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 41, "column": 0 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 42, "column": 0 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 43, "column": 0 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 44, "column": 0 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 45, "column": 0 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 46, "column": 0 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 47, "column": 0 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 48, "column": 0 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 49, "column": 0 },
+          "generated": { "line": 49, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 50, "column": 0 },
+          "generated": { "line": 50, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 51, "column": 0 },
+          "generated": { "line": 51, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 52, "column": 0 },
+          "generated": { "line": 52, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 53, "column": 0 },
+          "generated": { "line": 53, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 54, "column": 0 },
+          "generated": { "line": 54, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 55, "column": 0 },
+          "generated": { "line": 55, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 56, "column": 0 },
+          "generated": { "line": 56, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 57, "column": 0 },
+          "generated": { "line": 57, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 58, "column": 0 },
+          "generated": { "line": 58, "column": 0 }
+        },
+        {
+          "source":
+            "../../../node_modules/prop-types/factoryWithThrowingShims.js",
+          "original": { "line": 59, "column": 0 },
+          "generated": { "line": 59, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../../node_modules/prop-types/factoryWithThrowingShims.js":
+          "/**\n * Copyright (c) 2013-present, Facebook, Inc.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE file in the root directory of this source tree.\n */\n\n'use strict';\n\nvar emptyFunction = require('fbjs/lib/emptyFunction');\nvar invariant = require('fbjs/lib/invariant');\nvar ReactPropTypesSecret = require('./lib/ReactPropTypesSecret');\n\nmodule.exports = function() {\n  function shim(props, propName, componentName, location, propFullName, secret) {\n    if (secret === ReactPropTypesSecret) {\n      // It is still safe when called from React.\n      return;\n    }\n    invariant(\n      false,\n      'Calling PropTypes validators directly is not supported by the `prop-types` package. ' +\n      'Use PropTypes.checkPropTypes() to call them. ' +\n      'Read more at http://fb.me/use-check-prop-types'\n    );\n  };\n  shim.isRequired = shim;\n  function getShim() {\n    return shim;\n  };\n  // Important!\n  // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.\n  var ReactPropTypes = {\n    array: shim,\n    bool: shim,\n    func: shim,\n    number: shim,\n    object: shim,\n    string: shim,\n    symbol: shim,\n\n    any: shim,\n    arrayOf: getShim,\n    element: shim,\n    instanceOf: getShim,\n    node: shim,\n    objectOf: getShim,\n    oneOf: getShim,\n    oneOfType: getShim,\n    shape: getShim,\n    exact: getShim\n  };\n\n  ReactPropTypes.checkPropTypes = emptyFunction;\n  ReactPropTypes.PropTypes = ReactPropTypes;\n\n  return ReactPropTypes;\n};\n"
+      },
+      "lineCount": 59
+    }
+  },
+  "hash": "55c4de6f3eb951984e19a61b2b224909",
+  "cacheData": { "env": {} }
+}
