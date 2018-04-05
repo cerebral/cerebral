@@ -1,0 +1,146 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/node_modules/fbjs/package.json",
+      "includedInParent": true,
+      "mtime": 1522096885000
+    }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\n/**\n * Copyright (c) 2013-present, Facebook, Inc.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE file in the root directory of this source tree.\n *\n * @typechecks\n */\n\n/**\n * @param {*} object The object to check.\n * @return {boolean} Whether or not the object is a DOM node.\n */\nfunction isNode(object) {\n  var doc = object ? object.ownerDocument || object : document;\n  var defaultView = doc.defaultView || window;\n  return !!(object && (typeof defaultView.Node === 'function' ? object instanceof defaultView.Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));\n}\n\nmodule.exports = isNode;",
+    "map": {
+      "mappings": [
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/isNode.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../../node_modules/fbjs/lib/isNode.js":
+          "'use strict';\n\n/**\n * Copyright (c) 2013-present, Facebook, Inc.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE file in the root directory of this source tree.\n *\n * @typechecks\n */\n\n/**\n * @param {*} object The object to check.\n * @return {boolean} Whether or not the object is a DOM node.\n */\nfunction isNode(object) {\n  var doc = object ? object.ownerDocument || object : document;\n  var defaultView = doc.defaultView || window;\n  return !!(object && (typeof defaultView.Node === 'function' ? object instanceof defaultView.Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));\n}\n\nmodule.exports = isNode;"
+      },
+      "lineCount": 22
+    }
+  },
+  "hash": "596e6e7435c9b1671f1e2eda65d3ebe1",
+  "cacheData": { "env": {} }
+}

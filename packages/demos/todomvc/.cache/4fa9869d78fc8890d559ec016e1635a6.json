@@ -1,0 +1,869 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/function-tree/package.json",
+      "includedInParent": true,
+      "mtime": 1522871068000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/function-tree/.babelrc",
+      "includedInParent": true,
+      "mtime": 1516822475000
+    }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nfunction createDebounce(time, execution) {\n  function debounce(_ref) {\n    var path = _ref.path;\n\n    return new Promise(function (resolve) {\n      if (execution.timer) {\n        execution.resolve(path.discard());\n        clearTimeout(execution.timer);\n      }\n\n      execution.timer = setTimeout(function () {\n        execution.resolve(path.continue());\n        execution.timer = null;\n        execution.resolve = null;\n      }, time);\n      execution.resolve = resolve;\n    });\n  }\n  debounce.displayName = 'debounce - ' + time + 'ms';\n\n  return debounce;\n}\n\nfunction debounceFactory(time) {\n  // New execution on every call\n  var execution = { timer: null, resolve: null };\n\n  return createDebounce(time, execution);\n}\n\ndebounceFactory.shared = function () {\n  // Shared execution\n  var execution = { timer: null, resolve: null };\n\n  return function debounceSharedFactory(time) {\n    return createDebounce(time, execution);\n  };\n};\n\nexports.default = debounceFactory;\n//# sourceMappingURL=debounce.js.map",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 6, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "name": "createDebounce",
+          "generated": { "line": 6, "column": 9 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 9 }
+        },
+        {
+          "generated": { "line": 6, "column": 23 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "name": "time",
+          "generated": { "line": 6, "column": 24 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 24 }
+        },
+        {
+          "generated": { "line": 6, "column": 28 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 6, "column": 30 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 30 }
+        },
+        {
+          "generated": { "line": 6, "column": 39 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 6, "column": 41 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 1, "column": 41 }
+        },
+        {
+          "generated": { "line": 7, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 2, "column": 2 }
+        },
+        {
+          "name": "debounce",
+          "generated": { "line": 7, "column": 11 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 2, "column": 11 }
+        },
+        {
+          "generated": { "line": 7, "column": 19 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 2, "column": 2 }
+        },
+        {
+          "name": "_ref",
+          "generated": { "line": 7, "column": 20 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 2, "column": 20 }
+        },
+        {
+          "generated": { "line": 7, "column": 24 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 2, "column": 2 }
+        },
+        {
+          "generated": { "line": 7, "column": 26 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 2, "column": 26 }
+        },
+        {
+          "generated": { "line": 8, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 3, "column": 4 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 8, "column": 8 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 3, "column": 8 }
+        },
+        {
+          "name": "_ref",
+          "generated": { "line": 8, "column": 15 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 3, "column": 15 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 8, "column": 20 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 3, "column": 20 }
+        },
+        {
+          "generated": { "line": 8, "column": 24 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 3, "column": 4 }
+        },
+        {
+          "generated": { "line": 10, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 4 }
+        },
+        {
+          "generated": { "line": 10, "column": 11 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 11 }
+        },
+        {
+          "name": "Promise",
+          "generated": { "line": 10, "column": 15 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 15 }
+        },
+        {
+          "generated": { "line": 10, "column": 22 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 11 }
+        },
+        {
+          "generated": { "line": 10, "column": 23 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 23 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 10, "column": 33 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 33 }
+        },
+        {
+          "generated": { "line": 10, "column": 40 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 23 }
+        },
+        {
+          "generated": { "line": 10, "column": 42 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 42 }
+        },
+        {
+          "generated": { "line": 11, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 6, "column": 6 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 11, "column": 10 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 6, "column": 10 }
+        },
+        {
+          "name": "timer",
+          "generated": { "line": 11, "column": 20 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 6, "column": 20 }
+        },
+        {
+          "generated": { "line": 11, "column": 25 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 6, "column": 6 }
+        },
+        {
+          "generated": { "line": 11, "column": 27 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 6, "column": 27 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 12, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 12, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 7, "column": 18 }
+        },
+        {
+          "generated": { "line": 12, "column": 25 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 12, "column": 26 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 7, "column": 26 }
+        },
+        {
+          "name": "discard",
+          "generated": { "line": 12, "column": 31 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 7, "column": 31 }
+        },
+        {
+          "generated": { "line": 12, "column": 38 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 7, "column": 26 }
+        },
+        {
+          "generated": { "line": 12, "column": 40 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 7, "column": 8 }
+        },
+        {
+          "name": "clearTimeout",
+          "generated": { "line": 13, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 8, "column": 8 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 13, "column": 21 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 8, "column": 21 }
+        },
+        {
+          "name": "timer",
+          "generated": { "line": 13, "column": 31 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 8, "column": 31 }
+        },
+        {
+          "generated": { "line": 13, "column": 36 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 8, "column": 8 }
+        },
+        {
+          "generated": { "line": 14, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 9, "column": 7 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 16, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 6 }
+        },
+        {
+          "name": "timer",
+          "generated": { "line": 16, "column": 16 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 16 }
+        },
+        {
+          "generated": { "line": 16, "column": 21 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 6 }
+        },
+        {
+          "name": "setTimeout",
+          "generated": { "line": 16, "column": 24 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 24 }
+        },
+        {
+          "generated": { "line": 16, "column": 35 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 35 }
+        },
+        {
+          "generated": { "line": 16, "column": 47 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 47 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 17, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 12, "column": 8 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 17, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 12, "column": 18 }
+        },
+        {
+          "generated": { "line": 17, "column": 25 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 12, "column": 8 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 17, "column": 26 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 12, "column": 26 }
+        },
+        {
+          "name": "continue",
+          "generated": { "line": 17, "column": 31 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 12, "column": 31 }
+        },
+        {
+          "generated": { "line": 17, "column": 39 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 12, "column": 26 }
+        },
+        {
+          "generated": { "line": 17, "column": 41 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 12, "column": 8 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 18, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 13, "column": 8 }
+        },
+        {
+          "name": "timer",
+          "generated": { "line": 18, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 13, "column": 18 }
+        },
+        {
+          "generated": { "line": 18, "column": 23 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 13, "column": 8 }
+        },
+        {
+          "generated": { "line": 18, "column": 26 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 13, "column": 26 }
+        },
+        {
+          "generated": { "line": 18, "column": 30 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 13, "column": 8 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 19, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 14, "column": 8 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 19, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 14, "column": 18 }
+        },
+        {
+          "generated": { "line": 19, "column": 25 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 14, "column": 8 }
+        },
+        {
+          "generated": { "line": 19, "column": 28 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 14, "column": 28 }
+        },
+        {
+          "generated": { "line": 19, "column": 32 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 14, "column": 8 }
+        },
+        {
+          "generated": { "line": 20, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 15, "column": 7 }
+        },
+        {
+          "generated": { "line": 20, "column": 7 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 24 }
+        },
+        {
+          "name": "time",
+          "generated": { "line": 20, "column": 9 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 15, "column": 9 }
+        },
+        {
+          "generated": { "line": 20, "column": 13 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 24 }
+        },
+        {
+          "generated": { "line": 20, "column": 14 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 11, "column": 6 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 21, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 16, "column": 6 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 21, "column": 16 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 16, "column": 16 }
+        },
+        {
+          "generated": { "line": 21, "column": 23 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 16, "column": 6 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 21, "column": 26 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 16, "column": 26 }
+        },
+        {
+          "generated": { "line": 21, "column": 33 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 16, "column": 6 }
+        },
+        {
+          "generated": { "line": 22, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 17, "column": 5 }
+        },
+        {
+          "generated": { "line": 22, "column": 5 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 11 }
+        },
+        {
+          "generated": { "line": 22, "column": 6 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 5, "column": 4 }
+        },
+        {
+          "generated": { "line": 23, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 18, "column": 3 }
+        },
+        {
+          "name": "debounce",
+          "generated": { "line": 24, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 2 }
+        },
+        {
+          "name": "displayName",
+          "generated": { "line": 24, "column": 11 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 11 }
+        },
+        {
+          "generated": { "line": 24, "column": 22 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 2 }
+        },
+        {
+          "generated": { "line": 24, "column": 25 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 25 }
+        },
+        {
+          "name": "time",
+          "generated": { "line": 24, "column": 41 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 41 }
+        },
+        {
+          "generated": { "line": 24, "column": 45 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 25 }
+        },
+        {
+          "generated": { "line": 24, "column": 48 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 48 }
+        },
+        {
+          "generated": { "line": 24, "column": 52 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 19, "column": 2 }
+        },
+        {
+          "generated": { "line": 26, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 21, "column": 2 }
+        },
+        {
+          "name": "debounce",
+          "generated": { "line": 26, "column": 9 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 21, "column": 9 }
+        },
+        {
+          "generated": { "line": 26, "column": 17 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 21, "column": 2 }
+        },
+        {
+          "generated": { "line": 27, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 22, "column": 1 }
+        },
+        {
+          "generated": { "line": 29, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 24, "column": 0 }
+        },
+        {
+          "name": "debounceFactory",
+          "generated": { "line": 29, "column": 9 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 24, "column": 9 }
+        },
+        {
+          "generated": { "line": 29, "column": 24 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 24, "column": 0 }
+        },
+        {
+          "name": "time",
+          "generated": { "line": 29, "column": 25 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 24, "column": 25 }
+        },
+        {
+          "generated": { "line": 29, "column": 29 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 24, "column": 0 }
+        },
+        {
+          "generated": { "line": 29, "column": 31 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 24, "column": 31 }
+        },
+        {
+          "generated": { "line": 30, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 25, "column": 2 }
+        },
+        {
+          "generated": { "line": 31, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 2 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 31, "column": 6 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 6 }
+        },
+        {
+          "generated": { "line": 31, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 18 }
+        },
+        {
+          "name": "timer",
+          "generated": { "line": 31, "column": 20 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 20 }
+        },
+        {
+          "generated": { "line": 31, "column": 27 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 27 }
+        },
+        {
+          "generated": { "line": 31, "column": 31 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 18 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 31, "column": 33 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 33 }
+        },
+        {
+          "generated": { "line": 31, "column": 42 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 42 }
+        },
+        {
+          "generated": { "line": 31, "column": 46 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 18 }
+        },
+        {
+          "generated": { "line": 31, "column": 48 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 26, "column": 2 }
+        },
+        {
+          "generated": { "line": 33, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 28, "column": 2 }
+        },
+        {
+          "name": "createDebounce",
+          "generated": { "line": 33, "column": 9 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 28, "column": 9 }
+        },
+        {
+          "name": "time",
+          "generated": { "line": 33, "column": 24 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 28, "column": 24 }
+        },
+        {
+          "generated": { "line": 33, "column": 28 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 28, "column": 9 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 33, "column": 30 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 28, "column": 30 }
+        },
+        {
+          "generated": { "line": 33, "column": 39 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 28, "column": 9 }
+        },
+        {
+          "generated": { "line": 33, "column": 40 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 28, "column": 2 }
+        },
+        {
+          "generated": { "line": 34, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 29, "column": 1 }
+        },
+        {
+          "name": "debounceFactory",
+          "generated": { "line": 36, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 31, "column": 0 }
+        },
+        {
+          "name": "shared",
+          "generated": { "line": 36, "column": 16 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 31, "column": 16 }
+        },
+        {
+          "generated": { "line": 36, "column": 22 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 31, "column": 0 }
+        },
+        {
+          "generated": { "line": 36, "column": 25 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 31, "column": 25 }
+        },
+        {
+          "generated": { "line": 36, "column": 37 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 31, "column": 37 }
+        },
+        {
+          "generated": { "line": 37, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 32, "column": 2 }
+        },
+        {
+          "generated": { "line": 38, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 2 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 38, "column": 6 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 6 }
+        },
+        {
+          "generated": { "line": 38, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 18 }
+        },
+        {
+          "name": "timer",
+          "generated": { "line": 38, "column": 20 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 20 }
+        },
+        {
+          "generated": { "line": 38, "column": 27 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 27 }
+        },
+        {
+          "generated": { "line": 38, "column": 31 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 18 }
+        },
+        {
+          "name": "resolve",
+          "generated": { "line": 38, "column": 33 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 33 }
+        },
+        {
+          "generated": { "line": 38, "column": 42 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 42 }
+        },
+        {
+          "generated": { "line": 38, "column": 46 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 18 }
+        },
+        {
+          "generated": { "line": 38, "column": 48 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 33, "column": 2 }
+        },
+        {
+          "generated": { "line": 40, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 2 }
+        },
+        {
+          "generated": { "line": 40, "column": 9 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 9 }
+        },
+        {
+          "name": "debounceSharedFactory",
+          "generated": { "line": 40, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 18 }
+        },
+        {
+          "generated": { "line": 40, "column": 39 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 9 }
+        },
+        {
+          "name": "time",
+          "generated": { "line": 40, "column": 40 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 40 }
+        },
+        {
+          "generated": { "line": 40, "column": 44 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 9 }
+        },
+        {
+          "generated": { "line": 40, "column": 46 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 46 }
+        },
+        {
+          "generated": { "line": 41, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 36, "column": 4 }
+        },
+        {
+          "name": "createDebounce",
+          "generated": { "line": 41, "column": 11 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 36, "column": 11 }
+        },
+        {
+          "name": "time",
+          "generated": { "line": 41, "column": 26 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 36, "column": 26 }
+        },
+        {
+          "generated": { "line": 41, "column": 30 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 36, "column": 11 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 41, "column": 32 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 36, "column": 32 }
+        },
+        {
+          "generated": { "line": 41, "column": 41 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 36, "column": 11 }
+        },
+        {
+          "generated": { "line": 41, "column": 42 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 36, "column": 4 }
+        },
+        {
+          "generated": { "line": 42, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 37, "column": 3 }
+        },
+        {
+          "generated": { "line": 42, "column": 3 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 35, "column": 2 }
+        },
+        {
+          "generated": { "line": 43, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 38, "column": 1 }
+        },
+        {
+          "generated": { "line": 43, "column": 1 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 31, "column": 0 }
+        },
+        {
+          "name": "debounceFactory",
+          "generated": { "line": 45, "column": 18 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 40, "column": 15 }
+        },
+        {
+          "generated": { "line": 46, "column": 0 },
+          "source": "../../node_modules/function-tree/es/factories/debounce.js",
+          "original": { "line": 41, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/function-tree/es/factories/debounce.js":
+          "function createDebounce(time, execution) {\n  function debounce(_ref) {\n    var path = _ref.path;\n\n    return new Promise(function (resolve) {\n      if (execution.timer) {\n        execution.resolve(path.discard());\n        clearTimeout(execution.timer);\n      }\n\n      execution.timer = setTimeout(function () {\n        execution.resolve(path.continue());\n        execution.timer = null;\n        execution.resolve = null;\n      }, time);\n      execution.resolve = resolve;\n    });\n  }\n  debounce.displayName = 'debounce - ' + time + 'ms';\n\n  return debounce;\n}\n\nfunction debounceFactory(time) {\n  // New execution on every call\n  var execution = { timer: null, resolve: null };\n\n  return createDebounce(time, execution);\n}\n\ndebounceFactory.shared = function () {\n  // Shared execution\n  var execution = { timer: null, resolve: null };\n\n  return function debounceSharedFactory(time) {\n    return createDebounce(time, execution);\n  };\n};\n\nexport default debounceFactory;\n//# sourceMappingURL=debounce.js.map"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "f913ada2cd2c0b218b4a542dfabd3964",
+  "cacheData": { "env": {} }
+}

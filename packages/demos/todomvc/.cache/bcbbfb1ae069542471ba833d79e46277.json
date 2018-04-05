@@ -1,0 +1,638 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    { "name": "react", "loc": { "line": 1, "column": 18 } },
+    { "name": "../Todo", "loc": { "line": 2, "column": 17 } },
+    { "name": "@cerebral/react", "loc": { "line": 3, "column": 24 } },
+    { "name": "cerebral/tags", "loc": { "line": 4, "column": 30 } },
+    {
+      "name": "../../computed/isAllChecked",
+      "loc": { "line": 5, "column": 33 }
+    },
+    {
+      "name": "../../computed/visibleTodosUids",
+      "loc": { "line": 6, "column": 29 }
+    }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral(['editingUid'], ['editingUid']),\n    _templateObject2 = _taggedTemplateLiteral(['toggleAllChanged'], ['toggleAllChanged']);\n\nvar _react = require('react');\n\nvar _react2 = _interopRequireDefault(_react);\n\nvar _Todo = require('../Todo');\n\nvar _Todo2 = _interopRequireDefault(_Todo);\n\nvar _react3 = require('@cerebral/react');\n\nvar _tags = require('cerebral/tags');\n\nvar _isAllChecked = require('../../computed/isAllChecked');\n\nvar _isAllChecked2 = _interopRequireDefault(_isAllChecked);\n\nvar _visibleTodosUids = require('../../computed/visibleTodosUids');\n\nvar _visibleTodosUids2 = _interopRequireDefault(_visibleTodosUids);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nexports.default = (0, _react3.connect)({\n    editingUid: (0, _tags.state)(_templateObject),\n    isAllChecked: _isAllChecked2.default,\n    todosUids: _visibleTodosUids2.default,\n    toggleAllChanged: (0, _tags.signal)(_templateObject2)\n}, function List(_ref) {\n    var editingUid = _ref.editingUid,\n        isAllChecked = _ref.isAllChecked,\n        todosUids = _ref.todosUids,\n        toggleAllChanged = _ref.toggleAllChanged;\n\n    return _react2.default.createElement(\n        'section',\n        { className: 'main' },\n        _react2.default.createElement('input', {\n            className: 'toggle-all',\n            type: 'checkbox',\n            checked: isAllChecked,\n            onChange: function onChange() {\n                return toggleAllChanged();\n            }\n        }),\n        _react2.default.createElement(\n            'label',\n            { htmlFor: 'toggle-all' },\n            'Mark all as complete'\n        ),\n        _react2.default.createElement(\n            'ul',\n            { className: 'todo-list' },\n            todosUids.map(function (todoUid, index) {\n                var isEditing = todoUid === editingUid;\n\n                return _react2.default.createElement(_Todo2.default, { key: todoUid, uid: todoUid, isEditing: isEditing });\n            })\n        )\n    );\n});",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 10, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 14, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 2, "column": 0 }
+        },
+        {
+          "generated": { "line": 18, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 20, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 4, "column": 0 }
+        },
+        {
+          "generated": { "line": 22, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "generated": { "line": 26, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 6, "column": 0 }
+        },
+        {
+          "generated": { "line": 34, "column": 18 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 8, "column": 15 }
+        },
+        {
+          "generated": { "line": 34, "column": 39 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "name": "editingUid",
+          "generated": { "line": 35, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 10, "column": 8 }
+        },
+        {
+          "generated": { "line": 35, "column": 49 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "name": "isAllChecked",
+          "generated": { "line": 36, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 11, "column": 8 }
+        },
+        {
+          "generated": { "line": 36, "column": 40 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "name": "todosUids",
+          "generated": { "line": 37, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 12, "column": 8 }
+        },
+        {
+          "generated": { "line": 37, "column": 41 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "name": "toggleAllChanged",
+          "generated": { "line": 38, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 13, "column": 8 }
+        },
+        {
+          "generated": { "line": 39, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "generated": { "line": 39, "column": 1 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 8, "column": 15 }
+        },
+        {
+          "generated": { "line": 39, "column": 3 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 4 }
+        },
+        {
+          "name": "List",
+          "generated": { "line": 39, "column": 12 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 13 }
+        },
+        {
+          "generated": { "line": 39, "column": 16 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 4 }
+        },
+        {
+          "generated": { "line": 39, "column": 23 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "generated": { "line": 40, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "editingUid",
+          "generated": { "line": 40, "column": 8 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 20 }
+        },
+        {
+          "generated": { "line": 40, "column": 18 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "editingUid",
+          "generated": { "line": 40, "column": 26 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 20 }
+        },
+        {
+          "generated": { "line": 40, "column": 36 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "generated": { "line": 41, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "isAllChecked",
+          "generated": { "line": 41, "column": 8 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 32 }
+        },
+        {
+          "generated": { "line": 41, "column": 20 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "isAllChecked",
+          "generated": { "line": 41, "column": 28 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 32 }
+        },
+        {
+          "generated": { "line": 41, "column": 40 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "generated": { "line": 42, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "todosUids",
+          "generated": { "line": 42, "column": 8 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 46 }
+        },
+        {
+          "generated": { "line": 42, "column": 17 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "todosUids",
+          "generated": { "line": 42, "column": 25 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 46 }
+        },
+        {
+          "generated": { "line": 42, "column": 34 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "generated": { "line": 43, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "toggleAllChanged",
+          "generated": { "line": 43, "column": 8 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 57 }
+        },
+        {
+          "generated": { "line": 43, "column": 24 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "name": "toggleAllChanged",
+          "generated": { "line": 43, "column": 32 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 57 }
+        },
+        {
+          "generated": { "line": 43, "column": 48 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 15, "column": 77 }
+        },
+        {
+          "generated": { "line": 45, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 16, "column": 8 }
+        },
+        {
+          "generated": { "line": 45, "column": 11 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 12 }
+        },
+        {
+          "generated": { "line": 46, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 12 }
+        },
+        {
+          "generated": { "line": 47, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 12 }
+        },
+        {
+          "generated": { "line": 47, "column": 10 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 21 }
+        },
+        {
+          "generated": { "line": 47, "column": 21 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 31 }
+        },
+        {
+          "generated": { "line": 47, "column": 27 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 12 }
+        },
+        {
+          "generated": { "line": 48, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 18, "column": 16 }
+        },
+        {
+          "generated": { "line": 49, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 19, "column": 20 }
+        },
+        {
+          "generated": { "line": 49, "column": 23 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 19, "column": 30 }
+        },
+        {
+          "generated": { "line": 49, "column": 35 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 18, "column": 16 }
+        },
+        {
+          "generated": { "line": 50, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 50, "column": 18 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 20, "column": 25 }
+        },
+        {
+          "generated": { "line": 50, "column": 28 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 18, "column": 16 }
+        },
+        {
+          "generated": { "line": 51, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 21, "column": 20 }
+        },
+        {
+          "name": "isAllChecked",
+          "generated": { "line": 51, "column": 21 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 21, "column": 29 }
+        },
+        {
+          "generated": { "line": 51, "column": 33 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 18, "column": 16 }
+        },
+        {
+          "generated": { "line": 52, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 22, "column": 20 }
+        },
+        {
+          "generated": { "line": 52, "column": 22 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 22, "column": 30 }
+        },
+        {
+          "generated": { "line": 53, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 22, "column": 30 }
+        },
+        {
+          "name": "toggleAllChanged",
+          "generated": { "line": 53, "column": 23 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 22, "column": 36 }
+        },
+        {
+          "generated": { "line": 53, "column": 41 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 22, "column": 30 }
+        },
+        {
+          "generated": { "line": 54, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 22, "column": 30 }
+        },
+        {
+          "generated": { "line": 55, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 18, "column": 16 }
+        },
+        {
+          "generated": { "line": 55, "column": 10 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 12 }
+        },
+        {
+          "generated": { "line": 56, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 57, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 58, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 58, "column": 14 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 23 }
+        },
+        {
+          "generated": { "line": 58, "column": 23 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 31 }
+        },
+        {
+          "generated": { "line": 58, "column": 35 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 59, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 60, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 24, "column": 16 }
+        },
+        {
+          "generated": { "line": 60, "column": 9 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 12 }
+        },
+        {
+          "generated": { "line": 61, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 25, "column": 16 }
+        },
+        {
+          "generated": { "line": 62, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 25, "column": 16 }
+        },
+        {
+          "generated": { "line": 63, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 25, "column": 16 }
+        },
+        {
+          "generated": { "line": 63, "column": 14 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 25, "column": 20 }
+        },
+        {
+          "generated": { "line": 63, "column": 25 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 25, "column": 30 }
+        },
+        {
+          "generated": { "line": 63, "column": 36 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 25, "column": 16 }
+        },
+        {
+          "name": "todosUids",
+          "generated": { "line": 64, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 21 }
+        },
+        {
+          "name": "map",
+          "generated": { "line": 64, "column": 22 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 31 }
+        },
+        {
+          "generated": { "line": 64, "column": 25 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 21 }
+        },
+        {
+          "generated": { "line": 64, "column": 26 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 35 }
+        },
+        {
+          "name": "todoUid",
+          "generated": { "line": 64, "column": 36 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 36 }
+        },
+        {
+          "generated": { "line": 64, "column": 43 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 35 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 64, "column": 45 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 45 }
+        },
+        {
+          "generated": { "line": 64, "column": 50 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 35 }
+        },
+        {
+          "generated": { "line": 64, "column": 52 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 55 }
+        },
+        {
+          "generated": { "line": 65, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 27, "column": 24 }
+        },
+        {
+          "name": "isEditing",
+          "generated": { "line": 65, "column": 20 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 27, "column": 30 }
+        },
+        {
+          "name": "todoUid",
+          "generated": { "line": 65, "column": 32 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 27, "column": 42 }
+        },
+        {
+          "name": "editingUid",
+          "generated": { "line": 65, "column": 44 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 27, "column": 54 }
+        },
+        {
+          "generated": { "line": 65, "column": 54 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 27, "column": 24 }
+        },
+        {
+          "generated": { "line": 67, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 24 }
+        },
+        {
+          "generated": { "line": 67, "column": 23 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 31 }
+        },
+        {
+          "generated": { "line": 67, "column": 71 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 37 }
+        },
+        {
+          "name": "todoUid",
+          "generated": { "line": 67, "column": 76 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 42 }
+        },
+        {
+          "generated": { "line": 67, "column": 83 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 31 }
+        },
+        {
+          "generated": { "line": 67, "column": 85 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 51 }
+        },
+        {
+          "name": "todoUid",
+          "generated": { "line": 67, "column": 90 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 56 }
+        },
+        {
+          "generated": { "line": 67, "column": 97 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 31 }
+        },
+        {
+          "generated": { "line": 67, "column": 99 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 65 }
+        },
+        {
+          "name": "isEditing",
+          "generated": { "line": 67, "column": 110 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 76 }
+        },
+        {
+          "generated": { "line": 67, "column": 119 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 31 }
+        },
+        {
+          "generated": { "line": 67, "column": 122 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 29, "column": 24 }
+        },
+        {
+          "generated": { "line": 68, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 30, "column": 21 }
+        },
+        {
+          "generated": { "line": 68, "column": 13 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 26, "column": 21 }
+        },
+        {
+          "generated": { "line": 69, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 25, "column": 16 }
+        },
+        {
+          "generated": { "line": 70, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 17, "column": 12 }
+        },
+        {
+          "generated": { "line": 70, "column": 5 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 16, "column": 8 }
+        },
+        {
+          "generated": { "line": 71, "column": 0 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 34, "column": 5 }
+        },
+        {
+          "generated": { "line": 71, "column": 1 },
+          "source": "src/components/List/index.js",
+          "original": { "line": 8, "column": 15 }
+        }
+      ],
+      "sources": {
+        "src/components/List/index.js":
+          "import React from 'react';\nimport Todo from '../Todo';\nimport { connect } from '@cerebral/react';\nimport { state, signal } from 'cerebral/proxy';\nimport computedIsAllChecked from '../../computed/isAllChecked';\nimport computedTodosUid from '../../computed/visibleTodosUids';\n\nexport default connect(\n    {\n        editingUid: state.editingUid,\n        isAllChecked: computedIsAllChecked,\n        todosUids: computedTodosUid,\n        toggleAllChanged: signal.toggleAllChanged\n    },\n    function List({ editingUid, isAllChecked, todosUids, toggleAllChanged }) {\n        return (\n            <section className=\"main\">\n                <input\n                    className=\"toggle-all\"\n                    type=\"checkbox\"\n                    checked={isAllChecked}\n                    onChange={() => toggleAllChanged()}\n                />\n                <label htmlFor=\"toggle-all\">Mark all as complete</label>\n                <ul className=\"todo-list\">\n                    {todosUids.map((todoUid, index) => {\n                        const isEditing = todoUid === editingUid;\n\n                        return <Todo key={todoUid} uid={todoUid} isEditing={isEditing} />;\n                    })}\n                </ul>\n            </section>\n        );\n    }\n);\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "765ffbc63de2680d61e9e60efd26c523",
+  "cacheData": { "env": {} }
+}

@@ -1,0 +1,3332 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/cerebral/package.json",
+      "includedInParent": true,
+      "mtime": 1522871063000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1512583350000
+    },
+    { "name": "./tags", "loc": { "line": 11, "column": 20 } },
+    { "name": "function-tree", "loc": { "line": 12, "column": 29 } }
+  ],
+  "generated": {
+    "js":
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.Compute = undefined;\nexports.default = compute;\n\nvar _tags = require(\"./tags\");\n\nvar _functionTree = require(\"function-tree\");\n\nvar _createClass = function () {\n  function defineProperties(target, props) {\n    for (var i = 0; i < props.length; i++) {\n      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if (\"value\" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);\n    }\n  }return function (Constructor, protoProps, staticProps) {\n    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;\n  };\n}();\n\nfunction _toConsumableArray(arr) {\n  if (Array.isArray(arr)) {\n    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {\n      arr2[i] = arr[i];\n    }return arr2;\n  } else {\n    return Array.from(arr);\n  }\n}\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass);\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\nvar Compute = exports.Compute = function (_ResolveValue) {\n  _inherits(Compute, _ResolveValue);\n\n  function Compute(args) {\n    _classCallCheck(this, Compute);\n\n    var _this = _possibleConstructorReturn(this, (Compute.__proto__ || Object.getPrototypeOf(Compute)).call(this));\n\n    _this.args = args;\n    _this.value = null;\n    return _this;\n  }\n\n  _createClass(Compute, [{\n    key: 'getValue',\n    value: function getValue(context) {\n      var computeGet = function computeGet(tag) {\n        return tag.getValue(context);\n      };\n      var result = this.args.reduce(function (details, arg, index) {\n        if (arg instanceof _tags.Tag) {\n          var path = arg.getPath(context);\n\n          if (path.indexOf('.*') > 0) {\n            var value = arg.getValue(context);\n\n            details.results.push(value ? Object.keys(value) : []);\n          } else {\n            details.results.push(arg.getValue(context));\n          }\n\n          return details;\n        } else if (arg instanceof _functionTree.ResolveValue) {\n          details.results.push(arg.getValue(context));\n\n          return details;\n        } else if (typeof arg === 'function') {\n          details.results.push(arg.apply(undefined, _toConsumableArray(details.results.slice(details.previousFuncIndex, index)).concat([computeGet])));\n          details.previousFuncIndex = index;\n\n          return details;\n        }\n\n        details.results.push(arg);\n\n        return details;\n      }, {\n        results: [],\n        previousFuncIndex: 0\n      });\n\n      return result.results[result.results.length - 1];\n    }\n  }]);\n\n  return Compute;\n}(_functionTree.ResolveValue);\n\nfunction compute() {\n  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n    args[_key] = arguments[_key];\n  }\n\n  return new Compute(args);\n}\n//# sourceMappingURL=Compute.js.map",
+    "map": {
+      "mappings": [
+        {
+          "name": "compute",
+          "generated": { "line": 7, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 72, "column": 24 }
+        },
+        {
+          "generated": { "line": 9, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 11, "column": 0 }
+        },
+        {
+          "generated": { "line": 11, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 12, "column": 0 }
+        },
+        {
+          "generated": { "line": 13, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 13, "column": 4 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 4 }
+        },
+        {
+          "generated": { "line": 13, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 19 }
+        },
+        {
+          "generated": { "line": 13, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 31 }
+        },
+        {
+          "generated": { "line": 14, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 14, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 42 }
+        },
+        {
+          "generated": { "line": 14, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 14, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 59 }
+        },
+        {
+          "generated": { "line": 14, "column": 34 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 14, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 67 }
+        },
+        {
+          "generated": { "line": 14, "column": 41 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "generated": { "line": 14, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 74 }
+        },
+        {
+          "generated": { "line": 15, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "generated": { "line": 15, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 81 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 15, "column": 13 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 85 }
+        },
+        {
+          "generated": { "line": 15, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 89 }
+        },
+        {
+          "generated": { "line": 15, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 15, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 92 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 15, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 96 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 15, "column": 30 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 102 }
+        },
+        {
+          "generated": { "line": 15, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 15, "column": 38 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 110 }
+        },
+        {
+          "generated": { "line": 15, "column": 41 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "generated": { "line": 15, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 115 }
+        },
+        {
+          "generated": { "line": 16, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 121 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 16, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 134 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 16, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 140 }
+        },
+        {
+          "generated": { "line": 16, "column": 30 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 134 }
+        },
+        {
+          "generated": { "line": 16, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 16, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 155 }
+        },
+        {
+          "generated": { "line": 16, "column": 53 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 56 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 168 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 16, "column": 67 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 179 }
+        },
+        {
+          "generated": { "line": 16, "column": 77 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 168 }
+        },
+        {
+          "generated": { "line": 16, "column": 81 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 193 }
+        },
+        {
+          "generated": { "line": 16, "column": 86 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 87 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "name": "configurable",
+          "generated": { "line": 16, "column": 98 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 211 }
+        },
+        {
+          "generated": { "line": 16, "column": 110 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "generated": { "line": 16, "column": 113 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 226 }
+        },
+        {
+          "generated": { "line": 16, "column": 117 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "generated": { "line": 16, "column": 118 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 232 }
+        },
+        {
+          "generated": { "line": 16, "column": 122 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 236 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 133 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 247 }
+        },
+        {
+          "generated": { "line": 16, "column": 143 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 232 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 145 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "name": "writable",
+          "generated": { "line": 16, "column": 156 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 270 }
+        },
+        {
+          "generated": { "line": 16, "column": 164 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "generated": { "line": 16, "column": 167 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 281 }
+        },
+        {
+          "generated": { "line": 16, "column": 171 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 16, "column": 172 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "defineProperty",
+          "generated": { "line": 16, "column": 179 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 294 }
+        },
+        {
+          "generated": { "line": 16, "column": 193 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 16, "column": 194 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 309 }
+        },
+        {
+          "generated": { "line": 16, "column": 200 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 202 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 317 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 16, "column": 213 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 328 }
+        },
+        {
+          "generated": { "line": 16, "column": 216 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 16, "column": 218 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 333 }
+        },
+        {
+          "generated": { "line": 16, "column": 228 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "generated": { "line": 17, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 347 }
+        },
+        {
+          "generated": { "line": 18, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 349 }
+        },
+        {
+          "generated": { "line": 18, "column": 3 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 350 }
+        },
+        {
+          "generated": { "line": 18, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 18, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 367 }
+        },
+        {
+          "generated": { "line": 18, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 18, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 380 }
+        },
+        {
+          "generated": { "line": 18, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 18, "column": 45 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 392 }
+        },
+        {
+          "generated": { "line": 18, "column": 56 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "generated": { "line": 18, "column": 58 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 405 }
+        },
+        {
+          "generated": { "line": 19, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 407 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 19, "column": 8 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 411 }
+        },
+        {
+          "generated": { "line": 19, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 407 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 19, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 19, "column": 37 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 440 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 19, "column": 49 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 452 }
+        },
+        {
+          "generated": { "line": 19, "column": 58 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 19, "column": 60 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 463 }
+        },
+        {
+          "generated": { "line": 19, "column": 70 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "generated": { "line": 19, "column": 72 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 476 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 19, "column": 76 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 480 }
+        },
+        {
+          "generated": { "line": 19, "column": 87 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 476 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 19, "column": 89 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 19, "column": 106 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 510 }
+        },
+        {
+          "generated": { "line": 19, "column": 117 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 19, "column": 119 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 523 }
+        },
+        {
+          "generated": { "line": 19, "column": 130 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "generated": { "line": 19, "column": 132 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 537 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 19, "column": 139 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 544 }
+        },
+        {
+          "generated": { "line": 19, "column": 150 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 537 }
+        },
+        {
+          "generated": { "line": 20, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 558 }
+        },
+        {
+          "generated": { "line": 20, "column": 3 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 350 }
+        },
+        {
+          "generated": { "line": 21, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 561 }
+        },
+        {
+          "generated": { "line": 21, "column": 1 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 19 }
+        },
+        {
+          "generated": { "line": 21, "column": 3 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 23, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "_toConsumableArray",
+          "generated": { "line": 23, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 9 }
+        },
+        {
+          "generated": { "line": 23, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "arr",
+          "generated": { "line": 23, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 28 }
+        },
+        {
+          "generated": { "line": 23, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 23, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 33 }
+        },
+        {
+          "generated": { "line": 24, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 35 }
+        },
+        {
+          "name": "Array",
+          "generated": { "line": 24, "column": 6 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 39 }
+        },
+        {
+          "name": "isArray",
+          "generated": { "line": 24, "column": 12 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 45 }
+        },
+        {
+          "generated": { "line": 24, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 39 }
+        },
+        {
+          "name": "arr",
+          "generated": { "line": 24, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 53 }
+        },
+        {
+          "generated": { "line": 24, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 39 }
+        },
+        {
+          "generated": { "line": 24, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 35 }
+        },
+        {
+          "generated": { "line": 24, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 59 }
+        },
+        {
+          "generated": { "line": 25, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 61 }
+        },
+        {
+          "generated": { "line": 25, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 66 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 25, "column": 13 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 70 }
+        },
+        {
+          "generated": { "line": 25, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 74 }
+        },
+        {
+          "generated": { "line": 25, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 66 }
+        },
+        {
+          "name": "arr2",
+          "generated": { "line": 25, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 77 }
+        },
+        {
+          "name": "Array",
+          "generated": { "line": 25, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 84 }
+        },
+        {
+          "name": "arr",
+          "generated": { "line": 25, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 90 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 25, "column": 37 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 94 }
+        },
+        {
+          "generated": { "line": 25, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 84 }
+        },
+        {
+          "generated": { "line": 25, "column": 44 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 61 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 25, "column": 46 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 103 }
+        },
+        {
+          "name": "arr",
+          "generated": { "line": 25, "column": 50 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 107 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 25, "column": 54 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 111 }
+        },
+        {
+          "generated": { "line": 25, "column": 60 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 61 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 25, "column": 62 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 119 }
+        },
+        {
+          "generated": { "line": 25, "column": 65 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 61 }
+        },
+        {
+          "generated": { "line": 25, "column": 67 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 124 }
+        },
+        {
+          "name": "arr2",
+          "generated": { "line": 26, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 126 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 26, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 131 }
+        },
+        {
+          "generated": { "line": 26, "column": 12 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 126 }
+        },
+        {
+          "name": "arr",
+          "generated": { "line": 26, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 136 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 26, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 140 }
+        },
+        {
+          "generated": { "line": 26, "column": 21 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 136 }
+        },
+        {
+          "generated": { "line": 26, "column": 22 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 126 }
+        },
+        {
+          "generated": { "line": 27, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 145 }
+        },
+        {
+          "generated": { "line": 27, "column": 5 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 146 }
+        },
+        {
+          "name": "arr2",
+          "generated": { "line": 27, "column": 12 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 153 }
+        },
+        {
+          "generated": { "line": 27, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 146 }
+        },
+        {
+          "generated": { "line": 28, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 160 }
+        },
+        {
+          "generated": { "line": 28, "column": 3 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 35 }
+        },
+        {
+          "generated": { "line": 28, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 166 }
+        },
+        {
+          "generated": { "line": 29, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 168 }
+        },
+        {
+          "name": "Array",
+          "generated": { "line": 29, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 175 }
+        },
+        {
+          "name": "from",
+          "generated": { "line": 29, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 181 }
+        },
+        {
+          "generated": { "line": 29, "column": 21 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 175 }
+        },
+        {
+          "name": "arr",
+          "generated": { "line": 29, "column": 22 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 186 }
+        },
+        {
+          "generated": { "line": 29, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 175 }
+        },
+        {
+          "generated": { "line": 29, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 168 }
+        },
+        {
+          "generated": { "line": 30, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 193 }
+        },
+        {
+          "generated": { "line": 31, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 3, "column": 195 }
+        },
+        {
+          "generated": { "line": 33, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 33, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 9 }
+        },
+        {
+          "generated": { "line": 33, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 33, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 25 }
+        },
+        {
+          "generated": { "line": 33, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 33, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 35 }
+        },
+        {
+          "generated": { "line": 33, "column": 46 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "generated": { "line": 33, "column": 48 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 48 }
+        },
+        {
+          "generated": { "line": 34, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 50 }
+        },
+        {
+          "generated": { "line": 34, "column": 6 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 54 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 34, "column": 8 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 56 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 34, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 76 }
+        },
+        {
+          "generated": { "line": 34, "column": 39 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 54 }
+        },
+        {
+          "generated": { "line": 34, "column": 40 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 50 }
+        },
+        {
+          "generated": { "line": 34, "column": 42 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 90 }
+        },
+        {
+          "generated": { "line": 35, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 92 }
+        },
+        {
+          "generated": { "line": 35, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 98 }
+        },
+        {
+          "name": "TypeError",
+          "generated": { "line": 35, "column": 14 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 102 }
+        },
+        {
+          "generated": { "line": 35, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 98 }
+        },
+        {
+          "generated": { "line": 35, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 112 }
+        },
+        {
+          "generated": { "line": 35, "column": 59 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 98 }
+        },
+        {
+          "generated": { "line": 35, "column": 60 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 92 }
+        },
+        {
+          "generated": { "line": 36, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 151 }
+        },
+        {
+          "generated": { "line": 37, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 5, "column": 153 }
+        },
+        {
+          "generated": { "line": 39, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "_possibleConstructorReturn",
+          "generated": { "line": 39, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 9 }
+        },
+        {
+          "generated": { "line": 39, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "self",
+          "generated": { "line": 39, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 36 }
+        },
+        {
+          "generated": { "line": 39, "column": 40 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 39, "column": 42 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 42 }
+        },
+        {
+          "generated": { "line": 39, "column": 46 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "generated": { "line": 39, "column": 48 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 48 }
+        },
+        {
+          "generated": { "line": 40, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 50 }
+        },
+        {
+          "generated": { "line": 40, "column": 6 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 54 }
+        },
+        {
+          "name": "self",
+          "generated": { "line": 40, "column": 7 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 55 }
+        },
+        {
+          "generated": { "line": 40, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 50 }
+        },
+        {
+          "generated": { "line": 40, "column": 13 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 61 }
+        },
+        {
+          "generated": { "line": 41, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 63 }
+        },
+        {
+          "generated": { "line": 41, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 69 }
+        },
+        {
+          "name": "ReferenceError",
+          "generated": { "line": 41, "column": 14 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 73 }
+        },
+        {
+          "generated": { "line": 41, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 69 }
+        },
+        {
+          "generated": { "line": 41, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 88 }
+        },
+        {
+          "generated": { "line": 41, "column": 88 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 69 }
+        },
+        {
+          "generated": { "line": 41, "column": 89 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 63 }
+        },
+        {
+          "generated": { "line": 42, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 151 }
+        },
+        {
+          "generated": { "line": 42, "column": 3 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 152 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 42, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 159 }
+        },
+        {
+          "generated": { "line": 42, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 168 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 42, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 175 }
+        },
+        {
+          "generated": { "line": 42, "column": 30 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 168 }
+        },
+        {
+          "generated": { "line": 42, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 184 }
+        },
+        {
+          "generated": { "line": 42, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 168 }
+        },
+        {
+          "generated": { "line": 42, "column": 47 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 196 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 42, "column": 54 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 203 }
+        },
+        {
+          "generated": { "line": 42, "column": 58 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 196 }
+        },
+        {
+          "generated": { "line": 42, "column": 63 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 212 }
+        },
+        {
+          "generated": { "line": 42, "column": 73 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 159 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 42, "column": 77 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 226 }
+        },
+        {
+          "generated": { "line": 42, "column": 81 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 159 }
+        },
+        {
+          "name": "self",
+          "generated": { "line": 42, "column": 84 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 233 }
+        },
+        {
+          "generated": { "line": 42, "column": 88 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 152 }
+        },
+        {
+          "generated": { "line": 43, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 7, "column": 240 }
+        },
+        {
+          "generated": { "line": 45, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 0 }
+        },
+        {
+          "name": "_inherits",
+          "generated": { "line": 45, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 9 }
+        },
+        {
+          "generated": { "line": 45, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 0 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 45, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 19 }
+        },
+        {
+          "generated": { "line": 45, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 0 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 45, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 29 }
+        },
+        {
+          "generated": { "line": 45, "column": 39 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 0 }
+        },
+        {
+          "generated": { "line": 45, "column": 41 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 41 }
+        },
+        {
+          "generated": { "line": 46, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 43 }
+        },
+        {
+          "generated": { "line": 46, "column": 6 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 47 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 46, "column": 13 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 54 }
+        },
+        {
+          "generated": { "line": 46, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 47 }
+        },
+        {
+          "generated": { "line": 46, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 69 }
+        },
+        {
+          "generated": { "line": 46, "column": 38 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 47 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 46, "column": 42 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 83 }
+        },
+        {
+          "generated": { "line": 46, "column": 57 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 98 }
+        },
+        {
+          "generated": { "line": 46, "column": 61 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 43 }
+        },
+        {
+          "generated": { "line": 46, "column": 63 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 104 }
+        },
+        {
+          "generated": { "line": 47, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 106 }
+        },
+        {
+          "generated": { "line": 47, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 112 }
+        },
+        {
+          "name": "TypeError",
+          "generated": { "line": 47, "column": 14 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 116 }
+        },
+        {
+          "generated": { "line": 47, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 112 }
+        },
+        {
+          "generated": { "line": 47, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 126 }
+        },
+        {
+          "generated": { "line": 47, "column": 85 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 187 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 47, "column": 92 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 194 }
+        },
+        {
+          "generated": { "line": 47, "column": 102 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 112 }
+        },
+        {
+          "generated": { "line": 47, "column": 103 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 106 }
+        },
+        {
+          "generated": { "line": 48, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 208 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 48, "column": 3 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 209 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 48, "column": 12 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 218 }
+        },
+        {
+          "generated": { "line": 48, "column": 21 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 209 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 48, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 230 }
+        },
+        {
+          "name": "create",
+          "generated": { "line": 48, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 237 }
+        },
+        {
+          "generated": { "line": 48, "column": 37 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 230 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 48, "column": 38 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 244 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 48, "column": 52 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 258 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 48, "column": 63 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 269 }
+        },
+        {
+          "generated": { "line": 48, "column": 72 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 230 }
+        },
+        {
+          "generated": { "line": 48, "column": 74 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 280 }
+        },
+        {
+          "name": "constructor",
+          "generated": { "line": 48, "column": 76 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 282 }
+        },
+        {
+          "generated": { "line": 48, "column": 89 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 295 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 48, "column": 91 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 297 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 48, "column": 98 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 304 }
+        },
+        {
+          "generated": { "line": 48, "column": 106 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 295 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 48, "column": 108 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 314 }
+        },
+        {
+          "generated": { "line": 48, "column": 120 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 326 }
+        },
+        {
+          "generated": { "line": 48, "column": 125 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 295 }
+        },
+        {
+          "name": "writable",
+          "generated": { "line": 48, "column": 127 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 333 }
+        },
+        {
+          "generated": { "line": 48, "column": 137 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 343 }
+        },
+        {
+          "generated": { "line": 48, "column": 141 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 295 }
+        },
+        {
+          "name": "configurable",
+          "generated": { "line": 48, "column": 143 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 349 }
+        },
+        {
+          "generated": { "line": 48, "column": 157 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 363 }
+        },
+        {
+          "generated": { "line": 48, "column": 161 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 295 }
+        },
+        {
+          "generated": { "line": 48, "column": 163 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 280 }
+        },
+        {
+          "generated": { "line": 48, "column": 165 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 230 }
+        },
+        {
+          "generated": { "line": 48, "column": 166 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 209 }
+        },
+        {
+          "generated": { "line": 48, "column": 167 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 374 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 48, "column": 171 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 378 }
+        },
+        {
+          "generated": { "line": 48, "column": 181 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 374 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 48, "column": 183 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 390 }
+        },
+        {
+          "name": "setPrototypeOf",
+          "generated": { "line": 48, "column": 190 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 397 }
+        },
+        {
+          "generated": { "line": 48, "column": 204 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 390 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 48, "column": 207 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 414 }
+        },
+        {
+          "name": "setPrototypeOf",
+          "generated": { "line": 48, "column": 214 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 421 }
+        },
+        {
+          "generated": { "line": 48, "column": 228 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 414 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 48, "column": 229 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 436 }
+        },
+        {
+          "generated": { "line": 48, "column": 237 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 414 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 48, "column": 239 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 446 }
+        },
+        {
+          "generated": { "line": 48, "column": 249 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 414 }
+        },
+        {
+          "generated": { "line": 48, "column": 250 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 390 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 48, "column": 253 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 460 }
+        },
+        {
+          "name": "__proto__",
+          "generated": { "line": 48, "column": 262 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 469 }
+        },
+        {
+          "generated": { "line": 48, "column": 271 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 460 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 48, "column": 274 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 481 }
+        },
+        {
+          "generated": { "line": 48, "column": 284 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 390 }
+        },
+        {
+          "generated": { "line": 49, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 9, "column": 494 }
+        },
+        {
+          "generated": { "line": 51, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 7 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 51, "column": 4 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 11 }
+        },
+        {
+          "generated": { "line": 51, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 21 }
+        },
+        {
+          "name": "_ResolveValue",
+          "generated": { "line": 51, "column": 42 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 31 }
+        },
+        {
+          "generated": { "line": 51, "column": 55 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 21 }
+        },
+        {
+          "generated": { "line": 51, "column": 57 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 46 }
+        },
+        {
+          "name": "_inherits",
+          "generated": { "line": 52, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 15, "column": 2 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 52, "column": 12 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 15, "column": 12 }
+        },
+        {
+          "generated": { "line": 52, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 15, "column": 2 }
+        },
+        {
+          "name": "_ResolveValue",
+          "generated": { "line": 52, "column": 21 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 15, "column": 21 }
+        },
+        {
+          "generated": { "line": 52, "column": 34 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 15, "column": 2 }
+        },
+        {
+          "generated": { "line": 54, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 17, "column": 2 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 54, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 17, "column": 11 }
+        },
+        {
+          "generated": { "line": 54, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 17, "column": 2 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 54, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 17, "column": 19 }
+        },
+        {
+          "generated": { "line": 54, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 17, "column": 2 }
+        },
+        {
+          "generated": { "line": 54, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 17, "column": 25 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 55, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 18, "column": 4 }
+        },
+        {
+          "generated": { "line": 55, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 18, "column": 20 }
+        },
+        {
+          "generated": { "line": 55, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 18, "column": 4 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 55, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 18, "column": 26 }
+        },
+        {
+          "generated": { "line": 55, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 18, "column": 4 }
+        },
+        {
+          "generated": { "line": 57, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 57, "column": 8 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 8 }
+        },
+        {
+          "name": "_possibleConstructorReturn",
+          "generated": { "line": 57, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 16 }
+        },
+        {
+          "generated": { "line": 57, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 43 }
+        },
+        {
+          "generated": { "line": 57, "column": 47 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 16 }
+        },
+        {
+          "generated": { "line": 57, "column": 49 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 49 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 57, "column": 50 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 50 }
+        },
+        {
+          "name": "__proto__",
+          "generated": { "line": 57, "column": 58 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 58 }
+        },
+        {
+          "generated": { "line": 57, "column": 67 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 50 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 57, "column": 71 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 71 }
+        },
+        {
+          "name": "getPrototypeOf",
+          "generated": { "line": 57, "column": 78 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 78 }
+        },
+        {
+          "generated": { "line": 57, "column": 92 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 71 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 57, "column": 93 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 93 }
+        },
+        {
+          "generated": { "line": 57, "column": 100 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 71 }
+        },
+        {
+          "generated": { "line": 57, "column": 101 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 49 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 57, "column": 103 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 103 }
+        },
+        {
+          "generated": { "line": 57, "column": 107 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 49 }
+        },
+        {
+          "generated": { "line": 57, "column": 108 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 108 }
+        },
+        {
+          "generated": { "line": 57, "column": 112 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 49 }
+        },
+        {
+          "generated": { "line": 57, "column": 113 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 16 }
+        },
+        {
+          "generated": { "line": 57, "column": 114 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 20, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 59, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 22, "column": 4 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 59, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 22, "column": 10 }
+        },
+        {
+          "generated": { "line": 59, "column": 14 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 22, "column": 4 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 59, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 22, "column": 17 }
+        },
+        {
+          "generated": { "line": 59, "column": 21 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 22, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 60, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 23, "column": 4 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 60, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 23, "column": 10 }
+        },
+        {
+          "generated": { "line": 60, "column": 15 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 23, "column": 4 }
+        },
+        {
+          "generated": { "line": 60, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 23, "column": 18 }
+        },
+        {
+          "generated": { "line": 60, "column": 22 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 23, "column": 4 }
+        },
+        {
+          "generated": { "line": 61, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 24, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 61, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 24, "column": 11 }
+        },
+        {
+          "generated": { "line": 61, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 24, "column": 4 }
+        },
+        {
+          "generated": { "line": 62, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 25, "column": 3 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 64, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 2 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 64, "column": 15 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 15 }
+        },
+        {
+          "generated": { "line": 64, "column": 22 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 2 }
+        },
+        {
+          "generated": { "line": 64, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 24 }
+        },
+        {
+          "generated": { "line": 64, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 25 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 65, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 28, "column": 4 }
+        },
+        {
+          "generated": { "line": 65, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 28, "column": 9 }
+        },
+        {
+          "generated": { "line": 65, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 25 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 66, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 29, "column": 4 }
+        },
+        {
+          "generated": { "line": 66, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 29, "column": 11 }
+        },
+        {
+          "name": "getValue",
+          "generated": { "line": 66, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 29, "column": 20 }
+        },
+        {
+          "generated": { "line": 66, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 29, "column": 11 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 66, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 29, "column": 29 }
+        },
+        {
+          "generated": { "line": 66, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 29, "column": 11 }
+        },
+        {
+          "generated": { "line": 66, "column": 38 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 29, "column": 38 }
+        },
+        {
+          "generated": { "line": 67, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 6 }
+        },
+        {
+          "name": "computeGet",
+          "generated": { "line": 67, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 10 }
+        },
+        {
+          "generated": { "line": 67, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 23 }
+        },
+        {
+          "name": "computeGet",
+          "generated": { "line": 67, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 32 }
+        },
+        {
+          "generated": { "line": 67, "column": 42 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 23 }
+        },
+        {
+          "name": "tag",
+          "generated": { "line": 67, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 43 }
+        },
+        {
+          "generated": { "line": 67, "column": 46 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 23 }
+        },
+        {
+          "generated": { "line": 67, "column": 48 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 48 }
+        },
+        {
+          "generated": { "line": 68, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 31, "column": 8 }
+        },
+        {
+          "name": "tag",
+          "generated": { "line": 68, "column": 15 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 31, "column": 15 }
+        },
+        {
+          "name": "getValue",
+          "generated": { "line": 68, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 31, "column": 19 }
+        },
+        {
+          "generated": { "line": 68, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 31, "column": 15 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 68, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 31, "column": 28 }
+        },
+        {
+          "generated": { "line": 68, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 31, "column": 15 }
+        },
+        {
+          "generated": { "line": 68, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 31, "column": 8 }
+        },
+        {
+          "generated": { "line": 69, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 32, "column": 7 }
+        },
+        {
+          "generated": { "line": 69, "column": 7 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 30, "column": 6 }
+        },
+        {
+          "generated": { "line": 70, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 6 }
+        },
+        {
+          "name": "result",
+          "generated": { "line": 70, "column": 10 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 10 }
+        },
+        {
+          "generated": { "line": 70, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 19 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 70, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 24 }
+        },
+        {
+          "generated": { "line": 70, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 19 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 70, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 29 }
+        },
+        {
+          "generated": { "line": 70, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 19 }
+        },
+        {
+          "generated": { "line": 70, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 36 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 70, "column": 46 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 46 }
+        },
+        {
+          "generated": { "line": 70, "column": 53 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 36 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 70, "column": 55 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 55 }
+        },
+        {
+          "generated": { "line": 70, "column": 58 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 36 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 70, "column": 60 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 60 }
+        },
+        {
+          "generated": { "line": 70, "column": 65 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 36 }
+        },
+        {
+          "generated": { "line": 70, "column": 67 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 67 }
+        },
+        {
+          "generated": { "line": 71, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 34, "column": 8 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 71, "column": 12 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 34, "column": 12 }
+        },
+        {
+          "generated": { "line": 71, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 34, "column": 8 }
+        },
+        {
+          "generated": { "line": 71, "column": 38 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 34, "column": 32 }
+        },
+        {
+          "generated": { "line": 72, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 10 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 72, "column": 14 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 14 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 72, "column": 21 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 21 }
+        },
+        {
+          "name": "getPath",
+          "generated": { "line": 72, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 25 }
+        },
+        {
+          "generated": { "line": 72, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 21 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 72, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 33 }
+        },
+        {
+          "generated": { "line": 72, "column": 40 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 21 }
+        },
+        {
+          "generated": { "line": 72, "column": 41 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 35, "column": 10 }
+        },
+        {
+          "generated": { "line": 74, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 10 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 74, "column": 14 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 14 }
+        },
+        {
+          "name": "indexOf",
+          "generated": { "line": 74, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 19 }
+        },
+        {
+          "generated": { "line": 74, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 14 }
+        },
+        {
+          "generated": { "line": 74, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 27 }
+        },
+        {
+          "generated": { "line": 74, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 14 }
+        },
+        {
+          "generated": { "line": 74, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 35 }
+        },
+        {
+          "generated": { "line": 74, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 10 }
+        },
+        {
+          "generated": { "line": 74, "column": 38 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 38 }
+        },
+        {
+          "generated": { "line": 75, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 12 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 75, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 16 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 75, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 24 }
+        },
+        {
+          "name": "getValue",
+          "generated": { "line": 75, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 28 }
+        },
+        {
+          "generated": { "line": 75, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 24 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 75, "column": 37 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 37 }
+        },
+        {
+          "generated": { "line": 75, "column": 44 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 24 }
+        },
+        {
+          "generated": { "line": 75, "column": 45 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 38, "column": 12 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 77, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 12 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 77, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 20 }
+        },
+        {
+          "generated": { "line": 77, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 12 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 77, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 28 }
+        },
+        {
+          "generated": { "line": 77, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 12 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 77, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 33 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 77, "column": 41 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 41 }
+        },
+        {
+          "name": "keys",
+          "generated": { "line": 77, "column": 48 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 48 }
+        },
+        {
+          "generated": { "line": 77, "column": 52 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 41 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 77, "column": 53 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 53 }
+        },
+        {
+          "generated": { "line": 77, "column": 58 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 41 }
+        },
+        {
+          "generated": { "line": 77, "column": 59 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 33 }
+        },
+        {
+          "generated": { "line": 77, "column": 62 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 62 }
+        },
+        {
+          "generated": { "line": 77, "column": 64 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 40, "column": 12 }
+        },
+        {
+          "generated": { "line": 78, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 41, "column": 11 }
+        },
+        {
+          "generated": { "line": 78, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 37, "column": 10 }
+        },
+        {
+          "generated": { "line": 78, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 41, "column": 17 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 79, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 12 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 79, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 20 }
+        },
+        {
+          "generated": { "line": 79, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 12 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 79, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 28 }
+        },
+        {
+          "generated": { "line": 79, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 12 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 79, "column": 33 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 33 }
+        },
+        {
+          "name": "getValue",
+          "generated": { "line": 79, "column": 37 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 37 }
+        },
+        {
+          "generated": { "line": 79, "column": 45 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 33 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 79, "column": 46 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 46 }
+        },
+        {
+          "generated": { "line": 79, "column": 53 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 33 }
+        },
+        {
+          "generated": { "line": 79, "column": 54 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 42, "column": 12 }
+        },
+        {
+          "generated": { "line": 80, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 43, "column": 11 }
+        },
+        {
+          "generated": { "line": 82, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 45, "column": 10 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 82, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 45, "column": 17 }
+        },
+        {
+          "generated": { "line": 82, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 45, "column": 10 }
+        },
+        {
+          "generated": { "line": 83, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 46, "column": 9 }
+        },
+        {
+          "generated": { "line": 83, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 34, "column": 8 }
+        },
+        {
+          "generated": { "line": 83, "column": 15 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 46, "column": 15 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 83, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 46, "column": 19 }
+        },
+        {
+          "generated": { "line": 83, "column": 60 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 46, "column": 15 }
+        },
+        {
+          "generated": { "line": 83, "column": 62 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 46, "column": 48 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 84, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 84, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 18 }
+        },
+        {
+          "generated": { "line": 84, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 84, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 26 }
+        },
+        {
+          "generated": { "line": 84, "column": 30 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 84, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 31 }
+        },
+        {
+          "name": "getValue",
+          "generated": { "line": 84, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 35 }
+        },
+        {
+          "generated": { "line": 84, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 31 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 84, "column": 44 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 44 }
+        },
+        {
+          "generated": { "line": 84, "column": 51 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 31 }
+        },
+        {
+          "generated": { "line": 84, "column": 52 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "generated": { "line": 86, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 49, "column": 10 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 86, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 49, "column": 17 }
+        },
+        {
+          "generated": { "line": 86, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 49, "column": 10 }
+        },
+        {
+          "generated": { "line": 87, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 9 }
+        },
+        {
+          "generated": { "line": 87, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 46, "column": 15 }
+        },
+        {
+          "generated": { "line": 87, "column": 15 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 15 }
+        },
+        {
+          "generated": { "line": 87, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 19 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 87, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 26 }
+        },
+        {
+          "generated": { "line": 87, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 19 }
+        },
+        {
+          "generated": { "line": 87, "column": 34 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 34 }
+        },
+        {
+          "generated": { "line": 87, "column": 44 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 15 }
+        },
+        {
+          "generated": { "line": 87, "column": 46 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 50, "column": 46 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 88, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 10 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 88, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 18 }
+        },
+        {
+          "generated": { "line": 88, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 10 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 88, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 26 }
+        },
+        {
+          "generated": { "line": 88, "column": 30 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 10 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 88, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 31 }
+        },
+        {
+          "name": "apply",
+          "generated": { "line": 88, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 35 }
+        },
+        {
+          "generated": { "line": 88, "column": 40 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 31 }
+        },
+        {
+          "name": "undefined",
+          "generated": { "line": 88, "column": 41 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 41 }
+        },
+        {
+          "generated": { "line": 88, "column": 50 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 31 }
+        },
+        {
+          "name": "_toConsumableArray",
+          "generated": { "line": 88, "column": 52 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 52 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 88, "column": 71 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 71 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 88, "column": 79 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 79 }
+        },
+        {
+          "generated": { "line": 88, "column": 86 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 71 }
+        },
+        {
+          "name": "slice",
+          "generated": { "line": 88, "column": 87 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 87 }
+        },
+        {
+          "generated": { "line": 88, "column": 92 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 71 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 88, "column": 93 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 93 }
+        },
+        {
+          "name": "previousFuncIndex",
+          "generated": { "line": 88, "column": 101 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 101 }
+        },
+        {
+          "generated": { "line": 88, "column": 118 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 71 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 88, "column": 120 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 120 }
+        },
+        {
+          "generated": { "line": 88, "column": 125 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 71 }
+        },
+        {
+          "generated": { "line": 88, "column": 126 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 52 }
+        },
+        {
+          "name": "concat",
+          "generated": { "line": 88, "column": 128 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 128 }
+        },
+        {
+          "generated": { "line": 88, "column": 134 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 52 }
+        },
+        {
+          "generated": { "line": 88, "column": 135 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 135 }
+        },
+        {
+          "name": "computeGet",
+          "generated": { "line": 88, "column": 136 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 136 }
+        },
+        {
+          "generated": { "line": 88, "column": 146 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 135 }
+        },
+        {
+          "generated": { "line": 88, "column": 147 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 52 }
+        },
+        {
+          "generated": { "line": 88, "column": 148 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 31 }
+        },
+        {
+          "generated": { "line": 88, "column": 149 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 51, "column": 10 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 89, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 52, "column": 10 }
+        },
+        {
+          "name": "previousFuncIndex",
+          "generated": { "line": 89, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 52, "column": 18 }
+        },
+        {
+          "generated": { "line": 89, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 52, "column": 10 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 89, "column": 38 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 52, "column": 38 }
+        },
+        {
+          "generated": { "line": 89, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 52, "column": 10 }
+        },
+        {
+          "generated": { "line": 91, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 54, "column": 10 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 91, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 54, "column": 17 }
+        },
+        {
+          "generated": { "line": 91, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 54, "column": 10 }
+        },
+        {
+          "generated": { "line": 92, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 55, "column": 9 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 94, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 57, "column": 8 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 94, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 57, "column": 16 }
+        },
+        {
+          "generated": { "line": 94, "column": 23 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 57, "column": 8 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 94, "column": 24 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 57, "column": 24 }
+        },
+        {
+          "generated": { "line": 94, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 57, "column": 8 }
+        },
+        {
+          "name": "arg",
+          "generated": { "line": 94, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 57, "column": 29 }
+        },
+        {
+          "generated": { "line": 94, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 57, "column": 8 }
+        },
+        {
+          "generated": { "line": 96, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 59, "column": 8 }
+        },
+        {
+          "name": "details",
+          "generated": { "line": 96, "column": 15 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 59, "column": 15 }
+        },
+        {
+          "generated": { "line": 96, "column": 22 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 59, "column": 8 }
+        },
+        {
+          "generated": { "line": 97, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 60, "column": 7 }
+        },
+        {
+          "generated": { "line": 97, "column": 7 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 19 }
+        },
+        {
+          "generated": { "line": 97, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 60, "column": 9 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 98, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 61, "column": 8 }
+        },
+        {
+          "generated": { "line": 98, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 61, "column": 17 }
+        },
+        {
+          "generated": { "line": 98, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 60, "column": 9 }
+        },
+        {
+          "name": "previousFuncIndex",
+          "generated": { "line": 99, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 62, "column": 8 }
+        },
+        {
+          "generated": { "line": 99, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 62, "column": 27 }
+        },
+        {
+          "generated": { "line": 100, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 60, "column": 9 }
+        },
+        {
+          "generated": { "line": 100, "column": 7 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 19 }
+        },
+        {
+          "generated": { "line": 100, "column": 8 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 33, "column": 6 }
+        },
+        {
+          "generated": { "line": 102, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 6 }
+        },
+        {
+          "name": "result",
+          "generated": { "line": 102, "column": 13 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 13 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 102, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 20 }
+        },
+        {
+          "generated": { "line": 102, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 13 }
+        },
+        {
+          "name": "result",
+          "generated": { "line": 102, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 28 }
+        },
+        {
+          "name": "results",
+          "generated": { "line": 102, "column": 35 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 35 }
+        },
+        {
+          "generated": { "line": 102, "column": 42 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 28 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 102, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 43 }
+        },
+        {
+          "generated": { "line": 102, "column": 49 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 28 }
+        },
+        {
+          "generated": { "line": 102, "column": 52 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 52 }
+        },
+        {
+          "generated": { "line": 102, "column": 53 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 13 }
+        },
+        {
+          "generated": { "line": 102, "column": 54 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 65, "column": 6 }
+        },
+        {
+          "generated": { "line": 103, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 66, "column": 5 }
+        },
+        {
+          "generated": { "line": 104, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 25 }
+        },
+        {
+          "generated": { "line": 104, "column": 3 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 24 }
+        },
+        {
+          "generated": { "line": 104, "column": 4 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 27, "column": 2 }
+        },
+        {
+          "generated": { "line": 106, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 69, "column": 2 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 106, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 69, "column": 9 }
+        },
+        {
+          "generated": { "line": 106, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 69, "column": 2 }
+        },
+        {
+          "generated": { "line": 107, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 70, "column": 1 }
+        },
+        {
+          "generated": { "line": 107, "column": 1 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 21 }
+        },
+        {
+          "generated": { "line": 107, "column": 29 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 14, "column": 7 }
+        },
+        {
+          "generated": { "line": 109, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 72, "column": 15 }
+        },
+        {
+          "name": "compute",
+          "generated": { "line": 109, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 72, "column": 24 }
+        },
+        {
+          "generated": { "line": 109, "column": 16 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 72, "column": 15 }
+        },
+        {
+          "generated": { "line": 109, "column": 19 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 72, "column": 34 }
+        },
+        {
+          "generated": { "line": 110, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 2 }
+        },
+        {
+          "generated": { "line": 110, "column": 7 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 7 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 110, "column": 11 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 11 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 110, "column": 18 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 18 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 110, "column": 28 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 28 }
+        },
+        {
+          "generated": { "line": 110, "column": 34 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 7 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 110, "column": 36 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 36 }
+        },
+        {
+          "name": "Array",
+          "generated": { "line": 110, "column": 43 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 43 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 110, "column": 49 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 49 }
+        },
+        {
+          "generated": { "line": 110, "column": 53 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 43 }
+        },
+        {
+          "generated": { "line": 110, "column": 54 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 7 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 110, "column": 56 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 56 }
+        },
+        {
+          "generated": { "line": 110, "column": 63 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 63 }
+        },
+        {
+          "generated": { "line": 110, "column": 64 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 2 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 110, "column": 66 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 66 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 110, "column": 73 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 73 }
+        },
+        {
+          "generated": { "line": 110, "column": 77 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 2 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 110, "column": 79 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 79 }
+        },
+        {
+          "generated": { "line": 110, "column": 85 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 2 }
+        },
+        {
+          "generated": { "line": 110, "column": 87 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 73, "column": 87 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 111, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 74, "column": 4 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 111, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 74, "column": 9 }
+        },
+        {
+          "generated": { "line": 111, "column": 13 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 74, "column": 4 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 111, "column": 17 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 74, "column": 17 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 111, "column": 27 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 74, "column": 27 }
+        },
+        {
+          "generated": { "line": 111, "column": 31 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 74, "column": 17 }
+        },
+        {
+          "generated": { "line": 111, "column": 32 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 74, "column": 4 }
+        },
+        {
+          "generated": { "line": 112, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 75, "column": 3 }
+        },
+        {
+          "generated": { "line": 114, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 77, "column": 2 }
+        },
+        {
+          "generated": { "line": 114, "column": 9 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 77, "column": 9 }
+        },
+        {
+          "name": "Compute",
+          "generated": { "line": 114, "column": 13 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 77, "column": 13 }
+        },
+        {
+          "generated": { "line": 114, "column": 20 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 77, "column": 9 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 114, "column": 21 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 77, "column": 21 }
+        },
+        {
+          "generated": { "line": 114, "column": 25 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 77, "column": 9 }
+        },
+        {
+          "generated": { "line": 114, "column": 26 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 77, "column": 2 }
+        },
+        {
+          "generated": { "line": 115, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 78, "column": 1 }
+        },
+        {
+          "generated": { "line": 116, "column": 0 },
+          "source": "../../node_modules/cerebral/es/Compute.js",
+          "original": { "line": 79, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/cerebral/es/Compute.js":
+          "var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nfunction _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }\n\nimport { Tag } from './tags';\nimport { ResolveValue } from 'function-tree';\n\nexport var Compute = function (_ResolveValue) {\n  _inherits(Compute, _ResolveValue);\n\n  function Compute(args) {\n    _classCallCheck(this, Compute);\n\n    var _this = _possibleConstructorReturn(this, (Compute.__proto__ || Object.getPrototypeOf(Compute)).call(this));\n\n    _this.args = args;\n    _this.value = null;\n    return _this;\n  }\n\n  _createClass(Compute, [{\n    key: 'getValue',\n    value: function getValue(context) {\n      var computeGet = function computeGet(tag) {\n        return tag.getValue(context);\n      };\n      var result = this.args.reduce(function (details, arg, index) {\n        if (arg instanceof Tag) {\n          var path = arg.getPath(context);\n\n          if (path.indexOf('.*') > 0) {\n            var value = arg.getValue(context);\n\n            details.results.push(value ? Object.keys(value) : []);\n          } else {\n            details.results.push(arg.getValue(context));\n          }\n\n          return details;\n        } else if (arg instanceof ResolveValue) {\n          details.results.push(arg.getValue(context));\n\n          return details;\n        } else if (typeof arg === 'function') {\n          details.results.push(arg.apply(undefined, _toConsumableArray(details.results.slice(details.previousFuncIndex, index)).concat([computeGet])));\n          details.previousFuncIndex = index;\n\n          return details;\n        }\n\n        details.results.push(arg);\n\n        return details;\n      }, {\n        results: [],\n        previousFuncIndex: 0\n      });\n\n      return result.results[result.results.length - 1];\n    }\n  }]);\n\n  return Compute;\n}(ResolveValue);\n\nexport default function compute() {\n  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n    args[_key] = arguments[_key];\n  }\n\n  return new Compute(args);\n}\n//# sourceMappingURL=Compute.js.map"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "171fc3806432c3b1d73e7597edf78437",
+  "cacheData": { "env": {} }
+}

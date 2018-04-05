@@ -1,0 +1,52 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/react/package.json",
+      "includedInParent": true,
+      "mtime": 1522871063000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/react/.babelrc",
+      "includedInParent": true,
+      "mtime": 1510689741000
+    },
+    { "name": "./lib", "loc": { "line": 1, "column": 25 } }
+  ],
+  "generated": {
+    "js": "module.exports = require('./lib')\n",
+    "map": {
+      "mappings": [
+        {
+          "source": "../../node_modules/@cerebral/react/index.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/react/index.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/@cerebral/react/index.js":
+          "module.exports = require('./lib')\n"
+      },
+      "lineCount": 2
+    }
+  },
+  "hash": "17d844f662931a97a9637d8ba62c9ec7",
+  "cacheData": { "env": {} }
+}

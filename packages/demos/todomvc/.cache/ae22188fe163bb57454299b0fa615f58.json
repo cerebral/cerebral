@@ -1,0 +1,59 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/function-tree/node_modules/universal-websocket-client/package.json",
+      "includedInParent": true,
+      "mtime": 1522176137000
+    }
+  ],
+  "generated": {
+    "js": "'use strict';\n\nmodule.exports = WebSocket;\n",
+    "map": {
+      "mappings": [
+        {
+          "source":
+            "../../node_modules/function-tree/node_modules/universal-websocket-client/browser.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/function-tree/node_modules/universal-websocket-client/browser.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/function-tree/node_modules/universal-websocket-client/browser.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/function-tree/node_modules/universal-websocket-client/browser.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/function-tree/node_modules/universal-websocket-client/browser.js":
+          "'use strict';\n\nmodule.exports = WebSocket;\n"
+      },
+      "lineCount": 4
+    }
+  },
+  "hash": "88b818b54f1c886a5b60bef8167946c3",
+  "cacheData": { "env": {} }
+}

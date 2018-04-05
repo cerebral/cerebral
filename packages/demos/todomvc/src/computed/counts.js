@@ -1,9 +1,9 @@
 import { Compute } from 'cerebral'
-import { state } from 'cerebral/tags'
+import { state } from 'cerebral/proxy'
 import computedVisibleTodosUids from './visibleTodosUids'
 
 export default Compute(
-  state`todos`,
+  state.todos,
   computedVisibleTodosUids,
   (todos, visibleTodosUids, get) => {
     const todosUids = Object.keys(todos)

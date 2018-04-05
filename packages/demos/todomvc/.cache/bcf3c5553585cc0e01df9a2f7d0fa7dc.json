@@ -1,0 +1,307 @@
+{
+  "dependencies": [
+    {
+      "name": "/Users/christianalfoni/Development/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1519154111000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc/package.json",
+      "includedInParent": true,
+      "mtime": 1522949595000
+    },
+    { "name": "@cerebral/router", "loc": { "line": 1, "column": 19 } },
+    { "name": "@cerebral/storage", "loc": { "line": 2, "column": 28 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.storage = exports.router = undefined;\n\nvar _router = require('@cerebral/router');\n\nvar _router2 = _interopRequireDefault(_router);\n\nvar _storage = require('@cerebral/storage');\n\nvar _storage2 = _interopRequireDefault(_storage);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar router = exports.router = (0, _router2.default)({\n  onlyHash: true,\n  query: true,\n  routes: [{ path: '/', signal: 'rootRouted' }, { path: '/:filter', signal: 'filterClicked' }]\n});\n\nvar storage = exports.storage = (0, _storage2.default)({\n  target: window.localStorage,\n  sync: { todos: 'todos' },\n  prefix: 'todomvc'\n});",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 8, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 12, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 2, "column": 0 }
+        },
+        {
+          "generated": { "line": 18, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 7 }
+        },
+        {
+          "name": "router",
+          "generated": { "line": 18, "column": 4 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 13 }
+        },
+        {
+          "generated": { "line": 18, "column": 30 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 22 }
+        },
+        {
+          "generated": { "line": 18, "column": 52 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 29 }
+        },
+        {
+          "name": "onlyHash",
+          "generated": { "line": 19, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 5, "column": 2 }
+        },
+        {
+          "generated": { "line": 19, "column": 12 },
+          "source": "src/app/modules.js",
+          "original": { "line": 5, "column": 12 }
+        },
+        {
+          "generated": { "line": 19, "column": 16 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 29 }
+        },
+        {
+          "name": "query",
+          "generated": { "line": 20, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 6, "column": 2 }
+        },
+        {
+          "generated": { "line": 20, "column": 9 },
+          "source": "src/app/modules.js",
+          "original": { "line": 6, "column": 9 }
+        },
+        {
+          "generated": { "line": 20, "column": 13 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 29 }
+        },
+        {
+          "name": "routes",
+          "generated": { "line": 21, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 7, "column": 2 }
+        },
+        {
+          "generated": { "line": 21, "column": 10 },
+          "source": "src/app/modules.js",
+          "original": { "line": 7, "column": 10 }
+        },
+        {
+          "generated": { "line": 21, "column": 11 },
+          "source": "src/app/modules.js",
+          "original": { "line": 8, "column": 4 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 21, "column": 13 },
+          "source": "src/app/modules.js",
+          "original": { "line": 8, "column": 6 }
+        },
+        {
+          "generated": { "line": 21, "column": 19 },
+          "source": "src/app/modules.js",
+          "original": { "line": 8, "column": 12 }
+        },
+        {
+          "generated": { "line": 21, "column": 22 },
+          "source": "src/app/modules.js",
+          "original": { "line": 8, "column": 4 }
+        },
+        {
+          "name": "signal",
+          "generated": { "line": 21, "column": 24 },
+          "source": "src/app/modules.js",
+          "original": { "line": 8, "column": 17 }
+        },
+        {
+          "generated": { "line": 21, "column": 32 },
+          "source": "src/app/modules.js",
+          "original": { "line": 8, "column": 25 }
+        },
+        {
+          "generated": { "line": 21, "column": 44 },
+          "source": "src/app/modules.js",
+          "original": { "line": 8, "column": 4 }
+        },
+        {
+          "generated": { "line": 21, "column": 46 },
+          "source": "src/app/modules.js",
+          "original": { "line": 7, "column": 10 }
+        },
+        {
+          "generated": { "line": 21, "column": 48 },
+          "source": "src/app/modules.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 21, "column": 50 },
+          "source": "src/app/modules.js",
+          "original": { "line": 9, "column": 6 }
+        },
+        {
+          "generated": { "line": 21, "column": 56 },
+          "source": "src/app/modules.js",
+          "original": { "line": 9, "column": 12 }
+        },
+        {
+          "generated": { "line": 21, "column": 66 },
+          "source": "src/app/modules.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "name": "signal",
+          "generated": { "line": 21, "column": 68 },
+          "source": "src/app/modules.js",
+          "original": { "line": 9, "column": 24 }
+        },
+        {
+          "generated": { "line": 21, "column": 76 },
+          "source": "src/app/modules.js",
+          "original": { "line": 9, "column": 32 }
+        },
+        {
+          "generated": { "line": 21, "column": 91 },
+          "source": "src/app/modules.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "generated": { "line": 21, "column": 93 },
+          "source": "src/app/modules.js",
+          "original": { "line": 7, "column": 10 }
+        },
+        {
+          "generated": { "line": 22, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 29 }
+        },
+        {
+          "generated": { "line": 22, "column": 1 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 22 }
+        },
+        {
+          "generated": { "line": 22, "column": 2 },
+          "source": "src/app/modules.js",
+          "original": { "line": 4, "column": 7 }
+        },
+        {
+          "generated": { "line": 24, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 7 }
+        },
+        {
+          "name": "storage",
+          "generated": { "line": 24, "column": 4 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 13 }
+        },
+        {
+          "generated": { "line": 24, "column": 32 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 23 }
+        },
+        {
+          "generated": { "line": 24, "column": 55 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 39 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 25, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 14, "column": 2 }
+        },
+        {
+          "name": "window",
+          "generated": { "line": 25, "column": 10 },
+          "source": "src/app/modules.js",
+          "original": { "line": 14, "column": 10 }
+        },
+        {
+          "name": "localStorage",
+          "generated": { "line": 25, "column": 17 },
+          "source": "src/app/modules.js",
+          "original": { "line": 14, "column": 17 }
+        },
+        {
+          "generated": { "line": 25, "column": 29 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 39 }
+        },
+        {
+          "name": "sync",
+          "generated": { "line": 26, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 15, "column": 2 }
+        },
+        {
+          "generated": { "line": 26, "column": 8 },
+          "source": "src/app/modules.js",
+          "original": { "line": 15, "column": 8 }
+        },
+        {
+          "name": "todos",
+          "generated": { "line": 26, "column": 10 },
+          "source": "src/app/modules.js",
+          "original": { "line": 15, "column": 10 }
+        },
+        {
+          "generated": { "line": 26, "column": 17 },
+          "source": "src/app/modules.js",
+          "original": { "line": 15, "column": 17 }
+        },
+        {
+          "generated": { "line": 26, "column": 24 },
+          "source": "src/app/modules.js",
+          "original": { "line": 15, "column": 8 }
+        },
+        {
+          "generated": { "line": 26, "column": 26 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 39 }
+        },
+        {
+          "name": "prefix",
+          "generated": { "line": 27, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 16, "column": 2 }
+        },
+        {
+          "generated": { "line": 27, "column": 10 },
+          "source": "src/app/modules.js",
+          "original": { "line": 16, "column": 10 }
+        },
+        {
+          "generated": { "line": 28, "column": 0 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 39 }
+        },
+        {
+          "generated": { "line": 28, "column": 1 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 23 }
+        },
+        {
+          "generated": { "line": 28, "column": 2 },
+          "source": "src/app/modules.js",
+          "original": { "line": 13, "column": 7 }
+        }
+      ],
+      "sources": {
+        "src/app/modules.js":
+          "import Router from '@cerebral/router'\nimport StorageProvider from '@cerebral/storage'\n\nexport const router = Router({\n  onlyHash: true,\n  query: true,\n  routes: [\n    { path: '/', signal: 'rootRouted' },\n    { path: '/:filter', signal: 'filterClicked' },\n  ],\n})\n\nexport const storage = StorageProvider({\n  target: window.localStorage,\n  sync: { todos: 'todos' },\n  prefix: 'todomvc',\n})\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "69a97c80567f85f1e05b0454c256b067",
+  "cacheData": { "env": {} }
+}
