@@ -1,9 +1,0 @@
-{
-  "dependencies": [{ "name": "./src/index.js", "dynamic": true }],
-  "generated": {
-    "html":
-      "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>TodoMVC</title>\n  </head>\n  <body>\n    <div id=\"root\"></div>\n    <script src=\"/c3b242c87551e928a4426905d9c2db46.js\"></script>\n  </body>\n</html>\n"
-  },
-  "hash": "954508596d0576b33654f35d4e57a97d",
-  "cacheData": {}
-}
