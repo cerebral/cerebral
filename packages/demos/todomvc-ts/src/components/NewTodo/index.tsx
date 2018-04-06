@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, signal } from 'cerebral/proxy'
+import { state, signal } from 'fluent'
 
 export default connect({
   title: state.newTodoTitle,
