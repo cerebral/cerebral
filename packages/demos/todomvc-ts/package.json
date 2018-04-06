@@ -14,6 +14,7 @@
         "babel-plugin-cerebral": "next",
         "cerebral": "^4.2.1",
         "classnames": "^2.2.5",
+        "parcel-plugin-typescript": "^0.7.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
         "todomvc-app-css": "^2.1.0",
