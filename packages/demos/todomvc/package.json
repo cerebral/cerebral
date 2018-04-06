@@ -4,13 +4,12 @@
     "private": true,
     "author": "Christian Alfoni <christianalfoni@gmail.com>",
     "homepage": "http://cerebral.github.io/todomvc/",
-    "contributors": [
-        "Henri Hulski <henri.hulski@gazeta.pl>"
-    ],
+    "contributors": [ "Henri Hulski <henri.hulski@gazeta.pl>" ],
     "dependencies": {
         "@cerebral/react": "next",
         "@cerebral/router": "next",
         "@cerebral/storage": "next",
+        "babel-plugin-cerebral": "next",
         "classnames": "^2.2.5",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",

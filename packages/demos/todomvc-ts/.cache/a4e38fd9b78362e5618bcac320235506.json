@@ -1,0 +1,3717 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/function-tree/package.json",
+      "includedInParent": true,
+      "mtime": 1522871068000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/function-tree/.babelrc",
+      "includedInParent": true,
+      "mtime": 1516822475000
+    },
+    { "name": "./utils", "loc": { "line": 7, "column": 40 } }
+  ],
+  "generated": {
+    "js":
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _utils = require(\"./utils\");\n\nvar _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) {\n  return typeof obj;\n} : function (obj) {\n  return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj;\n};\n\nvar _createClass = function () {\n  function defineProperties(target, props) {\n    for (var i = 0; i < props.length; i++) {\n      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if (\"value\" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);\n    }\n  }return function (Constructor, protoProps, staticProps) {\n    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;\n  };\n}();\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nvar Provider = function () {\n  function Provider(definition) {\n    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},\n        _ref$wrap = _ref.wrap,\n        wrap = _ref$wrap === undefined ? true : _ref$wrap,\n        _ref$ignoreDefinition = _ref.ignoreDefinition,\n        ignoreDefinition = _ref$ignoreDefinition === undefined ? false : _ref$ignoreDefinition;\n\n    _classCallCheck(this, Provider);\n\n    this.definition = definition;\n\n    if (typeof definition === 'function') {\n      return;\n    }\n\n    if (!ignoreDefinition) {\n      this.verifyDefinition(definition);\n    }\n\n    this.wrap = wrap;\n\n    this.ProviderConstructor = function (context) {\n      this.context = context;\n    };\n    this.ProviderConstructor.prototype = definition;\n\n    this.WrappedProviderConstructor = function (name, context) {\n      this.context = context;\n      this.providerName = name;\n    };\n    this.WrappedProviderConstructor.prototype = Object.keys(ignoreDefinition ? {} : definition).reduce(function (wrappedProvider, key) {\n      var originalFunc = definition[key];\n\n      wrappedProvider[key] = function () {\n        var _this = this;\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        var providerResult = originalFunc.apply(this, args);\n\n        if ((0, _utils.isPromise)(providerResult)) {\n          return providerResult.then(function (result) {\n            _this.context.debugger.send({\n              method: _this.providerName + '.' + key,\n              args: args,\n              isPromise: true,\n              isRejected: false,\n              returnValue: (0, _utils.isPlainValue)(result) ? result : '[CAN_NOT_SERIALIZE]'\n            });\n\n            return result;\n          }).catch(function (error) {\n            _this.context.debugger.send({\n              method: _this.providerName + '.' + key,\n              args: args,\n              isPromise: true,\n              isRejected: true\n            });\n\n            throw error;\n          });\n        }\n\n        this.context.debugger.send({\n          method: this.providerName + '.' + key,\n          args: args,\n          returnValue: (0, _utils.isPlainValue)(providerResult) ? providerResult : '[CAN_NOT_SERIALIZE]'\n        });\n\n        return providerResult;\n      };\n\n      return wrappedProvider;\n    }, {});\n  }\n\n  _createClass(Provider, [{\n    key: 'verifyDefinition',\n    value: function verifyDefinition(definition) {\n      if (this.ignoreDefinition) {\n        return;\n      }\n\n      if ((typeof definition === 'undefined' ? 'undefined' : _typeof(definition)) !== 'object' || definition === null) {\n        throw new Error('The definition passed as Provider is not valid');\n      }\n\n      Object.keys(definition).forEach(function (key) {\n        if (typeof definition[key] !== 'function') {\n          throw new Error('The property ' + key + ' passed to Provider is not a method');\n        }\n      });\n    }\n  }, {\n    key: 'get',\n    value: function get(context) {\n      if (typeof this.definition === 'function') {\n        return this.definition(context);\n      }\n\n      return new this.ProviderConstructor(context);\n    }\n  }, {\n    key: 'getWrapped',\n    value: function getWrapped(name, context) {\n      if (typeof this.definition === 'function') {\n        return this.definition(context);\n      }\n\n      return new this.WrappedProviderConstructor(name, context);\n    }\n  }]);\n\n  return Provider;\n}();\n\nexports.default = Provider;\n//# sourceMappingURL=Provider.js.map",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 7, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "generated": { "line": 9, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "name": "_typeof",
+          "generated": { "line": 9, "column": 4 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 4 }
+        },
+        {
+          "generated": { "line": 9, "column": 14 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 14 }
+        },
+        {
+          "name": "Symbol",
+          "generated": { "line": 9, "column": 21 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 21 }
+        },
+        {
+          "generated": { "line": 9, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 14 }
+        },
+        {
+          "generated": { "line": 9, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 32 }
+        },
+        {
+          "generated": { "line": 9, "column": 42 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 14 }
+        },
+        {
+          "generated": { "line": 9, "column": 46 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 46 }
+        },
+        {
+          "name": "Symbol",
+          "generated": { "line": 9, "column": 53 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 53 }
+        },
+        {
+          "name": "iterator",
+          "generated": { "line": 9, "column": 60 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 60 }
+        },
+        {
+          "generated": { "line": 9, "column": 68 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 46 }
+        },
+        {
+          "generated": { "line": 9, "column": 73 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 73 }
+        },
+        {
+          "generated": { "line": 9, "column": 81 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 14 }
+        },
+        {
+          "generated": { "line": 9, "column": 84 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 84 }
+        },
+        {
+          "name": "obj",
+          "generated": { "line": 9, "column": 94 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 94 }
+        },
+        {
+          "generated": { "line": 9, "column": 97 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 84 }
+        },
+        {
+          "generated": { "line": 9, "column": 99 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 99 }
+        },
+        {
+          "generated": { "line": 10, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 101 }
+        },
+        {
+          "generated": { "line": 10, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 108 }
+        },
+        {
+          "name": "obj",
+          "generated": { "line": 10, "column": 16 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 115 }
+        },
+        {
+          "generated": { "line": 10, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 101 }
+        },
+        {
+          "generated": { "line": 11, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 121 }
+        },
+        {
+          "generated": { "line": 11, "column": 1 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 14 }
+        },
+        {
+          "generated": { "line": 11, "column": 4 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 124 }
+        },
+        {
+          "name": "obj",
+          "generated": { "line": 11, "column": 14 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 134 }
+        },
+        {
+          "generated": { "line": 11, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 124 }
+        },
+        {
+          "generated": { "line": 11, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 139 }
+        },
+        {
+          "generated": { "line": 12, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 141 }
+        },
+        {
+          "name": "obj",
+          "generated": { "line": 12, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 148 }
+        },
+        {
+          "generated": { "line": 12, "column": 16 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 155 }
+        },
+        {
+          "name": "Symbol",
+          "generated": { "line": 12, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 162 }
+        },
+        {
+          "generated": { "line": 12, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 155 }
+        },
+        {
+          "generated": { "line": 12, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 173 }
+        },
+        {
+          "generated": { "line": 12, "column": 44 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 148 }
+        },
+        {
+          "name": "obj",
+          "generated": { "line": 12, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 187 }
+        },
+        {
+          "name": "constructor",
+          "generated": { "line": 12, "column": 52 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 191 }
+        },
+        {
+          "generated": { "line": 12, "column": 63 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 187 }
+        },
+        {
+          "name": "Symbol",
+          "generated": { "line": 12, "column": 68 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 207 }
+        },
+        {
+          "generated": { "line": 12, "column": 74 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 148 }
+        },
+        {
+          "name": "obj",
+          "generated": { "line": 12, "column": 78 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 217 }
+        },
+        {
+          "name": "Symbol",
+          "generated": { "line": 12, "column": 86 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 225 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 12, "column": 93 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 232 }
+        },
+        {
+          "generated": { "line": 12, "column": 102 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 148 }
+        },
+        {
+          "generated": { "line": 12, "column": 105 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 244 }
+        },
+        {
+          "generated": { "line": 12, "column": 113 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 148 }
+        },
+        {
+          "generated": { "line": 12, "column": 116 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 255 }
+        },
+        {
+          "name": "obj",
+          "generated": { "line": 12, "column": 123 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 262 }
+        },
+        {
+          "generated": { "line": 12, "column": 126 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 141 }
+        },
+        {
+          "generated": { "line": 13, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 268 }
+        },
+        {
+          "generated": { "line": 13, "column": 1 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 15, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 15, "column": 4 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 4 }
+        },
+        {
+          "generated": { "line": 15, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 19 }
+        },
+        {
+          "generated": { "line": 15, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 31 }
+        },
+        {
+          "generated": { "line": 16, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 33 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 16, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 42 }
+        },
+        {
+          "generated": { "line": 16, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 33 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 16, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 59 }
+        },
+        {
+          "generated": { "line": 16, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 33 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 16, "column": 36 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 67 }
+        },
+        {
+          "generated": { "line": 16, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 33 }
+        },
+        {
+          "generated": { "line": 16, "column": 43 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 74 }
+        },
+        {
+          "generated": { "line": 17, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 76 }
+        },
+        {
+          "generated": { "line": 17, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 81 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 17, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 85 }
+        },
+        {
+          "generated": { "line": 17, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 89 }
+        },
+        {
+          "generated": { "line": 17, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 17, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 92 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 17, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 96 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 17, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 102 }
+        },
+        {
+          "generated": { "line": 17, "column": 36 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 17, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 110 }
+        },
+        {
+          "generated": { "line": 17, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 76 }
+        },
+        {
+          "generated": { "line": 17, "column": 43 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 115 }
+        },
+        {
+          "generated": { "line": 18, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 121 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 18, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 134 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 18, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 140 }
+        },
+        {
+          "generated": { "line": 18, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 134 }
+        },
+        {
+          "generated": { "line": 18, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 144 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 18, "column": 43 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 155 }
+        },
+        {
+          "generated": { "line": 18, "column": 53 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 56 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 168 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 18, "column": 67 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 179 }
+        },
+        {
+          "generated": { "line": 18, "column": 77 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 168 }
+        },
+        {
+          "generated": { "line": 18, "column": 81 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 193 }
+        },
+        {
+          "generated": { "line": 18, "column": 86 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 87 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 200 }
+        },
+        {
+          "name": "configurable",
+          "generated": { "line": 18, "column": 98 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 211 }
+        },
+        {
+          "generated": { "line": 18, "column": 110 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 200 }
+        },
+        {
+          "generated": { "line": 18, "column": 113 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 226 }
+        },
+        {
+          "generated": { "line": 18, "column": 117 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 200 }
+        },
+        {
+          "generated": { "line": 18, "column": 118 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 232 }
+        },
+        {
+          "generated": { "line": 18, "column": 122 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 236 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 133 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 247 }
+        },
+        {
+          "generated": { "line": 18, "column": 143 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 232 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 145 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 259 }
+        },
+        {
+          "name": "writable",
+          "generated": { "line": 18, "column": 156 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 270 }
+        },
+        {
+          "generated": { "line": 18, "column": 164 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 259 }
+        },
+        {
+          "generated": { "line": 18, "column": 167 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 281 }
+        },
+        {
+          "generated": { "line": 18, "column": 171 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 259 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 18, "column": 172 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 287 }
+        },
+        {
+          "name": "defineProperty",
+          "generated": { "line": 18, "column": 179 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 294 }
+        },
+        {
+          "generated": { "line": 18, "column": 193 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 287 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 18, "column": 194 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 309 }
+        },
+        {
+          "generated": { "line": 18, "column": 200 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 202 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 317 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 18, "column": 213 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 328 }
+        },
+        {
+          "generated": { "line": 18, "column": 216 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 18, "column": 218 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 333 }
+        },
+        {
+          "generated": { "line": 18, "column": 228 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 287 }
+        },
+        {
+          "generated": { "line": 19, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 347 }
+        },
+        {
+          "generated": { "line": 20, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 349 }
+        },
+        {
+          "generated": { "line": 20, "column": 3 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 350 }
+        },
+        {
+          "generated": { "line": 20, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 357 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 20, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 367 }
+        },
+        {
+          "generated": { "line": 20, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 357 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 20, "column": 33 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 380 }
+        },
+        {
+          "generated": { "line": 20, "column": 43 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 357 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 20, "column": 45 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 392 }
+        },
+        {
+          "generated": { "line": 20, "column": 56 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 357 }
+        },
+        {
+          "generated": { "line": 20, "column": 58 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 405 }
+        },
+        {
+          "generated": { "line": 21, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 407 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 21, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 411 }
+        },
+        {
+          "generated": { "line": 21, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 407 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 21, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 423 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 21, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 440 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 21, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 452 }
+        },
+        {
+          "generated": { "line": 21, "column": 58 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 423 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 21, "column": 60 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 463 }
+        },
+        {
+          "generated": { "line": 21, "column": 70 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 423 }
+        },
+        {
+          "generated": { "line": 21, "column": 72 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 476 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 21, "column": 76 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 480 }
+        },
+        {
+          "generated": { "line": 21, "column": 87 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 476 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 21, "column": 89 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 493 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 21, "column": 106 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 510 }
+        },
+        {
+          "generated": { "line": 21, "column": 117 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 493 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 21, "column": 119 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 523 }
+        },
+        {
+          "generated": { "line": 21, "column": 130 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 493 }
+        },
+        {
+          "generated": { "line": 21, "column": 132 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 537 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 21, "column": 139 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 544 }
+        },
+        {
+          "generated": { "line": 21, "column": 150 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 537 }
+        },
+        {
+          "generated": { "line": 22, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 558 }
+        },
+        {
+          "generated": { "line": 22, "column": 3 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 350 }
+        },
+        {
+          "generated": { "line": 23, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 561 }
+        },
+        {
+          "generated": { "line": 23, "column": 1 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 19 }
+        },
+        {
+          "generated": { "line": 23, "column": 3 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 25, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 25, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 9 }
+        },
+        {
+          "generated": { "line": 25, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 25, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 25 }
+        },
+        {
+          "generated": { "line": 25, "column": 33 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 25, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 35 }
+        },
+        {
+          "generated": { "line": 25, "column": 46 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "generated": { "line": 25, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 48 }
+        },
+        {
+          "generated": { "line": 26, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 50 }
+        },
+        {
+          "generated": { "line": 26, "column": 6 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 54 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 26, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 56 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 26, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 76 }
+        },
+        {
+          "generated": { "line": 26, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 54 }
+        },
+        {
+          "generated": { "line": 26, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 50 }
+        },
+        {
+          "generated": { "line": 26, "column": 42 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 90 }
+        },
+        {
+          "generated": { "line": 27, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 92 }
+        },
+        {
+          "generated": { "line": 27, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 98 }
+        },
+        {
+          "name": "TypeError",
+          "generated": { "line": 27, "column": 14 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 102 }
+        },
+        {
+          "generated": { "line": 27, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 98 }
+        },
+        {
+          "generated": { "line": 27, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 112 }
+        },
+        {
+          "generated": { "line": 27, "column": 59 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 98 }
+        },
+        {
+          "generated": { "line": 27, "column": 60 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 92 }
+        },
+        {
+          "generated": { "line": 28, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 151 }
+        },
+        {
+          "generated": { "line": 29, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 5, "column": 153 }
+        },
+        {
+          "generated": { "line": 31, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 9, "column": 0 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 31, "column": 4 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "generated": { "line": 31, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 9, "column": 15 }
+        },
+        {
+          "generated": { "line": 31, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 9, "column": 27 }
+        },
+        {
+          "generated": { "line": 32, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 10, "column": 2 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 32, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 10, "column": 11 }
+        },
+        {
+          "generated": { "line": 32, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 10, "column": 2 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 32, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 10, "column": 20 }
+        },
+        {
+          "generated": { "line": 32, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 10, "column": 2 }
+        },
+        {
+          "generated": { "line": 32, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 10, "column": 32 }
+        },
+        {
+          "generated": { "line": 33, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "name": "_ref",
+          "generated": { "line": 33, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 8 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 33, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 15 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 33, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 25 }
+        },
+        {
+          "generated": { "line": 33, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 15 }
+        },
+        {
+          "generated": { "line": 33, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 34 }
+        },
+        {
+          "generated": { "line": 33, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 15 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 33, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 39 }
+        },
+        {
+          "generated": { "line": 33, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 49 }
+        },
+        {
+          "generated": { "line": 33, "column": 50 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 39 }
+        },
+        {
+          "name": "undefined",
+          "generated": { "line": 33, "column": 56 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 56 }
+        },
+        {
+          "generated": { "line": 33, "column": 65 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 15 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 33, "column": 68 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 68 }
+        },
+        {
+          "generated": { "line": 33, "column": 78 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 78 }
+        },
+        {
+          "generated": { "line": 33, "column": 79 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 68 }
+        },
+        {
+          "generated": { "line": 33, "column": 80 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 15 }
+        },
+        {
+          "generated": { "line": 33, "column": 83 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 83 }
+        },
+        {
+          "generated": { "line": 33, "column": 85 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "generated": { "line": 34, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "name": "_ref$wrap",
+          "generated": { "line": 34, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 12, "column": 8 }
+        },
+        {
+          "name": "_ref",
+          "generated": { "line": 34, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 12, "column": 20 }
+        },
+        {
+          "name": "wrap",
+          "generated": { "line": 34, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 12, "column": 25 }
+        },
+        {
+          "generated": { "line": 34, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "generated": { "line": 35, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "name": "wrap",
+          "generated": { "line": 35, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 13, "column": 8 }
+        },
+        {
+          "name": "_ref$wrap",
+          "generated": { "line": 35, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 13, "column": 15 }
+        },
+        {
+          "name": "undefined",
+          "generated": { "line": 35, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 13, "column": 29 }
+        },
+        {
+          "generated": { "line": 35, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 13, "column": 15 }
+        },
+        {
+          "generated": { "line": 35, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 13, "column": 41 }
+        },
+        {
+          "generated": { "line": 35, "column": 45 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 13, "column": 15 }
+        },
+        {
+          "name": "_ref$wrap",
+          "generated": { "line": 35, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 13, "column": 48 }
+        },
+        {
+          "generated": { "line": 35, "column": 57 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "generated": { "line": 36, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "name": "_ref$ignoreDefinition",
+          "generated": { "line": 36, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 14, "column": 8 }
+        },
+        {
+          "name": "_ref",
+          "generated": { "line": 36, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 14, "column": 32 }
+        },
+        {
+          "name": "ignoreDefinition",
+          "generated": { "line": 36, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 14, "column": 37 }
+        },
+        {
+          "generated": { "line": 36, "column": 53 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "generated": { "line": 37, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "name": "ignoreDefinition",
+          "generated": { "line": 37, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 15, "column": 8 }
+        },
+        {
+          "name": "_ref$ignoreDefinition",
+          "generated": { "line": 37, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 15, "column": 27 }
+        },
+        {
+          "name": "undefined",
+          "generated": { "line": 37, "column": 53 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 15, "column": 53 }
+        },
+        {
+          "generated": { "line": 37, "column": 62 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 15, "column": 27 }
+        },
+        {
+          "generated": { "line": 37, "column": 65 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 15, "column": 65 }
+        },
+        {
+          "generated": { "line": 37, "column": 70 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 15, "column": 27 }
+        },
+        {
+          "name": "_ref$ignoreDefinition",
+          "generated": { "line": 37, "column": 73 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 15, "column": 73 }
+        },
+        {
+          "generated": { "line": 37, "column": 94 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 39, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 17, "column": 4 }
+        },
+        {
+          "generated": { "line": 39, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 17, "column": 20 }
+        },
+        {
+          "generated": { "line": 39, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 17, "column": 4 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 39, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 17, "column": 26 }
+        },
+        {
+          "generated": { "line": 39, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 17, "column": 4 }
+        },
+        {
+          "generated": { "line": 41, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 19, "column": 4 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 41, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 19, "column": 9 }
+        },
+        {
+          "generated": { "line": 41, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 19, "column": 4 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 41, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 19, "column": 22 }
+        },
+        {
+          "generated": { "line": 41, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 19, "column": 4 }
+        },
+        {
+          "generated": { "line": 43, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 21, "column": 4 }
+        },
+        {
+          "generated": { "line": 43, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 21, "column": 8 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 43, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 21, "column": 15 }
+        },
+        {
+          "generated": { "line": 43, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 21, "column": 8 }
+        },
+        {
+          "generated": { "line": 43, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 21, "column": 30 }
+        },
+        {
+          "generated": { "line": 43, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 21, "column": 4 }
+        },
+        {
+          "generated": { "line": 43, "column": 42 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 21, "column": 42 }
+        },
+        {
+          "generated": { "line": 44, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 22, "column": 6 }
+        },
+        {
+          "generated": { "line": 45, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 23, "column": 5 }
+        },
+        {
+          "generated": { "line": 47, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 25, "column": 4 }
+        },
+        {
+          "generated": { "line": 47, "column": 8 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 25, "column": 8 }
+        },
+        {
+          "name": "ignoreDefinition",
+          "generated": { "line": 47, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 25, "column": 9 }
+        },
+        {
+          "generated": { "line": 47, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 25, "column": 4 }
+        },
+        {
+          "generated": { "line": 47, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 25, "column": 27 }
+        },
+        {
+          "generated": { "line": 48, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 26, "column": 6 }
+        },
+        {
+          "name": "verifyDefinition",
+          "generated": { "line": 48, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 26, "column": 11 }
+        },
+        {
+          "generated": { "line": 48, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 26, "column": 6 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 48, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 26, "column": 28 }
+        },
+        {
+          "generated": { "line": 48, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 26, "column": 6 }
+        },
+        {
+          "generated": { "line": 49, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 27, "column": 5 }
+        },
+        {
+          "generated": { "line": 51, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 29, "column": 4 }
+        },
+        {
+          "name": "wrap",
+          "generated": { "line": 51, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 29, "column": 9 }
+        },
+        {
+          "generated": { "line": 51, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 29, "column": 4 }
+        },
+        {
+          "name": "wrap",
+          "generated": { "line": 51, "column": 16 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 29, "column": 16 }
+        },
+        {
+          "generated": { "line": 51, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 29, "column": 4 }
+        },
+        {
+          "generated": { "line": 53, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 4 }
+        },
+        {
+          "name": "ProviderConstructor",
+          "generated": { "line": 53, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 9 }
+        },
+        {
+          "generated": { "line": 53, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 4 }
+        },
+        {
+          "generated": { "line": 53, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 31 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 53, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 41 }
+        },
+        {
+          "generated": { "line": 53, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 31 }
+        },
+        {
+          "generated": { "line": 53, "column": 50 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 50 }
+        },
+        {
+          "generated": { "line": 54, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 32, "column": 6 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 54, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 32, "column": 11 }
+        },
+        {
+          "generated": { "line": 54, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 32, "column": 6 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 54, "column": 21 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 32, "column": 21 }
+        },
+        {
+          "generated": { "line": 54, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 32, "column": 6 }
+        },
+        {
+          "generated": { "line": 55, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 33, "column": 5 }
+        },
+        {
+          "generated": { "line": 55, "column": 5 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 31, "column": 4 }
+        },
+        {
+          "generated": { "line": 56, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 34, "column": 4 }
+        },
+        {
+          "name": "ProviderConstructor",
+          "generated": { "line": 56, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 34, "column": 9 }
+        },
+        {
+          "generated": { "line": 56, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 34, "column": 4 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 56, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 34, "column": 29 }
+        },
+        {
+          "generated": { "line": 56, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 34, "column": 4 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 56, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 34, "column": 41 }
+        },
+        {
+          "generated": { "line": 56, "column": 51 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 34, "column": 4 }
+        },
+        {
+          "generated": { "line": 58, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 4 }
+        },
+        {
+          "name": "WrappedProviderConstructor",
+          "generated": { "line": 58, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 9 }
+        },
+        {
+          "generated": { "line": 58, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 4 }
+        },
+        {
+          "generated": { "line": 58, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 38 }
+        },
+        {
+          "name": "name",
+          "generated": { "line": 58, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 48 }
+        },
+        {
+          "generated": { "line": 58, "column": 52 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 38 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 58, "column": 54 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 54 }
+        },
+        {
+          "generated": { "line": 58, "column": 61 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 38 }
+        },
+        {
+          "generated": { "line": 58, "column": 63 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 63 }
+        },
+        {
+          "generated": { "line": 59, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 37, "column": 6 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 59, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 37, "column": 11 }
+        },
+        {
+          "generated": { "line": 59, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 37, "column": 6 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 59, "column": 21 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 37, "column": 21 }
+        },
+        {
+          "generated": { "line": 59, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 37, "column": 6 }
+        },
+        {
+          "generated": { "line": 60, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 38, "column": 6 }
+        },
+        {
+          "name": "providerName",
+          "generated": { "line": 60, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 38, "column": 11 }
+        },
+        {
+          "generated": { "line": 60, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 38, "column": 6 }
+        },
+        {
+          "name": "name",
+          "generated": { "line": 60, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 38, "column": 26 }
+        },
+        {
+          "generated": { "line": 60, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 38, "column": 6 }
+        },
+        {
+          "generated": { "line": 61, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 39, "column": 5 }
+        },
+        {
+          "generated": { "line": 61, "column": 5 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 36, "column": 4 }
+        },
+        {
+          "generated": { "line": 62, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 4 }
+        },
+        {
+          "name": "WrappedProviderConstructor",
+          "generated": { "line": 62, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 9 }
+        },
+        {
+          "generated": { "line": 62, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 4 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 62, "column": 36 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 36 }
+        },
+        {
+          "generated": { "line": 62, "column": 45 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 4 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 62, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 48 }
+        },
+        {
+          "name": "keys",
+          "generated": { "line": 62, "column": 55 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 55 }
+        },
+        {
+          "generated": { "line": 62, "column": 59 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 48 }
+        },
+        {
+          "name": "ignoreDefinition",
+          "generated": { "line": 62, "column": 60 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 60 }
+        },
+        {
+          "generated": { "line": 62, "column": 79 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 79 }
+        },
+        {
+          "generated": { "line": 62, "column": 81 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 60 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 62, "column": 84 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 84 }
+        },
+        {
+          "generated": { "line": 62, "column": 94 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 48 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 62, "column": 96 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 96 }
+        },
+        {
+          "generated": { "line": 62, "column": 102 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 48 }
+        },
+        {
+          "generated": { "line": 62, "column": 103 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 103 }
+        },
+        {
+          "name": "wrappedProvider",
+          "generated": { "line": 62, "column": 113 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 113 }
+        },
+        {
+          "generated": { "line": 62, "column": 128 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 103 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 62, "column": 130 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 130 }
+        },
+        {
+          "generated": { "line": 62, "column": 133 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 103 }
+        },
+        {
+          "generated": { "line": 62, "column": 135 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 135 }
+        },
+        {
+          "generated": { "line": 63, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 41, "column": 6 }
+        },
+        {
+          "name": "originalFunc",
+          "generated": { "line": 63, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 41, "column": 10 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 63, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 41, "column": 25 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 63, "column": 36 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 41, "column": 36 }
+        },
+        {
+          "generated": { "line": 63, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 41, "column": 25 }
+        },
+        {
+          "generated": { "line": 63, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 41, "column": 6 }
+        },
+        {
+          "name": "wrappedProvider",
+          "generated": { "line": 65, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 43, "column": 6 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 65, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 43, "column": 22 }
+        },
+        {
+          "generated": { "line": 65, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 43, "column": 6 }
+        },
+        {
+          "generated": { "line": 65, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 43, "column": 29 }
+        },
+        {
+          "generated": { "line": 65, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 43, "column": 41 }
+        },
+        {
+          "generated": { "line": 66, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 44, "column": 8 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 66, "column": 12 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 44, "column": 12 }
+        },
+        {
+          "generated": { "line": 66, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 44, "column": 20 }
+        },
+        {
+          "generated": { "line": 66, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 44, "column": 8 }
+        },
+        {
+          "generated": { "line": 68, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 8 }
+        },
+        {
+          "generated": { "line": 68, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 13 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 68, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 17 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 68, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 24 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 68, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 34 }
+        },
+        {
+          "generated": { "line": 68, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 13 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 68, "column": 42 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 42 }
+        },
+        {
+          "name": "Array",
+          "generated": { "line": 68, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 49 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 68, "column": 55 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 55 }
+        },
+        {
+          "generated": { "line": 68, "column": 59 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 49 }
+        },
+        {
+          "generated": { "line": 68, "column": 60 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 13 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 68, "column": 62 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 62 }
+        },
+        {
+          "generated": { "line": 68, "column": 69 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 69 }
+        },
+        {
+          "generated": { "line": 68, "column": 70 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 8 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 68, "column": 72 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 72 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 68, "column": 79 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 79 }
+        },
+        {
+          "generated": { "line": 68, "column": 83 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 8 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 68, "column": 85 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 85 }
+        },
+        {
+          "generated": { "line": 68, "column": 91 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 8 }
+        },
+        {
+          "generated": { "line": 68, "column": 93 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 46, "column": 93 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 69, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 69, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 47, "column": 15 }
+        },
+        {
+          "generated": { "line": 69, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 69, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 47, "column": 23 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 69, "column": 33 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 47, "column": 33 }
+        },
+        {
+          "generated": { "line": 69, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 47, "column": 23 }
+        },
+        {
+          "generated": { "line": 69, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "generated": { "line": 70, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 48, "column": 9 }
+        },
+        {
+          "generated": { "line": 72, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 8 }
+        },
+        {
+          "name": "providerResult",
+          "generated": { "line": 72, "column": 12 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 12 }
+        },
+        {
+          "name": "originalFunc",
+          "generated": { "line": 72, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 29 }
+        },
+        {
+          "name": "apply",
+          "generated": { "line": 72, "column": 42 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 42 }
+        },
+        {
+          "generated": { "line": 72, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 29 }
+        },
+        {
+          "generated": { "line": 72, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 48 }
+        },
+        {
+          "generated": { "line": 72, "column": 52 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 29 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 72, "column": 54 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 54 }
+        },
+        {
+          "generated": { "line": 72, "column": 58 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 29 }
+        },
+        {
+          "generated": { "line": 72, "column": 59 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 50, "column": 8 }
+        },
+        {
+          "generated": { "line": 74, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 52, "column": 8 }
+        },
+        {
+          "generated": { "line": 74, "column": 12 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 52, "column": 12 }
+        },
+        {
+          "name": "providerResult",
+          "generated": { "line": 74, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 52, "column": 22 }
+        },
+        {
+          "generated": { "line": 74, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 52, "column": 12 }
+        },
+        {
+          "generated": { "line": 74, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 52, "column": 8 }
+        },
+        {
+          "generated": { "line": 74, "column": 51 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 52, "column": 39 }
+        },
+        {
+          "generated": { "line": 75, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 10 }
+        },
+        {
+          "name": "providerResult",
+          "generated": { "line": 75, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 17 }
+        },
+        {
+          "name": "then",
+          "generated": { "line": 75, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 32 }
+        },
+        {
+          "generated": { "line": 75, "column": 36 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 17 }
+        },
+        {
+          "generated": { "line": 75, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 37 }
+        },
+        {
+          "name": "result",
+          "generated": { "line": 75, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 47 }
+        },
+        {
+          "generated": { "line": 75, "column": 53 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 37 }
+        },
+        {
+          "generated": { "line": 75, "column": 55 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 55 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 76, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 12 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 76, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 18 }
+        },
+        {
+          "generated": { "line": 76, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 12 }
+        },
+        {
+          "name": "debugger",
+          "generated": { "line": 76, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 26 }
+        },
+        {
+          "generated": { "line": 76, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 12 }
+        },
+        {
+          "name": "send",
+          "generated": { "line": 76, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 35 }
+        },
+        {
+          "generated": { "line": 76, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 12 }
+        },
+        {
+          "generated": { "line": 76, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 40 }
+        },
+        {
+          "name": "method",
+          "generated": { "line": 77, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 55, "column": 14 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 77, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 55, "column": 22 }
+        },
+        {
+          "name": "providerName",
+          "generated": { "line": 77, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 55, "column": 28 }
+        },
+        {
+          "generated": { "line": 77, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 55, "column": 22 }
+        },
+        {
+          "generated": { "line": 77, "column": 43 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 55, "column": 43 }
+        },
+        {
+          "generated": { "line": 77, "column": 46 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 55, "column": 22 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 77, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 55, "column": 49 }
+        },
+        {
+          "generated": { "line": 77, "column": 52 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 40 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 78, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 56, "column": 14 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 78, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 56, "column": 20 }
+        },
+        {
+          "generated": { "line": 78, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 40 }
+        },
+        {
+          "name": "isPromise",
+          "generated": { "line": 79, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 57, "column": 14 }
+        },
+        {
+          "generated": { "line": 79, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 57, "column": 25 }
+        },
+        {
+          "generated": { "line": 79, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 40 }
+        },
+        {
+          "name": "isRejected",
+          "generated": { "line": 80, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 58, "column": 14 }
+        },
+        {
+          "generated": { "line": 80, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 58, "column": 26 }
+        },
+        {
+          "generated": { "line": 80, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 40 }
+        },
+        {
+          "name": "returnValue",
+          "generated": { "line": 81, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 59, "column": 14 }
+        },
+        {
+          "generated": { "line": 81, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 59, "column": 27 }
+        },
+        {
+          "name": "result",
+          "generated": { "line": 81, "column": 52 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 59, "column": 40 }
+        },
+        {
+          "generated": { "line": 81, "column": 58 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 59, "column": 27 }
+        },
+        {
+          "name": "result",
+          "generated": { "line": 81, "column": 62 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 59, "column": 50 }
+        },
+        {
+          "generated": { "line": 81, "column": 68 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 59, "column": 27 }
+        },
+        {
+          "generated": { "line": 81, "column": 71 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 59, "column": 59 }
+        },
+        {
+          "generated": { "line": 82, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 40 }
+        },
+        {
+          "generated": { "line": 82, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 54, "column": 12 }
+        },
+        {
+          "generated": { "line": 84, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 62, "column": 12 }
+        },
+        {
+          "name": "result",
+          "generated": { "line": 84, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 62, "column": 19 }
+        },
+        {
+          "generated": { "line": 84, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 62, "column": 12 }
+        },
+        {
+          "generated": { "line": 85, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 63, "column": 11 }
+        },
+        {
+          "generated": { "line": 85, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 17 }
+        },
+        {
+          "name": "catch",
+          "generated": { "line": 85, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 63, "column": 13 }
+        },
+        {
+          "generated": { "line": 85, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 17 }
+        },
+        {
+          "generated": { "line": 85, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 63, "column": 19 }
+        },
+        {
+          "name": "error",
+          "generated": { "line": 85, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 63, "column": 29 }
+        },
+        {
+          "generated": { "line": 85, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 63, "column": 19 }
+        },
+        {
+          "generated": { "line": 85, "column": 36 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 63, "column": 36 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 86, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 12 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 86, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 18 }
+        },
+        {
+          "generated": { "line": 86, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 12 }
+        },
+        {
+          "name": "debugger",
+          "generated": { "line": 86, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 26 }
+        },
+        {
+          "generated": { "line": 86, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 12 }
+        },
+        {
+          "name": "send",
+          "generated": { "line": 86, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 35 }
+        },
+        {
+          "generated": { "line": 86, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 12 }
+        },
+        {
+          "generated": { "line": 86, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 40 }
+        },
+        {
+          "name": "method",
+          "generated": { "line": 87, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 65, "column": 14 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 87, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 65, "column": 22 }
+        },
+        {
+          "name": "providerName",
+          "generated": { "line": 87, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 65, "column": 28 }
+        },
+        {
+          "generated": { "line": 87, "column": 40 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 65, "column": 22 }
+        },
+        {
+          "generated": { "line": 87, "column": 43 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 65, "column": 43 }
+        },
+        {
+          "generated": { "line": 87, "column": 46 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 65, "column": 22 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 87, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 65, "column": 49 }
+        },
+        {
+          "generated": { "line": 87, "column": 52 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 40 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 88, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 66, "column": 14 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 88, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 66, "column": 20 }
+        },
+        {
+          "generated": { "line": 88, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 40 }
+        },
+        {
+          "name": "isPromise",
+          "generated": { "line": 89, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 67, "column": 14 }
+        },
+        {
+          "generated": { "line": 89, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 67, "column": 25 }
+        },
+        {
+          "generated": { "line": 89, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 40 }
+        },
+        {
+          "name": "isRejected",
+          "generated": { "line": 90, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 68, "column": 14 }
+        },
+        {
+          "generated": { "line": 90, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 68, "column": 26 }
+        },
+        {
+          "generated": { "line": 91, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 40 }
+        },
+        {
+          "generated": { "line": 91, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 64, "column": 12 }
+        },
+        {
+          "generated": { "line": 93, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 71, "column": 12 }
+        },
+        {
+          "name": "error",
+          "generated": { "line": 93, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 71, "column": 18 }
+        },
+        {
+          "generated": { "line": 93, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 71, "column": 12 }
+        },
+        {
+          "generated": { "line": 94, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 72, "column": 11 }
+        },
+        {
+          "generated": { "line": 94, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 17 }
+        },
+        {
+          "generated": { "line": 94, "column": 12 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 53, "column": 10 }
+        },
+        {
+          "generated": { "line": 95, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 73, "column": 9 }
+        },
+        {
+          "generated": { "line": 97, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 8 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 97, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 13 }
+        },
+        {
+          "generated": { "line": 97, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 8 }
+        },
+        {
+          "name": "debugger",
+          "generated": { "line": 97, "column": 21 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 21 }
+        },
+        {
+          "generated": { "line": 97, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 8 }
+        },
+        {
+          "name": "send",
+          "generated": { "line": 97, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 30 }
+        },
+        {
+          "generated": { "line": 97, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 8 }
+        },
+        {
+          "generated": { "line": 97, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 35 }
+        },
+        {
+          "name": "method",
+          "generated": { "line": 98, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 76, "column": 10 }
+        },
+        {
+          "generated": { "line": 98, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 76, "column": 18 }
+        },
+        {
+          "name": "providerName",
+          "generated": { "line": 98, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 76, "column": 23 }
+        },
+        {
+          "generated": { "line": 98, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 76, "column": 18 }
+        },
+        {
+          "generated": { "line": 98, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 76, "column": 38 }
+        },
+        {
+          "generated": { "line": 98, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 76, "column": 18 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 98, "column": 44 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 76, "column": 44 }
+        },
+        {
+          "generated": { "line": 98, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 35 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 99, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 77, "column": 10 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 99, "column": 16 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 77, "column": 16 }
+        },
+        {
+          "generated": { "line": 99, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 35 }
+        },
+        {
+          "name": "returnValue",
+          "generated": { "line": 100, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 78, "column": 10 }
+        },
+        {
+          "generated": { "line": 100, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 78, "column": 23 }
+        },
+        {
+          "name": "providerResult",
+          "generated": { "line": 100, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 78, "column": 36 }
+        },
+        {
+          "generated": { "line": 100, "column": 62 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 78, "column": 23 }
+        },
+        {
+          "name": "providerResult",
+          "generated": { "line": 100, "column": 66 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 78, "column": 54 }
+        },
+        {
+          "generated": { "line": 100, "column": 80 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 78, "column": 23 }
+        },
+        {
+          "generated": { "line": 100, "column": 83 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 78, "column": 71 }
+        },
+        {
+          "generated": { "line": 101, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 35 }
+        },
+        {
+          "generated": { "line": 101, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 75, "column": 8 }
+        },
+        {
+          "generated": { "line": 103, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 81, "column": 8 }
+        },
+        {
+          "name": "providerResult",
+          "generated": { "line": 103, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 81, "column": 15 }
+        },
+        {
+          "generated": { "line": 103, "column": 29 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 81, "column": 8 }
+        },
+        {
+          "generated": { "line": 104, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 82, "column": 7 }
+        },
+        {
+          "generated": { "line": 104, "column": 7 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 43, "column": 6 }
+        },
+        {
+          "generated": { "line": 106, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 84, "column": 6 }
+        },
+        {
+          "name": "wrappedProvider",
+          "generated": { "line": 106, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 84, "column": 13 }
+        },
+        {
+          "generated": { "line": 106, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 84, "column": 6 }
+        },
+        {
+          "generated": { "line": 107, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 85, "column": 5 }
+        },
+        {
+          "generated": { "line": 107, "column": 5 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 48 }
+        },
+        {
+          "generated": { "line": 107, "column": 7 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 85, "column": 7 }
+        },
+        {
+          "generated": { "line": 107, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 48 }
+        },
+        {
+          "generated": { "line": 107, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 40, "column": 4 }
+        },
+        {
+          "generated": { "line": 108, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 86, "column": 3 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 110, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 2 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 110, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 15 }
+        },
+        {
+          "generated": { "line": 110, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 2 }
+        },
+        {
+          "generated": { "line": 110, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 25 }
+        },
+        {
+          "generated": { "line": 110, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 26 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 111, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 89, "column": 4 }
+        },
+        {
+          "generated": { "line": 111, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 89, "column": 9 }
+        },
+        {
+          "generated": { "line": 111, "column": 27 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 26 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 112, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 90, "column": 4 }
+        },
+        {
+          "generated": { "line": 112, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 90, "column": 11 }
+        },
+        {
+          "name": "verifyDefinition",
+          "generated": { "line": 112, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 90, "column": 20 }
+        },
+        {
+          "generated": { "line": 112, "column": 36 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 90, "column": 11 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 112, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 90, "column": 37 }
+        },
+        {
+          "generated": { "line": 112, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 90, "column": 11 }
+        },
+        {
+          "generated": { "line": 112, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 90, "column": 49 }
+        },
+        {
+          "generated": { "line": 113, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 91, "column": 6 }
+        },
+        {
+          "generated": { "line": 113, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 91, "column": 10 }
+        },
+        {
+          "name": "ignoreDefinition",
+          "generated": { "line": 113, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 91, "column": 15 }
+        },
+        {
+          "generated": { "line": 113, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 91, "column": 6 }
+        },
+        {
+          "generated": { "line": 113, "column": 33 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 91, "column": 33 }
+        },
+        {
+          "generated": { "line": 114, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 92, "column": 8 }
+        },
+        {
+          "generated": { "line": 115, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 93, "column": 7 }
+        },
+        {
+          "generated": { "line": 117, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 6 }
+        },
+        {
+          "generated": { "line": 117, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 10 }
+        },
+        {
+          "generated": { "line": 117, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 11 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 117, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 18 }
+        },
+        {
+          "generated": { "line": 117, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 11 }
+        },
+        {
+          "generated": { "line": 117, "column": 33 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 33 }
+        },
+        {
+          "generated": { "line": 117, "column": 44 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 11 }
+        },
+        {
+          "generated": { "line": 117, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 47 }
+        },
+        {
+          "generated": { "line": 117, "column": 58 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 11 }
+        },
+        {
+          "name": "_typeof",
+          "generated": { "line": 117, "column": 61 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 61 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 117, "column": 69 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 69 }
+        },
+        {
+          "generated": { "line": 117, "column": 79 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 61 }
+        },
+        {
+          "generated": { "line": 117, "column": 80 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 10 }
+        },
+        {
+          "generated": { "line": 117, "column": 86 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 86 }
+        },
+        {
+          "generated": { "line": 117, "column": 94 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 10 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 117, "column": 98 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 98 }
+        },
+        {
+          "generated": { "line": 117, "column": 113 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 113 }
+        },
+        {
+          "generated": { "line": 117, "column": 117 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 6 }
+        },
+        {
+          "generated": { "line": 117, "column": 119 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 95, "column": 119 }
+        },
+        {
+          "generated": { "line": 118, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 96, "column": 8 }
+        },
+        {
+          "generated": { "line": 118, "column": 14 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 96, "column": 14 }
+        },
+        {
+          "name": "Error",
+          "generated": { "line": 118, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 96, "column": 18 }
+        },
+        {
+          "generated": { "line": 118, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 96, "column": 14 }
+        },
+        {
+          "generated": { "line": 118, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 96, "column": 24 }
+        },
+        {
+          "generated": { "line": 118, "column": 72 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 96, "column": 14 }
+        },
+        {
+          "generated": { "line": 118, "column": 73 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 96, "column": 8 }
+        },
+        {
+          "generated": { "line": 119, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 97, "column": 7 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 121, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "name": "keys",
+          "generated": { "line": 121, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 13 }
+        },
+        {
+          "generated": { "line": 121, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 121, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 18 }
+        },
+        {
+          "generated": { "line": 121, "column": 28 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "name": "forEach",
+          "generated": { "line": 121, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 30 }
+        },
+        {
+          "generated": { "line": 121, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "generated": { "line": 121, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 38 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 121, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 48 }
+        },
+        {
+          "generated": { "line": 121, "column": 51 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 38 }
+        },
+        {
+          "generated": { "line": 121, "column": 53 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 53 }
+        },
+        {
+          "generated": { "line": 122, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 8 }
+        },
+        {
+          "generated": { "line": 122, "column": 12 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 12 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 122, "column": 19 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 19 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 122, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 30 }
+        },
+        {
+          "generated": { "line": 122, "column": 33 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 19 }
+        },
+        {
+          "generated": { "line": 122, "column": 34 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 12 }
+        },
+        {
+          "generated": { "line": 122, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 39 }
+        },
+        {
+          "generated": { "line": 122, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 8 }
+        },
+        {
+          "generated": { "line": 122, "column": 51 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 100, "column": 51 }
+        },
+        {
+          "generated": { "line": 123, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 10 }
+        },
+        {
+          "generated": { "line": 123, "column": 16 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 16 }
+        },
+        {
+          "name": "Error",
+          "generated": { "line": 123, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 20 }
+        },
+        {
+          "generated": { "line": 123, "column": 25 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 16 }
+        },
+        {
+          "generated": { "line": 123, "column": 26 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 26 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 123, "column": 44 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 44 }
+        },
+        {
+          "generated": { "line": 123, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 26 }
+        },
+        {
+          "generated": { "line": 123, "column": 50 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 50 }
+        },
+        {
+          "generated": { "line": 123, "column": 87 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 16 }
+        },
+        {
+          "generated": { "line": 123, "column": 88 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 101, "column": 10 }
+        },
+        {
+          "generated": { "line": 124, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 102, "column": 9 }
+        },
+        {
+          "generated": { "line": 125, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 103, "column": 7 }
+        },
+        {
+          "generated": { "line": 125, "column": 7 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "generated": { "line": 126, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 104, "column": 5 }
+        },
+        {
+          "generated": { "line": 127, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 26 }
+        },
+        {
+          "generated": { "line": 127, "column": 3 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 25 }
+        },
+        {
+          "generated": { "line": 127, "column": 5 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 105, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 128, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 106, "column": 4 }
+        },
+        {
+          "generated": { "line": 128, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 106, "column": 9 }
+        },
+        {
+          "generated": { "line": 128, "column": 14 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 105, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 129, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 107, "column": 4 }
+        },
+        {
+          "generated": { "line": 129, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 107, "column": 11 }
+        },
+        {
+          "name": "get",
+          "generated": { "line": 129, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 107, "column": 20 }
+        },
+        {
+          "generated": { "line": 129, "column": 23 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 107, "column": 11 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 129, "column": 24 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 107, "column": 24 }
+        },
+        {
+          "generated": { "line": 129, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 107, "column": 11 }
+        },
+        {
+          "generated": { "line": 129, "column": 33 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 107, "column": 33 }
+        },
+        {
+          "generated": { "line": 130, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 6 }
+        },
+        {
+          "generated": { "line": 130, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 10 }
+        },
+        {
+          "generated": { "line": 130, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 17 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 130, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 22 }
+        },
+        {
+          "generated": { "line": 130, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 10 }
+        },
+        {
+          "generated": { "line": 130, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 37 }
+        },
+        {
+          "generated": { "line": 130, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 6 }
+        },
+        {
+          "generated": { "line": 130, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 108, "column": 49 }
+        },
+        {
+          "generated": { "line": 131, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 109, "column": 8 }
+        },
+        {
+          "generated": { "line": 131, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 109, "column": 15 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 131, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 109, "column": 20 }
+        },
+        {
+          "generated": { "line": 131, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 109, "column": 15 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 131, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 109, "column": 31 }
+        },
+        {
+          "generated": { "line": 131, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 109, "column": 15 }
+        },
+        {
+          "generated": { "line": 131, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 109, "column": 8 }
+        },
+        {
+          "generated": { "line": 132, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 110, "column": 7 }
+        },
+        {
+          "generated": { "line": 134, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 6 }
+        },
+        {
+          "generated": { "line": 134, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 13 }
+        },
+        {
+          "generated": { "line": 134, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 17 }
+        },
+        {
+          "name": "ProviderConstructor",
+          "generated": { "line": 134, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 22 }
+        },
+        {
+          "generated": { "line": 134, "column": 41 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 13 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 134, "column": 42 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 42 }
+        },
+        {
+          "generated": { "line": 134, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 13 }
+        },
+        {
+          "generated": { "line": 134, "column": 50 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 112, "column": 6 }
+        },
+        {
+          "generated": { "line": 135, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 113, "column": 5 }
+        },
+        {
+          "generated": { "line": 136, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 105, "column": 5 }
+        },
+        {
+          "generated": { "line": 136, "column": 3 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 25 }
+        },
+        {
+          "generated": { "line": 136, "column": 5 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 114, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 137, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 115, "column": 4 }
+        },
+        {
+          "generated": { "line": 137, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 115, "column": 9 }
+        },
+        {
+          "generated": { "line": 137, "column": 21 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 114, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 138, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 4 }
+        },
+        {
+          "generated": { "line": 138, "column": 11 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 11 }
+        },
+        {
+          "name": "getWrapped",
+          "generated": { "line": 138, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 20 }
+        },
+        {
+          "generated": { "line": 138, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 11 }
+        },
+        {
+          "name": "name",
+          "generated": { "line": 138, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 31 }
+        },
+        {
+          "generated": { "line": 138, "column": 35 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 11 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 138, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 37 }
+        },
+        {
+          "generated": { "line": 138, "column": 44 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 11 }
+        },
+        {
+          "generated": { "line": 138, "column": 46 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 116, "column": 46 }
+        },
+        {
+          "generated": { "line": 139, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 6 }
+        },
+        {
+          "generated": { "line": 139, "column": 10 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 10 }
+        },
+        {
+          "generated": { "line": 139, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 17 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 139, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 22 }
+        },
+        {
+          "generated": { "line": 139, "column": 32 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 10 }
+        },
+        {
+          "generated": { "line": 139, "column": 37 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 37 }
+        },
+        {
+          "generated": { "line": 139, "column": 47 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 6 }
+        },
+        {
+          "generated": { "line": 139, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 117, "column": 49 }
+        },
+        {
+          "generated": { "line": 140, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 118, "column": 8 }
+        },
+        {
+          "generated": { "line": 140, "column": 15 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 118, "column": 15 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 140, "column": 20 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 118, "column": 20 }
+        },
+        {
+          "generated": { "line": 140, "column": 30 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 118, "column": 15 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 140, "column": 31 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 118, "column": 31 }
+        },
+        {
+          "generated": { "line": 140, "column": 38 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 118, "column": 15 }
+        },
+        {
+          "generated": { "line": 140, "column": 39 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 118, "column": 8 }
+        },
+        {
+          "generated": { "line": 141, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 119, "column": 7 }
+        },
+        {
+          "generated": { "line": 143, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 6 }
+        },
+        {
+          "generated": { "line": 143, "column": 13 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 13 }
+        },
+        {
+          "generated": { "line": 143, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 17 }
+        },
+        {
+          "name": "WrappedProviderConstructor",
+          "generated": { "line": 143, "column": 22 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 22 }
+        },
+        {
+          "generated": { "line": 143, "column": 48 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 13 }
+        },
+        {
+          "name": "name",
+          "generated": { "line": 143, "column": 49 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 49 }
+        },
+        {
+          "generated": { "line": 143, "column": 53 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 13 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 143, "column": 55 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 55 }
+        },
+        {
+          "generated": { "line": 143, "column": 62 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 13 }
+        },
+        {
+          "generated": { "line": 143, "column": 63 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 121, "column": 6 }
+        },
+        {
+          "generated": { "line": 144, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 122, "column": 5 }
+        },
+        {
+          "generated": { "line": 145, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 114, "column": 5 }
+        },
+        {
+          "generated": { "line": 145, "column": 3 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 25 }
+        },
+        {
+          "generated": { "line": 145, "column": 4 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 88, "column": 2 }
+        },
+        {
+          "generated": { "line": 147, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 125, "column": 2 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 147, "column": 9 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 125, "column": 9 }
+        },
+        {
+          "generated": { "line": 147, "column": 17 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 125, "column": 2 }
+        },
+        {
+          "generated": { "line": 148, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 126, "column": 1 }
+        },
+        {
+          "generated": { "line": 148, "column": 1 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 9, "column": 15 }
+        },
+        {
+          "generated": { "line": 148, "column": 3 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 9, "column": 0 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 150, "column": 18 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 128, "column": 15 }
+        },
+        {
+          "generated": { "line": 151, "column": 0 },
+          "source": "../../node_modules/function-tree/es/Provider.js",
+          "original": { "line": 129, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/function-tree/es/Provider.js":
+          "var _typeof = typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; };\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nimport { isPromise, isPlainValue } from './utils';\n\nvar Provider = function () {\n  function Provider(definition) {\n    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},\n        _ref$wrap = _ref.wrap,\n        wrap = _ref$wrap === undefined ? true : _ref$wrap,\n        _ref$ignoreDefinition = _ref.ignoreDefinition,\n        ignoreDefinition = _ref$ignoreDefinition === undefined ? false : _ref$ignoreDefinition;\n\n    _classCallCheck(this, Provider);\n\n    this.definition = definition;\n\n    if (typeof definition === 'function') {\n      return;\n    }\n\n    if (!ignoreDefinition) {\n      this.verifyDefinition(definition);\n    }\n\n    this.wrap = wrap;\n\n    this.ProviderConstructor = function (context) {\n      this.context = context;\n    };\n    this.ProviderConstructor.prototype = definition;\n\n    this.WrappedProviderConstructor = function (name, context) {\n      this.context = context;\n      this.providerName = name;\n    };\n    this.WrappedProviderConstructor.prototype = Object.keys(ignoreDefinition ? {} : definition).reduce(function (wrappedProvider, key) {\n      var originalFunc = definition[key];\n\n      wrappedProvider[key] = function () {\n        var _this = this;\n\n        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n          args[_key] = arguments[_key];\n        }\n\n        var providerResult = originalFunc.apply(this, args);\n\n        if (isPromise(providerResult)) {\n          return providerResult.then(function (result) {\n            _this.context.debugger.send({\n              method: _this.providerName + '.' + key,\n              args: args,\n              isPromise: true,\n              isRejected: false,\n              returnValue: isPlainValue(result) ? result : '[CAN_NOT_SERIALIZE]'\n            });\n\n            return result;\n          }).catch(function (error) {\n            _this.context.debugger.send({\n              method: _this.providerName + '.' + key,\n              args: args,\n              isPromise: true,\n              isRejected: true\n            });\n\n            throw error;\n          });\n        }\n\n        this.context.debugger.send({\n          method: this.providerName + '.' + key,\n          args: args,\n          returnValue: isPlainValue(providerResult) ? providerResult : '[CAN_NOT_SERIALIZE]'\n        });\n\n        return providerResult;\n      };\n\n      return wrappedProvider;\n    }, {});\n  }\n\n  _createClass(Provider, [{\n    key: 'verifyDefinition',\n    value: function verifyDefinition(definition) {\n      if (this.ignoreDefinition) {\n        return;\n      }\n\n      if ((typeof definition === 'undefined' ? 'undefined' : _typeof(definition)) !== 'object' || definition === null) {\n        throw new Error('The definition passed as Provider is not valid');\n      }\n\n      Object.keys(definition).forEach(function (key) {\n        if (typeof definition[key] !== 'function') {\n          throw new Error('The property ' + key + ' passed to Provider is not a method');\n        }\n      });\n    }\n  }, {\n    key: 'get',\n    value: function get(context) {\n      if (typeof this.definition === 'function') {\n        return this.definition(context);\n      }\n\n      return new this.ProviderConstructor(context);\n    }\n  }, {\n    key: 'getWrapped',\n    value: function getWrapped(name, context) {\n      if (typeof this.definition === 'function') {\n        return this.definition(context);\n      }\n\n      return new this.WrappedProviderConstructor(name, context);\n    }\n  }]);\n\n  return Provider;\n}();\n\nexport default Provider;\n//# sourceMappingURL=Provider.js.map"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "86f10c07eff7b565bbb9009933316e8f",
+  "cacheData": { "env": {} }
+}

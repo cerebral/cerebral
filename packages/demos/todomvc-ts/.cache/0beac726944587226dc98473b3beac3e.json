@@ -1,0 +1,147 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
+      "includedInParent": true,
+      "mtime": 1522956493000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    { "name": "uuid", "loc": { "line": 1, "column": 17 } },
+    { "name": "cerebral", "loc": { "line": 2, "column": 25 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.id = undefined;\n\nvar _uuid = require('uuid');\n\nvar _uuid2 = _interopRequireDefault(_uuid);\n\nvar _cerebral = require('cerebral');\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar id = exports.id = (0, _cerebral.Provider)({\n    create: function create() {\n        return _uuid2.default.v4();\n    }\n});",
+    "map": {
+      "mappings": [
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 7 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 13 },
+          "generated": { "line": 16, "column": 4 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 18 },
+          "generated": { "line": 16, "column": 22 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 27 },
+          "generated": { "line": 16, "column": 46 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 5, "column": 2 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 27 },
+          "generated": { "line": 17, "column": 10 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 5, "column": 8 },
+          "generated": { "line": 17, "column": 30 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 6, "column": 4 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 6, "column": 11 },
+          "generated": { "line": 18, "column": 15 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 6, "column": 16 },
+          "generated": { "line": 18, "column": 30 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 6, "column": 11 },
+          "generated": { "line": 18, "column": 32 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 6, "column": 4 },
+          "generated": { "line": 18, "column": 34 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 7, "column": 3 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 27 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 18 },
+          "generated": { "line": 20, "column": 1 }
+        },
+        {
+          "source": "src/app/providers.ts",
+          "name": null,
+          "original": { "line": 4, "column": 7 },
+          "generated": { "line": 20, "column": 2 }
+        }
+      ],
+      "sources": {
+        "src/app/providers.ts":
+          "import uuid from 'uuid'\nimport { Provider } from 'cerebral'\n\nexport const id = Provider({\n  create() {\n    return uuid.v4()\n  },\n})\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "74fd076a6c24ffd3129280edfca06d3d",
+  "cacheData": { "env": {} }
+}

@@ -1,0 +1,321 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
+      "includedInParent": true,
+      "mtime": 1522956493000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    { "name": "cerebral", "loc": { "line": 1, "column": 24 } },
+    { "name": "cerebral/tags", "loc": { "line": 2, "column": 22 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral(['todos'], ['todos']),\n    _templateObject2 = _taggedTemplateLiteral(['filter'], ['filter']);\n\nvar _cerebral = require('cerebral');\n\nvar _tags = require('cerebral/tags');\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nexports.default = (0, _cerebral.Compute)((0, _tags.state)(_templateObject), (0, _tags.state)(_templateObject2), function (todos, filter) {\n    return Object.keys(todos).filter(function (uid) {\n        return filter === 'all' || filter === 'completed' && todos[uid].completed || filter === 'active' && !todos[uid].completed;\n    });\n});",
+    "map": {
+      "mappings": [
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 15 },
+          "generated": { "line": 16, "column": 18 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 50 },
+          "generated": { "line": 16, "column": 112 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 16, "column": 122 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 50 },
+          "generated": { "line": 16, "column": 127 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 58 },
+          "generated": { "line": 16, "column": 129 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 50 },
+          "generated": { "line": 16, "column": 135 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 68 },
+          "generated": { "line": 16, "column": 137 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 4 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 11 },
+          "generated": { "line": 17, "column": 11 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 18 },
+          "generated": { "line": 17, "column": 18 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 11 },
+          "generated": { "line": 17, "column": 22 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 23 },
+          "generated": { "line": 17, "column": 23 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 11 },
+          "generated": { "line": 17, "column": 28 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 30 },
+          "generated": { "line": 17, "column": 30 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 11 },
+          "generated": { "line": 17, "column": 36 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 37 },
+          "generated": { "line": 17, "column": 37 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 38 },
+          "generated": { "line": 17, "column": 47 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 37 },
+          "generated": { "line": 17, "column": 50 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 45 },
+          "generated": { "line": 17, "column": 52 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 6, "column": 8 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 7, "column": 12 },
+          "generated": { "line": 18, "column": 15 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 7, "column": 23 },
+          "generated": { "line": 18, "column": 26 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 7, "column": 12 },
+          "generated": { "line": 18, "column": 31 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 8, "column": 13 },
+          "generated": { "line": 18, "column": 35 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 8, "column": 24 },
+          "generated": { "line": 18, "column": 46 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 8, "column": 13 },
+          "generated": { "line": 18, "column": 57 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 8, "column": 39 },
+          "generated": { "line": 18, "column": 61 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 8, "column": 45 },
+          "generated": { "line": 18, "column": 67 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 8, "column": 39 },
+          "generated": { "line": 18, "column": 70 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 8, "column": 50 },
+          "generated": { "line": 18, "column": 72 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 7, "column": 12 },
+          "generated": { "line": 18, "column": 81 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 13 },
+          "generated": { "line": 18, "column": 85 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 24 },
+          "generated": { "line": 18, "column": 96 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 13 },
+          "generated": { "line": 18, "column": 104 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 36 },
+          "generated": { "line": 18, "column": 108 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 37 },
+          "generated": { "line": 18, "column": 109 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 43 },
+          "generated": { "line": 18, "column": 115 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 37 },
+          "generated": { "line": 18, "column": 118 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 9, "column": 48 },
+          "generated": { "line": 18, "column": 120 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 6, "column": 8 },
+          "generated": { "line": 18, "column": 129 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 11, "column": 5 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 11 },
+          "generated": { "line": 19, "column": 5 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 5, "column": 4 },
+          "generated": { "line": 19, "column": 6 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 12, "column": 1 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "src/computed/visibleTodosUids.ts",
+          "name": null,
+          "original": { "line": 4, "column": 15 },
+          "generated": { "line": 20, "column": 1 }
+        }
+      ],
+      "sources": {
+        "src/computed/visibleTodosUids.ts":
+          "import { Compute } from 'cerebral';\nimport { state } from 'cerebral/proxy';\n\nexport default Compute(state.todos, state.filter, (todos, filter) => {\n    return Object.keys(todos).filter((uid) => {\n        return (\n            filter === 'all' ||\n            (filter === 'completed' && todos[uid].completed) ||\n            (filter === 'active' && !todos[uid].completed)\n        );\n    });\n});\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "b89a9db9d118e8019277e5c73a72eb15",
+  "cacheData": { "env": {} }
+}

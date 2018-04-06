@@ -1,0 +1,3754 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/cerebral/package.json",
+      "includedInParent": true,
+      "mtime": 1522871063000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/cerebral/.babelrc",
+      "includedInParent": true,
+      "mtime": 1512583350000
+    },
+    { "name": "./utils", "loc": { "line": 5, "column": 32 } }
+  ],
+  "generated": {
+    "js":
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _utils = require(\"./utils\");\n\nvar _createClass = function () {\n  function defineProperties(target, props) {\n    for (var i = 0; i < props.length; i++) {\n      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if (\"value\" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);\n    }\n  }return function (Constructor, protoProps, staticProps) {\n    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;\n  };\n}();\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nvar DependencyStore = function () {\n  function DependencyStore() {\n    _classCallCheck(this, DependencyStore);\n\n    this.map = {};\n  }\n  /*\n    Adds the entity to all the depending paths\n  */\n\n  _createClass(DependencyStore, [{\n    key: 'addEntity',\n    value: function addEntity(entity, depsMap) {\n      var _this = this;\n\n      var _loop = function _loop(depsMapKey) {\n        var path = depsMapKey.split('.');\n\n        path.reduce(function (currentMapLevel, key, index) {\n          if (!currentMapLevel[key]) {\n            currentMapLevel[key] = {};\n          }\n\n          if (index < path.length - 1) {\n            currentMapLevel[key].children = currentMapLevel[key].children || {};\n\n            return currentMapLevel[key].children;\n          }\n\n          currentMapLevel[key].entities = currentMapLevel[key].entities ? currentMapLevel[key].entities.concat(entity) : [entity];\n\n          return currentMapLevel;\n        }, _this.map);\n      };\n\n      for (var depsMapKey in depsMap) {\n        _loop(depsMapKey);\n      }\n    }\n    /*\n      Removes the entity from all depending paths\n    */\n\n  }, {\n    key: 'removeEntity',\n    value: function removeEntity(entity, depsMap) {\n      var _this2 = this;\n\n      var _loop2 = function _loop2(depsMapKey) {\n        var path = depsMapKey.split('.');\n        path.reduce(function (currentMapLevel, key, index) {\n          if (index === path.length - 1) {\n            currentMapLevel[key].entities.splice(currentMapLevel[key].entities.indexOf(entity), 1);\n\n            if (!currentMapLevel[key].entities.length) {\n              delete currentMapLevel[key].entities;\n            }\n          }\n\n          return currentMapLevel[key].children;\n        }, _this2.map);\n      };\n\n      for (var depsMapKey in depsMap) {\n        _loop2(depsMapKey);\n      }\n    }\n    /*\n      Updates entity based on changed dependencies\n    */\n\n  }, {\n    key: 'updateEntity',\n    value: function updateEntity(entity, prevDepsMap, nextDepsMap) {\n      var toRemove = Object.keys(prevDepsMap).reduce(function (removeDepsMap, prevDepsMapKey) {\n        if (!nextDepsMap[prevDepsMapKey]) {\n          removeDepsMap[prevDepsMapKey] = true;\n        }\n\n        return removeDepsMap;\n      }, {});\n      var toAdd = Object.keys(nextDepsMap).reduce(function (addDepsMap, nextDepsMapKey) {\n        if (!prevDepsMap[nextDepsMapKey]) {\n          addDepsMap[nextDepsMapKey] = true;\n        }\n\n        return addDepsMap;\n      }, {});\n\n      this.removeEntity(entity, toRemove);\n\n      this.addEntity(entity, toAdd);\n    }\n    /*\n      As same entity can appear in multiple paths, this method returns\n      all unique entities. Used by view to render all components\n    */\n\n  }, {\n    key: 'getAllUniqueEntities',\n    value: function getAllUniqueEntities() {\n      var entities = [];\n\n      function traverseChildren(children) {\n        for (var childKey in children) {\n          if (children[childKey].entities) {\n            for (var y = 0; y < children[childKey].entities.length; y++) {\n              if (entities.indexOf(children[childKey].entities[y]) === -1) {\n                entities.push(children[childKey].entities[y]);\n              }\n            }\n          }\n\n          if (children[childKey].children) {\n            traverseChildren(children[childKey].children);\n          }\n        }\n      }\n      traverseChildren(this.map);\n\n      return entities;\n    }\n    /*\n      Returns entities based on a change map returned from\n      the model flush method.\n    */\n\n  }, {\n    key: 'getUniqueEntities',\n    value: function getUniqueEntities(changesMap) {\n      return (0, _utils.dependencyMatch)(changesMap, this.map).reduce(function (unique, match) {\n        return (match.entities || []).reduce(function (currentUnique, entity) {\n          if (currentUnique.indexOf(entity) === -1) {\n            return currentUnique.concat(entity);\n          }\n\n          return currentUnique;\n        }, unique);\n      }, []);\n    }\n  }]);\n\n  return DependencyStore;\n}();\n\nexports.default = DependencyStore;\n//# sourceMappingURL=DependencyStore.js.map",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 7, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "generated": { "line": 9, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 9, "column": 4 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 4 }
+        },
+        {
+          "generated": { "line": 9, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 19 }
+        },
+        {
+          "generated": { "line": 9, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 31 }
+        },
+        {
+          "generated": { "line": 10, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 10, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 42 }
+        },
+        {
+          "generated": { "line": 10, "column": 27 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 10, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 59 }
+        },
+        {
+          "generated": { "line": 10, "column": 34 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 10, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 67 }
+        },
+        {
+          "generated": { "line": 10, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "generated": { "line": 10, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 74 }
+        },
+        {
+          "generated": { "line": 11, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "generated": { "line": 11, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 81 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 11, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 85 }
+        },
+        {
+          "generated": { "line": 11, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 89 }
+        },
+        {
+          "generated": { "line": 11, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 11, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 92 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 11, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 96 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 11, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 102 }
+        },
+        {
+          "generated": { "line": 11, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 11, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 110 }
+        },
+        {
+          "generated": { "line": 11, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "generated": { "line": 11, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 115 }
+        },
+        {
+          "generated": { "line": 12, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 121 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 12, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 134 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 12, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 140 }
+        },
+        {
+          "generated": { "line": 12, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 134 }
+        },
+        {
+          "generated": { "line": 12, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 12, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 155 }
+        },
+        {
+          "generated": { "line": 12, "column": 53 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 56 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 168 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 12, "column": 67 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 179 }
+        },
+        {
+          "generated": { "line": 12, "column": 77 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 168 }
+        },
+        {
+          "generated": { "line": 12, "column": 81 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 193 }
+        },
+        {
+          "generated": { "line": 12, "column": 86 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 87 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "name": "configurable",
+          "generated": { "line": 12, "column": 98 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 211 }
+        },
+        {
+          "generated": { "line": 12, "column": 110 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "generated": { "line": 12, "column": 113 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 226 }
+        },
+        {
+          "generated": { "line": 12, "column": 117 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "generated": { "line": 12, "column": 118 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 232 }
+        },
+        {
+          "generated": { "line": 12, "column": 122 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 236 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 133 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 247 }
+        },
+        {
+          "generated": { "line": 12, "column": 143 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 232 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 145 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "name": "writable",
+          "generated": { "line": 12, "column": 156 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 270 }
+        },
+        {
+          "generated": { "line": 12, "column": 164 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "generated": { "line": 12, "column": 167 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 281 }
+        },
+        {
+          "generated": { "line": 12, "column": 171 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 12, "column": 172 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "defineProperty",
+          "generated": { "line": 12, "column": 179 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 294 }
+        },
+        {
+          "generated": { "line": 12, "column": 193 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 12, "column": 194 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 309 }
+        },
+        {
+          "generated": { "line": 12, "column": 200 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 202 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 317 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 12, "column": 213 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 328 }
+        },
+        {
+          "generated": { "line": 12, "column": 216 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 12, "column": 218 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 333 }
+        },
+        {
+          "generated": { "line": 12, "column": 228 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "generated": { "line": 13, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 347 }
+        },
+        {
+          "generated": { "line": 14, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 349 }
+        },
+        {
+          "generated": { "line": 14, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 350 }
+        },
+        {
+          "generated": { "line": 14, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 14, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 367 }
+        },
+        {
+          "generated": { "line": 14, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 14, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 380 }
+        },
+        {
+          "generated": { "line": 14, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 14, "column": 45 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 392 }
+        },
+        {
+          "generated": { "line": 14, "column": 56 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "generated": { "line": 14, "column": 58 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 405 }
+        },
+        {
+          "generated": { "line": 15, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 407 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 15, "column": 8 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 411 }
+        },
+        {
+          "generated": { "line": 15, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 407 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 15, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 15, "column": 37 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 440 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 15, "column": 49 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 452 }
+        },
+        {
+          "generated": { "line": 15, "column": 58 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 15, "column": 60 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 463 }
+        },
+        {
+          "generated": { "line": 15, "column": 70 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "generated": { "line": 15, "column": 72 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 476 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 15, "column": 76 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 480 }
+        },
+        {
+          "generated": { "line": 15, "column": 87 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 476 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 15, "column": 89 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 15, "column": 106 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 510 }
+        },
+        {
+          "generated": { "line": 15, "column": 117 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 15, "column": 119 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 523 }
+        },
+        {
+          "generated": { "line": 15, "column": 130 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "generated": { "line": 15, "column": 132 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 537 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 15, "column": 139 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 544 }
+        },
+        {
+          "generated": { "line": 15, "column": 150 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 537 }
+        },
+        {
+          "generated": { "line": 16, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 558 }
+        },
+        {
+          "generated": { "line": 16, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 350 }
+        },
+        {
+          "generated": { "line": 17, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 561 }
+        },
+        {
+          "generated": { "line": 17, "column": 1 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 19 }
+        },
+        {
+          "generated": { "line": 17, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 19, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 19, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 9 }
+        },
+        {
+          "generated": { "line": 19, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 19, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 25 }
+        },
+        {
+          "generated": { "line": 19, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 19, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 35 }
+        },
+        {
+          "generated": { "line": 19, "column": 46 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 19, "column": 48 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 48 }
+        },
+        {
+          "generated": { "line": 20, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 50 }
+        },
+        {
+          "generated": { "line": 20, "column": 6 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 54 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 20, "column": 8 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 56 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 20, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 76 }
+        },
+        {
+          "generated": { "line": 20, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 54 }
+        },
+        {
+          "generated": { "line": 20, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 50 }
+        },
+        {
+          "generated": { "line": 20, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 90 }
+        },
+        {
+          "generated": { "line": 21, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 92 }
+        },
+        {
+          "generated": { "line": 21, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 98 }
+        },
+        {
+          "name": "TypeError",
+          "generated": { "line": 21, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 102 }
+        },
+        {
+          "generated": { "line": 21, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 98 }
+        },
+        {
+          "generated": { "line": 21, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 112 }
+        },
+        {
+          "generated": { "line": 21, "column": 59 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 98 }
+        },
+        {
+          "generated": { "line": 21, "column": 60 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 92 }
+        },
+        {
+          "generated": { "line": 22, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 151 }
+        },
+        {
+          "generated": { "line": 23, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 3, "column": 153 }
+        },
+        {
+          "generated": { "line": 25, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "DependencyStore",
+          "generated": { "line": 25, "column": 4 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 7, "column": 4 }
+        },
+        {
+          "generated": { "line": 25, "column": 22 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 7, "column": 22 }
+        },
+        {
+          "generated": { "line": 25, "column": 34 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 7, "column": 34 }
+        },
+        {
+          "generated": { "line": 26, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 8, "column": 2 }
+        },
+        {
+          "name": "DependencyStore",
+          "generated": { "line": 26, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 8, "column": 11 }
+        },
+        {
+          "generated": { "line": 26, "column": 26 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 8, "column": 2 }
+        },
+        {
+          "generated": { "line": 26, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 8, "column": 29 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 27, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "generated": { "line": 27, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 9, "column": 20 }
+        },
+        {
+          "generated": { "line": 27, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "name": "DependencyStore",
+          "generated": { "line": 27, "column": 26 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 9, "column": 26 }
+        },
+        {
+          "generated": { "line": 27, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 9, "column": 4 }
+        },
+        {
+          "generated": { "line": 29, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "name": "map",
+          "generated": { "line": 29, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 11, "column": 9 }
+        },
+        {
+          "generated": { "line": 29, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "generated": { "line": 29, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 11, "column": 15 }
+        },
+        {
+          "generated": { "line": 29, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 11, "column": 4 }
+        },
+        {
+          "generated": { "line": 30, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 12, "column": 3 }
+        },
+        {
+          "generated": { "line": 31, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 13, "column": 2 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 35, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 2 }
+        },
+        {
+          "name": "DependencyStore",
+          "generated": { "line": 35, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 15 }
+        },
+        {
+          "generated": { "line": 35, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 2 }
+        },
+        {
+          "generated": { "line": 35, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 32 }
+        },
+        {
+          "generated": { "line": 35, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 33 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 36, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 19, "column": 4 }
+        },
+        {
+          "generated": { "line": 36, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 19, "column": 9 }
+        },
+        {
+          "generated": { "line": 36, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 33 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 37, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 4 }
+        },
+        {
+          "generated": { "line": 37, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 11 }
+        },
+        {
+          "name": "addEntity",
+          "generated": { "line": 37, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 37, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 11 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 37, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 30 }
+        },
+        {
+          "generated": { "line": 37, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 11 }
+        },
+        {
+          "name": "depsMap",
+          "generated": { "line": 37, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 38 }
+        },
+        {
+          "generated": { "line": 37, "column": 45 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 11 }
+        },
+        {
+          "generated": { "line": 37, "column": 47 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 20, "column": 47 }
+        },
+        {
+          "generated": { "line": 38, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 21, "column": 6 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 38, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 21, "column": 10 }
+        },
+        {
+          "generated": { "line": 38, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 21, "column": 18 }
+        },
+        {
+          "generated": { "line": 38, "column": 22 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 21, "column": 6 }
+        },
+        {
+          "generated": { "line": 40, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 6 }
+        },
+        {
+          "name": "_loop",
+          "generated": { "line": 40, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 10 }
+        },
+        {
+          "generated": { "line": 40, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 18 }
+        },
+        {
+          "name": "_loop",
+          "generated": { "line": 40, "column": 27 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 27 }
+        },
+        {
+          "generated": { "line": 40, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 18 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 40, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 33 }
+        },
+        {
+          "generated": { "line": 40, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 18 }
+        },
+        {
+          "generated": { "line": 40, "column": 45 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 45 }
+        },
+        {
+          "generated": { "line": 41, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 8 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 41, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 12 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 41, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 19 }
+        },
+        {
+          "name": "split",
+          "generated": { "line": 41, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 30 }
+        },
+        {
+          "generated": { "line": 41, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 19 }
+        },
+        {
+          "generated": { "line": 41, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 36 }
+        },
+        {
+          "generated": { "line": 41, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 19 }
+        },
+        {
+          "generated": { "line": 41, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 24, "column": 8 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 43, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 8 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 43, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 13 }
+        },
+        {
+          "generated": { "line": 43, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 8 }
+        },
+        {
+          "generated": { "line": 43, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 20 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 43, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 30 }
+        },
+        {
+          "generated": { "line": 43, "column": 45 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 20 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 43, "column": 47 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 47 }
+        },
+        {
+          "generated": { "line": 43, "column": 50 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 20 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 43, "column": 52 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 52 }
+        },
+        {
+          "generated": { "line": 43, "column": 57 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 20 }
+        },
+        {
+          "generated": { "line": 43, "column": 59 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 59 }
+        },
+        {
+          "generated": { "line": 44, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 27, "column": 10 }
+        },
+        {
+          "generated": { "line": 44, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 27, "column": 14 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 44, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 27, "column": 15 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 44, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 27, "column": 31 }
+        },
+        {
+          "generated": { "line": 44, "column": 34 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 27, "column": 15 }
+        },
+        {
+          "generated": { "line": 44, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 27, "column": 10 }
+        },
+        {
+          "generated": { "line": 44, "column": 37 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 27, "column": 37 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 45, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 28, "column": 12 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 45, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 28, "column": 28 }
+        },
+        {
+          "generated": { "line": 45, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 28, "column": 12 }
+        },
+        {
+          "generated": { "line": 45, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 28, "column": 35 }
+        },
+        {
+          "generated": { "line": 45, "column": 37 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 28, "column": 12 }
+        },
+        {
+          "generated": { "line": 46, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 29, "column": 11 }
+        },
+        {
+          "generated": { "line": 48, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 10 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 48, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 14 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 48, "column": 22 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 22 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 48, "column": 27 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 27 }
+        },
+        {
+          "generated": { "line": 48, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 22 }
+        },
+        {
+          "generated": { "line": 48, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 36 }
+        },
+        {
+          "generated": { "line": 48, "column": 37 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 10 }
+        },
+        {
+          "generated": { "line": 48, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 31, "column": 39 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 49, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 12 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 49, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 28 }
+        },
+        {
+          "generated": { "line": 49, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 12 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 49, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 33 }
+        },
+        {
+          "generated": { "line": 49, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 12 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 49, "column": 44 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 44 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 49, "column": 60 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 60 }
+        },
+        {
+          "generated": { "line": 49, "column": 63 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 44 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 49, "column": 65 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 65 }
+        },
+        {
+          "generated": { "line": 49, "column": 73 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 44 }
+        },
+        {
+          "generated": { "line": 49, "column": 77 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 77 }
+        },
+        {
+          "generated": { "line": 49, "column": 79 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 32, "column": 12 }
+        },
+        {
+          "generated": { "line": 51, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 34, "column": 12 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 51, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 34, "column": 19 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 51, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 34, "column": 35 }
+        },
+        {
+          "generated": { "line": 51, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 34, "column": 19 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 51, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 34, "column": 40 }
+        },
+        {
+          "generated": { "line": 51, "column": 48 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 34, "column": 12 }
+        },
+        {
+          "generated": { "line": 52, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 35, "column": 11 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 54, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 10 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 54, "column": 26 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 26 }
+        },
+        {
+          "generated": { "line": 54, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 10 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 54, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 31 }
+        },
+        {
+          "generated": { "line": 54, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 10 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 54, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 42 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 54, "column": 58 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 58 }
+        },
+        {
+          "generated": { "line": 54, "column": 61 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 42 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 54, "column": 63 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 63 }
+        },
+        {
+          "generated": { "line": 54, "column": 71 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 42 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 54, "column": 74 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 74 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 54, "column": 90 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 90 }
+        },
+        {
+          "generated": { "line": 54, "column": 93 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 74 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 54, "column": 95 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 95 }
+        },
+        {
+          "generated": { "line": 54, "column": 103 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 74 }
+        },
+        {
+          "name": "concat",
+          "generated": { "line": 54, "column": 104 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 104 }
+        },
+        {
+          "generated": { "line": 54, "column": 110 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 74 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 54, "column": 111 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 111 }
+        },
+        {
+          "generated": { "line": 54, "column": 117 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 74 }
+        },
+        {
+          "generated": { "line": 54, "column": 118 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 42 }
+        },
+        {
+          "generated": { "line": 54, "column": 121 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 121 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 54, "column": 122 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 122 }
+        },
+        {
+          "generated": { "line": 54, "column": 128 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 121 }
+        },
+        {
+          "generated": { "line": 54, "column": 129 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 37, "column": 10 }
+        },
+        {
+          "generated": { "line": 56, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 39, "column": 10 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 56, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 39, "column": 17 }
+        },
+        {
+          "generated": { "line": 56, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 39, "column": 10 }
+        },
+        {
+          "generated": { "line": 57, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 40, "column": 9 }
+        },
+        {
+          "generated": { "line": 57, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 8 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 57, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 40, "column": 11 }
+        },
+        {
+          "name": "map",
+          "generated": { "line": 57, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 40, "column": 17 }
+        },
+        {
+          "generated": { "line": 57, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 26, "column": 8 }
+        },
+        {
+          "generated": { "line": 58, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 41, "column": 7 }
+        },
+        {
+          "generated": { "line": 58, "column": 7 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 23, "column": 6 }
+        },
+        {
+          "generated": { "line": 60, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 43, "column": 6 }
+        },
+        {
+          "generated": { "line": 60, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 43, "column": 11 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 60, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 43, "column": 15 }
+        },
+        {
+          "generated": { "line": 60, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 43, "column": 6 }
+        },
+        {
+          "name": "depsMap",
+          "generated": { "line": 60, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 43, "column": 29 }
+        },
+        {
+          "generated": { "line": 60, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 43, "column": 6 }
+        },
+        {
+          "generated": { "line": 60, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 43, "column": 38 }
+        },
+        {
+          "name": "_loop",
+          "generated": { "line": 61, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 44, "column": 8 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 61, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 44, "column": 14 }
+        },
+        {
+          "generated": { "line": 61, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 44, "column": 8 }
+        },
+        {
+          "generated": { "line": 62, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 45, "column": 7 }
+        },
+        {
+          "generated": { "line": 63, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 46, "column": 5 }
+        },
+        {
+          "generated": { "line": 64, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 47, "column": 4 }
+        },
+        {
+          "generated": { "line": 68, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 33 }
+        },
+        {
+          "generated": { "line": 68, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 32 }
+        },
+        {
+          "generated": { "line": 68, "column": 5 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 51, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 69, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 52, "column": 4 }
+        },
+        {
+          "generated": { "line": 69, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 52, "column": 9 }
+        },
+        {
+          "generated": { "line": 69, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 51, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 70, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 4 }
+        },
+        {
+          "generated": { "line": 70, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 11 }
+        },
+        {
+          "name": "removeEntity",
+          "generated": { "line": 70, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 20 }
+        },
+        {
+          "generated": { "line": 70, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 11 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 70, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 33 }
+        },
+        {
+          "generated": { "line": 70, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 11 }
+        },
+        {
+          "name": "depsMap",
+          "generated": { "line": 70, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 41 }
+        },
+        {
+          "generated": { "line": 70, "column": 48 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 11 }
+        },
+        {
+          "generated": { "line": 70, "column": 50 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 53, "column": 50 }
+        },
+        {
+          "generated": { "line": 71, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 54, "column": 6 }
+        },
+        {
+          "name": "_this2",
+          "generated": { "line": 71, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 54, "column": 10 }
+        },
+        {
+          "generated": { "line": 71, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 54, "column": 19 }
+        },
+        {
+          "generated": { "line": 71, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 54, "column": 6 }
+        },
+        {
+          "generated": { "line": 73, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 6 }
+        },
+        {
+          "name": "_loop2",
+          "generated": { "line": 73, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 10 }
+        },
+        {
+          "generated": { "line": 73, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 19 }
+        },
+        {
+          "name": "_loop2",
+          "generated": { "line": 73, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 28 }
+        },
+        {
+          "generated": { "line": 73, "column": 34 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 19 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 73, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 35 }
+        },
+        {
+          "generated": { "line": 73, "column": 45 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 19 }
+        },
+        {
+          "generated": { "line": 73, "column": 47 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 47 }
+        },
+        {
+          "generated": { "line": 74, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 8 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 74, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 12 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 74, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 19 }
+        },
+        {
+          "name": "split",
+          "generated": { "line": 74, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 30 }
+        },
+        {
+          "generated": { "line": 74, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 19 }
+        },
+        {
+          "generated": { "line": 74, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 36 }
+        },
+        {
+          "generated": { "line": 74, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 19 }
+        },
+        {
+          "generated": { "line": 74, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 57, "column": 8 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 75, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 8 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 75, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 13 }
+        },
+        {
+          "generated": { "line": 75, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 8 }
+        },
+        {
+          "generated": { "line": 75, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 20 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 75, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 30 }
+        },
+        {
+          "generated": { "line": 75, "column": 45 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 20 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 75, "column": 47 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 47 }
+        },
+        {
+          "generated": { "line": 75, "column": 50 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 20 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 75, "column": 52 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 52 }
+        },
+        {
+          "generated": { "line": 75, "column": 57 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 20 }
+        },
+        {
+          "generated": { "line": 75, "column": 59 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 59 }
+        },
+        {
+          "generated": { "line": 76, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 10 }
+        },
+        {
+          "name": "index",
+          "generated": { "line": 76, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 14 }
+        },
+        {
+          "name": "path",
+          "generated": { "line": 76, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 24 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 76, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 29 }
+        },
+        {
+          "generated": { "line": 76, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 24 }
+        },
+        {
+          "generated": { "line": 76, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 38 }
+        },
+        {
+          "generated": { "line": 76, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 10 }
+        },
+        {
+          "generated": { "line": 76, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 59, "column": 41 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 77, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 12 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 77, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 28 }
+        },
+        {
+          "generated": { "line": 77, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 12 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 77, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 33 }
+        },
+        {
+          "generated": { "line": 77, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 12 }
+        },
+        {
+          "name": "splice",
+          "generated": { "line": 77, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 42 }
+        },
+        {
+          "generated": { "line": 77, "column": 48 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 12 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 77, "column": 49 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 49 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 77, "column": 65 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 65 }
+        },
+        {
+          "generated": { "line": 77, "column": 68 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 49 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 77, "column": 70 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 70 }
+        },
+        {
+          "generated": { "line": 77, "column": 78 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 49 }
+        },
+        {
+          "name": "indexOf",
+          "generated": { "line": 77, "column": 79 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 79 }
+        },
+        {
+          "generated": { "line": 77, "column": 86 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 49 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 77, "column": 87 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 87 }
+        },
+        {
+          "generated": { "line": 77, "column": 93 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 49 }
+        },
+        {
+          "generated": { "line": 77, "column": 94 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 12 }
+        },
+        {
+          "generated": { "line": 77, "column": 96 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 96 }
+        },
+        {
+          "generated": { "line": 77, "column": 97 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 60, "column": 12 }
+        },
+        {
+          "generated": { "line": 79, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 12 }
+        },
+        {
+          "generated": { "line": 79, "column": 16 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 16 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 79, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 17 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 79, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 33 }
+        },
+        {
+          "generated": { "line": 79, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 17 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 79, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 38 }
+        },
+        {
+          "generated": { "line": 79, "column": 46 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 17 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 79, "column": 47 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 47 }
+        },
+        {
+          "generated": { "line": 79, "column": 53 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 12 }
+        },
+        {
+          "generated": { "line": 79, "column": 55 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 62, "column": 55 }
+        },
+        {
+          "generated": { "line": 80, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 63, "column": 14 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 80, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 63, "column": 21 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 80, "column": 37 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 63, "column": 37 }
+        },
+        {
+          "generated": { "line": 80, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 63, "column": 21 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 80, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 63, "column": 42 }
+        },
+        {
+          "generated": { "line": 80, "column": 50 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 63, "column": 14 }
+        },
+        {
+          "generated": { "line": 81, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 64, "column": 13 }
+        },
+        {
+          "generated": { "line": 82, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 65, "column": 11 }
+        },
+        {
+          "generated": { "line": 84, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 67, "column": 10 }
+        },
+        {
+          "name": "currentMapLevel",
+          "generated": { "line": 84, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 67, "column": 17 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 84, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 67, "column": 33 }
+        },
+        {
+          "generated": { "line": 84, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 67, "column": 17 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 84, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 67, "column": 38 }
+        },
+        {
+          "generated": { "line": 84, "column": 46 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 67, "column": 10 }
+        },
+        {
+          "generated": { "line": 85, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 68, "column": 9 }
+        },
+        {
+          "generated": { "line": 85, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 8 }
+        },
+        {
+          "name": "_this2",
+          "generated": { "line": 85, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 68, "column": 11 }
+        },
+        {
+          "name": "map",
+          "generated": { "line": 85, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 68, "column": 18 }
+        },
+        {
+          "generated": { "line": 85, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 58, "column": 8 }
+        },
+        {
+          "generated": { "line": 86, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 69, "column": 7 }
+        },
+        {
+          "generated": { "line": 86, "column": 7 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 56, "column": 6 }
+        },
+        {
+          "generated": { "line": 88, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 71, "column": 6 }
+        },
+        {
+          "generated": { "line": 88, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 71, "column": 11 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 88, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 71, "column": 15 }
+        },
+        {
+          "generated": { "line": 88, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 71, "column": 6 }
+        },
+        {
+          "name": "depsMap",
+          "generated": { "line": 88, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 71, "column": 29 }
+        },
+        {
+          "generated": { "line": 88, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 71, "column": 6 }
+        },
+        {
+          "generated": { "line": 88, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 71, "column": 38 }
+        },
+        {
+          "name": "_loop2",
+          "generated": { "line": 89, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 72, "column": 8 }
+        },
+        {
+          "name": "depsMapKey",
+          "generated": { "line": 89, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 72, "column": 15 }
+        },
+        {
+          "generated": { "line": 89, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 72, "column": 8 }
+        },
+        {
+          "generated": { "line": 90, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 73, "column": 7 }
+        },
+        {
+          "generated": { "line": 91, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 74, "column": 5 }
+        },
+        {
+          "generated": { "line": 92, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 75, "column": 4 }
+        },
+        {
+          "generated": { "line": 96, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 51, "column": 5 }
+        },
+        {
+          "generated": { "line": 96, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 32 }
+        },
+        {
+          "generated": { "line": 96, "column": 5 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 79, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 97, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 80, "column": 4 }
+        },
+        {
+          "generated": { "line": 97, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 80, "column": 9 }
+        },
+        {
+          "generated": { "line": 97, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 79, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 98, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 4 }
+        },
+        {
+          "generated": { "line": 98, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 11 }
+        },
+        {
+          "name": "updateEntity",
+          "generated": { "line": 98, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 20 }
+        },
+        {
+          "generated": { "line": 98, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 11 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 98, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 33 }
+        },
+        {
+          "generated": { "line": 98, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 11 }
+        },
+        {
+          "name": "prevDepsMap",
+          "generated": { "line": 98, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 41 }
+        },
+        {
+          "generated": { "line": 98, "column": 52 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 11 }
+        },
+        {
+          "name": "nextDepsMap",
+          "generated": { "line": 98, "column": 54 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 54 }
+        },
+        {
+          "generated": { "line": 98, "column": 65 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 11 }
+        },
+        {
+          "generated": { "line": 98, "column": 67 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 81, "column": 67 }
+        },
+        {
+          "generated": { "line": 99, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 6 }
+        },
+        {
+          "name": "toRemove",
+          "generated": { "line": 99, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 10 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 99, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 21 }
+        },
+        {
+          "name": "keys",
+          "generated": { "line": 99, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 28 }
+        },
+        {
+          "generated": { "line": 99, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 21 }
+        },
+        {
+          "name": "prevDepsMap",
+          "generated": { "line": 99, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 33 }
+        },
+        {
+          "generated": { "line": 99, "column": 44 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 21 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 99, "column": 46 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 46 }
+        },
+        {
+          "generated": { "line": 99, "column": 52 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 21 }
+        },
+        {
+          "generated": { "line": 99, "column": 53 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 53 }
+        },
+        {
+          "name": "removeDepsMap",
+          "generated": { "line": 99, "column": 63 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 63 }
+        },
+        {
+          "generated": { "line": 99, "column": 76 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 53 }
+        },
+        {
+          "name": "prevDepsMapKey",
+          "generated": { "line": 99, "column": 78 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 78 }
+        },
+        {
+          "generated": { "line": 99, "column": 92 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 53 }
+        },
+        {
+          "generated": { "line": 99, "column": 94 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 94 }
+        },
+        {
+          "generated": { "line": 100, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 83, "column": 8 }
+        },
+        {
+          "generated": { "line": 100, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 83, "column": 12 }
+        },
+        {
+          "name": "nextDepsMap",
+          "generated": { "line": 100, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 83, "column": 13 }
+        },
+        {
+          "name": "prevDepsMapKey",
+          "generated": { "line": 100, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 83, "column": 25 }
+        },
+        {
+          "generated": { "line": 100, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 83, "column": 13 }
+        },
+        {
+          "generated": { "line": 100, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 83, "column": 8 }
+        },
+        {
+          "generated": { "line": 100, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 83, "column": 42 }
+        },
+        {
+          "name": "removeDepsMap",
+          "generated": { "line": 101, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 84, "column": 10 }
+        },
+        {
+          "name": "prevDepsMapKey",
+          "generated": { "line": 101, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 84, "column": 24 }
+        },
+        {
+          "generated": { "line": 101, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 84, "column": 10 }
+        },
+        {
+          "generated": { "line": 101, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 84, "column": 42 }
+        },
+        {
+          "generated": { "line": 101, "column": 46 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 84, "column": 10 }
+        },
+        {
+          "generated": { "line": 102, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 85, "column": 9 }
+        },
+        {
+          "generated": { "line": 104, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 87, "column": 8 }
+        },
+        {
+          "name": "removeDepsMap",
+          "generated": { "line": 104, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 87, "column": 15 }
+        },
+        {
+          "generated": { "line": 104, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 87, "column": 8 }
+        },
+        {
+          "generated": { "line": 105, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 88, "column": 7 }
+        },
+        {
+          "generated": { "line": 105, "column": 7 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 21 }
+        },
+        {
+          "generated": { "line": 105, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 88, "column": 9 }
+        },
+        {
+          "generated": { "line": 105, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 21 }
+        },
+        {
+          "generated": { "line": 105, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 82, "column": 6 }
+        },
+        {
+          "generated": { "line": 106, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 6 }
+        },
+        {
+          "name": "toAdd",
+          "generated": { "line": 106, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 10 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 106, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 18 }
+        },
+        {
+          "name": "keys",
+          "generated": { "line": 106, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 25 }
+        },
+        {
+          "generated": { "line": 106, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 18 }
+        },
+        {
+          "name": "nextDepsMap",
+          "generated": { "line": 106, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 30 }
+        },
+        {
+          "generated": { "line": 106, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 18 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 106, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 43 }
+        },
+        {
+          "generated": { "line": 106, "column": 49 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 18 }
+        },
+        {
+          "generated": { "line": 106, "column": 50 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 50 }
+        },
+        {
+          "name": "addDepsMap",
+          "generated": { "line": 106, "column": 60 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 60 }
+        },
+        {
+          "generated": { "line": 106, "column": 70 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 50 }
+        },
+        {
+          "name": "nextDepsMapKey",
+          "generated": { "line": 106, "column": 72 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 72 }
+        },
+        {
+          "generated": { "line": 106, "column": 86 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 50 }
+        },
+        {
+          "generated": { "line": 106, "column": 88 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 88 }
+        },
+        {
+          "generated": { "line": 107, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 90, "column": 8 }
+        },
+        {
+          "generated": { "line": 107, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 90, "column": 12 }
+        },
+        {
+          "name": "prevDepsMap",
+          "generated": { "line": 107, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 90, "column": 13 }
+        },
+        {
+          "name": "nextDepsMapKey",
+          "generated": { "line": 107, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 90, "column": 25 }
+        },
+        {
+          "generated": { "line": 107, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 90, "column": 13 }
+        },
+        {
+          "generated": { "line": 107, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 90, "column": 8 }
+        },
+        {
+          "generated": { "line": 107, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 90, "column": 42 }
+        },
+        {
+          "name": "addDepsMap",
+          "generated": { "line": 108, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 91, "column": 10 }
+        },
+        {
+          "name": "nextDepsMapKey",
+          "generated": { "line": 108, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 91, "column": 21 }
+        },
+        {
+          "generated": { "line": 108, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 91, "column": 10 }
+        },
+        {
+          "generated": { "line": 108, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 91, "column": 39 }
+        },
+        {
+          "generated": { "line": 108, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 91, "column": 10 }
+        },
+        {
+          "generated": { "line": 109, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 92, "column": 9 }
+        },
+        {
+          "generated": { "line": 111, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 94, "column": 8 }
+        },
+        {
+          "name": "addDepsMap",
+          "generated": { "line": 111, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 94, "column": 15 }
+        },
+        {
+          "generated": { "line": 111, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 94, "column": 8 }
+        },
+        {
+          "generated": { "line": 112, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 95, "column": 7 }
+        },
+        {
+          "generated": { "line": 112, "column": 7 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 18 }
+        },
+        {
+          "generated": { "line": 112, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 95, "column": 9 }
+        },
+        {
+          "generated": { "line": 112, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 18 }
+        },
+        {
+          "generated": { "line": 112, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 89, "column": 6 }
+        },
+        {
+          "generated": { "line": 114, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 97, "column": 6 }
+        },
+        {
+          "name": "removeEntity",
+          "generated": { "line": 114, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 97, "column": 11 }
+        },
+        {
+          "generated": { "line": 114, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 97, "column": 6 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 114, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 97, "column": 24 }
+        },
+        {
+          "generated": { "line": 114, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 97, "column": 6 }
+        },
+        {
+          "name": "toRemove",
+          "generated": { "line": 114, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 97, "column": 32 }
+        },
+        {
+          "generated": { "line": 114, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 97, "column": 6 }
+        },
+        {
+          "generated": { "line": 116, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "name": "addEntity",
+          "generated": { "line": 116, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 99, "column": 11 }
+        },
+        {
+          "generated": { "line": 116, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 116, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 99, "column": 21 }
+        },
+        {
+          "generated": { "line": 116, "column": 27 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "name": "toAdd",
+          "generated": { "line": 116, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 99, "column": 29 }
+        },
+        {
+          "generated": { "line": 116, "column": 34 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 99, "column": 6 }
+        },
+        {
+          "generated": { "line": 117, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 100, "column": 5 }
+        },
+        {
+          "generated": { "line": 118, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 101, "column": 4 }
+        },
+        {
+          "generated": { "line": 123, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 79, "column": 5 }
+        },
+        {
+          "generated": { "line": 123, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 32 }
+        },
+        {
+          "generated": { "line": 123, "column": 5 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 106, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 124, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 107, "column": 4 }
+        },
+        {
+          "generated": { "line": 124, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 107, "column": 9 }
+        },
+        {
+          "generated": { "line": 124, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 106, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 125, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 108, "column": 4 }
+        },
+        {
+          "generated": { "line": 125, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "name": "getAllUniqueEntities",
+          "generated": { "line": 125, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 108, "column": 20 }
+        },
+        {
+          "generated": { "line": 125, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "generated": { "line": 125, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 108, "column": 43 }
+        },
+        {
+          "generated": { "line": 126, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 109, "column": 6 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 126, "column": 10 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 109, "column": 10 }
+        },
+        {
+          "generated": { "line": 126, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 109, "column": 21 }
+        },
+        {
+          "generated": { "line": 126, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 109, "column": 6 }
+        },
+        {
+          "generated": { "line": 128, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 111, "column": 6 }
+        },
+        {
+          "name": "traverseChildren",
+          "generated": { "line": 128, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 111, "column": 15 }
+        },
+        {
+          "generated": { "line": 128, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 111, "column": 6 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 128, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 111, "column": 32 }
+        },
+        {
+          "generated": { "line": 128, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 111, "column": 6 }
+        },
+        {
+          "generated": { "line": 128, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 111, "column": 42 }
+        },
+        {
+          "generated": { "line": 129, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 112, "column": 8 }
+        },
+        {
+          "generated": { "line": 129, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 112, "column": 13 }
+        },
+        {
+          "name": "childKey",
+          "generated": { "line": 129, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 112, "column": 17 }
+        },
+        {
+          "generated": { "line": 129, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 112, "column": 8 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 129, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 112, "column": 29 }
+        },
+        {
+          "generated": { "line": 129, "column": 37 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 112, "column": 8 }
+        },
+        {
+          "generated": { "line": 129, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 112, "column": 39 }
+        },
+        {
+          "generated": { "line": 130, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 113, "column": 10 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 130, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 113, "column": 14 }
+        },
+        {
+          "name": "childKey",
+          "generated": { "line": 130, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 113, "column": 23 }
+        },
+        {
+          "generated": { "line": 130, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 113, "column": 14 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 130, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 113, "column": 33 }
+        },
+        {
+          "generated": { "line": 130, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 113, "column": 10 }
+        },
+        {
+          "generated": { "line": 130, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 113, "column": 43 }
+        },
+        {
+          "generated": { "line": 131, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 12 }
+        },
+        {
+          "generated": { "line": 131, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 17 }
+        },
+        {
+          "name": "y",
+          "generated": { "line": 131, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 21 }
+        },
+        {
+          "generated": { "line": 131, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 25 }
+        },
+        {
+          "generated": { "line": 131, "column": 26 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 12 }
+        },
+        {
+          "name": "y",
+          "generated": { "line": 131, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 28 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 131, "column": 32 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 32 }
+        },
+        {
+          "name": "childKey",
+          "generated": { "line": 131, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 41 }
+        },
+        {
+          "generated": { "line": 131, "column": 49 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 32 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 131, "column": 51 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 51 }
+        },
+        {
+          "generated": { "line": 131, "column": 59 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 32 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 131, "column": 60 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 60 }
+        },
+        {
+          "generated": { "line": 131, "column": 66 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 12 }
+        },
+        {
+          "name": "y",
+          "generated": { "line": 131, "column": 68 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 68 }
+        },
+        {
+          "generated": { "line": 131, "column": 71 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 12 }
+        },
+        {
+          "generated": { "line": 131, "column": 73 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 114, "column": 73 }
+        },
+        {
+          "generated": { "line": 132, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 14 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 132, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 18 }
+        },
+        {
+          "name": "indexOf",
+          "generated": { "line": 132, "column": 27 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 27 }
+        },
+        {
+          "generated": { "line": 132, "column": 34 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 18 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 132, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 35 }
+        },
+        {
+          "name": "childKey",
+          "generated": { "line": 132, "column": 44 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 44 }
+        },
+        {
+          "generated": { "line": 132, "column": 52 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 35 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 132, "column": 54 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 54 }
+        },
+        {
+          "generated": { "line": 132, "column": 62 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 35 }
+        },
+        {
+          "name": "y",
+          "generated": { "line": 132, "column": 63 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 63 }
+        },
+        {
+          "generated": { "line": 132, "column": 64 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 35 }
+        },
+        {
+          "generated": { "line": 132, "column": 65 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 18 }
+        },
+        {
+          "generated": { "line": 132, "column": 71 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 71 }
+        },
+        {
+          "generated": { "line": 132, "column": 72 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 72 }
+        },
+        {
+          "generated": { "line": 132, "column": 73 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 14 }
+        },
+        {
+          "generated": { "line": 132, "column": 75 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 115, "column": 75 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 133, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 16 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 133, "column": 25 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 25 }
+        },
+        {
+          "generated": { "line": 133, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 16 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 133, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 30 }
+        },
+        {
+          "name": "childKey",
+          "generated": { "line": 133, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 39 }
+        },
+        {
+          "generated": { "line": 133, "column": 47 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 30 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 133, "column": 49 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 49 }
+        },
+        {
+          "generated": { "line": 133, "column": 57 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 30 }
+        },
+        {
+          "name": "y",
+          "generated": { "line": 133, "column": 58 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 58 }
+        },
+        {
+          "generated": { "line": 133, "column": 59 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 30 }
+        },
+        {
+          "generated": { "line": 133, "column": 60 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 116, "column": 16 }
+        },
+        {
+          "generated": { "line": 134, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 117, "column": 15 }
+        },
+        {
+          "generated": { "line": 135, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 118, "column": 13 }
+        },
+        {
+          "generated": { "line": 136, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 119, "column": 11 }
+        },
+        {
+          "generated": { "line": 138, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 121, "column": 10 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 138, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 121, "column": 14 }
+        },
+        {
+          "name": "childKey",
+          "generated": { "line": 138, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 121, "column": 23 }
+        },
+        {
+          "generated": { "line": 138, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 121, "column": 14 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 138, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 121, "column": 33 }
+        },
+        {
+          "generated": { "line": 138, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 121, "column": 10 }
+        },
+        {
+          "generated": { "line": 138, "column": 43 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 121, "column": 43 }
+        },
+        {
+          "name": "traverseChildren",
+          "generated": { "line": 139, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 122, "column": 12 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 139, "column": 29 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 122, "column": 29 }
+        },
+        {
+          "name": "childKey",
+          "generated": { "line": 139, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 122, "column": 38 }
+        },
+        {
+          "generated": { "line": 139, "column": 46 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 122, "column": 29 }
+        },
+        {
+          "name": "children",
+          "generated": { "line": 139, "column": 48 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 122, "column": 48 }
+        },
+        {
+          "generated": { "line": 139, "column": 56 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 122, "column": 12 }
+        },
+        {
+          "generated": { "line": 140, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 123, "column": 11 }
+        },
+        {
+          "generated": { "line": 141, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 124, "column": 9 }
+        },
+        {
+          "generated": { "line": 142, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 125, "column": 7 }
+        },
+        {
+          "name": "traverseChildren",
+          "generated": { "line": 143, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 126, "column": 6 }
+        },
+        {
+          "generated": { "line": 143, "column": 23 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 126, "column": 23 }
+        },
+        {
+          "name": "map",
+          "generated": { "line": 143, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 126, "column": 28 }
+        },
+        {
+          "generated": { "line": 143, "column": 31 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 126, "column": 6 }
+        },
+        {
+          "generated": { "line": 145, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 128, "column": 6 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 145, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 128, "column": 13 }
+        },
+        {
+          "generated": { "line": 145, "column": 21 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 128, "column": 6 }
+        },
+        {
+          "generated": { "line": 146, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 129, "column": 5 }
+        },
+        {
+          "generated": { "line": 147, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 130, "column": 4 }
+        },
+        {
+          "generated": { "line": 152, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 106, "column": 5 }
+        },
+        {
+          "generated": { "line": 152, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 32 }
+        },
+        {
+          "generated": { "line": 152, "column": 5 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 135, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 153, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 136, "column": 4 }
+        },
+        {
+          "generated": { "line": 153, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 136, "column": 9 }
+        },
+        {
+          "generated": { "line": 153, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 135, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 154, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 137, "column": 4 }
+        },
+        {
+          "generated": { "line": 154, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 137, "column": 11 }
+        },
+        {
+          "name": "getUniqueEntities",
+          "generated": { "line": 154, "column": 20 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 137, "column": 20 }
+        },
+        {
+          "generated": { "line": 154, "column": 37 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 137, "column": 11 }
+        },
+        {
+          "name": "changesMap",
+          "generated": { "line": 154, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 137, "column": 38 }
+        },
+        {
+          "generated": { "line": 154, "column": 48 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 137, "column": 11 }
+        },
+        {
+          "generated": { "line": 154, "column": 50 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 137, "column": 50 }
+        },
+        {
+          "generated": { "line": 155, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 6 }
+        },
+        {
+          "generated": { "line": 155, "column": 13 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 13 }
+        },
+        {
+          "name": "changesMap",
+          "generated": { "line": 155, "column": 41 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 29 }
+        },
+        {
+          "generated": { "line": 155, "column": 51 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 13 }
+        },
+        {
+          "generated": { "line": 155, "column": 53 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 41 }
+        },
+        {
+          "name": "map",
+          "generated": { "line": 155, "column": 58 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 46 }
+        },
+        {
+          "generated": { "line": 155, "column": 61 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 13 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 155, "column": 63 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 51 }
+        },
+        {
+          "generated": { "line": 155, "column": 69 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 13 }
+        },
+        {
+          "generated": { "line": 155, "column": 70 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 58 }
+        },
+        {
+          "name": "unique",
+          "generated": { "line": 155, "column": 80 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 68 }
+        },
+        {
+          "generated": { "line": 155, "column": 86 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 58 }
+        },
+        {
+          "name": "match",
+          "generated": { "line": 155, "column": 88 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 76 }
+        },
+        {
+          "generated": { "line": 155, "column": 93 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 58 }
+        },
+        {
+          "generated": { "line": 155, "column": 95 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 83 }
+        },
+        {
+          "generated": { "line": 156, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 8 }
+        },
+        {
+          "generated": { "line": 156, "column": 15 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 15 }
+        },
+        {
+          "name": "match",
+          "generated": { "line": 156, "column": 16 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 16 }
+        },
+        {
+          "name": "entities",
+          "generated": { "line": 156, "column": 22 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 22 }
+        },
+        {
+          "generated": { "line": 156, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 16 }
+        },
+        {
+          "generated": { "line": 156, "column": 34 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 34 }
+        },
+        {
+          "generated": { "line": 156, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 15 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 156, "column": 38 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 38 }
+        },
+        {
+          "generated": { "line": 156, "column": 44 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 15 }
+        },
+        {
+          "generated": { "line": 156, "column": 45 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 45 }
+        },
+        {
+          "name": "currentUnique",
+          "generated": { "line": 156, "column": 55 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 55 }
+        },
+        {
+          "generated": { "line": 156, "column": 68 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 45 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 156, "column": 70 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 70 }
+        },
+        {
+          "generated": { "line": 156, "column": 76 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 45 }
+        },
+        {
+          "generated": { "line": 156, "column": 78 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 78 }
+        },
+        {
+          "generated": { "line": 157, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 10 }
+        },
+        {
+          "name": "currentUnique",
+          "generated": { "line": 157, "column": 14 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 14 }
+        },
+        {
+          "name": "indexOf",
+          "generated": { "line": 157, "column": 28 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 28 }
+        },
+        {
+          "generated": { "line": 157, "column": 35 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 14 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 157, "column": 36 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 36 }
+        },
+        {
+          "generated": { "line": 157, "column": 42 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 14 }
+        },
+        {
+          "generated": { "line": 157, "column": 48 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 48 }
+        },
+        {
+          "generated": { "line": 157, "column": 49 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 49 }
+        },
+        {
+          "generated": { "line": 157, "column": 50 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 10 }
+        },
+        {
+          "generated": { "line": 157, "column": 52 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 140, "column": 52 }
+        },
+        {
+          "generated": { "line": 158, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 141, "column": 12 }
+        },
+        {
+          "name": "currentUnique",
+          "generated": { "line": 158, "column": 19 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 141, "column": 19 }
+        },
+        {
+          "name": "concat",
+          "generated": { "line": 158, "column": 33 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 141, "column": 33 }
+        },
+        {
+          "generated": { "line": 158, "column": 39 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 141, "column": 19 }
+        },
+        {
+          "name": "entity",
+          "generated": { "line": 158, "column": 40 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 141, "column": 40 }
+        },
+        {
+          "generated": { "line": 158, "column": 46 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 141, "column": 19 }
+        },
+        {
+          "generated": { "line": 158, "column": 47 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 141, "column": 12 }
+        },
+        {
+          "generated": { "line": 159, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 142, "column": 11 }
+        },
+        {
+          "generated": { "line": 161, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 144, "column": 10 }
+        },
+        {
+          "name": "currentUnique",
+          "generated": { "line": 161, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 144, "column": 17 }
+        },
+        {
+          "generated": { "line": 161, "column": 30 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 144, "column": 10 }
+        },
+        {
+          "generated": { "line": 162, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 145, "column": 9 }
+        },
+        {
+          "generated": { "line": 162, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 15 }
+        },
+        {
+          "name": "unique",
+          "generated": { "line": 162, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 145, "column": 11 }
+        },
+        {
+          "generated": { "line": 162, "column": 17 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 15 }
+        },
+        {
+          "generated": { "line": 162, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 139, "column": 8 }
+        },
+        {
+          "generated": { "line": 163, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 146, "column": 7 }
+        },
+        {
+          "generated": { "line": 163, "column": 7 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 13 }
+        },
+        {
+          "generated": { "line": 163, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 146, "column": 9 }
+        },
+        {
+          "generated": { "line": 163, "column": 11 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 13 }
+        },
+        {
+          "generated": { "line": 163, "column": 12 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 138, "column": 6 }
+        },
+        {
+          "generated": { "line": 164, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 147, "column": 5 }
+        },
+        {
+          "generated": { "line": 165, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 135, "column": 5 }
+        },
+        {
+          "generated": { "line": 165, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 32 }
+        },
+        {
+          "generated": { "line": 165, "column": 4 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 18, "column": 2 }
+        },
+        {
+          "generated": { "line": 167, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 150, "column": 2 }
+        },
+        {
+          "name": "DependencyStore",
+          "generated": { "line": 167, "column": 9 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 150, "column": 9 }
+        },
+        {
+          "generated": { "line": 167, "column": 24 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 150, "column": 2 }
+        },
+        {
+          "generated": { "line": 168, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 151, "column": 1 }
+        },
+        {
+          "generated": { "line": 168, "column": 1 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 7, "column": 22 }
+        },
+        {
+          "generated": { "line": 168, "column": 3 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "DependencyStore",
+          "generated": { "line": 170, "column": 18 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 153, "column": 15 }
+        },
+        {
+          "generated": { "line": 171, "column": 0 },
+          "source": "../../node_modules/cerebral/es/DependencyStore.js",
+          "original": { "line": 154, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/cerebral/es/DependencyStore.js":
+          "var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nimport { dependencyMatch } from './utils';\n\nvar DependencyStore = function () {\n  function DependencyStore() {\n    _classCallCheck(this, DependencyStore);\n\n    this.map = {};\n  }\n  /*\n    Adds the entity to all the depending paths\n  */\n\n\n  _createClass(DependencyStore, [{\n    key: 'addEntity',\n    value: function addEntity(entity, depsMap) {\n      var _this = this;\n\n      var _loop = function _loop(depsMapKey) {\n        var path = depsMapKey.split('.');\n\n        path.reduce(function (currentMapLevel, key, index) {\n          if (!currentMapLevel[key]) {\n            currentMapLevel[key] = {};\n          }\n\n          if (index < path.length - 1) {\n            currentMapLevel[key].children = currentMapLevel[key].children || {};\n\n            return currentMapLevel[key].children;\n          }\n\n          currentMapLevel[key].entities = currentMapLevel[key].entities ? currentMapLevel[key].entities.concat(entity) : [entity];\n\n          return currentMapLevel;\n        }, _this.map);\n      };\n\n      for (var depsMapKey in depsMap) {\n        _loop(depsMapKey);\n      }\n    }\n    /*\n      Removes the entity from all depending paths\n    */\n\n  }, {\n    key: 'removeEntity',\n    value: function removeEntity(entity, depsMap) {\n      var _this2 = this;\n\n      var _loop2 = function _loop2(depsMapKey) {\n        var path = depsMapKey.split('.');\n        path.reduce(function (currentMapLevel, key, index) {\n          if (index === path.length - 1) {\n            currentMapLevel[key].entities.splice(currentMapLevel[key].entities.indexOf(entity), 1);\n\n            if (!currentMapLevel[key].entities.length) {\n              delete currentMapLevel[key].entities;\n            }\n          }\n\n          return currentMapLevel[key].children;\n        }, _this2.map);\n      };\n\n      for (var depsMapKey in depsMap) {\n        _loop2(depsMapKey);\n      }\n    }\n    /*\n      Updates entity based on changed dependencies\n    */\n\n  }, {\n    key: 'updateEntity',\n    value: function updateEntity(entity, prevDepsMap, nextDepsMap) {\n      var toRemove = Object.keys(prevDepsMap).reduce(function (removeDepsMap, prevDepsMapKey) {\n        if (!nextDepsMap[prevDepsMapKey]) {\n          removeDepsMap[prevDepsMapKey] = true;\n        }\n\n        return removeDepsMap;\n      }, {});\n      var toAdd = Object.keys(nextDepsMap).reduce(function (addDepsMap, nextDepsMapKey) {\n        if (!prevDepsMap[nextDepsMapKey]) {\n          addDepsMap[nextDepsMapKey] = true;\n        }\n\n        return addDepsMap;\n      }, {});\n\n      this.removeEntity(entity, toRemove);\n\n      this.addEntity(entity, toAdd);\n    }\n    /*\n      As same entity can appear in multiple paths, this method returns\n      all unique entities. Used by view to render all components\n    */\n\n  }, {\n    key: 'getAllUniqueEntities',\n    value: function getAllUniqueEntities() {\n      var entities = [];\n\n      function traverseChildren(children) {\n        for (var childKey in children) {\n          if (children[childKey].entities) {\n            for (var y = 0; y < children[childKey].entities.length; y++) {\n              if (entities.indexOf(children[childKey].entities[y]) === -1) {\n                entities.push(children[childKey].entities[y]);\n              }\n            }\n          }\n\n          if (children[childKey].children) {\n            traverseChildren(children[childKey].children);\n          }\n        }\n      }\n      traverseChildren(this.map);\n\n      return entities;\n    }\n    /*\n      Returns entities based on a change map returned from\n      the model flush method.\n    */\n\n  }, {\n    key: 'getUniqueEntities',\n    value: function getUniqueEntities(changesMap) {\n      return dependencyMatch(changesMap, this.map).reduce(function (unique, match) {\n        return (match.entities || []).reduce(function (currentUnique, entity) {\n          if (currentUnique.indexOf(entity) === -1) {\n            return currentUnique.concat(entity);\n          }\n\n          return currentUnique;\n        }, unique);\n      }, []);\n    }\n  }]);\n\n  return DependencyStore;\n}();\n\nexport default DependencyStore;\n//# sourceMappingURL=DependencyStore.js.map"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "24b1f79f9866b13cac3ef2d50916140e",
+  "cacheData": { "env": {} }
+}

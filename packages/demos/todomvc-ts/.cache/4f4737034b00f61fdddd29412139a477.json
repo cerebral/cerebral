@@ -1,0 +1,351 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
+      "includedInParent": true,
+      "mtime": 1522956493000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    { "name": "@cerebral/router", "loc": { "line": 1, "column": 19 } },
+    { "name": "@cerebral/storage", "loc": { "line": 2, "column": 28 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.storage = exports.router = undefined;\n\nvar _router = require('@cerebral/router');\n\nvar _router2 = _interopRequireDefault(_router);\n\nvar _storage = require('@cerebral/storage');\n\nvar _storage2 = _interopRequireDefault(_storage);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar router = exports.router = (0, _router2.default)({\n    onlyHash: true,\n    query: true,\n    routes: [{ path: '/', signal: 'rootRouted' }, { path: '/:filter', signal: 'filterClicked' }]\n});\nvar storage = exports.storage = (0, _storage2.default)({\n    target: window.localStorage,\n    sync: { todos: 'todos' },\n    prefix: 'todomvc'\n});",
+    "map": {
+      "mappings": [
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 7 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 13 },
+          "generated": { "line": 18, "column": 4 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 22 },
+          "generated": { "line": 18, "column": 30 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 29 },
+          "generated": { "line": 18, "column": 52 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 5, "column": 2 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 5, "column": 12 },
+          "generated": { "line": 19, "column": 14 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 29 },
+          "generated": { "line": 19, "column": 18 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 6, "column": 2 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 6, "column": 9 },
+          "generated": { "line": 20, "column": 11 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 29 },
+          "generated": { "line": 20, "column": 15 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 7, "column": 2 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 7, "column": 10 },
+          "generated": { "line": 21, "column": 12 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 8, "column": 4 },
+          "generated": { "line": 21, "column": 13 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 8, "column": 6 },
+          "generated": { "line": 21, "column": 15 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 8, "column": 12 },
+          "generated": { "line": 21, "column": 21 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 8, "column": 4 },
+          "generated": { "line": 21, "column": 24 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 8, "column": 17 },
+          "generated": { "line": 21, "column": 26 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 8, "column": 25 },
+          "generated": { "line": 21, "column": 34 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 8, "column": 4 },
+          "generated": { "line": 21, "column": 46 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 7, "column": 10 },
+          "generated": { "line": 21, "column": 48 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 21, "column": 50 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 9, "column": 6 },
+          "generated": { "line": 21, "column": 52 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 9, "column": 12 },
+          "generated": { "line": 21, "column": 58 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 21, "column": 68 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 9, "column": 24 },
+          "generated": { "line": 21, "column": 70 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 9, "column": 32 },
+          "generated": { "line": 21, "column": 78 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 21, "column": 93 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 7, "column": 10 },
+          "generated": { "line": 21, "column": 95 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 29 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 22 },
+          "generated": { "line": 22, "column": 1 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 4, "column": 7 },
+          "generated": { "line": 22, "column": 2 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 7 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 13 },
+          "generated": { "line": 23, "column": 4 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 23 },
+          "generated": { "line": 23, "column": 32 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 39 },
+          "generated": { "line": 23, "column": 55 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 14, "column": 10 },
+          "generated": { "line": 24, "column": 12 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 14, "column": 17 },
+          "generated": { "line": 24, "column": 19 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 39 },
+          "generated": { "line": 24, "column": 31 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 15, "column": 2 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 15, "column": 8 },
+          "generated": { "line": 25, "column": 10 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 15, "column": 10 },
+          "generated": { "line": 25, "column": 12 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 15, "column": 17 },
+          "generated": { "line": 25, "column": 19 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 15, "column": 8 },
+          "generated": { "line": 25, "column": 26 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 39 },
+          "generated": { "line": 25, "column": 28 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 16, "column": 2 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 16, "column": 10 },
+          "generated": { "line": 26, "column": 12 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 39 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 23 },
+          "generated": { "line": 27, "column": 1 }
+        },
+        {
+          "source": "src/app/modules.ts",
+          "name": null,
+          "original": { "line": 13, "column": 7 },
+          "generated": { "line": 27, "column": 2 }
+        }
+      ],
+      "sources": {
+        "src/app/modules.ts":
+          "import Router from '@cerebral/router'\nimport StorageProvider from '@cerebral/storage'\n\nexport const router = Router({\n  onlyHash: true,\n  query: true,\n  routes: [\n    { path: '/', signal: 'rootRouted' },\n    { path: '/:filter', signal: 'filterClicked' },\n  ],\n})\n\nexport const storage = StorageProvider({\n  target: window.localStorage,\n  sync: { todos: 'todos' },\n  prefix: 'todomvc',\n})\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "ab688c8265e7707f3df1ce79b7d1e049",
+  "cacheData": { "env": {} }
+}

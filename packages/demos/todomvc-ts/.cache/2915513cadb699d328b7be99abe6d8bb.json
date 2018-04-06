@@ -1,0 +1,1571 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
+      "includedInParent": true,
+      "mtime": 1522956493000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    { "name": "react", "loc": { "line": 1, "column": 23 } },
+    { "name": "classnames", "loc": { "line": 2, "column": 28 } },
+    { "name": "@cerebral/react", "loc": { "line": 3, "column": 24 } },
+    { "name": "cerebral/tags", "loc": { "line": 4, "column": 37 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral(['uid'], ['uid']),\n    _templateObject2 = _taggedTemplateLiteral(['todos.', ''], ['todos.', '']),\n    _templateObject3 = _taggedTemplateLiteral(['todoDoubleClicked'], ['todoDoubleClicked']),\n    _templateObject4 = _taggedTemplateLiteral(['todoNewTitleChanged'], ['todoNewTitleChanged']),\n    _templateObject5 = _taggedTemplateLiteral(['todoNewTitleSubmitted'], ['todoNewTitleSubmitted']),\n    _templateObject6 = _taggedTemplateLiteral(['toggleTodoCompletedChanged'], ['toggleTodoCompletedChanged']),\n    _templateObject7 = _taggedTemplateLiteral(['removeTodoClicked'], ['removeTodoClicked']),\n    _templateObject8 = _taggedTemplateLiteral(['todoNewTitleAborted'], ['todoNewTitleAborted']);\n\nvar _react = require('react');\n\nvar React = _interopRequireWildcard(_react);\n\nvar _classnames = require('classnames');\n\nvar classnames = _interopRequireWildcard(_classnames);\n\nvar _react2 = require('@cerebral/react');\n\nvar _tags = require('cerebral/tags');\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nexports.default = (0, _react2.connect)({\n    todo: (0, _tags.state)(_templateObject2, (0, _tags.props)(_templateObject)),\n    todoDoubleClicked: (0, _tags.signal)(_templateObject3),\n    newTitleChanged: (0, _tags.signal)(_templateObject4),\n    newTitleSubmitted: (0, _tags.signal)(_templateObject5),\n    toggleCompletedChanged: (0, _tags.signal)(_templateObject6),\n    removeTodoClicked: (0, _tags.signal)(_templateObject7),\n    newTitleAborted: (0, _tags.signal)(_templateObject8)\n})(function Todo(_ref) {\n    var uid = _ref.uid,\n        isEditing = _ref.isEditing,\n        todo = _ref.todo,\n        todoDoubleClicked = _ref.todoDoubleClicked,\n        newTitleChanged = _ref.newTitleChanged,\n        newTitleSubmitted = _ref.newTitleSubmitted,\n        toggleCompletedChanged = _ref.toggleCompletedChanged,\n        removeTodoClicked = _ref.removeTodoClicked,\n        newTitleAborted = _ref.newTitleAborted;\n\n    return React.createElement(\"li\", { className: classnames({\n            completed: todo.completed,\n            editing: isEditing\n        }) }, React.createElement(\"div\", { className: \"view\" }, React.createElement(\"input\", { className: \"toggle\", type: \"checkbox\", onChange: function onChange() {\n            return toggleCompletedChanged({ uid: uid });\n        }, checked: todo.completed }), React.createElement(\"label\", { onDoubleClick: function onDoubleClick() {\n            return todoDoubleClicked({ uid: uid });\n        } }, todo.title), React.createElement(\"button\", { className: \"destroy\", onClick: function onClick() {\n            return removeTodoClicked({ uid: uid });\n        } })), isEditing && React.createElement(\"form\", { onSubmit: function onSubmit(e) {\n            e.preventDefault();\n            newTitleSubmitted({ uid: uid });\n        } }, React.createElement(\"input\", { autoFocus: true, className: \"edit\", value: isEditing ? todo.editedTitle : todo.title, onBlur: function onBlur() {\n            return newTitleSubmitted({ uid: uid });\n        }, onChange: function onChange(e) {\n            return newTitleChanged({ uid: uid, title: e.target.value });\n        } })));\n});",
+    "map": {
+      "mappings": [
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 1, "column": 12 },
+          "generated": { "line": 18, "column": 4 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 2, "column": 12 },
+          "generated": { "line": 22, "column": 4 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 15 },
+          "generated": { "line": 32, "column": 18 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 32, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 7, "column": 4 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 33, "column": 79 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 8, "column": 4 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 34, "column": 58 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 35, "column": 56 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 10, "column": 4 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 36, "column": 58 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 11, "column": 4 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 37, "column": 63 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 12, "column": 4 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 38, "column": 58 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 4 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 23 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 15 },
+          "generated": { "line": 40, "column": 1 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 3 },
+          "generated": { "line": 40, "column": 3 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 3 },
+          "generated": { "line": 40, "column": 12 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 3 },
+          "generated": { "line": 40, "column": 16 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 40, "column": 23 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 15, "column": 4 },
+          "generated": { "line": 41, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 41, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 15, "column": 4 },
+          "generated": { "line": 41, "column": 19 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 41, "column": 22 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 16, "column": 4 },
+          "generated": { "line": 42, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 42, "column": 17 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 16, "column": 4 },
+          "generated": { "line": 42, "column": 25 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 42, "column": 34 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 17, "column": 4 },
+          "generated": { "line": 43, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 43, "column": 12 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 17, "column": 4 },
+          "generated": { "line": 43, "column": 20 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 43, "column": 24 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 18, "column": 4 },
+          "generated": { "line": 44, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 44, "column": 25 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 18, "column": 4 },
+          "generated": { "line": 44, "column": 33 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 44, "column": 50 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 19, "column": 4 },
+          "generated": { "line": 45, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 45, "column": 23 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 19, "column": 4 },
+          "generated": { "line": 45, "column": 31 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 45, "column": 46 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 20, "column": 4 },
+          "generated": { "line": 46, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 46, "column": 25 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 20, "column": 4 },
+          "generated": { "line": 46, "column": 33 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 46, "column": 50 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 21, "column": 4 },
+          "generated": { "line": 47, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 47, "column": 30 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 21, "column": 4 },
+          "generated": { "line": 47, "column": 38 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 47, "column": 60 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 22, "column": 4 },
+          "generated": { "line": 48, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 48, "column": 25 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 22, "column": 4 },
+          "generated": { "line": 48, "column": 33 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 48, "column": 50 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 49, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 23, "column": 4 },
+          "generated": { "line": 49, "column": 8 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 49, "column": 23 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 23, "column": 4 },
+          "generated": { "line": 49, "column": 31 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 24, "column": 1 },
+          "generated": { "line": 49, "column": 46 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 25, "column": 4 },
+          "generated": { "line": 51, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 51, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 51, "column": 17 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 51, "column": 30 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 51, "column": 31 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 51, "column": 35 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 51, "column": 37 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 27, "column": 12 },
+          "generated": { "line": 51, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 27, "column": 23 },
+          "generated": { "line": 51, "column": 50 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 27, "column": 34 },
+          "generated": { "line": 51, "column": 61 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 28, "column": 16 },
+          "generated": { "line": 52, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 28, "column": 27 },
+          "generated": { "line": 52, "column": 23 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 28, "column": 32 },
+          "generated": { "line": 52, "column": 28 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 27, "column": 34 },
+          "generated": { "line": 52, "column": 37 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 29, "column": 16 },
+          "generated": { "line": 53, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 29, "column": 25 },
+          "generated": { "line": 53, "column": 21 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 27, "column": 34 },
+          "generated": { "line": 54, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 27, "column": 23 },
+          "generated": { "line": 54, "column": 9 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 54, "column": 10 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 54, "column": 12 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 14 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 20 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 33 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 34 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 41 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 17 },
+          "generated": { "line": 54, "column": 43 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 27 },
+          "generated": { "line": 54, "column": 54 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 60 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 54, "column": 62 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 64 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 70 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 83 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 84 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 91 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 93 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 34, "column": 20 },
+          "generated": { "line": 54, "column": 95 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 34, "column": 30 },
+          "generated": { "line": 54, "column": 106 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 114 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 35, "column": 20 },
+          "generated": { "line": 54, "column": 116 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 35, "column": 25 },
+          "generated": { "line": 54, "column": 122 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 54, "column": 132 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 20 },
+          "generated": { "line": 54, "column": 134 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 30 },
+          "generated": { "line": 54, "column": 144 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 30 },
+          "generated": { "line": 55, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 36 },
+          "generated": { "line": 55, "column": 19 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 59 },
+          "generated": { "line": 55, "column": 42 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 61 },
+          "generated": { "line": 55, "column": 44 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 59 },
+          "generated": { "line": 55, "column": 52 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 36 },
+          "generated": { "line": 55, "column": 54 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 30 },
+          "generated": { "line": 55, "column": 55 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 36, "column": 30 },
+          "generated": { "line": 56, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 56, "column": 9 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 37, "column": 20 },
+          "generated": { "line": 56, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 37, "column": 29 },
+          "generated": { "line": 56, "column": 20 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 37, "column": 34 },
+          "generated": { "line": 56, "column": 25 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 56, "column": 34 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 33, "column": 16 },
+          "generated": { "line": 56, "column": 36 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 56, "column": 37 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 56, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 56, "column": 45 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 56, "column": 58 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 56, "column": 59 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 56, "column": 66 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 56, "column": 68 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 23 },
+          "generated": { "line": 56, "column": 70 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 38 },
+          "generated": { "line": 56, "column": 85 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 38 },
+          "generated": { "line": 57, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 44 },
+          "generated": { "line": 57, "column": 19 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 62 },
+          "generated": { "line": 57, "column": 37 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 64 },
+          "generated": { "line": 57, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 62 },
+          "generated": { "line": 57, "column": 47 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 44 },
+          "generated": { "line": 57, "column": 49 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 38 },
+          "generated": { "line": 57, "column": 50 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 38 },
+          "generated": { "line": 58, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 58, "column": 9 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 58, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 73 },
+          "generated": { "line": 58, "column": 13 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 78 },
+          "generated": { "line": 58, "column": 18 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 39, "column": 16 },
+          "generated": { "line": 58, "column": 23 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 58, "column": 24 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 58, "column": 26 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 58, "column": 32 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 58, "column": 45 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 58, "column": 46 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 58, "column": 54 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 58, "column": 56 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 24 },
+          "generated": { "line": 58, "column": 58 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 34 },
+          "generated": { "line": 58, "column": 69 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 58, "column": 78 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 44 },
+          "generated": { "line": 58, "column": 80 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 53 },
+          "generated": { "line": 58, "column": 89 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 53 },
+          "generated": { "line": 59, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 59 },
+          "generated": { "line": 59, "column": 19 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 77 },
+          "generated": { "line": 59, "column": 37 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 79 },
+          "generated": { "line": 59, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 77 },
+          "generated": { "line": 59, "column": 47 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 59 },
+          "generated": { "line": 59, "column": 49 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 53 },
+          "generated": { "line": 59, "column": 50 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 53 },
+          "generated": { "line": 60, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 60, "column": 9 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 40, "column": 16 },
+          "generated": { "line": 60, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 60, "column": 12 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 60, "column": 13 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 42, "column": 13 },
+          "generated": { "line": 60, "column": 15 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 60, "column": 28 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 60, "column": 34 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 60, "column": 47 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 60, "column": 48 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 60, "column": 54 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 60, "column": 56 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 44, "column": 20 },
+          "generated": { "line": 60, "column": 58 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 44, "column": 30 },
+          "generated": { "line": 60, "column": 68 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 44, "column": 31 },
+          "generated": { "line": 60, "column": 86 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 44, "column": 30 },
+          "generated": { "line": 60, "column": 87 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 44, "column": 36 },
+          "generated": { "line": 60, "column": 89 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 45, "column": 24 },
+          "generated": { "line": 61, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 45, "column": 26 },
+          "generated": { "line": 61, "column": 14 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 45, "column": 24 },
+          "generated": { "line": 61, "column": 28 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 46, "column": 24 },
+          "generated": { "line": 62, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 46, "column": 42 },
+          "generated": { "line": 62, "column": 30 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 46, "column": 44 },
+          "generated": { "line": 62, "column": 32 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 46, "column": 42 },
+          "generated": { "line": 62, "column": 40 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 46, "column": 24 },
+          "generated": { "line": 62, "column": 42 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 47, "column": 21 },
+          "generated": { "line": 63, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 63, "column": 9 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 63, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 13 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 19 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 32 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 33 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 40 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 42 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 50, "column": 24 },
+          "generated": { "line": 63, "column": 44 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 50, "column": 33 },
+          "generated": { "line": 63, "column": 55 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 59 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 51, "column": 24 },
+          "generated": { "line": 63, "column": 61 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 51, "column": 34 },
+          "generated": { "line": 63, "column": 72 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 78 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 52, "column": 24 },
+          "generated": { "line": 63, "column": 80 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 52, "column": 31 },
+          "generated": { "line": 63, "column": 87 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 52, "column": 43 },
+          "generated": { "line": 63, "column": 99 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 52, "column": 48 },
+          "generated": { "line": 63, "column": 104 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 52, "column": 31 },
+          "generated": { "line": 63, "column": 115 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 52, "column": 62 },
+          "generated": { "line": 63, "column": 118 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 52, "column": 67 },
+          "generated": { "line": 63, "column": 123 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 63, "column": 128 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 24 },
+          "generated": { "line": 63, "column": 130 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 32 },
+          "generated": { "line": 63, "column": 138 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 32 },
+          "generated": { "line": 64, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 38 },
+          "generated": { "line": 64, "column": 19 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 56 },
+          "generated": { "line": 64, "column": 37 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 58 },
+          "generated": { "line": 64, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 56 },
+          "generated": { "line": 64, "column": 47 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 38 },
+          "generated": { "line": 64, "column": 49 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 32 },
+          "generated": { "line": 64, "column": 50 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 53, "column": 32 },
+          "generated": { "line": 65, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 65, "column": 9 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 24 },
+          "generated": { "line": 65, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 34 },
+          "generated": { "line": 65, "column": 21 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 35 },
+          "generated": { "line": 65, "column": 39 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 34 },
+          "generated": { "line": 65, "column": 40 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 34 },
+          "generated": { "line": 66, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 41 },
+          "generated": { "line": 66, "column": 19 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 57 },
+          "generated": { "line": 66, "column": 35 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 59 },
+          "generated": { "line": 66, "column": 37 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 57 },
+          "generated": { "line": 66, "column": 45 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 64 },
+          "generated": { "line": 66, "column": 47 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 71 },
+          "generated": { "line": 66, "column": 54 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 73 },
+          "generated": { "line": 66, "column": 56 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 71 },
+          "generated": { "line": 66, "column": 62 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 80 },
+          "generated": { "line": 66, "column": 63 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 57 },
+          "generated": { "line": 66, "column": 68 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 41 },
+          "generated": { "line": 66, "column": 70 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 34 },
+          "generated": { "line": 66, "column": 71 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 54, "column": 34 },
+          "generated": { "line": 67, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 67, "column": 9 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 49, "column": 20 },
+          "generated": { "line": 67, "column": 11 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 43, "column": 16 },
+          "generated": { "line": 67, "column": 12 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 26, "column": 8 },
+          "generated": { "line": 67, "column": 13 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 25, "column": 4 },
+          "generated": { "line": 67, "column": 14 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 60, "column": 1 },
+          "generated": { "line": 68, "column": 0 }
+        },
+        {
+          "source": "src/components/Todo/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 15 },
+          "generated": { "line": 68, "column": 1 }
+        }
+      ],
+      "sources": {
+        "src/components/Todo/index.tsx":
+          "import * as React from 'react';\nimport * as classnames from 'classnames';\nimport { connect } from '@cerebral/react';\nimport { state, signal, props } from 'cerebral/proxy';\n\nexport default connect({\n    todo: state.todos[props.uid],\n    todoDoubleClicked: signal.todoDoubleClicked,\n    newTitleChanged: signal.todoNewTitleChanged,\n    newTitleSubmitted: signal.todoNewTitleSubmitted,\n    toggleCompletedChanged: signal.toggleTodoCompletedChanged,\n    removeTodoClicked: signal.removeTodoClicked,\n    newTitleAborted: signal.todoNewTitleAborted\n})(function Todo({\n    uid,\n    isEditing,\n    todo,\n    todoDoubleClicked,\n    newTitleChanged,\n    newTitleSubmitted,\n    toggleCompletedChanged,\n    removeTodoClicked,\n    newTitleAborted\n}) {\n    return (\n        <li\n            className={classnames({\n                completed: todo.completed,\n                editing: isEditing\n            })}\n        >\n            <div className=\"view\">\n                <input\n                    className=\"toggle\"\n                    type=\"checkbox\"\n                    onChange={() => toggleCompletedChanged({ uid })}\n                    checked={todo.completed}\n                />\n                <label onDoubleClick={() => todoDoubleClicked({ uid })}>{todo.title}</label>\n                <button className=\"destroy\" onClick={() => removeTodoClicked({ uid })} />\n            </div>\n            {isEditing && (\n                <form\n                    onSubmit={(e) => {\n                        e.preventDefault();\n                        newTitleSubmitted({ uid });\n                    }}\n                >\n                    <input\n                        autoFocus\n                        className=\"edit\"\n                        value={isEditing ? todo.editedTitle : todo.title}\n                        onBlur={() => newTitleSubmitted({ uid })}\n                        onChange={(e) => newTitleChanged({ uid, title: e.target.value })}\n                    />\n                </form>\n            )}\n        </li>\n    );\n});\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "556c3a75ab9e90e3ebb1f1c16eb45630",
+  "cacheData": { "env": {} }
+}
