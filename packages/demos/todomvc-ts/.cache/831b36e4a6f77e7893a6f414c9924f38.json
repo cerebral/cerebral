@@ -1,0 +1,656 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
+      "includedInParent": true,
+      "mtime": 1522956493000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name": "@cerebral/router/operators",
+      "loc": { "line": 1, "column": 25 }
+    },
+    { "name": "cerebral/operators", "loc": { "line": 2, "column": 41 } },
+    { "name": "cerebral/tags", "loc": { "line": 3, "column": 29 } },
+    { "name": "./actions", "loc": { "line": 4, "column": 25 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.submitTodoTitle = exports.abortEdit = exports.editTodo = exports.changeTodoTitle = exports.submitNewTodo = exports.changeFilter = exports.clearCompletedTodos = exports.toggleTodoCompleted = exports.toggleAllChecked = exports.removeTodo = exports.changeNewTodoTitle = exports.redirectToAll = undefined;\n\nvar _templateObject = _taggedTemplateLiteral(['newTodoTitle'], ['newTodoTitle']),\n    _templateObject2 = _taggedTemplateLiteral(['title'], ['title']),\n    _templateObject3 = _taggedTemplateLiteral(['uid'], ['uid']),\n    _templateObject4 = _taggedTemplateLiteral(['todos.', ''], ['todos.', '']),\n    _templateObject5 = _taggedTemplateLiteral(['uid.', ''], ['uid.', '']),\n    _templateObject6 = _taggedTemplateLiteral(['todos.', '.completed'], ['todos.', '.completed']),\n    _templateObject7 = _taggedTemplateLiteral(['filter'], ['filter']),\n    _templateObject8 = _taggedTemplateLiteral(['todos.', '.editedTitle'], ['todos.', '.editedTitle']),\n    _templateObject9 = _taggedTemplateLiteral(['todos.', '.title'], ['todos.', '.title']),\n    _templateObject10 = _taggedTemplateLiteral(['editingUid'], ['editingUid']);\n\nvar _operators = require('@cerebral/router/operators');\n\nvar _operators2 = require('cerebral/operators');\n\nvar _tags = require('cerebral/tags');\n\nvar _actions = require('./actions');\n\nvar actions = _interopRequireWildcard(_actions);\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nvar redirectToAll = exports.redirectToAll = (0, _operators.redirect)('/all');\nvar changeNewTodoTitle = exports.changeNewTodoTitle = (0, _operators2.set)((0, _tags.state)(_templateObject), (0, _tags.props)(_templateObject2));\nvar removeTodo = exports.removeTodo = (0, _operators2.unset)((0, _tags.state)(_templateObject4, (0, _tags.props)(_templateObject3)));\nvar toggleAllChecked = exports.toggleAllChecked = actions.toggleAllChecked;\nvar toggleTodoCompleted = exports.toggleTodoCompleted = (0, _operators2.toggle)((0, _tags.state)(_templateObject6, (0, _tags.props)(_templateObject3)));\nvar clearCompletedTodos = exports.clearCompletedTodos = actions.clearCompletedTodos;\nvar changeFilter = exports.changeFilter = (0, _operators2.set)((0, _tags.state)(_templateObject7), (0, _tags.props)(_templateObject7));\nvar submitNewTodo = exports.submitNewTodo = [(0, _operators2.when)((0, _tags.state)(_templateObject)), {\n    true: [actions.addTodo, (0, _operators2.set)((0, _tags.state)(_templateObject), '')],\n    false: []\n}];\nvar changeTodoTitle = exports.changeTodoTitle = (0, _operators2.set)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3)), (0, _tags.props)(_templateObject2));\nvar editTodo = exports.editTodo = [(0, _operators2.set)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3)), (0, _tags.state)(_templateObject9, (0, _tags.props)(_templateObject3))), (0, _operators2.set)((0, _tags.state)(_templateObject10), (0, _tags.props)(_templateObject3))];\nvar abortEdit = exports.abortEdit = [(0, _operators2.unset)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), (0, _operators2.set)((0, _tags.state)(_templateObject10), null)];\nvar submitTodoTitle = exports.submitTodoTitle = [(0, _operators2.when)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), {\n    true: [(0, _operators2.set)((0, _tags.state)(_templateObject9, (0, _tags.props)(_templateObject3)), (0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), (0, _operators2.unset)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), (0, _operators2.set)((0, _tags.state)(_templateObject10), null)],\n    false: []\n}];",
+    "map": {
+      "mappings": [
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 4, "column": 12 },
+          "generated": { "line": 27, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 6, "column": 7 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 6, "column": 13 },
+          "generated": { "line": 33, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 6, "column": 29 },
+          "generated": { "line": 33, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 6, "column": 38 },
+          "generated": { "line": 33, "column": 69 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 6, "column": 29 },
+          "generated": { "line": 33, "column": 75 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 6, "column": 7 },
+          "generated": { "line": 33, "column": 76 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 7 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 13 },
+          "generated": { "line": 34, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 34 },
+          "generated": { "line": 34, "column": 54 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 7 },
+          "generated": { "line": 34, "column": 145 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 10, "column": 7 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 10, "column": 13 },
+          "generated": { "line": 35, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 10, "column": 26 },
+          "generated": { "line": 35, "column": 38 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 10, "column": 7 },
+          "generated": { "line": 35, "column": 132 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 7 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 13 },
+          "generated": { "line": 36, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 32 },
+          "generated": { "line": 36, "column": 50 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 40 },
+          "generated": { "line": 36, "column": 58 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 7 },
+          "generated": { "line": 36, "column": 74 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 14, "column": 7 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 14, "column": 13 },
+          "generated": { "line": 37, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 14, "column": 35 },
+          "generated": { "line": 37, "column": 56 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 14, "column": 7 },
+          "generated": { "line": 37, "column": 151 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 16, "column": 7 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 16, "column": 13 },
+          "generated": { "line": 38, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 16, "column": 35 },
+          "generated": { "line": 38, "column": 56 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 16, "column": 43 },
+          "generated": { "line": 38, "column": 64 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 16, "column": 7 },
+          "generated": { "line": 38, "column": 83 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 18, "column": 7 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 18, "column": 13 },
+          "generated": { "line": 39, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 18, "column": 28 },
+          "generated": { "line": 39, "column": 42 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 18, "column": 7 },
+          "generated": { "line": 39, "column": 134 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 7 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 13 },
+          "generated": { "line": 40, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 29 },
+          "generated": { "line": 40, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 21, "column": 2 },
+          "generated": { "line": 40, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 29 },
+          "generated": { "line": 40, "column": 101 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 22, "column": 2 },
+          "generated": { "line": 40, "column": 103 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 4 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 10 },
+          "generated": { "line": 41, "column": 10 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 11 },
+          "generated": { "line": 41, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 19 },
+          "generated": { "line": 41, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 10 },
+          "generated": { "line": 41, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 28 },
+          "generated": { "line": 41, "column": 28 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 52 },
+          "generated": { "line": 41, "column": 84 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 28 },
+          "generated": { "line": 41, "column": 86 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 23, "column": 10 },
+          "generated": { "line": 41, "column": 87 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 22, "column": 2 },
+          "generated": { "line": 41, "column": 88 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 24, "column": 4 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 24, "column": 11 },
+          "generated": { "line": 42, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 22, "column": 2 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 29 },
+          "generated": { "line": 43, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 7 },
+          "generated": { "line": 43, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 7 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 13 },
+          "generated": { "line": 44, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 31 },
+          "generated": { "line": 44, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 7 },
+          "generated": { "line": 44, "column": 176 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 7 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 13 },
+          "generated": { "line": 45, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 24 },
+          "generated": { "line": 45, "column": 34 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 34, "column": 2 },
+          "generated": { "line": 45, "column": 35 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 24 },
+          "generated": { "line": 45, "column": 199 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 35, "column": 2 },
+          "generated": { "line": 45, "column": 201 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 24 },
+          "generated": { "line": 45, "column": 294 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 7 },
+          "generated": { "line": 45, "column": 295 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 38, "column": 7 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 38, "column": 13 },
+          "generated": { "line": 46, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 38, "column": 25 },
+          "generated": { "line": 46, "column": 36 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 39, "column": 2 },
+          "generated": { "line": 46, "column": 37 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 38, "column": 25 },
+          "generated": { "line": 46, "column": 131 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 40, "column": 2 },
+          "generated": { "line": 46, "column": 133 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 40, "column": 24 },
+          "generated": { "line": 46, "column": 191 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 40, "column": 2 },
+          "generated": { "line": 46, "column": 195 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 38, "column": 25 },
+          "generated": { "line": 46, "column": 196 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 38, "column": 7 },
+          "generated": { "line": 46, "column": 197 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 43, "column": 7 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 43, "column": 13 },
+          "generated": { "line": 47, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 43, "column": 31 },
+          "generated": { "line": 47, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 44, "column": 2 },
+          "generated": { "line": 47, "column": 49 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 43, "column": 31 },
+          "generated": { "line": 47, "column": 142 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 2 },
+          "generated": { "line": 47, "column": 144 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 4 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 10 },
+          "generated": { "line": 48, "column": 10 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 47, "column": 6 },
+          "generated": { "line": 48, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 10 },
+          "generated": { "line": 48, "column": 175 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 48, "column": 6 },
+          "generated": { "line": 48, "column": 177 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 10 },
+          "generated": { "line": 48, "column": 271 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 49, "column": 6 },
+          "generated": { "line": 48, "column": 273 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 49, "column": 28 },
+          "generated": { "line": 48, "column": 331 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 49, "column": 6 },
+          "generated": { "line": 48, "column": 335 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 10 },
+          "generated": { "line": 48, "column": 336 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 2 },
+          "generated": { "line": 48, "column": 337 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 51, "column": 4 },
+          "generated": { "line": 49, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 51, "column": 11 },
+          "generated": { "line": 49, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 2 },
+          "generated": { "line": 50, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 43, "column": 31 },
+          "generated": { "line": 50, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 43, "column": 7 },
+          "generated": { "line": 50, "column": 2 }
+        }
+      ],
+      "sources": {
+        "src/app/sequences.ts":
+          "import { redirect } from '@cerebral/router/operators'\nimport { set, toggle, unset, when } from 'cerebral/operators'\nimport { props, state } from 'cerebral/proxy'\nimport * as actions from './actions'\n\nexport const redirectToAll = redirect('/all')\n\nexport const changeNewTodoTitle = set(state.newTodoTitle, props.title)\n\nexport const removeTodo = unset(state.todos[props.uid])\n\nexport const toggleAllChecked = actions.toggleAllChecked\n\nexport const toggleTodoCompleted = toggle(state.todos[props.uid].completed)\n\nexport const clearCompletedTodos = actions.clearCompletedTodos\n\nexport const changeFilter = set(state.filter, props.filter)\n\nexport const submitNewTodo = [\n  when(state.newTodoTitle),\n  {\n    true: [actions.addTodo, set(state.newTodoTitle, '')],\n    false: [],\n  },\n]\n\nexport const changeTodoTitle = set(\n  state.todos[props.uid].editedTitle,\n  props.title\n)\n\nexport const editTodo = [\n  set(state.todos[props.uid].editedTitle, state.todos[props.uid].title),\n  set(state.editingUid, props.uid),\n]\n\nexport const abortEdit = [\n  unset(state.todos[props.uid].editedTitle),\n  set(state.editingUid, null),\n]\n\nexport const submitTodoTitle = [\n  when(state.todos[props.uid].editedTitle),\n  {\n    true: [\n      set(state.todos[props.uid].title, state.todos[props.uid].editedTitle),\n      unset(state.todos[props.uid].editedTitle),\n      set(state.editingUid, null),\n    ],\n    false: [],\n  },\n]\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "a0b35b34576176c7f6f0fab2629c757b",
+  "cacheData": { "env": {} }
+}

@@ -1,0 +1,1365 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/router/node_modules/addressbar/package.json",
+      "includedInParent": true,
+      "mtime": 1510917226000
+    },
+    { "name": "url-parse", "loc": { "line": 3, "column": 18 } },
+    { "name": "eventemitter3", "loc": { "line": 4, "column": 27 } }
+  ],
+  "generated": {
+    "js":
+      "var global = (1,eval)(\"this\");\n/* global history */\n\nvar URL = require('url-parse')\nvar EventEmitter = require('eventemitter3').EventEmitter\nvar instance = null\n\n// Check if IE history polyfill is added\nvar location = window.history.location || window.location\n\nmodule.exports = (function () {\n  if (instance) {\n    return instance\n  }\n\n  var eventEmitter = new EventEmitter()\n\n  eventEmitter.addEventListener = eventEmitter.addListener\n  eventEmitter.removeEventListener = eventEmitter.removeListener\n\n  var initialUrl = location.href\n  var uri = URL(initialUrl)\n  var origin = uri.protocol + '//' + uri.host\n  var isPreventingDefault = false\n  var doReplace = false\n  var prevUrl = ''\n  // var linkClicked = false\n  var isEmitting = false\n  var setSyncUrl = false\n\n  var emitChange = function (url, event) {\n    eventEmitter.emit('change', {\n      preventDefault: function () {\n        event && event.preventDefault()\n        isPreventingDefault = true\n      },\n      target: {\n        value: url ? origin + url : location.href\n      }\n    })\n  }\n\n  var onUrlChange = function (type) {\n    return function (event) {\n      if (location.href === prevUrl) {\n        return\n      }\n\n      // Fixes bug where trailing slash is converted to normal url\n      if (location.href[location.href.length - 1] === '/') {\n        doReplace = true\n      }\n\n      isEmitting = true\n      emitChange()\n      isEmitting = false\n\n      if (!setSyncUrl && isPreventingDefault) {\n        history.replaceState({}, '', (prevUrl || initialUrl).replace(origin, ''))\n      }\n\n      prevUrl = location.href\n      isPreventingDefault = false\n      setSyncUrl = false\n      doReplace = false\n    }\n  }\n\n  // this hack resolves issue with safari\n  // see issue from Page JS for reference https://github.com/visionmedia/page.js/issues/213\n  // see also https://github.com/visionmedia/page.js/pull/240\n  if (document.readyState !== 'complete') {\n    // load event has not fired\n    global.addEventListener('load', function () {\n      setTimeout(function () {\n        global.addEventListener('popstate', onUrlChange('pop'), false)\n      }, 0)\n    }, false)\n  } else {\n    // load event has fired\n    global.addEventListener('popstate', onUrlChange('pop'), false)\n  }\n\n  Object.defineProperty(eventEmitter, 'value', {\n    get: function () {\n      return location.href\n    },\n    set: function (value) {\n      if (typeof value !== 'string') {\n        doReplace = Boolean(value.replace)\n        value = value.value\n      }\n\n      // If emitting a change we flag that we are setting\n      // a url based on the event being emitted\n      if (isEmitting) {\n        setSyncUrl = true\n      }\n\n      // Ensure full url\n      if (value.indexOf(origin) === -1) {\n        value = origin + value\n      }\n\n      // If it is same url, forget about it\n      if (value === location.href) {\n        return\n      }\n\n      // We might need to replace the url if we are fixing\n      // for example trailing slash issue\n      if (doReplace) {\n        history.replaceState({}, '', value.replace(origin, ''))\n        doReplace = false\n      } else {\n        history.pushState({}, '', value.replace(origin, ''))\n      }\n\n      prevUrl = location.href\n      isPreventingDefault = false\n    }\n  })\n\n  // expose URLUtils like API https://developer.mozilla.org/en-US/docs/Web/API/URLUtils\n  // thanks https://github.com/cofounders/urlutils for reference\n  Object.defineProperty(eventEmitter, 'origin', {\n    get: function () {\n      var uri = URL(location.href)\n      return uri.protocol + '//' + uri.host\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'protocol', {\n    get: function () {\n      return URL(location.href).protocol\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'port', {\n    get: function () {\n      return URL(location.href).port\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'hostname', {\n    get: function () {\n      return URL(location.href).hostname\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'pathname', {\n    get: function () {\n      return URL(location.href).pathname\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'hash', {\n    get: function () {\n      return URL(location.href).hash\n    }\n  })\n\n  /*\n    This code is from the Page JS source code. Amazing work on handling all\n    kinds of scenarios with hyperlinks, thanks!\n  */\n\n  var isSameOrigin = function (href) {\n    return (href && (href.indexOf(origin) === 0))\n  }\n\n  var getClickedHref = function (event) {\n    // check which button\n    if ((event.which === null ? event.button : event.which) !== 1) { return false }\n\n    // check for modifiers\n    if (event.metaKey || event.ctrlKey || event.shiftKey) { return false }\n    if (event.defaultPrevented) { return false }\n\n    // ensure link\n    var element = event.target\n    while (element && element.nodeName !== 'A') { element = element.parentNode }\n    if (!element || element.nodeName !== 'A') { return false }\n\n    // Ignore if tag has\n    // 1. \"download\" attribute\n    // 2. rel=\"external\" attribute\n    if (element.hasAttribute('download') || element.getAttribute('rel') === 'external') { return false }\n\n    // Check for mailto: in the href\n    var href = element.getAttribute('href')\n    if (href && href.indexOf('mailto:') > -1) { return false }\n\n    // check target\n    if (element.target) { return false }\n\n    // x-origin\n    if (!isSameOrigin(element.href)) { return false }\n\n    return href\n  }\n\n  global.addEventListener(document.ontouchstart ? 'touchstart' : 'click', function (event) {\n    var href = getClickedHref(event)\n    if (href) {\n      // linkClicked = true\n      isEmitting = true\n      emitChange(href, event)\n      isEmitting = false\n      if (isPreventingDefault) {\n        // linkClicked = false\n      }\n      prevUrl = href\n      isPreventingDefault = false\n    }\n  })\n\n  instance = eventEmitter\n\n  return eventEmitter\n}())\n",
+    "map": {
+      "mappings": [
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 23, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 24, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 25, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 26, "column": 0 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 27, "column": 0 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 28, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 29, "column": 0 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 30, "column": 0 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 31, "column": 0 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 32, "column": 0 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 33, "column": 0 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 34, "column": 0 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 35, "column": 0 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 36, "column": 0 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 37, "column": 0 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 38, "column": 0 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 39, "column": 0 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 40, "column": 0 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 41, "column": 0 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 42, "column": 0 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 43, "column": 0 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 44, "column": 0 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 45, "column": 0 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 46, "column": 0 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 47, "column": 0 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 48, "column": 0 },
+          "generated": { "line": 49, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 49, "column": 0 },
+          "generated": { "line": 50, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 50, "column": 0 },
+          "generated": { "line": 51, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 51, "column": 0 },
+          "generated": { "line": 52, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 52, "column": 0 },
+          "generated": { "line": 53, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 53, "column": 0 },
+          "generated": { "line": 54, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 54, "column": 0 },
+          "generated": { "line": 55, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 55, "column": 0 },
+          "generated": { "line": 56, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 56, "column": 0 },
+          "generated": { "line": 57, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 57, "column": 0 },
+          "generated": { "line": 58, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 58, "column": 0 },
+          "generated": { "line": 59, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 59, "column": 0 },
+          "generated": { "line": 60, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 60, "column": 0 },
+          "generated": { "line": 61, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 61, "column": 0 },
+          "generated": { "line": 62, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 62, "column": 0 },
+          "generated": { "line": 63, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 63, "column": 0 },
+          "generated": { "line": 64, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 64, "column": 0 },
+          "generated": { "line": 65, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 65, "column": 0 },
+          "generated": { "line": 66, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 66, "column": 0 },
+          "generated": { "line": 67, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 67, "column": 0 },
+          "generated": { "line": 68, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 68, "column": 0 },
+          "generated": { "line": 69, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 69, "column": 0 },
+          "generated": { "line": 70, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 70, "column": 0 },
+          "generated": { "line": 71, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 71, "column": 0 },
+          "generated": { "line": 72, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 72, "column": 0 },
+          "generated": { "line": 73, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 73, "column": 0 },
+          "generated": { "line": 74, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 74, "column": 0 },
+          "generated": { "line": 75, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 75, "column": 0 },
+          "generated": { "line": 76, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 76, "column": 0 },
+          "generated": { "line": 77, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 77, "column": 0 },
+          "generated": { "line": 78, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 78, "column": 0 },
+          "generated": { "line": 79, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 79, "column": 0 },
+          "generated": { "line": 80, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 80, "column": 0 },
+          "generated": { "line": 81, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 81, "column": 0 },
+          "generated": { "line": 82, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 82, "column": 0 },
+          "generated": { "line": 83, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 83, "column": 0 },
+          "generated": { "line": 84, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 84, "column": 0 },
+          "generated": { "line": 85, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 85, "column": 0 },
+          "generated": { "line": 86, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 86, "column": 0 },
+          "generated": { "line": 87, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 87, "column": 0 },
+          "generated": { "line": 88, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 88, "column": 0 },
+          "generated": { "line": 89, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 89, "column": 0 },
+          "generated": { "line": 90, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 90, "column": 0 },
+          "generated": { "line": 91, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 91, "column": 0 },
+          "generated": { "line": 92, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 92, "column": 0 },
+          "generated": { "line": 93, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 93, "column": 0 },
+          "generated": { "line": 94, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 94, "column": 0 },
+          "generated": { "line": 95, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 95, "column": 0 },
+          "generated": { "line": 96, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 96, "column": 0 },
+          "generated": { "line": 97, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 97, "column": 0 },
+          "generated": { "line": 98, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 98, "column": 0 },
+          "generated": { "line": 99, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 99, "column": 0 },
+          "generated": { "line": 100, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 100, "column": 0 },
+          "generated": { "line": 101, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 101, "column": 0 },
+          "generated": { "line": 102, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 102, "column": 0 },
+          "generated": { "line": 103, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 103, "column": 0 },
+          "generated": { "line": 104, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 104, "column": 0 },
+          "generated": { "line": 105, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 105, "column": 0 },
+          "generated": { "line": 106, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 106, "column": 0 },
+          "generated": { "line": 107, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 107, "column": 0 },
+          "generated": { "line": 108, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 108, "column": 0 },
+          "generated": { "line": 109, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 109, "column": 0 },
+          "generated": { "line": 110, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 110, "column": 0 },
+          "generated": { "line": 111, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 111, "column": 0 },
+          "generated": { "line": 112, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 112, "column": 0 },
+          "generated": { "line": 113, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 113, "column": 0 },
+          "generated": { "line": 114, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 114, "column": 0 },
+          "generated": { "line": 115, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 115, "column": 0 },
+          "generated": { "line": 116, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 116, "column": 0 },
+          "generated": { "line": 117, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 117, "column": 0 },
+          "generated": { "line": 118, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 118, "column": 0 },
+          "generated": { "line": 119, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 119, "column": 0 },
+          "generated": { "line": 120, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 120, "column": 0 },
+          "generated": { "line": 121, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 121, "column": 0 },
+          "generated": { "line": 122, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 122, "column": 0 },
+          "generated": { "line": 123, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 123, "column": 0 },
+          "generated": { "line": 124, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 124, "column": 0 },
+          "generated": { "line": 125, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 125, "column": 0 },
+          "generated": { "line": 126, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 126, "column": 0 },
+          "generated": { "line": 127, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 127, "column": 0 },
+          "generated": { "line": 128, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 128, "column": 0 },
+          "generated": { "line": 129, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 129, "column": 0 },
+          "generated": { "line": 130, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 130, "column": 0 },
+          "generated": { "line": 131, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 131, "column": 0 },
+          "generated": { "line": 132, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 132, "column": 0 },
+          "generated": { "line": 133, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 133, "column": 0 },
+          "generated": { "line": 134, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 134, "column": 0 },
+          "generated": { "line": 135, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 135, "column": 0 },
+          "generated": { "line": 136, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 136, "column": 0 },
+          "generated": { "line": 137, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 137, "column": 0 },
+          "generated": { "line": 138, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 138, "column": 0 },
+          "generated": { "line": 139, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 139, "column": 0 },
+          "generated": { "line": 140, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 140, "column": 0 },
+          "generated": { "line": 141, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 141, "column": 0 },
+          "generated": { "line": 142, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 142, "column": 0 },
+          "generated": { "line": 143, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 143, "column": 0 },
+          "generated": { "line": 144, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 144, "column": 0 },
+          "generated": { "line": 145, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 145, "column": 0 },
+          "generated": { "line": 146, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 146, "column": 0 },
+          "generated": { "line": 147, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 147, "column": 0 },
+          "generated": { "line": 148, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 148, "column": 0 },
+          "generated": { "line": 149, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 149, "column": 0 },
+          "generated": { "line": 150, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 150, "column": 0 },
+          "generated": { "line": 151, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 151, "column": 0 },
+          "generated": { "line": 152, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 152, "column": 0 },
+          "generated": { "line": 153, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 153, "column": 0 },
+          "generated": { "line": 154, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 154, "column": 0 },
+          "generated": { "line": 155, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 155, "column": 0 },
+          "generated": { "line": 156, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 156, "column": 0 },
+          "generated": { "line": 157, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 157, "column": 0 },
+          "generated": { "line": 158, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 158, "column": 0 },
+          "generated": { "line": 159, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 159, "column": 0 },
+          "generated": { "line": 160, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 160, "column": 0 },
+          "generated": { "line": 161, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 161, "column": 0 },
+          "generated": { "line": 162, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 162, "column": 0 },
+          "generated": { "line": 163, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 163, "column": 0 },
+          "generated": { "line": 164, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 164, "column": 0 },
+          "generated": { "line": 165, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 165, "column": 0 },
+          "generated": { "line": 166, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 166, "column": 0 },
+          "generated": { "line": 167, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 167, "column": 0 },
+          "generated": { "line": 168, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 168, "column": 0 },
+          "generated": { "line": 169, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 169, "column": 0 },
+          "generated": { "line": 170, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 170, "column": 0 },
+          "generated": { "line": 171, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 171, "column": 0 },
+          "generated": { "line": 172, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 172, "column": 0 },
+          "generated": { "line": 173, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 173, "column": 0 },
+          "generated": { "line": 174, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 174, "column": 0 },
+          "generated": { "line": 175, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 175, "column": 0 },
+          "generated": { "line": 176, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 176, "column": 0 },
+          "generated": { "line": 177, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 177, "column": 0 },
+          "generated": { "line": 178, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 178, "column": 0 },
+          "generated": { "line": 179, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 179, "column": 0 },
+          "generated": { "line": 180, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 180, "column": 0 },
+          "generated": { "line": 181, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 181, "column": 0 },
+          "generated": { "line": 182, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 182, "column": 0 },
+          "generated": { "line": 183, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 183, "column": 0 },
+          "generated": { "line": 184, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 184, "column": 0 },
+          "generated": { "line": 185, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 185, "column": 0 },
+          "generated": { "line": 186, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 186, "column": 0 },
+          "generated": { "line": 187, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 187, "column": 0 },
+          "generated": { "line": 188, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 188, "column": 0 },
+          "generated": { "line": 189, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 189, "column": 0 },
+          "generated": { "line": 190, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 190, "column": 0 },
+          "generated": { "line": 191, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 191, "column": 0 },
+          "generated": { "line": 192, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 192, "column": 0 },
+          "generated": { "line": 193, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 193, "column": 0 },
+          "generated": { "line": 194, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 194, "column": 0 },
+          "generated": { "line": 195, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 195, "column": 0 },
+          "generated": { "line": 196, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 196, "column": 0 },
+          "generated": { "line": 197, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 197, "column": 0 },
+          "generated": { "line": 198, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 198, "column": 0 },
+          "generated": { "line": 199, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 199, "column": 0 },
+          "generated": { "line": 200, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 200, "column": 0 },
+          "generated": { "line": 201, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 201, "column": 0 },
+          "generated": { "line": 202, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 202, "column": 0 },
+          "generated": { "line": 203, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 203, "column": 0 },
+          "generated": { "line": 204, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 204, "column": 0 },
+          "generated": { "line": 205, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 205, "column": 0 },
+          "generated": { "line": 206, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 206, "column": 0 },
+          "generated": { "line": 207, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 207, "column": 0 },
+          "generated": { "line": 208, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 208, "column": 0 },
+          "generated": { "line": 209, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 209, "column": 0 },
+          "generated": { "line": 210, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 210, "column": 0 },
+          "generated": { "line": 211, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 211, "column": 0 },
+          "generated": { "line": 212, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 212, "column": 0 },
+          "generated": { "line": 213, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 213, "column": 0 },
+          "generated": { "line": 214, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 214, "column": 0 },
+          "generated": { "line": 215, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 215, "column": 0 },
+          "generated": { "line": 216, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 216, "column": 0 },
+          "generated": { "line": 217, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 217, "column": 0 },
+          "generated": { "line": 218, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 218, "column": 0 },
+          "generated": { "line": 219, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 219, "column": 0 },
+          "generated": { "line": 220, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 220, "column": 0 },
+          "generated": { "line": 221, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/router/node_modules/addressbar/index.js",
+          "original": { "line": 221, "column": 0 },
+          "generated": { "line": 222, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/@cerebral/router/node_modules/addressbar/index.js":
+          "/* global history */\n\nvar URL = require('url-parse')\nvar EventEmitter = require('eventemitter3').EventEmitter\nvar instance = null\n\n// Check if IE history polyfill is added\nvar location = window.history.location || window.location\n\nmodule.exports = (function () {\n  if (instance) {\n    return instance\n  }\n\n  var eventEmitter = new EventEmitter()\n\n  eventEmitter.addEventListener = eventEmitter.addListener\n  eventEmitter.removeEventListener = eventEmitter.removeListener\n\n  var initialUrl = location.href\n  var uri = URL(initialUrl)\n  var origin = uri.protocol + '//' + uri.host\n  var isPreventingDefault = false\n  var doReplace = false\n  var prevUrl = ''\n  // var linkClicked = false\n  var isEmitting = false\n  var setSyncUrl = false\n\n  var emitChange = function (url, event) {\n    eventEmitter.emit('change', {\n      preventDefault: function () {\n        event && event.preventDefault()\n        isPreventingDefault = true\n      },\n      target: {\n        value: url ? origin + url : location.href\n      }\n    })\n  }\n\n  var onUrlChange = function (type) {\n    return function (event) {\n      if (location.href === prevUrl) {\n        return\n      }\n\n      // Fixes bug where trailing slash is converted to normal url\n      if (location.href[location.href.length - 1] === '/') {\n        doReplace = true\n      }\n\n      isEmitting = true\n      emitChange()\n      isEmitting = false\n\n      if (!setSyncUrl && isPreventingDefault) {\n        history.replaceState({}, '', (prevUrl || initialUrl).replace(origin, ''))\n      }\n\n      prevUrl = location.href\n      isPreventingDefault = false\n      setSyncUrl = false\n      doReplace = false\n    }\n  }\n\n  // this hack resolves issue with safari\n  // see issue from Page JS for reference https://github.com/visionmedia/page.js/issues/213\n  // see also https://github.com/visionmedia/page.js/pull/240\n  if (document.readyState !== 'complete') {\n    // load event has not fired\n    global.addEventListener('load', function () {\n      setTimeout(function () {\n        global.addEventListener('popstate', onUrlChange('pop'), false)\n      }, 0)\n    }, false)\n  } else {\n    // load event has fired\n    global.addEventListener('popstate', onUrlChange('pop'), false)\n  }\n\n  Object.defineProperty(eventEmitter, 'value', {\n    get: function () {\n      return location.href\n    },\n    set: function (value) {\n      if (typeof value !== 'string') {\n        doReplace = Boolean(value.replace)\n        value = value.value\n      }\n\n      // If emitting a change we flag that we are setting\n      // a url based on the event being emitted\n      if (isEmitting) {\n        setSyncUrl = true\n      }\n\n      // Ensure full url\n      if (value.indexOf(origin) === -1) {\n        value = origin + value\n      }\n\n      // If it is same url, forget about it\n      if (value === location.href) {\n        return\n      }\n\n      // We might need to replace the url if we are fixing\n      // for example trailing slash issue\n      if (doReplace) {\n        history.replaceState({}, '', value.replace(origin, ''))\n        doReplace = false\n      } else {\n        history.pushState({}, '', value.replace(origin, ''))\n      }\n\n      prevUrl = location.href\n      isPreventingDefault = false\n    }\n  })\n\n  // expose URLUtils like API https://developer.mozilla.org/en-US/docs/Web/API/URLUtils\n  // thanks https://github.com/cofounders/urlutils for reference\n  Object.defineProperty(eventEmitter, 'origin', {\n    get: function () {\n      var uri = URL(location.href)\n      return uri.protocol + '//' + uri.host\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'protocol', {\n    get: function () {\n      return URL(location.href).protocol\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'port', {\n    get: function () {\n      return URL(location.href).port\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'hostname', {\n    get: function () {\n      return URL(location.href).hostname\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'pathname', {\n    get: function () {\n      return URL(location.href).pathname\n    }\n  })\n\n  Object.defineProperty(eventEmitter, 'hash', {\n    get: function () {\n      return URL(location.href).hash\n    }\n  })\n\n  /*\n    This code is from the Page JS source code. Amazing work on handling all\n    kinds of scenarios with hyperlinks, thanks!\n  */\n\n  var isSameOrigin = function (href) {\n    return (href && (href.indexOf(origin) === 0))\n  }\n\n  var getClickedHref = function (event) {\n    // check which button\n    if ((event.which === null ? event.button : event.which) !== 1) { return false }\n\n    // check for modifiers\n    if (event.metaKey || event.ctrlKey || event.shiftKey) { return false }\n    if (event.defaultPrevented) { return false }\n\n    // ensure link\n    var element = event.target\n    while (element && element.nodeName !== 'A') { element = element.parentNode }\n    if (!element || element.nodeName !== 'A') { return false }\n\n    // Ignore if tag has\n    // 1. \"download\" attribute\n    // 2. rel=\"external\" attribute\n    if (element.hasAttribute('download') || element.getAttribute('rel') === 'external') { return false }\n\n    // Check for mailto: in the href\n    var href = element.getAttribute('href')\n    if (href && href.indexOf('mailto:') > -1) { return false }\n\n    // check target\n    if (element.target) { return false }\n\n    // x-origin\n    if (!isSameOrigin(element.href)) { return false }\n\n    return href\n  }\n\n  global.addEventListener(document.ontouchstart ? 'touchstart' : 'click', function (event) {\n    var href = getClickedHref(event)\n    if (href) {\n      // linkClicked = true\n      isEmitting = true\n      emitChange(href, event)\n      isEmitting = false\n      if (isPreventingDefault) {\n        // linkClicked = false\n      }\n      prevUrl = href\n      isPreventingDefault = false\n    }\n  })\n\n  instance = eventEmitter\n\n  return eventEmitter\n}())\n"
+      },
+      "lineCount": 222
+    }
+  },
+  "hash": "7353655c97c41e419263a7dee093314b",
+  "cacheData": { "env": {} }
+}

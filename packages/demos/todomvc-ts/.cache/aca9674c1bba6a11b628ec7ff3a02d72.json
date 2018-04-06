@@ -1,0 +1,217 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/node_modules/fbjs/package.json",
+      "includedInParent": true,
+      "mtime": 1522096885000
+    }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\n/**\n * Copyright (c) 2013-present, Facebook, Inc.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE file in the root directory of this source tree.\n *\n * @typechecks\n */\n\n/* eslint-disable fb-www/typeof-undefined */\n\n/**\n * Same as document.activeElement but wraps in a try-catch block. In IE it is\n * not safe to call document.activeElement if there is nothing focused.\n *\n * The activeElement will be null only if the document or document body is not\n * yet defined.\n *\n * @param {?DOMDocument} doc Defaults to current document.\n * @return {?DOMElement}\n */\nfunction getActiveElement(doc) /*?DOMElement*/{\n  doc = doc || (typeof document !== 'undefined' ? document : undefined);\n  if (typeof doc === 'undefined') {\n    return null;\n  }\n  try {\n    return doc.activeElement || doc.body;\n  } catch (e) {\n    return doc.body;\n  }\n}\n\nmodule.exports = getActiveElement;",
+    "map": {
+      "mappings": [
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 23, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 24, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 25, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 26, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 27, "column": 0 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 28, "column": 0 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 29, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 30, "column": 0 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 31, "column": 0 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 32, "column": 0 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 33, "column": 0 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 34, "column": 0 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 35, "column": 0 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source": "../../../node_modules/fbjs/lib/getActiveElement.js",
+          "original": { "line": 36, "column": 0 },
+          "generated": { "line": 36, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../../node_modules/fbjs/lib/getActiveElement.js":
+          "'use strict';\n\n/**\n * Copyright (c) 2013-present, Facebook, Inc.\n *\n * This source code is licensed under the MIT license found in the\n * LICENSE file in the root directory of this source tree.\n *\n * @typechecks\n */\n\n/* eslint-disable fb-www/typeof-undefined */\n\n/**\n * Same as document.activeElement but wraps in a try-catch block. In IE it is\n * not safe to call document.activeElement if there is nothing focused.\n *\n * The activeElement will be null only if the document or document body is not\n * yet defined.\n *\n * @param {?DOMDocument} doc Defaults to current document.\n * @return {?DOMElement}\n */\nfunction getActiveElement(doc) /*?DOMElement*/{\n  doc = doc || (typeof document !== 'undefined' ? document : undefined);\n  if (typeof doc === 'undefined') {\n    return null;\n  }\n  try {\n    return doc.activeElement || doc.body;\n  } catch (e) {\n    return doc.body;\n  }\n}\n\nmodule.exports = getActiveElement;"
+      },
+      "lineCount": 36
+    }
+  },
+  "hash": "5e322f9d4ca5b8266500662f05b40014",
+  "cacheData": { "env": {} }
+}

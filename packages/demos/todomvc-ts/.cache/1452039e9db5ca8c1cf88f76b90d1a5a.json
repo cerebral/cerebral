@@ -1,0 +1,9 @@
+{
+  "dependencies": [{ "name": "./src/index.tsx", "dynamic": true }],
+  "generated": {
+    "html":
+      "<!doctype html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title>TodoMVC</title>\n  </head>\n  <body>\n    <div id=\"root\"></div>\n    <script src=\"/4dea5230ecfaf8ef67db50a3c25b25ab.js\"></script>\n  </body>\n</html>\n"
+  },
+  "hash": "4520caa9b372cad0033633bf77be05d6",
+  "cacheData": {}
+}

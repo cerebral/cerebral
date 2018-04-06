@@ -1,0 +1,4583 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/function-tree/package.json",
+      "includedInParent": true,
+      "mtime": 1522871068000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/function-tree/.babelrc",
+      "includedInParent": true,
+      "mtime": 1516822475000
+    },
+    { "name": "../Provider", "loc": { "line": 10, "column": 22 } },
+    { "name": "./base", "loc": { "line": 15, "column": 40 } },
+    {
+      "name": "universal-websocket-client",
+      "loc": { "line": 12, "column": 22 }
+    }
+  ],
+  "generated": {
+    "js":
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.Devtools = exports.DevtoolsBase = undefined;\n\nvar _base = require(\"./base\");\n\nObject.defineProperty(exports, \"DevtoolsBase\", {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_base).default;\n  }\n});\n\nvar _Provider2 = require(\"../Provider\");\n\nvar _Provider3 = _interopRequireDefault(_Provider2);\n\nvar _base2 = _interopRequireDefault(_base);\n\nvar _universalWebsocketClient = require(\"universal-websocket-client\");\n\nvar _universalWebsocketClient2 = _interopRequireDefault(_universalWebsocketClient);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar _createClass = function () {\n  function defineProperties(target, props) {\n    for (var i = 0; i < props.length; i++) {\n      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if (\"value\" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);\n    }\n  }return function (Constructor, protoProps, staticProps) {\n    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;\n  };\n}();\n\nfunction _classCallCheck(instance, Constructor) {\n  if (!(instance instanceof Constructor)) {\n    throw new TypeError(\"Cannot call a class as a function\");\n  }\n}\n\nfunction _possibleConstructorReturn(self, call) {\n  if (!self) {\n    throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\");\n  }return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self;\n}\n\nfunction _inherits(subClass, superClass) {\n  if (typeof superClass !== \"function\" && superClass !== null) {\n    throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass);\n  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;\n}\n\n/* global VERSION */\nvar Devtools = exports.Devtools = function (_DevtoolsBase) {\n  _inherits(Devtools, _DevtoolsBase);\n\n  function Devtools(options) {\n    _classCallCheck(this, Devtools);\n\n    var _this = _possibleConstructorReturn(this, (Devtools.__proto__ || Object.getPrototypeOf(Devtools)).call(this, options));\n\n    _this.trees = [];\n    _this.latestExecutionId = null;\n    _this.version = \"0.0.0-next\";\n    _this.init();\n    return _this;\n  }\n\n  _createClass(Devtools, [{\n    key: 'createSocket',\n    value: function createSocket() {\n      this.ws = new _universalWebsocketClient2.default((this.https ? 'wss' : 'ws') + '://' + this.host);\n    }\n  }, {\n    key: 'onMessage',\n    value: function onMessage(event) {\n      var message = JSON.parse(event.data);\n      switch (message.type) {\n        case 'pong':\n          this.sendInitial();\n          break;\n        case 'ping':\n          this.sendInitial();\n          break;\n      }\n    }\n  }, {\n    key: 'add',\n    value: function add(tree) {\n      this.trees.push(tree);\n      tree.contextProviders.debugger = this.Provider();\n      this.watchExecution(tree, 'ft');\n    }\n  }, {\n    key: 'remove',\n    value: function remove(tree) {\n      this.trees.splice(this.trees.indexOf(tree), 1);\n      delete tree.contextProviders.debugger;\n\n      tree.removeAllListeners('start');\n      tree.removeAllListeners('end');\n      tree.removeAllListeners('pathStart');\n      tree.removeAllListeners('functionStart');\n      tree.removeAllListeners('functionEnd');\n      tree.removeAllListeners('error');\n    }\n  }, {\n    key: 'removeAll',\n    value: function removeAll() {\n      var _this2 = this;\n\n      var trees = this.trees.reduce(function (newTrees, tree) {\n        newTrees.push(tree);\n        return newTrees;\n      }, []);\n      trees.forEach(function (tree) {\n        _this2.remove(tree);\n      });\n    }\n  }, {\n    key: 'sendInitial',\n    value: function sendInitial() {\n      var message = JSON.stringify({\n        type: 'init',\n        source: 'ft',\n        version: this.version\n      });\n\n      this.sendMessage(message);\n      if (this.backlog.length) {\n        this.sendBulkMessage(this.backlog, 'ft');\n        this.backlog = [];\n      }\n      this.isConnected = true;\n    }\n    /*\n      Create the stringified message for the debugger. As we need to\n      store mutations with the default true \"storeMutations\" option used\n      by time travel and jumping between Cerebral apps, we are careful\n      not doing unnecessary stringifying.\n    */\n\n  }, {\n    key: 'createExecutionMessage',\n    value: function createExecutionMessage(debuggingData, execution, functionDetails, payload) {\n      var type = 'execution';\n      var data = {\n        execution: {\n          executionId: execution.id,\n          functionIndex: functionDetails.functionIndex,\n          payload: payload,\n          datetime: execution.datetime,\n          data: debuggingData\n        }\n      };\n\n      return this.safeStringify({\n        type: type,\n        source: 'ft',\n        version: this.version,\n        data: data\n      });\n    }\n  }, {\n    key: 'Provider',\n    value: function Provider() {\n      var sendExecutionData = this.sendExecutionData.bind(this);\n\n      return new _Provider3.default({\n        send: function send(data) {\n          sendExecutionData(data, this.context.execution, this.context.functionDetails, this.context.props);\n        },\n        wrapProvider: function wrapProvider(name, provider) {\n          var _this3 = this;\n\n          return Object.keys(provider).reduce(function (wrappedProvider, key) {\n            var originalFunc = provider[key];\n\n            wrappedProvider[key] = function () {\n              for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n                args[_key] = arguments[_key];\n              }\n\n              _this3.context.debugger.send({\n                method: name + '.' + key,\n                args: args\n              });\n\n              return originalFunc.apply(provider, args);\n            };\n\n            return wrappedProvider;\n          }, {});\n        }\n      }, {\n        wrap: false\n      });\n    }\n  }]);\n\n  return Devtools;\n}(_base2.default);\n\nexports.default = Devtools;\n//# sourceMappingURL=index.js.map",
+    "map": {
+      "mappings": [
+        {
+          "generated": { "line": 8, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 11, "column": 0 }
+        },
+        {
+          "name": "default",
+          "generated": { "line": 13, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 15, "column": 9 }
+        },
+        {
+          "generated": { "line": 17, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 10, "column": 0 }
+        },
+        {
+          "generated": { "line": 23, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 12, "column": 0 }
+        },
+        {
+          "generated": { "line": 29, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 29, "column": 4 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 4 }
+        },
+        {
+          "generated": { "line": 29, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 19 }
+        },
+        {
+          "generated": { "line": 29, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 31 }
+        },
+        {
+          "generated": { "line": 30, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 30, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 42 }
+        },
+        {
+          "generated": { "line": 30, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 30, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 59 }
+        },
+        {
+          "generated": { "line": 30, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 30, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 67 }
+        },
+        {
+          "generated": { "line": 30, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 33 }
+        },
+        {
+          "generated": { "line": 30, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 74 }
+        },
+        {
+          "generated": { "line": 31, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "generated": { "line": 31, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 81 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 31, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 85 }
+        },
+        {
+          "generated": { "line": 31, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 89 }
+        },
+        {
+          "generated": { "line": 31, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 31, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 92 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 31, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 96 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 31, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 102 }
+        },
+        {
+          "generated": { "line": 31, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 31, "column": 38 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 110 }
+        },
+        {
+          "generated": { "line": 31, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 76 }
+        },
+        {
+          "generated": { "line": 31, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 115 }
+        },
+        {
+          "generated": { "line": 32, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 121 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 32, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 134 }
+        },
+        {
+          "name": "i",
+          "generated": { "line": 32, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 140 }
+        },
+        {
+          "generated": { "line": 32, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 134 }
+        },
+        {
+          "generated": { "line": 32, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 117 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 32, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 155 }
+        },
+        {
+          "generated": { "line": 32, "column": 53 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 56 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 168 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 32, "column": 67 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 179 }
+        },
+        {
+          "generated": { "line": 32, "column": 77 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 168 }
+        },
+        {
+          "generated": { "line": 32, "column": 81 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 193 }
+        },
+        {
+          "generated": { "line": 32, "column": 86 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 144 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 87 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "name": "configurable",
+          "generated": { "line": 32, "column": 98 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 211 }
+        },
+        {
+          "generated": { "line": 32, "column": 110 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "generated": { "line": 32, "column": 113 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 226 }
+        },
+        {
+          "generated": { "line": 32, "column": 117 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 200 }
+        },
+        {
+          "generated": { "line": 32, "column": 118 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 232 }
+        },
+        {
+          "generated": { "line": 32, "column": 122 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 236 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 133 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 247 }
+        },
+        {
+          "generated": { "line": 32, "column": 143 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 232 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 145 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "name": "writable",
+          "generated": { "line": 32, "column": 156 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 270 }
+        },
+        {
+          "generated": { "line": 32, "column": 164 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "generated": { "line": 32, "column": 167 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 281 }
+        },
+        {
+          "generated": { "line": 32, "column": 171 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 259 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 32, "column": 172 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "defineProperty",
+          "generated": { "line": 32, "column": 179 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 294 }
+        },
+        {
+          "generated": { "line": 32, "column": 193 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "target",
+          "generated": { "line": 32, "column": 194 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 309 }
+        },
+        {
+          "generated": { "line": 32, "column": 200 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 202 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 317 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 32, "column": 213 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 328 }
+        },
+        {
+          "generated": { "line": 32, "column": 216 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "name": "descriptor",
+          "generated": { "line": 32, "column": 218 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 333 }
+        },
+        {
+          "generated": { "line": 32, "column": 228 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 287 }
+        },
+        {
+          "generated": { "line": 33, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 347 }
+        },
+        {
+          "generated": { "line": 34, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 349 }
+        },
+        {
+          "generated": { "line": 34, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 350 }
+        },
+        {
+          "generated": { "line": 34, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 34, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 367 }
+        },
+        {
+          "generated": { "line": 34, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 34, "column": 33 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 380 }
+        },
+        {
+          "generated": { "line": 34, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 34, "column": 45 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 392 }
+        },
+        {
+          "generated": { "line": 34, "column": 56 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 357 }
+        },
+        {
+          "generated": { "line": 34, "column": 58 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 405 }
+        },
+        {
+          "generated": { "line": 35, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 407 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 35, "column": 8 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 411 }
+        },
+        {
+          "generated": { "line": 35, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 407 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 35, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 35, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 440 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 35, "column": 49 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 452 }
+        },
+        {
+          "generated": { "line": 35, "column": 58 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "name": "protoProps",
+          "generated": { "line": 35, "column": 60 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 463 }
+        },
+        {
+          "generated": { "line": 35, "column": 70 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 423 }
+        },
+        {
+          "generated": { "line": 35, "column": 72 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 476 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 35, "column": 76 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 480 }
+        },
+        {
+          "generated": { "line": 35, "column": 87 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 476 }
+        },
+        {
+          "name": "defineProperties",
+          "generated": { "line": 35, "column": 89 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 35, "column": 106 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 510 }
+        },
+        {
+          "generated": { "line": 35, "column": 117 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "name": "staticProps",
+          "generated": { "line": 35, "column": 119 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 523 }
+        },
+        {
+          "generated": { "line": 35, "column": 130 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 493 }
+        },
+        {
+          "generated": { "line": 35, "column": 132 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 537 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 35, "column": 139 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 544 }
+        },
+        {
+          "generated": { "line": 35, "column": 150 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 537 }
+        },
+        {
+          "generated": { "line": 36, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 558 }
+        },
+        {
+          "generated": { "line": 36, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 350 }
+        },
+        {
+          "generated": { "line": 37, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 561 }
+        },
+        {
+          "generated": { "line": 37, "column": 1 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 19 }
+        },
+        {
+          "generated": { "line": 37, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 1, "column": 0 }
+        },
+        {
+          "generated": { "line": 39, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 39, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 9 }
+        },
+        {
+          "generated": { "line": 39, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 39, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 25 }
+        },
+        {
+          "generated": { "line": 39, "column": 33 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 39, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 35 }
+        },
+        {
+          "generated": { "line": 39, "column": 46 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 0 }
+        },
+        {
+          "generated": { "line": 39, "column": 48 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 48 }
+        },
+        {
+          "generated": { "line": 40, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 50 }
+        },
+        {
+          "generated": { "line": 40, "column": 6 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 54 }
+        },
+        {
+          "name": "instance",
+          "generated": { "line": 40, "column": 8 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 56 }
+        },
+        {
+          "name": "Constructor",
+          "generated": { "line": 40, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 76 }
+        },
+        {
+          "generated": { "line": 40, "column": 39 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 54 }
+        },
+        {
+          "generated": { "line": 40, "column": 40 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 50 }
+        },
+        {
+          "generated": { "line": 40, "column": 42 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 90 }
+        },
+        {
+          "generated": { "line": 41, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 92 }
+        },
+        {
+          "generated": { "line": 41, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 98 }
+        },
+        {
+          "name": "TypeError",
+          "generated": { "line": 41, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 102 }
+        },
+        {
+          "generated": { "line": 41, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 98 }
+        },
+        {
+          "generated": { "line": 41, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 112 }
+        },
+        {
+          "generated": { "line": 41, "column": 59 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 98 }
+        },
+        {
+          "generated": { "line": 41, "column": 60 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 92 }
+        },
+        {
+          "generated": { "line": 42, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 151 }
+        },
+        {
+          "generated": { "line": 43, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 3, "column": 153 }
+        },
+        {
+          "generated": { "line": 45, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "_possibleConstructorReturn",
+          "generated": { "line": 45, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 9 }
+        },
+        {
+          "generated": { "line": 45, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "self",
+          "generated": { "line": 45, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 36 }
+        },
+        {
+          "generated": { "line": 45, "column": 40 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 45, "column": 42 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 42 }
+        },
+        {
+          "generated": { "line": 45, "column": 46 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 0 }
+        },
+        {
+          "generated": { "line": 45, "column": 48 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 48 }
+        },
+        {
+          "generated": { "line": 46, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 50 }
+        },
+        {
+          "generated": { "line": 46, "column": 6 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 54 }
+        },
+        {
+          "name": "self",
+          "generated": { "line": 46, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 55 }
+        },
+        {
+          "generated": { "line": 46, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 50 }
+        },
+        {
+          "generated": { "line": 46, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 61 }
+        },
+        {
+          "generated": { "line": 47, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 63 }
+        },
+        {
+          "generated": { "line": 47, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 69 }
+        },
+        {
+          "name": "ReferenceError",
+          "generated": { "line": 47, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 73 }
+        },
+        {
+          "generated": { "line": 47, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 69 }
+        },
+        {
+          "generated": { "line": 47, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 88 }
+        },
+        {
+          "generated": { "line": 47, "column": 88 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 69 }
+        },
+        {
+          "generated": { "line": 47, "column": 89 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 63 }
+        },
+        {
+          "generated": { "line": 48, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 151 }
+        },
+        {
+          "generated": { "line": 48, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 152 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 48, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 159 }
+        },
+        {
+          "generated": { "line": 48, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 168 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 48, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 175 }
+        },
+        {
+          "generated": { "line": 48, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 168 }
+        },
+        {
+          "generated": { "line": 48, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 184 }
+        },
+        {
+          "generated": { "line": 48, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 168 }
+        },
+        {
+          "generated": { "line": 48, "column": 47 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 196 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 48, "column": 54 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 203 }
+        },
+        {
+          "generated": { "line": 48, "column": 58 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 196 }
+        },
+        {
+          "generated": { "line": 48, "column": 63 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 212 }
+        },
+        {
+          "generated": { "line": 48, "column": 73 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 159 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 48, "column": 77 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 226 }
+        },
+        {
+          "generated": { "line": 48, "column": 81 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 159 }
+        },
+        {
+          "name": "self",
+          "generated": { "line": 48, "column": 84 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 233 }
+        },
+        {
+          "generated": { "line": 48, "column": 88 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 152 }
+        },
+        {
+          "generated": { "line": 49, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 5, "column": 240 }
+        },
+        {
+          "generated": { "line": 51, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "_inherits",
+          "generated": { "line": 51, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 9 }
+        },
+        {
+          "generated": { "line": 51, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 51, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 19 }
+        },
+        {
+          "generated": { "line": 51, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 51, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 29 }
+        },
+        {
+          "generated": { "line": 51, "column": 39 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 0 }
+        },
+        {
+          "generated": { "line": 51, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 41 }
+        },
+        {
+          "generated": { "line": 52, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 43 }
+        },
+        {
+          "generated": { "line": 52, "column": 6 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 47 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 52, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 54 }
+        },
+        {
+          "generated": { "line": 52, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 47 }
+        },
+        {
+          "generated": { "line": 52, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 69 }
+        },
+        {
+          "generated": { "line": 52, "column": 38 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 47 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 52, "column": 42 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 83 }
+        },
+        {
+          "generated": { "line": 52, "column": 57 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 98 }
+        },
+        {
+          "generated": { "line": 52, "column": 61 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 43 }
+        },
+        {
+          "generated": { "line": 52, "column": 63 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 104 }
+        },
+        {
+          "generated": { "line": 53, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 106 }
+        },
+        {
+          "generated": { "line": 53, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 112 }
+        },
+        {
+          "name": "TypeError",
+          "generated": { "line": 53, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 116 }
+        },
+        {
+          "generated": { "line": 53, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 112 }
+        },
+        {
+          "generated": { "line": 53, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 126 }
+        },
+        {
+          "generated": { "line": 53, "column": 85 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 187 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 53, "column": 92 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 194 }
+        },
+        {
+          "generated": { "line": 53, "column": 102 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 112 }
+        },
+        {
+          "generated": { "line": 53, "column": 103 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 106 }
+        },
+        {
+          "generated": { "line": 54, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 208 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 54, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 209 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 54, "column": 12 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 218 }
+        },
+        {
+          "generated": { "line": 54, "column": 21 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 209 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 54, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 230 }
+        },
+        {
+          "name": "create",
+          "generated": { "line": 54, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 237 }
+        },
+        {
+          "generated": { "line": 54, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 230 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 54, "column": 38 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 244 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 54, "column": 52 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 258 }
+        },
+        {
+          "name": "prototype",
+          "generated": { "line": 54, "column": 63 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 269 }
+        },
+        {
+          "generated": { "line": 54, "column": 72 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 230 }
+        },
+        {
+          "generated": { "line": 54, "column": 74 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 280 }
+        },
+        {
+          "name": "constructor",
+          "generated": { "line": 54, "column": 76 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 282 }
+        },
+        {
+          "generated": { "line": 54, "column": 89 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 295 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 54, "column": 91 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 297 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 54, "column": 98 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 304 }
+        },
+        {
+          "generated": { "line": 54, "column": 106 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 295 }
+        },
+        {
+          "name": "enumerable",
+          "generated": { "line": 54, "column": 108 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 314 }
+        },
+        {
+          "generated": { "line": 54, "column": 120 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 326 }
+        },
+        {
+          "generated": { "line": 54, "column": 125 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 295 }
+        },
+        {
+          "name": "writable",
+          "generated": { "line": 54, "column": 127 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 333 }
+        },
+        {
+          "generated": { "line": 54, "column": 137 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 343 }
+        },
+        {
+          "generated": { "line": 54, "column": 141 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 295 }
+        },
+        {
+          "name": "configurable",
+          "generated": { "line": 54, "column": 143 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 349 }
+        },
+        {
+          "generated": { "line": 54, "column": 157 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 363 }
+        },
+        {
+          "generated": { "line": 54, "column": 161 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 295 }
+        },
+        {
+          "generated": { "line": 54, "column": 163 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 280 }
+        },
+        {
+          "generated": { "line": 54, "column": 165 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 230 }
+        },
+        {
+          "generated": { "line": 54, "column": 166 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 209 }
+        },
+        {
+          "generated": { "line": 54, "column": 167 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 374 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 54, "column": 171 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 378 }
+        },
+        {
+          "generated": { "line": 54, "column": 181 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 374 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 54, "column": 183 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 390 }
+        },
+        {
+          "name": "setPrototypeOf",
+          "generated": { "line": 54, "column": 190 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 397 }
+        },
+        {
+          "generated": { "line": 54, "column": 204 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 390 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 54, "column": 207 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 414 }
+        },
+        {
+          "name": "setPrototypeOf",
+          "generated": { "line": 54, "column": 214 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 421 }
+        },
+        {
+          "generated": { "line": 54, "column": 228 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 414 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 54, "column": 229 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 436 }
+        },
+        {
+          "generated": { "line": 54, "column": 237 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 414 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 54, "column": 239 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 446 }
+        },
+        {
+          "generated": { "line": 54, "column": 249 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 414 }
+        },
+        {
+          "generated": { "line": 54, "column": 250 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 390 }
+        },
+        {
+          "name": "subClass",
+          "generated": { "line": 54, "column": 253 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 460 }
+        },
+        {
+          "name": "__proto__",
+          "generated": { "line": 54, "column": 262 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 469 }
+        },
+        {
+          "generated": { "line": 54, "column": 271 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 460 }
+        },
+        {
+          "name": "superClass",
+          "generated": { "line": 54, "column": 274 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 481 }
+        },
+        {
+          "generated": { "line": 54, "column": 284 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 390 }
+        },
+        {
+          "generated": { "line": 55, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 7, "column": 494 }
+        },
+        {
+          "generated": { "line": 57, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 9, "column": 0 }
+        },
+        {
+          "generated": { "line": 58, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 7 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 58, "column": 4 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 11 }
+        },
+        {
+          "generated": { "line": 58, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 22 }
+        },
+        {
+          "name": "_DevtoolsBase",
+          "generated": { "line": 58, "column": 44 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 32 }
+        },
+        {
+          "generated": { "line": 58, "column": 57 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 22 }
+        },
+        {
+          "generated": { "line": 58, "column": 59 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 47 }
+        },
+        {
+          "name": "_inherits",
+          "generated": { "line": 59, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 18, "column": 2 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 59, "column": 12 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 18, "column": 12 }
+        },
+        {
+          "generated": { "line": 59, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 18, "column": 2 }
+        },
+        {
+          "name": "_DevtoolsBase",
+          "generated": { "line": 59, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 18, "column": 22 }
+        },
+        {
+          "generated": { "line": 59, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 18, "column": 2 }
+        },
+        {
+          "generated": { "line": 61, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 20, "column": 2 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 61, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 20, "column": 11 }
+        },
+        {
+          "generated": { "line": 61, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 20, "column": 2 }
+        },
+        {
+          "name": "options",
+          "generated": { "line": 61, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 20, "column": 20 }
+        },
+        {
+          "generated": { "line": 61, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 20, "column": 2 }
+        },
+        {
+          "generated": { "line": 61, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 20, "column": 29 }
+        },
+        {
+          "name": "_classCallCheck",
+          "generated": { "line": 62, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 21, "column": 4 }
+        },
+        {
+          "generated": { "line": 62, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 21, "column": 20 }
+        },
+        {
+          "generated": { "line": 62, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 21, "column": 4 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 62, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 21, "column": 26 }
+        },
+        {
+          "generated": { "line": 62, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 21, "column": 4 }
+        },
+        {
+          "generated": { "line": 64, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 64, "column": 8 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 8 }
+        },
+        {
+          "name": "_possibleConstructorReturn",
+          "generated": { "line": 64, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 16 }
+        },
+        {
+          "generated": { "line": 64, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 43 }
+        },
+        {
+          "generated": { "line": 64, "column": 47 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 16 }
+        },
+        {
+          "generated": { "line": 64, "column": 49 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 49 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 64, "column": 50 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 50 }
+        },
+        {
+          "name": "__proto__",
+          "generated": { "line": 64, "column": 59 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 59 }
+        },
+        {
+          "generated": { "line": 64, "column": 68 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 50 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 64, "column": 72 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 72 }
+        },
+        {
+          "name": "getPrototypeOf",
+          "generated": { "line": 64, "column": 79 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 79 }
+        },
+        {
+          "generated": { "line": 64, "column": 93 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 72 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 64, "column": 94 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 94 }
+        },
+        {
+          "generated": { "line": 64, "column": 102 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 72 }
+        },
+        {
+          "generated": { "line": 64, "column": 103 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 49 }
+        },
+        {
+          "name": "call",
+          "generated": { "line": 64, "column": 105 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 105 }
+        },
+        {
+          "generated": { "line": 64, "column": 109 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 49 }
+        },
+        {
+          "generated": { "line": 64, "column": 110 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 110 }
+        },
+        {
+          "generated": { "line": 64, "column": 114 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 49 }
+        },
+        {
+          "name": "options",
+          "generated": { "line": 64, "column": 116 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 116 }
+        },
+        {
+          "generated": { "line": 64, "column": 123 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 49 }
+        },
+        {
+          "generated": { "line": 64, "column": 124 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 16 }
+        },
+        {
+          "generated": { "line": 64, "column": 125 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 23, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 66, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 25, "column": 4 }
+        },
+        {
+          "name": "trees",
+          "generated": { "line": 66, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 25, "column": 10 }
+        },
+        {
+          "generated": { "line": 66, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 25, "column": 4 }
+        },
+        {
+          "generated": { "line": 66, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 25, "column": 18 }
+        },
+        {
+          "generated": { "line": 66, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 25, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 67, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 26, "column": 4 }
+        },
+        {
+          "name": "latestExecutionId",
+          "generated": { "line": 67, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 26, "column": 10 }
+        },
+        {
+          "generated": { "line": 67, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 26, "column": 4 }
+        },
+        {
+          "generated": { "line": 67, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 26, "column": 30 }
+        },
+        {
+          "generated": { "line": 67, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 26, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 68, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 27, "column": 4 }
+        },
+        {
+          "name": "version",
+          "generated": { "line": 68, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 27, "column": 10 }
+        },
+        {
+          "generated": { "line": 68, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 27, "column": 4 }
+        },
+        {
+          "generated": { "line": 68, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 27, "column": 20 }
+        },
+        {
+          "generated": { "line": 68, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 27, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 69, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 28, "column": 4 }
+        },
+        {
+          "name": "init",
+          "generated": { "line": 69, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 28, "column": 10 }
+        },
+        {
+          "generated": { "line": 69, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 28, "column": 4 }
+        },
+        {
+          "generated": { "line": 70, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 29, "column": 4 }
+        },
+        {
+          "name": "_this",
+          "generated": { "line": 70, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 29, "column": 11 }
+        },
+        {
+          "generated": { "line": 70, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 29, "column": 4 }
+        },
+        {
+          "generated": { "line": 71, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 30, "column": 3 }
+        },
+        {
+          "name": "_createClass",
+          "generated": { "line": 73, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 2 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 73, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 15 }
+        },
+        {
+          "generated": { "line": 73, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 2 }
+        },
+        {
+          "generated": { "line": 73, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 73, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 26 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 74, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 33, "column": 4 }
+        },
+        {
+          "generated": { "line": 74, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 33, "column": 9 }
+        },
+        {
+          "generated": { "line": 74, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 26 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 75, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 34, "column": 4 }
+        },
+        {
+          "generated": { "line": 75, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 34, "column": 11 }
+        },
+        {
+          "name": "createSocket",
+          "generated": { "line": 75, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 34, "column": 20 }
+        },
+        {
+          "generated": { "line": 75, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 34, "column": 11 }
+        },
+        {
+          "generated": { "line": 75, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 34, "column": 35 }
+        },
+        {
+          "generated": { "line": 76, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 6 }
+        },
+        {
+          "name": "ws",
+          "generated": { "line": 76, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 11 }
+        },
+        {
+          "generated": { "line": 76, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 6 }
+        },
+        {
+          "generated": { "line": 76, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 16 }
+        },
+        {
+          "generated": { "line": 76, "column": 55 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 30 }
+        },
+        {
+          "generated": { "line": 76, "column": 56 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 31 }
+        },
+        {
+          "name": "https",
+          "generated": { "line": 76, "column": 61 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 36 }
+        },
+        {
+          "generated": { "line": 76, "column": 66 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 31 }
+        },
+        {
+          "generated": { "line": 76, "column": 69 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 44 }
+        },
+        {
+          "generated": { "line": 76, "column": 74 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 31 }
+        },
+        {
+          "generated": { "line": 76, "column": 77 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 52 }
+        },
+        {
+          "generated": { "line": 76, "column": 81 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 30 }
+        },
+        {
+          "generated": { "line": 76, "column": 85 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 60 }
+        },
+        {
+          "generated": { "line": 76, "column": 90 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 30 }
+        },
+        {
+          "generated": { "line": 76, "column": 93 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 68 }
+        },
+        {
+          "name": "host",
+          "generated": { "line": 76, "column": 98 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 73 }
+        },
+        {
+          "generated": { "line": 76, "column": 102 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 16 }
+        },
+        {
+          "generated": { "line": 76, "column": 103 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 35, "column": 6 }
+        },
+        {
+          "generated": { "line": 77, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 36, "column": 5 }
+        },
+        {
+          "generated": { "line": 78, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 26 }
+        },
+        {
+          "generated": { "line": 78, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 78, "column": 5 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 37, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 79, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 38, "column": 4 }
+        },
+        {
+          "generated": { "line": 79, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 38, "column": 9 }
+        },
+        {
+          "generated": { "line": 79, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 37, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 80, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 39, "column": 4 }
+        },
+        {
+          "generated": { "line": 80, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 39, "column": 11 }
+        },
+        {
+          "name": "onMessage",
+          "generated": { "line": 80, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 39, "column": 20 }
+        },
+        {
+          "generated": { "line": 80, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 39, "column": 11 }
+        },
+        {
+          "name": "event",
+          "generated": { "line": 80, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 39, "column": 30 }
+        },
+        {
+          "generated": { "line": 80, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 39, "column": 11 }
+        },
+        {
+          "generated": { "line": 80, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 39, "column": 37 }
+        },
+        {
+          "generated": { "line": 81, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 6 }
+        },
+        {
+          "name": "message",
+          "generated": { "line": 81, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 10 }
+        },
+        {
+          "name": "JSON",
+          "generated": { "line": 81, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 20 }
+        },
+        {
+          "name": "parse",
+          "generated": { "line": 81, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 25 }
+        },
+        {
+          "generated": { "line": 81, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 20 }
+        },
+        {
+          "name": "event",
+          "generated": { "line": 81, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 31 }
+        },
+        {
+          "name": "data",
+          "generated": { "line": 81, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 37 }
+        },
+        {
+          "generated": { "line": 81, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 20 }
+        },
+        {
+          "generated": { "line": 81, "column": 42 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 40, "column": 6 }
+        },
+        {
+          "generated": { "line": 82, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 41, "column": 6 }
+        },
+        {
+          "name": "message",
+          "generated": { "line": 82, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 41, "column": 14 }
+        },
+        {
+          "name": "type",
+          "generated": { "line": 82, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 41, "column": 22 }
+        },
+        {
+          "generated": { "line": 82, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 41, "column": 6 }
+        },
+        {
+          "generated": { "line": 83, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 42, "column": 8 }
+        },
+        {
+          "generated": { "line": 83, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 42, "column": 13 }
+        },
+        {
+          "generated": { "line": 83, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 42, "column": 8 }
+        },
+        {
+          "generated": { "line": 84, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 43, "column": 10 }
+        },
+        {
+          "name": "sendInitial",
+          "generated": { "line": 84, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 43, "column": 15 }
+        },
+        {
+          "generated": { "line": 84, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 43, "column": 10 }
+        },
+        {
+          "generated": { "line": 85, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 44, "column": 10 }
+        },
+        {
+          "generated": { "line": 86, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 45, "column": 8 }
+        },
+        {
+          "generated": { "line": 86, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 45, "column": 13 }
+        },
+        {
+          "generated": { "line": 86, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 45, "column": 8 }
+        },
+        {
+          "generated": { "line": 87, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 46, "column": 10 }
+        },
+        {
+          "name": "sendInitial",
+          "generated": { "line": 87, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 46, "column": 15 }
+        },
+        {
+          "generated": { "line": 87, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 46, "column": 10 }
+        },
+        {
+          "generated": { "line": 88, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 47, "column": 10 }
+        },
+        {
+          "generated": { "line": 89, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 41, "column": 6 }
+        },
+        {
+          "generated": { "line": 90, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 49, "column": 5 }
+        },
+        {
+          "generated": { "line": 91, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 37, "column": 5 }
+        },
+        {
+          "generated": { "line": 91, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 91, "column": 5 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 50, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 92, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 51, "column": 4 }
+        },
+        {
+          "generated": { "line": 92, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 51, "column": 9 }
+        },
+        {
+          "generated": { "line": 92, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 50, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 93, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 52, "column": 4 }
+        },
+        {
+          "generated": { "line": 93, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 52, "column": 11 }
+        },
+        {
+          "name": "add",
+          "generated": { "line": 93, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 52, "column": 20 }
+        },
+        {
+          "generated": { "line": 93, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 52, "column": 11 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 93, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 52, "column": 24 }
+        },
+        {
+          "generated": { "line": 93, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 52, "column": 11 }
+        },
+        {
+          "generated": { "line": 93, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 52, "column": 30 }
+        },
+        {
+          "generated": { "line": 94, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 53, "column": 6 }
+        },
+        {
+          "name": "trees",
+          "generated": { "line": 94, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 53, "column": 11 }
+        },
+        {
+          "generated": { "line": 94, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 53, "column": 6 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 94, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 53, "column": 17 }
+        },
+        {
+          "generated": { "line": 94, "column": 21 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 53, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 94, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 53, "column": 22 }
+        },
+        {
+          "generated": { "line": 94, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 53, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 95, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 6 }
+        },
+        {
+          "name": "contextProviders",
+          "generated": { "line": 95, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 11 }
+        },
+        {
+          "generated": { "line": 95, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 6 }
+        },
+        {
+          "name": "debugger",
+          "generated": { "line": 95, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 28 }
+        },
+        {
+          "generated": { "line": 95, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 6 }
+        },
+        {
+          "generated": { "line": 95, "column": 39 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 39 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 95, "column": 44 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 44 }
+        },
+        {
+          "generated": { "line": 95, "column": 52 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 39 }
+        },
+        {
+          "generated": { "line": 95, "column": 54 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 54, "column": 6 }
+        },
+        {
+          "generated": { "line": 96, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 55, "column": 6 }
+        },
+        {
+          "name": "watchExecution",
+          "generated": { "line": 96, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 55, "column": 11 }
+        },
+        {
+          "generated": { "line": 96, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 55, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 96, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 55, "column": 26 }
+        },
+        {
+          "generated": { "line": 96, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 55, "column": 6 }
+        },
+        {
+          "generated": { "line": 96, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 55, "column": 32 }
+        },
+        {
+          "generated": { "line": 96, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 55, "column": 6 }
+        },
+        {
+          "generated": { "line": 97, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 56, "column": 5 }
+        },
+        {
+          "generated": { "line": 98, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 50, "column": 5 }
+        },
+        {
+          "generated": { "line": 98, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 98, "column": 5 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 57, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 99, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 58, "column": 4 }
+        },
+        {
+          "generated": { "line": 99, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 58, "column": 9 }
+        },
+        {
+          "generated": { "line": 99, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 57, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 100, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 59, "column": 4 }
+        },
+        {
+          "generated": { "line": 100, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 59, "column": 11 }
+        },
+        {
+          "name": "remove",
+          "generated": { "line": 100, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 59, "column": 20 }
+        },
+        {
+          "generated": { "line": 100, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 59, "column": 11 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 100, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 59, "column": 27 }
+        },
+        {
+          "generated": { "line": 100, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 59, "column": 11 }
+        },
+        {
+          "generated": { "line": 100, "column": 33 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 59, "column": 33 }
+        },
+        {
+          "generated": { "line": 101, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 6 }
+        },
+        {
+          "name": "trees",
+          "generated": { "line": 101, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 11 }
+        },
+        {
+          "generated": { "line": 101, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 6 }
+        },
+        {
+          "name": "splice",
+          "generated": { "line": 101, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 17 }
+        },
+        {
+          "generated": { "line": 101, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 6 }
+        },
+        {
+          "generated": { "line": 101, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 24 }
+        },
+        {
+          "name": "trees",
+          "generated": { "line": 101, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 29 }
+        },
+        {
+          "generated": { "line": 101, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 24 }
+        },
+        {
+          "name": "indexOf",
+          "generated": { "line": 101, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 35 }
+        },
+        {
+          "generated": { "line": 101, "column": 42 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 24 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 101, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 43 }
+        },
+        {
+          "generated": { "line": 101, "column": 47 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 24 }
+        },
+        {
+          "generated": { "line": 101, "column": 48 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 6 }
+        },
+        {
+          "generated": { "line": 101, "column": 50 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 50 }
+        },
+        {
+          "generated": { "line": 101, "column": 51 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 60, "column": 6 }
+        },
+        {
+          "generated": { "line": 102, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 61, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 102, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 61, "column": 13 }
+        },
+        {
+          "name": "contextProviders",
+          "generated": { "line": 102, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 61, "column": 18 }
+        },
+        {
+          "generated": { "line": 102, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 61, "column": 13 }
+        },
+        {
+          "name": "debugger",
+          "generated": { "line": 102, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 61, "column": 35 }
+        },
+        {
+          "generated": { "line": 102, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 61, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 104, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 63, "column": 6 }
+        },
+        {
+          "name": "removeAllListeners",
+          "generated": { "line": 104, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 63, "column": 11 }
+        },
+        {
+          "generated": { "line": 104, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 63, "column": 6 }
+        },
+        {
+          "generated": { "line": 104, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 63, "column": 30 }
+        },
+        {
+          "generated": { "line": 104, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 63, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 105, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 64, "column": 6 }
+        },
+        {
+          "name": "removeAllListeners",
+          "generated": { "line": 105, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 64, "column": 11 }
+        },
+        {
+          "generated": { "line": 105, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 64, "column": 6 }
+        },
+        {
+          "generated": { "line": 105, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 64, "column": 30 }
+        },
+        {
+          "generated": { "line": 105, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 64, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 106, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 65, "column": 6 }
+        },
+        {
+          "name": "removeAllListeners",
+          "generated": { "line": 106, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 65, "column": 11 }
+        },
+        {
+          "generated": { "line": 106, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 65, "column": 6 }
+        },
+        {
+          "generated": { "line": 106, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 65, "column": 30 }
+        },
+        {
+          "generated": { "line": 106, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 65, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 107, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 66, "column": 6 }
+        },
+        {
+          "name": "removeAllListeners",
+          "generated": { "line": 107, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 66, "column": 11 }
+        },
+        {
+          "generated": { "line": 107, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 66, "column": 6 }
+        },
+        {
+          "generated": { "line": 107, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 66, "column": 30 }
+        },
+        {
+          "generated": { "line": 107, "column": 45 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 66, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 108, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 67, "column": 6 }
+        },
+        {
+          "name": "removeAllListeners",
+          "generated": { "line": 108, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 67, "column": 11 }
+        },
+        {
+          "generated": { "line": 108, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 67, "column": 6 }
+        },
+        {
+          "generated": { "line": 108, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 67, "column": 30 }
+        },
+        {
+          "generated": { "line": 108, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 67, "column": 6 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 109, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 68, "column": 6 }
+        },
+        {
+          "name": "removeAllListeners",
+          "generated": { "line": 109, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 68, "column": 11 }
+        },
+        {
+          "generated": { "line": 109, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 68, "column": 6 }
+        },
+        {
+          "generated": { "line": 109, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 68, "column": 30 }
+        },
+        {
+          "generated": { "line": 109, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 68, "column": 6 }
+        },
+        {
+          "generated": { "line": 110, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 69, "column": 5 }
+        },
+        {
+          "generated": { "line": 111, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 57, "column": 5 }
+        },
+        {
+          "generated": { "line": 111, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 111, "column": 5 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 70, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 112, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 71, "column": 4 }
+        },
+        {
+          "generated": { "line": 112, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 71, "column": 9 }
+        },
+        {
+          "generated": { "line": 112, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 70, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 113, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 72, "column": 4 }
+        },
+        {
+          "generated": { "line": 113, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 72, "column": 11 }
+        },
+        {
+          "name": "removeAll",
+          "generated": { "line": 113, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 72, "column": 20 }
+        },
+        {
+          "generated": { "line": 113, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 72, "column": 11 }
+        },
+        {
+          "generated": { "line": 113, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 72, "column": 32 }
+        },
+        {
+          "generated": { "line": 114, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 73, "column": 6 }
+        },
+        {
+          "name": "_this2",
+          "generated": { "line": 114, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 73, "column": 10 }
+        },
+        {
+          "generated": { "line": 114, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 73, "column": 19 }
+        },
+        {
+          "generated": { "line": 114, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 73, "column": 6 }
+        },
+        {
+          "generated": { "line": 116, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 6 }
+        },
+        {
+          "name": "trees",
+          "generated": { "line": 116, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 10 }
+        },
+        {
+          "generated": { "line": 116, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 18 }
+        },
+        {
+          "name": "trees",
+          "generated": { "line": 116, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 23 }
+        },
+        {
+          "generated": { "line": 116, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 18 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 116, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 29 }
+        },
+        {
+          "generated": { "line": 116, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 18 }
+        },
+        {
+          "generated": { "line": 116, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 36 }
+        },
+        {
+          "name": "newTrees",
+          "generated": { "line": 116, "column": 46 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 46 }
+        },
+        {
+          "generated": { "line": 116, "column": 54 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 36 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 116, "column": 56 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 56 }
+        },
+        {
+          "generated": { "line": 116, "column": 60 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 36 }
+        },
+        {
+          "generated": { "line": 116, "column": 62 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 62 }
+        },
+        {
+          "name": "newTrees",
+          "generated": { "line": 117, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 76, "column": 8 }
+        },
+        {
+          "name": "push",
+          "generated": { "line": 117, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 76, "column": 17 }
+        },
+        {
+          "generated": { "line": 117, "column": 21 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 76, "column": 8 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 117, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 76, "column": 22 }
+        },
+        {
+          "generated": { "line": 117, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 76, "column": 8 }
+        },
+        {
+          "generated": { "line": 118, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 77, "column": 8 }
+        },
+        {
+          "name": "newTrees",
+          "generated": { "line": 118, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 77, "column": 15 }
+        },
+        {
+          "generated": { "line": 118, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 77, "column": 8 }
+        },
+        {
+          "generated": { "line": 119, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 78, "column": 7 }
+        },
+        {
+          "generated": { "line": 119, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 18 }
+        },
+        {
+          "generated": { "line": 119, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 78, "column": 9 }
+        },
+        {
+          "generated": { "line": 119, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 18 }
+        },
+        {
+          "generated": { "line": 119, "column": 12 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 75, "column": 6 }
+        },
+        {
+          "name": "trees",
+          "generated": { "line": 120, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 6 }
+        },
+        {
+          "name": "forEach",
+          "generated": { "line": 120, "column": 12 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 12 }
+        },
+        {
+          "generated": { "line": 120, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 6 }
+        },
+        {
+          "generated": { "line": 120, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 20 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 120, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 30 }
+        },
+        {
+          "generated": { "line": 120, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 20 }
+        },
+        {
+          "generated": { "line": 120, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 36 }
+        },
+        {
+          "name": "_this2",
+          "generated": { "line": 121, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 80, "column": 8 }
+        },
+        {
+          "name": "remove",
+          "generated": { "line": 121, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 80, "column": 15 }
+        },
+        {
+          "generated": { "line": 121, "column": 21 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 80, "column": 8 }
+        },
+        {
+          "name": "tree",
+          "generated": { "line": 121, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 80, "column": 22 }
+        },
+        {
+          "generated": { "line": 121, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 80, "column": 8 }
+        },
+        {
+          "generated": { "line": 122, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 81, "column": 7 }
+        },
+        {
+          "generated": { "line": 122, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 79, "column": 6 }
+        },
+        {
+          "generated": { "line": 123, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 82, "column": 5 }
+        },
+        {
+          "generated": { "line": 124, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 70, "column": 5 }
+        },
+        {
+          "generated": { "line": 124, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 124, "column": 5 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 83, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 125, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 84, "column": 4 }
+        },
+        {
+          "generated": { "line": 125, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 84, "column": 9 }
+        },
+        {
+          "generated": { "line": 125, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 83, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 126, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 85, "column": 4 }
+        },
+        {
+          "generated": { "line": 126, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 85, "column": 11 }
+        },
+        {
+          "name": "sendInitial",
+          "generated": { "line": 126, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 85, "column": 20 }
+        },
+        {
+          "generated": { "line": 126, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 85, "column": 11 }
+        },
+        {
+          "generated": { "line": 126, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 85, "column": 34 }
+        },
+        {
+          "generated": { "line": 127, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 6 }
+        },
+        {
+          "name": "message",
+          "generated": { "line": 127, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 10 }
+        },
+        {
+          "name": "JSON",
+          "generated": { "line": 127, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 20 }
+        },
+        {
+          "name": "stringify",
+          "generated": { "line": 127, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 25 }
+        },
+        {
+          "generated": { "line": 127, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 20 }
+        },
+        {
+          "generated": { "line": 127, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 35 }
+        },
+        {
+          "name": "type",
+          "generated": { "line": 128, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 87, "column": 8 }
+        },
+        {
+          "generated": { "line": 128, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 87, "column": 14 }
+        },
+        {
+          "generated": { "line": 128, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 35 }
+        },
+        {
+          "name": "source",
+          "generated": { "line": 129, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 88, "column": 8 }
+        },
+        {
+          "generated": { "line": 129, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 88, "column": 16 }
+        },
+        {
+          "generated": { "line": 129, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 35 }
+        },
+        {
+          "name": "version",
+          "generated": { "line": 130, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 89, "column": 8 }
+        },
+        {
+          "generated": { "line": 130, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 89, "column": 17 }
+        },
+        {
+          "name": "version",
+          "generated": { "line": 130, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 89, "column": 22 }
+        },
+        {
+          "generated": { "line": 131, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 35 }
+        },
+        {
+          "generated": { "line": 131, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 20 }
+        },
+        {
+          "generated": { "line": 131, "column": 8 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 86, "column": 6 }
+        },
+        {
+          "generated": { "line": 133, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 92, "column": 6 }
+        },
+        {
+          "name": "sendMessage",
+          "generated": { "line": 133, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 92, "column": 11 }
+        },
+        {
+          "generated": { "line": 133, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 92, "column": 6 }
+        },
+        {
+          "name": "message",
+          "generated": { "line": 133, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 92, "column": 23 }
+        },
+        {
+          "generated": { "line": 133, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 92, "column": 6 }
+        },
+        {
+          "generated": { "line": 134, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 93, "column": 6 }
+        },
+        {
+          "generated": { "line": 134, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 93, "column": 10 }
+        },
+        {
+          "name": "backlog",
+          "generated": { "line": 134, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 93, "column": 15 }
+        },
+        {
+          "generated": { "line": 134, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 93, "column": 10 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 134, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 93, "column": 23 }
+        },
+        {
+          "generated": { "line": 134, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 93, "column": 6 }
+        },
+        {
+          "generated": { "line": 134, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 93, "column": 31 }
+        },
+        {
+          "generated": { "line": 135, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 8 }
+        },
+        {
+          "name": "sendBulkMessage",
+          "generated": { "line": 135, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 13 }
+        },
+        {
+          "generated": { "line": 135, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 8 }
+        },
+        {
+          "generated": { "line": 135, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 29 }
+        },
+        {
+          "name": "backlog",
+          "generated": { "line": 135, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 34 }
+        },
+        {
+          "generated": { "line": 135, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 8 }
+        },
+        {
+          "generated": { "line": 135, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 43 }
+        },
+        {
+          "generated": { "line": 135, "column": 47 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 94, "column": 8 }
+        },
+        {
+          "generated": { "line": 136, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 95, "column": 8 }
+        },
+        {
+          "name": "backlog",
+          "generated": { "line": 136, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 95, "column": 13 }
+        },
+        {
+          "generated": { "line": 136, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 95, "column": 8 }
+        },
+        {
+          "generated": { "line": 136, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 95, "column": 23 }
+        },
+        {
+          "generated": { "line": 136, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 95, "column": 8 }
+        },
+        {
+          "generated": { "line": 137, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 96, "column": 7 }
+        },
+        {
+          "generated": { "line": 138, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 97, "column": 6 }
+        },
+        {
+          "name": "isConnected",
+          "generated": { "line": 138, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 97, "column": 11 }
+        },
+        {
+          "generated": { "line": 138, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 97, "column": 6 }
+        },
+        {
+          "generated": { "line": 138, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 97, "column": 25 }
+        },
+        {
+          "generated": { "line": 138, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 97, "column": 6 }
+        },
+        {
+          "generated": { "line": 139, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 98, "column": 5 }
+        },
+        {
+          "generated": { "line": 140, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 99, "column": 4 }
+        },
+        {
+          "generated": { "line": 147, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 83, "column": 5 }
+        },
+        {
+          "generated": { "line": 147, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 147, "column": 5 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 106, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 148, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 107, "column": 4 }
+        },
+        {
+          "generated": { "line": 148, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 107, "column": 9 }
+        },
+        {
+          "generated": { "line": 148, "column": 33 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 106, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 149, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 4 }
+        },
+        {
+          "generated": { "line": 149, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "name": "createExecutionMessage",
+          "generated": { "line": 149, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 20 }
+        },
+        {
+          "generated": { "line": 149, "column": 42 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "name": "debuggingData",
+          "generated": { "line": 149, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 43 }
+        },
+        {
+          "generated": { "line": 149, "column": 56 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 149, "column": 58 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 58 }
+        },
+        {
+          "generated": { "line": 149, "column": 67 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "name": "functionDetails",
+          "generated": { "line": 149, "column": 69 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 69 }
+        },
+        {
+          "generated": { "line": 149, "column": 84 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "name": "payload",
+          "generated": { "line": 149, "column": 86 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 86 }
+        },
+        {
+          "generated": { "line": 149, "column": 93 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 11 }
+        },
+        {
+          "generated": { "line": 149, "column": 95 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 108, "column": 95 }
+        },
+        {
+          "generated": { "line": 150, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 109, "column": 6 }
+        },
+        {
+          "name": "type",
+          "generated": { "line": 150, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 109, "column": 10 }
+        },
+        {
+          "generated": { "line": 150, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 109, "column": 17 }
+        },
+        {
+          "generated": { "line": 150, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 109, "column": 6 }
+        },
+        {
+          "generated": { "line": 151, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 110, "column": 6 }
+        },
+        {
+          "name": "data",
+          "generated": { "line": 151, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 110, "column": 10 }
+        },
+        {
+          "generated": { "line": 151, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 110, "column": 17 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 152, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 111, "column": 8 }
+        },
+        {
+          "generated": { "line": 152, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 111, "column": 19 }
+        },
+        {
+          "name": "executionId",
+          "generated": { "line": 153, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 112, "column": 10 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 153, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 112, "column": 23 }
+        },
+        {
+          "name": "id",
+          "generated": { "line": 153, "column": 33 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 112, "column": 33 }
+        },
+        {
+          "generated": { "line": 153, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 111, "column": 19 }
+        },
+        {
+          "name": "functionIndex",
+          "generated": { "line": 154, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 113, "column": 10 }
+        },
+        {
+          "name": "functionDetails",
+          "generated": { "line": 154, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 113, "column": 25 }
+        },
+        {
+          "name": "functionIndex",
+          "generated": { "line": 154, "column": 41 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 113, "column": 41 }
+        },
+        {
+          "generated": { "line": 154, "column": 54 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 111, "column": 19 }
+        },
+        {
+          "name": "payload",
+          "generated": { "line": 155, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 114, "column": 10 }
+        },
+        {
+          "name": "payload",
+          "generated": { "line": 155, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 114, "column": 19 }
+        },
+        {
+          "generated": { "line": 155, "column": 26 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 111, "column": 19 }
+        },
+        {
+          "name": "datetime",
+          "generated": { "line": 156, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 115, "column": 10 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 156, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 115, "column": 20 }
+        },
+        {
+          "name": "datetime",
+          "generated": { "line": 156, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 115, "column": 30 }
+        },
+        {
+          "generated": { "line": 156, "column": 38 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 111, "column": 19 }
+        },
+        {
+          "name": "data",
+          "generated": { "line": 157, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 116, "column": 10 }
+        },
+        {
+          "name": "debuggingData",
+          "generated": { "line": 157, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 116, "column": 16 }
+        },
+        {
+          "generated": { "line": 158, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 111, "column": 19 }
+        },
+        {
+          "generated": { "line": 159, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 110, "column": 17 }
+        },
+        {
+          "generated": { "line": 159, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 110, "column": 6 }
+        },
+        {
+          "generated": { "line": 161, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 6 }
+        },
+        {
+          "generated": { "line": 161, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 13 }
+        },
+        {
+          "name": "safeStringify",
+          "generated": { "line": 161, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 18 }
+        },
+        {
+          "generated": { "line": 161, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 13 }
+        },
+        {
+          "generated": { "line": 161, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 32 }
+        },
+        {
+          "name": "type",
+          "generated": { "line": 162, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 121, "column": 8 }
+        },
+        {
+          "name": "type",
+          "generated": { "line": 162, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 121, "column": 14 }
+        },
+        {
+          "generated": { "line": 162, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 32 }
+        },
+        {
+          "name": "source",
+          "generated": { "line": 163, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 122, "column": 8 }
+        },
+        {
+          "generated": { "line": 163, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 122, "column": 16 }
+        },
+        {
+          "generated": { "line": 163, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 32 }
+        },
+        {
+          "name": "version",
+          "generated": { "line": 164, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 123, "column": 8 }
+        },
+        {
+          "generated": { "line": 164, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 123, "column": 17 }
+        },
+        {
+          "name": "version",
+          "generated": { "line": 164, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 123, "column": 22 }
+        },
+        {
+          "generated": { "line": 164, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 32 }
+        },
+        {
+          "name": "data",
+          "generated": { "line": 165, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 124, "column": 8 }
+        },
+        {
+          "name": "data",
+          "generated": { "line": 165, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 124, "column": 14 }
+        },
+        {
+          "generated": { "line": 166, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 32 }
+        },
+        {
+          "generated": { "line": 166, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 13 }
+        },
+        {
+          "generated": { "line": 166, "column": 8 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 120, "column": 6 }
+        },
+        {
+          "generated": { "line": 167, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 126, "column": 5 }
+        },
+        {
+          "generated": { "line": 168, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 106, "column": 5 }
+        },
+        {
+          "generated": { "line": 168, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 168, "column": 5 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 127, "column": 5 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 169, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 128, "column": 4 }
+        },
+        {
+          "generated": { "line": 169, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 128, "column": 9 }
+        },
+        {
+          "generated": { "line": 169, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 127, "column": 5 }
+        },
+        {
+          "name": "value",
+          "generated": { "line": 170, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 129, "column": 4 }
+        },
+        {
+          "generated": { "line": 170, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 129, "column": 11 }
+        },
+        {
+          "name": "Provider",
+          "generated": { "line": 170, "column": 20 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 129, "column": 20 }
+        },
+        {
+          "generated": { "line": 170, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 129, "column": 11 }
+        },
+        {
+          "generated": { "line": 170, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 129, "column": 31 }
+        },
+        {
+          "generated": { "line": 171, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 6 }
+        },
+        {
+          "name": "sendExecutionData",
+          "generated": { "line": 171, "column": 10 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 10 }
+        },
+        {
+          "generated": { "line": 171, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 30 }
+        },
+        {
+          "name": "sendExecutionData",
+          "generated": { "line": 171, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 35 }
+        },
+        {
+          "generated": { "line": 171, "column": 52 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 30 }
+        },
+        {
+          "name": "bind",
+          "generated": { "line": 171, "column": 53 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 53 }
+        },
+        {
+          "generated": { "line": 171, "column": 57 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 30 }
+        },
+        {
+          "generated": { "line": 171, "column": 58 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 58 }
+        },
+        {
+          "generated": { "line": 171, "column": 62 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 30 }
+        },
+        {
+          "generated": { "line": 171, "column": 63 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 130, "column": 6 }
+        },
+        {
+          "generated": { "line": 173, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 6 }
+        },
+        {
+          "generated": { "line": 173, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 13 }
+        },
+        {
+          "generated": { "line": 173, "column": 36 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 27 }
+        },
+        {
+          "name": "send",
+          "generated": { "line": 174, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 133, "column": 8 }
+        },
+        {
+          "generated": { "line": 174, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 133, "column": 14 }
+        },
+        {
+          "name": "send",
+          "generated": { "line": 174, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 133, "column": 23 }
+        },
+        {
+          "generated": { "line": 174, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 133, "column": 14 }
+        },
+        {
+          "name": "data",
+          "generated": { "line": 174, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 133, "column": 28 }
+        },
+        {
+          "generated": { "line": 174, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 133, "column": 14 }
+        },
+        {
+          "generated": { "line": 174, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 133, "column": 34 }
+        },
+        {
+          "name": "sendExecutionData",
+          "generated": { "line": 175, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 10 }
+        },
+        {
+          "name": "data",
+          "generated": { "line": 175, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 28 }
+        },
+        {
+          "generated": { "line": 175, "column": 32 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 10 }
+        },
+        {
+          "generated": { "line": 175, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 34 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 175, "column": 39 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 39 }
+        },
+        {
+          "generated": { "line": 175, "column": 46 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 34 }
+        },
+        {
+          "name": "execution",
+          "generated": { "line": 175, "column": 47 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 47 }
+        },
+        {
+          "generated": { "line": 175, "column": 56 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 10 }
+        },
+        {
+          "generated": { "line": 175, "column": 58 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 58 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 175, "column": 63 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 63 }
+        },
+        {
+          "generated": { "line": 175, "column": 70 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 58 }
+        },
+        {
+          "name": "functionDetails",
+          "generated": { "line": 175, "column": 71 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 71 }
+        },
+        {
+          "generated": { "line": 175, "column": 86 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 10 }
+        },
+        {
+          "generated": { "line": 175, "column": 88 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 88 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 175, "column": 93 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 93 }
+        },
+        {
+          "generated": { "line": 175, "column": 100 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 88 }
+        },
+        {
+          "name": "props",
+          "generated": { "line": 175, "column": 101 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 101 }
+        },
+        {
+          "generated": { "line": 175, "column": 106 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 134, "column": 10 }
+        },
+        {
+          "generated": { "line": 176, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 135, "column": 9 }
+        },
+        {
+          "generated": { "line": 176, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 27 }
+        },
+        {
+          "name": "wrapProvider",
+          "generated": { "line": 177, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 8 }
+        },
+        {
+          "generated": { "line": 177, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 22 }
+        },
+        {
+          "name": "wrapProvider",
+          "generated": { "line": 177, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 31 }
+        },
+        {
+          "generated": { "line": 177, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 22 }
+        },
+        {
+          "name": "name",
+          "generated": { "line": 177, "column": 44 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 44 }
+        },
+        {
+          "generated": { "line": 177, "column": 48 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 22 }
+        },
+        {
+          "name": "provider",
+          "generated": { "line": 177, "column": 50 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 50 }
+        },
+        {
+          "generated": { "line": 177, "column": 58 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 22 }
+        },
+        {
+          "generated": { "line": 177, "column": 60 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 136, "column": 60 }
+        },
+        {
+          "generated": { "line": 178, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 137, "column": 10 }
+        },
+        {
+          "name": "_this3",
+          "generated": { "line": 178, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 137, "column": 14 }
+        },
+        {
+          "generated": { "line": 178, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 137, "column": 23 }
+        },
+        {
+          "generated": { "line": 178, "column": 27 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 137, "column": 10 }
+        },
+        {
+          "generated": { "line": 180, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 10 }
+        },
+        {
+          "name": "Object",
+          "generated": { "line": 180, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 17 }
+        },
+        {
+          "name": "keys",
+          "generated": { "line": 180, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 24 }
+        },
+        {
+          "generated": { "line": 180, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 17 }
+        },
+        {
+          "name": "provider",
+          "generated": { "line": 180, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 29 }
+        },
+        {
+          "generated": { "line": 180, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 17 }
+        },
+        {
+          "name": "reduce",
+          "generated": { "line": 180, "column": 39 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 39 }
+        },
+        {
+          "generated": { "line": 180, "column": 45 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 17 }
+        },
+        {
+          "generated": { "line": 180, "column": 46 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 46 }
+        },
+        {
+          "name": "wrappedProvider",
+          "generated": { "line": 180, "column": 56 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 56 }
+        },
+        {
+          "generated": { "line": 180, "column": 71 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 46 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 180, "column": 73 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 73 }
+        },
+        {
+          "generated": { "line": 180, "column": 76 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 46 }
+        },
+        {
+          "generated": { "line": 180, "column": 78 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 78 }
+        },
+        {
+          "generated": { "line": 181, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 140, "column": 12 }
+        },
+        {
+          "name": "originalFunc",
+          "generated": { "line": 181, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 140, "column": 16 }
+        },
+        {
+          "name": "provider",
+          "generated": { "line": 181, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 140, "column": 31 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 181, "column": 40 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 140, "column": 40 }
+        },
+        {
+          "generated": { "line": 181, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 140, "column": 31 }
+        },
+        {
+          "generated": { "line": 181, "column": 44 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 140, "column": 12 }
+        },
+        {
+          "name": "wrappedProvider",
+          "generated": { "line": 183, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 142, "column": 12 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 183, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 142, "column": 28 }
+        },
+        {
+          "generated": { "line": 183, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 142, "column": 12 }
+        },
+        {
+          "generated": { "line": 183, "column": 35 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 142, "column": 35 }
+        },
+        {
+          "generated": { "line": 183, "column": 47 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 142, "column": 47 }
+        },
+        {
+          "generated": { "line": 184, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 14 }
+        },
+        {
+          "generated": { "line": 184, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 19 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 184, "column": 23 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 23 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 184, "column": 30 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 30 }
+        },
+        {
+          "name": "length",
+          "generated": { "line": 184, "column": 40 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 40 }
+        },
+        {
+          "generated": { "line": 184, "column": 46 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 19 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 184, "column": 48 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 48 }
+        },
+        {
+          "name": "Array",
+          "generated": { "line": 184, "column": 55 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 55 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 184, "column": 61 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 61 }
+        },
+        {
+          "generated": { "line": 184, "column": 65 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 55 }
+        },
+        {
+          "generated": { "line": 184, "column": 66 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 19 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 184, "column": 68 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 68 }
+        },
+        {
+          "generated": { "line": 184, "column": 75 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 75 }
+        },
+        {
+          "generated": { "line": 184, "column": 76 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 14 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 184, "column": 78 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 78 }
+        },
+        {
+          "name": "_len",
+          "generated": { "line": 184, "column": 85 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 85 }
+        },
+        {
+          "generated": { "line": 184, "column": 89 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 14 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 184, "column": 91 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 91 }
+        },
+        {
+          "generated": { "line": 184, "column": 97 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 14 }
+        },
+        {
+          "generated": { "line": 184, "column": 99 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 143, "column": 99 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 185, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 144, "column": 16 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 185, "column": 21 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 144, "column": 21 }
+        },
+        {
+          "generated": { "line": 185, "column": 25 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 144, "column": 16 }
+        },
+        {
+          "name": "arguments",
+          "generated": { "line": 185, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 144, "column": 29 }
+        },
+        {
+          "name": "_key",
+          "generated": { "line": 185, "column": 39 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 144, "column": 39 }
+        },
+        {
+          "generated": { "line": 185, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 144, "column": 29 }
+        },
+        {
+          "generated": { "line": 185, "column": 44 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 144, "column": 16 }
+        },
+        {
+          "generated": { "line": 186, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 145, "column": 15 }
+        },
+        {
+          "name": "_this3",
+          "generated": { "line": 188, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 14 }
+        },
+        {
+          "name": "context",
+          "generated": { "line": 188, "column": 21 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 21 }
+        },
+        {
+          "generated": { "line": 188, "column": 28 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 14 }
+        },
+        {
+          "name": "debugger",
+          "generated": { "line": 188, "column": 29 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 29 }
+        },
+        {
+          "generated": { "line": 188, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 14 }
+        },
+        {
+          "name": "send",
+          "generated": { "line": 188, "column": 38 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 38 }
+        },
+        {
+          "generated": { "line": 188, "column": 42 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 14 }
+        },
+        {
+          "generated": { "line": 188, "column": 43 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 43 }
+        },
+        {
+          "name": "method",
+          "generated": { "line": 189, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 148, "column": 16 }
+        },
+        {
+          "name": "name",
+          "generated": { "line": 189, "column": 24 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 148, "column": 24 }
+        },
+        {
+          "generated": { "line": 189, "column": 31 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 148, "column": 31 }
+        },
+        {
+          "generated": { "line": 189, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 148, "column": 24 }
+        },
+        {
+          "name": "key",
+          "generated": { "line": 189, "column": 37 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 148, "column": 37 }
+        },
+        {
+          "generated": { "line": 189, "column": 40 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 43 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 190, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 149, "column": 16 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 190, "column": 22 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 149, "column": 22 }
+        },
+        {
+          "generated": { "line": 191, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 43 }
+        },
+        {
+          "generated": { "line": 191, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 147, "column": 14 }
+        },
+        {
+          "generated": { "line": 193, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 14 }
+        },
+        {
+          "name": "originalFunc",
+          "generated": { "line": 193, "column": 21 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 21 }
+        },
+        {
+          "name": "apply",
+          "generated": { "line": 193, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 34 }
+        },
+        {
+          "generated": { "line": 193, "column": 39 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 21 }
+        },
+        {
+          "name": "provider",
+          "generated": { "line": 193, "column": 40 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 40 }
+        },
+        {
+          "generated": { "line": 193, "column": 48 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 21 }
+        },
+        {
+          "name": "args",
+          "generated": { "line": 193, "column": 50 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 50 }
+        },
+        {
+          "generated": { "line": 193, "column": 54 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 21 }
+        },
+        {
+          "generated": { "line": 193, "column": 55 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 152, "column": 14 }
+        },
+        {
+          "generated": { "line": 194, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 153, "column": 13 }
+        },
+        {
+          "generated": { "line": 194, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 142, "column": 12 }
+        },
+        {
+          "generated": { "line": 196, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 155, "column": 12 }
+        },
+        {
+          "name": "wrappedProvider",
+          "generated": { "line": 196, "column": 19 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 155, "column": 19 }
+        },
+        {
+          "generated": { "line": 196, "column": 34 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 155, "column": 12 }
+        },
+        {
+          "generated": { "line": 197, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 156, "column": 11 }
+        },
+        {
+          "generated": { "line": 197, "column": 11 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 17 }
+        },
+        {
+          "generated": { "line": 197, "column": 13 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 156, "column": 13 }
+        },
+        {
+          "generated": { "line": 197, "column": 15 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 17 }
+        },
+        {
+          "generated": { "line": 197, "column": 16 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 139, "column": 10 }
+        },
+        {
+          "generated": { "line": 198, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 157, "column": 9 }
+        },
+        {
+          "generated": { "line": 199, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 27 }
+        },
+        {
+          "generated": { "line": 199, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 13 }
+        },
+        {
+          "generated": { "line": 199, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 158, "column": 9 }
+        },
+        {
+          "name": "wrap",
+          "generated": { "line": 200, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 159, "column": 8 }
+        },
+        {
+          "generated": { "line": 200, "column": 14 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 159, "column": 14 }
+        },
+        {
+          "generated": { "line": 201, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 158, "column": 9 }
+        },
+        {
+          "generated": { "line": 201, "column": 7 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 13 }
+        },
+        {
+          "generated": { "line": 201, "column": 8 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 132, "column": 6 }
+        },
+        {
+          "generated": { "line": 202, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 161, "column": 5 }
+        },
+        {
+          "generated": { "line": 203, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 127, "column": 5 }
+        },
+        {
+          "generated": { "line": 203, "column": 3 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 25 }
+        },
+        {
+          "generated": { "line": 203, "column": 4 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 32, "column": 2 }
+        },
+        {
+          "generated": { "line": 205, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 164, "column": 2 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 205, "column": 9 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 164, "column": 9 }
+        },
+        {
+          "generated": { "line": 205, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 164, "column": 2 }
+        },
+        {
+          "generated": { "line": 206, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 165, "column": 1 }
+        },
+        {
+          "generated": { "line": 206, "column": 1 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 22 }
+        },
+        {
+          "generated": { "line": 206, "column": 17 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 17, "column": 7 }
+        },
+        {
+          "name": "Devtools",
+          "generated": { "line": 208, "column": 18 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 167, "column": 15 }
+        },
+        {
+          "generated": { "line": 209, "column": 0 },
+          "source": "../../node_modules/function-tree/es/devtools/index.js",
+          "original": { "line": 168, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/function-tree/es/devtools/index.js":
+          "var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }\n\n/* global VERSION */\nimport _Provider from '../Provider';\nimport DevtoolsBase from './base';\nimport WebSocket from 'universal-websocket-client';\n\n// Used by cerebral/devtools\nexport { default as DevtoolsBase } from './base';\n\nexport var Devtools = function (_DevtoolsBase) {\n  _inherits(Devtools, _DevtoolsBase);\n\n  function Devtools(options) {\n    _classCallCheck(this, Devtools);\n\n    var _this = _possibleConstructorReturn(this, (Devtools.__proto__ || Object.getPrototypeOf(Devtools)).call(this, options));\n\n    _this.trees = [];\n    _this.latestExecutionId = null;\n    _this.version = \"0.0.0-next\";\n    _this.init();\n    return _this;\n  }\n\n  _createClass(Devtools, [{\n    key: 'createSocket',\n    value: function createSocket() {\n      this.ws = new WebSocket((this.https ? 'wss' : 'ws') + '://' + this.host);\n    }\n  }, {\n    key: 'onMessage',\n    value: function onMessage(event) {\n      var message = JSON.parse(event.data);\n      switch (message.type) {\n        case 'pong':\n          this.sendInitial();\n          break;\n        case 'ping':\n          this.sendInitial();\n          break;\n      }\n    }\n  }, {\n    key: 'add',\n    value: function add(tree) {\n      this.trees.push(tree);\n      tree.contextProviders.debugger = this.Provider();\n      this.watchExecution(tree, 'ft');\n    }\n  }, {\n    key: 'remove',\n    value: function remove(tree) {\n      this.trees.splice(this.trees.indexOf(tree), 1);\n      delete tree.contextProviders.debugger;\n\n      tree.removeAllListeners('start');\n      tree.removeAllListeners('end');\n      tree.removeAllListeners('pathStart');\n      tree.removeAllListeners('functionStart');\n      tree.removeAllListeners('functionEnd');\n      tree.removeAllListeners('error');\n    }\n  }, {\n    key: 'removeAll',\n    value: function removeAll() {\n      var _this2 = this;\n\n      var trees = this.trees.reduce(function (newTrees, tree) {\n        newTrees.push(tree);\n        return newTrees;\n      }, []);\n      trees.forEach(function (tree) {\n        _this2.remove(tree);\n      });\n    }\n  }, {\n    key: 'sendInitial',\n    value: function sendInitial() {\n      var message = JSON.stringify({\n        type: 'init',\n        source: 'ft',\n        version: this.version\n      });\n\n      this.sendMessage(message);\n      if (this.backlog.length) {\n        this.sendBulkMessage(this.backlog, 'ft');\n        this.backlog = [];\n      }\n      this.isConnected = true;\n    }\n    /*\n      Create the stringified message for the debugger. As we need to\n      store mutations with the default true \"storeMutations\" option used\n      by time travel and jumping between Cerebral apps, we are careful\n      not doing unnecessary stringifying.\n    */\n\n  }, {\n    key: 'createExecutionMessage',\n    value: function createExecutionMessage(debuggingData, execution, functionDetails, payload) {\n      var type = 'execution';\n      var data = {\n        execution: {\n          executionId: execution.id,\n          functionIndex: functionDetails.functionIndex,\n          payload: payload,\n          datetime: execution.datetime,\n          data: debuggingData\n        }\n      };\n\n      return this.safeStringify({\n        type: type,\n        source: 'ft',\n        version: this.version,\n        data: data\n      });\n    }\n  }, {\n    key: 'Provider',\n    value: function Provider() {\n      var sendExecutionData = this.sendExecutionData.bind(this);\n\n      return new _Provider({\n        send: function send(data) {\n          sendExecutionData(data, this.context.execution, this.context.functionDetails, this.context.props);\n        },\n        wrapProvider: function wrapProvider(name, provider) {\n          var _this3 = this;\n\n          return Object.keys(provider).reduce(function (wrappedProvider, key) {\n            var originalFunc = provider[key];\n\n            wrappedProvider[key] = function () {\n              for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {\n                args[_key] = arguments[_key];\n              }\n\n              _this3.context.debugger.send({\n                method: name + '.' + key,\n                args: args\n              });\n\n              return originalFunc.apply(provider, args);\n            };\n\n            return wrappedProvider;\n          }, {});\n        }\n      }, {\n        wrap: false\n      });\n    }\n  }]);\n\n  return Devtools;\n}(DevtoolsBase);\n\nexport default Devtools;\n//# sourceMappingURL=index.js.map"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "efcf4fa9fcdb7e5f6283ffab4b59ac7d",
+  "cacheData": { "env": {} }
+}
