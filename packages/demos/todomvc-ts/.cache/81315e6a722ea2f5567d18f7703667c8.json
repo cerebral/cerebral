@@ -1,0 +1,225 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
+      "includedInParent": true,
+      "mtime": 1522956493000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    { "name": "react", "loc": { "line": 1, "column": 23 } },
+    { "name": "react-dom", "loc": { "line": 2, "column": 23 } },
+    { "name": "./controller", "loc": { "line": 3, "column": 23 } },
+    { "name": "@cerebral/react", "loc": { "line": 4, "column": 26 } },
+    { "name": "todomvc-common/base.css", "loc": { "line": 5, "column": 7 } },
+    { "name": "todomvc-app-css/index.css", "loc": { "line": 6, "column": 7 } },
+    { "name": "./styles.css", "loc": { "line": 7, "column": 7 } },
+    { "name": "./components/App", "loc": { "line": 8, "column": 16 } }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nvar _react = require('react');\n\nvar React = _interopRequireWildcard(_react);\n\nvar _reactDom = require('react-dom');\n\nvar _controller = require('./controller');\n\nvar _controller2 = _interopRequireDefault(_controller);\n\nvar _react2 = require('@cerebral/react');\n\nrequire('todomvc-common/base.css');\n\nrequire('todomvc-app-css/index.css');\n\nrequire('./styles.css');\n\nvar _App = require('./components/App');\n\nvar _App2 = _interopRequireDefault(_App);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\n(0, _reactDom.render)(React.createElement(_react2.Container, { controller: _controller2.default }, React.createElement(_App2.default, null)), document.querySelector('#root'));",
+    "map": {
+      "mappings": [
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 1, "column": 12 },
+          "generated": { "line": 5, "column": 4 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 1 },
+          "generated": { "line": 29, "column": 22 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 1 },
+          "generated": { "line": 29, "column": 28 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 1 },
+          "generated": { "line": 29, "column": 41 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 11 },
+          "generated": { "line": 29, "column": 61 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 12 },
+          "generated": { "line": 29, "column": 63 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 11 },
+          "generated": { "line": 29, "column": 95 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 1 },
+          "generated": { "line": 29, "column": 97 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 29, "column": 99 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 29, "column": 105 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 29, "column": 118 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 6 },
+          "generated": { "line": 29, "column": 134 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 29, "column": 138 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 13, "column": 1 },
+          "generated": { "line": 29, "column": 139 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 29, "column": 140 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 16, "column": 1 },
+          "generated": { "line": 29, "column": 142 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 16, "column": 10 },
+          "generated": { "line": 29, "column": 151 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 16, "column": 1 },
+          "generated": { "line": 29, "column": 164 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 16, "column": 24 },
+          "generated": { "line": 29, "column": 165 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 16, "column": 1 },
+          "generated": { "line": 29, "column": 172 }
+        },
+        {
+          "source": "src/index.tsx",
+          "name": null,
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 29, "column": 173 }
+        }
+      ],
+      "sources": {
+        "src/index.tsx":
+          "import * as React from 'react';\nimport { render } from 'react-dom';\nimport controller from './controller';\nimport { Container } from '@cerebral/react';\n\nimport 'todomvc-common/base.css';\nimport 'todomvc-app-css/index.css';\nimport './styles.css';\n\nimport App from './components/App';\n\nrender(\n\t<Container controller={controller}>\n\t\t<App />\n\t</Container>,\n\tdocument.querySelector('#root')\n);\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "bd7c2f1610e228f5a6e5bc9411f3f0ea",
+  "cacheData": { "env": {} }
+}

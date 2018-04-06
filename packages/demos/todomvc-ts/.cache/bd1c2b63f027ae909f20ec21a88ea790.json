@@ -1,0 +1,451 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/storage/package.json",
+      "includedInParent": true,
+      "mtime": 1522871063000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/storage/.babelrc",
+      "includedInParent": true,
+      "mtime": 1512583336000
+    }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }\n\nfunction _extendableBuiltin(cls) {\n  function ExtendableBuiltin() {\n    var instance = Reflect.construct(cls, Array.from(arguments));\n    Object.setPrototypeOf(instance, Object.getPrototypeOf(this));\n    return instance;\n  }\n\n  ExtendableBuiltin.prototype = Object.create(cls.prototype, {\n    constructor: {\n      value: cls,\n      enumerable: false,\n      writable: true,\n      configurable: true\n    }\n  });\n\n  if (Object.setPrototypeOf) {\n    Object.setPrototypeOf(ExtendableBuiltin, cls);\n  } else {\n    ExtendableBuiltin.__proto__ = cls;\n  }\n\n  return ExtendableBuiltin;\n}\n\nvar StorageProviderError = function (_extendableBuiltin2) {\n  _inherits(StorageProviderError, _extendableBuiltin2);\n\n  function StorageProviderError(error) {\n    _classCallCheck(this, StorageProviderError);\n\n    var _this = _possibleConstructorReturn(this, (StorageProviderError.__proto__ || Object.getPrototypeOf(StorageProviderError)).call(this, error.message));\n\n    _this.name = 'StorageProviderError';\n    _this.message = error.message;\n    return _this;\n  }\n\n  _createClass(StorageProviderError, [{\n    key: 'toJSON',\n    value: function toJSON() {\n      return {\n        name: this.name,\n        message: this.message,\n        stack: this.stack\n      };\n    }\n  }]);\n\n  return StorageProviderError;\n}(_extendableBuiltin(Error));\n\nexports.default = StorageProviderError;\n//# sourceMappingURL=StorageProviderError.js.map",
+    "map": {
+      "mappings": [
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 3, "column": 0 },
+          "generated": { "line": 3, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 4, "column": 0 },
+          "generated": { "line": 4, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 5, "column": 0 },
+          "generated": { "line": 5, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 6, "column": 0 },
+          "generated": { "line": 6, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 7, "column": 0 },
+          "generated": { "line": 7, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 8, "column": 0 },
+          "generated": { "line": 8, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 9, "column": 0 },
+          "generated": { "line": 9, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 10, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 11, "column": 0 },
+          "generated": { "line": 11, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 12, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 13, "column": 0 },
+          "generated": { "line": 13, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 14, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 15, "column": 0 },
+          "generated": { "line": 15, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 16, "column": 0 },
+          "generated": { "line": 16, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 17, "column": 0 },
+          "generated": { "line": 17, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 18, "column": 0 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 19, "column": 0 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 20, "column": 0 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 21, "column": 0 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 22, "column": 0 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 23, "column": 0 },
+          "generated": { "line": 23, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 24, "column": 0 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 25, "column": 0 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 26, "column": 0 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 27, "column": 0 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 28, "column": 0 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 29, "column": 0 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 30, "column": 0 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 31, "column": 0 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 32, "column": 0 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 33, "column": 0 },
+          "generated": { "line": 33, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 34, "column": 0 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 35, "column": 0 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 36, "column": 0 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 37, "column": 0 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 38, "column": 0 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 39, "column": 0 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 40, "column": 0 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 41, "column": 0 },
+          "generated": { "line": 41, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 42, "column": 0 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 43, "column": 0 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 44, "column": 0 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 45, "column": 0 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 46, "column": 0 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 47, "column": 0 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 48, "column": 0 },
+          "generated": { "line": 48, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 49, "column": 0 },
+          "generated": { "line": 49, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 50, "column": 0 },
+          "generated": { "line": 50, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 51, "column": 0 },
+          "generated": { "line": 51, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 52, "column": 0 },
+          "generated": { "line": 52, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 53, "column": 0 },
+          "generated": { "line": 53, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 54, "column": 0 },
+          "generated": { "line": 54, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 55, "column": 0 },
+          "generated": { "line": 55, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 56, "column": 0 },
+          "generated": { "line": 56, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 57, "column": 0 },
+          "generated": { "line": 57, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 58, "column": 0 },
+          "generated": { "line": 58, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 59, "column": 0 },
+          "generated": { "line": 59, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 60, "column": 0 },
+          "generated": { "line": 60, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 61, "column": 0 },
+          "generated": { "line": 61, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 62, "column": 0 },
+          "generated": { "line": 62, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 63, "column": 0 },
+          "generated": { "line": 63, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 64, "column": 0 },
+          "generated": { "line": 64, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 65, "column": 0 },
+          "generated": { "line": 65, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 66, "column": 0 },
+          "generated": { "line": 66, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 67, "column": 0 },
+          "generated": { "line": 67, "column": 0 }
+        },
+        {
+          "source":
+            "../../node_modules/@cerebral/storage/lib/StorageProviderError.js",
+          "original": { "line": 68, "column": 0 },
+          "generated": { "line": 68, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/@cerebral/storage/lib/StorageProviderError.js":
+          "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nvar _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return call && (typeof call === \"object\" || typeof call === \"function\") ? call : self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function, not \" + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }\n\nfunction _extendableBuiltin(cls) {\n  function ExtendableBuiltin() {\n    var instance = Reflect.construct(cls, Array.from(arguments));\n    Object.setPrototypeOf(instance, Object.getPrototypeOf(this));\n    return instance;\n  }\n\n  ExtendableBuiltin.prototype = Object.create(cls.prototype, {\n    constructor: {\n      value: cls,\n      enumerable: false,\n      writable: true,\n      configurable: true\n    }\n  });\n\n  if (Object.setPrototypeOf) {\n    Object.setPrototypeOf(ExtendableBuiltin, cls);\n  } else {\n    ExtendableBuiltin.__proto__ = cls;\n  }\n\n  return ExtendableBuiltin;\n}\n\nvar StorageProviderError = function (_extendableBuiltin2) {\n  _inherits(StorageProviderError, _extendableBuiltin2);\n\n  function StorageProviderError(error) {\n    _classCallCheck(this, StorageProviderError);\n\n    var _this = _possibleConstructorReturn(this, (StorageProviderError.__proto__ || Object.getPrototypeOf(StorageProviderError)).call(this, error.message));\n\n    _this.name = 'StorageProviderError';\n    _this.message = error.message;\n    return _this;\n  }\n\n  _createClass(StorageProviderError, [{\n    key: 'toJSON',\n    value: function toJSON() {\n      return {\n        name: this.name,\n        message: this.message,\n        stack: this.stack\n      };\n    }\n  }]);\n\n  return StorageProviderError;\n}(_extendableBuiltin(Error));\n\nexports.default = StorageProviderError;\n//# sourceMappingURL=StorageProviderError.js.map"
+      },
+      "lineCount": 68
+    }
+  },
+  "hash": "772a066ce2dff881355f5c19d270d769",
+  "cacheData": { "env": {} }
+}

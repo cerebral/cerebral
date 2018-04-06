@@ -1,0 +1,53 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/router/package.json",
+      "includedInParent": true,
+      "mtime": 1522871063000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/node_modules/@cerebral/router/.babelrc",
+      "includedInParent": true,
+      "mtime": 1510689741000
+    },
+    { "name": "./lib/operators", "loc": { "line": 1, "column": 25 } }
+  ],
+  "generated": {
+    "js": "module.exports = require('./lib/operators')\n",
+    "map": {
+      "mappings": [
+        {
+          "source": "../../node_modules/@cerebral/router/operators.js",
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 1, "column": 0 }
+        },
+        {
+          "source": "../../node_modules/@cerebral/router/operators.js",
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 2, "column": 0 }
+        }
+      ],
+      "sources": {
+        "../../node_modules/@cerebral/router/operators.js":
+          "module.exports = require('./lib/operators')\n"
+      },
+      "lineCount": 2
+    }
+  },
+  "hash": "e36322130cf48ee012a3cb47906b9bdd",
+  "cacheData": { "env": {} }
+}

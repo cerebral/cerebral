@@ -1,0 +1,822 @@
+{
+  "dependencies": [
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
+      "includedInParent": true,
+      "mtime": 1522956493000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
+      "includedInParent": true,
+      "mtime": 1522949698000
+    },
+    {
+      "name":
+        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
+      "includedInParent": true,
+      "mtime": 1522953864000
+    },
+    { "name": "../computed/isAllChecked", "loc": { "line": 1, "column": 33 } },
+    {
+      "name": "../computed/visibleTodosUids",
+      "loc": { "line": 2, "column": 37 }
+    }
+  ],
+  "generated": {
+    "js":
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.toggleAllChecked = toggleAllChecked;\nexports.addTodo = addTodo;\nexports.clearCompletedTodos = clearCompletedTodos;\n\nvar _isAllChecked = require('../computed/isAllChecked');\n\nvar _isAllChecked2 = _interopRequireDefault(_isAllChecked);\n\nvar _visibleTodosUids = require('../computed/visibleTodosUids');\n\nvar _visibleTodosUids2 = _interopRequireDefault(_visibleTodosUids);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction toggleAllChecked(_ref) {\n    var state = _ref.state,\n        resolve = _ref.resolve;\n\n    var isCompleted = !resolve.value(_isAllChecked2.default);\n    var currentTodosUids = resolve.value(_visibleTodosUids2.default);\n    currentTodosUids.forEach(function (uid) {\n        state.set('todos.' + uid + '.completed', isCompleted);\n    });\n}\nfunction addTodo(_ref2) {\n    var state = _ref2.state,\n        id = _ref2.id;\n\n    state.set('todos.' + id.create(), {\n        title: state.get('newTodoTitle'),\n        completed: false\n    });\n}\nfunction clearCompletedTodos(_ref3) {\n    var state = _ref3.state;\n\n    var todos = state.get('todos');\n    Object.keys(todos).forEach(function (uid) {\n        if (todos[uid].completed) {\n            state.unset('todos.' + uid);\n        }\n    });\n}",
+    "map": {
+      "mappings": [
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 6 },
+          "generated": { "line": 6, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 6 },
+          "generated": { "line": 6, "column": 27 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 6 },
+          "generated": { "line": 7, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 6 },
+          "generated": { "line": 7, "column": 18 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 6 },
+          "generated": { "line": 8, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 6 },
+          "generated": { "line": 8, "column": 30 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 1, "column": 0 },
+          "generated": { "line": 10, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 2, "column": 0 },
+          "generated": { "line": 14, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 6 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 6 },
+          "generated": { "line": 20, "column": 9 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 6 },
+          "generated": { "line": 20, "column": 25 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 20, "column": 32 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 35 },
+          "generated": { "line": 21, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 21, "column": 13 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 35 },
+          "generated": { "line": 21, "column": 21 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 21, "column": 26 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 42 },
+          "generated": { "line": 22, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 22, "column": 15 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 42 },
+          "generated": { "line": 22, "column": 23 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 4, "column": 51 },
+          "generated": { "line": 22, "column": 30 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 5, "column": 2 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 5, "column": 8 },
+          "generated": { "line": 24, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 5, "column": 22 },
+          "generated": { "line": 24, "column": 22 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 5, "column": 23 },
+          "generated": { "line": 24, "column": 23 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 5, "column": 31 },
+          "generated": { "line": 24, "column": 31 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 5, "column": 23 },
+          "generated": { "line": 24, "column": 36 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 5, "column": 2 },
+          "generated": { "line": 24, "column": 60 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 6, "column": 2 },
+          "generated": { "line": 25, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 6, "column": 8 },
+          "generated": { "line": 25, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 6, "column": 27 },
+          "generated": { "line": 25, "column": 27 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 6, "column": 35 },
+          "generated": { "line": 25, "column": 35 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 6, "column": 27 },
+          "generated": { "line": 25, "column": 40 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 6, "column": 2 },
+          "generated": { "line": 25, "column": 68 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 2 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 19 },
+          "generated": { "line": 26, "column": 21 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 2 },
+          "generated": { "line": 26, "column": 28 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 27 },
+          "generated": { "line": 26, "column": 29 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 28 },
+          "generated": { "line": 26, "column": 39 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 27 },
+          "generated": { "line": 26, "column": 42 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 35 },
+          "generated": { "line": 26, "column": 44 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 9, "column": 10 },
+          "generated": { "line": 27, "column": 14 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 27, "column": 17 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 9, "column": 23 },
+          "generated": { "line": 27, "column": 29 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 27, "column": 32 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 9, "column": 40 },
+          "generated": { "line": 27, "column": 49 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 9, "column": 4 },
+          "generated": { "line": 27, "column": 60 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 10, "column": 3 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 8, "column": 2 },
+          "generated": { "line": 28, "column": 5 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 11, "column": 1 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 6 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 6 },
+          "generated": { "line": 30, "column": 9 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 6 },
+          "generated": { "line": 30, "column": 16 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 37 },
+          "generated": { "line": 30, "column": 24 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 37 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 26 },
+          "generated": { "line": 31, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 37 },
+          "generated": { "line": 31, "column": 13 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 26 },
+          "generated": { "line": 31, "column": 22 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 37 },
+          "generated": { "line": 31, "column": 27 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 37 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 33 },
+          "generated": { "line": 32, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 37 },
+          "generated": { "line": 32, "column": 10 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 33 },
+          "generated": { "line": 32, "column": 19 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 13, "column": 37 },
+          "generated": { "line": 32, "column": 21 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 34, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 8 },
+          "generated": { "line": 34, "column": 10 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 34, "column": 13 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 21 },
+          "generated": { "line": 34, "column": 25 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 24 },
+          "generated": { "line": 34, "column": 28 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 21 },
+          "generated": { "line": 34, "column": 34 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 34, "column": 36 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 36 },
+          "generated": { "line": 34, "column": 38 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 15, "column": 4 },
+          "generated": { "line": 35, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 15, "column": 11 },
+          "generated": { "line": 35, "column": 15 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 15, "column": 17 },
+          "generated": { "line": 35, "column": 21 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 15, "column": 11 },
+          "generated": { "line": 35, "column": 24 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 15, "column": 21 },
+          "generated": { "line": 35, "column": 25 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 15, "column": 11 },
+          "generated": { "line": 35, "column": 39 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 36 },
+          "generated": { "line": 35, "column": 40 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 16, "column": 4 },
+          "generated": { "line": 36, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 16, "column": 15 },
+          "generated": { "line": 36, "column": 19 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 36 },
+          "generated": { "line": 37, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 14, "column": 2 },
+          "generated": { "line": 37, "column": 5 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 18, "column": 1 },
+          "generated": { "line": 38, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 6 },
+          "generated": { "line": 39, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 6 },
+          "generated": { "line": 39, "column": 9 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 6 },
+          "generated": { "line": 39, "column": 28 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 45 },
+          "generated": { "line": 39, "column": 36 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 45 },
+          "generated": { "line": 40, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 38 },
+          "generated": { "line": 40, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 45 },
+          "generated": { "line": 40, "column": 13 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 38 },
+          "generated": { "line": 40, "column": 22 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 20, "column": 45 },
+          "generated": { "line": 40, "column": 27 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 2 },
+          "generated": { "line": 42, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 8 },
+          "generated": { "line": 42, "column": 8 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 16 },
+          "generated": { "line": 42, "column": 16 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 22 },
+          "generated": { "line": 42, "column": 22 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 16 },
+          "generated": { "line": 42, "column": 25 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 26 },
+          "generated": { "line": 42, "column": 26 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 16 },
+          "generated": { "line": 42, "column": 33 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 21, "column": 2 },
+          "generated": { "line": 42, "column": 34 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 2 },
+          "generated": { "line": 43, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 9 },
+          "generated": { "line": 43, "column": 11 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 2 },
+          "generated": { "line": 43, "column": 15 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 14 },
+          "generated": { "line": 43, "column": 16 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 2 },
+          "generated": { "line": 43, "column": 21 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 21 },
+          "generated": { "line": 43, "column": 23 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 2 },
+          "generated": { "line": 43, "column": 30 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 29 },
+          "generated": { "line": 43, "column": 31 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 30 },
+          "generated": { "line": 43, "column": 41 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 29 },
+          "generated": { "line": 43, "column": 44 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 37 },
+          "generated": { "line": 43, "column": 46 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 24, "column": 4 },
+          "generated": { "line": 44, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 24, "column": 8 },
+          "generated": { "line": 44, "column": 12 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 24, "column": 14 },
+          "generated": { "line": 44, "column": 18 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 24, "column": 8 },
+          "generated": { "line": 44, "column": 21 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 24, "column": 19 },
+          "generated": { "line": 44, "column": 23 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 24, "column": 4 },
+          "generated": { "line": 44, "column": 32 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 24, "column": 30 },
+          "generated": { "line": 44, "column": 34 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 25, "column": 6 },
+          "generated": { "line": 45, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 25, "column": 12 },
+          "generated": { "line": 45, "column": 18 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 25, "column": 6 },
+          "generated": { "line": 45, "column": 23 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 25, "column": 27 },
+          "generated": { "line": 45, "column": 35 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 25, "column": 6 },
+          "generated": { "line": 45, "column": 38 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 26, "column": 5 },
+          "generated": { "line": 46, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 27, "column": 3 },
+          "generated": { "line": 47, "column": 0 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 23, "column": 2 },
+          "generated": { "line": 47, "column": 5 }
+        },
+        {
+          "source": "src/app/actions.ts",
+          "name": null,
+          "original": { "line": 28, "column": 1 },
+          "generated": { "line": 48, "column": 0 }
+        }
+      ],
+      "sources": {
+        "src/app/actions.ts":
+          "import computedIsAllChecked from '../computed/isAllChecked'\nimport computedVisibleTodosUids from '../computed/visibleTodosUids'\n\nexport function toggleAllChecked({ state, resolve }) {\n  const isCompleted = !resolve.value(computedIsAllChecked)\n  const currentTodosUids = resolve.value(computedVisibleTodosUids)\n\n  currentTodosUids.forEach((uid) => {\n    state.set(`todos.${uid}.completed`, isCompleted)\n  })\n}\n\nexport function addTodo({ state, id }) {\n  state.set(`todos.${id.create()}`, {\n    title: state.get('newTodoTitle'),\n    completed: false,\n  })\n}\n\nexport function clearCompletedTodos({ state }) {\n  const todos = state.get('todos')\n\n  Object.keys(todos).forEach((uid) => {\n    if (todos[uid].completed) {\n      state.unset(`todos.${uid}`)\n    }\n  })\n}\n"
+      },
+      "lineCount": null
+    }
+  },
+  "hash": "b6db1e1158b9f2a6d07b916aa38ef72a",
+  "cacheData": { "env": {} }
+}
