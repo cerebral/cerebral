@@ -2,21 +2,15 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "cerebral", "loc": { "line": 1, "column": 23 } },
     { "name": "./sequences", "loc": { "line": 2, "column": 27 } },
@@ -25,7 +19,7 @@
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _cerebral = require('cerebral');\n\nvar _sequences = require('./sequences');\n\nvar sequences = _interopRequireWildcard(_sequences);\n\nvar _providers = require('./providers');\n\nvar _modules = require('./modules');\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nvar state = {\n    newTodoTitle: '',\n    todos: {},\n    filter: 'all',\n    editingUid: null\n};\nvar signals = {\n    rootRouted: sequences.redirectToAll,\n    newTodoTitleChanged: sequences.changeNewTodoTitle,\n    newTodoSubmitted: sequences.submitNewTodo,\n    todoNewTitleChanged: sequences.changeTodoTitle,\n    todoNewTitleSubmitted: sequences.submitTodoTitle,\n    removeTodoClicked: sequences.removeTodo,\n    todoDoubleClicked: sequences.editTodo,\n    toggleAllChanged: sequences.toggleAllChecked,\n    toggleTodoCompletedChanged: sequences.toggleTodoCompleted,\n    todoNewTitleAborted: sequences.abortEdit,\n    clearCompletedClicked: sequences.clearCompletedTodos,\n    filterClicked: sequences.changeFilter\n};\nexports.default = (0, _cerebral.Module)({\n    state: state,\n    signals: signals,\n    providers: {\n        id: _providers.id\n    },\n    modules: {\n        router: _modules.router,\n        storage: _modules.storage\n    }\n});",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _cerebral = require(\"cerebral\");\n\nvar _sequences = require(\"./sequences\");\n\nvar sequences = _interopRequireWildcard(_sequences);\n\nvar _providers = require(\"./providers\");\n\nvar _modules = require(\"./modules\");\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nvar state = {\n    newTodoTitle: '',\n    todos: {},\n    filter: 'all',\n    editingUid: null\n};\nvar signals = {\n    rootRouted: sequences.redirectToAll,\n    newTodoTitleChanged: sequences.changeNewTodoTitle,\n    newTodoSubmitted: sequences.submitNewTodo,\n    todoNewTitleChanged: sequences.changeTodoTitle,\n    todoNewTitleSubmitted: sequences.submitTodoTitle,\n    removeTodoClicked: sequences.removeTodo,\n    todoDoubleClicked: sequences.editTodo,\n    toggleAllChanged: sequences.toggleAllChecked,\n    toggleTodoCompletedChanged: sequences.toggleTodoCompleted,\n    todoNewTitleAborted: sequences.abortEdit,\n    clearCompletedClicked: sequences.clearCompletedTodos,\n    filterClicked: sequences.changeFilter\n};\nexports.default = (0, _cerebral.Module)({\n    state: state,\n    signals: signals,\n    providers: {\n        id: _providers.id\n    },\n    modules: {\n        router: _modules.router,\n        storage: _modules.storage\n    }\n});",
     "map": {
       "mappings": [
         {
@@ -588,6 +582,6 @@
       "lineCount": null
     }
   },
-  "hash": "b84ad43c20825e1d137b774e98414856",
+  "hash": "6ee8583e889b997851e95a584bd219bc",
   "cacheData": { "env": {} }
 }

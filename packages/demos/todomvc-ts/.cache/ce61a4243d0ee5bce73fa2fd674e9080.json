@@ -2,21 +2,15 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "react", "loc": { "line": 1, "column": 23 } },
     { "name": "@cerebral/react", "loc": { "line": 2, "column": 24 } },
@@ -27,7 +21,7 @@
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _react = require('react');\n\nvar React = _interopRequireWildcard(_react);\n\nvar _react2 = require('@cerebral/react');\n\nvar _NewTodo = require('../NewTodo');\n\nvar _NewTodo2 = _interopRequireDefault(_NewTodo);\n\nvar _List = require('../List');\n\nvar _List2 = _interopRequireDefault(_List);\n\nvar _Footer = require('../Footer');\n\nvar _Footer2 = _interopRequireDefault(_Footer);\n\nvar _counts = require('../../computed/counts');\n\nvar _counts2 = _interopRequireDefault(_counts);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nexports.default = (0, _react2.connect)({\n    counts: _counts2.default\n})(function App(_ref) {\n    var counts = _ref.counts;\n\n    return React.createElement(\"div\", { id: \"todoapp-wrapper\" }, React.createElement(\"section\", { className: \"todoapp\" }, React.createElement(\"header\", { className: \"header\" }, React.createElement(\"h1\", null, \"todos\"), React.createElement(_NewTodo2.default, null)), !!counts.visible && React.createElement(_List2.default, null), !!counts.total && React.createElement(_Footer2.default, null)), React.createElement(\"footer\", { className: \"info\" }, React.createElement(\"p\", null, \"Double-click to edit a todo\"), React.createElement(\"p\", null, \"Credits:\", React.createElement(\"a\", { href: \"http://christianalfoni.com\" }, \"Christian Alfoni\"), \",\"), React.createElement(\"p\", null, \"Part of \", React.createElement(\"a\", { href: \"http://todomvc.com\" }, \"TodoMVC\"))));\n});",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _react = require(\"react\");\n\nvar React = _interopRequireWildcard(_react);\n\nvar _react2 = require(\"@cerebral/react\");\n\nvar _NewTodo = require(\"../NewTodo\");\n\nvar _NewTodo2 = _interopRequireDefault(_NewTodo);\n\nvar _List = require(\"../List\");\n\nvar _List2 = _interopRequireDefault(_List);\n\nvar _Footer = require(\"../Footer\");\n\nvar _Footer2 = _interopRequireDefault(_Footer);\n\nvar _counts = require(\"../../computed/counts\");\n\nvar _counts2 = _interopRequireDefault(_counts);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nexports.default = (0, _react2.connect)({\n    counts: _counts2.default\n})(function App(_ref) {\n    var counts = _ref.counts;\n\n    return React.createElement(\"div\", { id: \"todoapp-wrapper\" }, React.createElement(\"section\", { className: \"todoapp\" }, React.createElement(\"header\", { className: \"header\" }, React.createElement(\"h1\", null, \"todos\"), React.createElement(_NewTodo2.default, null)), !!counts.visible && React.createElement(_List2.default, null), !!counts.total && React.createElement(_Footer2.default, null)), React.createElement(\"footer\", { className: \"info\" }, React.createElement(\"p\", null, \"Double-click to edit a todo\"), React.createElement(\"p\", null, \"Credits:\", React.createElement(\"a\", { href: \"http://christianalfoni.com\" }, \"Christian Alfoni\"), \",\"), React.createElement(\"p\", null, \"Part of \", React.createElement(\"a\", { href: \"http://todomvc.com\" }, \"TodoMVC\"))));\n});",
     "map": {
       "mappings": [
         {
@@ -1004,6 +998,6 @@
       "lineCount": null
     }
   },
-  "hash": "dd3ab2ae5abcd7be5dcaf018717869cd",
+  "hash": "a10f19d9dbf84e1b8c0f2655caed2332",
   "cacheData": { "env": {} }
 }

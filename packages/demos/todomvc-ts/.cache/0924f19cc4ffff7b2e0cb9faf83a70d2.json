@@ -2,31 +2,25 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "react", "loc": { "line": 1, "column": 23 } },
     { "name": "@cerebral/react", "loc": { "line": 2, "column": 24 } },
-    { "name": "cerebral/tags", "loc": { "line": 3, "column": 30 } },
+    { "name": "../../cerebral.proxy.ts", "loc": { "line": 3, "column": 30 } },
     { "name": "../../computed/counts", "loc": { "line": 4, "column": 19 } },
-    { "name": "classnames", "loc": { "line": 5, "column": 28 } }
+    { "name": "classnames", "loc": { "line": 5, "column": 23 } }
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral(['filter'], ['filter']),\n    _templateObject2 = _taggedTemplateLiteral(['filterClicked'], ['filterClicked']),\n    _templateObject3 = _taggedTemplateLiteral(['clearCompletedClicked'], ['clearCompletedClicked']);\n\nvar _react = require('react');\n\nvar React = _interopRequireWildcard(_react);\n\nvar _react2 = require('@cerebral/react');\n\nvar _tags = require('cerebral/tags');\n\nvar _counts = require('../../computed/counts');\n\nvar _counts2 = _interopRequireDefault(_counts);\n\nvar _classnames = require('classnames');\n\nvar classnames = _interopRequireWildcard(_classnames);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nvar filters = ['All', 'Active', 'Completed'];\nexports.default = (0, _react2.connect)({\n    filter: (0, _tags.state)(_templateObject),\n    counts: _counts2.default,\n    filterClicked: (0, _tags.signal)(_templateObject2),\n    clearCompletedClicked: (0, _tags.signal)(_templateObject3)\n})(function Footer(_ref) {\n    var filter = _ref.filter,\n        counts = _ref.counts,\n        filterClicked = _ref.filterClicked,\n        clearCompletedClicked = _ref.clearCompletedClicked;\n\n    return React.createElement(\"footer\", { className: \"footer\" }, React.createElement(\"span\", { className: \"todo-count\" }, React.createElement(\"strong\", null, counts.remaining, \" \", counts.remaining === 1 ? 'item' : 'items', \" left\")), React.createElement(\"ul\", { className: \"filters\" }, filters.map(function (filterName) {\n        return React.createElement(\"li\", { key: filterName }, React.createElement(\"a\", { onClick: function onClick() {\n                return filterClicked({ filter: filterName.toLowerCase() });\n            }, className: classnames({\n                selected: filter === filterName.toLowerCase()\n            }) }, filterName));\n    })), !!counts.completed && React.createElement(\"button\", { className: \"clear-completed\", onClick: function onClick() {\n            return clearCompletedClicked();\n        } }, \"Clear completed (\", counts.completed, \")\"));\n});",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral([\"filter\"], [\"filter\"]),\n    _templateObject2 = _taggedTemplateLiteral([\"filterClicked\"], [\"filterClicked\"]),\n    _templateObject3 = _taggedTemplateLiteral([\"clearCompletedClicked\"], [\"clearCompletedClicked\"]);\n\nvar _react = require(\"react\");\n\nvar React = _interopRequireWildcard(_react);\n\nvar _react2 = require(\"@cerebral/react\");\n\nvar _cerebralProxy = require(\"../../cerebral.proxy.ts\");\n\nvar _counts = require(\"../../computed/counts\");\n\nvar _counts2 = _interopRequireDefault(_counts);\n\nvar _classnames = require(\"classnames\");\n\nvar _classnames2 = _interopRequireDefault(_classnames);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nvar filters = ['All', 'Active', 'Completed'];\nexports.default = (0, _react2.connect)({\n    filter: (0, _cerebralProxy.state)(_templateObject),\n    counts: _counts2.default,\n    filterClicked: (0, _cerebralProxy.signal)(_templateObject2),\n    clearCompletedClicked: (0, _cerebralProxy.signal)(_templateObject3)\n})(function Footer(_ref) {\n    var filter = _ref.filter,\n        counts = _ref.counts,\n        filterClicked = _ref.filterClicked,\n        clearCompletedClicked = _ref.clearCompletedClicked;\n\n    return React.createElement(\"footer\", { className: \"footer\" }, React.createElement(\"span\", { className: \"todo-count\" }, React.createElement(\"strong\", null, counts.remaining, \" \", counts.remaining === 1 ? 'item' : 'items', \" left\")), React.createElement(\"ul\", { className: \"filters\" }, filters.map(function (filterName) {\n        return React.createElement(\"li\", { key: filterName }, React.createElement(\"a\", { onClick: function onClick() {\n                return filterClicked({ filter: filterName.toLowerCase() });\n            }, className: (0, _classnames2.default)({\n                selected: filter === filterName.toLowerCase()\n            }) }, filterName));\n    })), !!counts.completed && React.createElement(\"button\", { className: \"clear-completed\", onClick: function onClick() {\n            return clearCompletedClicked();\n        } }, \"Clear completed (\", counts.completed, \")\"));\n});",
     "map": {
       "mappings": [
         {
@@ -64,12 +58,6 @@
           "name": null,
           "original": { "line": 5, "column": 0 },
           "generated": { "line": 23, "column": 0 }
-        },
-        {
-          "source": "src/components/Footer/index.tsx",
-          "name": null,
-          "original": { "line": 5, "column": 12 },
-          "generated": { "line": 25, "column": 4 }
         },
         {
           "source": "src/components/Footer/index.tsx",
@@ -153,7 +141,7 @@
           "source": "src/components/Footer/index.tsx",
           "name": null,
           "original": { "line": 9, "column": 23 },
-          "generated": { "line": 35, "column": 45 }
+          "generated": { "line": 35, "column": 54 }
         },
         {
           "source": "src/components/Footer/index.tsx",
@@ -177,7 +165,7 @@
           "source": "src/components/Footer/index.tsx",
           "name": null,
           "original": { "line": 9, "column": 23 },
-          "generated": { "line": 37, "column": 54 }
+          "generated": { "line": 37, "column": 63 }
         },
         {
           "source": "src/components/Footer/index.tsx",
@@ -903,7 +891,7 @@
           "source": "src/components/Footer/index.tsx",
           "name": null,
           "original": { "line": 29, "column": 36 },
-          "generated": { "line": 48, "column": 37 }
+          "generated": { "line": 48, "column": 52 }
         },
         {
           "source": "src/components/Footer/index.tsx",
@@ -1196,11 +1184,11 @@
       ],
       "sources": {
         "src/components/Footer/index.tsx":
-          "import * as React from 'react'\nimport { connect } from '@cerebral/react'\nimport { state, signal } from 'cerebral/proxy'\nimport counts from '../../computed/counts'\nimport * as classnames from 'classnames'\n\nconst filters = ['All', 'Active', 'Completed']\n\nexport default connect({\n  filter: state.filter,\n  counts,\n  filterClicked: signal.filterClicked,\n  clearCompletedClicked: signal.clearCompletedClicked,\n})(function Footer({ filter, counts, filterClicked, clearCompletedClicked }) {\n  return (\n    <footer className=\"footer\">\n      <span className=\"todo-count\">\n        <strong>\n          {counts.remaining} {counts.remaining === 1 ? 'item' : 'items'} left\n        </strong>\n      </span>\n      <ul className=\"filters\">\n        {filters.map((filterName) => (\n          <li key={filterName}>\n            <a\n              onClick={() =>\n                filterClicked({ filter: filterName.toLowerCase() })\n              }\n              className={classnames({\n                selected: filter === filterName.toLowerCase(),\n              })}\n            >\n              {filterName}\n            </a>\n          </li>\n        ))}\n      </ul>\n      {!!counts.completed && (\n        <button\n          className=\"clear-completed\"\n          onClick={() => clearCompletedClicked()}\n        >\n          Clear completed ({counts.completed})\n        </button>\n      )}\n    </footer>\n  )\n})\n"
+          "import * as React from 'react'\nimport { connect } from '@cerebral/react'\nimport { state, signal } from 'fluent'\nimport counts from '../../computed/counts'\nimport classnames from 'classnames'\n\nconst filters = ['All', 'Active', 'Completed']\n\nexport default connect({\n  filter: state.filter,\n  counts,\n  filterClicked: signal.filterClicked,\n  clearCompletedClicked: signal.clearCompletedClicked,\n})(function Footer({ filter, counts, filterClicked, clearCompletedClicked }) {\n  return (\n    <footer className=\"footer\">\n      <span className=\"todo-count\">\n        <strong>\n          {counts.remaining} {counts.remaining === 1 ? 'item' : 'items'} left\n        </strong>\n      </span>\n      <ul className=\"filters\">\n        {filters.map((filterName) => (\n          <li key={filterName}>\n            <a\n              onClick={() =>\n                filterClicked({ filter: filterName.toLowerCase() })\n              }\n              className={classnames({\n                selected: filter === filterName.toLowerCase(),\n              })}\n            >\n              {filterName}\n            </a>\n          </li>\n        ))}\n      </ul>\n      {!!counts.completed && (\n        <button\n          className=\"clear-completed\"\n          onClick={() => clearCompletedClicked()}\n        >\n          Clear completed ({counts.completed})\n        </button>\n      )}\n    </footer>\n  )\n})\n"
       },
       "lineCount": null
     }
   },
-  "hash": "a2f6dc7804d53dacaaaecb7b3333ead0",
+  "hash": "9f2fcedd9d5b98ebfcb4115bb65520a9",
   "cacheData": { "env": {} }
 }

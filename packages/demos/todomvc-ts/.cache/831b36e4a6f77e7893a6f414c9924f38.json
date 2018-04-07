@@ -2,655 +2,3306 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     {
       "name": "@cerebral/router/operators",
       "loc": { "line": 1, "column": 25 }
     },
-    { "name": "cerebral/operators", "loc": { "line": 2, "column": 41 } },
-    { "name": "cerebral/tags", "loc": { "line": 3, "column": 29 } },
-    { "name": "./actions", "loc": { "line": 4, "column": 25 } }
+    { "name": "../cerebral.proxy.ts", "loc": { "line": 2, "column": 50 } },
+    { "name": "./actions", "loc": { "line": 3, "column": 25 } }
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.submitTodoTitle = exports.abortEdit = exports.editTodo = exports.changeTodoTitle = exports.submitNewTodo = exports.changeFilter = exports.clearCompletedTodos = exports.toggleTodoCompleted = exports.toggleAllChecked = exports.removeTodo = exports.changeNewTodoTitle = exports.redirectToAll = undefined;\n\nvar _templateObject = _taggedTemplateLiteral(['newTodoTitle'], ['newTodoTitle']),\n    _templateObject2 = _taggedTemplateLiteral(['title'], ['title']),\n    _templateObject3 = _taggedTemplateLiteral(['uid'], ['uid']),\n    _templateObject4 = _taggedTemplateLiteral(['todos.', ''], ['todos.', '']),\n    _templateObject5 = _taggedTemplateLiteral(['uid.', ''], ['uid.', '']),\n    _templateObject6 = _taggedTemplateLiteral(['todos.', '.completed'], ['todos.', '.completed']),\n    _templateObject7 = _taggedTemplateLiteral(['filter'], ['filter']),\n    _templateObject8 = _taggedTemplateLiteral(['todos.', '.editedTitle'], ['todos.', '.editedTitle']),\n    _templateObject9 = _taggedTemplateLiteral(['todos.', '.title'], ['todos.', '.title']),\n    _templateObject10 = _taggedTemplateLiteral(['editingUid'], ['editingUid']);\n\nvar _operators = require('@cerebral/router/operators');\n\nvar _operators2 = require('cerebral/operators');\n\nvar _tags = require('cerebral/tags');\n\nvar _actions = require('./actions');\n\nvar actions = _interopRequireWildcard(_actions);\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nvar redirectToAll = exports.redirectToAll = (0, _operators.redirect)('/all');\nvar changeNewTodoTitle = exports.changeNewTodoTitle = (0, _operators2.set)((0, _tags.state)(_templateObject), (0, _tags.props)(_templateObject2));\nvar removeTodo = exports.removeTodo = (0, _operators2.unset)((0, _tags.state)(_templateObject4, (0, _tags.props)(_templateObject3)));\nvar toggleAllChecked = exports.toggleAllChecked = actions.toggleAllChecked;\nvar toggleTodoCompleted = exports.toggleTodoCompleted = (0, _operators2.toggle)((0, _tags.state)(_templateObject6, (0, _tags.props)(_templateObject3)));\nvar clearCompletedTodos = exports.clearCompletedTodos = actions.clearCompletedTodos;\nvar changeFilter = exports.changeFilter = (0, _operators2.set)((0, _tags.state)(_templateObject7), (0, _tags.props)(_templateObject7));\nvar submitNewTodo = exports.submitNewTodo = [(0, _operators2.when)((0, _tags.state)(_templateObject)), {\n    true: [actions.addTodo, (0, _operators2.set)((0, _tags.state)(_templateObject), '')],\n    false: []\n}];\nvar changeTodoTitle = exports.changeTodoTitle = (0, _operators2.set)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3)), (0, _tags.props)(_templateObject2));\nvar editTodo = exports.editTodo = [(0, _operators2.set)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3)), (0, _tags.state)(_templateObject9, (0, _tags.props)(_templateObject3))), (0, _operators2.set)((0, _tags.state)(_templateObject10), (0, _tags.props)(_templateObject3))];\nvar abortEdit = exports.abortEdit = [(0, _operators2.unset)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), (0, _operators2.set)((0, _tags.state)(_templateObject10), null)];\nvar submitTodoTitle = exports.submitTodoTitle = [(0, _operators2.when)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), {\n    true: [(0, _operators2.set)((0, _tags.state)(_templateObject9, (0, _tags.props)(_templateObject3)), (0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), (0, _operators2.unset)((0, _tags.state)(_templateObject8, (0, _tags.props)(_templateObject3))), (0, _operators2.set)((0, _tags.state)(_templateObject10), null)],\n    false: []\n}];",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.submitTodoTitle = exports.abortEdit = exports.editTodo = exports.changeTodoTitle = exports.submitNewTodo = exports.changeFilter = exports.clearCompletedTodos = exports.toggleTodoCompleted = exports.toggleAllChecked = exports.removeTodo = exports.changeNewTodoTitle = exports.redirectToAll = undefined;\n\nvar _operators = require(\"@cerebral/router/operators\");\n\nvar _cerebralProxy = require(\"../cerebral.proxy.ts\");\n\nvar _actions = require(\"./actions\");\n\nvar actions = _interopRequireWildcard(_actions);\n\nfunction _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }\n\nvar redirectToAll = exports.redirectToAll = (0, _cerebralProxy.sequence)(function (s) {\n    return s.action((0, _operators.redirect)('/all'));\n});\nvar changeNewTodoTitle = exports.changeNewTodoTitle = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.action(function (_ref) {\n        var state = _ref.state,\n            props = _ref.props;\n        return state.set(\"newTodoTitle\", props.title);\n    });\n});\nvar removeTodo = exports.removeTodo = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.action(function (_ref2) {\n        var state = _ref2.state,\n            props = _ref2.props;\n        return state.unset(\"todos.\" + props.uid);\n    });\n});\nvar toggleAllChecked = exports.toggleAllChecked = (0, _cerebralProxy.sequence)(function (s) {\n    return s.action(actions.toggleAllChecked);\n});\nvar toggleTodoCompleted = exports.toggleTodoCompleted = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.action(function (_ref3) {\n        var state = _ref3.state,\n            props = _ref3.props;\n        return state.toggle(\"todos.\" + props.uid + \".completed\");\n    });\n});\nvar clearCompletedTodos = exports.clearCompletedTodos = (0, _cerebralProxy.sequence)(function (s) {\n    return s.action(actions.clearCompletedTodos);\n});\nvar changeFilter = exports.changeFilter = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.action(function (_ref4) {\n        var state = _ref4.state,\n            props = _ref4.props;\n        return state.set(\"filter\", props.filter);\n    });\n});\nvar submitNewTodo = exports.submitNewTodo = (0, _cerebralProxy.sequence)(function (s) {\n    return s.when(function (_ref5) {\n        var state = _ref5.state;\n        return Boolean(state.get(\"newTodoTitle\"));\n    }).paths({\n        true: function _true(s) {\n            return s.action(actions.addTodo).action(function (_ref6) {\n                var state = _ref6.state;\n                return state.set(\"newTodoTitle\", '');\n            });\n        },\n        false: function _false(s) {\n            return s;\n        }\n    });\n});\nvar changeTodoTitle = exports.changeTodoTitle = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.action(function (_ref7) {\n        var state = _ref7.state,\n            props = _ref7.props;\n        return state.set(\"todos.\" + props.uid + \".editedTitle\", props.title);\n    });\n});\nvar editTodo = exports.editTodo = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.action(function (_ref8) {\n        var state = _ref8.state,\n            props = _ref8.props;\n        return state.set(\"todos.\" + props.uid + \".editedTitle\", \"todos.\" + props.uid + \".title\");\n    }).action(function (_ref9) {\n        var state = _ref9.state,\n            props = _ref9.props;\n        return state.set(\"editingUid\", props.uid);\n    });\n});\nvar abortEdit = exports.abortEdit = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.action(function (_ref10) {\n        var state = _ref10.state,\n            props = _ref10.props;\n        return state.unset(\"todos.\" + props.uid + \".editedTitle\");\n    }).action(function (_ref11) {\n        var state = _ref11.state;\n        return state.set(\"editingUid\", null);\n    });\n});\nvar submitTodoTitle = exports.submitTodoTitle = (0, _cerebralProxy.sequenceWithProps)(function (s) {\n    return s.when(function (_ref12) {\n        var state = _ref12.state,\n            props = _ref12.props;\n        return Boolean(state.get(\"todos.\" + props.uid + \".editedTitle\"));\n    }).paths({\n        true: function _true(s) {\n            return s.action(function (_ref13) {\n                var state = _ref13.state,\n                    props = _ref13.props;\n                return state.set(\"todos.\" + props.uid + \".title\", \"todos.\" + props.uid + \".editedTitle\");\n            }).action(function (_ref14) {\n                var state = _ref14.state,\n                    props = _ref14.props;\n                return state.unset(\"todos.\" + props.uid + \".editedTitle\");\n            }).action(function (_ref15) {\n                var state = _ref15.state;\n                return state.set(\"editingUid\", null);\n            });\n        },\n        false: function _false(s) {\n            return s;\n        }\n    });\n});",
     "map": {
       "mappings": [
         {
           "source": "src/app/sequences.ts",
           "name": null,
           "original": { "line": 1, "column": 0 },
-          "generated": { "line": 19, "column": 0 }
+          "generated": { "line": 8, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
           "original": { "line": 2, "column": 0 },
-          "generated": { "line": 21, "column": 0 }
+          "generated": { "line": 10, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
           "original": { "line": 3, "column": 0 },
+          "generated": { "line": 12, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 3, "column": 12 },
+          "generated": { "line": 14, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 7 },
+          "generated": { "line": 18, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 13 },
+          "generated": { "line": 18, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 29 },
+          "generated": { "line": 18, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 38 },
+          "generated": { "line": 18, "column": 73 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 39 },
+          "generated": { "line": 18, "column": 83 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 38 },
+          "generated": { "line": 18, "column": 84 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 38 },
+          "generated": { "line": 19, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 45 },
+          "generated": { "line": 19, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 47 },
+          "generated": { "line": 19, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 45 },
+          "generated": { "line": 19, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 54 },
+          "generated": { "line": 19, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 63 },
+          "generated": { "line": 19, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 54 },
+          "generated": { "line": 19, "column": 51 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 45 },
+          "generated": { "line": 19, "column": 52 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 38 },
+          "generated": { "line": 19, "column": 53 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 38 },
+          "generated": { "line": 20, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 29 },
+          "generated": { "line": 20, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 5, "column": 7 },
+          "generated": { "line": 20, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 7 },
+          "generated": { "line": 21, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 13 },
+          "generated": { "line": 21, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 34 },
+          "generated": { "line": 21, "column": 54 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 71 },
+          "generated": { "line": 21, "column": 92 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 72 },
+          "generated": { "line": 21, "column": 102 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 71 },
+          "generated": { "line": 21, "column": 103 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 71 },
+          "generated": { "line": 22, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 2 },
+          "generated": { "line": 22, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 4 },
+          "generated": { "line": 22, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 2 },
+          "generated": { "line": 22, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 22, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
           "generated": { "line": 23, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 4, "column": 0 },
+          "original": { "line": 8, "column": 14 },
+          "generated": { "line": 23, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 23, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 14 },
+          "generated": { "line": 23, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 23, "column": 30 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 24, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 21 },
+          "generated": { "line": 24, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 24, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 21 },
+          "generated": { "line": 24, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 24, "column": 30 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
           "generated": { "line": 25, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 4, "column": 12 },
-          "generated": { "line": 27, "column": 4 }
+          "original": { "line": 8, "column": 33 },
+          "generated": { "line": 25, "column": 15 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 6, "column": 7 },
+          "original": { "line": 8, "column": 39 },
+          "generated": { "line": 25, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 33 },
+          "generated": { "line": 25, "column": 24 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 62 },
+          "generated": { "line": 25, "column": 41 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 68 },
+          "generated": { "line": 25, "column": 47 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 33 },
+          "generated": { "line": 25, "column": 52 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 25, "column": 53 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 11 },
+          "generated": { "line": 26, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 8, "column": 2 },
+          "generated": { "line": 26, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 71 },
+          "generated": { "line": 26, "column": 6 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 71 },
+          "generated": { "line": 27, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 34 },
+          "generated": { "line": 27, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 7, "column": 7 },
+          "generated": { "line": 27, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 11, "column": 7 },
+          "generated": { "line": 28, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 11, "column": 13 },
+          "generated": { "line": 28, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 11, "column": 26 },
+          "generated": { "line": 28, "column": 38 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 11, "column": 61 },
+          "generated": { "line": 28, "column": 76 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 11, "column": 62 },
+          "generated": { "line": 28, "column": 86 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 11, "column": 61 },
+          "generated": { "line": 28, "column": 87 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 11, "column": 61 },
+          "generated": { "line": 29, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 2 },
+          "generated": { "line": 29, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 4 },
+          "generated": { "line": 29, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 2 },
+          "generated": { "line": 29, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 29, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 30, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 14 },
+          "generated": { "line": 30, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 30, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 14 },
+          "generated": { "line": 30, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 30, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 31, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 21 },
+          "generated": { "line": 31, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 31, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 21 },
+          "generated": { "line": 31, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 31, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 32, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 33 },
+          "generated": { "line": 32, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 39 },
+          "generated": { "line": 32, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 33 },
+          "generated": { "line": 32, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 56 },
+          "generated": { "line": 32, "column": 38 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 62 },
+          "generated": { "line": 32, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 33 },
+          "generated": { "line": 32, "column": 47 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
+          "generated": { "line": 32, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 12, "column": 11 },
           "generated": { "line": 33, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 6, "column": 13 },
-          "generated": { "line": 33, "column": 4 }
+          "original": { "line": 12, "column": 2 },
+          "generated": { "line": 33, "column": 5 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 6, "column": 29 },
-          "generated": { "line": 33, "column": 44 }
+          "original": { "line": 11, "column": 61 },
+          "generated": { "line": 33, "column": 6 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 6, "column": 38 },
-          "generated": { "line": 33, "column": 69 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 6, "column": 29 },
-          "generated": { "line": 33, "column": 75 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 6, "column": 7 },
-          "generated": { "line": 33, "column": 76 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 8, "column": 7 },
+          "original": { "line": 11, "column": 61 },
           "generated": { "line": 34, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 8, "column": 13 },
-          "generated": { "line": 34, "column": 4 }
+          "original": { "line": 11, "column": 26 },
+          "generated": { "line": 34, "column": 1 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 8, "column": 34 },
-          "generated": { "line": 34, "column": 54 }
+          "original": { "line": 11, "column": 7 },
+          "generated": { "line": 34, "column": 2 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 8, "column": 7 },
-          "generated": { "line": 34, "column": 145 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 10, "column": 7 },
+          "original": { "line": 15, "column": 7 },
           "generated": { "line": 35, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 10, "column": 13 },
+          "original": { "line": 15, "column": 13 },
           "generated": { "line": 35, "column": 4 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 10, "column": 26 },
-          "generated": { "line": 35, "column": 38 }
+          "original": { "line": 15, "column": 32 },
+          "generated": { "line": 35, "column": 50 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 10, "column": 7 },
-          "generated": { "line": 35, "column": 132 }
+          "original": { "line": 15, "column": 41 },
+          "generated": { "line": 35, "column": 79 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 12, "column": 7 },
+          "original": { "line": 15, "column": 42 },
+          "generated": { "line": 35, "column": 89 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 15, "column": 41 },
+          "generated": { "line": 35, "column": 90 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 15, "column": 41 },
           "generated": { "line": 36, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 12, "column": 13 },
-          "generated": { "line": 36, "column": 4 }
+          "original": { "line": 16, "column": 2 },
+          "generated": { "line": 36, "column": 11 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 12, "column": 32 },
-          "generated": { "line": 36, "column": 50 }
+          "original": { "line": 16, "column": 4 },
+          "generated": { "line": 36, "column": 13 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 12, "column": 40 },
-          "generated": { "line": 36, "column": 58 }
+          "original": { "line": 16, "column": 2 },
+          "generated": { "line": 36, "column": 19 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 12, "column": 7 },
-          "generated": { "line": 36, "column": 74 }
+          "original": { "line": 16, "column": 11 },
+          "generated": { "line": 36, "column": 20 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 14, "column": 7 },
+          "original": { "line": 16, "column": 19 },
+          "generated": { "line": 36, "column": 28 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 16, "column": 2 },
+          "generated": { "line": 36, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 15, "column": 41 },
+          "generated": { "line": 36, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 15, "column": 41 },
           "generated": { "line": 37, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 14, "column": 13 },
-          "generated": { "line": 37, "column": 4 }
+          "original": { "line": 15, "column": 32 },
+          "generated": { "line": 37, "column": 1 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 14, "column": 35 },
-          "generated": { "line": 37, "column": 56 }
+          "original": { "line": 15, "column": 7 },
+          "generated": { "line": 37, "column": 2 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 14, "column": 7 },
-          "generated": { "line": 37, "column": 151 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 16, "column": 7 },
+          "original": { "line": 19, "column": 7 },
           "generated": { "line": 38, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 16, "column": 13 },
+          "original": { "line": 19, "column": 13 },
           "generated": { "line": 38, "column": 4 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 16, "column": 35 },
+          "original": { "line": 19, "column": 35 },
           "generated": { "line": 38, "column": 56 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 16, "column": 43 },
-          "generated": { "line": 38, "column": 64 }
+          "original": { "line": 19, "column": 70 },
+          "generated": { "line": 38, "column": 94 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 16, "column": 7 },
-          "generated": { "line": 38, "column": 83 }
+          "original": { "line": 19, "column": 71 },
+          "generated": { "line": 38, "column": 104 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 18, "column": 7 },
+          "original": { "line": 19, "column": 70 },
+          "generated": { "line": 38, "column": 105 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 19, "column": 70 },
           "generated": { "line": 39, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 18, "column": 13 },
-          "generated": { "line": 39, "column": 4 }
+          "original": { "line": 20, "column": 2 },
+          "generated": { "line": 39, "column": 11 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 18, "column": 28 },
-          "generated": { "line": 39, "column": 42 }
+          "original": { "line": 20, "column": 4 },
+          "generated": { "line": 39, "column": 13 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 18, "column": 7 },
-          "generated": { "line": 39, "column": 134 }
+          "original": { "line": 20, "column": 2 },
+          "generated": { "line": 39, "column": 19 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 20, "column": 7 },
+          "original": { "line": 20, "column": 11 },
+          "generated": { "line": 39, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 11 },
           "generated": { "line": 40, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 20, "column": 13 },
-          "generated": { "line": 40, "column": 4 }
+          "original": { "line": 20, "column": 14 },
+          "generated": { "line": 40, "column": 12 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 20, "column": 29 },
-          "generated": { "line": 40, "column": 44 }
+          "original": { "line": 20, "column": 11 },
+          "generated": { "line": 40, "column": 17 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 21, "column": 2 },
-          "generated": { "line": 40, "column": 45 }
+          "original": { "line": 20, "column": 14 },
+          "generated": { "line": 40, "column": 26 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 20, "column": 29 },
-          "generated": { "line": 40, "column": 101 }
+          "original": { "line": 20, "column": 11 },
+          "generated": { "line": 40, "column": 31 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 22, "column": 2 },
-          "generated": { "line": 40, "column": 103 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 23, "column": 4 },
+          "original": { "line": 20, "column": 11 },
           "generated": { "line": 41, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 23, "column": 10 },
-          "generated": { "line": 41, "column": 10 }
+          "original": { "line": 20, "column": 21 },
+          "generated": { "line": 41, "column": 12 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 23, "column": 11 },
-          "generated": { "line": 41, "column": 11 }
+          "original": { "line": 20, "column": 11 },
+          "generated": { "line": 41, "column": 17 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 23, "column": 19 },
-          "generated": { "line": 41, "column": 19 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 23, "column": 10 },
+          "original": { "line": 20, "column": 21 },
           "generated": { "line": 41, "column": 26 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 23, "column": 28 },
-          "generated": { "line": 41, "column": 28 }
+          "original": { "line": 20, "column": 11 },
+          "generated": { "line": 41, "column": 31 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 23, "column": 52 },
-          "generated": { "line": 41, "column": 84 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 23, "column": 28 },
-          "generated": { "line": 41, "column": 86 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 23, "column": 10 },
-          "generated": { "line": 41, "column": 87 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 22, "column": 2 },
-          "generated": { "line": 41, "column": 88 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 24, "column": 4 },
+          "original": { "line": 20, "column": 11 },
           "generated": { "line": 42, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 24, "column": 11 },
-          "generated": { "line": 42, "column": 11 }
+          "original": { "line": 20, "column": 33 },
+          "generated": { "line": 42, "column": 15 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 22, "column": 2 },
+          "original": { "line": 20, "column": 39 },
+          "generated": { "line": 42, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 33 },
+          "generated": { "line": 42, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 57 },
+          "generated": { "line": 42, "column": 39 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 63 },
+          "generated": { "line": 42, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 33 },
+          "generated": { "line": 42, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 11 },
+          "generated": { "line": 42, "column": 64 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 20, "column": 11 },
           "generated": { "line": 43, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 20, "column": 29 },
-          "generated": { "line": 43, "column": 1 }
+          "original": { "line": 20, "column": 2 },
+          "generated": { "line": 43, "column": 5 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 20, "column": 7 },
-          "generated": { "line": 43, "column": 2 }
+          "original": { "line": 19, "column": 70 },
+          "generated": { "line": 43, "column": 6 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 28, "column": 7 },
+          "original": { "line": 19, "column": 70 },
           "generated": { "line": 44, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 28, "column": 13 },
-          "generated": { "line": 44, "column": 4 }
+          "original": { "line": 19, "column": 35 },
+          "generated": { "line": 44, "column": 1 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 28, "column": 31 },
-          "generated": { "line": 44, "column": 48 }
+          "original": { "line": 19, "column": 7 },
+          "generated": { "line": 44, "column": 2 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 28, "column": 7 },
-          "generated": { "line": 44, "column": 176 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 33, "column": 7 },
+          "original": { "line": 23, "column": 7 },
           "generated": { "line": 45, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 33, "column": 13 },
+          "original": { "line": 23, "column": 13 },
           "generated": { "line": 45, "column": 4 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 33, "column": 24 },
-          "generated": { "line": 45, "column": 34 }
+          "original": { "line": 23, "column": 35 },
+          "generated": { "line": 45, "column": 56 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 34, "column": 2 },
-          "generated": { "line": 45, "column": 35 }
+          "original": { "line": 23, "column": 44 },
+          "generated": { "line": 45, "column": 85 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 33, "column": 24 },
-          "generated": { "line": 45, "column": 199 }
+          "original": { "line": 23, "column": 45 },
+          "generated": { "line": 45, "column": 95 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 35, "column": 2 },
-          "generated": { "line": 45, "column": 201 }
+          "original": { "line": 23, "column": 44 },
+          "generated": { "line": 45, "column": 96 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 33, "column": 24 },
-          "generated": { "line": 45, "column": 294 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 33, "column": 7 },
-          "generated": { "line": 45, "column": 295 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 38, "column": 7 },
+          "original": { "line": 23, "column": 44 },
           "generated": { "line": 46, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 38, "column": 13 },
-          "generated": { "line": 46, "column": 4 }
+          "original": { "line": 24, "column": 2 },
+          "generated": { "line": 46, "column": 11 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 38, "column": 25 },
-          "generated": { "line": 46, "column": 36 }
+          "original": { "line": 24, "column": 4 },
+          "generated": { "line": 46, "column": 13 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 39, "column": 2 },
-          "generated": { "line": 46, "column": 37 }
+          "original": { "line": 24, "column": 2 },
+          "generated": { "line": 46, "column": 19 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 38, "column": 25 },
-          "generated": { "line": 46, "column": 131 }
+          "original": { "line": 24, "column": 11 },
+          "generated": { "line": 46, "column": 20 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 40, "column": 2 },
-          "generated": { "line": 46, "column": 133 }
+          "original": { "line": 24, "column": 19 },
+          "generated": { "line": 46, "column": 28 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 40, "column": 24 },
-          "generated": { "line": 46, "column": 191 }
+          "original": { "line": 24, "column": 2 },
+          "generated": { "line": 46, "column": 47 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 40, "column": 2 },
-          "generated": { "line": 46, "column": 195 }
+          "original": { "line": 23, "column": 44 },
+          "generated": { "line": 46, "column": 48 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 38, "column": 25 },
-          "generated": { "line": 46, "column": 196 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 38, "column": 7 },
-          "generated": { "line": 46, "column": 197 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 43, "column": 7 },
+          "original": { "line": 23, "column": 44 },
           "generated": { "line": 47, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 43, "column": 13 },
-          "generated": { "line": 47, "column": 4 }
+          "original": { "line": 23, "column": 35 },
+          "generated": { "line": 47, "column": 1 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 43, "column": 31 },
-          "generated": { "line": 47, "column": 48 }
+          "original": { "line": 23, "column": 7 },
+          "generated": { "line": 47, "column": 2 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 44, "column": 2 },
-          "generated": { "line": 47, "column": 49 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 43, "column": 31 },
-          "generated": { "line": 47, "column": 142 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 45, "column": 2 },
-          "generated": { "line": 47, "column": 144 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 46, "column": 4 },
+          "original": { "line": 27, "column": 7 },
           "generated": { "line": 48, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 46, "column": 10 },
-          "generated": { "line": 48, "column": 10 }
+          "original": { "line": 27, "column": 13 },
+          "generated": { "line": 48, "column": 4 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 47, "column": 6 },
-          "generated": { "line": 48, "column": 11 }
+          "original": { "line": 27, "column": 28 },
+          "generated": { "line": 48, "column": 42 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 46, "column": 10 },
-          "generated": { "line": 48, "column": 175 }
+          "original": { "line": 27, "column": 66 },
+          "generated": { "line": 48, "column": 80 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 48, "column": 6 },
-          "generated": { "line": 48, "column": 177 }
+          "original": { "line": 27, "column": 67 },
+          "generated": { "line": 48, "column": 90 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 46, "column": 10 },
-          "generated": { "line": 48, "column": 271 }
+          "original": { "line": 27, "column": 66 },
+          "generated": { "line": 48, "column": 91 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 49, "column": 6 },
-          "generated": { "line": 48, "column": 273 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 49, "column": 28 },
-          "generated": { "line": 48, "column": 331 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 49, "column": 6 },
-          "generated": { "line": 48, "column": 335 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 46, "column": 10 },
-          "generated": { "line": 48, "column": 336 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 45, "column": 2 },
-          "generated": { "line": 48, "column": 337 }
-        },
-        {
-          "source": "src/app/sequences.ts",
-          "name": null,
-          "original": { "line": 51, "column": 4 },
+          "original": { "line": 27, "column": 66 },
           "generated": { "line": 49, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 51, "column": 11 },
+          "original": { "line": 28, "column": 2 },
           "generated": { "line": 49, "column": 11 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 45, "column": 2 },
+          "original": { "line": 28, "column": 4 },
+          "generated": { "line": 49, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 2 },
+          "generated": { "line": 49, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 49, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
           "generated": { "line": 50, "column": 0 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 43, "column": 31 },
-          "generated": { "line": 50, "column": 1 }
+          "original": { "line": 28, "column": 14 },
+          "generated": { "line": 50, "column": 12 }
         },
         {
           "source": "src/app/sequences.ts",
           "name": null,
-          "original": { "line": 43, "column": 7 },
-          "generated": { "line": 50, "column": 2 }
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 50, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 14 },
+          "generated": { "line": 50, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 50, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 51, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 21 },
+          "generated": { "line": 51, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 51, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 21 },
+          "generated": { "line": 51, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 51, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 52, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 33 },
+          "generated": { "line": 52, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 39 },
+          "generated": { "line": 52, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 33 },
+          "generated": { "line": 52, "column": 24 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 56 },
+          "generated": { "line": 52, "column": 35 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 62 },
+          "generated": { "line": 52, "column": 41 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 33 },
+          "generated": { "line": 52, "column": 47 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 52, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 11 },
+          "generated": { "line": 53, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 28, "column": 2 },
+          "generated": { "line": 53, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 27, "column": 66 },
+          "generated": { "line": 53, "column": 6 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 27, "column": 66 },
+          "generated": { "line": 54, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 27, "column": 28 },
+          "generated": { "line": 54, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 27, "column": 7 },
+          "generated": { "line": 54, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 7 },
+          "generated": { "line": 55, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 13 },
+          "generated": { "line": 55, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 29 },
+          "generated": { "line": 55, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 38 },
+          "generated": { "line": 55, "column": 73 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 39 },
+          "generated": { "line": 55, "column": 83 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 38 },
+          "generated": { "line": 55, "column": 84 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 38 },
+          "generated": { "line": 56, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 2 },
+          "generated": { "line": 56, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 4 },
+          "generated": { "line": 56, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 2 },
+          "generated": { "line": 56, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 9 },
+          "generated": { "line": 56, "column": 18 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 9 },
+          "generated": { "line": 57, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 57, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 9 },
+          "generated": { "line": 57, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 12 },
+          "generated": { "line": 57, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 9 },
+          "generated": { "line": 57, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 9 },
+          "generated": { "line": 58, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 24 },
+          "generated": { "line": 58, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 32 },
+          "generated": { "line": 58, "column": 23 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 38 },
+          "generated": { "line": 58, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 32 },
+          "generated": { "line": 58, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 24 },
+          "generated": { "line": 58, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 9 },
+          "generated": { "line": 58, "column": 49 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 9 },
+          "generated": { "line": 59, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 2 },
+          "generated": { "line": 59, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 63 },
+          "generated": { "line": 59, "column": 7 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 2 },
+          "generated": { "line": 59, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 69 },
+          "generated": { "line": 59, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 4 },
+          "generated": { "line": 60, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 10 },
+          "generated": { "line": 60, "column": 14 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 11 },
+          "generated": { "line": 60, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 10 },
+          "generated": { "line": 60, "column": 30 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 10 },
+          "generated": { "line": 61, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 34, "column": 6 },
+          "generated": { "line": 61, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 35, "column": 9 },
+          "generated": { "line": 61, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 34, "column": 6 },
+          "generated": { "line": 61, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 35, "column": 16 },
+          "generated": { "line": 61, "column": 28 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 35, "column": 24 },
+          "generated": { "line": 61, "column": 36 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 34, "column": 6 },
+          "generated": { "line": 61, "column": 43 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 9 },
+          "generated": { "line": 61, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 34, "column": 6 },
+          "generated": { "line": 61, "column": 51 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 16 },
+          "generated": { "line": 61, "column": 52 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 16 },
+          "generated": { "line": 62, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 19 },
+          "generated": { "line": 62, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 16 },
+          "generated": { "line": 62, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 19 },
+          "generated": { "line": 62, "column": 34 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 16 },
+          "generated": { "line": 62, "column": 39 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 16 },
+          "generated": { "line": 63, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 31 },
+          "generated": { "line": 63, "column": 23 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 37 },
+          "generated": { "line": 63, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 31 },
+          "generated": { "line": 63, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 60 },
+          "generated": { "line": 63, "column": 49 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 31 },
+          "generated": { "line": 63, "column": 51 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 16 },
+          "generated": { "line": 63, "column": 52 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 36, "column": 16 },
+          "generated": { "line": 64, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 34, "column": 6 },
+          "generated": { "line": 64, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 10 },
+          "generated": { "line": 64, "column": 14 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 33, "column": 10 },
+          "generated": { "line": 65, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 69 },
+          "generated": { "line": 65, "column": 9 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 4 },
+          "generated": { "line": 66, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 11 },
+          "generated": { "line": 66, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 12 },
+          "generated": { "line": 66, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 11 },
+          "generated": { "line": 66, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 11 },
+          "generated": { "line": 67, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 18 },
+          "generated": { "line": 67, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 11 },
+          "generated": { "line": 67, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 37, "column": 11 },
+          "generated": { "line": 68, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 69 },
+          "generated": { "line": 69, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 32, "column": 2 },
+          "generated": { "line": 69, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 38 },
+          "generated": { "line": 69, "column": 6 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 38 },
+          "generated": { "line": 70, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 29 },
+          "generated": { "line": 70, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 31, "column": 7 },
+          "generated": { "line": 70, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 41, "column": 7 },
+          "generated": { "line": 71, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 41, "column": 13 },
+          "generated": { "line": 71, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 41, "column": 31 },
+          "generated": { "line": 71, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 44, "column": 3 },
+          "generated": { "line": 71, "column": 86 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 44, "column": 4 },
+          "generated": { "line": 71, "column": 96 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 44, "column": 3 },
+          "generated": { "line": 71, "column": 97 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 44, "column": 3 },
+          "generated": { "line": 72, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 2 },
+          "generated": { "line": 72, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 4 },
+          "generated": { "line": 72, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 2 },
+          "generated": { "line": 72, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 72, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 73, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 14 },
+          "generated": { "line": 73, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 73, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 14 },
+          "generated": { "line": 73, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 73, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 74, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 21 },
+          "generated": { "line": 74, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 74, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 21 },
+          "generated": { "line": 74, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 74, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 75, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 4 },
+          "generated": { "line": 75, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 10 },
+          "generated": { "line": 75, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 4 },
+          "generated": { "line": 75, "column": 24 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 25 },
+          "generated": { "line": 75, "column": 36 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 31 },
+          "generated": { "line": 75, "column": 42 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 4 },
+          "generated": { "line": 75, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 49 },
+          "generated": { "line": 75, "column": 64 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 55 },
+          "generated": { "line": 75, "column": 70 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 46, "column": 4 },
+          "generated": { "line": 75, "column": 75 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 75, "column": 76 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 11 },
+          "generated": { "line": 76, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 45, "column": 2 },
+          "generated": { "line": 76, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 44, "column": 3 },
+          "generated": { "line": 76, "column": 6 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 44, "column": 3 },
+          "generated": { "line": 77, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 41, "column": 31 },
+          "generated": { "line": 77, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 41, "column": 7 },
+          "generated": { "line": 77, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 7 },
+          "generated": { "line": 78, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 13 },
+          "generated": { "line": 78, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 24 },
+          "generated": { "line": 78, "column": 34 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 59 },
+          "generated": { "line": 78, "column": 72 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 60 },
+          "generated": { "line": 78, "column": 82 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 59 },
+          "generated": { "line": 78, "column": 83 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 59 },
+          "generated": { "line": 79, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 51, "column": 2 },
+          "generated": { "line": 79, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 5 },
+          "generated": { "line": 79, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 51, "column": 2 },
+          "generated": { "line": 79, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 79, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 80, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 15 },
+          "generated": { "line": 80, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 80, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 15 },
+          "generated": { "line": 80, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 80, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 81, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 22 },
+          "generated": { "line": 81, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 81, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 22 },
+          "generated": { "line": 81, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 81, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 82, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 6 },
+          "generated": { "line": 82, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 12 },
+          "generated": { "line": 82, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 6 },
+          "generated": { "line": 82, "column": 24 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 27 },
+          "generated": { "line": 82, "column": 36 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 33 },
+          "generated": { "line": 82, "column": 42 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 6 },
+          "generated": { "line": 82, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 62 },
+          "generated": { "line": 82, "column": 75 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 68 },
+          "generated": { "line": 82, "column": 81 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 53, "column": 6 },
+          "generated": { "line": 82, "column": 84 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 82, "column": 96 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 52, "column": 12 },
+          "generated": { "line": 83, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 51, "column": 2 },
+          "generated": { "line": 83, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 5 },
+          "generated": { "line": 83, "column": 7 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 51, "column": 2 },
+          "generated": { "line": 83, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 83, "column": 14 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 84, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 15 },
+          "generated": { "line": 84, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 84, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 15 },
+          "generated": { "line": 84, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 84, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 85, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 22 },
+          "generated": { "line": 85, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 85, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 22 },
+          "generated": { "line": 85, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 85, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 86, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 34 },
+          "generated": { "line": 86, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 40 },
+          "generated": { "line": 86, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 34 },
+          "generated": { "line": 86, "column": 24 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 61 },
+          "generated": { "line": 86, "column": 39 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 67 },
+          "generated": { "line": 86, "column": 45 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 34 },
+          "generated": { "line": 86, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 86, "column": 49 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 55, "column": 12 },
+          "generated": { "line": 87, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 51, "column": 2 },
+          "generated": { "line": 87, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 59 },
+          "generated": { "line": 87, "column": 6 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 59 },
+          "generated": { "line": 88, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 24 },
+          "generated": { "line": 88, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 50, "column": 7 },
+          "generated": { "line": 88, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 7 },
+          "generated": { "line": 89, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 13 },
+          "generated": { "line": 89, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 25 },
+          "generated": { "line": 89, "column": 36 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 60 },
+          "generated": { "line": 89, "column": 74 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 61 },
+          "generated": { "line": 89, "column": 84 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 60 },
+          "generated": { "line": 89, "column": 85 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 60 },
+          "generated": { "line": 90, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 59, "column": 2 },
+          "generated": { "line": 90, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 5 },
+          "generated": { "line": 90, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 59, "column": 2 },
+          "generated": { "line": 90, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 90, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 91, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 15 },
+          "generated": { "line": 91, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 91, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 15 },
+          "generated": { "line": 91, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 91, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 92, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 22 },
+          "generated": { "line": 92, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 92, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 22 },
+          "generated": { "line": 92, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 92, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 93, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 61, "column": 6 },
+          "generated": { "line": 93, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 61, "column": 12 },
+          "generated": { "line": 93, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 61, "column": 6 },
+          "generated": { "line": 93, "column": 26 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 61, "column": 29 },
+          "generated": { "line": 93, "column": 38 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 61, "column": 35 },
+          "generated": { "line": 93, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 61, "column": 6 },
+          "generated": { "line": 93, "column": 47 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 93, "column": 65 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 60, "column": 12 },
+          "generated": { "line": 94, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 59, "column": 2 },
+          "generated": { "line": 94, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 5 },
+          "generated": { "line": 94, "column": 7 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 59, "column": 2 },
+          "generated": { "line": 94, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 12 },
+          "generated": { "line": 94, "column": 14 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 12 },
+          "generated": { "line": 95, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 15 },
+          "generated": { "line": 95, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 12 },
+          "generated": { "line": 95, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 15 },
+          "generated": { "line": 95, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 12 },
+          "generated": { "line": 95, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 12 },
+          "generated": { "line": 96, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 27 },
+          "generated": { "line": 96, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 33 },
+          "generated": { "line": 96, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 27 },
+          "generated": { "line": 96, "column": 24 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 54 },
+          "generated": { "line": 96, "column": 39 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 27 },
+          "generated": { "line": 96, "column": 43 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 12 },
+          "generated": { "line": 96, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 63, "column": 12 },
+          "generated": { "line": 97, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 59, "column": 2 },
+          "generated": { "line": 97, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 60 },
+          "generated": { "line": 97, "column": 6 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 60 },
+          "generated": { "line": 98, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 25 },
+          "generated": { "line": 98, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 58, "column": 7 },
+          "generated": { "line": 98, "column": 2 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 7 },
+          "generated": { "line": 99, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 13 },
+          "generated": { "line": 99, "column": 4 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 31 },
+          "generated": { "line": 99, "column": 48 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 66 },
+          "generated": { "line": 99, "column": 86 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 67 },
+          "generated": { "line": 99, "column": 96 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 66 },
+          "generated": { "line": 99, "column": 97 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 66 },
+          "generated": { "line": 100, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 67, "column": 2 },
+          "generated": { "line": 100, "column": 11 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 5 },
+          "generated": { "line": 100, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 67, "column": 2 },
+          "generated": { "line": 100, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 100, "column": 18 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 101, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 13 },
+          "generated": { "line": 101, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 101, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 13 },
+          "generated": { "line": 101, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 101, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 102, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 20 },
+          "generated": { "line": 102, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 102, "column": 17 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 20 },
+          "generated": { "line": 102, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 102, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 103, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 6 },
+          "generated": { "line": 103, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 14 },
+          "generated": { "line": 103, "column": 23 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 20 },
+          "generated": { "line": 103, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 14 },
+          "generated": { "line": 103, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 35 },
+          "generated": { "line": 103, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 41 },
+          "generated": { "line": 103, "column": 50 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 14 },
+          "generated": { "line": 103, "column": 53 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 69, "column": 6 },
+          "generated": { "line": 103, "column": 71 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 103, "column": 72 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 68, "column": 10 },
+          "generated": { "line": 104, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 67, "column": 2 },
+          "generated": { "line": 104, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 71, "column": 5 },
+          "generated": { "line": 104, "column": 7 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 67, "column": 2 },
+          "generated": { "line": 104, "column": 12 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 71, "column": 11 },
+          "generated": { "line": 104, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 72, "column": 6 },
+          "generated": { "line": 105, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 72, "column": 12 },
+          "generated": { "line": 105, "column": 14 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 72, "column": 13 },
+          "generated": { "line": 105, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 72, "column": 12 },
+          "generated": { "line": 105, "column": 30 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 72, "column": 12 },
+          "generated": { "line": 106, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 73, "column": 8 },
+          "generated": { "line": 106, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 11 },
+          "generated": { "line": 106, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 73, "column": 8 },
+          "generated": { "line": 106, "column": 27 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 106, "column": 28 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 107, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 21 },
+          "generated": { "line": 107, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 107, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 21 },
+          "generated": { "line": 107, "column": 35 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 107, "column": 40 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 108, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 28 },
+          "generated": { "line": 108, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 108, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 28 },
+          "generated": { "line": 108, "column": 35 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 108, "column": 40 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 109, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 75, "column": 12 },
+          "generated": { "line": 109, "column": 23 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 75, "column": 18 },
+          "generated": { "line": 109, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 75, "column": 12 },
+          "generated": { "line": 109, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 76, "column": 25 },
+          "generated": { "line": 109, "column": 44 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 76, "column": 31 },
+          "generated": { "line": 109, "column": 50 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 75, "column": 12 },
+          "generated": { "line": 109, "column": 53 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 77, "column": 25 },
+          "generated": { "line": 109, "column": 77 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 77, "column": 31 },
+          "generated": { "line": 109, "column": 83 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 75, "column": 12 },
+          "generated": { "line": 109, "column": 86 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 109, "column": 104 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 74, "column": 18 },
+          "generated": { "line": 110, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 73, "column": 8 },
+          "generated": { "line": 110, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 11 },
+          "generated": { "line": 110, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 73, "column": 8 },
+          "generated": { "line": 110, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 110, "column": 22 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 111, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 21 },
+          "generated": { "line": 111, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 111, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 21 },
+          "generated": { "line": 111, "column": 35 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 111, "column": 40 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 112, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 28 },
+          "generated": { "line": 112, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 112, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 28 },
+          "generated": { "line": 112, "column": 35 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 112, "column": 40 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 113, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 81, "column": 12 },
+          "generated": { "line": 113, "column": 23 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 81, "column": 18 },
+          "generated": { "line": 113, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 81, "column": 12 },
+          "generated": { "line": 113, "column": 34 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 81, "column": 35 },
+          "generated": { "line": 113, "column": 46 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 81, "column": 41 },
+          "generated": { "line": 113, "column": 52 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 81, "column": 12 },
+          "generated": { "line": 113, "column": 55 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 113, "column": 73 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 80, "column": 18 },
+          "generated": { "line": 114, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 73, "column": 8 },
+          "generated": { "line": 114, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 11 },
+          "generated": { "line": 114, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 73, "column": 8 },
+          "generated": { "line": 114, "column": 21 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 18 },
+          "generated": { "line": 114, "column": 22 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 18 },
+          "generated": { "line": 115, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 21 },
+          "generated": { "line": 115, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 18 },
+          "generated": { "line": 115, "column": 25 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 21 },
+          "generated": { "line": 115, "column": 35 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 18 },
+          "generated": { "line": 115, "column": 40 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 18 },
+          "generated": { "line": 116, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 33 },
+          "generated": { "line": 116, "column": 23 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 39 },
+          "generated": { "line": 116, "column": 29 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 33 },
+          "generated": { "line": 116, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 60 },
+          "generated": { "line": 116, "column": 47 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 33 },
+          "generated": { "line": 116, "column": 51 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 18 },
+          "generated": { "line": 116, "column": 52 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 83, "column": 18 },
+          "generated": { "line": 117, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 73, "column": 8 },
+          "generated": { "line": 117, "column": 13 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 72, "column": 12 },
+          "generated": { "line": 117, "column": 14 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 72, "column": 12 },
+          "generated": { "line": 118, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 71, "column": 11 },
+          "generated": { "line": 118, "column": 9 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 6 },
+          "generated": { "line": 119, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 13 },
+          "generated": { "line": 119, "column": 15 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 14 },
+          "generated": { "line": 119, "column": 31 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 13 },
+          "generated": { "line": 119, "column": 32 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 13 },
+          "generated": { "line": 120, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 20 },
+          "generated": { "line": 120, "column": 19 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 13 },
+          "generated": { "line": 120, "column": 20 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 84, "column": 13 },
+          "generated": { "line": 121, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 71, "column": 11 },
+          "generated": { "line": 122, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 67, "column": 2 },
+          "generated": { "line": 122, "column": 5 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 66 },
+          "generated": { "line": 122, "column": 6 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 66 },
+          "generated": { "line": 123, "column": 0 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 31 },
+          "generated": { "line": 123, "column": 1 }
+        },
+        {
+          "source": "src/app/sequences.ts",
+          "name": null,
+          "original": { "line": 66, "column": 7 },
+          "generated": { "line": 123, "column": 2 }
         }
       ],
       "sources": {
         "src/app/sequences.ts":
-          "import { redirect } from '@cerebral/router/operators'\nimport { set, toggle, unset, when } from 'cerebral/operators'\nimport { props, state } from 'cerebral/proxy'\nimport * as actions from './actions'\n\nexport const redirectToAll = redirect('/all')\n\nexport const changeNewTodoTitle = set(state.newTodoTitle, props.title)\n\nexport const removeTodo = unset(state.todos[props.uid])\n\nexport const toggleAllChecked = actions.toggleAllChecked\n\nexport const toggleTodoCompleted = toggle(state.todos[props.uid].completed)\n\nexport const clearCompletedTodos = actions.clearCompletedTodos\n\nexport const changeFilter = set(state.filter, props.filter)\n\nexport const submitNewTodo = [\n  when(state.newTodoTitle),\n  {\n    true: [actions.addTodo, set(state.newTodoTitle, '')],\n    false: [],\n  },\n]\n\nexport const changeTodoTitle = set(\n  state.todos[props.uid].editedTitle,\n  props.title\n)\n\nexport const editTodo = [\n  set(state.todos[props.uid].editedTitle, state.todos[props.uid].title),\n  set(state.editingUid, props.uid),\n]\n\nexport const abortEdit = [\n  unset(state.todos[props.uid].editedTitle),\n  set(state.editingUid, null),\n]\n\nexport const submitTodoTitle = [\n  when(state.todos[props.uid].editedTitle),\n  {\n    true: [\n      set(state.todos[props.uid].title, state.todos[props.uid].editedTitle),\n      unset(state.todos[props.uid].editedTitle),\n      set(state.editingUid, null),\n    ],\n    false: [],\n  },\n]\n"
+          "import { redirect } from '@cerebral/router/operators'\nimport { path, sequence, sequenceWithProps } from 'fluent'\nimport * as actions from './actions'\n\nexport const redirectToAll = sequence((s) => s.action(redirect('/all')))\n\nexport const changeNewTodoTitle = sequenceWithProps<{ title: string }>((s) =>\n  s.action(({ state, props }) => state.set(path.newTodoTitle, props.title))\n)\n\nexport const removeTodo = sequenceWithProps<{ uid: string }>((s) =>\n  s.action(({ state, props }) => state.unset(path.todos[props.uid]))\n)\n\nexport const toggleAllChecked = sequence((s) =>\n  s.action(actions.toggleAllChecked)\n)\n\nexport const toggleTodoCompleted = sequenceWithProps<{ uid: string }>((s) =>\n  s.action(({ state, props }) => state.toggle(path.todos[props.uid].completed))\n)\n\nexport const clearCompletedTodos = sequence((s) =>\n  s.action(actions.clearCompletedTodos)\n)\n\nexport const changeFilter = sequenceWithProps<{ filter: string }>((s) =>\n  s.action(({ state, props }) => state.set(path.filter, props.filter))\n)\n\nexport const submitNewTodo = sequence((s) =>\n  s.when(({ state }) => Boolean(state.get(path.newTodoTitle))).paths({\n    true: (s) =>\n      s\n        .action(actions.addTodo)\n        .action(({ state }) => state.set(path.newTodoTitle, '')),\n    false: (s) => s,\n  })\n)\n\nexport const changeTodoTitle = sequenceWithProps<{\n  uid: string\n  title: string\n}>((s) =>\n  s.action(({ state, props }) =>\n    state.set(path.todos[props.uid].editedTitle, props.title)\n  )\n)\n\nexport const editTodo = sequenceWithProps<{ uid: string }>((s) =>\n  s\n    .action(({ state, props }) =>\n      state.set(path.todos[props.uid].editedTitle, path.todos[props.uid].title)\n    )\n    .action(({ state, props }) => state.set(path.editingUid, props.uid))\n)\n\nexport const abortEdit = sequenceWithProps<{ uid: string }>((s) =>\n  s\n    .action(({ state, props }) =>\n      state.unset(path.todos[props.uid].editedTitle)\n    )\n    .action(({ state }) => state.set(path.editingUid, null))\n)\n\nexport const submitTodoTitle = sequenceWithProps<{ uid: string }>((s) =>\n  s\n    .when(({ state, props }) =>\n      Boolean(state.get(path.todos[props.uid].editedTitle))\n    )\n    .paths({\n      true: (s) =>\n        s\n          .action(({ state, props }) =>\n            state.set(\n              path.todos[props.uid].title,\n              path.todos[props.uid].editedTitle\n            )\n          )\n          .action(({ state, props }) =>\n            state.unset(path.todos[props.uid].editedTitle)\n          )\n          .action(({ state }) => state.set(path.editingUid, null)),\n      false: (s) => s,\n    })\n)\n"
       },
       "lineCount": null
     }
   },
-  "hash": "a0b35b34576176c7f6f0fab2629c757b",
+  "hash": "3baf90fdc40330ecf8d129ed38ee3507",
   "cacheData": { "env": {} }
 }

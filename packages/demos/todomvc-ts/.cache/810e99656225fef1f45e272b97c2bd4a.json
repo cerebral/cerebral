@@ -2,21 +2,15 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "../computed/isAllChecked", "loc": { "line": 1, "column": 33 } },
     {
@@ -26,7 +20,7 @@
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.toggleAllChecked = toggleAllChecked;\nexports.addTodo = addTodo;\nexports.clearCompletedTodos = clearCompletedTodos;\n\nvar _isAllChecked = require('../computed/isAllChecked');\n\nvar _isAllChecked2 = _interopRequireDefault(_isAllChecked);\n\nvar _visibleTodosUids = require('../computed/visibleTodosUids');\n\nvar _visibleTodosUids2 = _interopRequireDefault(_visibleTodosUids);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction toggleAllChecked(_ref) {\n    var state = _ref.state,\n        resolve = _ref.resolve;\n\n    var isCompleted = !resolve.value(_isAllChecked2.default);\n    var currentTodosUids = resolve.value(_visibleTodosUids2.default);\n    currentTodosUids.forEach(function (uid) {\n        state.set('todos.' + uid + '.completed', isCompleted);\n    });\n}\nfunction addTodo(_ref2) {\n    var state = _ref2.state,\n        id = _ref2.id;\n\n    state.set('todos.' + id.create(), {\n        title: state.get('newTodoTitle'),\n        completed: false\n    });\n}\nfunction clearCompletedTodos(_ref3) {\n    var state = _ref3.state;\n\n    var todos = state.get('todos');\n    Object.keys(todos).forEach(function (uid) {\n        if (todos[uid].completed) {\n            state.unset('todos.' + uid);\n        }\n    });\n}",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.toggleAllChecked = toggleAllChecked;\nexports.addTodo = addTodo;\nexports.clearCompletedTodos = clearCompletedTodos;\n\nvar _isAllChecked = require(\"../computed/isAllChecked\");\n\nvar _isAllChecked2 = _interopRequireDefault(_isAllChecked);\n\nvar _visibleTodosUids = require(\"../computed/visibleTodosUids\");\n\nvar _visibleTodosUids2 = _interopRequireDefault(_visibleTodosUids);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction toggleAllChecked(_ref) {\n    var state = _ref.state,\n        resolve = _ref.resolve;\n\n    var isCompleted = !resolve.value(_isAllChecked2.default);\n    var currentTodosUids = resolve.value(_visibleTodosUids2.default);\n    currentTodosUids.forEach(function (uid) {\n        state.set(\"todos.\" + uid + \".completed\", isCompleted);\n    });\n}\nfunction addTodo(_ref2) {\n    var state = _ref2.state,\n        id = _ref2.id;\n\n    state.set(\"todos.\" + id.create(), {\n        title: state.get('newTodoTitle'),\n        completed: false\n    });\n}\nfunction clearCompletedTodos(_ref3) {\n    var state = _ref3.state;\n\n    var todos = state.get('todos');\n    Object.keys(todos).forEach(function (uid) {\n        if (todos[uid].completed) {\n            state.unset(\"todos.\" + uid);\n        }\n    });\n}",
     "map": {
       "mappings": [
         {
@@ -817,6 +811,6 @@
       "lineCount": null
     }
   },
-  "hash": "b6db1e1158b9f2a6d07b916aa38ef72a",
+  "hash": "9fee32c710320d00a7b90199a62ad94a",
   "cacheData": { "env": {} }
 }
