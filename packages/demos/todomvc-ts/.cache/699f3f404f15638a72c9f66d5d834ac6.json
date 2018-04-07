@@ -4,19 +4,19 @@
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/node_modules/cerebral/package.json",
       "includedInParent": true,
-      "mtime": 1522871063000
+      "mtime": 1523112004000
     },
     {
       "name":
@@ -27,17 +27,18 @@
     { "name": "./Controller", "loc": { "line": 6, "column": 43 } },
     { "name": "./UniversalController", "loc": { "line": 2, "column": 37 } },
     { "name": "./Module", "loc": { "line": 5, "column": 39 } },
-    { "name": "./Provider", "loc": { "line": 23, "column": 36 } },
+    { "name": "./Provider", "loc": { "line": 24, "column": 36 } },
     { "name": "./BaseController", "loc": { "line": 8, "column": 47 } },
-    { "name": "./CerebralError", "loc": { "line": 22, "column": 41 } },
-    { "name": "./Compute", "loc": { "line": 24, "column": 35 } },
-    { "name": "function-tree", "loc": { "line": 25, "column": 35 } },
-    { "name": "./View", "loc": { "line": 27, "column": 32 } },
-    { "name": "./utils", "loc": { "line": 28, "column": 50 } }
+    { "name": "./fluent", "loc": { "line": 9, "column": 115 } },
+    { "name": "./CerebralError", "loc": { "line": 23, "column": 41 } },
+    { "name": "./Compute", "loc": { "line": 25, "column": 35 } },
+    { "name": "function-tree", "loc": { "line": 26, "column": 35 } },
+    { "name": "./View", "loc": { "line": 28, "column": 32 } },
+    { "name": "./utils", "loc": { "line": 29, "column": 50 } }
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.throwError = exports.createDummyController = exports.View = exports.parallel = exports.sequence = exports.Compute = exports.Provider = exports.CerebralError = exports.BaseControllerClass = exports.ProviderClass = exports.ControllerClass = exports.ModuleClass = undefined;\n\nvar _Module = require('./Module');\n\nObject.defineProperty(exports, 'ModuleClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Module).default;\n  }\n});\n\nvar _Controller = require('./Controller');\n\nObject.defineProperty(exports, 'ControllerClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Controller).default;\n  }\n});\n\nvar _Provider = require('./Provider');\n\nObject.defineProperty(exports, 'ProviderClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Provider).default;\n  }\n});\n\nvar _BaseController = require('./BaseController');\n\nObject.defineProperty(exports, 'BaseControllerClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_BaseController).default;\n  }\n});\nexports.Controller = Controller;\nexports.UniversalController = UniversalController;\nexports.Module = Module;\n\nvar _CerebralError = require('./CerebralError');\n\nObject.defineProperty(exports, 'CerebralError', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_CerebralError).default;\n  }\n});\nObject.defineProperty(exports, 'Provider', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Provider).default;\n  }\n});\n\nvar _Compute = require('./Compute');\n\nObject.defineProperty(exports, 'Compute', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Compute).default;\n  }\n});\n\nvar _functionTree = require('function-tree');\n\nObject.defineProperty(exports, 'sequence', {\n  enumerable: true,\n  get: function () {\n    return _functionTree.sequence;\n  }\n});\nObject.defineProperty(exports, 'parallel', {\n  enumerable: true,\n  get: function () {\n    return _functionTree.parallel;\n  }\n});\n\nvar _View = require('./View');\n\nObject.defineProperty(exports, 'View', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_View).default;\n  }\n});\n\nvar _utils = require('./utils');\n\nObject.defineProperty(exports, 'createDummyController', {\n  enumerable: true,\n  get: function () {\n    return _utils.createDummyController;\n  }\n});\nObject.defineProperty(exports, 'throwError', {\n  enumerable: true,\n  get: function () {\n    return _utils.throwError;\n  }\n});\n\nvar _Controller2 = _interopRequireDefault(_Controller);\n\nvar _UniversalController = require('./UniversalController');\n\nvar _UniversalController2 = _interopRequireDefault(_UniversalController);\n\nvar _Module2 = _interopRequireDefault(_Module);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction Controller(rootModule, options) {\n  return new _Controller2.default(rootModule, options);\n}\n\nfunction UniversalController(rootModule, options) {\n  return new _UniversalController2.default(rootModule, options);\n}\n\nfunction Module(definition) {\n  return new _Module2.default(definition);\n}",
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports.throwError = exports.createDummyController = exports.View = exports.parallel = exports.sequence = exports.Compute = exports.Provider = exports.CerebralError = exports.ChainSequenceWithPropsFactory = exports.ChainSequenceFactory = exports.BaseControllerClass = exports.ProviderClass = exports.ControllerClass = exports.ModuleClass = undefined;\n\nvar _Module = require('./Module');\n\nObject.defineProperty(exports, 'ModuleClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Module).default;\n  }\n});\n\nvar _Controller = require('./Controller');\n\nObject.defineProperty(exports, 'ControllerClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Controller).default;\n  }\n});\n\nvar _Provider = require('./Provider');\n\nObject.defineProperty(exports, 'ProviderClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Provider).default;\n  }\n});\n\nvar _BaseController = require('./BaseController');\n\nObject.defineProperty(exports, 'BaseControllerClass', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_BaseController).default;\n  }\n});\n\nvar _fluent = require('./fluent');\n\nObject.defineProperty(exports, 'ChainSequenceFactory', {\n  enumerable: true,\n  get: function () {\n    return _fluent.SequenceFactory;\n  }\n});\nObject.defineProperty(exports, 'ChainSequenceWithPropsFactory', {\n  enumerable: true,\n  get: function () {\n    return _fluent.SequenceWithPropsFactory;\n  }\n});\nexports.Controller = Controller;\nexports.UniversalController = UniversalController;\nexports.Module = Module;\n\nvar _CerebralError = require('./CerebralError');\n\nObject.defineProperty(exports, 'CerebralError', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_CerebralError).default;\n  }\n});\nObject.defineProperty(exports, 'Provider', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Provider).default;\n  }\n});\n\nvar _Compute = require('./Compute');\n\nObject.defineProperty(exports, 'Compute', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_Compute).default;\n  }\n});\n\nvar _functionTree = require('function-tree');\n\nObject.defineProperty(exports, 'sequence', {\n  enumerable: true,\n  get: function () {\n    return _functionTree.sequence;\n  }\n});\nObject.defineProperty(exports, 'parallel', {\n  enumerable: true,\n  get: function () {\n    return _functionTree.parallel;\n  }\n});\n\nvar _View = require('./View');\n\nObject.defineProperty(exports, 'View', {\n  enumerable: true,\n  get: function () {\n    return _interopRequireDefault(_View).default;\n  }\n});\n\nvar _utils = require('./utils');\n\nObject.defineProperty(exports, 'createDummyController', {\n  enumerable: true,\n  get: function () {\n    return _utils.createDummyController;\n  }\n});\nObject.defineProperty(exports, 'throwError', {\n  enumerable: true,\n  get: function () {\n    return _utils.throwError;\n  }\n});\n\nvar _Controller2 = _interopRequireDefault(_Controller);\n\nvar _UniversalController = require('./UniversalController');\n\nvar _UniversalController2 = _interopRequireDefault(_UniversalController);\n\nvar _Module2 = _interopRequireDefault(_Module);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction Controller(rootModule, options) {\n  return new _Controller2.default(rootModule, options);\n}\n\nfunction UniversalController(rootModule, options) {\n  return new _UniversalController2.default(rootModule, options);\n}\n\nfunction Module(definition) {\n  return new _Module2.default(definition);\n}",
     "map": {
       "mappings": [
         {
@@ -75,335 +76,347 @@
           "original": { "line": 8, "column": 9 }
         },
         {
-          "name": "Controller",
-          "generated": { "line": 43, "column": 8 },
+          "name": "SequenceFactory",
+          "generated": { "line": 49, "column": 19 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 16 }
+          "original": { "line": 9, "column": 9 }
+        },
+        {
+          "name": "SequenceWithPropsFactory",
+          "generated": { "line": 55, "column": 19 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 9, "column": 50 }
         },
         {
           "name": "Controller",
-          "generated": { "line": 43, "column": 21 },
+          "generated": { "line": 58, "column": 8 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 16 }
+          "original": { "line": 11, "column": 16 }
+        },
+        {
+          "name": "Controller",
+          "generated": { "line": 58, "column": 21 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 11, "column": 16 }
         },
         {
           "name": "UniversalController",
-          "generated": { "line": 44, "column": 8 },
+          "generated": { "line": 59, "column": 8 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 16 }
+          "original": { "line": 15, "column": 16 }
         },
         {
           "name": "UniversalController",
-          "generated": { "line": 44, "column": 30 },
+          "generated": { "line": 59, "column": 30 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 16 }
+          "original": { "line": 15, "column": 16 }
         },
         {
           "name": "Module",
-          "generated": { "line": 45, "column": 8 },
+          "generated": { "line": 60, "column": 8 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 16 }
+          "original": { "line": 19, "column": 16 }
         },
         {
           "name": "Module",
-          "generated": { "line": 45, "column": 17 },
+          "generated": { "line": 60, "column": 17 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 16 }
+          "original": { "line": 19, "column": 16 }
         },
         {
           "name": "default",
-          "generated": { "line": 52, "column": 50 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 22, "column": 9 }
-        },
-        {
-          "name": "default",
-          "generated": { "line": 58, "column": 45 },
+          "generated": { "line": 67, "column": 50 },
           "source": "../../node_modules/cerebral/es/index.js",
           "original": { "line": 23, "column": 9 }
         },
         {
           "name": "default",
-          "generated": { "line": 67, "column": 44 },
+          "generated": { "line": 73, "column": 45 },
           "source": "../../node_modules/cerebral/es/index.js",
           "original": { "line": 24, "column": 9 }
         },
         {
-          "name": "sequence",
-          "generated": { "line": 76, "column": 25 },
+          "name": "default",
+          "generated": { "line": 82, "column": 44 },
           "source": "../../node_modules/cerebral/es/index.js",
           "original": { "line": 25, "column": 9 }
         },
         {
-          "name": "parallel",
-          "generated": { "line": 82, "column": 25 },
+          "name": "sequence",
+          "generated": { "line": 91, "column": 25 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 25, "column": 19 }
+          "original": { "line": 26, "column": 9 }
+        },
+        {
+          "name": "parallel",
+          "generated": { "line": 97, "column": 25 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 26, "column": 19 }
         },
         {
           "name": "default",
-          "generated": { "line": 91, "column": 41 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 27, "column": 9 }
-        },
-        {
-          "name": "createDummyController",
-          "generated": { "line": 100, "column": 18 },
+          "generated": { "line": 106, "column": 41 },
           "source": "../../node_modules/cerebral/es/index.js",
           "original": { "line": 28, "column": 9 }
         },
         {
-          "name": "throwError",
-          "generated": { "line": 106, "column": 18 },
+          "name": "createDummyController",
+          "generated": { "line": 115, "column": 18 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 28, "column": 32 }
+          "original": { "line": 29, "column": 9 }
         },
         {
-          "generated": { "line": 112, "column": 0 },
+          "name": "throwError",
+          "generated": { "line": 121, "column": 18 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 29, "column": 32 }
+        },
+        {
+          "generated": { "line": 127, "column": 0 },
           "source": "../../node_modules/cerebral/es/index.js",
           "original": { "line": 2, "column": 0 }
         },
         {
-          "generated": { "line": 120, "column": 0 },
+          "generated": { "line": 135, "column": 0 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 7 }
+          "original": { "line": 11, "column": 7 }
         },
         {
           "name": "Controller",
-          "generated": { "line": 120, "column": 9 },
+          "generated": { "line": 135, "column": 9 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 16 }
+          "original": { "line": 11, "column": 16 }
         },
         {
-          "generated": { "line": 120, "column": 19 },
+          "generated": { "line": 135, "column": 19 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 7 }
-        },
-        {
-          "name": "rootModule",
-          "generated": { "line": 120, "column": 20 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 27 }
-        },
-        {
-          "generated": { "line": 120, "column": 30 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 7 }
-        },
-        {
-          "name": "options",
-          "generated": { "line": 120, "column": 32 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 39 }
-        },
-        {
-          "generated": { "line": 120, "column": 39 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 7 }
-        },
-        {
-          "generated": { "line": 120, "column": 41 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 10, "column": 48 }
-        },
-        {
-          "generated": { "line": 121, "column": 0 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 11, "column": 2 }
-        },
-        {
-          "generated": { "line": 121, "column": 9 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 11, "column": 9 }
+          "original": { "line": 11, "column": 7 }
         },
         {
           "name": "rootModule",
-          "generated": { "line": 121, "column": 34 },
+          "generated": { "line": 135, "column": 20 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 11, "column": 29 }
+          "original": { "line": 11, "column": 27 }
         },
         {
-          "generated": { "line": 121, "column": 44 },
+          "generated": { "line": 135, "column": 30 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 11, "column": 9 }
+          "original": { "line": 11, "column": 7 }
         },
         {
           "name": "options",
-          "generated": { "line": 121, "column": 46 },
+          "generated": { "line": 135, "column": 32 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 11, "column": 41 }
+          "original": { "line": 11, "column": 39 }
         },
         {
-          "generated": { "line": 121, "column": 53 },
+          "generated": { "line": 135, "column": 39 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 11, "column": 9 }
+          "original": { "line": 11, "column": 7 }
         },
         {
-          "generated": { "line": 121, "column": 54 },
+          "generated": { "line": 135, "column": 41 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 11, "column": 2 }
+          "original": { "line": 11, "column": 48 }
         },
         {
-          "generated": { "line": 122, "column": 0 },
+          "generated": { "line": 136, "column": 0 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 12, "column": 1 }
+          "original": { "line": 12, "column": 2 }
         },
         {
-          "generated": { "line": 124, "column": 0 },
+          "generated": { "line": 136, "column": 9 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 7 }
+          "original": { "line": 12, "column": 9 }
+        },
+        {
+          "name": "rootModule",
+          "generated": { "line": 136, "column": 34 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 12, "column": 29 }
+        },
+        {
+          "generated": { "line": 136, "column": 44 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 12, "column": 9 }
+        },
+        {
+          "name": "options",
+          "generated": { "line": 136, "column": 46 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 12, "column": 41 }
+        },
+        {
+          "generated": { "line": 136, "column": 53 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 12, "column": 9 }
+        },
+        {
+          "generated": { "line": 136, "column": 54 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 12, "column": 2 }
+        },
+        {
+          "generated": { "line": 137, "column": 0 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 13, "column": 1 }
+        },
+        {
+          "generated": { "line": 139, "column": 0 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 15, "column": 7 }
         },
         {
           "name": "UniversalController",
-          "generated": { "line": 124, "column": 9 },
+          "generated": { "line": 139, "column": 9 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 16 }
+          "original": { "line": 15, "column": 16 }
         },
         {
-          "generated": { "line": 124, "column": 28 },
+          "generated": { "line": 139, "column": 28 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 7 }
-        },
-        {
-          "name": "rootModule",
-          "generated": { "line": 124, "column": 29 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 36 }
-        },
-        {
-          "generated": { "line": 124, "column": 39 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 7 }
-        },
-        {
-          "name": "options",
-          "generated": { "line": 124, "column": 41 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 48 }
-        },
-        {
-          "generated": { "line": 124, "column": 48 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 7 }
-        },
-        {
-          "generated": { "line": 124, "column": 50 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 14, "column": 57 }
-        },
-        {
-          "generated": { "line": 125, "column": 0 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 15, "column": 2 }
-        },
-        {
-          "generated": { "line": 125, "column": 9 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 15, "column": 9 }
+          "original": { "line": 15, "column": 7 }
         },
         {
           "name": "rootModule",
-          "generated": { "line": 125, "column": 43 },
+          "generated": { "line": 139, "column": 29 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 15, "column": 38 }
+          "original": { "line": 15, "column": 36 }
         },
         {
-          "generated": { "line": 125, "column": 53 },
+          "generated": { "line": 139, "column": 39 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 15, "column": 9 }
+          "original": { "line": 15, "column": 7 }
         },
         {
           "name": "options",
-          "generated": { "line": 125, "column": 55 },
+          "generated": { "line": 139, "column": 41 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 15, "column": 50 }
+          "original": { "line": 15, "column": 48 }
         },
         {
-          "generated": { "line": 125, "column": 62 },
+          "generated": { "line": 139, "column": 48 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 15, "column": 9 }
+          "original": { "line": 15, "column": 7 }
         },
         {
-          "generated": { "line": 125, "column": 63 },
+          "generated": { "line": 139, "column": 50 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 15, "column": 2 }
+          "original": { "line": 15, "column": 57 }
         },
         {
-          "generated": { "line": 126, "column": 0 },
+          "generated": { "line": 140, "column": 0 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 16, "column": 1 }
+          "original": { "line": 16, "column": 2 }
         },
         {
-          "generated": { "line": 128, "column": 0 },
+          "generated": { "line": 140, "column": 9 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 7 }
+          "original": { "line": 16, "column": 9 }
+        },
+        {
+          "name": "rootModule",
+          "generated": { "line": 140, "column": 43 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 16, "column": 38 }
+        },
+        {
+          "generated": { "line": 140, "column": 53 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 16, "column": 9 }
+        },
+        {
+          "name": "options",
+          "generated": { "line": 140, "column": 55 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 16, "column": 50 }
+        },
+        {
+          "generated": { "line": 140, "column": 62 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 16, "column": 9 }
+        },
+        {
+          "generated": { "line": 140, "column": 63 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 16, "column": 2 }
+        },
+        {
+          "generated": { "line": 141, "column": 0 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 17, "column": 1 }
+        },
+        {
+          "generated": { "line": 143, "column": 0 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 19, "column": 7 }
         },
         {
           "name": "Module",
-          "generated": { "line": 128, "column": 9 },
+          "generated": { "line": 143, "column": 9 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 16 }
+          "original": { "line": 19, "column": 16 }
         },
         {
-          "generated": { "line": 128, "column": 15 },
+          "generated": { "line": 143, "column": 15 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 7 }
-        },
-        {
-          "name": "definition",
-          "generated": { "line": 128, "column": 16 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 23 }
-        },
-        {
-          "generated": { "line": 128, "column": 26 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 7 }
-        },
-        {
-          "generated": { "line": 128, "column": 28 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 18, "column": 35 }
-        },
-        {
-          "generated": { "line": 129, "column": 0 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 19, "column": 2 }
-        },
-        {
-          "generated": { "line": 129, "column": 9 },
-          "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 19, "column": 9 }
+          "original": { "line": 19, "column": 7 }
         },
         {
           "name": "definition",
-          "generated": { "line": 129, "column": 30 },
+          "generated": { "line": 143, "column": 16 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 19, "column": 25 }
+          "original": { "line": 19, "column": 23 }
         },
         {
-          "generated": { "line": 129, "column": 40 },
+          "generated": { "line": 143, "column": 26 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 19, "column": 9 }
+          "original": { "line": 19, "column": 7 }
         },
         {
-          "generated": { "line": 129, "column": 41 },
+          "generated": { "line": 143, "column": 28 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 19, "column": 2 }
+          "original": { "line": 19, "column": 35 }
         },
         {
-          "generated": { "line": 130, "column": 0 },
+          "generated": { "line": 144, "column": 0 },
           "source": "../../node_modules/cerebral/es/index.js",
-          "original": { "line": 20, "column": 1 }
+          "original": { "line": 20, "column": 2 }
+        },
+        {
+          "generated": { "line": 144, "column": 9 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 20, "column": 9 }
+        },
+        {
+          "name": "definition",
+          "generated": { "line": 144, "column": 30 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 20, "column": 25 }
+        },
+        {
+          "generated": { "line": 144, "column": 40 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 20, "column": 9 }
+        },
+        {
+          "generated": { "line": 144, "column": 41 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 20, "column": 2 }
+        },
+        {
+          "generated": { "line": 145, "column": 0 },
+          "source": "../../node_modules/cerebral/es/index.js",
+          "original": { "line": 21, "column": 1 }
         }
       ],
       "sources": {
         "../../node_modules/cerebral/es/index.js":
-          "import ControllerClass from './Controller';\nimport UniversalControllerClass from './UniversalController';\nimport ModuleClass from './Module';\n// Needed to test for instanceof.\nexport { default as ModuleClass } from './Module';\nexport { default as ControllerClass } from './Controller';\nexport { default as ProviderClass } from './Provider';\nexport { default as BaseControllerClass } from './BaseController';\n\nexport function Controller(rootModule, options) {\n  return new ControllerClass(rootModule, options);\n}\n\nexport function UniversalController(rootModule, options) {\n  return new UniversalControllerClass(rootModule, options);\n}\n\nexport function Module(definition) {\n  return new ModuleClass(definition);\n}\n\nexport { default as CerebralError } from './CerebralError';\nexport { default as Provider } from './Provider';\nexport { default as Compute } from './Compute';\nexport { sequence, parallel } from 'function-tree';\n\nexport { default as View } from './View';\nexport { createDummyController, throwError } from './utils';\n//# sourceMappingURL=index.js.map"
+          "import ControllerClass from './Controller';\nimport UniversalControllerClass from './UniversalController';\nimport ModuleClass from './Module';\n// Needed to test for instanceof.\nexport { default as ModuleClass } from './Module';\nexport { default as ControllerClass } from './Controller';\nexport { default as ProviderClass } from './Provider';\nexport { default as BaseControllerClass } from './BaseController';\nexport { SequenceFactory as ChainSequenceFactory, SequenceWithPropsFactory as ChainSequenceWithPropsFactory } from './fluent';\n\nexport function Controller(rootModule, options) {\n  return new ControllerClass(rootModule, options);\n}\n\nexport function UniversalController(rootModule, options) {\n  return new UniversalControllerClass(rootModule, options);\n}\n\nexport function Module(definition) {\n  return new ModuleClass(definition);\n}\n\nexport { default as CerebralError } from './CerebralError';\nexport { default as Provider } from './Provider';\nexport { default as Compute } from './Compute';\nexport { sequence, parallel } from 'function-tree';\n\nexport { default as View } from './View';\nexport { createDummyController, throwError } from './utils';\n//# sourceMappingURL=index.js.map"
       },
       "lineCount": null
     }
   },
-  "hash": "c8cfaf0dc4cc7a79571d3b49b1305c52",
+  "hash": "2b7d225053a1d2b4a6565f19a4cc3f5e",
   "cacheData": { "env": {} }
 }

@@ -2,21 +2,15 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "cerebral", "loc": { "line": 1, "column": 24 } },
     { "name": "cerebral/tags", "loc": { "line": 2, "column": 22 } },
@@ -24,7 +18,7 @@
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral(['todos'], ['todos']);\n\nvar _cerebral = require('cerebral');\n\nvar _tags = require('cerebral/tags');\n\nvar _visibleTodosUids = require('./visibleTodosUids');\n\nvar _visibleTodosUids2 = _interopRequireDefault(_visibleTodosUids);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nexports.default = (0, _cerebral.Compute)((0, _tags.state)(_templateObject), _visibleTodosUids2.default, function (todos, visibleTodosUids, get) {\n    var todosUids = Object.keys(todos);\n    return todosUids.reduce(function (counts, uid) {\n        if (todos[uid].completed) {\n            counts.completed++;\n        } else {\n            counts.remaining++;\n        }\n        counts.total++;\n        return counts;\n    }, {\n        completed: 0,\n        remaining: 0,\n        total: Object.keys(todos).length,\n        visible: todosUids.length\n    });\n});",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _templateObject = _taggedTemplateLiteral([\"todos\"], [\"todos\"]);\n\nvar _cerebral = require(\"cerebral\");\n\nvar _tags = require(\"cerebral/tags\");\n\nvar _visibleTodosUids = require(\"./visibleTodosUids\");\n\nvar _visibleTodosUids2 = _interopRequireDefault(_visibleTodosUids);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nfunction _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }\n\nexports.default = (0, _cerebral.Compute)((0, _tags.state)(_templateObject), _visibleTodosUids2.default, function (todos, visibleTodosUids, get) {\n    var todosUids = Object.keys(todos);\n    return todosUids.reduce(function (counts, uid) {\n        if (todos[uid].completed) {\n            counts.completed++;\n        } else {\n            counts.remaining++;\n        }\n        counts.total++;\n        return counts;\n    }, {\n        completed: 0,\n        remaining: 0,\n        total: Object.keys(todos).length,\n        visible: todosUids.length\n    });\n});",
     "map": {
       "mappings": [
         {
@@ -503,6 +497,6 @@
       "lineCount": null
     }
   },
-  "hash": "4443c5584c6d004ba6c4402c6a3f4062",
+  "hash": "faf47d070b43c372b5e5a6f6729305ae",
   "cacheData": { "env": {} }
 }

@@ -2,28 +2,22 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "uuid", "loc": { "line": 1, "column": 17 } },
     { "name": "cerebral", "loc": { "line": 2, "column": 25 } }
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.id = undefined;\n\nvar _uuid = require('uuid');\n\nvar _uuid2 = _interopRequireDefault(_uuid);\n\nvar _cerebral = require('cerebral');\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar id = exports.id = (0, _cerebral.Provider)({\n    create: function create() {\n        return _uuid2.default.v4();\n    }\n});",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.id = undefined;\n\nvar _uuid = require(\"uuid\");\n\nvar _uuid2 = _interopRequireDefault(_uuid);\n\nvar _cerebral = require(\"cerebral\");\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar id = exports.id = (0, _cerebral.Provider)({\n    create: function create() {\n        return _uuid2.default.v4();\n    }\n});",
     "map": {
       "mappings": [
         {
@@ -142,6 +136,6 @@
       "lineCount": null
     }
   },
-  "hash": "74fd076a6c24ffd3129280edfca06d3d",
+  "hash": "07a5bf22f440a69084fa0fae78837beb",
   "cacheData": { "env": {} }
 }
