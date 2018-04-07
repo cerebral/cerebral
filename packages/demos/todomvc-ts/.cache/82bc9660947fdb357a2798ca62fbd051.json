@@ -4,19 +4,19 @@
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/node_modules/cerebral/package.json",
       "includedInParent": true,
-      "mtime": 1522871063000
+      "mtime": 1523112004000
     },
     {
       "name":
@@ -28,7 +28,7 @@
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nexports.default = function (target, value) {\n  function set(_ref) {\n    var state = _ref.state,\n        module = _ref.module,\n        props = _ref.props,\n        resolve = _ref.resolve;\n\n    if (!resolve.isTag(target, 'state', 'props', 'module')) {\n      throw new Error('Cerebral operator.set: You have to use the STATE, PROPS or MODULE tag as first argument');\n    }\n\n    var resolvedValue = resolve.value(value);\n\n    if (!resolve.isResolveValue(value) && (0, _utils.isObject)(value)) {\n      resolvedValue = Object.assign({}, resolvedValue);\n    } else if (!resolve.isResolveValue(value) && Array.isArray(value)) {\n      resolvedValue = resolvedValue.slice();\n    }\n\n    if (target.type === 'state') {\n      state.set(resolve.path(target), resolvedValue);\n    } else if (target.type === 'module') {\n      module.set(resolve.path(target), resolvedValue);\n    } else {\n      var result = Object.assign({}, props);\n      var parts = resolve.path(target).split('.');\n      var key = parts.pop();\n      var targetObj = parts.reduce(function (target, key) {\n        return target[key] = Object.assign({}, target[key] || {});\n      }, result);\n      targetObj[key] = resolvedValue;\n\n      return result;\n    }\n  }\n\n  set.displayName = 'operator.set(' + String(target) + ', ' + String(value) + ')';\n\n  return set;\n};\n\nvar _utils = require('../utils');",
+      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\n\nexports.default = function (target, value) {\n  function set(_ref) {\n    var state = _ref.state,\n        module = _ref.module,\n        props = _ref.props,\n        resolve = _ref.resolve;\n\n    if (!resolve.isTag(target, 'state', 'props', 'module')) {\n      throw new Error('Cerebral operator.set: You have to use the STATE, PROPS or MODULE tag as first argument');\n    }\n\n    var resolvedValue = resolve.value(value);\n\n    if (!resolve.isResolveValue(value) && (0, _utils.isObject)(value)) {\n      resolvedValue = Object.assign({}, resolvedValue);\n    } else if (!resolve.isResolveValue(value) && Array.isArray(value)) {\n      resolvedValue = resolvedValue.slice();\n    }\n\n    if (target.type === 'state') {\n      state.set(resolve.path(target), resolvedValue);\n    } else if (target.type === 'module') {\n      module.set(resolve.path(target), resolvedValue);\n    } else {\n      var result = Object.assign({}, props);\n      var parts = resolve.path(target).split('.');\n      var key = parts.pop();\n      var targetObj = parts.reduce(function (target, key) {\n        return target[key] = Object.assign({}, target[key] || {});\n      }, result);\n      targetObj[key] = resolvedValue;\n\n      return result;\n    }\n  }\n  // @ts-ignore\n  set.displayName = 'operator.set(' + String(target) + ', ' + String(value) + ')';\n\n  return set;\n};\n\nvar _utils = require('../utils');",
     "map": {
       "mappings": [
         {
@@ -1207,6 +1207,11 @@
           "original": { "line": 37, "column": 3 }
         },
         {
+          "generated": { "line": 42, "column": 0 },
+          "source": "../../node_modules/cerebral/es/operators/set.js",
+          "original": { "line": 38, "column": 2 }
+        },
+        {
           "name": "set",
           "generated": { "line": 43, "column": 0 },
           "source": "../../node_modules/cerebral/es/operators/set.js",
@@ -1321,11 +1326,11 @@
       ],
       "sources": {
         "../../node_modules/cerebral/es/operators/set.js":
-          "import { isObject } from '../utils';\n\nexport default function (target, value) {\n  function set(_ref) {\n    var state = _ref.state,\n        module = _ref.module,\n        props = _ref.props,\n        resolve = _ref.resolve;\n\n    if (!resolve.isTag(target, 'state', 'props', 'module')) {\n      throw new Error('Cerebral operator.set: You have to use the STATE, PROPS or MODULE tag as first argument');\n    }\n\n    var resolvedValue = resolve.value(value);\n\n    if (!resolve.isResolveValue(value) && isObject(value)) {\n      resolvedValue = Object.assign({}, resolvedValue);\n    } else if (!resolve.isResolveValue(value) && Array.isArray(value)) {\n      resolvedValue = resolvedValue.slice();\n    }\n\n    if (target.type === 'state') {\n      state.set(resolve.path(target), resolvedValue);\n    } else if (target.type === 'module') {\n      module.set(resolve.path(target), resolvedValue);\n    } else {\n      var result = Object.assign({}, props);\n      var parts = resolve.path(target).split('.');\n      var key = parts.pop();\n      var targetObj = parts.reduce(function (target, key) {\n        return target[key] = Object.assign({}, target[key] || {});\n      }, result);\n      targetObj[key] = resolvedValue;\n\n      return result;\n    }\n  }\n\n  set.displayName = 'operator.set(' + String(target) + ', ' + String(value) + ')';\n\n  return set;\n}\n//# sourceMappingURL=set.js.map"
+          "import { isObject } from '../utils';\n\nexport default function (target, value) {\n  function set(_ref) {\n    var state = _ref.state,\n        module = _ref.module,\n        props = _ref.props,\n        resolve = _ref.resolve;\n\n    if (!resolve.isTag(target, 'state', 'props', 'module')) {\n      throw new Error('Cerebral operator.set: You have to use the STATE, PROPS or MODULE tag as first argument');\n    }\n\n    var resolvedValue = resolve.value(value);\n\n    if (!resolve.isResolveValue(value) && isObject(value)) {\n      resolvedValue = Object.assign({}, resolvedValue);\n    } else if (!resolve.isResolveValue(value) && Array.isArray(value)) {\n      resolvedValue = resolvedValue.slice();\n    }\n\n    if (target.type === 'state') {\n      state.set(resolve.path(target), resolvedValue);\n    } else if (target.type === 'module') {\n      module.set(resolve.path(target), resolvedValue);\n    } else {\n      var result = Object.assign({}, props);\n      var parts = resolve.path(target).split('.');\n      var key = parts.pop();\n      var targetObj = parts.reduce(function (target, key) {\n        return target[key] = Object.assign({}, target[key] || {});\n      }, result);\n      targetObj[key] = resolvedValue;\n\n      return result;\n    }\n  }\n  // @ts-ignore\n  set.displayName = 'operator.set(' + String(target) + ', ' + String(value) + ')';\n\n  return set;\n}\n//# sourceMappingURL=set.js.map"
       },
       "lineCount": null
     }
   },
-  "hash": "41ee805d64751a01867e328316b03609",
+  "hash": "b08180e6f32326789d1f2555b44e887c",
   "cacheData": { "env": {} }
 }

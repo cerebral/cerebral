@@ -2,29 +2,23 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "cerebral", "loc": { "line": 1, "column": 27 } },
     { "name": "cerebral/devtools", "loc": { "line": 2, "column": 21 } },
-    { "name": "./app", "loc": { "line": 3, "column": 16 } }
+    { "name": "./app/index.ts", "loc": { "line": 3, "column": 16 } }
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _cerebral = require('cerebral');\n\nvar _devtools = require('cerebral/devtools');\n\nvar _devtools2 = _interopRequireDefault(_devtools);\n\nvar _app = require('./app');\n\nvar _app2 = _interopRequireDefault(_app);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar controller = (0, _cerebral.Controller)(_app2.default, {\n    devtools: (0, _devtools2.default)({ host: 'localhost:8686' })\n});\nexports.default = controller;",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\n\nvar _cerebral = require(\"cerebral\");\n\nvar _devtools = require(\"cerebral/devtools\");\n\nvar _devtools2 = _interopRequireDefault(_devtools);\n\nvar _index = require(\"./app/index.ts\");\n\nvar _index2 = _interopRequireDefault(_index);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar controller = (0, _cerebral.Controller)(_index2.default, {\n    devtools: (0, _devtools2.default)({ host: 'localhost:8686' })\n});\nexports.default = controller;",
     "map": {
       "mappings": [
         {
@@ -67,7 +61,7 @@
           "source": "src/controller.ts",
           "name": null,
           "original": { "line": 5, "column": 35 },
-          "generated": { "line": 19, "column": 58 }
+          "generated": { "line": 19, "column": 60 }
         },
         {
           "source": "src/controller.ts",
@@ -143,6 +137,6 @@
       "lineCount": null
     }
   },
-  "hash": "d300a13e04b4cd448ac5a1b6d116c8f0",
+  "hash": "3bdda89c39d439ae4e2f06a804c766c5",
   "cacheData": { "env": {} }
 }

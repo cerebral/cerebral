@@ -2,28 +2,22 @@
   "dependencies": [
     {
       "name":
-        "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/tsconfig.json",
-      "includedInParent": true,
-      "mtime": 1522956493000
-    },
-    {
-      "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/.babelrc",
       "includedInParent": true,
-      "mtime": 1522949698000
+      "mtime": 1522993159000
     },
     {
       "name":
         "/Users/christianalfoni/Development/cerebral/packages/demos/todomvc-ts/package.json",
       "includedInParent": true,
-      "mtime": 1522953864000
+      "mtime": 1523112004000
     },
     { "name": "@cerebral/router", "loc": { "line": 1, "column": 19 } },
     { "name": "@cerebral/storage", "loc": { "line": 2, "column": 28 } }
   ],
   "generated": {
     "js":
-      "'use strict';\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.storage = exports.router = undefined;\n\nvar _router = require('@cerebral/router');\n\nvar _router2 = _interopRequireDefault(_router);\n\nvar _storage = require('@cerebral/storage');\n\nvar _storage2 = _interopRequireDefault(_storage);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar router = exports.router = (0, _router2.default)({\n    onlyHash: true,\n    query: true,\n    routes: [{ path: '/', signal: 'rootRouted' }, { path: '/:filter', signal: 'filterClicked' }]\n});\nvar storage = exports.storage = (0, _storage2.default)({\n    target: window.localStorage,\n    sync: { todos: 'todos' },\n    prefix: 'todomvc'\n});",
+      "\"use strict\";\n\nObject.defineProperty(exports, \"__esModule\", {\n    value: true\n});\nexports.storage = exports.router = undefined;\n\nvar _router = require(\"@cerebral/router\");\n\nvar _router2 = _interopRequireDefault(_router);\n\nvar _storage = require(\"@cerebral/storage\");\n\nvar _storage2 = _interopRequireDefault(_storage);\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }\n\nvar router = exports.router = (0, _router2.default)({\n    onlyHash: true,\n    query: true,\n    routes: [{ path: '/', signal: 'rootRouted' }, { path: '/:filter', signal: 'filterClicked' }]\n});\nvar storage = exports.storage = (0, _storage2.default)({\n    target: window.localStorage,\n    sync: { todos: 'todos' },\n    prefix: 'todomvc'\n});",
     "map": {
       "mappings": [
         {
@@ -346,6 +340,6 @@
       "lineCount": null
     }
   },
-  "hash": "ab688c8265e7707f3df1ce79b7d1e049",
+  "hash": "0eed71281b66ce9061db8f2fc72834c7",
   "cacheData": { "env": {} }
 }

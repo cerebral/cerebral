@@ -9,7 +9,11 @@ import {
 type State = {
   newTodoTitle: string
   todos: {
-    [uid: string]: any
+    [uid: string]: {
+      title: string
+      completed: boolean
+      editedTitle: string
+    }
   }
   filter: string
   editingUid: string | null
@@ -30,6 +34,7 @@ export type BranchContext<TPaths, TProps = {}> = IBranchContext<
 
 export const sequence = ChainSequenceFactory<Context>()
 export const sequenceWithProps = ChainSequenceWithPropsFactory<Context>()
-export const state: State = tags.state
-export const signal: any = tags.signal
-export const props: any = tags.props
+export const state = tags.state as State
+export const signal = tags.signal
+export const props = tags.props
+export const path = {} as State
