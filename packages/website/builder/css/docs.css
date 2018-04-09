@@ -13,6 +13,16 @@ blockquote {
   line-height: 32px;
 }
 
+/*
+positions paragraphs above other content
+by creating a new stacking context
+and giving it a positive z-index
+*/
+p {
+  position: relative;
+  z-index: 1;
+}
+
 h1,
 h2,
 h3,
