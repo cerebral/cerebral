@@ -13,16 +13,6 @@ blockquote {
   line-height: 32px;
 }
 
-/*
-positions paragraphs above other content
-by creating a new stacking context
-and giving it a positive z-index
-*/
-p {
-  position: relative;
-  z-index: 1;
-}
-
 h1,
 h2,
 h3,
@@ -124,12 +114,12 @@ h6:hover > a {
 }
 
 @media (min-width: 851px) {
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1 > span,
+  h2 > span,
+  h3 > span,
+  h4 > span,
+  h5 > span,
+  h6 > span {
     padding-top: 100px;
     margin-top: -70px;
   }

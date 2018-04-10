@@ -61,41 +61,46 @@ module.exports = marksy({
     },
     h2(props) {
       return (
-        <h2 id={props.id}>
+        <h2>
           {props.children}
           <a href={`#${props.id}`}>∞</a>
+          <span id={props.id}>&nbsp;</span>
         </h2>
       )
     },
     h3(props) {
       return (
-        <h3 id={props.id}>
+        <h3>
           {props.children}
           <a href={`#${props.id}`}>∞</a>
+          <span id={props.id}>&nbsp;</span>
         </h3>
       )
     },
     h4(props) {
       return (
-        <h4 id={props.id}>
+        <h4>
           {props.children}
           <a href={`#${props.id}`}>∞</a>
+          <span id={props.id}>&nbsp;</span>
         </h4>
       )
     },
     h5(props) {
       return (
-        <h5 id={props.id}>
+        <h5>
           {props.children}
           <a href={`#${props.id}`}>∞</a>
+          <span id={props.id}>&nbsp;</span>
         </h5>
       )
     },
     h6(props) {
       return (
-        <h6 id={props.id}>
+        <h6>
           {props.children}
           <a href={`#${props.id}`}>∞</a>
+          <span id={props.id}>&nbsp;</span>
         </h6>
       )
     },
