@@ -120,6 +120,7 @@ h6:hover > a {
   h4 > span,
   h5 > span,
   h6 > span {
+    visibility: hidden;
     padding-top: 100px;
     margin-top: -70px;
   }
