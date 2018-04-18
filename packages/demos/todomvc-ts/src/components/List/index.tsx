@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Todo from '../Todo'
 import { connect } from '@cerebral/react'
-import { state, signal } from 'fluent'
+import { state, signal } from 'cerebral.proxy'
 import computedIsAllChecked from '../../computed/isAllChecked'
 import computedTodosUid from '../../computed/visibleTodosUids'
 

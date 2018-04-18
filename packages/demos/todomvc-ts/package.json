@@ -14,7 +14,6 @@
         "babel-plugin-cerebral": "next",
         "cerebral": "^4.2.1",
         "classnames": "^2.2.5",
-        "parcel-plugin-typescript": "^0.7.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
         "todomvc-app-css": "^2.1.0",
@@ -27,7 +26,30 @@
         "start": "parcel serve index.html --no-autoinstall",
         "test": "jest"
     },
+    "jest": {
+        "transform": {
+            "^.+\\.tsx?$": "ts-jest"
+        },
+        "testRegex": "(/__tests__/.*|(\\.|/)(spec))\\.(tsx?)$",
+        "moduleFileExtensions": [
+            "ts",
+            "tsx",
+            "js",
+            "json",
+            "node"
+        ],
+        "moduleNameMapper": {
+            "cerebral.proxy": "<rootDir>/src/cerebral.proxy.ts"
+        },
+        "globals": {
+            "ts-jest": {
+                "tsConfigFile": "tsconfig.test.json",
+                "useBabelrc": true
+            }
+        }
+    },
     "devDependencies": {
-        "parcel-bundler": "^1.7.0"
+        "@types/jest": "^22.2.3",
+        "parcel-plugin-typescript": "^0.7.0"
     }
 }
