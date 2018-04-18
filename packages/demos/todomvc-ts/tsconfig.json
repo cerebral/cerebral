@@ -6,11 +6,7 @@
     "lib": ["es6", "dom"],
     "baseUrl": "./src",
     "paths": {
-<<<<<<< HEAD
       "cerebral.proxy": ["cerebral.proxy.ts"]
-=======
-      "fluent": ["cerebral.proxy.ts"]
->>>>>>> refactor(todomvc): refactor to new babel plugin management
     },
     "sourceMap": true,
     "allowJs": true,
