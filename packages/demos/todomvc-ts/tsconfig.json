@@ -1,12 +1,12 @@
 {
   "compilerOptions": {
     "outDir": "build/dist",
-    "module": "esnext",
+    "module": "es2015",
     "target": "es2016",
     "lib": ["es6", "dom"],
     "baseUrl": "./src",
     "paths": {
-      "fluent": ["cerebral.proxy.ts"]
+      "cerebral.proxy": ["cerebral.proxy.ts"]
     },
     "sourceMap": true,
     "allowJs": true,
@@ -30,7 +30,6 @@
     "scripts",
     "acceptance-tests",
     "webpack",
-    "jest",
-    "src/setupTests.ts"
+    "jest"
   ]
 }

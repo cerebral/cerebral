@@ -1,5 +1,5 @@
 import { redirect } from '@cerebral/router/operators'
-import { path, sequence, sequenceWithProps } from 'fluent'
+import { path, sequence, sequenceWithProps } from 'cerebral.proxy'
 import * as actions from './actions'
 
 export const redirectToAll = sequence((s) => s.action(redirect('/all')))
