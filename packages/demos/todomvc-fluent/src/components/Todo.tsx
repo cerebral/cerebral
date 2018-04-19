@@ -1,27 +1,27 @@
-import * as React from 'react'
 import * as classnames from 'classnames'
+import * as React from 'react'
 import { connect } from '../fluent'
 
 export default connect<{ uid: string; isEditing: boolean }>()
   .with(({ state, props, signals }) => {
     const todo = state.todos.get(props.uid) || {
-      title: '',
-      editedTitle: '',
       completed: false,
+      editedTitle: '',
+      title: '',
     }
 
     return {
       todo: {
-        title: todo.title,
         completed: todo.completed,
         editedTitle: todo.editedTitle,
+        title: todo.title,
       },
-      todoDoubleClicked: signals.editTodo,
+      newTitleAborted: signals.abortEdit,
       newTitleChanged: signals.changeTodoTitle,
       newTitleSubmitted: signals.submitTodoTitle,
-      toggleCompletedChanged: signals.toggleTodoCompleted,
       removeTodoClicked: signals.removeTodo,
-      newTitleAborted: signals.abortEdit,
+      todoDoubleClicked: signals.editTodo,
+      toggleCompletedChanged: signals.toggleTodoCompleted,
     }
   })
   .to(function Todo({

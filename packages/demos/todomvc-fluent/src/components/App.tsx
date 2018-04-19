@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { connect } from '../fluent'
-import NewTodo from './NewTodo'
-import TodosList from './List'
 import TodosFooter from './Footer'
+import TodosList from './List'
+import NewTodo from './NewTodo'
 
 export default connect()
   .with(({ state }) => ({
