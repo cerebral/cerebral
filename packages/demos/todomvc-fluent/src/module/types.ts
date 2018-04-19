@@ -1,15 +1,15 @@
 import { Dictionary, ComputedValue } from '@cerebral/fluent'
 import * as signals from './sequences'
 
-export type Todo = {
+export interface ITodo {
   title: string
   completed: boolean
   editedTitle: string
 }
 
-export type State = {
+export interface IState {
   newTodoTitle: string
-  todos: Dictionary<Todo>
+  todos: Dictionary<ITodo>
   filter: string
   editingUid: string | null
   counts: ComputedValue<{

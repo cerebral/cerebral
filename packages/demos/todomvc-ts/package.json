@@ -24,6 +24,7 @@
         "build": "parcel build index.html",
         "prepublish": "npm run build",
         "start": "parcel serve index.html --no-autoinstall",
+        "setup": "npm install --only=dev",
         "test": "jest"
     },
     "jest": {

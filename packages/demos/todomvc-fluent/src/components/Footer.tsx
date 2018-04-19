@@ -1,15 +1,15 @@
+import * as classnames from 'classnames'
 import * as React from 'react'
 import { connect } from '../fluent'
-import * as classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']
 
 export default connect()
   .with(({ state, signals }) => ({
-    filter: state.filter,
-    counts: state.counts.get(),
-    filterClicked: signals.changeFilter,
     clearCompletedClicked: signals.clearCompletedTodos,
+    counts: state.counts.get(),
+    filter: state.filter,
+    filterClicked: signals.changeFilter,
   }))
   .to(function Footer({
     filter,

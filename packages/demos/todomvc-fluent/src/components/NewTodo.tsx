@@ -4,9 +4,9 @@ import { connect } from '../fluent'
 export default connect()
   .with(({ state, signals }) => {
     return {
+      submitted: signals.submitNewTodo,
       title: state.newTodoTitle,
       titleChanged: signals.changeNewTodoTitle,
-      submitted: signals.submitNewTodo,
     }
   })
   .to(function NewTodo({ title, titleChanged, submitted }) {

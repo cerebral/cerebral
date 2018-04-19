@@ -6,26 +6,24 @@ import {
   SequenceWithPropsFactory,
 } from '@cerebral/fluent'
 import { Provider as RouterProvider } from '@cerebral/router'
-import { State, Signals } from './module/types'
-import { HttpProvider } from '@cerebral/http'
+import { IState, Signals } from './module/types'
 
-interface Providers {
+interface IProviders {
   id: {
     create(): string
   }
   router: RouterProvider
-  http: HttpProvider
-  state: State
-  module: State
+  state: IState
+  module: IState
 }
 
-export type Context<TProps = {}> = IContext<TProps> & Providers
+export type Context<TProps = {}> = IContext<TProps> & IProviders
 export type BranchContext<TPaths, TProps = {}> = IBranchContext<
   TPaths,
   TProps
 > &
-  Providers
+  IProviders
 
-export const connect = ConnectFactory<State, Signals>()
+export const connect = ConnectFactory<IState, Signals>()
 export const sequence = SequenceFactory<Context>()
 export const sequenceWithProps = SequenceWithPropsFactory<Context>()
