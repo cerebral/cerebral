@@ -1,19 +1,19 @@
-import { State } from './types'
+import { IState } from './types'
 
-export function counts(state: State) {
+export function counts(state: IState) {
   return state.visibleTodosUids.get().reduce(
-    (counts, uid) => {
+    (currentCounts, uid) => {
       const todo = state.todos.get(uid)
 
       if (todo && todo.completed) {
-        counts.completed++
+        currentCounts.completed++
       } else {
-        counts.remaining++
+        currentCounts.remaining++
       }
 
-      counts.total++
+      currentCounts.total++
 
-      return counts
+      return currentCounts
     },
     {
       completed: 0,
@@ -23,7 +23,7 @@ export function counts(state: State) {
     }
   )
 }
-export function visibleTodosUids(state: State): string[] {
+export function visibleTodosUids(state: IState): string[] {
   return state.todos.keys().filter((uid) => {
     const todo = state.todos.get(uid)
 
@@ -34,7 +34,7 @@ export function visibleTodosUids(state: State): string[] {
     )
   })
 }
-export function isAllChecked(state: State) {
+export function isAllChecked(state: IState) {
   return (
     state.visibleTodosUids.get().filter((uid) => {
       const todo = state.todos.get(uid)

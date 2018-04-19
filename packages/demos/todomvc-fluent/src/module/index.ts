@@ -2,7 +2,7 @@ import { Module, Computed, Dictionary, pathFor } from '@cerebral/fluent'
 import Router from '@cerebral/router'
 import * as signals from './sequences'
 import * as providers from './providers'
-import { State, Todo, Signals } from './types'
+import { IState, ITodo, Signals } from './types'
 import { counts, isAllChecked, visibleTodosUids } from './computed'
 
 const router = Router({
@@ -14,9 +14,9 @@ const router = Router({
   ],
 })
 
-const state: State = {
+const state: IState = {
   newTodoTitle: '',
-  todos: Dictionary<Todo>({}),
+  todos: Dictionary<ITodo>({}),
   filter: 'all',
   editingUid: null,
   visibleTodosUids: Computed(visibleTodosUids),

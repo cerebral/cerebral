@@ -4,7 +4,9 @@
     "private": true,
     "author": "Christian Alfoni <christianalfoni@gmail.com>",
     "homepage": "http://cerebral.github.io/todomvc/",
-    "contributors": [ "Henri Hulski <henri.hulski@gazeta.pl>" ],
+    "contributors": [
+        "Henri Hulski <henri.hulski@gazeta.pl>"
+    ],
     "dependencies": {
         "@cerebral/react": "next",
         "@cerebral/router": "next",
@@ -22,8 +24,5 @@
         "prepublish": "npm run build",
         "start": "parcel serve index.html",
         "test": "jest"
-    },
-    "devDependencies": {
-        "parcel-bundler": "^1.7.0"
     }
 }
