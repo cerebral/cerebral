@@ -23,7 +23,7 @@
   },
   "overrides": [
     {
-      "files": ["*.ts", "*.tsx", "*.d.ts"],
+      "files": ["*.ts", "*.tsx"],
       "parser": "typescript-eslint-parser",
       "plugins": ["typescript"],
       "rules": {
