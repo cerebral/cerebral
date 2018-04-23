@@ -79,7 +79,7 @@ import * as actions from '../actions'
 
 export const myOtherSequence = [actions.doThis]
 
-export const mySequence = [actions.someAction, myOtherSequence]
+export const mySequence = [someAction, myOtherSequence]
 ```
 
 ## Parallel
