@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, signal } from 'cerebral/proxy'
+import { state, signal } from 'fluent'
 import counts from '../../computed/counts'
-import * as classnames from 'classnames'
+import classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']
 

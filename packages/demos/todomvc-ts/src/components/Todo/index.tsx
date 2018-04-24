@@ -1,7 +1,7 @@
 import * as React from 'react'
-import * as classnames from 'classnames'
+import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, signal, props } from 'cerebral/proxy'
+import { state, signal, props } from 'fluent'
 
 export default connect({
   todo: state.todos[props.uid],
