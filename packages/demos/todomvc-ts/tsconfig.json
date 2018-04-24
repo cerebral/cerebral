@@ -4,10 +4,15 @@
     "module": "esnext",
     "target": "es2016",
     "lib": ["es6", "dom"],
+    "baseUrl": "./src",
+    "paths": {
+      "fluent": ["cerebral.proxy.ts"]
+    },
     "sourceMap": true,
     "allowJs": true,
     "strict": true,
     "strictPropertyInitialization": false,
+    "allowSyntheticDefaultImports": true,
     "jsx": "react",
     "moduleResolution": "node",
     "rootDir": "src",
