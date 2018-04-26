@@ -4,10 +4,14 @@
 <Youtube url="https://www.youtube.com/embed/OIKz6iASp1A" />
 ```
 
-Cerebral uses a single state tree to store all the state of your application. It is just a single object:
+Cerebral uses a single state tree to store all the state of your application. Even though you split up your state into modules, at the end of the day it will look like one big tree:
 
 ```js
 {
+  title: 'My Project',
+  someOtherModule: {
+    foo: 'bar'
+  }
 }
 ```
 
@@ -20,22 +24,35 @@ You will normally store other objects, arrays, strings, booleans and numbers in 
 3.  All the state of your application can be inspected through one object
 4.  All state is related to a path. There is no need to import and/or pass around model instances into other model instances to access state
 
-To define the initial state of any application all we need to do is to add a root module to our **Controller** in _controller.js_
+Let us add some new state to the application to show of some more Cerebral. Let us add the following in our **app/index.js** file:
 
 ```js
-import { Controller, Module } from 'cerebral'
+import { Module } from 'cerebral'
 
-const app = Module({
+export default Module({
   state: {
-    title: 'Cerebral Tutorial'
+    title: 'My Project',
+    users: {},
+    currentUserId: null,
+    isLoadingUser: false,
+    error: null
   }
 })
-
-export default Controller(app)
 ```
 
-Later you will learn more about **modules** which help you structure your application.
+We are going to load users from [JSONPlaceholder](https://jsonplaceholder.typicode.com) and for that we need some state. First of all we need a way to store the users we load. When you are dealing with data that has an _id_ you should favor inserting them into an object:
 
-```marksy
-<CodeSandbox url="https://codesandbox.io/embed/oqx7po71nz?view=editor" />
+```js
+{
+  'user1': {
+    id: 'user1',
+    name: 'Bob'
+  },
+  'user2': {
+    id: 'user2',
+    name: 'Alice'
+  }
+}
 ```
+
+This makes it easer for you to point to a specific user later on. We also need a _currentUserId_ to know which user we are currently looking at. We also want to indicate if we are currently loading a user with the _isLoadingUser_ state. Lastly we need to indicate any errors with the _error_ state.

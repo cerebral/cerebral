@@ -27,9 +27,9 @@ You can use it with operators in a signal:
 ```js
 import computedFoo from '../computedFoo'
 import { set } from 'cerebral/operators'
-import { state } from 'cerebral/tags'
+import { state } from 'cerebral/proxy'
 
-export const mySequence = [set(state`foo`, computedFoo)]
+export const mySequence = [set(state.foo, computedFoo)]
 ```
 
 Or you can resolve it inside an action if you need to:
@@ -42,23 +42,23 @@ export function myAction({ resolve }) {
 }
 ```
 
-You can even compose it into a Tag:
+You can even compose it into a proxy:
 
 ```js
 import computedFoo from '../computedFoo'
-import { state } from 'cerebral/tags'
+import { state } from 'cerebral/proxy'
 import { set } from 'cerebral/operators'
 
-export const mySequence = [set(state`${computedFoo}.bar`, 'baz')]
+export const mySequence = [set(state[computedFoo].bar, 'baz')]
 ```
 
 The compute signature is very flexible. It allows you to put in any number of arguments which will be evaluated. For example here we go and grab some state and props, before using their values to produce a new value.
 
 ```js
 import { Compute } from 'cerebral'
-import { state, props } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 
-export default Compute(state`foo`, props`bar`, (foo, bar) => {
+export default Compute(state.foo, props.bar, (foo, bar) => {
   return foo + bar
 })
 ```
@@ -67,15 +67,15 @@ We can even keep adding arguments and produce yet another value:
 
 ```js
 import { Compute } from 'cerebral'
-import { state, props } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 
 export default Compute(
-  state`foo`,
-  props`bar`,
+  state.foo,
+  props.bar,
   (foo, bar) => {
     return foo + bar
   },
-  state`baz`,
+  state.baz,
   (computedFooBar, baz) => {
     return computedFooBar + baz
   }
@@ -86,13 +86,13 @@ That means you can compose computeds, lets try by splitting them up into two:
 
 ```js
 import { Compute } from 'cerebral'
-import { state, props } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 
-const fooBar = Compute(state`foo`, props`bar`, (foo, bar) => {
+const fooBar = Compute(state.foo, props.bar, (foo, bar) => {
   return foo + bar
 })
 
-const fooBarBaz = Compute(state`baz`, (computedFooBar, baz) => {
+const fooBarBaz = Compute(state.baz, (computedFooBar, baz) => {
   return computedFooBar + baz
 })
 
@@ -105,14 +105,11 @@ For example we have items with an array of user ids. We create a computed taking
 
 ```js
 import { Compute } from 'cerebral'
-import { state, props } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 
-const computedItemUsers = Compute(
-  state`items.${props`itemKey`}`,
-  (item, get) => {
-    return item.userIds.map((userId) => get(state`users.${userId}`))
-  }
-)
+const computedItemUsers = Compute(state.items[props.itemKey], (item, get) => {
+  return item.userIds.map((userId) => get(state.users[userId]))
+})
 
 // In connect
 connect({
@@ -128,4 +125,4 @@ connect({
 })
 ```
 
-Typically you can get away with most things using Tags, but compute will help you with any other scenarios where more "umph" is needed.
+Typically you can get away with most things using proxies, but compute will help you with any other scenarios where more "umph" is needed.
