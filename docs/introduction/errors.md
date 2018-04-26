@@ -4,68 +4,153 @@
 <Youtube url="https://www.youtube.com/embed/UdVjsKQLybw" />
 ```
 
-Handling complex asynchronous flows is a challenging task for error handling. If things are not done correctly errors can be swallowed and you will have a hard time figuring out why your application does not work.
+Currently we are creating a nested structure in our signal to express conditional execution. Related to errors that does not always make sense, cause you just want to stop execution and do something completely different. Let us revert our sequence back to is original format:
 
-Error handling in Cerebral signals are done for you. Wherever you throw an error, it will be caught correctly and thrown to the console unless you have explicitly said you want to handle it. And even when you do explicitly handle it Cerebral will still show the error in the debugger as a **caught** error, meaning you can never go wrong. The action in question is highlighted red, you will see the error message, the code related and even what executed related to you catching the error.
+```js
+import * as actions from './actions'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/proxy'
 
-![debugger error](/images/debugger_error.png)
+export const loadUser = [
+  set(state.isLoadingUser, true),
+  actions.getUser,
+  set(state.users[props.id], props.user),
+  set(state.currentUserId, props.id),
+  set(state.isLoadingUser, false)
+]
+```
 
-## Catching errors
-
-You catch errors in module:
+and then we rather catch errors in the module file. Look at `src/app/index.js`:
 
 ```js
 import { Module } from 'cerebral'
-import { FirebaseProviderError } from '@cerebral/firebase'
-import * as sequences from './sequences'
+import { jsonPlaceholder } from './providers'
+import { loadUser, handleError } from './sequences'
 
 export default Module({
-  state: {},
-  signals: {
-    somethingHappened: sequences.doSomething
+  state: {
+    title: 'My Project',
+    users: {},
+    currentUserId: null,
+    isLoadingUser: false
   },
-  catch: [[FirebaseProviderError, sequences.catchFirebaseError]]
+  signals: {
+    loadUser
+  },
+  catch: [[Error, handleError]],
+  providers: {
+    jsonPlaceholder
+  }
 })
 ```
 
-We basically tell the module that we are interested in any errors thrown by the Firebase Provider. Then we point to the sequence of actions we want to handle it. An error will be passed in to the sequence of actions handling the error:
-
-```js
-{
-  foo: 'bar', // already on payload
-  error: {
-    name: 'FirebaseProviderError',
-    message: 'Could not connect',
-    stack: '...'
-  }
-}
-```
-
-## Creating an error type
-
-Cerebral ships with a base error class of **CerebralError**. It extends **Error** and adds some functionality to give more details about the error and show it correctly in the debugger. You can extend this error class to create your own error types.
+The **catch** takes a list of error handlers. You give the handler the error type and the sequence to handle it. In this case we are catching any error, but we could be more specific. Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/app`:
 
 ```js
 import { CerebralError } from 'cerebral'
 
-export class AppError extends CerebralError {}
-```
-
-You can extend the error with your own name and props.
-
-```js
-import { CerebralError } from 'cerebral'
-
-export class AuthError extends CerebralError {
-  constructor(message, code) {
+export class JsonPlaceholderError extends CerebralError {
+  constructor(message, statusCode) {
     super(message)
-
-    this.name = 'AuthError'
-    this.code = code
+    this.statusCode = statusCode
+    this.name = 'JsonPlaceholderError'
   }
 }
 ```
 
-```marksy
-<CodeSandbox url="https://codesandbox.io/embed/61902m93w3?view=editor" />
+We can now handle this error specifically in our module:
+
+```js
+import { Module } from 'cerebral'
+import { jsonPlaceholder } from './providers'
+import { loadUser, handleError } from './sequences'
+import { JsonPlaceholderError } from './errors'
+
+export default Module({
+  state: {
+    title: 'My Project',
+    users: {},
+    currentUserId: null,
+    isLoadingUser: false
+  },
+  signals: {
+    loadUser
+  },
+  catch: [[JsonPlaceholderError, handleError]],
+  providers: {
+    jsonPlaceholder
+  }
+})
+```
+
+And we can throw it from our provider:
+
+```js
+import { Provider } from 'cerebral'
+import { JsonPlaceholderError } from './errors'
+
+export const jsonPlaceholder = Provider({
+  getUser(id) {
+    return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+      .then((response) => {
+        if (response.status >= 200 && response.status < 300) {
+          return response.json()
+        } else {
+          return response.text().then((message) => {
+            throw new JsonPlaceholderError(message, response.status)
+          })
+        }
+      })
+      .then((user) => ({ user }))
+      .catch((error) => {
+        throw new JsonPlaceholderError(error.message, 0)
+      })
+  }
+})
+```
+
+Let us force an error to see how it looks. First let us actually handle the error by creating a new sequence in our **sequences.js** file:
+
+```js
+import * as actions from './actions'
+import { set } from 'cerebral/operators'
+import { state, props } from 'cerebral/proxy'
+
+export const handleError = [
+  set(state.error, props.error.message)
+]
+
+export const loadUser = [...]
+```
+
+Now let us throw an error when our provider runs:
+
+```js
+import { Provider } from 'cerebral'
+import { JsonPlaceholderError } from './errors'
+
+export const jsonPlaceholder = Provider({
+  getUser(id) {
+    throw new JsonPlaceholderError('Wuuut', 0)
+  }
+})
+```
+
+As you can see the debugger indicates when it catches an error and how it is handled. Note that by default Cerebral will not throw to the console when errors occur, but just give you a warning about it. You can force Cerebral to also throw to the console by passing in an option to the controller:
+
+```js
+import { Controller } from 'cerebral'
+import app from './app'
+
+let Devtools = null
+if (process.env.NODE_ENV === 'development') {
+  Devtools = require('cerebral/devtools').default
+}
+
+export default Controller(app, {
+  ???
+  devtools: Devtools({
+    host: 'localhost:8585'
+  })
+})
 ```

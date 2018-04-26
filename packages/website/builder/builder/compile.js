@@ -13,6 +13,9 @@ module.exports = marksy({
     return Prism.highlight(code, Prism.languages[language])
   },
   components: {
+    Image(props) {
+      return <img src={props.src} style={props.style} />
+    },
     Youtube(props) {
       return (
         <div style={{ textAlign: 'center' }}>
@@ -29,19 +32,16 @@ module.exports = marksy({
     },
     CodeSandbox(props) {
       return (
-        <div style={{ textAlign: 'center' }}>
-          <iframe
-            src={props.url}
+        <a href={props.url} target="new">
+          <img
+            src="https://codesandbox.io/static/img/play-codesandbox.svg"
+            alt="Edit Cerebral "
             style={{
-              width: '100%',
-              height: '500px',
-              border: '0',
-              borderRadius: '4px',
-              overflow: 'hidden',
+              border: 0,
+              width: 'auto',
             }}
-            sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
           />
-        </div>
+        </a>
       )
     },
   },

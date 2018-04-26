@@ -11,23 +11,21 @@
   },
   "docs": {
     "introduction": [
-      "../../../docs/introduction/the_architecture",
-      "../../../docs/introduction/install",
-      "../../../docs/introduction/debugger",
+      "../../../docs/introduction/get_started",
       "../../../docs/introduction/modules",
+      "../../../docs/introduction/devtools",
       "../../../docs/introduction/state",
-      "../../../docs/introduction/signals",
       "../../../docs/introduction/providers",
+      "../../../docs/introduction/signals",
       "../../../docs/introduction/errors",
-      "../../../docs/introduction/views",
-      "../../../docs/introduction/compute",
-      "../../../docs/introduction/patterns",
-      "../../../docs/introduction/test",
-      "../../../docs/introduction/typescript"
+      "../../../docs/introduction/views"
     ],
-    "contribute": [
-      "../../../docs/contribute/introduction",
-      "../../../docs/contribute/issues"
+    "advanced": [
+      "../../../docs/advanced/compute",
+      "../../../docs/advanced/structure",
+      "../../../docs/advanced/test",
+      "../../../docs/advanced/the_architecture",
+      "../../../docs/advanced/typescript"
     ],
     "guides": [
       "../../../docs/guides/composing",
@@ -36,6 +34,10 @@
       "../../../docs/guides/routing",
       "../../../docs/guides/ssr",
       "../../../docs/guides/typescript"
+    ],
+    "contribute": [
+      "../../../docs/contribute/introduction",
+      "../../../docs/contribute/issues"
     ],
     "api": [
       "../../../docs/api/action",
