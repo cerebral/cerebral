@@ -37,36 +37,38 @@ glob(packagesGlob, (er, files) => {
       const dependencies = cerebralPackage[dependencyType]
       const monodeps = monorepo[dependencyType]
       if (dependencies) {
-        Object.keys(dependencies).forEach((dependency) => {
-          if (cerebralPackages[dependency]) {
-            // ignore
-            return
-          }
-          const packageExactVersion = dependencies[dependency]
-          const packageVersion = packageExactVersion.replace('^', '')
-          const monoVersion = monodeps[dependency]
-          let update = operations[dependency]
-          if (!update) {
-            update = operations[dependency] = {
-              dependency,
-              monoVersion,
-              packages: {},
-              type: 'noop',
+        Object.keys(dependencies)
+          .filter((dependency) => dependency.indexOf('@types/') === -1) // remove @type dependencies
+          .forEach((dependency) => {
+            if (cerebralPackages[dependency]) {
+              // ignore
+              return
             }
-          }
-          update.packages[cerebralPackage.name] = packageExactVersion
-          if (!update.version) {
-            // No change yet
-            if (packageVersion !== update.monoVersion) {
-              update.type = 'install'
-              update.version = packageVersion
+            const packageExactVersion = dependencies[dependency]
+            const packageVersion = packageExactVersion.replace('^', '')
+            const monoVersion = monodeps[dependency]
+            let update = operations[dependency]
+            if (!update) {
+              update = operations[dependency] = {
+                dependency,
+                monoVersion,
+                packages: {},
+                type: 'noop',
+              }
             }
-          } else if (update.version === packageVersion) {
-            // OK
-          } else {
-            update.type = 'conflict'
-          }
-        })
+            update.packages[cerebralPackage.name] = packageExactVersion
+            if (!update.version) {
+              // No change yet
+              if (packageVersion !== update.monoVersion) {
+                update.type = 'install'
+                update.version = packageVersion
+              }
+            } else if (update.version === packageVersion) {
+              // OK
+            } else {
+              update.type = 'conflict'
+            }
+          })
       }
     })
 
