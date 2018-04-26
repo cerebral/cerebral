@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "build/dist",
     "module": "es2015",
-    "target": "es2016",
+    "target": "es5",
     "lib": ["es6", "dom"],
     "baseUrl": "./src",
     "paths": {

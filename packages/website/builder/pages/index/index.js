@@ -16,36 +16,30 @@ function Index(props) {
       <h1 className="index-title">Cerebral</h1>
       <div className="docs-doc">
         <div className="docs-doc-content">
-          {
-            props.compile(`
-> Declarative **state and side effects management** for popular JavaScript frameworks
-`).tree
-          }
           <div className="index-buttons">
             <a href="/docs/introduction" className="button">
-              introduction
+              GET STARTED
             </a>
             <a href="/docs/api" className="button">
-              api
+              API
             </a>
           </div>
-          <div className="index-youtube">
-            <iframe
-              width="560"
-              height="315"
-              src="https://www.youtube.com/embed/mYkM8CiVsXw"
-              frameBorder="0"
-              allowFullScreen
-            />
-          </div>
+          {
+            props.compile(
+              `It makes perfect sense for us to write our UIs with declarative code. The reason is that we need to reuse UI elements and compose them together in different configurations. UIs are complex.`
+            ).tree
+          }
           <div className="index-example-row">
             <div>
               {
                 props.compile(`
-Writing **declaratively**:
+**DECLARATIVE**
 
 \`\`\`js
-<h1 class="header">Hello</h1>
+<ul>
+  <li>Item 1</li>
+  <li>Item 2</li>
+</ul>
 \`\`\`
 `).tree
               }
@@ -53,12 +47,17 @@ Writing **declaratively**:
             <div>
               {
                 props.compile(`
-Compared to **imperatively**:
+**IMPERATIVE**
 
 \`\`\`js
-const h1 = document.createElement('h1')
-h1.className = 'header'
-document.body.appendChild(h1)
+const list = document.createElement('ul')
+const item1 = document.createElement('li')
+const item2 = document.createElement('li')
+
+item1.innerHTML = 'Item 1'
+item2.innerHTML = 'Item 2'
+list.appendChild(item1)
+list.appendChild(item2)
 \`\`\`
 `).tree
               }
@@ -66,9 +65,7 @@ document.body.appendChild(h1)
           </div>
           {
             props.compile(`
-It makes perfect sense for us to write our UIs in a declarative manner. The reason is that we need to reuse UI elements and compose them together in different configurations. One can also claim that declarative code reads better, not because it is less syntax, but because you only describe **what** you want, not **how** you want it.
-
-But what about our business logic, can we get the same benefits there?
+But what about our application logic? The code we write to change the state of our applications and run side effects would also benefit from having the same properties.
 
 `).tree
           }
@@ -76,12 +73,13 @@ But what about our business logic, can we get the same benefits there?
             <div>
               {
                 props.compile(`
-Writing **declaratively**:
+**DECLARATIVE**
 
 \`\`\`js
 [
   setLoading(true),
-  getUser, {
+  getUser,
+  {
     success: setUser,
     error: setError
   },
@@ -94,7 +92,7 @@ Writing **declaratively**:
             <div>
               {
                 props.compile(`
-Compared to **imperatively**:
+**IMPERATIVE**
 
 \`\`\`js
 function getUser() {
@@ -116,33 +114,21 @@ function getUser() {
           </div>
           {
             props.compile(`
-You might think this example tries to highlight "less lines of code", but it is actually about reaching for these properties:
+A declarative approach to application logic also allows us to build developer tools that gives you valuable information:
 
-- **Composability**
-- **Readability**
-- **Reusability**
-- **Testability**
-
-All these properties makes **better code** and **scalable code**. The declarative approach inherits all of these properties by default.
-You can read more about declarative code in this short blog post, [Business logic as a data structure](https://www.jsblog.io/articles/christianalfoni/business_logic_as_a_data_structure).
-
-Declarative code also allows us to build developer tools that gives you valuable information:
-
-![debugger](/images/debugger.gif)
+![debugger](/images/debugger.png)
 
 Take a look at a real project using Cerebral, [Codesandbox.io](https://www.codesandbox.io). The client  is completely open source and the [code can be explored here](https://github.com/CompuIves/codesandbox-client/tree/master/packages/app/src/app).
 
 ![codesandbox](/images/codesandbox.jpeg)
-
-> *Read on to learn more about how Cerebral enforces scalable code and gives you insight into the inner workings of your app*
 `).tree
           }
           <div className="index-buttons">
             <a href="/docs/introduction" className="button">
-              introduction
+              GET STARTED
             </a>
             <a href="/docs/api" className="button">
-              api
+              API
             </a>
           </div>
           <div className="index-release">

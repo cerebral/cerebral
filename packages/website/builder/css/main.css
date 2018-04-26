@@ -2,9 +2,8 @@ html,
 body {
   background-color: #fff;
   margin: 0;
-  font-size: 15px;
+  font-size: 14px;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Arial, sans-serif;
-  line-height: 24px;
   color: #333;
   height: 100%;
   -webkit-font-smoothing: antialiased;
@@ -24,7 +23,8 @@ body {
   border-radius: 3px;
   height: 50px;
   line-height: 30px;
-  font-size: 22px;
+  font-size: 16px;
+  font-weight: bold;
   color: #fff;
   text-decoration: none;
   margin: 0 10px;
@@ -91,6 +91,10 @@ h6 {
   }
 }
 
+code {
+  color: #999;
+}
+
 pre {
   padding: 0;
   background: white !important;
@@ -106,14 +110,12 @@ pre > code {
   border-radius: 3px;
   background-color: #fafafa !important;
   color: #333 !important;
-  font-family: monospace !important;
   font-size: 14px;
-  line-height: 24px;
 }
 
 @font-face {
   font-family: 'cerebral icons';
-  src: url('/images/cerebral-icons.woff') format('woff');
+  src: url('/cerebral-icons.woff') format('woff');
   font-weight: normal;
   font-style: normal;
 }
