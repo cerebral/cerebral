@@ -466,6 +466,19 @@ export default connect()
   )
 ```
 
+To connect Dictionaries / computed values:
+
+```ts
+import * as React from 'react'
+import { connect } from 'fluent'
+
+export default connect()
+  .with(({ state }) => ({
+    computed: state.computed.get(),
+    dictionary: state.dictionary.values()
+  }))
+```
+
 Connecting to a class gives a callback with the prop which you can **typeof** into the component class. This gives type safety and auto suggestions on the props in the component itself.
 
 ## Dictionary
