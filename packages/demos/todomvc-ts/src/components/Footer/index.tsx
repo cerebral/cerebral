@@ -1,14 +1,13 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, signal } from 'cerebral.proxy'
-import counts from '../../computed/counts'
+import { state, signal, computed } from 'cerebral.proxy'
 import classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']
 
 export default connect({
   filter: state.filter,
-  counts,
+  counts: computed.counts,
   filterClicked: signal.filterClicked,
   clearCompletedClicked: signal.clearCompletedClicked,
 })(function Footer({ filter, counts, filterClicked, clearCompletedClicked }) {

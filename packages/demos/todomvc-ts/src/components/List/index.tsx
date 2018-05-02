@@ -1,14 +1,12 @@
 import * as React from 'react'
 import Todo from '../Todo'
 import { connect } from '@cerebral/react'
-import { state, signal } from 'cerebral.proxy'
-import computedIsAllChecked from '../../computed/isAllChecked'
-import computedTodosUid from '../../computed/visibleTodosUids'
+import { state, signal, computed } from 'cerebral.proxy'
 
 export default connect({
   editingUid: state.editingUid,
-  isAllChecked: computedIsAllChecked,
-  todosUids: computedTodosUid,
+  isAllChecked: computed.isAllChecked,
+  todosUids: computed.visibleTodosUids,
   toggleAllChanged: signal.toggleAllChanged,
 })(function List({ editingUid, isAllChecked, todosUids, toggleAllChanged }) {
   return (

@@ -5,23 +5,21 @@ import {
   ChainSequenceFactory,
   ChainSequenceWithPropsFactory,
 } from 'cerebral'
+import { State as AppState, Computed as AppComputed } from './app/types'
 
-type State = {
-  newTodoTitle: string
-  todos: {
-    [uid: string]: {
-      title: string
-      completed: boolean
-      editedTitle: string
-    }
-  }
-  filter: string
-  editingUid: string | null
-}
+type State = AppState
+
+type Computed = AppComputed
 
 interface Providers {
   id: {
     create(): string
+  }
+  computed: {
+    get<T>(path: T): T
+  }
+  state: {
+    get<T>(path: T): T
   }
 }
 
@@ -37,4 +35,6 @@ export const sequenceWithProps = ChainSequenceWithPropsFactory<Context>()
 export const state = tags.state as State
 export const signal = tags.signal
 export const props = tags.props
-export const path = {} as State
+export const computed = tags.computed as Computed
+export const computedPath = tags.computedPath as Computed
+export const statePath = tags.statePath as State
