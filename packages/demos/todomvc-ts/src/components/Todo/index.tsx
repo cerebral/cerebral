@@ -3,6 +3,11 @@ import classnames from 'classnames'
 import { connect } from '@cerebral/react'
 import { state, signal, props } from 'cerebral.proxy'
 
+type ExternalProps = {
+  uid: string
+  isEditing: boolean
+}
+
 export default connect({
   todo: state.todos[props.uid],
   todoDoubleClicked: signal.todoDoubleClicked,
@@ -11,7 +16,7 @@ export default connect({
   toggleCompletedChanged: signal.toggleTodoCompletedChanged,
   removeTodoClicked: signal.removeTodoClicked,
   newTitleAborted: signal.todoNewTitleAborted,
-})(function Todo({
+})<ExternalProps>(function Todo({
   uid,
   isEditing,
   todo,

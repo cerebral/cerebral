@@ -1,8 +1,9 @@
 import { Module } from 'cerebral'
 import * as sequences from './sequences'
 import { id } from './providers'
+import * as computed from './computed'
 import { router, storage } from './modules'
-import { State } from 'cerebral/proxy'
+import { State } from './types'
 
 const state: State = {
   newTodoTitle: '',
@@ -32,6 +33,7 @@ export default Module<State, typeof signals>({
   providers: {
     id,
   },
+  computed,
   modules: {
     router,
     storage,
