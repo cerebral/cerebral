@@ -1,8 +1,8 @@
 {
-  "presets": ["es2015"],
+  "presets": ["env"],
   "env": {
     "test": {
-      "presets": ["es2015", "react"]
+      "presets": ["env", "react"]
     },
     "production": {
       "ignore": [

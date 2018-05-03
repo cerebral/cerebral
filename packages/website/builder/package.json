@@ -5,8 +5,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "babel-watch builder/dev --presets es2015,react --watch pages css scripts",
-    "build": "babel-node builder/build --presets es2015,react"
+    "start": "babel-watch builder/dev --presets env,react --watch pages css scripts",
+    "build": "babel-node builder/build --presets env,react"
   },
   "author": "",
   "license": "ISC",

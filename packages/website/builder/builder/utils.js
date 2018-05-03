@@ -33,7 +33,7 @@ module.exports = {
       babel.transformFile(
         filePath,
         {
-          presets: [require('babel-preset-es2015')],
+          presets: [require('babel-preset-env')],
         },
         function(err, result) {
           if (err) {

@@ -61,11 +61,11 @@ A good workflow for working with server side rendered components requires some p
 
 ### Configure babel
 
-First install babel dependencies with `npm install babel-loader babel-preset-es2015 babel-preset-react babel-plugin-transform-define`. Instead of configuring babel options inside your webpack config, you should do so in a `.babelrc` file:
+First install babel dependencies with `npm install babel-loader babel-preset-env babel-preset-react babel-plugin-transform-define`. Instead of configuring babel options inside your webpack config, you should do so in a `.babelrc` file:
 
 ```js
 {
-  "presets": ["es2015", "react"],
+  "presets": ["env", "react"],
   "env": {
     "development": {
       "plugins": []
