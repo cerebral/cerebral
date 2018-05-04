@@ -7,7 +7,7 @@ export default connect({
   editingUid: state.editingUid,
   isAllChecked: computed.isAllChecked,
   todosUids: computed.visibleTodosUids,
-  toggleAllChanged: signal.toggleAllChanged,
+  toggleAllChanged: signal.toggleAllChecked,
 })(function List({ editingUid, isAllChecked, todosUids, toggleAllChanged }) {
   return (
     <section className="main">

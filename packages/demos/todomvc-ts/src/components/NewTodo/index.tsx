@@ -4,8 +4,8 @@ import { state, signal } from 'cerebral.proxy'
 
 export default connect({
   title: state.newTodoTitle,
-  titleChanged: signal.newTodoTitleChanged,
-  submitted: signal.newTodoSubmitted,
+  titleChanged: signal.changeNewTodoTitle,
+  submitted: signal.submitNewTodo,
 })(function NewTodo({ title, titleChanged, submitted }) {
   return (
     <form
