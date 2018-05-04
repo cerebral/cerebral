@@ -1,3 +1,5 @@
+import * as signals from './sequences'
+
 export type State = {
   newTodoTitle: string
   todos: {
@@ -21,3 +23,5 @@ export type Computed = {
   isAllChecked: boolean
   visibleTodosUids: string[]
 }
+
+export type Signals = { [key in keyof typeof signals]: typeof signals[key] }
