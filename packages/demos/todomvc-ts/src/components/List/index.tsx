@@ -12,6 +12,7 @@ export default connect({
   return (
     <section className="main">
       <input
+        id="toggle-all"
         className="toggle-all"
         type="checkbox"
         checked={isAllChecked}
