@@ -10,12 +10,12 @@ type ExternalProps = {
 
 export default connect({
   todo: state.todos[props.uid],
-  todoDoubleClicked: signal.todoDoubleClicked,
-  newTitleChanged: signal.todoNewTitleChanged,
-  newTitleSubmitted: signal.todoNewTitleSubmitted,
-  toggleCompletedChanged: signal.toggleTodoCompletedChanged,
-  removeTodoClicked: signal.removeTodoClicked,
-  newTitleAborted: signal.todoNewTitleAborted,
+  todoDoubleClicked: signal.editTodo,
+  newTitleChanged: signal.changeNewTodoTitle,
+  newTitleSubmitted: signal.submitTodoTitle,
+  toggleCompletedChanged: signal.toggleTodoCompleted,
+  removeTodoClicked: signal.removeTodo,
+  newTitleAborted: signal.abortEdit,
 })<ExternalProps>(function Todo({
   uid,
   isEditing,
@@ -61,7 +61,7 @@ export default connect({
             className="edit"
             value={isEditing ? todo.editedTitle : todo.title}
             onBlur={() => newTitleSubmitted({ uid })}
-            onChange={(e) => newTitleChanged({ uid, title: e.target.value })}
+            onChange={(e) => newTitleChanged({ title: e.target.value })}
           />
         </form>
       )}

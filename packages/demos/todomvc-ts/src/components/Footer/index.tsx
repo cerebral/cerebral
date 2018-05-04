@@ -8,8 +8,8 @@ const filters = ['All', 'Active', 'Completed']
 export default connect({
   filter: state.filter,
   counts: computed.counts,
-  filterClicked: signal.filterClicked,
-  clearCompletedClicked: signal.clearCompletedClicked,
+  filterClicked: signal.changeFilter,
+  clearCompletedClicked: signal.clearCompletedTodos,
 })(function Footer({ filter, counts, filterClicked, clearCompletedClicked }) {
   return (
     <footer className="footer">

@@ -5,8 +5,8 @@ export const router = Router({
   onlyHash: true,
   query: true,
   routes: [
-    { path: '/', signal: 'rootRouted' },
-    { path: '/:filter', signal: 'filterClicked' },
+    { path: '/', signal: 'redirectToAll' },
+    { path: '/:filter', signal: 'changeFilter' },
   ],
 })
 
