@@ -21,7 +21,7 @@
     "predeploy": "node ./scripts/run.js prepublish demos",
     "pretest": "npm run checkdeps",
     "release": "babel-node ./scripts/release/index.js",
-    "setup": "node ./scripts/run.js prepublish nodemos && node ./scripts/run.js setup all",
+    "setup": "node ./scripts/run.js setup all && node ./scripts/run.js prepublish nodemos",
     "test": "node ./scripts/run.js test"
   },
   "repository": {
@@ -138,8 +138,6 @@
     "node-sass": "4.5.3",
     "npm-run-all": "4.0.2",
     "nyc": "^10.3.2",
-    "parcel-bundler": "1.7.0",
-    "parcel-plugin-typescript": "0.7.0",
     "preact": "8.1.0",
     "prettier": "^1.11.1",
     "prismjs": "1.6.0",
