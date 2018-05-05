@@ -7,7 +7,7 @@ const marksy = require('marksy/components').marksy
 prismJsx(Prism)
 prismJsxTs(Prism)
 
-module.exports = marksy({
+const compile = marksy({
   createElement: React.createElement,
   highlight(language, code) {
     return Prism.highlight(code, Prism.languages[language])
@@ -42,6 +42,36 @@ module.exports = marksy({
             }}
           />
         </a>
+      )
+    },
+    Warning(props) {
+      return (
+        <div
+          style={{
+            backgroundColor: '#FAFAFA',
+            borderLeft: '4px solid #f44336',
+            borderRadius: '3px',
+            padding: '10px 15px',
+            color: '#666',
+          }}
+        >
+          {compile(props.children.join('')).tree}
+        </div>
+      )
+    },
+    Info(props) {
+      return (
+        <div
+          style={{
+            backgroundColor: '#FAFAFA',
+            borderLeft: '4px solid #f4ca36',
+            borderRadius: '3px',
+            padding: '10px 15px',
+            color: '#666',
+          }}
+        >
+          {compile(props.children.join('')).tree}
+        </div>
       )
     },
   },
@@ -106,3 +136,5 @@ module.exports = marksy({
     },
   },
 })
+
+module.exports = compile
