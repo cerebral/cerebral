@@ -42,23 +42,27 @@ As you can see we can just write out exactly what we want to happen. This allows
 Let us create the **actions.js** file in `src/app` and look at how we implement the actions.
 
 ```js
+import { state } from 'cerebral/tags'
+
 export const setLoadingUser = ({ mutation }) =>
-  mutation.set('isLoadingUser', true)
+  mutation.set(state`isLoadingUser`, true)
 
 export const getUser = ({ jsonPlaceholder, props }) =>
   jsonPlaceholder.getUser(props.id)
 
 export const addUser = ({ mutation, props }) =>
-  mutation.set(`users.${props.id}`, props.user)
+  mutation.set(state`users.${props.id}`, props.user)
 
 export const setCurrentUser = ({ mutation, props }) =>
-  mutation.set('currentUserId', props.id)
+  mutation.set(state`currentUserId`, props.id)
 
 export const unsetLoadingUser = ({ mutation }) =>
-  mutation.set('isLoadingUser', false)
+  mutation.set(state`isLoadingUser`, false)
 ```
 
 As you can see every action has access to **mutation**, **props** and **jsonPlaceholder**. The mutation API allows you to do different mutations, here only showing _set_, by giving it a path and a value. The props holds values passed into the sequence and populated through the execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
+
+Your first question here is probably: _"What is a tag?"_. Cerebral exposes a mutation API that allows you to target what you want to mutate. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
 
 ```js
 {
@@ -127,9 +131,9 @@ loadUser({
 
 When you refresh the application now you should see the debugger show you that the _loadUser_ signal has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
 
-## Operators and tags
+## Operators
 
-But we can actually refactor our _loadUser_ signal a bit. We can take advantage of something called **operators** and **tags** to express state changes directly in the sequence. In the **sequences.js** file do:
+But we can actually refactor our _loadUser_ signal a bit. We can take advantage of something called **operators** to express state changes directly in the sequence. In the **sequences.js** file do:
 
 ```js
 import * as actions from './actions'
@@ -145,7 +149,7 @@ export const loadUser = [
 ]
 ```
 
-We now just made 4 actions obsolete. By using the **set** operator and the tags, which are [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), we are able to be more efficient and keep a good level of declarativeness. But we can actually do better. Recently Cerebral released proxies. Take another look:
+We now just made 4 actions obsolete. By using the **set** operator and the tags we are able to be more efficient and keep a good level of declarativeness. But we can actually do better. Recently Cerebral released proxies. Take another look:
 
 ```js
 import * as actions from './actions'
