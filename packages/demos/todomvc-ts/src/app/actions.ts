@@ -1,27 +1,27 @@
-import { Context, computedPath, statePath } from 'cerebral.proxy'
+import { Context, state, computed } from 'cerebral.proxy'
 
-export function toggleAllChecked({ state, computed }: Context) {
-  const isCompleted = !computed.get(computedPath.isAllChecked)
-  const currentTodosUids = computed.get(computedPath.visibleTodosUids)
+export function toggleAllChecked({ mutation, get }: Context) {
+  const isCompleted = !get(computed.isAllChecked)
+  const currentTodosUids = get(computed.visibleTodosUids)
 
   currentTodosUids.forEach((uid) => {
-    state.set(statePath.todos[uid].completed, isCompleted)
+    mutation.set(state.todos[uid].completed, isCompleted)
   })
 }
 
-export function addTodo({ state, id }: Context) {
-  state.set(statePath.todos[id.create()], {
-    title: state.get('newTodoTitle'),
+export function addTodo({ get, mutation, id }: Context) {
+  mutation.set(state.todos[id.create()], {
+    title: get(state.newTodoTitle),
     completed: false,
   })
 }
 
-export function clearCompletedTodos({ state }: Context) {
-  const todos = state.get(statePath.todos)
+export function clearCompletedTodos({ mutation, get }: Context) {
+  const todos = get(state.todos)
 
   Object.keys(todos).forEach((uid) => {
     if (todos[uid].completed) {
-      state.unset(statePath.todos[uid])
+      mutation.unset(state.todos[uid])
     }
   })
 }

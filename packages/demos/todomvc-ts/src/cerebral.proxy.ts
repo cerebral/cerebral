@@ -36,5 +36,3 @@ export const state = tags.state as State
 export const signal = tags.signal as Signals
 export const props = tags.props
 export const computed = tags.computed as Computed
-export const computedPath = tags.computedPath as Computed
-export const statePath = tags.statePath as State
