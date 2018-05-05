@@ -6,7 +6,14 @@
 
 Any event in your application should trigger a signal. An event is everything from a button click to a url change. It can be a user interaction or some other internal event in the application. We are now going to define a signal that we will trigger manually. This signal should receive an id of a user, go grab that user and store it as the current user in your application.
 
-A signal is built up by something we call **sequences**. A sequence is basically just a list of **actions** to perform. An **action** is what makes things happen in Cerebral. It is just a function, but a function that has the ability access astate and providers.
+A signal is built up by something we call **sequences**. A sequence is basically just a list of **actions** to perform. An **action** is what makes things happen in Cerebral. It is just a function that has the ability access state and providers.
+
+```marksy
+<Info>
+When a signal triggers you can pass in **props**. These props can be accessed by any action
+in the sequence(s).
+</Info>
+```
 
 When you build Cerebral application you typically write out the sequences first, then you implement the actions. Let us try that approach now. What we want to happen is:
 
@@ -35,25 +42,31 @@ As you can see we can just write out exactly what we want to happen. This allows
 Let us create the **actions.js** file in `src/app` and look at how we implement the actions.
 
 ```js
-export const setLoadingUser = ({ state }) => state.set('isLoadingUser', true)
+export const setLoadingUser = ({ mutation }) =>
+  mutation.set('isLoadingUser', true)
 
 export const getUser = ({ jsonPlaceholder, props }) =>
   jsonPlaceholder.getUser(props.id)
 
-export const addUser = ({ state, props }) =>
-  state.set(`users.${props.id}`, props.user)
+export const addUser = ({ mutation, props }) =>
+  mutation.set(`users.${props.id}`, props.user)
 
-export const setCurrentUser = ({ state, props }) =>
-  state.set('currentUserId', props.id)
+export const setCurrentUser = ({ mutation, props }) =>
+  mutation.set('currentUserId', props.id)
 
-export const unsetLoadingUser = ({ state }) => state.set('isLoadingUser', false)
+export const unsetLoadingUser = ({ mutation }) =>
+  mutation.set('isLoadingUser', false)
 ```
 
-As you can see every action has access to **state**, **props** and **jsonPlaceholder**. The state API allows you to do different mutations, here only showing _set_, give it a path and a value. The props holds values passed into and populated through the signal execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
+As you can see every action has access to **mutation**, **props** and **jsonPlaceholder**. The mutation API allows you to do different mutations, here only showing _set_, by giving it a path and a value. The props holds values passed into the sequence and populated through the execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
 
 ```js
 {
+  // We pass the id when we execute the signal
   id: 1,
+
+  // jsonPlaceholder.getUser will extend the
+  // props with the user
   user: {
     id: 1,
     name: 'Leanne Graham',
@@ -158,9 +171,13 @@ Install the plugin by: `npm install babel-plugin-cerebral`. Then you need to add
 }
 ```
 
-You will need to restart the Parcel development process to make this take effect. Hit `CMD + C` in your terminal and run `npm start` again.
+You will need to restart the Parcel development process to make this take effect. Hit `CTRL + C` in your terminal and run `npm start` again.
 
-You can choose to use the traditional template literal tags if you want to, but the documentation and guides will always use the proxies.
+```marksy
+<Info>
+You can choose to use the traditional template literal tags if you want to, but the documentation and guides will always use the proxies. They are more declarative and with the babel plugin your code will run in any browser.
+</Info>
+```
 
 ## Paths
 
@@ -184,7 +201,7 @@ export const loadUser = [
 ]
 ```
 
-Objects in sequences are treated as conditional and it is the action in front of it, _actions.getUser_ in this case, that chooses what path of execution to take. Since we only want to set the user on a success, let us move them up there:
+Objects in sequences are treated as conditional execution and it is the action in front of it, _actions.getUser_ in this case, that chooses what path of execution to take. Since we only want to set the user on a success, let us move them up there:
 
 ```js
 import * as actions from './actions'
@@ -205,6 +222,12 @@ export const loadUser = [
 ]
 ```
 
+```marksy
+<Info>
+In this case we just chose to use **success** and **error** as paths here, but it could have been anything. You could even create paths for http error codes if you wanted to, specifically handling 404 for a user not found for example.
+</Info>
+```
+
 To actually handle the conditional execution we need to look back into our _getUser_ action located in **actions.js**:
 
 ```js
@@ -215,6 +238,10 @@ export const getUser = ({ jsonPlaceholder, props, path }) =>
     .catch((error) => path.error({ error }))
 ```
 
-The **result** here is the object with the user and we use it as an argument when calling the success path. Note here that calling a path returns the path, meaning that you can not just call a path, it needs to be returned from the function/promise. When we catch an **error** we want to return an object with the error, which will be merged into the props of the signal.
+The **result** here is the object with the user and we use it as an argument when calling the success path. When we catch an **error** we want to return an object with the error, which will be merged into the props of the signal.
 
-Note that in this case we just chose to use **success** and **error** as paths here, but it could have been anything. You could even create paths for http error codes if you wanted to, specifically handling 404 for a user not found for example.
+```marksy
+<Warning>
+When we call a path we return its result. That means if you want an action to run down a path you have to call the path to execute and return its value. Just calling the path does nothing.
+</Warning>
+```

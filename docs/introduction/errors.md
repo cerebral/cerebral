@@ -44,7 +44,7 @@ export default Module({
 })
 ```
 
-The **catch** takes a list of error handlers. You give the handler the error type and the sequence to handle it. In this case we are catching any error, but we could be more specific. Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/app`:
+The **catch** takes a list of error handlers. You define the handler with an error type and the sequence to run. In this case we are catching any error, but we could be more specific. Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/app`:
 
 ```js
 import { CerebralError } from 'cerebral'
@@ -109,6 +109,13 @@ export const jsonPlaceholder = Provider({
 })
 ```
 
+```marksy
+<Info>
+The **@cerebral/http** package exports an **HttpProviderError** which you can use the same way.
+The error contains status code, headers etc. related to the request that failed.
+</Info>
+```
+
 Let us force an error to see how it looks. First let us actually handle the error by creating a new sequence in our **sequences.js** file:
 
 ```js
@@ -132,6 +139,9 @@ import { JsonPlaceholderError } from './errors'
 export const jsonPlaceholder = Provider({
   getUser(id) {
     throw new JsonPlaceholderError('Wuuut', 0)
+    /*
+      THE ORIGINAL CODE
+    */
   }
 })
 ```
@@ -148,7 +158,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 export default Controller(app, {
-  ???
+  throwToConsole: true,
   devtools: Devtools({
     host: 'localhost:8585'
   })
