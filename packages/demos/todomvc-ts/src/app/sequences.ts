@@ -1,16 +1,18 @@
 // @ts-ignore
 import { redirect } from '@cerebral/router/operators'
-import { statePath, sequence, sequenceWithProps } from 'cerebral.proxy'
+import { state, sequence, sequenceWithProps } from 'cerebral.proxy'
 import * as actions from './actions'
 
 export const redirectToAll = sequence((s) => s.action(redirect('/all')))
 
 export const changeNewTodoTitle = sequenceWithProps<{ title: string }>((s) =>
-  s.action(({ state, props }) => state.set(statePath.newTodoTitle, props.title))
+  s.action(({ mutation, props }) =>
+    mutation.set(state.newTodoTitle, props.title)
+  )
 )
 
 export const removeTodo = sequenceWithProps<{ uid: string }>((s) =>
-  s.action(({ state, props }) => state.unset(statePath.todos[props.uid]))
+  s.action(({ mutation, props }) => mutation.unset(state.todos[props.uid]))
 )
 
 export const toggleAllChecked = sequence((s) =>
@@ -18,8 +20,8 @@ export const toggleAllChecked = sequence((s) =>
 )
 
 export const toggleTodoCompleted = sequenceWithProps<{ uid: string }>((s) =>
-  s.action(({ state, props }) =>
-    state.toggle(statePath.todos[props.uid].completed)
+  s.action(({ mutation, props }) =>
+    mutation.toggle(state.todos[props.uid].completed)
   )
 )
 
@@ -28,15 +30,15 @@ export const clearCompletedTodos = sequence((s) =>
 )
 
 export const changeFilter = sequenceWithProps<{ filter: string }>((s) =>
-  s.action(({ state, props }) => state.set(statePath.filter, props.filter))
+  s.action(({ mutation, props }) => mutation.set(state.filter, props.filter))
 )
 
 export const submitNewTodo = sequence((s) =>
-  s.when(({ state }) => Boolean(state.get(statePath.newTodoTitle))).paths({
+  s.when(({ get }) => Boolean(get(state.newTodoTitle))).paths({
     true: (s) =>
       s
         .action(actions.addTodo)
-        .action(({ state }) => state.set(statePath.newTodoTitle, '')),
+        .action(({ mutation }) => mutation.set(state.newTodoTitle, '')),
     false: (s) => s,
   })
 )
@@ -45,48 +47,46 @@ export const changeTodoTitle = sequenceWithProps<{
   uid: string
   title: string
 }>((s) =>
-  s.action(({ state, props }) =>
-    state.set(statePath.todos[props.uid].editedTitle, props.title)
+  s.action(({ mutation, props }) =>
+    mutation.set(state.todos[props.uid].editedTitle, props.title)
   )
 )
 
 export const editTodo = sequenceWithProps<{ uid: string }>((s) =>
   s
-    .action(({ state, props }) =>
-      state.set(
-        statePath.todos[props.uid].editedTitle,
-        statePath.todos[props.uid].title
+    .action(({ mutation, props }) =>
+      mutation.set(
+        state.todos[props.uid].editedTitle,
+        state.todos[props.uid].title
       )
     )
-    .action(({ state, props }) => state.set(statePath.editingUid, props.uid))
+    .action(({ mutation, props }) => mutation.set(state.editingUid, props.uid))
 )
 
 export const abortEdit = sequenceWithProps<{ uid: string }>((s) =>
   s
-    .action(({ state, props }) =>
-      state.unset(statePath.todos[props.uid].editedTitle)
+    .action(({ mutation, props }) =>
+      mutation.unset(state.todos[props.uid].editedTitle)
     )
-    .action(({ state }) => state.set(statePath.editingUid, null))
+    .action(({ mutation }) => mutation.set(state.editingUid, null))
 )
 
 export const submitTodoTitle = sequenceWithProps<{ uid: string }>((s) =>
   s
-    .when(({ state, props }) =>
-      Boolean(state.get(statePath.todos[props.uid].editedTitle))
-    )
+    .when(({ get, props }) => Boolean(get(state.todos[props.uid].editedTitle)))
     .paths({
       true: (s) =>
         s
-          .action(({ state, props }) =>
-            state.set(
-              statePath.todos[props.uid].title,
-              statePath.todos[props.uid].editedTitle
+          .action(({ mutation, props }) =>
+            mutation.set(
+              state.todos[props.uid].title,
+              state.todos[props.uid].editedTitle
             )
           )
-          .action(({ state, props }) =>
-            state.unset(statePath.todos[props.uid].editedTitle)
+          .action(({ mutation, props }) =>
+            mutation.unset(state.todos[props.uid].editedTitle)
           )
-          .action(({ state }) => state.set(statePath.editingUid, null)),
+          .action(({ mutation }) => mutation.set(state.editingUid, null)),
       false: (s) => s,
     })
 )
