@@ -1,85 +1,76 @@
 # Compute
 
-Normally you use state directly from the state tree, but sometimes you need to compute values. Typically filtering lists, grabbing the projects of a user, or other derived state. It is a good idea not to put this kind of logic inside your view layer, cause by creating a computed you can reuse the logic anywhere.
+Normally you use state directly from the state tree, but sometimes you need to compute state. Typically filtering lists, grabbing the projects of a user, or other derived state. It is a good idea not to put this kind of logic inside your view layer, cause by creating a computed you can reuse the logic anywhere and it will automatically optimize the need to recalculate the value.
 
-Cerebral allows you to compute state that can be used in multiple contexts. Let us look at the signature:
+Cerebral allows you to compute state that can be used in multiple contexts. Let us look at an example:
 
 ```js
 import { Compute } from 'cerebral'
+import { state } from 'cerebral/proxy'
 
-export default Compute(() => {
-  return 'foo'
+export const filteredList = Compute({
+  items: state.items,
+  filter: state.filter
+})(function filterList({ items, filter }) {
+  return items.filter((item) => item[filter.property] === filter.value)
 })
 ```
 
-You can now use this with **connect**:
+When we call a computed we give it the dependencies to produce our calculated value. This returns a function which you can call giving a callback that receives the dependencies.
+
+```marksy
+<Info>
+You might ask why we have this signature. The reason is that Cerebral can be written with types and the only way to infer the correct type is by splitting the dependencies and the actualy computation in two different executions.
+</Info>
+```
+
+A computed needs to be attached to a module. This is simply done by:
 
 ```js
-import computedFoo from '../computedFoo'
+import { Module } from 'cerebral'
+import * as computed from './computed'
+
+export default Module({
+  computed
+})
+```
+
+You can now reference this computed everywhere. When connecting to components using **connect**:
+
+```js
+import { computed } from 'cerebral/proxy'
 
 connect({
-  foo: computedFoo
+  foo: computed.filteredList
 })
 ```
 
 You can use it with operators in a signal:
 
 ```js
-import computedFoo from '../computedFoo'
 import { set } from 'cerebral/operators'
-import { state } from 'cerebral/proxy'
+import { state, computed } from 'cerebral/proxy'
 
-export const mySequence = [set(state.foo, computedFoo)]
+export const mySequence = [set(state.filteredList, computed.filteredList)]
 ```
 
 Or you can resolve it inside an action if you need to:
 
 ```js
-import computedFoo from '../computedFoo'
+import { computed } from 'cerebral/proxy'
 
-export function myAction({ resolve }) {
-  const foo = resolve.value(computedFoo)
+export function myAction({ get }) {
+  const filteredList = get(computed.filteredList)
 }
 ```
 
 You can even compose it into a proxy:
 
 ```js
-import computedFoo from '../computedFoo'
-import { state } from 'cerebral/proxy'
+import { state, computed } from 'cerebral/proxy'
 import { set } from 'cerebral/operators'
 
-export const mySequence = [set(state[computedFoo].bar, 'baz')]
-```
-
-The compute signature is very flexible. It allows you to put in any number of arguments which will be evaluated. For example here we go and grab some state and props, before using their values to produce a new value.
-
-```js
-import { Compute } from 'cerebral'
-import { state, props } from 'cerebral/proxy'
-
-export default Compute(state.foo, props.bar, (foo, bar) => {
-  return foo + bar
-})
-```
-
-We can even keep adding arguments and produce yet another value:
-
-```js
-import { Compute } from 'cerebral'
-import { state, props } from 'cerebral/proxy'
-
-export default Compute(
-  state.foo,
-  props.bar,
-  (foo, bar) => {
-    return foo + bar
-  },
-  state.baz,
-  (computedFooBar, baz) => {
-    return computedFooBar + baz
-  }
-)
+export const mySequence = [set(state[computed.somPropKey].bar, 'baz')]
 ```
 
 That means you can compose computeds, lets try by splitting them up into two:

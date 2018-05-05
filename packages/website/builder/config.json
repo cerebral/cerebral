@@ -12,6 +12,7 @@
   "docs": {
     "introduction": [
       "../../../docs/introduction/get_started",
+      "../../../docs/introduction/tutorial",
       "../../../docs/introduction/modules",
       "../../../docs/introduction/devtools",
       "../../../docs/introduction/state",

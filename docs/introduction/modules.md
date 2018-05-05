@@ -16,7 +16,7 @@ export default Module({
 })
 ```
 
-You have now succesfully created state to your application, a title state. This module will act as the root module of the project and needs to be added to the controller.
+You have now succesfully added state to your application, a title state. This module will act as the root module of the project and needs to be added to the controller.
 
 Create a new file in `src` named **controller.js** and add the following content:
 

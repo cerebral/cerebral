@@ -30,7 +30,11 @@ export default Controller(app, {
 })
 ```
 
+```marksy
+<Info>
 Since we only want to run the debugger when we are developing we can point to a special **process.env.NODE_ENV** value to figure out if that is the case. When you build your application for production neither the devtools code or any connection attempt will be part of the application.
+</Info>
+```
 
 You will also need to import the controller into the main **index.js** file located at `src/`. Just delete any content there and add:
 

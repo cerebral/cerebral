@@ -65,7 +65,8 @@ list.appendChild(item2)
           </div>
           {
             props.compile(`
-But what about our application logic? The code we write to change the state of our applications and run side effects would also benefit from having the same properties.
+But what about our application logic? Applications are becoming more complex in nature as we push the boundaries of user experiences. 
+The code we write to manage this complexity would also benefit from having the same properties as our UI code.
 
 `).tree
           }
@@ -114,7 +115,7 @@ function getUser() {
           </div>
           {
             props.compile(`
-A declarative approach to application logic also allows us to build developer tools that gives you valuable information:
+A declarative approach to application logic also allows us to build developer tools that builds the mental image of this complexity for you:
 
 ![debugger](/images/debugger.png)
 
