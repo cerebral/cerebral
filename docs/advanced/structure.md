@@ -22,14 +22,14 @@ This structure favors a single file for each type of composable component of a s
 ## Actions
 
 ```js
-import { path } from 'cerebral/proxy'
+import { state } from 'cerebral/proxy'
 
-export function actionA({ state }) {
-  state.set(path.foo, 'bar')
+export function actionA({ mutation }) {
+  mutation.set(state.foo, 'bar')
 }
 
-export function actionB({ state }) {
-  state.set(path.foo, 'bar')
+export function actionB({ mutation }) {
+  mutation.set(state.foo, 'bar')
 }
 ```
 
@@ -38,11 +38,11 @@ You export multiple actions from each modules _actions.js_ file.
 If you prefer arrow functions, you can write:
 
 ```js
-import { path } from 'cerebral/proxy'
+import { state } from 'cerebral/proxy'
 
-export const actionA = ({ state }) => state.set(path.foo, 'bar')
+export const actionA = ({ mutation }) => mutation.set(state.foo, 'bar')
 
-export const actionB = ({ state }) => state.set(path.foo, 'bar')
+export const actionB = ({ mutation }) => mutation.set(path.foo, 'bar')
 ```
 
 ### Factories
@@ -52,16 +52,17 @@ Factories are similar to actions:
 ```js
 // Normal function
 export function setLoadingApp (isLoading) {
-  return function setLoadingApp({ state }) {
-    state.set(path.isLoading, isLoading)
+  return function setLoadingApp({ mutation }) {
+    mutation.set(state.isLoading, isLoading)
   }
 }
 
 // Arrow function
 // We return a named function for debugging purposes
-export const setLoadingApp = (isLoading) => function setLoadingApp({ state }) {
-  state.set(path.isLoading, isLoading)
-}
+export const setLoadingApp = (isLoading) =>
+  function setLoadingApp({ mutation }) {
+    mutation.set(state.isLoading, isLoading)
+  }
 ```
 
 ### Sequences
@@ -88,24 +89,6 @@ You import all your sequences into the modules file, attaching them to the signa
 
 ```js
 import { Module } from 'cerebral'
-import * as sequences from './sequences'
-import * as errors from './errors'
-
-export default Module({
-  state: {
-    isLoading: false
-  },
-  signals: {
-    initialized: sequences.initialize
-  },
-  catch: [[errors.AuthError, sequences.catchAuthError]]
-})
-```
-
-You might prefer not writing signal names in past tense. Then you can just attach all sequences as signals:
-
-```js
-import { Module } from 'cerebral'
 import * as signals from './sequences'
 import * as errors from './errors'
 
@@ -114,6 +97,6 @@ export default Module({
     isLoading: false
   },
   signals,
-  catch: [[errors.AuthError, signals.catchAuthError]]
+  catch: [[errors.AuthError, sequences.catchAuthError]]
 })
 ```
