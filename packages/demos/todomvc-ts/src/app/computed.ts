@@ -42,7 +42,7 @@ export const counts = Compute({
 
 export const isAllChecked = Compute({
   uids: computed.visibleTodosUids,
-})(({ uids }, get) => {
+})(({ uids, get }) => {
   return (
     uids.filter((uid) => {
       const todo = get(state.todos[uid])
