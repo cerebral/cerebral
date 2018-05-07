@@ -23,6 +23,7 @@
         "build": "parcel build index.html",
         "prepublish": "npm run build",
         "start": "parcel serve index.html",
+        "setup": "npm install @types/jest --no-save",
         "test": "jest"
     }
 }

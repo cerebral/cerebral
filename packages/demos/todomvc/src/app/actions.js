@@ -1,28 +1,27 @@
-import computedIsAllChecked from '../computed/isAllChecked'
-import computedVisibleTodosUids from '../computed/visibleTodosUids'
+import { state, computed } from 'cerebral/proxy'
 
-export function toggleAllChecked({ state, resolve }) {
-  const isCompleted = !resolve.value(computedIsAllChecked)
-  const currentTodosUids = resolve.value(computedVisibleTodosUids)
+export function toggleAllChecked({ operators, get }) {
+  const isCompleted = !get(computed.isAllChecked)
+  const currentTodosUids = get(computed.visibleTodosUids)
 
   currentTodosUids.forEach((uid) => {
-    state.set(`todos.${uid}.completed`, isCompleted)
+    operators.set(state.todos[uid].completed, isCompleted)
   })
 }
 
-export function addTodo({ state, id }) {
-  state.set(`todos.${id.create()}`, {
-    title: state.get('newTodoTitle'),
+export function addTodo({ operators, get, id }) {
+  operators.set(state.todos[id.create()], {
+    title: get(state.newTodoTitle),
     completed: false,
   })
 }
 
-export function clearCompletedTodos({ state }) {
-  const todos = state.get('todos')
+export function clearCompletedTodos({ operators, get }) {
+  const todos = get(state.todos)
 
   Object.keys(todos).forEach((uid) => {
     if (todos[uid].completed) {
-      state.unset(`todos.${uid}`)
+      operators.unset(state.todos[uid])
     }
   })
 }

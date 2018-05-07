@@ -1,12 +1,12 @@
 import React from 'react'
 import { connect } from '@cerebral/react'
+import { computed } from 'cerebral/proxy'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
-import computedCounts from '../../computed/counts'
 
 export default connect({
-  counts: computedCounts,
+  counts: computed.counts,
 })(function App({ counts }) {
   return (
     <div id="todoapp-wrapper">
