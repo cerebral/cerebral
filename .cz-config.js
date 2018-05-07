@@ -25,6 +25,7 @@ module.exports = {
     {name: 'Operators'},
     {name: 'Devtools'},
     {name: 'Providers'},
+    {name: 'cerebral'},
     {name: 'router'},
     {name: 'function-tree'},
     {name: 'demos'},
