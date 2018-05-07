@@ -44,25 +44,25 @@ Let us create the **actions.js** file in `src/app` and look at how we implement 
 ```js
 import { state } from 'cerebral/tags'
 
-export const setLoadingUser = ({ mutation }) =>
-  mutation.set(state`isLoadingUser`, true)
+export const setLoadingUser = ({ operators }) =>
+  operators.set(state`isLoadingUser`, true)
 
 export const getUser = ({ jsonPlaceholder, props }) =>
   jsonPlaceholder.getUser(props.id)
 
-export const addUser = ({ mutation, props }) =>
-  mutation.set(state`users.${props.id}`, props.user)
+export const addUser = ({ operators, props }) =>
+  operators.set(state`users.${props.id}`, props.user)
 
-export const setCurrentUser = ({ mutation, props }) =>
-  mutation.set(state`currentUserId`, props.id)
+export const setCurrentUser = ({ operators, props }) =>
+  operators.set(state`currentUserId`, props.id)
 
-export const unsetLoadingUser = ({ mutation }) =>
-  mutation.set(state`isLoadingUser`, false)
+export const unsetLoadingUser = ({ operators }) =>
+  operators.set(state`isLoadingUser`, false)
 ```
 
-As you can see every action has access to **mutation**, **props** and **jsonPlaceholder**. The mutation API allows you to do different mutations, here only showing _set_, by giving it a path and a value. The props holds values passed into the sequence and populated through the execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
+As you can see every action has access to **operators**, **props** and **jsonPlaceholder**. The operators API allows you to do different mutations on the state of the application, here only showing _set_. The props holds values passed into the sequence and populated through the execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
 
-Your first question here is probably: _"What is a tag?"_. Cerebral exposes a mutation API that allows you to target what you want to mutate. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
+Your first question here is probably: _"What is a tag?"_. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
 
 ```js
 {
@@ -133,7 +133,7 @@ When you refresh the application now you should see the debugger show you that t
 
 ## Operators
 
-But we can actually refactor our _loadUser_ signal a bit. We can take advantage of something called **operators** to express state changes directly in the sequence. In the **sequences.js** file do:
+But we can actually refactor our _loadUser_ signal a bit. We do not only have operators available inside an action, we can actually use them directly in the sequence definition. In the **sequences.js** file do:
 
 ```js
 import * as actions from './actions'
@@ -149,7 +149,7 @@ export const loadUser = [
 ]
 ```
 
-We now just made 4 actions obsolete. By using the **set** operator and the tags we are able to be more efficient and keep a good level of declarativeness. But we can actually do better. Recently Cerebral released proxies. Take another look:
+We now just made 4 actions obsolete. By using the **set** operator and the tags we are able to be more efficient and keep a good level of declarativeness. But we can actually do better. We can use proxies:
 
 ```js
 import * as actions from './actions'
@@ -179,7 +179,7 @@ You will need to restart the Parcel development process to make this take effect
 
 ```marksy
 <Info>
-You can choose to use the traditional template literal tags if you want to, but the documentation and guides will always use the proxies. They are more declarative and with the babel plugin your code will run in any browser.
+You can choose to use the traditional template literal tags if you want to, but the documentation and guides will always use the proxies. They are more declarative and with the babel plugin your code will run in any browser. The plugin actually converts the proxies to tags.
 </Info>
 ```
 
