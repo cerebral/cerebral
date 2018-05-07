@@ -4,6 +4,6 @@
         "es2015"
     ],
     "plugins": [
-        "babel-plugin-cerebral"
+        "cerebral"
     ]
 }

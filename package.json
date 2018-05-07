@@ -16,12 +16,12 @@
     "lint": "eslint \"**/*.js\" \"**/*.ts\" \"**/*.tsx\"",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "postinstall": "npm run setup",
-    "postsetup": "npm run link",
+    "postsetup": "npm run link && node ./scripts/run.js setup all",
     "precommit": "lint-staged",
     "predeploy": "node ./scripts/run.js prepublish demos",
     "pretest": "npm run checkdeps",
     "release": "babel-node ./scripts/release/index.js",
-    "setup": "node ./scripts/run.js setup all && node ./scripts/run.js prepublish nodemos",
+    "setup": "node ./scripts/run.js prepublish nodemos",
     "test": "node ./scripts/run.js test"
   },
   "repository": {
@@ -161,10 +161,10 @@
     "@types/react": "16.3.11",
     "@types/react-dom": "16.0.5",
     "@types/uuid": "3.4.3",
-    "@types/jest": "22.2.3",
     "@types/mocha": "5.1.0",
     "@types/prop-types": "15.5.2",
     "parcel-plugin-typescript": "0.7.0",
-    "parcel-bundler": "1.7.0"
+    "parcel-bundler": "1.7.0",
+    "@types/jest": "22.2.3"
   }
 }

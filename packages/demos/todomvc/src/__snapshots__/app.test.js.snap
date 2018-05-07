@@ -7,6 +7,7 @@ exports[`should add new todo 1`] = `
   <input
     checked={false}
     className="toggle-all"
+    id="toggle-all"
     onChange={[Function]}
     type="checkbox"
   />
