@@ -164,7 +164,6 @@
     "@types/mocha": "5.1.0",
     "@types/prop-types": "15.5.2",
     "parcel-plugin-typescript": "0.7.0",
-    "parcel-bundler": "1.7.0",
-    "@types/jest": "22.2.3"
+    "parcel-bundler": "1.7.0"
   }
 }
