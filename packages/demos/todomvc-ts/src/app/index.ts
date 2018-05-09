@@ -1,7 +1,7 @@
 import { Module } from 'cerebral'
 import * as signals from './sequences'
 import { id } from './providers'
-import * as computed from './computed'
+import * as computeds from './computeds'
 import { router, storage } from './modules'
 import { State } from './types'
 
@@ -18,7 +18,7 @@ export default Module<State, typeof signals>({
   providers: {
     id,
   },
-  computed,
+  computeds,
   modules: {
     router,
     storage,
