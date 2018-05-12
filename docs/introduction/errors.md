@@ -44,7 +44,15 @@ export default Module({
 })
 ```
 
-The **catch** takes a list of error handlers. You define the handler with an error type and the sequence to run. In this case we are catching any error, but we could be more specific. Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/app`:
+The **catch** takes a list of error handlers. You define the handler with an error type and the sequence to run. In this case we are catching any error, but we could be more specific.
+
+```marksy
+<Warning>
+Notice that the catch handler is an array of arrays. Each item in the array is an array of two items. The error to handle and what sequence should handle it.
+</Warning>
+```
+
+Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/app`:
 
 ```js
 import { CerebralError } from 'cerebral'

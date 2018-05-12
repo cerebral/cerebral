@@ -15,8 +15,6 @@ Cerebral uses a single state tree to store all the state of your application. Ev
 }
 ```
 
-That's it.
-
 You will normally store other objects, arrays, strings, booleans and numbers in it. Forcing you to think of your state in this simple form gives us benefits.
 
 1.  The state of the application is exposed as simple values. There are no classes or other abstractions hiding the state of your application
@@ -24,7 +22,7 @@ You will normally store other objects, arrays, strings, booleans and numbers in 
 3.  All the state of your application can be inspected through one object
 4.  All state is related to a path. There is no need to import and/or pass around model instances into other model instances to access state
 
-Let us add some new state to the application to show of some more Cerebral. Let us add the following in our **app/index.js** file:
+Let us add some new state to the application to show of some more Cerebral. In our **app/index.js** file:
 
 ```js
 import { Module } from 'cerebral'

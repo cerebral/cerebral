@@ -8,3 +8,4 @@ packages/*/**/dist/
 **/coverage/
 **/vendor/
 packages/codemods/1.x-2.x/__testfixtures__/
+*.d.ts

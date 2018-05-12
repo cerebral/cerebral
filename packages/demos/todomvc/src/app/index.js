@@ -2,7 +2,7 @@ import { Module } from 'cerebral'
 import * as sequences from './sequences'
 import { id } from './providers'
 import { router, storage } from './modules'
-import * as computeds from './computeds'
+import * as computed from './computed'
 
 export default Module({
   state: {
@@ -28,7 +28,7 @@ export default Module({
   providers: {
     id,
   },
-  computeds,
+  computed,
   modules: {
     router,
     storage,

@@ -7,22 +7,25 @@ Normally you use state directly from the state tree, but sometimes you need to c
 Cerebral allows you to compute state that can be used in multiple contexts. Let us look at an example:
 
 ```js
-import { Compute } from 'cerebral'
+import { Computed } from 'cerebral'
 import { state } from 'cerebral/proxy'
 
-export const filteredList = Compute({
-  items: state.items,
-  filter: state.filter
-})(function filterList({ items, filter }) {
-  return items.filter((item) => item[filter.property] === filter.value)
-})
+export const filteredList = Computed(
+  {
+    items: state.items,
+    filter: state.filter
+  },
+  function filterList({ items, filter }) {
+    return items.filter((item) => item[filter.property] === filter.value)
+  }
+)
 ```
 
 When we call a computed we give it the dependencies to produce our calculated value. This returns a function which you can call giving a callback that receives the dependencies.
 
 ```marksy
 <Info>
-You might ask why we have this signature. The reason is that Cerebral can be written with types and the only way to infer the correct type is by splitting the dependencies and the actualy computation in two different executions.
+As you can see a Computed follows the same signature as your views. Actually, views are treated the same way as computeds, they just return a UI description instead of a value of your choice.
 </Info>
 ```
 
@@ -44,11 +47,14 @@ Here shown with _React_:
 ```js
 import { computed } from 'cerebral/proxy'
 
-connect({
-  list: computed.filteredList
-})(function List({ list }) {
-  return <ul>{list.map((item) => <li>{item.title}</li>)}</ul>
-})
+connect(
+  {
+    list: computed.filteredList
+  },
+  function List({ list }) {
+    return <ul>{list.map((item) => <li>{item.title}</li>)}</ul>
+  }
+)
 ```
 
 ## With operators
@@ -57,7 +63,7 @@ connect({
 import { set } from 'cerebral/operators'
 import { state, computed } from 'cerebral/proxy'
 
-export const mySequence = [set(state.filteredList, computed.filteredList)]
+export const mySequence = set(state.filteredList, computed.filteredList)
 ```
 
 ## With actions
@@ -76,28 +82,34 @@ export function myAction({ get }) {
 import { state, computed } from 'cerebral/proxy'
 import { set } from 'cerebral/operators'
 
-export const mySequence = [set(state[computed.somPropKey].bar, 'baz')]
+export const mySequence = set(state[computed.somePropKey].bar, 'baz')
 ```
 
 ## Computing computeds
 
 ```js
-import { Compute } from 'cerebral'
+import { Computed } from 'cerebral'
 import { state, props } from 'cerebral/proxy'
 
-export const fooBar = Compute({
-  foo: state.foo,
-  bar: props.bar
-})(({ foo, bar }) => {
-  return foo + bar
-})
+export const fooBar = Computed(
+  {
+    foo: state.foo,
+    bar: props.bar
+  },
+  ({ foo, bar }) => {
+    return foo + bar
+  }
+)
 
-export const fooBarBaz = Compute({
-  fooBar: computed.fooBar,
-  baz: state.baz
-})(({ fooBar, baz }) => {
-  return fooBar + baz
-})
+export const fooBarBaz = Computed(
+  {
+    fooBar: computed.fooBar,
+    baz: state.baz
+  },
+  ({ fooBar, baz }) => {
+    return fooBar + baz
+  }
+)
 ```
 
 ```marksy
@@ -111,20 +123,21 @@ needs to live individually on a module. No worry though, a computed does not rec
 
 All computed receives a second argument called **get**. This argument can be used to manually extract state and props, very useful to optimize computed lists.
 
-For example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users.
-
 ```js
-import { Compute } from 'cerebral'
+import { Computed } from 'cerebral'
 import { state, props } from 'cerebral/proxy'
 
-export const itemUsers = Compute({
-  item: state.items[props.itemKey]
-})(function getItemUsers({ item }, get) {
-  return item.userIds.map((userId) => get(state.users[userId]))
-})
+export const itemUsers = Computed(
+  {
+    item: state.items[props.itemKey]
+  },
+  function getItemUsers({ item, get }) {
+    return item.userIds.map((userId) => get(state.users[userId]))
+  }
+)
 ```
 
-We now grab an item based on a property passed in, _itemKey_. Then we iterate the userIds of this item and grab the actual related user. Now the computed will only update when the item itself or the grabbed users update.
+In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users.
 
 ```marksy
 <Info>
@@ -149,9 +162,10 @@ import React from 'react'
 import { connect } from '@cerebral/react'
 import { computed } from 'cerebral/proxy'
 
-export default connect({
-  users: computed.itemUsers
-})(
+export default connect(
+  {
+    users: computed.itemUsers
+  },
   function ({ users }) {
     return ...
   }
@@ -169,6 +183,6 @@ Now this component only renders when the item changes or any related users. Even
 ```marksy
 <Info>
 Computeds that uses props and are connected to components will actually be cloned under the hood.
-This ensures that when you use the same computed, for example for a list, they will all individually cache. When the component unmounts the clone is destroyed.
+This ensures that when you use the same computed, for example for a list, they will all individually cached. When the component unmounts the clone is destroyed.
 </Info>
 ```

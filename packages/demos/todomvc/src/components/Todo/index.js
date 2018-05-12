@@ -1,15 +1,15 @@
 import React from 'react'
 import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, signal } from 'cerebral/proxy'
+import { state, signals } from 'cerebral/proxy'
 
 export default connect(function Todo({ uid, isEditing, get }) {
   const todo = get(state.todos[uid])
-  const todoDoubleClicked = get(signal.todoDoubleClicked)
-  const newTitleChanged = get(signal.todoNewTitleChanged)
-  const newTitleSubmitted = get(signal.todoNewTitleSubmitted)
-  const toggleCompletedChanged = get(signal.toggleTodoCompletedChanged)
-  const removeTodoClicked = get(signal.removeTodoClicked)
+  const todoDoubleClicked = get(signals.todoDoubleClicked)
+  const newTitleChanged = get(signals.todoNewTitleChanged)
+  const newTitleSubmitted = get(signals.todoNewTitleSubmitted)
+  const toggleCompletedChanged = get(signals.toggleTodoCompletedChanged)
+  const removeTodoClicked = get(signals.removeTodoClicked)
 
   return (
     <li
