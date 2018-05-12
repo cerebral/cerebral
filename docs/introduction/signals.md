@@ -6,7 +6,7 @@
 
 Any event in your application should trigger a signal. An event is everything from a button click to a url change. It can be a user interaction or some other internal event in the application. We are now going to define a signal that we will trigger manually. This signal should receive an id of a user, go grab that user and store it as the current user in your application.
 
-A signal is built up by something we call **sequences**. A sequence is basically just a list of **actions** to perform. An **action** is what makes things happen in Cerebral. It is just a function that has the ability access state and providers.
+A signal is built up by something we call **sequences**. A sequence is basically just a list of **actions** to perform. An **action** is what makes things happen in Cerebral. It is just a function that has the ability to access state and providers.
 
 ```marksy
 <Info>
@@ -60,9 +60,9 @@ export const unsetLoadingUser = ({ operators }) =>
   operators.set(state`isLoadingUser`, false)
 ```
 
-As you can see every action has access to **operators**, **props** and **jsonPlaceholder**. The operators API allows you to do different mutations on the state of the application, here only showing _set_. The props holds values passed into the sequence and populated through the execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
+Your first question here is probably: _"What is this state tag?"_. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
 
-Your first question here is probably: _"What is a tag?"_. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
+Moving on... as you can see every action has access to **operators**, **props** and **jsonPlaceholder**. The operators API allows you to do different mutations on the state of the application, here only showing _set_. The props holds values passed into the sequence and populated through the execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
 
 ```js
 {
@@ -154,6 +154,8 @@ We now just made 4 actions obsolete. By using the **set** operator and the tags 
 ```js
 import * as actions from './actions'
 import { set } from 'cerebral/operators'
+// Note we are changing from "cerebral/tags" to
+// "cerebral/proxy"
 import { state, props } from 'cerebral/proxy'
 
 export const loadUser = [
@@ -179,7 +181,7 @@ You will need to restart the Parcel development process to make this take effect
 
 ```marksy
 <Info>
-You can choose to use the traditional template literal tags if you want to, but the documentation and guides will always use the proxies. They are more declarative and with the babel plugin your code will run in any browser. The plugin actually converts the proxies to tags.
+You can choose to use the traditional template literal tags if you want to, but the documentation and guides will always use the proxies. They are more declarative. The plugin actually converts the proxies to tags.
 </Info>
 ```
 
@@ -205,7 +207,7 @@ export const loadUser = [
 ]
 ```
 
-Objects in sequences are treated as conditional execution and it is the action in front of it, _actions.getUser_ in this case, that chooses what path of execution to take. Since we only want to set the user on a success, let us move them up there:
+Objects in sequences are treated as conditional execution and it is the action in front of it, _actions.getUser_ in this case, that chooses what path of execution to take. Since we only want to set the user on a success, let us refactor a bit:
 
 ```js
 import * as actions from './actions'
@@ -220,7 +222,7 @@ export const loadUser = [
       set(state.users[props.id], props.user),
       set(state.currentUserId, props.id)
     ],
-    error: [set(state.error, props.error.message)]
+    error: set(state.error, props.error.message)
   },
   set(state.isLoadingUser, false)
 ]
@@ -242,10 +244,10 @@ export const getUser = ({ jsonPlaceholder, props, path }) =>
     .catch((error) => path.error({ error }))
 ```
 
-The **result** here is the object with the user and we use it as an argument when calling the success path. When we catch an **error** we want to return an object with the error, which will be merged into the props of the signal.
+The **result** here is the object with the user which we use as an argument when calling the success path. When we catch an **error** we want to return an object with the error, which will be merged into the props of the signal.
 
 ```marksy
 <Warning>
-When we call a path we return its result. That means if you want an action to run down a path you have to call the path to execute and return its value. Just calling the path does nothing.
+When we call a path we return its result from the action. That means if you want an action to run down a path you have to call the path to execute and return its value. Just calling the path does nothing.
 </Warning>
 ```

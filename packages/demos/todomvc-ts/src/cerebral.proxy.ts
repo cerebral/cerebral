@@ -5,34 +5,28 @@ import {
   ChainSequenceFactory,
   ChainSequenceWithPropsFactory,
 } from 'cerebral'
-import {
-  State as AppState,
-  Computed as AppComputed,
-  Signals as AppSignals,
-} from './app/types'
+import * as App from './app/types'
 
-type State = AppState
+type State = App.State
 
-type Computed = AppComputed
+type Computed = App.Computed
 
-type Signals = AppSignals
+type Signals = App.Signals
 
-interface Providers {
+type Providers = {
   id: {
     create(): string
   }
 }
 
-export type Context<TProps = {}> = IContext<TProps> & Providers
-export type BranchContext<TPaths, TProps = {}> = IBranchContext<
-  TPaths,
-  TProps
-> &
+export type Context<Props = {}> = IContext<Props> & Providers
+
+export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> &
   Providers
 
 export const sequence = ChainSequenceFactory<Context>()
 export const sequenceWithProps = ChainSequenceWithPropsFactory<Context>()
 export const state = tags.state as State
-export const signal = tags.signal as Signals
-export const props = tags.props
+export const signal = tags.signals as Signals
 export const computed = tags.computed as Computed
+export const props = tags.props

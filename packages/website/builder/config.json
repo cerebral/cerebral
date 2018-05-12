@@ -22,7 +22,7 @@
       "../../../docs/introduction/views"
     ],
     "advanced": [
-      "../../../docs/advanced/compute",
+      "../../../docs/advanced/computed",
       "../../../docs/advanced/structure",
       "../../../docs/advanced/test",
       "../../../docs/advanced/the_architecture",
