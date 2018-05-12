@@ -27,20 +27,23 @@ And your **App** component located in `src/components/App.js` could look like:
 
 ```js
 import React from 'react'
-import { state, signal } from 'cerebral/proxy'
+import { state, signals } from 'cerebral/proxy'
 import { connect } from '@cerebral/react'
 
-export default connect({
-  user: state.users[state.currentUserId],
-  click: signal.loadUser
-})(function MyComponent({ user, click }) {
-  return (
-    <div>
-      <h1>Hello {user ? user.name : 'nobody'}</h1>
-      <button onClick={() => click({ id: 1 })}>Get user 1</button>
-    </div>
-  )
-})
+export default connect(
+  {
+    user: state.users[state.currentUserId],
+    click: signals.loadUser
+  },
+  function MyComponent({ user, click }) {
+    return (
+      <div>
+        <h1>Hello {user ? user.name : 'nobody'}</h1>
+        <button onClick={() => click({ id: 1 })}>Get user 1</button>
+      </div>
+    )
+  }
+)
 ```
 
 If you rather prefer [Vue](https://vuejs.org/) you could connect Cerebral in a similar way by first running the following command in the terminal:
@@ -66,12 +69,12 @@ And you would define the component like this:
 
 ```js
 import { connect } from '@cerebral/vue'
-import { state, signal } from 'cerebral/proxy'
+import { state, signals } from 'cerebral/proxy'
 
 export default connect(
   {
     user: state.users[state.currentUserId],
-    click: signal.loadUser
+    click: signals.loadUser
   },
   {
     template: `

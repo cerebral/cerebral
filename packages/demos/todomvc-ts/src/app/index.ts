@@ -1,7 +1,7 @@
 import { Module } from 'cerebral'
 import * as signals from './sequences'
 import { id } from './providers'
-import * as computeds from './computeds'
+import * as computed from './computed'
 import { router, storage } from './modules'
 import { State } from './types'
 
@@ -12,13 +12,13 @@ const state: State = {
   editingUid: null,
 }
 
-export default Module<State, typeof signals>({
+export default Module({
   state,
   signals,
+  computed,
   providers: {
     id,
   },
-  computeds,
   modules: {
     router,
     storage,
