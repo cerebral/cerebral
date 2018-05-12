@@ -5,9 +5,9 @@ import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 
-export default connect({
-  counts: computed.counts,
-})(function App({ counts }) {
+export default connect(function App({ get }) {
+  const counts = get(computed.counts)
+
   return (
     <div id="todoapp-wrapper">
       <section className="todoapp">

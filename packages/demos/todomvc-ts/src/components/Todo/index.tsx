@@ -8,7 +8,7 @@ type ExternalProps = {
   isEditing: boolean
 }
 
-export default connect({
+const deps = {
   todo: state.todos[props.uid],
   todoDoubleClicked: signal.editTodo,
   newTitleChanged: signal.changeNewTodoTitle,
@@ -16,7 +16,9 @@ export default connect({
   toggleCompletedChanged: signal.toggleTodoCompleted,
   removeTodoClicked: signal.removeTodo,
   newTitleAborted: signal.abortEdit,
-})<ExternalProps>(function Todo({
+}
+
+export default connect<ExternalProps, typeof deps>(deps, function Todo({
   uid,
   isEditing,
   todo,
