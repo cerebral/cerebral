@@ -5,12 +5,12 @@ import classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']
 
-export default connect({
-  filter: state.filter,
-  counts: computed.counts,
-  filterClicked: signal.filterClicked,
-  clearCompletedClicked: signal.clearCompletedClicked,
-})(function Footer({ filter, counts, filterClicked, clearCompletedClicked }) {
+export default connect(function Footer({ get }) {
+  const filter = get(state.filter)
+  const counts = get(computed.counts)
+  const filterClicked = get(signal.filterClicked)
+  const clearCompletedClicked = get(signal.clearCompletedClicked)
+
   return (
     <footer className="footer">
       <span className="todo-count">

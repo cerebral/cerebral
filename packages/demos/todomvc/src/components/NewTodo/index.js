@@ -2,11 +2,11 @@ import React from 'react'
 import { connect } from '@cerebral/react'
 import { state, signal } from 'cerebral/proxy'
 
-export default connect({
-  title: state.newTodoTitle,
-  titleChanged: signal.newTodoTitleChanged,
-  submitted: signal.newTodoSubmitted,
-})(function NewTodo({ title, titleChanged, submitted }) {
+export default connect(function NewTodo({ get }) {
+  const title = get(state.newTodoTitle)
+  const titleChanged = get(signal.newTodoTitleChanged)
+  const submitted = get(signal.newTodoSubmitted)
+
   return (
     <form
       id="todo-form"
