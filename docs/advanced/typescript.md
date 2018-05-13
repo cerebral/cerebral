@@ -1,6 +1,6 @@
 # Typescript
 
-Cerebral supports full type safety in your application. It is recommended to use [React]() as you will continue to use the types there. You can gradually add type safety to Cerebral so let us take this step by step. You can stop at any step you want when you feel you enough type safety in your application.
+Cerebral supports full type safety in your application. It is recommended to use [React]() as you will continue to use the types there. You can gradually add type safety to Cerebral so let us take this step by step. You can stop at any step you want when you feel you have enough type safety in your application.
 
 ## Required: Preparing typing
 

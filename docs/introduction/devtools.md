@@ -6,9 +6,7 @@
 
 * **Mac**: cerebral-debugger-x.x.x.dmg
 * **Windows**: cerebral-debugger-setup-x.x.x.exe
-* **Linux**: cerebral-debugger_x.x.x_amd64.snap
-
-The debugger will automatically notify you and self-update. On Linux auto-update works only for the [snap](https://snapcraft.io) package.
+* **Linux**: cerebral-debugger_x.x.x_amd64.deb
 
 ## Initialize
 
