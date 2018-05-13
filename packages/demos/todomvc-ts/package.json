@@ -14,8 +14,8 @@
         "babel-plugin-cerebral": "next",
         "cerebral": "^4.2.1",
         "classnames": "^2.2.5",
-        "react": "^16.2.0",
-        "react-dom": "^16.2.0",
+        "react": "^16.3.2",
+        "react-dom": "^16.3.2",
         "todomvc-app-css": "^2.1.0",
         "todomvc-common": "^1.0.4",
         "uuid": "^3.1.0"
@@ -50,10 +50,6 @@
         }
     },
     "devDependencies": {
-        "@types/jest": "^22.2.3",
-        "@types/react": "^16.3.11",
-        "@types/react-dom": "^16.0.5",
-        "@types/uuid": "^3.4.3",
         "parcel-plugin-typescript": "^0.7.0",
         "parcel-bundler": "1.7.0"
     }
