@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, signal, props } from 'cerebral.proxy'
+import { state, signals, props } from 'cerebral.proxy'
 
 type ExternalProps = {
   uid: string
@@ -10,12 +10,12 @@ type ExternalProps = {
 
 const deps = {
   todo: state.todos[props.uid],
-  todoDoubleClicked: signal.editTodo,
-  newTitleChanged: signal.changeNewTodoTitle,
-  newTitleSubmitted: signal.submitTodoTitle,
-  toggleCompletedChanged: signal.toggleTodoCompleted,
-  removeTodoClicked: signal.removeTodo,
-  newTitleAborted: signal.abortEdit,
+  todoDoubleClicked: signals.editTodo,
+  newTitleChanged: signals.changeTodoTitle,
+  newTitleSubmitted: signals.submitTodoTitle,
+  toggleCompletedChanged: signals.toggleTodoCompleted,
+  removeTodoClicked: signals.removeTodo,
+  newTitleAborted: signals.abortEdit,
 }
 
 export default connect<ExternalProps, typeof deps>(deps, function Todo({
@@ -63,7 +63,7 @@ export default connect<ExternalProps, typeof deps>(deps, function Todo({
             className="edit"
             value={isEditing ? todo.editedTitle : todo.title}
             onBlur={() => newTitleSubmitted({ uid })}
-            onChange={(e) => newTitleChanged({ title: e.target.value })}
+            onChange={(e) => newTitleChanged({ uid, title: e.target.value })}
           />
         </form>
       )}

@@ -56,9 +56,15 @@ export type State = {
   isAwesome: true
 }
 
-export type Signals = typeof signals
+export type Signals = { [key in keyof typeof signals]: typeof signals[key] }
 
-export type Computed = typeof computeds
+export type Computed = { [key in keyof typeof computed]: typeof computed[key] }
+```
+
+```marksy
+<Info>
+The way we type **signals** and **computed** just exposes the way they are defined. Meaning if you add new computeds and/or sequences they will automatically be typed.
+</Info>
 ```
 
 This type can now be used in your module to ensure type safety:

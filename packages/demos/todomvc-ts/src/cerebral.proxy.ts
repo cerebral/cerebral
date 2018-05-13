@@ -13,11 +13,7 @@ type Computed = App.Computed
 
 type Signals = App.Signals
 
-type Providers = {
-  id: {
-    create(): string
-  }
-}
+type Providers = App.Providers
 
 export type Context<Props = {}> = IContext<Props> & Providers
 
@@ -27,6 +23,6 @@ export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> &
 export const sequence = ChainSequenceFactory<Context>()
 export const sequenceWithProps = ChainSequenceWithPropsFactory<Context>()
 export const state = tags.state as State
-export const signal = tags.signals as Signals
+export const signals = tags.signals as Signals
 export const computed = tags.computed as Computed
 export const props = tags.props
