@@ -95,6 +95,7 @@ import * as signals from './sequences'
 import * as errors from './errors'
 import * as computeds from './computeds'
 import * as providers from './providers'
+import * as reactions from './reactions'
 
 export default Module({
   state: {
@@ -102,7 +103,8 @@ export default Module({
   },
   signals,
   computeds,
+  reactions,
   providers,
-  catch: [[errors.AuthError, sequences.catchAuthError]]
+  catch: [[errors.AuthError, signals.catchAuthError]]
 })
 ```
