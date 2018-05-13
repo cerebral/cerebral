@@ -12,6 +12,7 @@
   "docs": {
     "introduction": [
       "../../../docs/introduction/get_started",
+      "../../../docs/introduction/the_architecture",
       "../../../docs/introduction/tutorial",
       "../../../docs/introduction/modules",
       "../../../docs/introduction/devtools",
@@ -23,9 +24,9 @@
     ],
     "advanced": [
       "../../../docs/advanced/computed",
+      "../../../docs/advanced/reactions",
       "../../../docs/advanced/structure",
       "../../../docs/advanced/test",
-      "../../../docs/advanced/the_architecture",
       "../../../docs/advanced/typescript"
     ],
     "guides": [
