@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, signal } from 'cerebral.proxy'
+import { state, signals } from 'cerebral.proxy'
 
 export default connect(
   {
     title: state.newTodoTitle,
-    titleChanged: signal.changeNewTodoTitle,
-    submitted: signal.submitNewTodo,
+    titleChanged: signals.changeNewTodoTitle,
+    submitted: signals.submitNewTodo,
   },
   function NewTodo({ title, titleChanged, submitted }) {
     return (

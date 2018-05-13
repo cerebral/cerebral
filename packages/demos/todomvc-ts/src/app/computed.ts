@@ -46,7 +46,7 @@ export const counts = Computed(
   }
 )
 
-export const isAllChecked = Computed(
+export const isAllChecked: boolean = Computed(
   {
     uids: computed.visibleTodosUids,
   },
