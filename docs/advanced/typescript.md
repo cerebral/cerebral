@@ -206,8 +206,8 @@ To get full type safety in signals you will need to move to a less declarative c
 import {
   IContext,
   IBranchContext,
-  SequenceFactory,
-  SequenceWithPropsFactory
+  ChainSequenceFactory,
+  ChainSequenceWithPropsFactory
 } from 'cerebral'
 import * as proxy from 'cerebral/proxy'
 import * as App from './app/types'
@@ -225,8 +225,8 @@ export type Context<Props = {}> = IContext<Props> & Providers
 export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> &
   Providers
 
-export const sequence = SequenceFactory<Context>()
-export const sequenceWithProps = SequenceWithPropsFactory<Context>()
+export const sequence = ChainSequenceFactory<Context>()
+export const sequenceWithProps = ChainSequenceWithPropsFactory<Context>()
 export const state = proxy.state as State
 export const signals = proxy.signals as Signals
 export const computed = proxy.computed as Computed

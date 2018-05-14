@@ -9,3 +9,4 @@ package.json
 /packages/website/builder/docs
 /node_modules
 /packages/*/**/node_modules
+*.md
