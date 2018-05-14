@@ -1,17 +1,21 @@
 # Http
 
-Most application needs some sort of standard requests going to a server, even using alternative solution like Firebase or Graphql. Cerebral HTTP provider is a simple JSON first based HTTP library that conforms to the functional nature of Cerebral.
+Most application needs some sort of requests going to a server. Cerebral HTTP provider is a simple JSON HTTP library that conforms to the functional nature of Cerebral.
 
 ## Configuring the provider
 
 ```js
-import { Module } from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
+export const http = HttpProvider()
+```
+
+```js
+import { Module } from 'cerebral'
+import * as providers from './providers'
+
 export default Module({
-  providers: {
-    http: HttpProvider()
-  }
+  providers
 })
 ```
 
@@ -26,18 +30,13 @@ function someAction({ http }) {
 You might need to set some default headers, or maybe you need to pass cookies to 3rd party urls:
 
 ```js
-import { Module } from 'cerebral'
 import HttpProvider from '@cerebral/http'
 
-export default Module({
-  providers: {
-    http: HttpProvider({
-      headers: {
-        Authorization: 'token whatevah'
-      },
-      withCredentials: true
-    })
-  }
+export const http = HttpProvider({
+  headers: {
+    Authorization: 'token whatevah'
+  },
+  withCredentials: true
 })
 ```
 
@@ -45,7 +44,7 @@ This configuration makes sure every request has an _Authorization_ header and co
 
 ## Per request configuration
 
-These options are also available when doing specific requests. For example we want to post some data using the older url encoded format:
+These options are also available when doing specific requests. For example we want to post some data using the url encoded format:
 
 ```js
 function getUser({ http, state }) {
@@ -63,9 +62,11 @@ When you make a request with the HTTP provider it will return an object of:
 
 ```js
 {
-  status: 200,
-  headers: {},
-  result: {}
+  response: {
+    status: 200,
+    headers: {},
+    result: {}
+  }
 }
 ```
 
@@ -103,7 +104,7 @@ Operators allows you to handle HTTP requests directly in the sequence of actions
 ```js
 import { httpGet } from '@cerebral/http/operators'
 
-export default [httpGet('/user')]
+export default httpGet('/user')
 ```
 
 The operator outputs the response to the signal, meaning that **status**, **result** and **headers** will now be available for the next actions. That means you could easily combine this with a Cerebral operator:
@@ -111,9 +112,11 @@ The operator outputs the response to the signal, meaning that **status**, **resu
 ```js
 import { httpGet } from '@cerebral/http/operators'
 import { set } from 'cerebral/operators'
-import { state, props } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 
-export default [httpGet('/user'), set(state`app.user`, props`response.result`)]
+export default [
+  httpGet('/user'), set(state.app.user, props.response.result)
+]
 ```
 
 The HTTP operators are actually pretty smart. You can optionally use paths to diverge execution. So if you wanted to speficially handle **success** and **error**, you could do this instead:
@@ -121,13 +124,13 @@ The HTTP operators are actually pretty smart. You can optionally use paths to di
 ```js
 import { httpGet } from '@cerebral/http/operators'
 import { set } from 'cerebral/operators'
-import { state, props } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 
 export default [
   httpGet('/user'),
   {
-    success: set(state`app.user`, props`response.result`),
-    error: set(state`app.error`, props`response.result`)
+    success: set(state.app.user, props.response.result),
+    error: set(state.app.error, props.response.result)
   }
 ]
 ```
@@ -137,13 +140,13 @@ You can even use status codes as paths by default:
 ```js
 import {httpGet} from '@cerebral/http/operators'
 import {set} from 'cerebral/operators'
-import {state, props} from 'cerebral/tags'
+import {state, props} from 'cerebral/proxy'
 
 export default [
   httpGet('/user'), {
-    401: set(state`app.isAuthorized`, false)
-    success: set(state`app.user`, props`response.result`),
-    error: set(state`app.error`, props`response.result`)
+    401: set(state.app.isAuthorized, false)
+    success: set(state.app.user, props.response.result),
+    error: set(state.app.error, props.response.result)
   }
 ]
 ```
@@ -155,9 +158,10 @@ When using operators it is quite restrictive to use a static url, you might want
 ```js
 import { httpGet } from '@cerebral/http/operators'
 import { set } from 'cerebral/operators'
-import { state, string } from 'cerebral/tags'
+import { string } from 'cerebral/tags'
+import { state } from 'cerebral/proxy'
 
-export default [httpGet(string`/items/${state`app.currentItem.id`}`)]
+export default httpGet(string`/items/${state.app.currentItem.id}`)
 ```
 
 ## Catching errors
@@ -167,23 +171,28 @@ Now, it is encouraged that you write your sequences of actions vertically for re
 ```js
 import { httpGet } from '@cerebral/http/operators'
 import { set } from 'cerebral/operators'
-import { state, props } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 
-export default [httpGet('/user'), set(state`app.user`, props`response.result`)]
+export default [
+  httpGet('/user'),
+  set(state.app.user, props.response.result)
+]
 ```
 
 You will need a way to handle errors. The HTTP provider actually throws an error in this scenario if something goes wrong and you can catch that error in either a signal specific error handler or a global. Typically you want a global error handler, so let us explore that:
 
 ```js
 import { Module } from 'controller'
-import HttpProvider, { HttpProviderError } from '@cerebral/http'
-import httpErrorThrown from './signals/httpErrorThrown'
+import { HttpProviderError } from '@cerebral/http'
+import * as providers from './providers'
+import * as signals from './signals'
 
 export default Module({
-  providers: {
-    http: HttpProvider()
-  },
-  catch: [[HttpProviderError, httpErrorThrown]]
+  providers,
+  signals,
+  catch: [
+    [HttpProviderError, signals.httpErrorThrown]
+  ]
 })
 ```
 
@@ -211,17 +220,18 @@ Sometimes you might need to abort requests, a typical example of this is typeahe
 
 ```js
 import { set } from 'cerebral/operators'
-import { state, props, string } from 'cerebral/tags'
+import { string } from 'cerebral/tags'
+import { state, props } from 'cerebral/proxy'
 import { httpGet, httpAbort } from '@cerebral/http'
 ;[
-  set(state`searchValue`, props`value`),
+  set(state.searchValue, props.value),
   httpAbort('/search*'),
   debounce(250),
   {
     continue: [
-      httpGet(string`/search?value=${state`searchValue`}`),
+      httpGet(string`/search?value=${state.searchValue}`),
       {
-        success: set(state`searchResult`, props`response.result`),
+        success: set(state.searchResult, props.response.result),
         error: [],
         abort: []
       }
@@ -241,20 +251,20 @@ Upload a file is as simple as:
 
 ```js
 import { httpUploadFile } from '@cerebral/http/operators'
-import { props } from 'cerebral/tags'
+import { props } from 'cerebral/proxy'
 
-export default [httpUploadFile('/upload', props`file`)]
+export default httpUploadFile('/upload', props.file)
 ```
 
 Typically with file upload you want to track the upload progress. You can do this by passing the path of a progress signal you have created as an option:
 
 ```js
 import { httpUploadFile } from '@cerebral/http/operators'
-import { props } from 'cerebral/tags'
+import { props, signals } from 'cerebral/proxy'
 
 export default [
-  httpUploadFile('/upload', props`file`, {
-    onProgress: 'files.uploadProgressed'
+  httpUploadFile('/upload', props.file, {
+    onProgress: signals.files.uploadProgressed
   })
 ]
 ```
@@ -271,14 +281,14 @@ Additional options for setting the name, passing additional data and headers are
 
 ```js
 import { httpUploadFile } from '@cerebral/http/operators'
-import { props } from 'cerebral/tags'
+import { props, signals } from 'cerebral/proxy'
 
 export default [
-  httpUploadFile('/upload', props`file`, {
+  httpUploadFile('/upload', props.file, {
     name: 'newImage.png',
-    data: state`files.currentMetaData`,
+    data: state.files.currentMetaData,
     headers: {},
-    onProgress: 'files.uploadProgressed'
+    onProgress: signals.files.uploadProgressed
   })
 ]
 ```

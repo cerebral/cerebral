@@ -30,12 +30,10 @@
       "../../../docs/advanced/typescript"
     ],
     "guides": [
-      "../../../docs/guides/composing",
       "../../../docs/guides/http",
       "../../../docs/guides/operators",
       "../../../docs/guides/routing",
-      "../../../docs/guides/ssr",
-      "../../../docs/guides/typescript"
+      "../../../docs/guides/ssr"
     ],
     "contribute": [
       "../../../docs/contribute/introduction",
