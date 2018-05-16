@@ -2,7 +2,7 @@ import React from 'react'
 import { connect } from '@cerebral/react'
 import { state, signals } from 'cerebral/proxy'
 
-export default connect(function NewTodo({ get }) {
+function NewTodo({ get }) {
   const title = get(state.newTodoTitle)
   const titleChanged = get(signals.newTodoTitleChanged)
   const submitted = get(signals.newTodoSubmitted)
@@ -24,4 +24,6 @@ export default connect(function NewTodo({ get }) {
       />
     </form>
   )
-})
+}
+
+export default connect(NewTodo)

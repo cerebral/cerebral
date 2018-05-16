@@ -5,7 +5,7 @@ import classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']
 
-export default connect(function Footer({ get }) {
+function Footer({ get }) {
   const filter = get(state.filter)
   const counts = get(computed.counts)
   const filterClicked = get(signals.filterClicked)
@@ -44,4 +44,6 @@ export default connect(function Footer({ get }) {
       )}
     </footer>
   )
-})
+}
+
+export default connect(Footer)
