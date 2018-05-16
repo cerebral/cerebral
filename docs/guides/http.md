@@ -111,7 +111,7 @@ The operator outputs the response to the signal, meaning that **status**, **resu
 
 ```js
 import { httpGet } from '@cerebral/http/operators'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
 export default [
@@ -123,7 +123,7 @@ The HTTP operators are actually pretty smart. You can optionally use paths to di
 
 ```js
 import { httpGet } from '@cerebral/http/operators'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
 export default [
@@ -139,7 +139,7 @@ You can even use status codes as paths by default:
 
 ```js
 import {httpGet} from '@cerebral/http/operators'
-import {set} from 'cerebral/operators'
+import {set} from 'cerebral/factories'
 import {state, props} from 'cerebral/proxy'
 
 export default [
@@ -157,7 +157,7 @@ When using operators it is quite restrictive to use a static url, you might want
 
 ```js
 import { httpGet } from '@cerebral/http/operators'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { string } from 'cerebral/tags'
 import { state } from 'cerebral/proxy'
 
@@ -170,7 +170,7 @@ Now, it is encouraged that you write your sequences of actions vertically for re
 
 ```js
 import { httpGet } from '@cerebral/http/operators'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
 export default [
@@ -219,7 +219,7 @@ The data you get passed in is something similar to:
 Sometimes you might need to abort requests, a typical example of this is typeahead. Let us just write out an example here first:
 
 ```js
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { string } from 'cerebral/tags'
 import { state, props } from 'cerebral/proxy'
 import { httpGet, httpAbort } from '@cerebral/http'

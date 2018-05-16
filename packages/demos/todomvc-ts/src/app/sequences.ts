@@ -1,5 +1,5 @@
 // @ts-ignore
-import { redirect } from '@cerebral/router/operators'
+import { redirect } from '@cerebral/router/factories'
 import { state, sequence, sequenceWithProps } from 'cerebral.proxy'
 import * as actions from './actions'
 

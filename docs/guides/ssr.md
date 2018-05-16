@@ -249,7 +249,7 @@ If your whole application is run from a single route, **/**, you do not have to 
 
 ```js
 import { Controller, Module } from 'cerebral'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state } from 'cerebral/tags'
 import Router from '@cerebral/router'
 
