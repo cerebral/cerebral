@@ -29,7 +29,7 @@ As you can see a Computed follows the same signature as your views. Actually, vi
 </Info>
 ```
 
-A computed needs to be attached to a module. By convention you just attach all the computed you export from the _computed_ file related to a module:
+A computed needs to be attached to a module. By convention you just attach all the computed you export from the *computed* file related to a module:
 
 ```js
 import { Module } from 'cerebral'
@@ -42,7 +42,7 @@ export default Module({
 
 ## With components
 
-Here shown with _React_:
+Here shown with *React*:
 
 ```js
 import { computed } from 'cerebral/proxy'
@@ -57,7 +57,7 @@ connect(
 )
 ```
 
-## With operators
+## With factories
 
 ```js
 import { set } from 'cerebral/factories'
@@ -121,7 +121,7 @@ needs to live individually on a module. No worry though, a computed does not rec
 
 ## Dynamic computed
 
-All computed receives a second argument called **get**. This argument can be used to manually extract state and props, very useful to optimize computed lists.
+All computed receives a property called **get**. This function can be used to manually extract state and props, very useful to optimize computed lists.
 
 ```js
 import { Computed } from 'cerebral'
@@ -137,7 +137,7 @@ export const itemUsers = Computed(
 )
 ```
 
-In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users.
+In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users. Now this computed will only recalculate when the item updates or any of the users grabbed. It will not update if any other users update, which would be the case if you were depending on the users state.
 
 ```marksy
 <Info>

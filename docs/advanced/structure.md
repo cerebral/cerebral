@@ -14,12 +14,13 @@ src/
     sequences.js
     providers.js
     computeds.js
+    reactions.js
     errors.js
     index.js
   controller.js
 ```
 
-This structure favors a single file for each type of composable component. The root module is named **app** and will hold submodules in the **modules** folder, where each module has the same structure. You will of course not create all these files for every module, but only when needed.
+This structure favors a single file for each type of composable piece of logic. The root module is named **app** and will hold submodules in the **modules** folder, where each module has the same structure. You will of course not create all these files for every module, only those needed.
 
 ## Actions
 
@@ -69,7 +70,7 @@ export const setLoadingApp = (isLoading) =>
 
 ### Sequences
 
-You import all actions and factories into the _sequences.js_ file. This will give you autosuggestions on available actions and factories. You can combine this with operators:
+You import all actions and factories into the *sequences.js* file. This will give you autosuggestions on available actions and factories. You can combine this with operators:
 
 ```js
 import { set } from 'cerebral/factories'

@@ -1,10 +1,10 @@
 # Typescript
 
-Cerebral supports full type safety in your application. It is recommended to use [React]() as you will continue to use the types there. You can gradually add type safety to Cerebral so let us take this step by step. You can stop at any step you want when you feel you have enough type safety in your application.
+Cerebral supports full type safety in your application. It is recommended to use [React](https://reactjs.org/) as you will continue to use the types there. You can gradually add type safety to Cerebral so let us take this step by step. You can stop at any step you want when you feel you have enough type safety in your application.
 
 ## Required: Preparing typing
 
-Cerebral uses its proxy concept to effectively type your state and signals. To attach the types to these proxies you will need to create a file called **cerebral.proxy.ts**:
+Cerebral uses its proxy concept to type your state and signals. To attach the types to these proxies you will need to create a file called **cerebral.proxy.ts**:
 
 ```ts
 import * as proxy from 'cerebral/proxy'
@@ -45,7 +45,7 @@ In your **tsconfig.json** file it is recommended to add paths so that you can im
 
 Typically you want to create a **types.ts** file next to your modules. This is where you will define your types in general.
 
-_app/types.ts_
+*app/types.ts*
 
 ```ts
 import * as signals from './sequences'
@@ -69,22 +69,26 @@ The way we type **signals** and **computed** just exposes the way they are defin
 
 This type can now be used in your module to ensure type safety:
 
-_app/index.ts_
+*app/index.ts*
 
 ```ts
 import { Module } from 'cerebral'
 import { State } from './types'
 import * as signals from './sequences'
 import * as computeds from './computeds'
+import * as providers from './providers'
 import { State, Signals Computed } from './types'
 
-export default Module<State, Signals, Computed>({
-  state: {
-    title: 'My project',
-    isAwesome: true
-  },
+const state: State = {
+  title: 'My project',
+  isAwesome: true
+}
+
+export default Module({
+  state,
   signals,
-  computeds
+  computeds,
+  providers
 })
 ```
 
@@ -266,8 +270,9 @@ To run conditional logic you will branch out:
 import { sequence, sequenceWithProps, state } from 'cerebral.proxy'
 import * as actions from './actions'
 
-export const doThis = sequence((sequence) =>
-  sequence.branch(actions.doOneOrTheOther).paths({
+export const doThis = sequence((sequence) => sequence
+  .branch(actions.doOneOrTheOther)
+  .paths({
     one: (sequence) => sequence,
     other: (sequence) => sequence
   })
@@ -280,10 +285,9 @@ You compose in sequences by:
 import { sequence, sequenceWithProps, state } from 'cerebral.proxy'
 import * as actions from './actions'
 
-export const doThis = sequence((sequence) =>
-  sequence
-    .sequence(sequences.someOtherSequence)
-    .parallel([sequences.sequenceA, sequences.sequenceB])
+export const doThis = sequence((sequence) => sequence
+  .sequence(sequences.someOtherSequence)
+  .parallel([sequences.sequenceA, sequences.sequenceB])
 )
 ```
 
