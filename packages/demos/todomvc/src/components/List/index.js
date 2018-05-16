@@ -3,7 +3,7 @@ import Todo from '../Todo'
 import { connect } from '@cerebral/react'
 import { state, signals, computed } from 'cerebral/proxy'
 
-export default connect(function List({ get }) {
+function List({ get }) {
   const editingUid = get(state.editingUid)
   const isAllChecked = get(computed.isAllChecked)
   const todosUids = get(computed.visibleTodosUids)
@@ -28,4 +28,6 @@ export default connect(function List({ get }) {
       </ul>
     </section>
   )
-})
+}
+
+export default connect(List)
