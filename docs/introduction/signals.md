@@ -60,9 +60,9 @@ export const unsetLoadingUser = ({ operators }) =>
   operators.set(state`isLoadingUser`, false)
 ```
 
-Your first question here is probably: _"What is this state tag?"_. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
+Your first question here is probably: *"What is this state tag?"*. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
 
-Moving on... as you can see every action has access to **operators**, **props** and **jsonPlaceholder**. The operators API allows you to do different mutations on the state of the application, here only showing _set_. The props holds values passed into the sequence and populated through the execution. When _jsonPlaceholder.getUser_ runs it will return an object with the user which will extend the props to:
+Moving on... as you can see every action has access to **operators**, **props** and **jsonPlaceholder**. The operators API allows you to do different changes on the state of the application, here only showing *set*. The props holds values passed into the sequence and populated through the execution. When *jsonPlaceholder.getUser* runs it will return an object with the user which will extend the props to:
 
 ```js
 {
@@ -98,8 +98,8 @@ Let us fire up the signal and we can rather let the debugger do this visualizati
 
 ```js
 import { Module } from 'cerebral'
-import { jsonPlaceholder } from './providers'
-import { loadUser } from './sequences'
+import * as providers from './providers'
+import * as signals from './sequences'
 
 export default Module({
   state: {
@@ -109,12 +109,8 @@ export default Module({
     isLoadingUser: false,
     error: null
   },
-  signals: {
-    loadUser
-  },
-  providers: {
-    jsonPlaceholder
-  }
+  signals,
+  providers
 })
 ```
 
@@ -124,16 +120,17 @@ Then in `/src` create a file called **index.js** and add the following:
 import controller from './controller'
 
 const loadUser = controller.getSignal('loadUser')
+
 loadUser({
   id: 1
 })
 ```
 
-When you refresh the application now you should see the debugger show you that the _loadUser_ signal has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
+When you refresh the application now you should see the debugger show you that the *loadUser* signal has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
 
-## Operators
+## Factories
 
-But we can actually refactor our _loadUser_ signal a bit. We do not only have operators available inside an action, we can actually use them directly in the sequence definition. In the **sequences.js** file do:
+But we can actually refactor our *loadUser* signal a bit. A concept in functional programming called *factories* allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. In the **sequences.js** file do:
 
 ```js
 import * as actions from './actions'
@@ -149,7 +146,7 @@ export const loadUser = [
 ]
 ```
 
-We now just made 4 actions obsolete. By using the **set** operator and the tags we are able to be more efficient and keep a good level of declarativeness. But we can actually do better. We can use proxies:
+We now just made 4 actions obsolete. By using the **set** factory and the tags we are able to be more efficient and keep a good level of declarativeness. But we can actually do better. We can use proxies:
 
 ```js
 import * as actions from './actions'
@@ -167,7 +164,7 @@ export const loadUser = [
 ]
 ```
 
-Proxies allows us to improve the declarativeness a little bit, but more importantly they open up for typing using [TypeScript](https://www.typescriptlang.org/). The proxies does require an additional package though, called [babel-plugin-cerebral](). Let us try it.
+Proxies allows us to improve the declarativeness a little bit, but more importantly they open up for typing using [TypeScript](https://www.typescriptlang.org/). The proxies does require an additional package though, called [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral). Let us try it.
 
 Install the plugin by: `npm install babel-plugin-cerebral`. Then you need to add a new file to your project root (not `/src`, but `/`). Name the file **.babelrc** and put:
 
@@ -187,7 +184,7 @@ You can choose to use the traditional template literal tags if you want to, but 
 
 ## Paths
 
-Our _actions.getUser_ might fail. The server might be unavailable for example. One way to solve this is to use conditional logic in the sequence. Let us first express a conditional in the sequence of **success** and **error**:
+Our *actions.getUser* might fail. The server might be unavailable for example. One way to solve this is to use conditional logic in the sequence. Let us first express a conditional in the sequence of **success** and **error**:
 
 ```js
 import * as actions from './actions'
@@ -207,7 +204,7 @@ export const loadUser = [
 ]
 ```
 
-Objects in sequences are treated as conditional execution and it is the action in front of it, _actions.getUser_ in this case, that chooses what path of execution to take. Since we only want to set the user on a success, let us refactor a bit:
+Objects in sequences are treated as conditional execution and it is the action in front of it, *actions.getUser* in this case, that chooses what path of execution to take. Since we only want to set the user on a success, let us refactor a bit:
 
 ```js
 import * as actions from './actions'
@@ -234,7 +231,7 @@ In this case we just chose to use **success** and **error** as paths here, but i
 </Info>
 ```
 
-To actually handle the conditional execution we need to look back into our _getUser_ action located in **actions.js**:
+To actually handle the conditional execution we need to look back into our *getUser* action located in **actions.js**:
 
 ```js
 export const getUser = ({ jsonPlaceholder, props, path }) =>

@@ -15,7 +15,7 @@ export default Module({
 })
 ```
 
-So you would typically create your reactions in a separate file, _reactions.js_:
+So you would typically create your reactions in a separate file, *reactions.js*:
 
 ```js
 import { Reaction } from 'cerebral'
@@ -35,7 +35,7 @@ This reaction will react to whenever the current page is changed and fire off th
 
 ## Reactions in views
 
-You can also create reactions inside views, here shown with _React_:
+You can also create reactions inside views, here shown with *React*:
 
 ```js
 import * as React from 'react'
@@ -50,9 +50,9 @@ export default connect(
   class MyComponent extends React.Component {
     componentDidMount() {
       this.props.reaction(
-        'focusInput',
+        'focusUsername',
         {
-          error: state.inputError
+          error: state.usernameError
         },
         ({ error }) => error && this.input.focus()
       )
@@ -80,6 +80,6 @@ These reactions are destroyed when the view is unmounted.
 <Info>
 Also the view reaction receives the **get** property allowing you to grab arbitrary state etc.
 
-A reaction can also depend on a computed, allowing you react to updates.
+A reaction can also depend on a computed, allowing you to react to computed updates.
 </Info>
 ```

@@ -24,8 +24,8 @@ and then we rather catch errors in the module file. Look at `src/app/index.js`:
 
 ```js
 import { Module } from 'cerebral'
-import { jsonPlaceholder } from './providers'
-import { loadUser, handleError } from './sequences'
+import * as providers from './providers'
+import * as signals from './sequences'
 
 export default Module({
   state: {
@@ -34,13 +34,11 @@ export default Module({
     currentUserId: null,
     isLoadingUser: false
   },
-  signals: {
-    loadUser
-  },
-  catch: [[Error, handleError]],
-  providers: {
-    jsonPlaceholder
-  }
+  signals,
+  providers,
+  catch: [
+    [Error, signals.handleError]
+  ]
 })
 ```
 
@@ -70,9 +68,9 @@ We can now handle this error specifically in our module:
 
 ```js
 import { Module } from 'cerebral'
-import { jsonPlaceholder } from './providers'
-import { loadUser, handleError } from './sequences'
-import { JsonPlaceholderError } from './errors'
+import * as providers from './providers'
+import * as signals from './sequences'
+import * as errors from './errors'
 
 export default Module({
   state: {
@@ -81,13 +79,11 @@ export default Module({
     currentUserId: null,
     isLoadingUser: false
   },
-  signals: {
-    loadUser
-  },
-  catch: [[JsonPlaceholderError, handleError]],
-  providers: {
-    jsonPlaceholder
-  }
+  signals,
+  providers,
+  catch: [
+    [errors.JsonPlaceholderError, signals.handleError]
+  ]
 })
 ```
 
@@ -131,9 +127,7 @@ import * as actions from './actions'
 import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
-export const handleError = [
-  set(state.error, props.error.message)
-]
+export const handleError = set(state.error, props.error.message)
 
 export const loadUser = [...]
 ```
