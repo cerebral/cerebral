@@ -28,7 +28,7 @@ We expose providers to Cerebral by adding them to modules. Any module can add a 
 
 ```js
 import { Module } from 'cerebral'
-import { jsonPlaceholder } from './providers'
+import * as providers from './providers'
 
 export default Module({
   state: {
@@ -38,9 +38,7 @@ export default Module({
     isLoadingUser: false,
     error: null
   },
-  providers: {
-    jsonPlaceholder
-  }
+  providers
 })
 ```
 
