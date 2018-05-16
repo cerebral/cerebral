@@ -5,7 +5,7 @@ import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 
-export default connect(function App({ get }) {
+function App({ get }) {
   const counts = get(computed.counts)
 
   return (
@@ -31,4 +31,6 @@ export default connect(function App({ get }) {
       </footer>
     </div>
   )
-})
+}
+
+export default connect(App)

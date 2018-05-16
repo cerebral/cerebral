@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { connect } from '@cerebral/react'
 import { state, signals } from 'cerebral/proxy'
 
-export default connect(function Todo({ uid, isEditing, get }) {
+function Todo({ uid, isEditing, get }) {
   const todo = get(state.todos[uid])
   const todoDoubleClicked = get(signals.todoDoubleClicked)
   const newTitleChanged = get(signals.todoNewTitleChanged)
@@ -51,4 +51,6 @@ export default connect(function Todo({ uid, isEditing, get }) {
       )}
     </li>
   )
-})
+}
+
+export default connect(Todo)
