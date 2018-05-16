@@ -8,7 +8,7 @@ Currently we are creating a nested structure in our signal to express conditiona
 
 ```js
 import * as actions from './actions'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
 export const loadUser = [
@@ -128,7 +128,7 @@ Let us force an error to see how it looks. First let us actually handle the erro
 
 ```js
 import * as actions from './actions'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
 export const handleError = [

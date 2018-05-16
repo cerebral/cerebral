@@ -23,7 +23,7 @@ Creating a factory gives you the possibility to configure what a function should
 So the typical operators you use with Cerebral are the state operators:
 
 ```js
-import { set, push } from 'cerebral/operators'
+import { set, push } from 'cerebral/factories'
 import { state } from 'cerebral/tags'
 
 export default [set(state`foo`, 'bar'), push(state`list`, 'foo')]
@@ -220,7 +220,7 @@ This might resolve to **items.123**.
 Resolving the path instead of the value within the path gives some contextual power. For example the core Cerebral operators uses this feature:
 
 ```js
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 
 export default [set(state`foo`, props`foo`)]

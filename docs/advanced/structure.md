@@ -72,7 +72,7 @@ export const setLoadingApp = (isLoading) =>
 You import all actions and factories into the _sequences.js_ file. This will give you autosuggestions on available actions and factories. You can combine this with operators:
 
 ```js
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state } from 'cerebral/proxy'
 import * as actions from './actions'
 import * as factories from './factories'

@@ -60,7 +60,7 @@ connect(
 ## With operators
 
 ```js
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, computed } from 'cerebral/proxy'
 
 export const mySequence = set(state.filteredList, computed.filteredList)
@@ -80,7 +80,7 @@ export function myAction({ get }) {
 
 ```js
 import { state, computed } from 'cerebral/proxy'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 
 export const mySequence = set(state[computed.somePropKey].bar, 'baz')
 ```
