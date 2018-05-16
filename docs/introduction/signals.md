@@ -137,7 +137,7 @@ But we can actually refactor our _loadUser_ signal a bit. We do not only have op
 
 ```js
 import * as actions from './actions'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 
 export const loadUser = [
@@ -153,7 +153,7 @@ We now just made 4 actions obsolete. By using the **set** operator and the tags 
 
 ```js
 import * as actions from './actions'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 // Note we are changing from "cerebral/tags" to
 // "cerebral/proxy"
 import { state, props } from 'cerebral/proxy'
@@ -191,7 +191,7 @@ Our _actions.getUser_ might fail. The server might be unavailable for example. O
 
 ```js
 import * as actions from './actions'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
 export const loadUser = [
@@ -211,7 +211,7 @@ Objects in sequences are treated as conditional execution and it is the action i
 
 ```js
 import * as actions from './actions'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
 export const loadUser = [
