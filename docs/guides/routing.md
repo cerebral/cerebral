@@ -64,7 +64,7 @@ _app/index.js_
 
 ```js
 import { Module } from 'cerebral'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state } from 'cerebral/tags'
 import router from './router'
 
@@ -123,7 +123,7 @@ _app/index.js_
 
 ```js
 import { Module } from 'cerebral'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
@@ -157,7 +157,7 @@ _app/index.js_
 
 ```js
 import { Module } from 'cerebral'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
@@ -197,7 +197,7 @@ _app/index.js_
 
 ```js
 import { Module } from 'cerebral'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
@@ -237,7 +237,7 @@ We have already looked at how to load data on a specific url event, the **/items
 _changePage.js_
 
 ```js
-import { set, when } from 'cerebral/operators'
+import { set, when } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 import { httpGet } from '@cerebral/http/operators'
 
@@ -266,7 +266,7 @@ _app/index.js_
 
 ```js
 import { Module } from 'cerebral'
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 import HttpProvider, { httpGet } from '@cerebral/http/operators'
 import router from './router'
@@ -330,7 +330,7 @@ As you can see we again use a factory, only we wrap **changePage**. That way we 
 _authenticate.js_
 
 ```js
-import { set, when } from 'cerebral/operators'
+import { set, when } from 'cerebral/factories'
 import { redirect } from '@cerebral/router/operators'
 import { state } from 'cerebral/tags'
 

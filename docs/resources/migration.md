@@ -125,10 +125,10 @@ The biggest change to Cerebral 2.x is the operators. You can read more about the
 npm install cerebral-operators
 ```
 
-The new operators now use tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/operators'
+The new operators now use tagged template literals and you can reduce number of actions and instead use the new operators. Here is a quick sample. As you can see you import them from 'cerebral/factories'
 
 ```js
-import { set } from 'cerebral/operators'
+import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/tags'
 
 export default [set(state`foo.bar`, props`bar`)]

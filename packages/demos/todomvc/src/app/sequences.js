@@ -1,5 +1,5 @@
-import { redirect } from '@cerebral/router/operators'
-import { set, toggle, unset, when } from 'cerebral/operators'
+import { redirect } from '@cerebral/router/factories'
+import { set, toggle, unset, when } from 'cerebral/factories'
 import { props, state } from 'cerebral/proxy'
 import * as actions from './actions'
 
