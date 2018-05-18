@@ -1,18 +1,18 @@
 import React from 'react'
 import { connect } from '@cerebral/react'
-import { state, signals } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral/proxy'
 
 function NewTodo({ get }) {
   const title = get(state.newTodoTitle)
-  const titleChanged = get(signals.newTodoTitleChanged)
-  const submitted = get(signals.newTodoSubmitted)
+  const changeNewTodoTitle = get(sequences.changeNewTodoTitle)
+  const submitNewTodo = get(sequences.submitNewTodo)
 
   return (
     <form
       id="todo-form"
       onSubmit={(e) => {
         e.preventDefault()
-        submitted()
+        submitNewTodo()
       }}
     >
       <input
@@ -20,7 +20,7 @@ function NewTodo({ get }) {
         autoComplete="off"
         placeholder="What needs to be done?"
         value={title || ''}
-        onChange={(e) => titleChanged({ title: e.target.value })}
+        onChange={(e) => changeNewTodoTitle({ title: e.target.value })}
       />
     </form>
   )

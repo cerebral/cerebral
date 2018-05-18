@@ -1,4 +1,4 @@
-import * as signals from './sequences'
+import * as sequences from './sequences'
 import * as computed from './computed'
 
 export type State = {
@@ -16,7 +16,9 @@ export type State = {
 
 export type Computed = { [key in keyof typeof computed]: typeof computed[key] }
 
-export type Signals = { [key in keyof typeof signals]: typeof signals[key] }
+export type Sequences = {
+  [key in keyof typeof sequences]: typeof sequences[key]
+}
 
 export type Providers = {
   id: {

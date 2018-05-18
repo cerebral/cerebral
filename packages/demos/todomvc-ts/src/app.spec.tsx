@@ -1,8 +1,9 @@
+// @ts-ignore
+import renderer from 'react-test-renderer'
 import React from 'react'
 import app from './app'
 import { Snapshot } from 'cerebral/test'
 import { Container } from '@cerebral/react'
-import renderer from 'react-test-renderer'
 import Footer from './components/Footer'
 import List from './components/List'
 
@@ -12,7 +13,7 @@ test('should filter on all', () => {
     .then((snapshot) => {
       const tree = renderer
         .create(
-          <Container controller={snapshot.controller}>
+          <Container app={snapshot.app}>
             <Footer />
           </Container>
         )
@@ -32,7 +33,7 @@ test('should add new todo', () => {
     .then((snapshot) => {
       const tree = renderer
         .create(
-          <Container controller={snapshot.controller}>
+          <Container app={snapshot.app}>
             <List />
           </Container>
         )
