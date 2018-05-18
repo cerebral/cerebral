@@ -60,10 +60,16 @@ connect(
 ## With factories
 
 ```js
-import { set } from 'cerebral/factories'
+import { when } from 'cerebral/factories'
 import { state, computed } from 'cerebral/proxy'
 
-export const mySequence = set(state.filteredList, computed.filteredList)
+export const mySequence = [
+  when(computed.appIsAwesome),
+  {
+    true: [],
+    false: []
+  }
+]
 ```
 
 ## With actions
@@ -76,7 +82,7 @@ export function myAction({ get }) {
 }
 ```
 
-## With proxy
+## With other proxies
 
 ```js
 import { state, computed } from 'cerebral/proxy'
@@ -137,7 +143,7 @@ export const itemUsers = Computed(
 )
 ```
 
-In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users. Now this computed will only recalculate when the item updates or any of the users grabbed. It will not update if any other users update, which would be the case if you were depending on the users state.
+In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users. Now this computed will only recalculate when the item updates or any of the users grabbed. It will not update if any other users update, which would be the case if you were depending on the users state itself.
 
 ```marksy
 <Info>
@@ -155,7 +161,7 @@ function myAction({ get }) {
 }
 ```
 
-Or with a component, here showing with _React_:
+Or with a component, here showing with *React*:
 
 ```js
 import React from 'react'

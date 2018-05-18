@@ -9,31 +9,48 @@ You could install [React](https://reactjs.org/) by running the following command
 And then in the root **index.js** file you can add:
 
 ```js
+
+```
+
+```js
+import App from 'cerebral'
 import React from 'react'
 import { render } from 'react-dom'
 import { Container } from '@cerebral/react'
-import controller from './controller'
-import App from './components/App'
+import main from './main'
+import AppComponent from './components/App'
+
+let Devtools = null
+if (process.env.NODE_ENV === 'development') {
+  Devtools = require('cerebral/devtools').default
+}
+
+const app = App(main, {
+  devtools: Devtools({
+    host: 'localhost:8585'
+  })
+})
 
 render(
-  <Container controller={controller}>
-    <App />
+  <Container app={app}>
+    <AppComponent />
   </Container>,
   document.querySelector('#app')
 )
 ```
 
+
 And your **App** component located in `src/components/App.js` could look like:
 
 ```js
 import React from 'react'
-import { state, signals } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral/proxy'
 import { connect } from '@cerebral/react'
 
 export default connect(
   {
     user: state.users[state.currentUserId],
-    click: signals.loadUser
+    click: sequences.loadUser
   },
   function MyComponent({ user, click }) {
     return (
@@ -52,15 +69,26 @@ If you rather prefer [Vue](https://vuejs.org/) you could connect Cerebral in a s
 
 ```js
 import Vue from 'vue/dist/vue'
+import App from 'cerebral'
 import { Container, connect } from '@cerebral/vue'
-import controller from './controller'
-import App from './components/App'
+import AppComponent from './components/App'
 
-var app = new Vue({
+let Devtools = null
+if (process.env.NODE_ENV === 'development') {
+  Devtools = require('cerebral/devtools').default
+}
+
+const app = App(main, {
+  devtools: Devtools({
+    host: 'localhost:8585'
+  })
+})
+
+const vue = new Vue({
   el: '#app',
   components: {
-    container: Container(controller),
-    app: App
+    container: Container(app),
+    app: AppComponent
   }
 })
 ```
@@ -69,12 +97,12 @@ And you would define the component like this:
 
 ```js
 import { connect } from '@cerebral/vue'
-import { state, signals } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral/proxy'
 
 export default connect(
   {
     user: state.users[state.currentUserId],
-    click: signals.loadUser
+    click: sequences.loadUser
   },
   {
     template: `

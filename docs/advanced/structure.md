@@ -6,7 +6,7 @@ You can structure your application however you want, but there is a recommended 
 
 ```js
 src/
-  app/
+  main/
     modules/
       ...
     actions.js
@@ -20,7 +20,7 @@ src/
   controller.js
 ```
 
-This structure favors a single file for each type of composable piece of logic. The root module is named **app** and will hold submodules in the **modules** folder, where each module has the same structure. You will of course not create all these files for every module, only those needed.
+This structure favors a single file for each type of composable piece of logic. The root module is named **main** and will hold submodules in the **modules** folder, where each module has the same structure. You will of course not create all these files for every module, only those needed.
 
 ## Actions
 
@@ -36,7 +36,7 @@ export function actionB({ operators }) {
 }
 ```
 
-You export multiple actions from each modules _actions.js_ file.
+You export multiple actions from each modules *actions.js* file.
 
 If you prefer arrow functions, you can write:
 
@@ -70,7 +70,7 @@ export const setLoadingApp = (isLoading) =>
 
 ### Sequences
 
-You import all actions and factories into the *sequences.js* file. This will give you autosuggestions on available actions and factories. You can combine this with operators:
+You import all actions and factories into the *sequences.js* file. This will give you autosuggestions on available actions and factories. You can combine this with factories from Cerebral:
 
 ```js
 import { set } from 'cerebral/factories'
@@ -88,13 +88,13 @@ export const initialize = [
 
 ### Modules
 
-You import all your sequences into the modules file, attaching them to the signals definition.
+You import all your files into the *index.js* file, attaching them like this:
 
 ```js
 import { Module } from 'cerebral'
-import * as signals from './sequences'
+import * as sequences from './sequences'
 import * as errors from './errors'
-import * as computeds from './computeds'
+import * as computed from './computeds'
 import * as providers from './providers'
 import * as reactions from './reactions'
 
@@ -102,10 +102,10 @@ export default Module({
   state: {
     isLoading: false
   },
-  signals,
-  computeds,
+  sequences,
+  computed,
   reactions,
   providers,
-  catch: [[errors.AuthError, signals.catchAuthError]]
+  catch: [[errors.AuthError, sequences.catchAuthError]]
 })
 ```

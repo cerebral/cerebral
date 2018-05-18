@@ -18,7 +18,7 @@
       "../../../docs/introduction/devtools",
       "../../../docs/introduction/state",
       "../../../docs/introduction/providers",
-      "../../../docs/introduction/signals",
+      "../../../docs/introduction/sequences",
       "../../../docs/introduction/errors",
       "../../../docs/introduction/views"
     ],
@@ -31,7 +31,7 @@
     ],
     "guides": [
       "../../../docs/guides/http",
-      "../../../docs/guides/operators",
+      "../../../docs/guides/factories",
       "../../../docs/guides/routing",
       "../../../docs/guides/ssr"
     ],
