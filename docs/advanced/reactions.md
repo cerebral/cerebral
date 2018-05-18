@@ -1,6 +1,6 @@
 # Reactions
 
-Sometimes you need to react to changes of the state. You might want to run a signal related to a change of the state or maybe some logic inside a component. Reactions allows you to express this kind of logic.
+Sometimes you need to react to changes of the state. You might want to run a sequence related to a change of the state or maybe some logic inside a component. Reactions allows you to express this kind of logic.
 
 ## Reactions in modules
 
@@ -19,14 +19,14 @@ So you would typically create your reactions in a separate file, *reactions.js*:
 
 ```js
 import { Reaction } from 'cerebral'
-import { state, signals } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral/proxy'
 
 export const pageChanged = Reaction(
   {
     page: state.currentPage
   },
   ({ page, get }) => {
-    get(signals.openPage)({ page })
+    get(sequences.openPage)({ page })
   }
 )
 ```
@@ -40,12 +40,12 @@ You can also create reactions inside views, here shown with *React*:
 ```js
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, signals } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral/proxy'
 
 export default connect(
   {
     inputValue: state.inputValue,
-    changeInputValue: signals.changeInputValue
+    changeInputValue: sequences.changeInputValue
   },
   class MyComponent extends React.Component {
     componentDidMount() {

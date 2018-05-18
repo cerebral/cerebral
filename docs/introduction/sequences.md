@@ -1,19 +1,12 @@
-# Signals
+# Sequences
 
 ```marksy
 <Youtube url="https://www.youtube.com/embed/o2ULoHp22BE" />
 ```
 
-Any event in your application should trigger a signal. An event is everything from a button click to a url change. It can be a user interaction or some other internal event in the application. We are now going to define a signal that we will trigger manually. This signal should receive an id of a user, go grab that user and store it as the current user in your application.
+Application development is about handling events to produce changes to the state. This event is everything from a button click to a url change. It can be a user interaction or some other internal event in the application. There are many concepts for handling events, like handlers, actions, dispatching etc. In Cerebral you handle events using a **sequence**.
 
-A signal is built up by something we call **sequences**. A sequence is basically just a list of **actions** to perform. An **action** is what makes things happen in Cerebral. It is just a function that has the ability to access state and providers.
-
-```marksy
-<Info>
-When a signal triggers you can pass in **props**. These props can be accessed by any action
-in the sequence(s).
-</Info>
-```
+We are now going to define a sequence that we will trigger manually. This signal should receive an id of a user, go grab that user and store it as the current user in your application.
 
 When you build Cerebral application you typically write out the sequences first, then you implement the actions. Let us try that approach now. What we want to happen is:
 
@@ -23,7 +16,7 @@ When you build Cerebral application you typically write out the sequences first,
 4.  Set current user
 5.  Unset that we are loading a user
 
-Let us create a **sequences.js** file in `src/app` and export a sequence:
+Let us create a **sequences.js** file in `src/main` and export a sequence:
 
 ```js
 import * as actions from './actions'
@@ -39,30 +32,43 @@ export const loadUser = [
 
 As you can see we can just write out exactly what we want to happen. This allows us to reason about **what** we want our application to do before we think about **how** to do it.
 
-Let us create the **actions.js** file in `src/app` and look at how we implement the actions.
+```marksy
+<Info>
+When a sequence triggers you can pass in **props**. These props can be accessed by any action
+in the sequence. In this example the props would contain the id of the user we want to fetch.
+</Info>
+```
+
+Let us create the **actions.js** file in `src/main` and look at how we implement the actions.
 
 ```js
-import { state } from 'cerebral/tags'
+import { state } from 'cerebral/proxy'
 
 export const setLoadingUser = ({ operators }) =>
-  operators.set(state`isLoadingUser`, true)
+  operators.set(state.isLoadingUser, true)
 
 export const getUser = ({ jsonPlaceholder, props }) =>
   jsonPlaceholder.getUser(props.id)
 
 export const addUser = ({ operators, props }) =>
-  operators.set(state`users.${props.id}`, props.user)
+  operators.set(state.users[props.id], props.user)
 
 export const setCurrentUser = ({ operators, props }) =>
-  operators.set(state`currentUserId`, props.id)
+  operators.set(state.currentUserId, props.id)
 
 export const unsetLoadingUser = ({ operators }) =>
-  operators.set(state`isLoadingUser`, false)
+  operators.set(state.isLoadingUser, false)
 ```
 
-Your first question here is probably: *"What is this state tag?"*. The tag is a [template literal tag](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), a relatively new feature of the JavaScript language. As you will soon see this has pretty huge benefits.
+Your first question here is probably: *"What is this state proxy?"*. Cerebral exposes what we call proxies. They basically allows you to point to state, sequences etc. and based on the context Cerebral is able to evaluate what you want to do. There are several benefits to this:
 
-Moving on... as you can see every action has access to **operators**, **props** and **jsonPlaceholder**. The operators API allows you to do different changes on the state of the application, here only showing *set*. The props holds values passed into the sequence and populated through the execution. When *jsonPlaceholder.getUser* runs it will return an object with the user which will extend the props to:
+1. We have to track the state changes that is being performed to effectively notify the view layer about needed changes. There are several approaches to this where Cerebral uses its own approach called "path matching". Proxies allows us to avoid using strings to define these paths
+
+2. We improve the declarativeness of the code, as dot notation reads better than a string when you compose multiple values together, for example `state.users[props.id]`
+
+3. Proxies allows us to type state, sequences and computed using TypeScript... if you want
+
+Moving on... as you can see every action has access to **operators**, **props** and **jsonPlaceholder**. The operators API allows you to do different changes on the state of the application, here only showing *set*. The props holds values passed into the sequence and populated through the execution. When **jsonPlaceholder.getUser** runs it will return an object with the user which will extend the props to:
 
 ```js
 {
@@ -94,12 +100,12 @@ export const loadUser = [
 ]
 ```
 
-Let us fire up the signal and we can rather let the debugger do this visualization for us. First we have to actually define the signal in our `src/app/index.js` file:
+Let us fire up the signal and we can rather let the debugger do this visualization for us. First we have to actually define the signal in our `src/main/index.js` file:
 
 ```js
 import { Module } from 'cerebral'
 import * as providers from './providers'
-import * as signals from './sequences'
+import * as sequences from './sequences'
 
 export default Module({
   state: {
@@ -109,50 +115,44 @@ export default Module({
     isLoadingUser: false,
     error: null
   },
-  signals,
+  sequences,
   providers
 })
 ```
 
-Then in `/src` create a file called **index.js** and add the following:
+Then in `/src/index.js` add the following:
 
 ```js
-import controller from './controller'
+import App from 'cerebral'
+import main from './main'
 
-const loadUser = controller.getSignal('loadUser')
+let Devtools = null
+if (process.env.NODE_ENV === 'development') {
+  Devtools = require('cerebral/devtools').default
+}
+
+const app = App(main, {
+  devtools: Devtools({
+    host: 'localhost:8585'
+  })
+})
+
+const loadUser = app.getSequence('loadUser')
 
 loadUser({
   id: 1
 })
 ```
 
-When you refresh the application now you should see the debugger show you that the *loadUser* signal has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
+When you refresh the application now you should see the debugger show you that the *loadUser* sequence has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
 
 ## Factories
 
-But we can actually refactor our *loadUser* signal a bit. A concept in functional programming called *factories* allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. In the **sequences.js** file do:
+But we can actually refactor our *loadUser* sequence a bit. A concept in functional programming called *factories* allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. In the **sequences.js** file do:
 
 ```js
 import * as actions from './actions'
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/tags'
-
-export const loadUser = [
-  set(state`isLoadingUser`, true),
-  actions.getUser,
-  set(state`users.${props`id`}`, props`user`),
-  set(state`currentUserId`, props`id`),
-  set(state`isLoadingUser`, false)
-]
-```
-
-We now just made 4 actions obsolete. By using the **set** factory and the tags we are able to be more efficient and keep a good level of declarativeness. But we can actually do better. We can use proxies:
-
-```js
-import * as actions from './actions'
-import { set } from 'cerebral/factories'
-// Note we are changing from "cerebral/tags" to
-// "cerebral/proxy"
 import { state, props } from 'cerebral/proxy'
 
 export const loadUser = [
@@ -164,21 +164,11 @@ export const loadUser = [
 ]
 ```
 
-Proxies allows us to improve the declarativeness a little bit, but more importantly they open up for typing using [TypeScript](https://www.typescriptlang.org/). The proxies does require an additional package though, called [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral). Let us try it.
-
-Install the plugin by: `npm install babel-plugin-cerebral`. Then you need to add a new file to your project root (not `/src`, but `/`). Name the file **.babelrc** and put:
-
-```js
-{
-  "plugins": ["cerebral"]
-}
-```
-
-You will need to restart the Parcel development process to make this take effect. Hit `CTRL + C` in your terminal and run `npm start` again.
+We now just made 4 actions obsolete. There are several other factories for operators and also managing the flow of execution.
 
 ```marksy
 <Info>
-You can choose to use the traditional template literal tags if you want to, but the documentation and guides will always use the proxies. They are more declarative. The plugin actually converts the proxies to tags.
+If you have built Cerebral applications on previous versions you know the concept "template literal tags". You can still use these instead, but the proxies are more declarative. The babel plugin actually converts the proxies to tags.
 </Info>
 ```
 

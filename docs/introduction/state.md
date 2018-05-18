@@ -22,7 +22,7 @@ You will normally store other objects, arrays, strings, booleans and numbers in 
 3.  All the state of your application can be inspected through one object
 4.  All state is related to a path. There is no need to import and/or pass around model instances into other model instances to access state
 
-Let us add some new state to the application to show of some more Cerebral. In our **app/index.js** file:
+Let us add some new state to the application to show of some more Cerebral. In our **main/index.js** file:
 
 ```js
 import { Module } from 'cerebral'
