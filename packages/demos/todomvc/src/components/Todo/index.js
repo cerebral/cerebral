@@ -1,15 +1,15 @@
 import React from 'react'
 import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, signals } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral/proxy'
 
 function Todo({ uid, isEditing, get }) {
   const todo = get(state.todos[uid])
-  const todoDoubleClicked = get(signals.todoDoubleClicked)
-  const newTitleChanged = get(signals.todoNewTitleChanged)
-  const newTitleSubmitted = get(signals.todoNewTitleSubmitted)
-  const toggleCompletedChanged = get(signals.toggleTodoCompletedChanged)
-  const removeTodoClicked = get(signals.removeTodoClicked)
+  const todoDoubleClicked = get(sequences.editTodo)
+  const changeTodoTitle = get(sequences.changeTodoTitle)
+  const submitTodoTitle = get(sequences.submitTodoTitle)
+  const toggleTodoCompleted = get(sequences.toggleTodoCompleted)
+  const removeTodo = get(sequences.removeTodo)
 
   return (
     <li
@@ -22,30 +22,27 @@ function Todo({ uid, isEditing, get }) {
         <input
           className="toggle"
           type="checkbox"
-          onChange={() => toggleCompletedChanged({ uid })}
+          onChange={() => toggleTodoCompleted({ uid })}
           checked={todo.completed}
         />
         <label onDoubleClick={() => todoDoubleClicked({ uid })}>
           {todo.title}
         </label>
-        <button
-          className="destroy"
-          onClick={() => removeTodoClicked({ uid })}
-        />
+        <button className="destroy" onClick={() => removeTodo({ uid })} />
       </div>
       {isEditing && (
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            newTitleSubmitted({ uid })
+            submitTodoTitle({ uid })
           }}
         >
           <input
             autoFocus
             className="edit"
             value={isEditing ? todo.editedTitle : todo.title}
-            onBlur={() => newTitleSubmitted({ uid })}
-            onChange={(e) => newTitleChanged({ uid, title: e.target.value })}
+            onBlur={() => submitTodoTitle({ uid })}
+            onChange={(e) => changeTodoTitle({ uid, title: e.target.value })}
           />
         </form>
       )}

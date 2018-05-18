@@ -1,39 +1,39 @@
 // @ts-ignore
 import { redirect } from '@cerebral/router/factories'
-import { state, sequence, sequenceWithProps } from 'cerebral.proxy'
+import { state, Sequence, SequenceWithProps } from 'cerebral.proxy'
 import * as actions from './actions'
 
-export const redirectToAll = sequence((s) => s.action(redirect('/all')))
+export const redirectToAll = Sequence((s) => s.action(redirect('/all')))
 
-export const changeNewTodoTitle = sequenceWithProps<{ title: string }>((s) =>
+export const changeNewTodoTitle = SequenceWithProps<{ title: string }>((s) =>
   s.action(({ operators, props }) =>
     operators.set(state.newTodoTitle, props.title)
   )
 )
 
-export const removeTodo = sequenceWithProps<{ uid: string }>((s) =>
+export const removeTodo = SequenceWithProps<{ uid: string }>((s) =>
   s.action(({ operators, props }) => operators.unset(state.todos[props.uid]))
 )
 
-export const toggleAllChecked = sequence((s) =>
+export const toggleAllChecked = Sequence((s) =>
   s.action(actions.toggleAllChecked)
 )
 
-export const toggleTodoCompleted = sequenceWithProps<{ uid: string }>((s) =>
+export const toggleTodoCompleted = SequenceWithProps<{ uid: string }>((s) =>
   s.action(({ operators, props }) =>
     operators.toggle(state.todos[props.uid].completed)
   )
 )
 
-export const clearCompletedTodos = sequence((s) =>
+export const clearCompletedTodos = Sequence((s) =>
   s.action(actions.clearCompletedTodos)
 )
 
-export const changeFilter = sequenceWithProps<{ filter: string }>((s) =>
+export const changeFilter = SequenceWithProps<{ filter: string }>((s) =>
   s.action(({ operators, props }) => operators.set(state.filter, props.filter))
 )
 
-export const submitNewTodo = sequence((s) =>
+export const submitNewTodo = Sequence((s) =>
   s.when(({ get }) => Boolean(get(state.newTodoTitle))).paths({
     true: (s) =>
       s
@@ -43,7 +43,7 @@ export const submitNewTodo = sequence((s) =>
   })
 )
 
-export const changeTodoTitle = sequenceWithProps<{
+export const changeTodoTitle = SequenceWithProps<{
   uid: string
   title: string
 }>((s) =>
@@ -52,7 +52,7 @@ export const changeTodoTitle = sequenceWithProps<{
   )
 )
 
-export const editTodo = sequenceWithProps<{ uid: string }>((s) =>
+export const editTodo = SequenceWithProps<{ uid: string }>((s) =>
   s
     .action(({ operators, props }) =>
       operators.set(
@@ -65,7 +65,7 @@ export const editTodo = sequenceWithProps<{ uid: string }>((s) =>
     )
 )
 
-export const abortEdit = sequenceWithProps<{ uid: string }>((s) =>
+export const abortEdit = SequenceWithProps<{ uid: string }>((s) =>
   s
     .action(({ operators, props }) =>
       operators.unset(state.todos[props.uid].editedTitle)
@@ -73,7 +73,7 @@ export const abortEdit = sequenceWithProps<{ uid: string }>((s) =>
     .action(({ operators }) => operators.set(state.editingUid, null))
 )
 
-export const submitTodoTitle = sequenceWithProps<{ uid: string }>((s) =>
+export const submitTodoTitle = SequenceWithProps<{ uid: string }>((s) =>
   s
     .when(({ get, props }) => Boolean(get(state.todos[props.uid].editedTitle)))
     .paths({
