@@ -11,6 +11,12 @@
 3.  Hit the **download** button and unzip the project to a folder
 4.  Run `npm install` and then `npm start`
 
+```marksy
+<Info>
+The project contains the [babel-plugin-cerebral]() package. This is package helps writing declarative code using proxies, as you will soon learn more about.
+</Info>
+```
+
 ## From the browser
 
 Open [Codesandbox.io](https://codesandbox.io/s/m59vpm64vx)

@@ -25,19 +25,15 @@ This response is now displayed in the browser and the Cerebral application is re
 
 Now lets lay out the considerations we need to take regarding server side rendering:
 
-1.  **Render components** - The minimum requirement is to actually render the components on the server inside the same `<div id="app"></div>` as the client will.
+1.  **Render components** - The minimum requirement is to actually render the components on the server inside the same `<div id="app"></div>` as the client will
 
-2.  **Universal Controller** - When your client fires up it might need some initial data from the server to display the content. With the help of the **Universal Controller** we can automate this process.
+2.  **Universal Cerebral App** - When your client fires up it might need some initial data from the server to display the content. With the help of the **Universal Cerebral App** we can automate this process
 
-3.  **Synchronize with router** - If your application uses the Cerebral router it is not only initial data that possibly needs to be synchronized, but also the state that is related to what URL you are on.
-
-```marksy
-<Twitter text="There are several considerations you need to take evaluating SSR for your application" hashtags="cerebral"/>
-```
+3.  **Synchronize with router** - If your application uses the Cerebral router it is not only initial data that possibly needs to be synchronized, but also the state that is related to what URL you are on
 
 ## Render components
 
-To render the components on the server they should be as pure as possible. By default components in a Cerebral app are kept pure because all business logic is contained in signals. That means it is safe to grab your root component on the server and render it:
+To render the components on the server they should be as pure as possible. By default components in a Cerebral app are kept pure because all application logic is contained in sequences and actions. That means it is safe to grab your root component on the server and render it:
 
 ```js
 import App from '../client/components/App'
@@ -59,121 +55,23 @@ app.get('/', (req, res) => {
 
 A good workflow for working with server side rendered components requires some packages and configuration. This is one approach to such a setup.
 
-### Configure babel
+### Run Node with Babel
 
-First install babel dependencies with `npm install babel-loader babel-preset-es2015 babel-preset-react babel-plugin-transform-define`. Instead of configuring babel options inside your webpack config, you should do so in a `.babelrc` file:
-
-```js
-{
-  "presets": ["es2015", "react"],
-  "env": {
-    "development": {
-      "plugins": []
-    },
-    "production": {
-      "plugins": [
-        ["transform-define", {
-          'process.env.NODE_ENV': 'production'
-        }]
-      ]
-    }
-  }
-}
-```
-
-Now everything related to babel, it being webpack, node or direct babel build will use the same configuration.
-
-### Development script
-
-You will need to run both your server and the webpack development server for your client. This can be accomplished by `npm install concurrently webpack-dev-server babel-watch`. The webpack dev server will actually be your main development server, but it will proxy requests to your Node server as well. To configure this:
-
-_webpack.config.js_
-
-```js
-const path = require('path')
-
-const rules = [
-  {
-    test: /\.js?$/,
-    include: [path.resolve('src', 'client')],
-    use: [
-      {
-        loader: require.resolve('babel-loader')
-      }
-    ]
-  }
-]
-
-module.exports = {
-  entry: path.resolve('src', 'client', 'index.js'),
-  output: {
-    path: path.resolve('public'),
-    filename: 'app.js',
-    publicPath: '/'
-  },
-  module: {
-    rules: rules
-  },
-  devServer: {
-    port: 3000,
-    proxy: {
-      '/': 'http://localhost:3001'
-    },
-    hot: false,
-    inline: false
-  }
-}
-```
-
-And your startup script in **package.json** should look like:
-
-```js
-{
-  "scripts": {
-    "start": "concurrently --prefix \"[{name}]\" --names \"CLIENT,SERVER\" -c \"white.bold,gray.bold\" \"webpack-dev-server\" \"babel-watch src/server/index.js --watch src\""
-  },
-  "build:client": "webpack",
-  "build:server": "babel src/server --out-dir server-build"
-}
-```
-
-What the _start_ line does is fire up two processes, _webpack-dev-server_ and _babel-watch_ , then it watches `src` folder for changes. Now any changes to your client or server files will allow you to just refresh your browser and the updates are there.
-
-You build production bundles for your client and server separately.
+To bring your components into Node you should run Node with the [babel-node](https://babeljs.io/docs/usage/cli/#babel-node) project. Make sure this is not run in production though. You will need to build the server files as well.
 
 ## Universal Controller
 
-Cerebrals universal controller allows you to mount your client side initial state on the server, execute logic to change that state and inject it with the server rendered app so that your client does not need to refetch the data.
-
-To prepare your application for server side rendering it is a good idea to define the modules in its own file, that way you can reuse them on the server.
-
-_modules/index.js_
+Cerebrals universal app allows you to mount your client side initial state on the server, execute logic to change that state and inject it with the server rendered app so that your client does not need to refetch the data.
 
 ```js
-export { default as app } from './app'
-export { default as admin } from './admin'
-```
-
-_controller.js_
-
-```js
-import { Controller } from 'controller'
-import app from './app'
-
-export default Controller(app)
-```
-
-Now on your server you can prepare your universal controller the same way:
-
-```js
-import {UniversalController} from 'cerebral'
-import app '../client/app'
-import App from '../client/components/App'
+import { UniversalApp } from 'cerebral'
+import main from '../client/main'
+import AppComponent from '../client/components/App'
 import {renderToString} from 'react-dom/server'
 
 app.get('/', (req, res) => {
-  const controller = UniversalController(app)
-  const appHtml = renderToString(<App/>)
+  const app = UniversalApp(main)
+  const appHtml = renderToString(<AppComponent/>)
 
   res.send(`<!DOCTYPE html>
 <html>
@@ -189,31 +87,31 @@ app.get('/', (req, res) => {
 This means that when the app is rendered it will have the same initial state, both on the client and the server. To actually produce some new state we need to execute logic and we do that using the **run** method:
 
 ```js
-import { UniversalController } from 'cerebral'
-import { Container } from 'cerebral/react'
-import app from '../client/app'
-import App from '../client/components/App'
-import { renderToString } from 'react-dom/server'
+import { UniversalApp } from 'cerebral'
+import { state } from 'cerebral/proxy'
+import main from '../client/main'
+import AppComponent from '../client/components/App'
+import {renderToString} from 'react-dom/server'
 
-function setInitialState({ state, props }) {
-  state.set('app.user', props.user)
+function setInitialState({ operators, props }) {
+  operators.set(state.app.user, props.user)
 }
 
 app.get('/', (req, res) => {
-  const controller = UniversalController(app)
+  const app = UniversalApp(main)
 
   db
     .getUser()
     .then((user) => {
-      return controller.run(setInitialState, { user })
+      return app.run(setInitialState, { user })
     })
     .then(() => {
       const appHtml = renderToString(
-        <Container controller={controller}>
+        <Container app={app}>
           <App />
         </Container>
       )
-      const stateScript = controller.getScript()
+      const stateScript = app.getScript()
 
       res.send(`<!DOCTYPE html>
 <html>
@@ -233,9 +131,9 @@ Lets summarize the changes:
 
 1.  We create a sequence, which is just one action, that expects to receive a user as a prop. This user is then put into the state
 
-2.  Before we start rendering our application we go and grab a user from the database. When this user is fetched we run the controller passing in the user, making it available on the props
+2.  Before we start rendering our application we go and grab a user from the database. When this user is fetched we run the app passing in the user, making it available on the props
 
-3.  When the execution is done we render the application by using the **Container** component which provides the controller to the components
+3.  When the execution is done we render the application by using the **Container** component which provides the app to the components
 
 4.  Now we can extract the script that contains the exact state changes made. The client will automatically pick up this script and produce the correct initial state of the application
 
@@ -248,72 +146,66 @@ This is what you need to do if you want to put the client side application in a 
 If your whole application is run from a single route, **/**, you do not have to worry about this. But if you want to combine server side rendering with a router you need to make sure that the server does not diverge from what the router will do when it triggers on client load. Let us imagine we have the following router setup:
 
 ```js
-import { Controller, Module } from 'cerebral'
+import { Module } from 'cerebral'
 import { set } from 'cerebral/factories'
-import { state } from 'cerebral/tags'
+import { state, sequences } from 'cerebral/proxy'
 import Router from '@cerebral/router'
 
 const router = Router({
   routes: [
     {
       path: '/',
-      signal: 'homeRouted'
+      sequence: sequences.openHomePage
     },
     {
       path: '/admin',
-      signal: 'adminRouted'
+      sequence: sequences.openAdminPage
     }
   ]
 })
 
-const app = Module({
+export default Module({
   modules: { router },
   state: {
     currentPage: 'home'
   },
-  signals: {
-    homeRouted: set(state`currentPage`, 'home'),
-    adminRouted: set(state`currentPage`, 'admin')
+  sequences: {
+    openHomePage: set(state.currentPage, 'home'),
+    openAdminPage: set(state.currentPage, 'admin')
   }
 })
-
-export default Controller(app)
 ```
 
 This is a pretty basic setup. When the router triggers it will, based on the url, change the **currentPage** state. That means when your user hits your server on either urls, the server needs to also set the correct state based on the url.
 
 ```js
-import { UniversalController, Module } from 'cerebral'
-import App from '../client/components/App'
+import { UniversalApp } from 'cerebral'
+import AppComponent from '../client/components/App'
 import { Container } from 'cerebral/react'
+import { state } from 'cerebral/proxy'
 import { renderToString } from 'react-dom/server'
+import main from '../client/main'
 
-function setInitialState({ state, props }) {
+function setInitialState({ operators, props }) {
   let page
   if (props.path === '/') {
     page = 'home'
   } else if (props.path === '/admin') {
     page = 'admin'
   }
-  state.set('page', page)
+  operators.set(state.page, page)
 }
 
 app.get('*', (req, res) => {
-  const app = Module({
-    state: {
-      page: 'home'
-    }
-  })
-  const controller = UniversalController(app)
-  const mip = `hmm ${foo} ha`
+  const app = UniversalApp(main)
 
-  controller.run(setInitialState, { path: req.path }).then(() => {
+  app.run(setInitialState, { path: req.path }).then(() => {
     const appHtml = renderToString(
-      <Container controller={controller}>
+      <Container app={app}>
         <App />
       </Container>
     )
-    const stateScript = controller.getScript()
+    const stateScript = app.getScript()
 
     res.send(`<!DOCTYPE html>
 <html>
