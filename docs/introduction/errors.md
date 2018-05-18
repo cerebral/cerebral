@@ -4,7 +4,7 @@
 <Youtube url="https://www.youtube.com/embed/UdVjsKQLybw" />
 ```
 
-Currently we are creating a nested structure in our signal to express conditional execution. Related to errors that does not always make sense, cause you just want to stop execution and do something completely different. Let us revert our sequence back to is original format:
+Currently we are creating a nested structure in our sequence to express conditional execution. Related to errors that does not always make sense, cause you just want to stop execution and do something completely different. Let us revert our sequence back to is original format:
 
 ```js
 import * as actions from './actions'
@@ -20,12 +20,12 @@ export const loadUser = [
 ]
 ```
 
-and then we rather catch errors in the module file. Look at `src/app/index.js`:
+and then we rather catch errors in the module file. Look at `src/main/index.js`:
 
 ```js
 import { Module } from 'cerebral'
 import * as providers from './providers'
-import * as signals from './sequences'
+import * as sequences from './sequences'
 
 export default Module({
   state: {
@@ -34,10 +34,10 @@ export default Module({
     currentUserId: null,
     isLoadingUser: false
   },
-  signals,
+  sequences,
   providers,
   catch: [
-    [Error, signals.handleError]
+    [Error, sequences.handleError]
   ]
 })
 ```
@@ -50,7 +50,7 @@ Notice that the catch handler is an array of arrays. Each item in the array is a
 </Warning>
 ```
 
-Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/app`:
+Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/ main`:
 
 ```js
 import { CerebralError } from 'cerebral'
@@ -69,7 +69,7 @@ We can now handle this error specifically in our module:
 ```js
 import { Module } from 'cerebral'
 import * as providers from './providers'
-import * as signals from './sequences'
+import * as sequences from './sequences'
 import * as errors from './errors'
 
 export default Module({
@@ -79,10 +79,10 @@ export default Module({
     currentUserId: null,
     isLoadingUser: false
   },
-  signals,
+  sequences,
   providers,
   catch: [
-    [errors.JsonPlaceholderError, signals.handleError]
+    [errors.JsonPlaceholderError, sequences.handleError]
   ]
 })
 ```
@@ -148,18 +148,18 @@ export const jsonPlaceholder = Provider({
 })
 ```
 
-As you can see the debugger indicates when it catches an error and how it is handled. Note that by default Cerebral will not throw to the console when errors occur, but just give you a warning about it. You can force Cerebral to also throw to the console by passing in an option to the controller:
+As you can see the debugger indicates when it catches an error and how it is handled. Note that by default Cerebral will not throw to the console when these caught errors occur, but just give you a warning about it. You can force Cerebral to also throw to the console by passing in an option to the controller:
 
 ```js
-import { Controller } from 'cerebral'
-import app from './app'
+import App from 'cerebral'
+import main from './main'
 
 let Devtools = null
 if (process.env.NODE_ENV === 'development') {
   Devtools = require('cerebral/devtools').default
 }
 
-export default Controller(app, {
+const app =  App(main, {
   throwToConsole: true,
   devtools: Devtools({
     host: 'localhost:8585'
