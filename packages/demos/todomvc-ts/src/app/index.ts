@@ -1,5 +1,5 @@
 import { Module } from 'cerebral'
-import * as signals from './sequences'
+import * as sequences from './sequences'
 import * as computed from './computed'
 import * as providers from './providers'
 import * as modules from './modules'
@@ -14,7 +14,7 @@ const state: State = {
 
 export default Module({
   state,
-  signals,
+  sequences,
   computed,
   providers,
   modules,

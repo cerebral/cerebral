@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, signals, props } from 'cerebral.proxy'
+import { state, sequences, props } from 'cerebral.proxy'
 
 type ExternalProps = {
   uid: string
@@ -10,12 +10,12 @@ type ExternalProps = {
 
 const deps = {
   todo: state.todos[props.uid],
-  todoDoubleClicked: signals.editTodo,
-  newTitleChanged: signals.changeTodoTitle,
-  newTitleSubmitted: signals.submitTodoTitle,
-  toggleCompletedChanged: signals.toggleTodoCompleted,
-  removeTodoClicked: signals.removeTodo,
-  newTitleAborted: signals.abortEdit,
+  todoDoubleClicked: sequences.editTodo,
+  newTitleChanged: sequences.changeTodoTitle,
+  newTitleSubmitted: sequences.submitTodoTitle,
+  toggleCompletedChanged: sequences.toggleTodoCompleted,
+  removeTodoClicked: sequences.removeTodo,
+  newTitleAborted: sequences.abortEdit,
 }
 
 export default connect<ExternalProps, typeof deps>(deps, function Todo({

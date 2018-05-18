@@ -1,12 +1,13 @@
 import Router from '@cerebral/router'
 import StorageProvider from '@cerebral/storage'
+import { sequences } from 'cerebral/proxy'
 
 export const router = Router({
   onlyHash: true,
   query: true,
   routes: [
-    { path: '/', signal: 'rootRouted' },
-    { path: '/:filter', signal: 'filterClicked' },
+    { path: '/', sequence: sequences.redirectToAll },
+    { path: '/:filter', sequence: sequences.changeFilter },
   ],
 })
 
