@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from '@cerebral/react'
-import { state, signals, computed } from 'cerebral/proxy'
+import { state, sequences, computed } from 'cerebral/proxy'
 import classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']
@@ -8,8 +8,8 @@ const filters = ['All', 'Active', 'Completed']
 function Footer({ get }) {
   const filter = get(state.filter)
   const counts = get(computed.counts)
-  const filterClicked = get(signals.filterClicked)
-  const clearCompletedClicked = get(signals.clearCompletedClicked)
+  const changeFilter = get(sequences.changeFilter)
+  const clearCompletedTodos = get(sequences.clearCompletedTodos)
 
   return (
     <footer className="footer">
@@ -22,9 +22,7 @@ function Footer({ get }) {
         {filters.map((filterName) => (
           <li key={filterName}>
             <a
-              onClick={() =>
-                filterClicked({ filter: filterName.toLowerCase() })
-              }
+              onClick={() => changeFilter({ filter: filterName.toLowerCase() })}
               className={classnames({
                 selected: filter === filterName.toLowerCase(),
               })}
@@ -37,7 +35,7 @@ function Footer({ get }) {
       {!!counts.completed && (
         <button
           className="clear-completed"
-          onClick={() => clearCompletedClicked()}
+          onClick={() => clearCompletedTodos()}
         >
           Clear completed ({counts.completed})
         </button>
