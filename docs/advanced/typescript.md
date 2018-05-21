@@ -48,7 +48,6 @@ Typically you want to create a **types.ts** file next to your modules. This is w
 *main/types.ts*
 
 ```ts
-import * as sequences from './sequences'
 import * as computeds from './computeds'
 
 export type State = {
@@ -56,14 +55,12 @@ export type State = {
   isAwesome: true
 }
 
-export type Sequences = { [key in keyof typeof sequences]: typeof sequences[key] }
-
 export type Computed = { [key in keyof typeof computed]: typeof computed[key] }
 ```
 
 ```marksy
 <Info>
-The way we type **signals** and **computed** just exposes the way they are defined. Meaning if you add new computeds and/or sequences they will automatically be typed.
+The way we type **sequences** and **computed** just exposes the way they are defined. Meaning if you add new computeds and/or sequences they will automatically be typed.
 </Info>
 ```
 
@@ -103,37 +100,223 @@ type State = Main.State & {
   moduleA: ModuleA.State
 }
 
-type Sequences = Main.Sequences & {
-  moduleA: ModuleA.Sequences
-}
-
 type Computed = Main.Computed & {
   moduleA: ModuleA.Computed
 }
 
 export const state = proxy.state as State
-export const sequences = proxy.sequences as Sequences
 export const computed = proxy.computed as Computed
+export const sequences = proxy.sequences
 export const props = proxy.props
 ```
 
-Any usage of proxies should now be imported from **cerebral.proxy**:
+## Step2: Typing sequences (declarative)
+
+The most important and common typing that helps you is "how to execute a sequence". By defining all your sequences using the **sequence** or **parallel** factory gives you this typing:
 
 ```ts
-import { state } from 'cerebral.proxy'
-import { connect } from '@cerebral/react'
+import { sequence } from 'cerebral'
 
-export default connect(
-  {
-    foo: state.foo
-  },
-  ({ foo }) => {
-    return ...
-  }
-)
+export const mySequence = sequence(actions.myAction)
+
+export const myOtherSequence = sequence([
+  actions.someAction,
+  actions.someOtherAction
+])
 ```
 
-## Step2: Typing actions
+To type a sequence with prosp to pass in, just add it:
+
+```ts
+import { sequence } from 'cerebral'
+
+export const mySequence = sequence<{ foo: string }>(actions.myAction)
+```
+
+Now your components will get type information on how to call the sequences. You are now also free to use all the factories with state typing.
+
+```marksy
+<Warning>
+This approach does **NOT** give you suggestions and type safety on props. This is just impossible to do with this syntax. That said, the value of keeping the declarativeness, typing the input to the sequence and with the assistance of the debugger this is the recommended approach.
+</Warning>
+```
+
+
+## Step3: Typing components
+
+In Cerebral we recommend using React if you intend to type your components. The typing can be inferred automatically, but it is recommended to split your **connect** and the component:
+
+### With dependencies
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+const deps = {
+  foo: state.foo,
+  bar: computed.bar,
+  onClick: sequences.onClick
+}
+
+export const MyComponent: React.SFC<typeof deps & ConnectedProps> = ({ foo, bar, onClick }) => {
+  return ...
+}
+
+export default connect(deps, MyComponent)
+```
+
+This approach allows you to export your components for testing without connecting them. It also writes out better in the different scenarios as you will see soon.
+
+**Using classes:**
+
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+const deps = {
+  foo: state.foo,
+  bar: computed.bar,
+  onClick: sequences.onClick
+}
+
+class MyComponent extends React.Component<typeof deps & ConnectedProps> {
+  render () {
+    return null
+  }
+}
+
+export default connect(deps, MyComponent)
+```
+
+### With dependencies and external props
+
+If the component receives external props you need to type those and your dependencies:
+
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+type Props = {
+  external: string
+}
+
+const deps = {
+  foo: state.foo,
+  bar: computed.bar,
+  onClick: sequences.onClick
+}
+
+export const MyComponent: React.SFC<Props & typeof deps & ConnectedProps> = ({
+  external,
+  foo,
+  bar,
+  onClick
+}) => {
+  return ...
+}
+
+export default connect<Props>(deps, MyComponent)
+```
+
+**And with a class:**
+
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+type Props = {
+  external: string
+}
+
+const deps = {
+  foo: state.foo,
+  bar: computed.bar,
+  onClick: sequences.onClick
+}
+
+class MyComponent extends React.Component<Props & typeof deps & ConnectedProps> {
+  render () {
+    return null
+  }
+}
+
+export default connect<Props>(deps, MyComponent)
+```
+
+### Dynamic dependencies
+
+If you choose the dynamic approach there is no need to type the dependencies, though you have to type the connected props:
+
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+const MyComponent: React.SFC<ConnectedProps> = ({ get }) => {
+  const foo = get(state.foo)
+  const bar = get(computed.bar)
+  const onClick = get(sequences.onClick)
+}
+
+export default connect(MyComponent)
+```
+
+**And classes:**
+
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+class MyComponent extends React.Component<ConnectedProps> {
+  render () {
+    const { get } = this.props
+    const foo = get(state.foo)
+    const bar = get(computed.bar)
+    const onClick = get(sequences.onClick)
+  }
+}
+
+export default connect(MyComponent)
+```
+
+### Dynamic dependencies and external props
+
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+type Props = {
+  external: string
+}
+
+const MyComponent: React.SFC<Props & ConnectedProps> = ({ external, get }) => {
+  const foo = get(state.foo)
+  const bar = get(computed.bar)
+  const onClick = get(sequences.onClick)
+}
+
+export default connect<Props>(MyComponent)
+```
+
+**And classes:**
+
+```ts
+import { state, computed, sequences } from 'cerebral.proxy'
+import { connect, ConnectedProps } from '@cerebral/react'
+
+type Props = {
+  external: string
+}
+
+class MyComponent extends React.Component<Props & ConnectedProps> {
+  render () {
+    const { get, external } = this.props
+    const foo = get(state.foo)
+    const bar = get(computed.bar)
+    const onClick = get(sequences.onClick)
+  }
+}
+```
+
+## Step4: Typing actions
 
 When writing actions you access the context. The default context is already typed and you can add your own provider typings.
 
@@ -163,14 +346,14 @@ When you now create your actions you can attach a context type:
 ```ts
 import { Context } from 'cerebral.proxy'
 
-export const function myAction ({ operators, myProvider }: Context) {
+export const function myAction ({ store, myProvider }: Context) {
 
 }
 ```
 
-## Step3: Typing sequences
+## Step5: Typing sequences (chain)
 
-To get full type safety in signals you will need to move to a less declarative chaining api for the sequences. But the cost gives you the value of full type safety. Note that we are also updating the Context typings here:
+To get full type safety in sequences you will need to move to a less declarative chaining api. But the cost gives you the value of full type safety. Note that we are also updating the Context typings here:
 
 ```ts
 import {
@@ -212,14 +395,14 @@ import * as actions from './actions'
 export const doThis = Sequence((sequence) =>
   sequence
     .action(actions.doSomething)
-    .action('doSomethingElse', ({ operators }) =>
-      operators.set(state.foo, 'bar')
+    .action('doSomethingElse', ({ store }) =>
+      store.set(state.foo, 'bar')
     )
 )
 
 export const doThat = SequenceWithProps<{ foo: string }>((sequence) =>
-  sequence.action('doThisThing', ({ operators, props }) =>
-    operators.set(state.foo, props.foo)
+  sequence.action('doThisThing', ({ store, props }) =>
+    store.set(state.foo, props.foo)
   )
 )
 ```
@@ -279,11 +462,11 @@ With the new action typings you will be able to improve inference in the sequenc
 ```ts
 import { Context } from 'cerebral.proxy'
 
-export const function myAction ({ operators, myProvider }: Context) {
+export const function myAction ({ store, myProvider }: Context) {
 
 }
 
-export const function myAction ({ operators, myProvider, props }: Context<{ foo: string }>) {
+export const function myAction ({ store, myProvider, props }: Context<{ foo: string }>) {
 
 }
 ```
@@ -293,7 +476,7 @@ And if the action triggers a path:
 ```ts
 import { BranchContext } from 'cerebral.proxy'
 
-export const function myAction ({ operators, myProvider, path }: BranchContext<
+export const function myAction ({ store, myProvider, path }: BranchContext<
   {
     success: { foo: string },
     error: { error: string }
@@ -302,7 +485,7 @@ export const function myAction ({ operators, myProvider, path }: BranchContext<
 
 }
 
-export const function myAction ({ operators, myProvider, path }: BranchContext<
+export const function myAction ({ store, myProvider, path }: BranchContext<
   {
     success: { foo: string },
     error: { error: string }

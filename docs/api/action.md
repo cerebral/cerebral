@@ -10,14 +10,14 @@ The context is populated by Cerebral and you can configure this by creating **pr
 
 ## Props
 
-When you trigger a signal you can pass it a payload. This payload is the starting point of the props to the signal. Given the signal:
+When you trigger a sequence you can pass it a payload. This payload is the starting point of the props to the sequence. Given the sequence:
 
 ```js
-;[actionA, actionB]
+[actionA, actionB]
 ```
 
 ```js
-someSignal({
+someSequence({
   foo: 'bar'
 })
 ```
@@ -44,13 +44,15 @@ function actionB({ props }) {
 
 So returning an object from actions, either directly or from a promise, extends the payload for later actions to handle.
 
-## State
+## store
 
-To change the state of your application you use the state API. It is available to every action.
+To change the state of your application you use the store API. It is available to every action and it is required that you use the proxies to point to the state you want to change.
 
 ```js
-function setSomething({ state }) {
-  state.set('some.path.foo', 'bar')
+import { state } from 'cerebral/proxy'
+
+function setSomething({ store }) {
+  store.set(state.some.path.foo, 'bar')
 }
 ```
 
@@ -60,49 +62,36 @@ All common state operations are available as a method. Instead of first pointing
 // Traditional approach
 someArray.push('newItem')
 // With Cerebral
-state.push('path.to.array', 'newItem')
+store.push(state.path.to.array, 'newItem')
 ```
 
 This is the one core concept of Cerebral that gives all its power. This simple approach allows for a few important things:
 
 1.  Track mutations in the application so that it can be passed to the debugger
-2.  Track mutations so that it can inform components depending on the changes
-3.  Only allow mutations through the API, and nowhere else in the application (using freezing during development)
-
-## Module
-
-This is the same as **state**, though the path already points to the module running the signal. So you give a relative path.
-
-```js
-function setSomething({ module }) {
-  // Already points to some.module
-  module.set('foo', 'bar')
-}
-```
+2.  Track mutations so that it can optimally inform components about needed renders
+3.  No need for immutability or intercepting getters and setters
 
 ## Path
 
 The path on the context is only available if there is actually expressed a path after the action in question:
 
 ```js
-import actionA from '../actions/actionA'
-import actionB from '../actions/actionB'
-import actionC from '../actions/actionC'
+import * as actions from './actions'
 
 export default [
-  actionA,
-  actionB,
+  actions.actionA,
+  actions.actionB,
   {
-    foo: actionC
+    foo: actions.actionC
   }
 ]
 ```
 
-In this scenario only _actionB_ has the path on its context. That means in any action you can check if path is available and what paths can be taken by looking at its keys.
+In this scenario only *actionB* has the path on its context. That means in any action you can check if path is available and what paths can be taken by looking at its keys.
 
 ## Resolve
 
-**Tags** and **Compute** needs resolving. In most scenarios you do not have to think about this, but you might want to do this manually in an action. This is typically related to action factories. To resolve an argument passed to a factory you can use resolve:
+**Tags** (proxy) and **Computed** needs resolving. In most scenarios you do not have to think about this, but you might want to do this manually in an action. This is typically related to factories. To resolve an argument passed to a factory you can use resolve:
 
 ```js
 function someActionFactory(someArgument) {
@@ -129,10 +118,14 @@ function someActionFactory(someArgument) {
 }
 ```
 
-## Controller
+## Get
 
-You have access to the controller instance on the context:
+Instead of using **resolve** you can grab any tag/proxy value by using *get*:
 
 ```js
-function someAction({ controller }) {}
+import { state } from 'cerebral/proxy'
+
+function someAction({ get }) {
+  const foo = get(state.foo)
+}
 ```

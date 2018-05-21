@@ -1,4 +1,3 @@
-import { Module } from 'cerebral'
 import * as sequences from './sequences'
 import * as computed from './computed'
 import * as providers from './providers'
@@ -12,10 +11,10 @@ const state: State = {
   editingUid: null,
 }
 
-export default Module({
+export default {
   state,
   sequences,
   computed,
   providers,
   modules,
-})
+}

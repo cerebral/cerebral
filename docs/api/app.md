@@ -1,11 +1,10 @@
-# Controller
+# App
 
 ```js
-import { Controller } from 'cerebral'
-import app from './app' // The root module
+import App from 'cerebral'
+import main from './main' // The main module
 
-// Signature changed since version 4.0
-export default Controller(app, {
+const app = App(main, {
   // The devtools
   devtools: null,
   // Also logs error handling to console.
@@ -23,17 +22,17 @@ export default Controller(app, {
 Returns state from the state tree
 
 ```js
-const someState = controller.getState('some.state')
+const someState = app.getState('some.state')
 ```
 
-### getSignal
+### getSequence
 
-Returns signal from Cerebral
+Returns sequence from Cerebral
 
 ```js
-const someSignal = controller.getSignal('some.signal')
-// Run signal
-someSignal({ foo: 'bar' })
+const someSequence = app.getSequence('some.sequence')
+// Run sequence
+someSequence({ foo: 'bar' })
 ```
 
 ### getModel
@@ -41,7 +40,7 @@ someSignal({ foo: 'bar' })
 Returns the model (state tree) of Cerebral
 
 ```js
-const model = controller.getModel()
+const model = app.getModel()
 ```
 
 ### flush
@@ -49,31 +48,31 @@ const model = controller.getModel()
 Flushes out changes to UI based on recent state changes, can be forced
 
 ```js
-controller.flush()
+app.flush()
 ```
 
-### runSignal
+### runSequence
 
 Allows you to run an arbitrary function tree definition
 
 ```js
-controller.runSignal('someSignal', [actionA, actionB], { foo: 'bar' })
+app.runSequence('someSequence', [actionA, actionB], { foo: 'bar' })
 ```
 
 ### addModule
 
-Allows you to add modules to the controller after instantiation (lazy)
+Allows you to add modules to the app after instantiation (lazy)
 
 ```js
-controller.addModule('someModule', module)
+app.addModule('someModule', module)
 ```
 
 ### removeModule
 
-Allows you to remove modules from the controller
+Allows you to remove modules from the app
 
 ```js
-controller.removeModule('someModule')
+app.removeModule('someModule')
 ```
 
 ## Events
@@ -83,15 +82,15 @@ controller.removeModule('someModule')
 Triggers when Cerebral model has initialized.
 
 ```js
-controller.on('initialized:model', () => {})
+app.on('initialized:model', () => {})
 ```
 
 ### initialized
 
-Triggers when Cerebral controller has initialized.
+Triggers when Cerebral app has initialized.
 
 ```js
-controller.on('initialized', () => {})
+app.on('initialized', () => {})
 ```
 
 ### flush
@@ -99,39 +98,39 @@ controller.on('initialized', () => {})
 Triggered whenever Cerebral flushes out changes to the UI. Passes a map of changes.
 
 ```js
-controller.on('flush', (changes) => {})
+app.on('flush', (changes) => {})
 ```
 
 ### start
 
-Triggered whenever Cerebral starts a signal execution.
+Triggered whenever Cerebral starts a sequence execution.
 
 ```js
-controller.on('start', (execution, payload) => {})
+app.on('start', (execution, payload) => {})
 ```
 
 ### end
 
-Triggered whenever Cerebral ends a signal execution.
+Triggered whenever Cerebral ends a sequence execution.
 
 ```js
-controller.on('end', (execution, payload) => {})
+app.on('end', (execution, payload) => {})
 ```
 
 ### pathStart
 
-Triggered whenever Cerebral starts execution a path in a signal
+Triggered whenever Cerebral starts execution a path in a sequence
 
 ```js
-controller.on('pathStart', (execution, payload) => {})
+app.on('pathStart', (execution, payload) => {})
 ```
 
 ### pathEnd
 
-Triggered whenever Cerebral ends execution a path in a signal
+Triggered whenever Cerebral ends execution a path in a sequence
 
 ```js
-controller.on('pathEnd', (execution, payload) => {})
+app.on('pathEnd', (execution, payload) => {})
 ```
 
 ### functionStart
@@ -139,7 +138,7 @@ controller.on('pathEnd', (execution, payload) => {})
 Triggered whenever Cerebral starts executing an action.
 
 ```js
-controller.on('functionStart', (execution, functionDetails, payload) => {})
+app.on('functionStart', (execution, functionDetails, payload) => {})
 ```
 
 ### functionEnd
@@ -147,7 +146,7 @@ controller.on('functionStart', (execution, functionDetails, payload) => {})
 Triggered whenever Cerebral ends executing an action.
 
 ```js
-controller.on(
+app.on(
   'functionEnd',
   (execution, functionDetails, payload, result) => {}
 )
@@ -158,7 +157,7 @@ controller.on(
 Triggered whenever Cerebral executed an async action.
 
 ```js
-controller.on('asyncFunction', (execution, functionDetails, payload) => {})
+app.on('asyncFunction', (execution, functionDetails, payload) => {})
 ```
 
 ### parallelStart
@@ -166,7 +165,7 @@ controller.on('asyncFunction', (execution, functionDetails, payload) => {})
 Triggered whenever Cerebral executes actions in parallel.
 
 ```js
-controller.on(
+app.on(
   'parallelStart',
   (execution, payload, functionsToResolveCount) => {}
 )
@@ -177,7 +176,7 @@ controller.on(
 Triggered whenever Cerebral executes actions in parallel.
 
 ```js
-controller.on(
+app.on(
   'parallelProgress',
   (execution, payload, functionsStillResolvingCount) => {}
 )
@@ -188,7 +187,7 @@ controller.on(
 Triggered whenever Cerebral ends executing actions in parallel.
 
 ```js
-controller.on('parallelEnd', (execution, payload, functionsExecutedCount) => {})
+app.on('parallelEnd', (execution, payload, functionsExecutedCount) => {})
 ```
 
 ### remember
@@ -196,14 +195,13 @@ controller.on('parallelEnd', (execution, payload, functionsExecutedCount) => {})
 Triggered whenever Cerebral travels back in time. Passes the timestamp it travelled to.
 
 ```js
-controller.on('remember', (datetime) => {})
+app.on('remember', (datetime) => {})
 ```
 
 ### mutation
 
-_since version 4.0_
 Triggered whenever Cerebral mutated the state
 
 ```js
-controller.on('mutation', (mutation) => {})
+app.on('mutation', (mutation) => {})
 ```

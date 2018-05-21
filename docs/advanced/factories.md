@@ -280,8 +280,8 @@ The factory could look something like this:
 import { state } from 'cerebral/proxy'
 
 function notifyFactory(message) {
-  function notify({ operators, get }) {
-    operators.set(state.message, get(message))
+  function notify({ store, get }) {
+    store.set(state.message, get(message))
   }
 
   return notify

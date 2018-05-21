@@ -14,24 +14,17 @@ You initialize the devtools by adding it to the app. In the **index.js** file yo
 
 ```js
 import { App } from 'cerebral'
-import main from './main'
+import Devtools from 'cerebral/devtools'
 
-let Devtools = null
-if (process.env.NODE_ENV === 'development') {
-  Devtools = require('cerebral/devtools').default
-}
-
-const app = App(main, {
+const app = App({
+  state: {
+    title: 'My Project'
+  }  
+}, {
   devtools: Devtools({
     host: 'localhost:8585'
   })
 })
-```
-
-```marksy
-<Info>
-Since we only want to run the debugger when we are developing we can point to a special **process.env.NODE_ENV** value to figure out if that is the case. When you build your application for production neither the devtools code or any connection attempt will be part of the application.
-</Info>
 ```
 
 Open up the newly installed debugger and add a new application.
