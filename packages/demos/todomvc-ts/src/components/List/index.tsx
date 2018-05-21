@@ -8,9 +8,9 @@ export default connect(
     editingUid: state.editingUid,
     isAllChecked: computed.isAllChecked,
     todosUids: computed.visibleTodosUids,
-    toggleAllChanged: sequences.toggleAllChecked,
+    toggleAllChecked: sequences.toggleAllChecked,
   },
-  function List({ editingUid, isAllChecked, todosUids, toggleAllChanged }) {
+  function List({ editingUid, isAllChecked, todosUids, toggleAllChecked }) {
     return (
       <section className="main">
         <input
@@ -18,7 +18,7 @@ export default connect(
           className="toggle-all"
           type="checkbox"
           checked={isAllChecked}
-          onChange={() => toggleAllChanged()}
+          onChange={() => toggleAllChecked()}
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">

@@ -5,16 +5,16 @@ import { state, sequences } from 'cerebral.proxy'
 export default connect(
   {
     title: state.newTodoTitle,
-    titleChanged: sequences.changeNewTodoTitle,
-    submitted: sequences.submitNewTodo,
+    changeNewTodoTitle: sequences.changeNewTodoTitle,
+    submitNewTodo: sequences.submitNewTodo,
   },
-  function NewTodo({ title, titleChanged, submitted }) {
+  function NewTodo({ title, changeNewTodoTitle, submitNewTodo }) {
     return (
       <form
         id="todo-form"
         onSubmit={(e) => {
           e.preventDefault()
-          submitted()
+          submitNewTodo()
         }}
       >
         <input
@@ -22,7 +22,7 @@ export default connect(
           autoComplete="off"
           placeholder="What needs to be done?"
           value={title || ''}
-          onChange={(e) => titleChanged({ title: e.target.value })}
+          onChange={(e) => changeNewTodoTitle({ title: e.target.value })}
         />
       </form>
     )

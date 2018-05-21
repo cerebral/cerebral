@@ -99,7 +99,7 @@ function getUser({ http, path }) {
 
 ## Taking advantage of factories
 
-Operators allows you to handle HTTP requests directly in the sequence of actions:
+store allows you to handle HTTP requests directly in the sequence of actions:
 
 ```js
 import { httpGet } from '@cerebral/http/factories'
@@ -314,4 +314,4 @@ export default Provider({
 })
 ```
 
-The operators of http provider though makes it a natural choice when working with Cerebral.
+The store of http provider though makes it a natural choice when working with Cerebral.

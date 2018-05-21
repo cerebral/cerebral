@@ -19,40 +19,16 @@
       "../../../docs/introduction/state",
       "../../../docs/introduction/providers",
       "../../../docs/introduction/sequences",
-      "../../../docs/introduction/errors",
       "../../../docs/introduction/views"
     ],
     "advanced": [
       "../../../docs/advanced/computed",
+      "../../../docs/advanced/errors",
+      "../../../docs/advanced/factories",
       "../../../docs/advanced/reactions",
       "../../../docs/advanced/structure",
       "../../../docs/advanced/test",
       "../../../docs/advanced/typescript"
-    ],
-    "guides": [
-      "../../../docs/guides/http",
-      "../../../docs/guides/factories",
-      "../../../docs/guides/routing",
-      "../../../docs/guides/ssr"
-    ],
-    "contribute": [
-      "../../../docs/contribute/introduction",
-      "../../../docs/contribute/issues"
-    ],
-    "api": [
-      "../../../docs/api/action",
-      "../../../docs/api/compute",
-      "../../../docs/api/controller",
-      "../../../docs/api/devtools",
-      "../../../docs/api/error",
-      "../../../docs/api/module",
-      "../../../docs/api/operators",
-      "../../../docs/api/providers",
-      "../../../docs/api/signal",
-      "../../../docs/api/state",
-      "../../../docs/api/tags",
-      "../../../docs/api/test",
-      "../../../docs/api/universalcontroller"
     ],
     "views": [
       {
@@ -80,63 +56,30 @@
         "path": "../../node_modules/@cerebral/vue/README"
       }
     ],
-    "addons": [
-      {
-        "name": "function-tree",
-        "path": "../../node_modules/function-tree/README"
-      },
-      {
-        "name": "baobab",
-        "path": "../../node_modules/@cerebral/baobab/README"
-      },
-      {
-        "name": "firebase",
-        "path": "../../node_modules/@cerebral/firebase/README"
-      },
-      {
-        "name": "firebase_admin",
-        "path": "../../node_modules/@cerebral/firebase-admin/README"
-      },
-      {
-        "name": "fluent",
-        "path": "../../node_modules/@cerebral/fluent/README"
-      },
-      {
-        "name": "forms",
-        "path": "../../node_modules/@cerebral/forms/README"
-      },
-      {
-        "name": "http",
-        "path": "../../node_modules/@cerebral/http/README"
-      },
-      {
-        "name": "mobx-state-tree",
-        "path": "../../node_modules/@cerebral/mobx-state-tree/README"
-      },
-      {
-        "name": "storage",
-        "path": "../../node_modules/@cerebral/storage/README"
-      },
-      {
-        "name": "shortcuts",
-        "path": "../../node_modules/@cerebral/shortcuts/README"
-      },
-      {
-        "name": "router",
-        "path": "../../node_modules/@cerebral/router/README"
-      },
-      {
-        "name": "useragent",
-        "path": "../../node_modules/@cerebral/useragent/README"
-      }
+    "guides": [
+      "../../../docs/guides/http",
+      "../../../docs/guides/routing",
+      "../../../docs/guides/ssr"
     ],
-    "resources": [
-      "../../../docs/resources/boilerplates",
-      "../../../docs/resources/migration",
-      "../../../docs/resources/articles",
-      "../../../docs/resources/videos",
-      "../../../docs/resources/projects"
+    "api": [
+      "../../../docs/api/action",
+      "../../../docs/api/app",
+      "../../../docs/api/computed",
+      "../../../docs/api/devtools",
+      "../../../docs/api/error",
+      "../../../docs/api/factories",
+      "../../../docs/api/module",
+      "../../../docs/api/providers",
+      "../../../docs/api/proxy",
+      "../../../docs/api/sequence",
+      "../../../docs/api/state",
+      "../../../docs/api/test",
+      "../../../docs/api/universalapp"
     ],
-    "migration": ["../../../docs/migration/4_0"]
+    "migration": ["../../../docs/migration/4_0", "../../../docs/migration/5_0"],
+    "contribute": [
+      "../../../docs/contribute/introduction",
+      "../../../docs/contribute/issues"
+    ]
   }
 }

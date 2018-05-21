@@ -1,16 +1,16 @@
-# Universal Controller
+# Universal App
 
 The Universal Controller allows you to put your application in its initial state on the server. In combination with your chosen view layer you can now render the application on the server and show it near instantly in the context of the current user. When the client side application loads it will piggyback on the existing DOM and effectively rehydrate the minimal state from the server to make it up to date, meaning that the pure HTML responded from your server and the loading of the actual application is transparent.
 
-Read more about server side rendering in the [Cerebral in depth - SSR](https://www.jsblog.io/articles/christianalfoni/cerebral_in_depth_ssr) article.
+Read more about server side rendering in the [SSR guide](/docs/guides/ssr).
 
 **Note** that when using JSX syntax it is wise to also transpile your server side code, which this example shows.
 
 ```js
-import { UniversalController } from 'cerebral'
-import app from './app'
+import { UniversalApp } from 'cerebral'
+import main from './main'
 
-const controller = UniversalController(app)
+const app = UniversalApp(main)
 ```
 
 ## Methods
@@ -20,16 +20,17 @@ const controller = UniversalController(app)
 If you need to update the state of the controller you can run a signal execution for doing so:
 
 ```js
-import { UniversalController } from 'cerebral'
-import app from './app'
+import { UniversalApp } from 'cerebral'
+import { state } from 'cerebral/proxy'
+import main from './main'
 
-const controller = UniversalController(app)
+const app = UniversalApp(main)
 
-controller
+app
   .runSequence(
     [
-      function myAction({ state, props }) {
-        state.set('app.isAwesome', props.isAwesome)
+      function myAction({ store, props }) {
+        store.set(state.isAwesome, props.isAwesome)
       }
     ],
     {
@@ -41,32 +42,32 @@ controller
   })
 ```
 
-You can run a predefined signal, which is defined inside a controller module as well:
+You can run a predefined sequence, which is defined inside a module as well:
 
 ```js
-import { UniversalController } from 'cerebral'
-import app from './app'
+import { UniversalApp } from 'cerebral'
+import main from './main'
 
-const controller = UniversalController(app)
+const app = UniversalApp(main)
 
-controller.runSequence('app.aSignal', { isAwesome: true }).then(() => {
+controller.runSequence('some.module.aSequence', { isAwesome: true }).then(() => {
   // I am done running
 })
 ```
 
-**NOTE!** You should instantiate the controller for each run you want to do.
+**NOTE!** You should instantiate the app for each run you want to do.
 
 ### setState
 
 Finally, you can (synchronously) set a value inside the state directly, using a path:
 
 ```js
-import { UniversalController } from 'cerebral'
-import app from './app'
+import { UniversalApp } from 'cerebral'
+import main from './main'
 
-const controller = UniversalController(app)
+const app = UniversalApp(main)
 
-controller.setState('app.foo', 123)
+app.setState('app.foo', 123)
 ```
 
 ### getChanges
@@ -74,13 +75,13 @@ controller.setState('app.foo', 123)
 Returns a map of the changes made.
 
 ```js
-import { UniversalController } from 'cerebral'
-import app from './app'
+import { UniversalApp } from 'cerebral'
+import main from './main'
 
-const controller = UniversalController(app)
+const app = UniversalApp(main)
 
-controller.runSequence('app.aSignal', { isAwesome: true }).then(() => {
-  controller.getChanges() // {"app.isAwesome": true}
+app.runSequence('app.aSequence', { isAwesome: true }).then(() => {
+  app.getChanges() // {"app.isAwesome": true}
 })
 ```
 
@@ -89,8 +90,9 @@ controller.runSequence('app.aSignal', { isAwesome: true }).then(() => {
 When the client side application loads it will do its first render with the default state, meaning that if the server updated the state this is now out of sync. Using the **getScript** method you will get a script tag you can inject into the _HEAD_ of the returned HTML. Cerebral will use this to bring your client side application state up to date with the server.
 
 ```js
-import { UniversalController } from 'cerebral'
-import app from './app'
+import { UniversalApp } from 'cerebral'
+import { state } from 'cerebral/proxy'
+import main from './main'
 import fs from 'fs'
 
 /*
@@ -106,13 +108,13 @@ import fs from 'fs'
 */
 const indexTemplate = fs.readFileSync('index.template.html').toString()
 
-const controller = UniversalController(app)
+const app = UniversalApp(main)
 
-controller
+app
   .run(
     [
-      function myAction({ state, props }) {
-        state.set('app.isAwesome', props.isAwesome)
+      function myAction({ store, props }) {
+        store.set(state.app.isAwesome, props.isAwesome)
       }
     ],
     {
@@ -122,7 +124,7 @@ controller
   .then(() => {
     const index = indexTemplate.replace(
       '{{CEREBRAL_SCRIPT}}',
-      controller.getScript()
+      app.getScript()
     )
   })
 ```
@@ -136,30 +138,30 @@ import React from 'react'
 import express from 'express'
 import fs from 'fs'
 import { renderToString } from 'react-dom/server'
-import { UniversalController } from 'cerebral'
+import { UniversalApp } from 'cerebral'
 import { Container } from 'cerebral/react'
-import app from '../client/app'
-import App from '../client/components/App'
-import loadApp from './loadApp'
+import main from '../client/main'
+import AppComponent from '../client/components/App'
+import loadAppSequence from './loadAppSequence'
 
 const server = express()
 const indexTemplate = fs.readFileSync('index.template.html').toString()
 
 server.get('/', (req, res) => {
-  const controller = UniversalController(app)
+  const app = UniversalApp(main)
 
-  controller
-    .run(loadApp, {
+  app
+    .run(loadAppSequence, {
       query: req.query,
       useragent: req.headers['user-agent']
     })
     .then(() => {
       const index = indexTemplate
-        .replace('{{CEREBRAL_SCRIPT}}', controller.getScript())
+        .replace('{{CEREBRAL_SCRIPT}}', app.getScript())
         .replace(
           '{{APP}}',
           renderToString(
-            <Container controller={controller}>
+            <Container app={app}>
               <App />
             </Container>
           )
@@ -172,6 +174,6 @@ server.get('/', (req, res) => {
 server.listen(3000)
 ```
 
-## ES6 on server
+## Transpile server code
 
-Take a look at the [demo application](https://github.com/cerebral/cerebral/tree/master/demos/universal) to see how you can run modern javascript, also with JSX, on the server. Demo does not include building for production, but you would typically use Webpack as normal for the client and just babel for the server. Or you can use Webpack there as well. If you are not using JSX you will probably get away with no transpiling on the server.
+You should run and build your Node instance with `babel`. Take a look at how you can run Node with babel [over here](https://babeljs.io/docs/usage/cli/#babel-node).
