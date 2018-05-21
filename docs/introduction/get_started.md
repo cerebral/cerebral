@@ -13,18 +13,8 @@
 
 ```marksy
 <Info>
-The project contains the [babel-plugin-cerebral]() package. This is package helps writing declarative code using proxies, as you will soon learn more about.
+The project contains the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) package. This package helps writing declarative code using proxies, as you will soon learn more about.
 </Info>
-```
-
-## From the browser
-
-Open [Codesandbox.io](https://codesandbox.io/s/m59vpm64vx)
-
-```marksy
-<Warning>
-The debugger application will only work if you are running Codesandbox with **Chrome**. This is because Chrome allows connecting from a public domain to localhost. Locally on your machine you can use any browser.
-</Warning>
 ```
 
 ## Download debugger

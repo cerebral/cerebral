@@ -13,7 +13,7 @@ src/
     factories.js
     sequences.js
     providers.js
-    computeds.js
+    computed.js
     reactions.js
     errors.js
     index.js
@@ -27,12 +27,12 @@ This structure favors a single file for each type of composable piece of logic. 
 ```js
 import { state } from 'cerebral/proxy'
 
-export function actionA({ operators }) {
-  operators.set(state.foo, 'bar')
+export function actionA({ store }) {
+  store.set(state.foo, 'bar')
 }
 
-export function actionB({ operators }) {
-  operators.set(state.foo, 'bar')
+export function actionB({ store }) {
+  store.set(state.foo, 'bar')
 }
 ```
 
@@ -43,32 +43,32 @@ If you prefer arrow functions, you can write:
 ```js
 import { state } from 'cerebral/proxy'
 
-export const actionA = ({ operators }) => operators.set(state.foo, 'bar')
+export const actionA = ({ store }) => store.set(state.foo, 'bar')
 
-export const actionB = ({ operators }) => operators.set(path.foo, 'bar')
+export const actionB = ({ store }) => store.set(path.foo, 'bar')
 ```
 
-### Factories
+## Factories
 
 Factories are similar to actions:
 
 ```js
 // Normal function
 export function setLoadingApp (isLoading) {
-  return function setLoadingApp({ operators }) {
-    operators.set(state.isLoading, isLoading)
+  return function setLoadingApp({ store }) {
+    store.set(state.isLoading, isLoading)
   }
 }
 
 // Arrow function
 // We return a named function for debugging purposes
 export const setLoadingApp = (isLoading) =>
-  function setLoadingApp({ operators }) {
-    operators.set(state.isLoading, isLoading)
+  function setLoadingApp({ store }) {
+    store.set(state.isLoading, isLoading)
   }
 ```
 
-### Sequences
+## Sequences
 
 You import all actions and factories into the *sequences.js* file. This will give you autosuggestions on available actions and factories. You can combine this with factories from Cerebral:
 
@@ -86,7 +86,7 @@ export const initialize = [
 ]
 ```
 
-### Modules
+## Modules
 
 You import all your files into the *index.js* file, attaching them like this:
 

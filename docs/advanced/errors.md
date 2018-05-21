@@ -4,45 +4,41 @@
 <Youtube url="https://www.youtube.com/embed/UdVjsKQLybw" />
 ```
 
-Currently we are creating a nested structure in our sequence to express conditional execution. Related to errors that does not always make sense, cause you just want to stop execution and do something completely different. Let us revert our sequence back to is original format:
+Currently we are creating a nested structure in our sequence to express conditional execution. Related to errors that does not always make sense, cause you just want to stop execution and do something completely different. Let us revert our sequence back to is original format and then we rather catch the error:
 
 ```js
-import * as actions from './actions'
+import { state } from 'cerebral/proxy'
 import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral/proxy'
 
-export const loadUser = [
-  set(state.isLoadingUser, true),
-  actions.getUser,
-  set(state.users[props.id], props.user),
-  set(state.currentUserId, props.id),
-  set(state.isLoadingUser, false)
-]
-```
+const getUser = ({ jsonPlaceholder, props }) =>
+  jsonPlaceholder.getUser(props.id).then(user => ({ user }))
 
-and then we rather catch errors in the module file. Look at `src/main/index.js`:
-
-```js
-import { Module } from 'cerebral'
-import * as providers from './providers'
-import * as sequences from './sequences'
-
-export default Module({
+export default {
   state: {
     title: 'My Project',
     users: {},
     currentUserId: null,
-    isLoadingUser: false
+    isLoadingUser: false,
+    error: null
   },
-  sequences,
-  providers,
+  sequences: {
+    loadUser: [
+      set(state.isLoadingUser, true),
+      getUser,
+      set(state.users[props.id], props.user),
+      set(state.currentUserId, props.id),
+      set(state.isLoadingUser, false)
+    ]
+  },
   catch: [
-    [Error, sequences.handleError]
-  ]
-})
+    [Error, set(state.error, props.error.message)]
+  ],
+  providers: {...}
+}
 ```
 
-The **catch** takes a list of error handlers. You define the handler with an error type and the sequence to run. In this case we are catching any error, but we could be more specific.
+The **catch** takes a list of error handlers. You define the handler with an error type and the sequence to run, in this case just one action. In this case we are catching any error, but we could be more specific.
 
 ```marksy
 <Warning>
@@ -50,41 +46,41 @@ Notice that the catch handler is an array of arrays. Each item in the array is a
 </Warning>
 ```
 
-Let us create a **JsonPlaceholderError** in a new file called **errors.js** that you put into `src/ main`:
+Let us create a **JsonPlaceholderError**:
 
 ```js
+import { state } from 'cerebral/proxy'
+import { set } from 'cerebral/factories'
+import { state, props } from 'cerebral/proxy'
 import { CerebralError } from 'cerebral'
 
-export class JsonPlaceholderError extends CerebralError {
+class JsonPlaceholderError extends CerebralError {
   constructor(message, statusCode) {
     super(message)
     this.statusCode = statusCode
     this.name = 'JsonPlaceholderError'
   }
 }
-```
 
-We can now handle this error specifically in our module:
+const getUser = ({ jsonPlaceholder, props }) =>
+  jsonPlaceholder.getUser(props.id).then(user => ({ user }))
 
-```js
-import { Module } from 'cerebral'
-import * as providers from './providers'
-import * as sequences from './sequences'
-import * as errors from './errors'
-
-export default Module({
-  state: {
-    title: 'My Project',
-    users: {},
-    currentUserId: null,
-    isLoadingUser: false
+export default {
+  state: {...},
+  sequences: {
+    loadUser: [
+      set(state.isLoadingUser, true),
+      getUser,
+      set(state.users[props.id], props.user),
+      set(state.currentUserId, props.id),
+      set(state.isLoadingUser, false)
+    ]
   },
-  sequences,
-  providers,
   catch: [
-    [errors.JsonPlaceholderError, sequences.handleError]
-  ]
-})
+    [JsonPlaceholderError, set(state.error, props.error.message)]
+  ],
+  providers: {...}
+}
 ```
 
 And we can throw it from our provider:
@@ -111,13 +107,6 @@ export const jsonPlaceholder = Provider({
       })
   }
 })
-```
-
-```marksy
-<Info>
-The **@cerebral/http** package exports an **HttpProviderError** which you can use the same way.
-The error contains status code, headers etc. related to the request that failed.
-</Info>
 ```
 
 Let us force an error to see how it looks. First let us actually handle the error by creating a new sequence in our **sequences.js** file:

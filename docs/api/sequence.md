@@ -1,6 +1,6 @@
-# Signal
+# Sequence
 
-Signals are just sequences which are expressed as arrays:
+Sequences can be expressed with a simple array:
 
 ```js
 export const mySequence = []
@@ -12,22 +12,20 @@ You populate these arrays with actions:
 export const mySequence = [actions.someAction]
 ```
 
-You can attach sequences to signal definitions in the modules:
+You attach sequences to modules:
 
 ```js
 import { Module } from 'cerebral'
 import * as sequences from './sequences'
 
 export default Module({
-  signals: {
-    somethingHappened: sequences.doSomething
-  }
+  sequences
 })
 ```
 
 ## Async
 
-By default signals run completely synchronous, but an action might run asynchronously thus making the signal async. When an action returns a promise it means it runs async.
+By default sequences run completely synchronous, but an action might run asynchronously thus making the sequence async. When an action returns a promise it means it runs async.
 
 ```js
 export function myAction() {
@@ -43,7 +41,7 @@ export async function myAction() {
 }
 ```
 
-## Sequence
+## Sequence factory
 
 Simple format of a sequence is to use an array literal, as explained above. Actions are run one after the other. If the action returns a promise Cerebral will wait until it resolves before moving to the next action:
 
@@ -57,24 +55,27 @@ The array is converted to a sequence, but you can also be explicit about it:
 
 ```js
 import { sequence } from 'cerebral'
-import * as actions from '../actions'
+import * as actions from './actions'
 
-export const mySequence = sequence([actions.someAction])
+export const mySequence = sequence([
+  actions.someAction
+])
 ```
 
 You can name a sequence, which will be displayed in debugger:
 
 ```js
 import { sequence } from 'cerebral'
-import * as actions from '../actions'
+import * as actions from './actions'
 
-export const mySequence = sequence('my sequence', [actions.someAction])
+export const mySequence = sequence('my sequence', [
+  actions.someAction
+])
 ```
 
-You can compose a sequence into existing sequence. The debugger will show this composition:
+You can compose a sequence into an existing sequence. The debugger will show this composition:
 
 ```js
-import someAction from '../actions/someAction'
 import * as actions from '../actions'
 
 export const myOtherSequence = [actions.doThis]
