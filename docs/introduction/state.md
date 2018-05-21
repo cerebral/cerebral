@@ -25,17 +25,18 @@ You will normally store other objects, arrays, strings, booleans and numbers in 
 Let us add some new state to the application to show of some more Cerebral. In our **main/index.js** file:
 
 ```js
-import { Module } from 'cerebral'
+import { App } from 'cerebral'
+import Devtools from 'cerebral/devtools'
 
-export default Module({
+const app = App({
   state: {
     title: 'My Project',
     users: {},
     currentUserId: null,
     isLoadingUser: false,
     error: null
-  }
-})
+  }  
+}, {...})
 ```
 
 We are going to load users from [JSONPlaceholder](https://jsonplaceholder.typicode.com) and for that we need some state. First of all we need a way to store the users we load. When you are dealing with data that has an _id_ you should favor inserting them into an object:

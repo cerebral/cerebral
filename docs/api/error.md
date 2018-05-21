@@ -1,8 +1,6 @@
 # Error
 
-_since version 4.0_
-The **CerebralError** allows you to create your own error types to be used to catch errors in your signals.
-The **catch** handler defined on the module will propagate up to parent modules. That means if a nested module does not catch an error, one of the parent modules can catch it if configured to do so.
+The **CerebralError** allows you to create your own error types to be used to catch errors in your sequences. The **catch** handler defined on the module will propagate up to parent modules. That means if a nested module does not catch an error, one of the parent modules can catch it if configured to do so.
 
 ```js
 import { CerebralError } from 'cerebral'
@@ -30,9 +28,9 @@ import { MyError } from './errors'
 import * as sequences from './sequences'
 
 export default Module({
-  signals: {
-    somethingHappened: sequences.doThis
-  },
-  catch: [[MyError, sequences.handleError]]
+  sequences,
+  catch: [
+    [MyError, sequences.handleError]
+  ]
 })
 ```

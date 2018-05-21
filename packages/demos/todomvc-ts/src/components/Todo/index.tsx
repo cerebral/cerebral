@@ -11,11 +11,11 @@ type ExternalProps = {
 const deps = {
   todo: state.todos[props.uid],
   todoDoubleClicked: sequences.editTodo,
-  newTitleChanged: sequences.changeTodoTitle,
-  newTitleSubmitted: sequences.submitTodoTitle,
-  toggleCompletedChanged: sequences.toggleTodoCompleted,
-  removeTodoClicked: sequences.removeTodo,
-  newTitleAborted: sequences.abortEdit,
+  changeTodoTitle: sequences.changeTodoTitle,
+  submitTodoTitle: sequences.submitTodoTitle,
+  toggleTodoCompleted: sequences.toggleTodoCompleted,
+  removeTodo: sequences.removeTodo,
+  abortEdit: sequences.abortEdit,
 }
 
 export default connect<ExternalProps, typeof deps>(deps, function Todo({
@@ -23,11 +23,11 @@ export default connect<ExternalProps, typeof deps>(deps, function Todo({
   isEditing,
   todo,
   todoDoubleClicked,
-  newTitleChanged,
-  newTitleSubmitted,
-  toggleCompletedChanged,
-  removeTodoClicked,
-  newTitleAborted,
+  changeTodoTitle,
+  submitTodoTitle,
+  toggleTodoCompleted,
+  removeTodo,
+  abortEdit,
 }) {
   return (
     <li
@@ -40,30 +40,27 @@ export default connect<ExternalProps, typeof deps>(deps, function Todo({
         <input
           className="toggle"
           type="checkbox"
-          onChange={() => toggleCompletedChanged({ uid })}
+          onChange={() => toggleTodoCompleted({ uid })}
           checked={todo.completed}
         />
         <label onDoubleClick={() => todoDoubleClicked({ uid })}>
           {todo.title}
         </label>
-        <button
-          className="destroy"
-          onClick={() => removeTodoClicked({ uid })}
-        />
+        <button className="destroy" onClick={() => removeTodo({ uid })} />
       </div>
       {isEditing && (
         <form
           onSubmit={(e) => {
             e.preventDefault()
-            newTitleSubmitted({ uid })
+            submitTodoTitle({ uid })
           }}
         >
           <input
             autoFocus
             className="edit"
             value={isEditing ? todo.editedTitle : todo.title}
-            onBlur={() => newTitleSubmitted({ uid })}
-            onChange={(e) => newTitleChanged({ uid, title: e.target.value })}
+            onBlur={() => submitTodoTitle({ uid })}
+            onChange={(e) => changeTodoTitle({ uid, title: e.target.value })}
           />
         </form>
       )}

@@ -1,8 +1,6 @@
 # Module
 
-_since version 4.0_
-
-Modules are the core building blocks of your application. This is where you define state, signals, submodules etc.
+Modules are the structural building blocks of your application. This is where you define state, sequences, submodules etc.
 
 # Module object
 
@@ -12,10 +10,12 @@ import { Module } from 'cerebral'
 export default Module({
   // Define module state, namespaced by module path
   state: {},
-  // Define module signals, namespaced by module path
-  signals: {},
+  // Define module sequences, namespaced by module path
+  sequences: {},
   // Define submodules, namespaced by module path
   modules: {},
+  // Define reactions, namespaced by module path
+  reactions: {},
   // Add a global providers when module instantiates
   providers: {},
   // Add error catchers
@@ -23,13 +23,13 @@ export default Module({
 })
 ```
 
-You add the root module to the controller:
+You add the root module to the app:
 
 ```js
-import { Controller } from 'cerebral'
-import app from './app'
+import App from 'cerebral'
+import main from './main'
 
-export default Controller(app)
+const app = App(main)
 ```
 
 # Module function
@@ -42,12 +42,13 @@ import { Module } from 'cerebral'
 export default Module((module) => {
   module.name // Name of module
   module.path // Full path to module
-  module.controller // The controller the module is attached to
+  module.app // The app the module is attached to
 
   return {
     state: {},
-    signals: {},
+    sequences: {},
     modules: {},
+    reactions: {},
     providers: {},
     catch: []
   }
@@ -73,10 +74,10 @@ export default (options) => {
 You then configure the module when you attach it:
 
 ```js
-import { Controller } from 'cerebral'
+import App from 'cerebral'
 import Location from './modules/Location'
 
-const controller = Controller({
+const app = App({
   modules: {
     location1: Location({ of: 'Europe' }),
     location2: Location({ of: 'Africa' })

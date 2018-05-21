@@ -1,6 +1,6 @@
 /* global test, expect */
 import React from 'react'
-import app from './app'
+import main from './main'
 import { Snapshot } from 'cerebral/test'
 import { Container } from '@cerebral/react'
 import renderer from 'react-test-renderer'
@@ -8,7 +8,7 @@ import Footer from './components/Footer'
 import List from './components/List'
 
 test('should filter on all', () => {
-  return Snapshot(app)
+  return Snapshot(main)
     .run('changeFilter', { filter: 'all' })
     .then((snapshot) => {
       const tree = renderer
@@ -25,7 +25,7 @@ test('should filter on all', () => {
 })
 
 test('should add new todo', () => {
-  return Snapshot(app)
+  return Snapshot(main)
     .mutate('set', 'filter', 'all')
     .mutate('set', 'newTodoTitle', 'h')
     .mock('id.create', 'fc033770-7d95-4ac2-a0b2-c68e0f26700e')

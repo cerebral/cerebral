@@ -1,7 +1,5 @@
 # Providers
 
-_since version 4.0_
-
 A provider exposes functionality to your actions. Typically to run side effects. Each action has a unique context object where the providers are populated.
 
 This provider is automatically wrapped by the debugger, where available.
@@ -9,7 +7,7 @@ This provider is automatically wrapped by the debugger, where available.
 ```js
 import { Provider } from 'cerebral'
 
-export default Provider({
+export const greetProvider = Provider({
   greet() {
     return 'hello'
   }
@@ -17,14 +15,12 @@ export default Provider({
 ```
 
 ```js
-import { Controller, Module } from 'cerebral'
-import greeter from './providers/greeter'
+import { Module } from 'cerebral'
+import * as providers from './providers'
 
-const app = Module({
-  providers: { greeter }
+export default Module({
+  providers
 })
-
-export default Controller(app)
 ```
 
 You also have access to the context inside your provider. This will allow you to leverage existing providers. The context is exposed as `this.context`. This keeps the API concise and under the hood we can do prototypal optimizations.
@@ -33,9 +29,9 @@ You also have access to the context inside your provider. This will allow you to
 import { Provider } from 'cerebral'
 
 export default Provider({
-  triggerSignalOnNativeEvent(event, signalPath) {
+  triggerSignalOnNativeEvent(event, sequence) {
     window.addEventListener(event, () => {
-      this.context.controller.getSignal(signalPath)()
+      this.context.get(sequence)()
     })
   }
 })

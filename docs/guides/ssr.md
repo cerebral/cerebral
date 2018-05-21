@@ -93,8 +93,8 @@ import main from '../client/main'
 import AppComponent from '../client/components/App'
 import {renderToString} from 'react-dom/server'
 
-function setInitialState({ operators, props }) {
-  operators.set(state.app.user, props.user)
+function setInitialState({ store, props }) {
+  store.set(state.app.user, props.user)
 }
 
 app.get('/', (req, res) => {
@@ -186,14 +186,14 @@ import { state } from 'cerebral/proxy'
 import { renderToString } from 'react-dom/server'
 import main from '../client/main'
 
-function setInitialState({ operators, props }) {
+function setInitialState({ store, props }) {
   let page
   if (props.path === '/') {
     page = 'home'
   } else if (props.path === '/admin') {
     page = 'admin'
   }
-  operators.set(state.page, page)
+  store.set(state.page, page)
 }
 
 app.get('*', (req, res) => {
