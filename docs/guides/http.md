@@ -1,317 +1,242 @@
 # Http
 
-Most application needs some sort of requests going to a server. Cerebral HTTP provider is a simple JSON HTTP library that conforms to the functional nature of Cerebral.
+Most applications needs some sort of requests going to a server. With Cerebral you choose your favourite library and expose it as a provider. By exposing it as a provider Cerebral will be able to track its usage and you can be more specific about how the library should work for your application.
 
-## Configuring the provider
+## Using axios
 
-```js
-import HttpProvider from '@cerebral/http'
-
-export const http = HttpProvider()
-```
+[Axios documentation](https://www.npmjs.com/package/axios)
 
 ```js
-import { Module } from 'cerebral'
-import * as providers from './providers'
-
-export default Module({
-  providers
-})
-```
-
-By default you really do not have to configure anything. By adding the provider we are ready to make requests inside our actions:
-
-```js
-function someAction({ http }) {
-  return http.get('/something')
-}
-```
-
-You might need to set some default headers, or maybe you need to pass cookies to 3rd party urls:
-
-```js
-import HttpProvider from '@cerebral/http'
-
-export const http = HttpProvider({
-  headers: {
-    Authorization: 'token whatevah'
-  },
-  withCredentials: true
-})
-```
-
-This configuration makes sure every request has an *Authorization* header and cookies are passed to any request, also outside the origin.
-
-## Per request configuration
-
-These options are also available when doing specific requests. For example we want to post some data using the url encoded format:
-
-```js
-function getUser({ http, get }) {
-  return http.post('/user', get(state.form), {
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  })
-}
-```
-
-## Handling responses
-
-When you make a request with the HTTP provider it will return an object of:
-
-```js
-{
-  response: {
-    status: 200,
-    headers: {},
-    result: {}
-  }
-}
-```
-
-When using an action you typically want to name the result and output it to the signal execution:
-
-```js
-function getUser({ http }) {
-  return http.get('/user').then(({ result }) => ({ user: result }))
-}
-```
-
-You might also want to diverge execution based on the status:
-
-```js
-function getUser({ http, path }) {
-  return http.get('/user').then(({ status, result }) => {
-    switch (status) {
-      case 404:
-        return path.notFound()
-      case 401:
-        return path.unauthorized()
-      case 200:
-        return path.success({ user: result })
-      default:
-        return path.error()
-    }
-  })
-}
-```
-
-## Taking advantage of factories
-
-store allows you to handle HTTP requests directly in the sequence of actions:
-
-```js
-import { httpGet } from '@cerebral/http/factories'
-
-export default httpGet('/user')
-```
-
-The operator outputs the response to the signal, meaning that **status**, **result** and **headers** will now be available for the next actions. That means you could easily combine this with a Cerebral factories:
-
-```js
-import { httpGet } from '@cerebral/http/factories'
-import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
-
-export default [
-  httpGet('/user'),
-  set(state.app.user, props.response.result)
-]
-```
-
-The HTTP factories are actually pretty smart. You can optionally use paths to diverge execution. So if you wanted to speficially handle **success** and **error**, you could do this instead:
-
-```js
-import { httpGet } from '@cerebral/http/factories'
-import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
-
-export default [
-  httpGet('/user'),
-  {
-    success: set(state.app.user, props.response.result),
-    error: set(state.app.error, props.response.result)
-  }
-]
-```
-
-You can even use status codes as paths by default:
-
-```js
-import { httpGet } from '@cerebral/http/factories'
-import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
-
-export default [
-  httpGet('/user'), {
-    401: set(state.app.isAuthorized, false)
-    success: set(state.app.user, props.response.result),
-    error: set(state.app.error, props.response.result)
-  }
-]
-```
-
-## Dynamic urls
-
-When using factories it is quite restrictive to use a static url, you might want to build the url based on some state, or maybe a property passed into the signal. You can use the string tag for this:
-
-```js
-import { httpGet } from '@cerebral/http/factories'
-import { set } from 'cerebral/factories'
-import { string } from 'cerebral/tags'
-import { state } from 'cerebral/proxy'
-
-export default httpGet(string`/items/${state.app.currentItem.id}`)
-```
-
-## Catching errors
-
-It is encouraged that you write your sequences of actions vertically for readability. So when you do:
-
-```js
-import { httpGet } from '@cerebral/http/factories'
-import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
-
-export default [
-  httpGet('/user'),
-  set(state.app.user, props.response.result)
-]
-```
-
-You will need a way to handle errors. The HTTP provider actually throws an error in this scenario if something goes wrong and you can catch that error in either a sequence specific error handler or a global. Typically you want a global error handler, so let us explore that:
-
-```js
-import { Module } from 'cerebral'
-import { HttpProviderError } from '@cerebral/http'
-import * as providers from './providers'
-import * as sequences from './sequences'
-
-export default Module({
-  providers,
-  sequences,
-  catch: [
-    [HttpProviderError, sequences.handleHttpError]
-  ]
-})
-```
-
-What we basically do here is map HTTP provider errors to a sequence. So whenever one of your requests gets into problems, you will be able to handle it inside the **handleHttpError** sequence.
-
-The data you get passed in is something similar to:
-
-```js
-{
-  name: 'HttpProviderError',
-  message: 'Some potential error message',
-  response: {
-    body: 'Message or response body',
-    status: 200,
-    isAborted: false,
-    headers: {},
-  },
-  stack: '...'  
-}
-```
-
-## Aborting requests
-
-Sometimes you might need to abort requests, a typical example of this is typeahead. Let us just write out an example here first:
-
-```js
-import { set } from 'cerebral/factories'
-import { string } from 'cerebral/tags'
-import { state, props } from 'cerebral/proxy'
-import { httpGet, httpAbort } from '@cerebral/http/factories'
-;[
-  set(state.searchValue, props.value),
-  httpAbort('/search*'),
-  debounce(250),
-  {
-    continue: [
-      httpGet(string`/search?value=${state.searchValue}`),
-      {
-        success: set(state.searchResult, props.response.result),
-        error: [],
-        abort: []
-      }
-    ],
-    discard: []
-  }
-]
-```
-
-And that is it, you have a typeahead. The **httpAbort** operator just takes a regexp string to decide what possibly running requests that will be aborted.
-
-## File upload
-
-You can also upload files from your sequences. Either a file you pass in as props to a sequence or directly from the state tree. Files are one of the special value types Cerebral supports. We say special value types because files are not serializable by default.
-
-Upload a file is as simple as:
-
-```js
-import { httpUploadFile } from '@cerebral/http/factories'
-import { props } from 'cerebral/proxy'
-
-export default httpUploadFile('/upload', props.file)
-```
-
-Typically with file upload you want to track the upload progress. You can do this by passing the path of a progress signal you have created as an option:
-
-```js
-import { httpUploadFile } from '@cerebral/http/factories'
-import { props, sequences } from 'cerebral/proxy'
-
-export default httpUploadFile('/upload', props.file, {
-  onProgress: sequences.files.uploadProgressed
-})
-```
-
-The progress signal will get the payload of:
-
-```js
-{
-  progress: 45 // The percentage completed
-}
-```
-
-Additional options for setting the name, passing additional data and headers are also available:
-
-```js
-import { httpUploadFile } from '@cerebral/http/factories'
-import { props, sequences } from 'cerebral/proxy'
-
-export default httpUploadFile('/upload', props.file, {
-  name: 'newImage.png',
-  data: state.files.currentMetaData,
-  headers: {},
-  onProgress: sequences.files.uploadProgressed
-})
-```
-
-You can of course choose to do this at action level instead. It is the same api:
-
-```js
-function uploadFile({ props, http }) {
-  return http.uploadFile('/upload', props.file)
-}
-```
-
-## Summary
-
-The Cerebral http provider is a simple provider that gives you access to the most common functionality. You can use any other http library if you want to by just exposing it as a provider. For example:
-
-```js
-import { Provider } from 'cerebral'
 import axios from 'axios'
 
-export default Provider({
-  get(...args) {
-    return axios.get(...args)
-  }
-  // And so on
-})
+export const http = {
+  get: axios.get,
+  post: axios.post,
+  put: axios.put,
+  patch: axios.patch,
+  delete: axios.delete
+}
 ```
 
-The store of http provider though makes it a natural choice when working with Cerebral.
+In this scenario we are just exposing the library methods we are going to use in our application, that might be enough. Or maybe you want to have an additional custom request, which is what the default export of axios provides:
+
+```js
+import axios from 'axios'
+
+export const http = {
+  request: axios,
+  get: axios.get,
+  post: axios.post,
+  put: axios.put,
+  patch: axios.patch,
+  delete: axios.delete
+}
+```
+
+You might want to intercept the usage to include a default header:
+
+```js
+import axios from 'axios'
+
+function withDefaultHeaders (config) {
+  return {
+     ...config,
+     headers: {
+       ...config.headers || {},
+       'my special header': 'awesome'
+     }
+   }
+}
+
+export const http = {
+  request(config) {
+   return axios(withDefaultHeaders(config)) 
+  },
+  get(url, config) {
+    return axios.get(url, withDefaultHeaders(config))
+  },
+  post(url, data, config) {
+    return axios.post(url, data, withDefaultHeaders(config))
+  },
+  ...
+}
+```
+
+And maybe this should be a token you want to set when the application loads:
+
+```js
+import axios from 'axios'
+
+let token
+
+function withDefaultHeaders (config) {
+  return {
+     ...config,
+     headers: {
+       ...config.headers || {},
+       'Authorization': `bearer ${token}`
+     }
+   }
+}
+
+export const http = {
+  setToken(newToken) {
+    token = newToken
+  }
+  request(config) {
+   return axios(withDefaultHeaders(config)) 
+  },
+  get(url, config) {
+    return axios.get(url, withDefaultHeaders(config))
+  },
+  post(url, data, config) {
+    return axios.post(url, data, withDefaultHeaders(config))
+  },
+  ...
+}
+```
+
+Though this token might be from local storage. Lets say you have a provider to talk to local storage and you just grab the token from there. This is another good example, cause you very likely want to JSON stringify/parse data in your local storage:
+
+```js
+import axios from 'axios'
+
+export const localStorage = {
+  get(key) {
+    return JSON.parse(localStorage.getItem(key))
+  },
+  set(key, value) {
+    localStorage.setItem(key, JSON.stringify(value))
+  }
+}
+
+// We use an IIFE to encapsulate our provider
+export const http = (() => {
+  function withDefaultHeaders (config, token) {
+    return {
+      ...config,
+      headers: {
+        ...config.headers || {},
+        'Authorization': `bearer ${token}`
+      }
+    }
+  }
+
+  return {
+    request(config) {
+      const token = this.context.localStorage.get('token')
+      return axios(withDefaultHeaders(config, token)) 
+    },
+    get(url, config) {
+      const token = this.context.localStorage.get('token')
+      return axios.get(url, withDefaultHeaders(config, token))
+    },
+    post(url, data, config) {
+      const token = this.context.localStorage.get('token')
+      return axios.post(url, data, withDefaultHeaders(config, token))
+    },
+    ...
+  }
+})()
+```
+
+As you can see there are many ways to put a provider together. It totally depends on your application what makes sense. What to also take note of here is that **http** could be completely replaced with a new provider exposing the same API.
+
+## Using fetch
+
+We could also just use the native fetch implementation to create our provider. Let us keep the signature and replace the code:
+
+```js
+import axios from 'axios'
+
+export const localStorage = {
+  get(key) {
+    return JSON.parse(localStorage.getItem(key))
+  },
+  set(key, value) {
+    localStorage.setItem(key, JSON.stringify(value))
+  }
+}
+
+// We use an IIFE to encapsulate our provider
+export const http = (() => {
+  function withDefaultHeaders (config, token) {
+    return {
+      ...config,
+      headers: {
+        ...config.headers || {},
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${token}`
+      }
+    }
+  }
+
+  function evaluateResponse (response) {
+    if (response.status >= 200 && response.status < 300) {
+      return response.toJSON()
+    }
+
+    return Promise.reject(response)
+  }
+
+  return {
+    request(config = {}) {
+      const token = this.context.localStorage.get('token')
+      return fetch(config.url, withDefaultHeaders(config, token))
+        .then(evaluateResponse)
+    },
+    get(url, config = {}) {
+      const token = this.context.localStorage.get('token')
+      config.url = url
+      return fetch(url, withDefaultHeaders(config, token))
+        .then(evaluateResponse)
+
+    },
+    post(url, data, config = {}) {
+      const token = this.context.localStorage.get('token')
+      config.url = url
+      config.method = 'POST'
+      config.body = JSON.stringify(data)
+
+      return fetch(url, withDefaultHeaders(config, token))
+        .then(evaluateResponse)
+    },
+    ...
+  }
+})()
+```
+
+Now our application works the same way, but we replaced the tool that performs the logic. This gives you a lot of flexibility in how you want to deal with requests.
+
+## Specific API
+
+You could also be more specific about how we expose running requests from your application. We could simply replace the signature to:
+
+```js
+import qs from 'query-string'
+
+export const api = (() => {
+  const baseUrl = '/api'
+  const http = {
+    get (url, query = {}) {
+      const queryString = qs.stringify(query)
+      return fetch(baseUrl + url + (queryString ? '?' + queryString : '')
+        .then(response => response.toJSON())
+    }
+  }
+
+  return {
+    getUser (id) {
+      return http.get(`/users/${id}`)
+    },
+    getItems (query) {
+      return http.get(`/items`, query)
+    },
+    getItem (id) {
+      return http.get(`/items/${id}`)
+    }
+  }
+})()
+```
+
+This approach gives you a more specific API in your actual application.
