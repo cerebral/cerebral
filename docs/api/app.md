@@ -11,7 +11,9 @@ const app = App(main, {
   throwToConsole: true,
   // A map of state changes to run before instantiation,
   // where the key is the path and value is the state value
-  stateChanges: {}
+  stateChanges: {},
+  // Sequence execution returns promises
+  returnSequencePromise: false
 })
 ```
 
