@@ -7,18 +7,19 @@ Cerebral supports full type safety in your application. It is recommended to use
 Cerebral uses its proxy concept to type your state and signals. To attach the types to these proxies you will need to create a file called **cerebral.proxy.ts**:
 
 ```ts
-import * as tags from 'cerebral/tags'
+import * as proxy from 'cerebral/proxy'
 
 type State = {}
 
-type Sequences = {}
-
 type Computed = {}
 
-export const state = tags.state as State
-export const signals = tags.sequences as Sequences
-export const computed = tags.computed as Computed
-export const props = tags.props
+export const props = proxy.props
+export const state = proxy.state as State
+export const computed = proxy.computed as Computed
+export const sequences = proxy.sequences
+export const moduleState = proxy.moduleState
+export const moduleComputed = proxy.moduleComputed
+export const moduleSequences = proxy.moduleSequences
 ```
 
 In your **tsconfig.json** file it is recommended to add paths so that you can import this file more easily:
@@ -69,7 +70,7 @@ This type can now be used in your module to ensure type safety:
 *main/index.ts*
 
 ```ts
-import { Module } from 'cerebral'
+import { ModuleDefinition } from 'cerebral'
 import { State } from './types'
 import * as sequences from './sequences'
 import * as computeds from './computeds'
@@ -81,12 +82,14 @@ const state: State = {
   isAwesome: true
 }
 
-export default Module({
+const module: ModuleDefinition = {
   state,
   sequences,
   computeds,
   providers
-})
+}
+
+export default module
 ```
 
 In your **cerebral.proxy** file you can now compose state from all your modules:
@@ -104,10 +107,23 @@ type Computed = Main.Computed & {
   moduleA: ModuleA.Computed
 }
 
+export const props = proxy.props
 export const state = proxy.state as State
 export const computed = proxy.computed as Computed
 export const sequences = proxy.sequences
-export const props = proxy.props
+export const moduleState = proxy.moduleState
+export const moduleComputed = proxy.moduleComputed
+export const moduleSequences = proxy.moduleSequences
+```
+
+Since the module type of proxies depends on what module you use them with you need to cast them where they are used:
+
+*main/sequences.ts*
+```ts
+import { moduleState as moduleStateProxy } from 'cerebral.proxy'
+import { State } from './types'
+
+const moduleState = moduleStateProxy as State
 ```
 
 ## Step2: Typing sequences (declarative)
@@ -141,6 +157,21 @@ This approach does **NOT** give you suggestions and type safety on props. This i
 </Warning>
 ```
 
+*main/types.ts*
+
+```ts
+import * as computeds from './computeds'
+import * as sequences from './sequences'
+
+export type State = {
+  title: string
+  isAwesome: true
+}
+
+export type Computed = { [key in keyof typeof computed]: typeof computed[key] }
+
+export type Sequences = { [key in keyof typeof sequences]: typeof sequences[key] }
+```
 
 ## Step3: Typing components
 
@@ -316,9 +347,37 @@ class MyComponent extends React.Component<Props & ConnectedProps> {
 }
 ```
 
-## Step4: Typing actions
+## Step4: Typing actions and providers
 
 When writing actions you access the context. The default context is already typed and you can add your own provider typings.
+
+*main/providers.ts*
+```ts
+export const myProvider = {
+  get(value: string) {
+    return value
+  }
+}
+```
+
+*main/types.ts*
+
+```ts
+import * as computeds from './computeds'
+import * as sequences from './sequences'
+import * as providers from './providers'
+
+export type State = {
+  title: string
+  isAwesome: true
+}
+
+export type Computed = { [key in keyof typeof computed]: typeof computed[key] }
+
+export type Sequences = { [key in keyof typeof sequences]: typeof sequences[key] }
+
+export type Providers = { [key in keyof typeof providers]: typeof providers[key] }
+```
 
 ```ts
 import { IContext, IBranchContext } from 'cerebral'
@@ -335,10 +394,13 @@ type Providers = Main.Providers
 
 export type Context = IContext<{}> & Providers
 
-export const state = proxy.state as State
-export const sequences = proxy.sequences as Sequences
-export const computed = proxy.computed as Computed
 export const props = proxy.props
+export const state = proxy.state as State
+export const computed = proxy.computed as Computed
+export const sequences = proxy.sequences as Sequences
+export const moduleState = proxy.moduleState
+export const moduleComputed = proxy.moduleComputed
+export const moduleSequences = proxy.moduleSequences
 ```
 
 When you now create your actions you can attach a context type:
@@ -378,12 +440,15 @@ export type Context<Props = {}> = IContext<Props> & Providers
 export type BranchContext<Paths, Props = {}> = IBranchContext<Paths, Props> &
   Providers
 
+export const props = proxy.props
 export const Sequence = ChainSequenceFactory<Context>()
 export const SequenceWithProps = ChainSequenceWithPropsFactory<Context>()
 export const state = proxy.state as State
-export const sequences = proxy.sequences as Sequences
 export const computed = proxy.computed as Computed
-export const props = proxy.props
+export const sequences = proxy.sequences as Sequences
+export const moduleState = proxy.moduleState
+export const moduleComputed = proxy.moduleComputed
+export const moduleSequences = proxy.moduleSequences
 ```
 
 When you now define your sequences you will use the exported **Sequence** and **SequenceWithProps** from the **cerebral.proxy** file:
