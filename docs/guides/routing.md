@@ -12,8 +12,10 @@ import { routeToRoot, routeToItems, routeToItem } from './sequences'
 
 export default ({ app }) => {
 
+  app.on('initialized', () => page.start())
+
   function route(url, sequence) {
-      page(url, (context) => app.runSequence(url, sequence, context))
+      page(url, (context) => app.runSequence(url, sequence, context.params))
 
       return ({ props }) => page.show(Object.keys(props).reduce((currentUrl, param) => {
         return currentUrl.replace(`:${param}`, props[param])
