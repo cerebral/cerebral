@@ -1,56 +1,56 @@
 {
-    "name": "cerebral-todomvc-ts",
-    "version": "0.0.0",
-    "private": true,
-    "author": "Christian Alfoni <christianalfoni@gmail.com>",
-    "homepage": "http://cerebral.github.io/todomvc/",
-    "contributors": [
-        "Henri Hulski <henri.hulski@gazeta.pl>"
-    ],
-    "dependencies": {
-        "@cerebral/react": "next",
-        "@cerebral/router": "next",
-        "@cerebral/storage": "next",
-        "babel-plugin-cerebral": "next",
-        "cerebral": "^4.2.1",
-        "classnames": "^2.2.5",
-        "react": "^16.2.0",
-        "react-dom": "^16.2.0",
-        "todomvc-app-css": "^2.1.0",
-        "todomvc-common": "^1.0.4",
-        "uuid": "^3.1.0"
-    },
-    "scripts": {
-        "build": "parcel build index.html",
-        "prepublish": "npm run build",
-        "start": "parcel serve index.html --no-autoinstall",
-        "setup": "npm install --only=dev && npm install @types/jest --no-save",
-        "test": "jest"
-    },
-    "jest": {
-        "transform": {
-            "^.+\\.tsx?$": "ts-jest"
-        },
-        "testRegex": "(/__tests__/.*|(\\.|/)(spec))\\.(tsx?)$",
-        "moduleFileExtensions": [
-            "ts",
-            "tsx",
-            "js",
-            "json",
-            "node"
-        ],
-        "moduleNameMapper": {
-            "cerebral.proxy": "<rootDir>/src/cerebral.proxy.ts"
-        },
-        "globals": {
-            "ts-jest": {
-                "tsConfigFile": "tsconfig.test.json",
-                "useBabelrc": true
-            }
-        }
-    },
-    "devDependencies": {
-        "parcel-plugin-typescript": "^0.7.0",
-        "parcel-bundler": "1.7.0"
-    }
+	"name": "cerebral-todomvc-ts",
+	"version": "0.0.0",
+	"private": true,
+	"author": "Christian Alfoni <christianalfoni@gmail.com>",
+	"homepage": "http://cerebral.github.io/todomvc/",
+	"contributors": [
+		"Henri Hulski <henri.hulski@gazeta.pl>"
+	],
+	"dependencies": {
+		"@cerebral/react": "next",
+		"@cerebral/router": "next",
+		"@cerebral/storage": "next",
+		"babel-plugin-cerebral": "next",
+		"cerebral": "next",
+		"classnames": "^2.2.5",
+		"react": "^16.2.0",
+		"react-dom": "^16.2.0",
+		"todomvc-app-css": "^2.1.0",
+		"todomvc-common": "^1.0.4",
+		"uuid": "^3.1.0"
+	},
+	"scripts": {
+		"build": "parcel build index.html",
+		"prepublish": "npm run build",
+		"start": "parcel serve index.html --no-autoinstall",
+		"setup": "npm install --only=dev && npm install @types/jest --no-save",
+		"test": "jest"
+	},
+	"jest": {
+		"transform": {
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testRegex": "(/__tests__/.*|(\\.|/)(spec))\\.(tsx?)$",
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"json",
+			"node"
+		],
+		"moduleNameMapper": {
+			"cerebral.proxy": "<rootDir>/src/cerebral.proxy.ts"
+		},
+		"globals": {
+			"ts-jest": {
+				"tsConfigFile": "tsconfig.test.json",
+				"useBabelrc": true
+			}
+		}
+	},
+	"devDependencies": {
+		"parcel-plugin-typescript": "^0.7.0",
+		"parcel-bundler": "1.7.0"
+	}
 }
