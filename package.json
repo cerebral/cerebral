@@ -22,7 +22,7 @@
     "pretest": "npm run checkdeps",
     "release": "babel-node ./scripts/release/index.js",
     "setup": "node ./scripts/run.js prepublish nodemos",
-    "test": "node ./scripts/run.js test"
+    "test": "node ./scripts/run.js prepublish nodemos && node ./scripts/run.js test"
   },
   "repository": {
     "type": "git",
