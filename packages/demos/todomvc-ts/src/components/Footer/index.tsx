@@ -10,9 +10,8 @@ export default connect(
     filter: state.filter,
     counts: computed.counts,
     clearCompletedClicked: sequences.clearCompletedTodos,
-    changeFilter: sequences.changeFilter,
   },
-  function Footer({ filter, counts, changeFilter, clearCompletedClicked }) {
+  function Footer({ filter, counts, clearCompletedClicked }) {
     return (
       <footer className="footer">
         <span className="todo-count">
@@ -24,9 +23,7 @@ export default connect(
           {filters.map((filterName) => (
             <li key={filterName}>
               <a
-                onClick={() =>
-                  changeFilter({ filter: filterName.toLowerCase() })
-                }
+                href={`/${filterName.toLowerCase()}`}
                 className={classnames({
                   selected: filter === filterName.toLowerCase(),
                 })}

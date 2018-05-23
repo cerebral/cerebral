@@ -14,6 +14,8 @@
 		"babel-plugin-cerebral": "next",
 		"cerebral": "next",
 		"classnames": "^2.2.5",
+		"local-storage": "^1.4.2",
+		"page": "^1.8.6",
 		"react": "^16.2.0",
 		"react-dom": "^16.2.0",
 		"todomvc-app-css": "^2.1.0",
@@ -50,7 +52,8 @@
 		}
 	},
 	"devDependencies": {
-		"parcel-plugin-typescript": "^0.7.0",
-		"parcel-bundler": "1.7.0"
+		"@types/page": "^1.5.32",
+		"parcel-bundler": "1.7.0",
+		"parcel-plugin-typescript": "^0.7.0"
 	}
 }

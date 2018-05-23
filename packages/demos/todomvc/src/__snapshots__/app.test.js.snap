@@ -49,7 +49,7 @@ exports[`should add new todo 1`] = `
 exports[`should add new todo 2`] = `
 Array [
   Action {
-    "name": "operator.when(state\`newTodoTitle\`)",
+    "name": "factory.when(state\`newTodoTitle\`)",
   },
   Path {
     "name": "true",
@@ -72,7 +72,7 @@ Array [
     "path": "todos.fc033770-7d95-4ac2-a0b2-c68e0f26700e",
   },
   Action {
-    "name": "operator.set(state\`newTodoTitle\`, )",
+    "name": "factory.set(state\`newTodoTitle\`, )",
   },
   Mutation {
     "args": Array [
@@ -132,7 +132,7 @@ exports[`should filter on all 1`] = `
 exports[`should filter on all 2`] = `
 Array [
   Action {
-    "name": "operator.set(state\`filter\`, props\`filter\`)",
+    "name": "factory.set(state\`filter\`, props\`filter\`)",
   },
   Mutation {
     "args": Array [
