@@ -44,11 +44,13 @@
     "firebase-admin": "4.0.4",
     "firebase-queue": "1.6.0",
     "js-joda": "1.1.13",
+    "local-storage": "1.4.2",
     "match-media": "0.2.0",
     "md5": "^2.2.1",
     "mobx": "3.4.1",
     "mobx-state-tree": "1.0.0",
     "offline-js": "0.7.18",
+    "page": "1.8.6",
     "prism": "4.1.2",
     "proxyquire": "1.7.11",
     "raf": "3.3.0",
@@ -164,6 +166,7 @@
     "@types/mocha": "5.1.0",
     "@types/prop-types": "15.5.2",
     "parcel-plugin-typescript": "0.7.0",
-    "parcel-bundler": "1.7.0"
+    "parcel-bundler": "1.7.0",
+    "@types/page": "1.5.32"
   }
 }

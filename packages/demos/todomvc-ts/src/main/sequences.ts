@@ -1,11 +1,10 @@
-// @ts-ignore
-import { redirect } from '@cerebral/router/factories'
 import { state, props } from 'cerebral.proxy'
-import { set, unset, toggle, when } from 'cerebral/factories'
-import { sequence } from 'cerebral'
+import { sequence, set, unset, toggle, when } from 'cerebral/factories'
 import * as actions from './actions'
 
-export const redirectToAll = sequence(redirect('/all'))
+export const changeFilter = sequence<{ filter: string }>(
+  set(state.filter, props.filter)
+)
 
 export const changeNewTodoTitle = sequence<{ title: string }>(
   set(state.newTodoTitle, props.title)
@@ -22,10 +21,6 @@ export const toggleTodoCompleted = sequence<{ uid: string }>(
 )
 
 export const clearCompletedTodos = sequence(actions.clearCompletedTodos)
-
-export const changeFilter = sequence<{ filter: string }>(
-  set(state.filter, props.filter)
-)
 
 export const submitNewTodo = sequence([
   when(state.newTodoTitle),
