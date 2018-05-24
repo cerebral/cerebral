@@ -131,7 +131,7 @@ const moduleState = moduleStateProxy as State
 The most important and common typing that helps you is "how to execute a sequence". By defining all your sequences using the **sequence** or **parallel** factory gives you this typing:
 
 ```ts
-import { sequence } from 'cerebral'
+import { sequence } from 'cerebral/factories'
 
 export const mySequence = sequence(actions.myAction)
 
