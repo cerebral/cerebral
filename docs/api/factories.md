@@ -4,7 +4,7 @@ You can call factories to create actions for you. These actions will help you ch
 
 Read more about factories in the [the guide](/docs/guides/factories) article.
 
-## Operator factories
+## Store factories
 
 The methods for changing state within actions are also available as factories.
 

@@ -44,7 +44,7 @@ function actionB({ props }) {
 
 So returning an object from actions, either directly or from a promise, extends the payload for later actions to handle.
 
-## store
+## Store
 
 To change the state of your application you use the store API. It is available to every action and it is required that you use the proxies to point to the state you want to change.
 
@@ -89,9 +89,21 @@ export default [
 
 In this scenario only *actionB* has the path on its context. That means in any action you can check if path is available and what paths can be taken by looking at its keys.
 
+## Get
+
+You can grab any tag/proxy value by using *get*:
+
+```js
+import { state } from 'cerebral/proxy'
+
+function someAction({ get }) {
+  const foo = get(state.foo)
+}
+```
+
 ## Resolve
 
-**Tags** (proxy) and **Computed** needs resolving. In most scenarios you do not have to think about this, but you might want to do this manually in an action. This is typically related to factories. To resolve an argument passed to a factory you can use resolve:
+**Get** is actually a wrapper around resolve and you should use that. **Resolve** has some additional functionality though. To resolve an argument passed to a factory you can use resolve:
 
 ```js
 function someActionFactory(someArgument) {
@@ -115,17 +127,5 @@ function someActionFactory(someArgument) {
   }
 
   return someAction
-}
-```
-
-## Get
-
-Instead of using **resolve** you can grab any tag/proxy value by using *get*:
-
-```js
-import { state } from 'cerebral/proxy'
-
-function someAction({ get }) {
-  const foo = get(state.foo)
 }
 ```

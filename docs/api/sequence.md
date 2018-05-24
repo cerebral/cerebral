@@ -15,12 +15,11 @@ export const mySequence = [actions.someAction]
 You attach sequences to modules:
 
 ```js
-import { Module } from 'cerebral'
 import * as sequences from './sequences'
 
-export default Module({
+export default {
   sequences
-})
+}
 ```
 
 ## Async
@@ -54,7 +53,7 @@ export const mySequence = [actions.someAction]
 The array is converted to a sequence, but you can also be explicit about it:
 
 ```js
-import { sequence } from 'cerebral'
+import { sequence } from 'cerebral/factories'
 import * as actions from './actions'
 
 export const mySequence = sequence([
@@ -65,7 +64,7 @@ export const mySequence = sequence([
 You can name a sequence, which will be displayed in debugger:
 
 ```js
-import { sequence } from 'cerebral'
+import { sequence } from 'cerebral/factories'
 import * as actions from './actions'
 
 export const mySequence = sequence('my sequence', [
@@ -88,7 +87,7 @@ export const mySequence = [actions.someAction, myOtherSequence]
 Cerebral can not truly run actions in parallel (JavaScript is single threaded), but it can trigger multiple asynchronous actions at the same time, just like **Promise.all**. That means when Cerebral triggers actions defined within a parallel, it will not wait if a promise is returned, it will just move on to the next action. When all actions within a parallel is resolved it will move to the action after the parallel definition, if any:
 
 ```js
-import { parallel } from 'cerebral'
+import { parallel } from 'cerebral/factories'
 import * as actions from './actions'
 
 export const mySequence = parallel([
@@ -100,7 +99,7 @@ export const mySequence = parallel([
 You can name a parallel, which will be displayed in debugger:
 
 ```js
-import { parallel } from 'cerebral'
+import { parallel } from 'cerebral/factories'
 import * as actions from './actions'
 
 export const mySequence = parallel('my parallel', [
@@ -112,7 +111,7 @@ export const mySequence = parallel('my parallel', [
 You can compose parallel into any existing sequence:
 
 ```js
-import { parallel } from 'cerebral'
+import { parallel } from 'cerebral/factories'
 import * as actions from './actions'
 
 export const mySequence = [
@@ -124,9 +123,11 @@ export const mySequence = [
 ]
 ```
 
+Note that you can also compose sequences into *parallel*. That means when both sequences are done running it will move on.
+
 ## Paths
 
-You can diverge execution by defining paths in your signal.
+You can diverge execution by defining paths in your sequences.
 
 ```js
 import * as actions from './actions'
