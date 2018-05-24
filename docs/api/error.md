@@ -23,14 +23,13 @@ function someAction() {
 And caught like this:
 
 ```js
-import { Module } from 'cerebral'
 import { MyError } from './errors'
 import * as sequences from './sequences'
 
-export default Module({
+export default {
   sequences,
   catch: [
     [MyError, sequences.handleError]
   ]
-})
+}
 ```

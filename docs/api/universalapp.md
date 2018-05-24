@@ -1,6 +1,6 @@
 # Universal App
 
-The Universal Controller allows you to put your application in its initial state on the server. In combination with your chosen view layer you can now render the application on the server and show it near instantly in the context of the current user. When the client side application loads it will piggyback on the existing DOM and effectively rehydrate the minimal state from the server to make it up to date, meaning that the pure HTML responded from your server and the loading of the actual application is transparent.
+The Universal App allows you to put your application in its initial state on the server. In combination with your chosen view layer you can now render the application on the server and show it near instantly in the context of the current user. When the client side application loads it will piggyback on the existing DOM and effectively rehydrate the minimal state from the server to make it up to date, meaning that the pure HTML responded from your server and the loading of the actual application is transparent.
 
 Read more about server side rendering in the [SSR guide](/docs/guides/ssr).
 
@@ -17,7 +17,7 @@ const app = UniversalApp(main)
 
 ### runSequence
 
-If you need to update the state of the controller you can run a signal execution for doing so:
+If you need to update the state of the controller you can run a sequence execution for doing so:
 
 ```js
 import { UniversalApp } from 'cerebral'
@@ -50,7 +50,7 @@ import main from './main'
 
 const app = UniversalApp(main)
 
-controller.runSequence('some.module.aSequence', { isAwesome: true }).then(() => {
+app.runSequence('some.module.aSequence', { isAwesome: true }).then(() => {
   // I am done running
 })
 ```

@@ -2,8 +2,6 @@
 
 ## Snapshot testing (beta)
 
-Snapshot testing requires your application to be written in Cerebral version 4 or up. All the providers you use needs to be defined using the `Provider` API, or you will have to mock out things yourself.
-
 ### Introduction
 
 **1. Run the sequence**
@@ -28,7 +26,7 @@ test('should filter on all', () => {
 })
 ```
 
-Run the test to create the first snapshot. Any changes to your app that affects this signal will be yelled at you by Jest.
+Run the test to create the first snapshot. Any changes to your app that affects this sequence will be yelled at you by Jest.
 
 ### Snapshot
 
@@ -44,7 +42,7 @@ Runs a sequence with an optional payload. It returns a promise, passing the snap
 
 ```js
 Snapshot(main)
-  .run('some.signal', { foo: 'bar' })
+  .run('some.sequence', { foo: 'bar' })
   .then((snapshot) => {})
 ```
 
@@ -107,7 +105,7 @@ describe('<Button />', () => {
       state: {
         foo: 'bar'
       },
-      signals: {
+      sequences: {
         clicked: ({ props }) => assert.equal(props.foo, 'bar')
       }
     })
@@ -239,6 +237,6 @@ it('should accumulate a count', () => {
 })
 ```
 
-When `recordActions: true` is specified each action will record its props/output against its index within the signal action chain. When `recordActions: 'byName'` is specified each action will record its output against an named property in the result.
+When `recordActions: true` is specified each action will record its props/output against its index within the sequence. When `recordActions: 'byName'` is specified each action will record its output against an named property in the result.
 
-The `result` object passed when the promise resolves contains `state` and an object for each named action in the signal chain with the same name as the actions with `props` and `output` properties.
+The `result` object passed when the promise resolves contains `state` and an object for each named action in the sequence with the same name as the actions with `props` and `output` properties.

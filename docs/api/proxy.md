@@ -47,9 +47,7 @@ function myAction ({ get }) {
 
 // In factories
 [
-  httpPost('/items', props.item, {
-    onProgress: sequences.updateUploadProgress
-  })
+  onMessage('some_channel', sequences.onMessage)
 ]
 
 // In reaction
@@ -157,9 +155,7 @@ function myAction ({ get }) {
 
 // In factories
 [
-  httpPost('/items', props.item, {
-    onProgress: moduleSequences.updateUploadProgress
-  })
+  onMessage('some_channel', moduleSequences.onMessage)
 ]
 
 // In reaction
