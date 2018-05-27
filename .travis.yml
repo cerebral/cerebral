@@ -20,7 +20,6 @@ script:
 - |
   if [[ $SKIP_TESTS != 'true' ]]; then
     npm prune
-    npm run lint
     npm test
   fi
 after_success:
