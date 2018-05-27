@@ -380,7 +380,7 @@ export type Providers = { [key in keyof typeof providers]: typeof providers[key]
 ```
 
 ```ts
-import { IContext, IBranchContext } from 'cerebral'
+import { IContext } from 'cerebral'
 import * as proxy from 'cerebral/proxy'
 import * as Main from './main/types'
 

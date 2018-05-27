@@ -18,18 +18,29 @@ In our application we want to talk to a service called [JSONPlaceholder](https:/
 import { App } from 'cerebral'
 import Devtools from 'cerebral/devtools'
 
+const API_URL = 'https://jsonplaceholder.typicode.com'
+
 const app = App({
   state: {
     title: 'My Project',
+    posts: [],
     users: {},
-    currentUserId: null,
+    userModal: {
+      show: false,
+      id: null
+    },
+    isLoadingPosts: false,
     isLoadingUser: false,
     error: null
   },
   providers: {
-    jsonPlaceholder: {
+    api: {
+      getPosts() {
+        return fetch(`${API_URL}/posts`)
+          .then(response => response.toJSON())
+      },
       getUser(id) {
-        return fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+        return fetch(`${API_URL}/users/${id}`)
           .then((response) => response.json())
       }
     }
@@ -37,6 +48,6 @@ const app = App({
 }, {...})
 ```
 
-We have now added a provider that uses the native fetch API of the browser to grab a user from JSONPlaceholder. Instead of creating a generic http provider we went all the way and created a specific provider for talking to JSONPlaceholder. The concept of a provider allows us to do this and it is highly encouraged as it will improve the readability of the application code.
+We have now added a provider that uses the native fetch API of the browser to grab posts and users from JSONPlaceholder. Instead of creating a generic http provider we went all the way and created a specific provider for talking to JSONPlaceholder called **api**. The concept of a provider allows us to do this and it is highly encouraged as it will improve the readability of the application code.
 
 We are now ready to make some stuff happen in our application!
