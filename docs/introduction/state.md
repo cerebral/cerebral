@@ -31,27 +31,27 @@ import Devtools from 'cerebral/devtools'
 const app = App({
   state: {
     title: 'My Project',
+    posts: [],
     users: {},
-    currentUserId: null,
+    userModal: {
+      show: false,
+      id: null
+    },
+    isLoadingItems: false,
     isLoadingUser: false,
     error: null
   }  
 }, {...})
 ```
 
-We are going to load users from [JSONPlaceholder](https://jsonplaceholder.typicode.com) and for that we need some state. First of all we need a way to store the users we load. When you are dealing with data that has an _id_ you should favor inserting them into an object:
+We are going to load posts from [JSONPlaceholder](https://jsonplaceholder.typicode.com). We also want to be able to click a post to load information about the user who wrote it, in a modal. For this to work we need some state. All the state defined here is pretty straight forward, but why do we choose an array for the posts and an object for the users?
+
+## Storing data
+
+**Data** in this context means entities from the server that are unique, they have a unique *id*. Both posts and users are like this, but we still choose to store posts as arrays and users as an object. Choosing one or the other is as simple as asking yourself, "What am I going to do with the state?". In this application we are only going to map over the posts to display a list of posts, nothing more. Arrays are good for that. But users here are different. We want to get a hold of the user in question with an id, *userModal.id*. Objects are very good for this. Cause we can say:
 
 ```js
-{
-  'user1': {
-    id: 'user1',
-    name: 'Bob'
-  },
-  'user2': {
-    id: 'user2',
-    name: 'Alice'
-  }
-}
+users[userModal.id]
 ```
 
-This makes it easer for you to point to a specific user later on. We also need a _currentUserId_ to know which user we are currently looking at. We also want to indicate if we are currently loading a user with the _isLoadingUser_ state. Lastly we need to indicate any errors with the _error_ state.
+No need to iterate through an array to find the user. Normally you will store data in objects, because you usually have the need for lookups. An object also ensures that there will never exist two entities with the same id, unlike in an array.
