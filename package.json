@@ -84,11 +84,11 @@
     }
   },
   "devDependencies": {
-    "@angular/common": "4.4.0-RC.0",
-    "@angular/compiler": "4.4.0-RC.0",
-    "@angular/core": "4.3.6",
-    "@angular/platform-browser": "4.4.0-RC.0",
-    "@angular/platform-browser-dynamic": "4.3.6",
+    "@angular/common": "6.0.3",
+    "@angular/compiler": "6.0.3",
+    "@angular/core": "6.0.3",
+    "@angular/platform-browser": "6.0.3",
+    "@angular/platform-browser-dynamic": "6.0.3",
     "assert": "1.4.1",
     "babel-cli": "6.24.1",
     "babel-core": "^6.24.1",
