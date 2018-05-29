@@ -141,7 +141,7 @@
     "npm-run-all": "4.0.2",
     "nyc": "^10.3.2",
     "preact": "8.1.0",
-    "prettier": "^1.11.1",
+    "prettier": "^1.13.1",
     "prismjs": "1.6.0",
     "prop-types": "15.6.1",
     "react-scripts": "1.1.1",
