@@ -8,7 +8,6 @@ const filters = ['All', 'Active', 'Completed']
 function Footer({ get }) {
   const filter = get(state.filter)
   const counts = get(computed.counts)
-  const changeFilter = get(sequences.changeFilter)
   const clearCompletedTodos = get(sequences.clearCompletedTodos)
 
   return (
@@ -22,7 +21,7 @@ function Footer({ get }) {
         {filters.map((filterName) => (
           <li key={filterName}>
             <a
-              onClick={() => changeFilter({ filter: filterName.toLowerCase() })}
+              href={`/${filterName.toLowerCase()}`}
               className={classnames({
                 selected: filter === filterName.toLowerCase(),
               })}

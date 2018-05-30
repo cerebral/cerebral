@@ -104,7 +104,7 @@ exports[`should filter on all 1`] = `
     <li>
       <a
         className="selected"
-        onClick={[Function]}
+        href="/all"
       >
         All
       </a>
@@ -112,7 +112,7 @@ exports[`should filter on all 1`] = `
     <li>
       <a
         className=""
-        onClick={[Function]}
+        href="/active"
       >
         Active
       </a>
@@ -120,7 +120,7 @@ exports[`should filter on all 1`] = `
     <li>
       <a
         className=""
-        onClick={[Function]}
+        href="/completed"
       >
         Completed
       </a>
