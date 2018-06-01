@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, sequences } from 'cerebral.proxy'
+import { state, sequences } from 'app.proxy'
 
 export default connect(
   {

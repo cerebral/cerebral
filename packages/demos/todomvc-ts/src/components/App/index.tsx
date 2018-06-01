@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { computed } from 'cerebral.proxy'
+import { computed } from 'app.proxy'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'

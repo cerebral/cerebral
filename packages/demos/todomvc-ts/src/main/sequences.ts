@@ -1,4 +1,4 @@
-import { state, props } from 'cerebral.proxy'
+import { state, props } from 'app.proxy'
 import { sequence, set, unset, toggle, when } from 'cerebral/factories'
 import * as actions from './actions'
 
