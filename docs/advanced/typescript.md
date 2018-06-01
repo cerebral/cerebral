@@ -4,7 +4,7 @@ Cerebral supports full type safety in your application. It is recommended to use
 
 ## Required: Preparing typing
 
-Cerebral uses its proxy concept to type your state and signals. To attach the types to these proxies you will need to create a file called **cerebral.proxy.ts**:
+Cerebral uses its proxy concept to type your state and signals. To attach the types to these proxies you will need to create a file called **app.proxy.ts**:
 
 ```ts
 import * as proxy from 'cerebral/proxy'
@@ -33,7 +33,7 @@ In your **tsconfig.json** file it is recommended to add paths so that you can im
     "lib": ["es6", "dom"],
     "baseUrl": "./src",
     "paths": {
-      "cerebral.proxy": ["cerebral.proxy.ts"]
+      "app.proxy": ["app.proxy.ts"]
     }
   },
   "exclude": [
@@ -92,7 +92,7 @@ const module: ModuleDefinition = {
 export default module
 ```
 
-In your **cerebral.proxy** file you can now compose state from all your modules:
+In your **app.proxy** file you can now compose state from all your modules:
 
 ```ts
 import * as proxy from 'cerebral/proxy'
@@ -120,7 +120,7 @@ Since the module type of proxies depends on what module you use them with you ne
 
 *main/sequences.ts*
 ```ts
-import { moduleState as moduleStateProxy } from 'cerebral.proxy'
+import { moduleState as moduleStateProxy } from 'app.proxy'
 import { State } from './types'
 
 const moduleState = moduleStateProxy as State
@@ -179,7 +179,7 @@ In Cerebral we recommend using React if you intend to type your components. The 
 
 ### With dependencies
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 const deps = {
@@ -200,7 +200,7 @@ This approach allows you to export your components for testing without connectin
 **Using classes:**
 
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 const deps = {
@@ -223,7 +223,7 @@ export default connect(deps, MyComponent)
 If the component receives external props you need to type those and your dependencies:
 
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 type Props = {
@@ -251,7 +251,7 @@ export default connect<Props>(deps, MyComponent)
 **And with a class:**
 
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 type Props = {
@@ -278,7 +278,7 @@ export default connect<Props>(deps, MyComponent)
 If you choose the dynamic approach there is no need to type the dependencies, though you have to type the connected props:
 
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 const MyComponent: React.SFC<ConnectedProps> = ({ get }) => {
@@ -293,7 +293,7 @@ export default connect(MyComponent)
 **And classes:**
 
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 class MyComponent extends React.Component<ConnectedProps> {
@@ -311,7 +311,7 @@ export default connect(MyComponent)
 ### Dynamic dependencies and external props
 
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 type Props = {
@@ -330,7 +330,7 @@ export default connect<Props>(MyComponent)
 **And classes:**
 
 ```ts
-import { state, computed, sequences } from 'cerebral.proxy'
+import { state, computed, sequences } from 'app.proxy'
 import { connect, ConnectedProps } from '@cerebral/react'
 
 type Props = {
@@ -406,7 +406,7 @@ export const moduleSequences = proxy.moduleSequences
 When you now create your actions you can attach a context type:
 
 ```ts
-import { Context } from 'cerebral.proxy'
+import { Context } from 'app.proxy'
 
 export const function myAction ({ store, myProvider }: Context) {
 
@@ -451,10 +451,10 @@ export const moduleComputed = proxy.moduleComputed
 export const moduleSequences = proxy.moduleSequences
 ```
 
-When you now define your sequences you will use the exported **Sequence** and **SequenceWithProps** from the **cerebral.proxy** file:
+When you now define your sequences you will use the exported **Sequence** and **SequenceWithProps** from the **app.proxy** file:
 
 ```ts
-import { Sequence, SequenceWithProps, state } from 'cerebral.proxy'
+import { Sequence, SequenceWithProps, state } from 'app.proxy'
 import * as actions from './actions'
 
 export const doThis = Sequence((sequence) =>
@@ -481,7 +481,7 @@ Composing together actions like this will infer what props are available as they
 To run conditional logic you will branch out:
 
 ```ts
-import { Sequence, state } from 'cerebral.proxy'
+import { Sequence, state } from 'app.proxy'
 import * as actions from './actions'
 
 export const doThis = Sequence((sequence) => sequence
@@ -496,7 +496,7 @@ export const doThis = Sequence((sequence) => sequence
 You compose in sequences by:
 
 ```ts
-import { Sequence, state } from 'cerebral.proxy'
+import { Sequence, state } from 'app.proxy'
 import * as actions from './actions'
 
 export const doThis = Sequence((sequence) => sequence
@@ -508,7 +508,7 @@ export const doThis = Sequence((sequence) => sequence
 The flow factories are implemented as part of the chaining API:
 
 ```ts
-import { Sequence, state } from 'cerebral.proxy'
+import { Sequence, state } from 'app.proxy'
 import * as actions from './actions'
 
 export const doThis = Sequence((sequence) =>
@@ -525,7 +525,7 @@ export const doThis = Sequence((sequence) =>
 With the new action typings you will be able to improve inference in the sequences by:
 
 ```ts
-import { Context } from 'cerebral.proxy'
+import { Context } from 'app.proxy'
 
 export const function myAction ({ store, myProvider }: Context) {
 
@@ -539,7 +539,7 @@ export const function myAction ({ store, myProvider, props }: Context<{ foo: str
 And if the action triggers a path:
 
 ```ts
-import { BranchContext } from 'cerebral.proxy'
+import { BranchContext } from 'app.proxy'
 
 export const function myAction ({ store, myProvider, path }: BranchContext<
   {

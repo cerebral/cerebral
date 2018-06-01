@@ -6,7 +6,7 @@
     "lib": ["es6", "dom"],
     "baseUrl": "./src",
     "paths": {
-      "cerebral.proxy": ["cerebral.proxy.ts"]
+      "app.proxy": ["app.proxy.ts"]
     },
     "sourceMap": true,
     "allowJs": true,

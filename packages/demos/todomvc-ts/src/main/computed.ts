@@ -1,5 +1,5 @@
 import { Computed } from 'cerebral'
-import { state, computed } from 'cerebral.proxy'
+import { state, computed } from 'app.proxy'
 
 export const visibleTodosUids = Computed(
   {
