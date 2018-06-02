@@ -16,6 +16,13 @@ function Index(props) {
       <h1 className="index-title">Cerebral</h1>
       <div className="docs-doc">
         <div className="docs-doc-content">
+          {
+            props.compile(`
+\`\`\`marksy
+<Views />
+\`\`\`
+            `).tree
+          }
           <div className="index-buttons">
             <a href="/docs/introduction" className="button">
               GET STARTED

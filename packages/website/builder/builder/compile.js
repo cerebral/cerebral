@@ -13,6 +13,63 @@ const compile = marksy({
     return Prism.highlight(code, Prism.languages[language])
   },
   components: {
+    Views() {
+      return (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+            margin: '0 50px 50px 50px',
+          }}
+        >
+          <div
+            style={{
+              backgroundImage: 'url(/images/vuejs.png)',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              width: '5vw',
+              height: '5vw',
+            }}
+          />
+          <div
+            style={{
+              backgroundImage: 'url(/images/react.png)',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              width: '5vw',
+              height: '5vw',
+            }}
+          />
+          <div
+            style={{
+              backgroundImage: 'url(/images/angular.png)',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              width: '5vw',
+              height: '5vw',
+            }}
+          />
+          <div
+            style={{
+              backgroundImage: 'url(/images/preact.jpg)',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              width: '5vw',
+              height: '5vw',
+            }}
+          />
+          <div
+            style={{
+              backgroundImage: 'url(/images/inferno.png)',
+              backgroundPosition: 'center',
+              backgroundSize: 'cover',
+              width: '5vw',
+              height: '5vw',
+            }}
+          />
+        </div>
+      )
+    },
     Image(props) {
       return <img src={props.src} style={props.style} />
     },
