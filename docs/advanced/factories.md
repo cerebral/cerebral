@@ -24,7 +24,7 @@ So the typical factories you use with Cerebral are the operator factories:
 
 ```js
 import { set, push } from 'cerebral/factories'
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 export default [
   set(state.foo, 'bar'),
@@ -62,8 +62,7 @@ But **httpGet** actually has more features than this. You can use a *string tag*
 
 ```js
 import { httpGet } from '@cerebral/http/factories'
-import { string } from 'cerebral/tags'
-import { props } from 'cerebral/proxy'
+import { props, string } from 'cerebral'
 
 export default httpGet(string`items/${props.itemId}`)
 ```
@@ -225,7 +224,7 @@ Resolving the path instead of the value within the path gives some contextual po
 
 ```js
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 
 export default set(state.foo, props.foo)
 ```
@@ -268,8 +267,7 @@ You will very likely create a lot of action factories in your application. This 
 
 ```js
 import factories from './factories'
-import { string } from 'cerebral/tags'
-import { state } from 'cerebral/proxy'
+import { string, state } from 'cerebral'
 
 export default notify(string`Sorry ${state.user.name}, this does not work :(`)
 ```
@@ -277,7 +275,7 @@ export default notify(string`Sorry ${state.user.name}, this does not work :(`)
 The factory could look something like this:
 
 ```js
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 function notifyFactory(message) {
   function notify({ store, get }) {

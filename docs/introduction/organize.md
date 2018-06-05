@@ -33,7 +33,7 @@ export default {
 Our actions should be contained in its own file at `src/main/actions.js`:
 
 ```js
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 export const getPosts =  ({ api }) =>
   api.getPosts().then(posts => ({ posts }))
@@ -48,7 +48,7 @@ The same for sequences at `src/main/sequences.js`:
 
 ```js
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 import * as actions from './actions'
 
 export const openPostsPage =  [

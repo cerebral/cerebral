@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from '@cerebral/react'
-import { state, sequences } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral'
 
 function NewTodo({ get }) {
   const title = get(state.newTodoTitle)

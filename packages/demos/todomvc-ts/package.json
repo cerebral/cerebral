@@ -42,7 +42,7 @@
 			"node"
 		],
 		"moduleNameMapper": {
-			"app.proxy": "<rootDir>/src/app.proxy.ts"
+			"app.cerebral": "<rootDir>/src/app.cerebral.ts"
 		},
 		"globals": {
 			"ts-jest": {

@@ -1,9 +1,6 @@
-import { redirect } from '@cerebral/router/factories'
+import { props, state } from 'cerebral'
 import { set, toggle, unset, when } from 'cerebral/factories'
-import { props, state } from 'cerebral/proxy'
 import * as actions from './actions'
-
-export const redirectToAll = redirect('/all')
 
 export const changeNewTodoTitle = set(state.newTodoTitle, props.title)
 

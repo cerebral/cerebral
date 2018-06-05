@@ -3,9 +3,8 @@
 Our *getUser* action might fail. The server might be unavailable for example. One way to solve this is to use conditional logic in the sequence. Let us first express a conditional in the sequence of **success** and **error** and refactor a bit:
 
 ```js
-import { state } from 'cerebral/proxy'
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 
 const getUser = ({ jsonPlaceholder, props }) =>
   jsonPlaceholder.getUser(props.id).then(user => ({ user }))
@@ -48,9 +47,8 @@ In this case we just chose to use **success** and **error** as paths here, but i
 To actually handle the conditional execution we need to look back into our *getUser* action:
 
 ```js
-import { state } from 'cerebral/proxy'
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 
 const getUser = ({ jsonPlaceholder, props, path }) =>
   jsonPlaceholder

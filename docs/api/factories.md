@@ -141,7 +141,7 @@ notifications where a previous notification should be cancelled by a new one.
 
 ```js
 import { debounce, set, unset } from 'cerebral/factories'
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 const sharedDebounce = debounce.shared()
 function showNotificationFactory(message, ms) {
@@ -171,7 +171,7 @@ This operator chooses a specific path based on the provided value.
 
 ```js
 import { equals } from 'cerebral/factories'
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 export default [
   equals(state.user.role), {
@@ -219,7 +219,7 @@ Run signal path depending on a truth value or function evaluation.
 
 ```js
 import { when } from 'cerebral/factories'
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 export default [
   when(state.foo.isAwesome),
@@ -241,7 +241,7 @@ When used with a truth function, the `when` operator supports more then a single
 
 ```js
 import { when } from 'cerebral/factories'
-import { props, state } from 'cerebral/proxy'
+import { props, state } from 'cerebral'
 
 export default [
   when(

@@ -7,9 +7,8 @@
 Currently we are creating a nested structure in our sequence to express conditional execution. Related to errors that does not always make sense, cause you just want to stop execution and do something completely different. Let us revert our sequence back to is original format and then we rather catch the error:
 
 ```js
-import { state } from 'cerebral/proxy'
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 
 const getUser = ({ jsonPlaceholder, props }) =>
   jsonPlaceholder.getUser(props.id).then(user => ({ user }))
@@ -49,10 +48,8 @@ Notice that the catch handler is an array of arrays. Each item in the array is a
 Let us create a **JsonPlaceholderError**:
 
 ```js
-import { state } from 'cerebral/proxy'
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
-import { CerebralError } from 'cerebral'
+import { CerebralError, state, props } from 'cerebral'
 
 class JsonPlaceholderError extends CerebralError {
   constructor(message, statusCode) {
@@ -114,7 +111,7 @@ Let us force an error to see how it looks. First let us actually handle the erro
 ```js
 import * as actions from './actions'
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 
 export const handleError = set(state.error, props.error.message)
 

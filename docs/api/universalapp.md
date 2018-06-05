@@ -20,8 +20,7 @@ const app = UniversalApp(main)
 If you need to update the state of the controller you can run a sequence execution for doing so:
 
 ```js
-import { UniversalApp } from 'cerebral'
-import { state } from 'cerebral/proxy'
+import { UniversalApp, state } from 'cerebral'
 import main from './main'
 
 const app = UniversalApp(main)
@@ -90,8 +89,7 @@ app.runSequence('app.aSequence', { isAwesome: true }).then(() => {
 When the client side application loads it will do its first render with the default state, meaning that if the server updated the state this is now out of sync. Using the **getScript** method you will get a script tag you can inject into the _HEAD_ of the returned HTML. Cerebral will use this to bring your client side application state up to date with the server.
 
 ```js
-import { UniversalApp } from 'cerebral'
-import { state } from 'cerebral/proxy'
+import { UniversalApp, state } from 'cerebral'
 import main from './main'
 import fs from 'fs'
 

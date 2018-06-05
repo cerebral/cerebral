@@ -37,7 +37,7 @@ And you would define the component like this:
 
 ```js
 import { connect } from '@cerebral/vue'
-import { state, sequences } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral'
 
 export default connect(
   {
@@ -117,7 +117,7 @@ And your **App** component located in `src/components/App.js` could look like:
 
 ```js
 import React from 'react'
-import { state, sequences } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral'
 import { connect } from '@cerebral/react'
 
 export default connect(

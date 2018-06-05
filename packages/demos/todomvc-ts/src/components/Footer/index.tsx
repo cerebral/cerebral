@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, sequences, computed } from 'app.proxy'
+import { state, sequences, computed } from 'app.cerebral'
 import classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']

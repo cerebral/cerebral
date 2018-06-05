@@ -25,7 +25,7 @@ This structure favors a single file for each type of composable piece of logic. 
 ## Actions
 
 ```js
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 export function actionA({ store }) {
   store.set(state.foo, 'bar')
@@ -41,7 +41,7 @@ You export multiple actions from each modules *actions.js* file.
 If you prefer arrow functions, you can write:
 
 ```js
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 export const actionA = ({ store }) => store.set(state.foo, 'bar')
 
@@ -74,7 +74,7 @@ You import all actions and factories into the *sequences.js* file. This will giv
 
 ```js
 import { set } from 'cerebral/factories'
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 import * as actions from './actions'
 import * as factories from './factories'
 

@@ -49,7 +49,7 @@ So returning an object from actions, either directly or from a promise, extends 
 To change the state of your application you use the store API. It is available to every action and it is required that you use the proxies to point to the state you want to change.
 
 ```js
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 function setSomething({ store }) {
   store.set(state.some.path.foo, 'bar')
@@ -94,7 +94,7 @@ In this scenario only *actionB* has the path on its context. That means in any a
 You can grab any tag/proxy value by using *get*:
 
 ```js
-import { state } from 'cerebral/proxy'
+import { state } from 'cerebral'
 
 function someAction({ get }) {
   const foo = get(state.foo)

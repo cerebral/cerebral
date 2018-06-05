@@ -1,8 +1,7 @@
 import uuid from 'uuid'
-import { Provider } from 'cerebral'
 
-export const id = Provider({
+export const id = {
   create() {
     return uuid.v4()
   },
-})
+}

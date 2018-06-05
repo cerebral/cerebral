@@ -19,7 +19,7 @@ So you would typically create your reactions in a separate file, *reactions.js*:
 
 ```js
 import { Reaction } from 'cerebral'
-import { state, sequences } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral'
 
 export const pageChanged = Reaction(
   {
@@ -40,7 +40,7 @@ You can also create reactions inside views, here shown with *React*:
 ```js
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { state, sequences } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral'
 
 export default connect(
   {
