@@ -1,7 +1,6 @@
-import { Computed } from 'cerebral'
-import { state, computed } from 'cerebral/proxy'
+import { Compute, state, computed } from 'cerebral'
 
-export const visibleTodosUids = Computed(
+export const visibleTodosUids = Compute(
   {
     todos: state.todos,
     filter: state.filter,
@@ -17,7 +16,7 @@ export const visibleTodosUids = Computed(
   }
 )
 
-export const counts = Computed(
+export const counts = Compute(
   {
     todos: state.todos,
   },
@@ -46,7 +45,7 @@ export const counts = Computed(
   }
 )
 
-export const isAllChecked = Computed(
+export const isAllChecked = Compute(
   {
     uids: computed.visibleTodosUids,
   },

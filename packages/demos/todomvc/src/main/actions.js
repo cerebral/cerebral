@@ -1,4 +1,4 @@
-import { state, computed } from 'cerebral/proxy'
+import { state, computed } from 'cerebral'
 
 export function toggleAllChecked({ store, get }) {
   const isCompleted = !get(computed.isAllChecked)

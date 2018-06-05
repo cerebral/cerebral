@@ -87,8 +87,7 @@ app.get('/', (req, res) => {
 This means that when the app is rendered it will have the same initial state, both on the client and the server. To actually produce some new state we need to execute logic and we do that using the **run** method:
 
 ```js
-import { UniversalApp } from 'cerebral'
-import { state } from 'cerebral/proxy'
+import { UniversalApp, state } from 'cerebral'
 import main from '../client/main'
 import AppComponent from '../client/components/App'
 import {renderToString} from 'react-dom/server'
@@ -146,9 +145,8 @@ This is what you need to do if you want to put the client side application in a 
 If your whole application is run from a single route, **/**, you do not have to worry about this. But if you want to combine server side rendering with a router you need to make sure that the server does not diverge from what the router will do when it triggers on client load. Let us imagine we have the following router setup:
 
 ```js
-import { Module } from 'cerebral'
+import { Module, state, sequences } from 'cerebral'
 import { set } from 'cerebral/factories'
-import { state, sequences } from 'cerebral/proxy'
 import Router from '@cerebral/router'
 
 const router = Router({
@@ -179,10 +177,9 @@ export default Module({
 This is a pretty basic setup. When the router triggers it will, based on the url, change the **currentPage** state. That means when your user hits your server on either urls, the server needs to also set the correct state based on the url.
 
 ```js
-import { UniversalApp } from 'cerebral'
+import { UniversalApp, state } from 'cerebral'
 import AppComponent from '../client/components/App'
 import { Container } from 'cerebral/react'
-import { state } from 'cerebral/proxy'
 import { renderToString } from 'react-dom/server'
 import main from '../client/main'
 

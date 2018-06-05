@@ -63,7 +63,9 @@
     "universal-websocket-client": "1.0.1",
     "url-mapper": "1.1.1",
     "uuid": "3.1.0",
-    "@types/classnames": "2.2.3"
+    "@types/classnames": "2.2.3",
+    "@cerebral/router": "next",
+    "@cerebral/storage": "next"
   },
   "lint-staged": {
     "*.{js,ts,tsx}": [

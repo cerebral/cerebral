@@ -20,7 +20,7 @@ function myAction ({ store }) {
 ]
 
 // In computed
-Computed({
+Compute({
   foo: state.foo
 }, () => {})
 
@@ -64,7 +64,7 @@ connect({
 }, ...)
 ```
 
-## Computed
+## Compute
 
 ```js
 import { computed } from 'proxy'
@@ -80,7 +80,7 @@ function myAction ({ get }) {
 ]
 
 // In computed
-Computed({
+Compute({
   foo: computed.foo
 }, ({ foo }) => {})
 
@@ -106,7 +106,7 @@ import { props } from 'proxy'
 ]
 
 // In computed
-Computed({
+Compute({
   foo: props.foo
 }, ({ foo }) => {})
 
@@ -133,7 +133,7 @@ function myAction ({ store }) {
 ]
 
 // In computed
-Computed({
+Compute({
   foo: moduleState.foo
 }, () => {})
 
@@ -182,7 +182,7 @@ function myAction ({ get }) {
 ]
 
 // In computed
-Computed({
+Compute({
   foo: moduleComputed.foo
 }, ({ foo }) => {})
 
@@ -197,8 +197,7 @@ Reaction({
 The string can not e converted to a proxy cause it represents a string, but you can combine it with proxies:
 
 ```js
-import { string } from 'cerebral/tags'
-import { state } from 'cerebral/proxy'
+import { state, string } from 'cerebral'
 
 // In factories
 [

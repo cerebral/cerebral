@@ -1,7 +1,7 @@
 import * as React from 'react'
 import Todo from '../Todo'
 import { connect } from '@cerebral/react'
-import { state, sequences, computed } from 'app.proxy'
+import { state, sequences, computed } from 'app.cerebral'
 
 export default connect(
   {

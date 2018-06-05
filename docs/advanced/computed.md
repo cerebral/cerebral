@@ -1,4 +1,4 @@
-# Computed
+# Compute
 
 Normally you use state directly from the state tree, but sometimes you need to compute state. Typically filtering lists, grabbing the projects of a user, or other derived state. It is a good idea not to put this kind of logic inside your view layer, cause by creating a computed you can reuse the logic anywhere and it will automatically optimize the need to recalculate the value.
 
@@ -7,10 +7,9 @@ Normally you use state directly from the state tree, but sometimes you need to c
 Cerebral allows you to compute state that can be used in multiple contexts. Let us look at an example:
 
 ```js
-import { Computed } from 'cerebral'
-import { state } from 'cerebral/proxy'
+import { Compute, state } from 'cerebral'
 
-export const filteredList = Computed(
+export const filteredList = Compute(
   {
     items: state.items,
     filter: state.filter
@@ -25,7 +24,7 @@ When we call a computed we give it the dependencies to produce our calculated va
 
 ```marksy
 <Info>
-As you can see a Computed follows the same signature as your views. Actually, views are treated the same way as computeds, they just return a UI description instead of a value of your choice.
+As you can see a Compute follows the same signature as your views. Actually, views are treated the same way as computeds, they just return a UI description instead of a value of your choice.
 </Info>
 ```
 
@@ -45,7 +44,7 @@ export default Module({
 Here shown with *React*:
 
 ```js
-import { computed } from 'cerebral/proxy'
+import { computed } from 'cerebral'
 
 connect(
   {
@@ -61,7 +60,7 @@ connect(
 
 ```js
 import { when } from 'cerebral/factories'
-import { state, computed } from 'cerebral/proxy'
+import { state, computed } from 'cerebral'
 
 export const mySequence = [
   when(computed.appIsAwesome),
@@ -75,7 +74,7 @@ export const mySequence = [
 ## With actions
 
 ```js
-import { computed } from 'cerebral/proxy'
+import { computed } from 'cerebral'
 
 export function myAction({ get }) {
   const filteredList = get(computed.filteredList)
@@ -85,7 +84,7 @@ export function myAction({ get }) {
 ## With other proxies
 
 ```js
-import { state, computed } from 'cerebral/proxy'
+import { state, computed } from 'cerebral'
 import { set } from 'cerebral/factories'
 
 export const mySequence = set(state[computed.somePropKey].bar, 'baz')
@@ -94,10 +93,9 @@ export const mySequence = set(state[computed.somePropKey].bar, 'baz')
 ## Computing computeds
 
 ```js
-import { Computed } from 'cerebral'
-import { state, props } from 'cerebral/proxy'
+import { Compute, state, props } from 'cerebral'
 
-export const fooBar = Computed(
+export const fooBar = Compute(
   {
     foo: state.foo,
     bar: props.bar
@@ -107,7 +105,7 @@ export const fooBar = Computed(
   }
 )
 
-export const fooBarBaz = Computed(
+export const fooBarBaz = Compute(
   {
     fooBar: computed.fooBar,
     baz: state.baz
@@ -130,10 +128,9 @@ needs to live individually on a module. No worry though, a computed does not rec
 All computed receives a property called **get**. This function can be used to manually extract state and props, very useful to optimize computed lists.
 
 ```js
-import { Computed } from 'cerebral'
-import { state, props } from 'cerebral/proxy'
+import { Compute, state, props } from 'cerebral'
 
-export const itemUsers = Computed(
+export const itemUsers = Compute(
   {
     item: state.items[props.itemKey]
   },
@@ -154,7 +151,7 @@ You typically want to use dynamic computed in situations where optimizations is 
 The computed we created here requires a prop and can be used in for example an action doing:
 
 ```js
-import { computed } from 'cerebral/proxy'
+import { computed } from 'cerebral'
 
 function myAction({ get }) {
   const itemUsers = get(computed.itemUsers, { itemKey: '123' })
@@ -166,7 +163,7 @@ Or with a component, here showing with *React*:
 ```js
 import React from 'react'
 import { connect } from '@cerebral/react'
-import { computed } from 'cerebral/proxy'
+import { computed } from 'cerebral'
 
 export default connect(
   {

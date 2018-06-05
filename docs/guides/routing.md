@@ -51,7 +51,7 @@ With this approach you trigger url changes with hyperlinks or you can call the s
 
 ```js
 import { connect } from '@cerebral/react'
-import { sequences } from 'cerebral/proxy'
+import { sequences } from 'cerebral'
 
 export default connect(
   function MyComponent ({ get }) {
@@ -116,7 +116,7 @@ Again you just use the query property in a component to add them to the url:
 
 ```js
 import { connect } from '@cerebral/react'
-import { sequences } from 'cerebral/proxy'
+import { sequences } from 'cerebral'
 
 export default connect(
   function MyComponent ({ get }) {
@@ -153,7 +153,7 @@ The way we would make sure that the items logic runs as well when `/items/:id` i
 
 ```js
 import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 import * as actions from './actions'
 
 export const routeToRoot = set(state.page, 'home')
@@ -176,7 +176,7 @@ In this situation it will go an grab the items first and then it will go and gra
 
 ```js
 import { parallel, set } from 'cerebral/factories'
-import { state, props } from 'cerebral/proxy'
+import { state, props } from 'cerebral'
 import * as actions from './actions'
 
 export const routeToRoot = set(state.page, 'home')

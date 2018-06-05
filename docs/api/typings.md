@@ -21,13 +21,13 @@ const actionArray: ActionChain = [
 ]
 ```
 
-## Computed
+## Compute
 
 ```typescript
-import { Computed, compute, ValueResolver } from 'cerebral'
+import { Compute, compute, ValueResolver } from 'cerebral'
 import { state } from 'cerebral/tags'
 
-const someComputed: Computed = compute(
+const someComputed: Compute = compute(
   state`foo`,
   (foo: string, get: ValueResolver) => ({
     bar: foo + get(state`bar`)

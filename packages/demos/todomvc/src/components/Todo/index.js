@@ -1,7 +1,7 @@
 import React from 'react'
 import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, sequences } from 'cerebral/proxy'
+import { state, sequences } from 'cerebral'
 
 function Todo({ uid, isEditing, get }) {
   const todo = get(state.todos[uid])

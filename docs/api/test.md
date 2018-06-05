@@ -120,7 +120,7 @@ describe('<Button />', () => {
 })
 ```
 
-### Computed
+### Compute
 
 The `runComputed` test helper accepts the `computed` and `fixture` arguments and returns the computed output.
 

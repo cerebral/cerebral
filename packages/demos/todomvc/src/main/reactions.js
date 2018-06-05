@@ -1,6 +1,5 @@
 import ls from 'local-storage'
-import { Reaction } from 'cerebral'
-import { state } from 'cerebral/proxy'
+import { Reaction, state } from 'cerebral'
 
 export const syncTodos = Reaction(
   {

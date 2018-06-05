@@ -1,7 +1,7 @@
 import * as React from 'react'
 import classnames from 'classnames'
 import { connect } from '@cerebral/react'
-import { state, sequences, props } from 'app.proxy'
+import { state, sequences, props } from 'app.cerebral'
 
 type ExternalProps = {
   uid: string

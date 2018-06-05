@@ -102,9 +102,8 @@ in the sequence. In this example the props would contain the id of the user we w
 We are now going to do the actual implementation:
 
 ```js
-import { App } from 'cerebral'
+import App, { state } from 'cerebral'
 import Devtools from 'cerebral/devtools'
-import { state } from 'cerebral/proxy'
 
 const API_URL = 'https://jsonplaceholder.typicode.com'
 
@@ -165,9 +164,8 @@ When **api.getPosts** runs we use its returned user and return an object with th
 Let us fire up the sequence and we can rather let the debugger do this visualization for us. In the `/src/index.js` add the following:
 
 ```js
-import { App } from 'cerebral'
+import App, { state, sequences } from 'cerebral'
 import Devtools from 'cerebral/devtools'
-import { state, sequences } from 'cerebral/proxy'
 
 const API_URL = 'https://jsonplaceholder.typicode.com'
 
@@ -219,10 +217,9 @@ When you refresh the application now you should see the debugger show you that t
 But we can actually refactor our *openPostsPage* sequence a bit. A concept in functional programming called *factories* allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. Let us refactor the code and also add the sequence for loading a user:
 
 ```js
-import { App } from 'cerebral'
+import App, { state, props, sequences } from 'cerebral'
 import Devtools from 'cerebral/devtools'
 import { set } from 'cerebral/factories'
-import { state, props, sequences } from 'cerebral/proxy'
 
 const API_URL = 'https://jsonplaceholder.typicode.com'
 

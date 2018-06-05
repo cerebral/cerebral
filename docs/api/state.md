@@ -5,7 +5,7 @@
 The only way to get state in your application is by connecting it to a component or grabbing it in an action.
 
 ```js
-import { state, moduleState } from 'cerebral/proxy'
+import { state, moduleState } from 'cerebral'
 
 function someAction({ get }) {
   const stateAtSomePath = get(state.some.path)
