@@ -75,7 +75,6 @@ import { State } from './types'
 import * as sequences from './sequences'
 import * as computeds from './computeds'
 import * as providers from './providers'
-import { State } from './types'
 
 const state: State = {
   title: 'My project',
