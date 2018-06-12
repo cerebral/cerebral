@@ -1,16 +1,16 @@
 import * as React from 'react'
 import Todo from '../Todo'
 import { connect } from '@cerebral/react'
-import { state, sequences, computed } from 'app.cerebral'
+import { state, sequences } from 'app.cerebral'
 
 export default connect(
   {
     editingUid: state.editingUid,
-    isAllChecked: computed.isAllChecked,
-    todosUids: computed.visibleTodosUids,
+    isAllChecked: state.isAllChecked,
+    uids: state.uids,
     toggleAllChecked: sequences.toggleAllChecked,
   },
-  function List({ editingUid, isAllChecked, todosUids, toggleAllChecked }) {
+  function List({ editingUid, isAllChecked, uids, toggleAllChecked }) {
     return (
       <section className="main">
         <input
@@ -22,7 +22,7 @@ export default connect(
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
-          {todosUids.map((todoUid, index) => {
+          {uids.map((todoUid, index) => {
             const isEditing = todoUid === editingUid
 
             return <Todo key={todoUid} uid={todoUid} isEditing={isEditing} />

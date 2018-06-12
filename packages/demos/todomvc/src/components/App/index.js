@@ -1,12 +1,12 @@
 import React from 'react'
-import { computed } from 'cerebral'
+import { state } from 'cerebral'
 import { connect } from '@cerebral/react'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 
 function App({ get }) {
-  const counts = get(computed.counts)
+  const counts = get(state.counts)
 
   return (
     <div id="todoapp-wrapper">

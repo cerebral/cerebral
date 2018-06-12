@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { connect } from '@cerebral/react'
-import { computed } from 'app.cerebral'
+import { state } from 'app.cerebral'
 import NewTodoForm from '../NewTodo'
 import TodosList from '../List'
 import TodosFooter from '../Footer'
 
 export default connect(
   {
-    counts: computed.counts,
+    counts: state.counts,
   },
   function App({ counts }) {
     return (

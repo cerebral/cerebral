@@ -1,10 +1,10 @@
-import { Context, state, computed } from 'app.cerebral'
+import { Context, state } from 'app.cerebral'
 
 export function toggleAllChecked({ store, get }: Context) {
-  const isCompleted = !get(computed.isAllChecked)
-  const currentTodosUids = get(computed.visibleTodosUids)
+  const isCompleted = !get(state.isAllChecked)
+  const uids = get(state.uids)
 
-  currentTodosUids.forEach((uid) => {
+  uids.forEach((uid) => {
     store.set(state.todos[uid].completed, isCompleted)
   })
 }

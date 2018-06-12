@@ -1,5 +1,4 @@
 import * as sequences from './sequences'
-import * as computed from './computed'
 
 export type State = {
   newTodoTitle: string
@@ -12,9 +11,15 @@ export type State = {
   }
   filter: string
   editingUid: string | null
+  counts: {
+    completed: number
+    remaining: number
+    total: number
+    visible: number
+  }
+  uids: string[]
+  isAllChecked: boolean
 }
-
-export type Computed = { [key in keyof typeof computed]: typeof computed[key] }
 
 export type Sequences = {
   [key in keyof typeof sequences]: typeof sequences[key]
