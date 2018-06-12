@@ -2,8 +2,8 @@ import ls from 'local-storage'
 import page from 'page'
 import * as reactions from './reactions'
 import * as sequences from './sequences'
-import * as computed from './computed'
 import * as providers from './providers'
+import { counts, uids, isAllChecked } from './computed'
 
 export default ({ app }) => {
   app.on('initialized', () =>
@@ -23,10 +23,12 @@ export default ({ app }) => {
       todos: ls.get('todos') || {},
       filter: 'all',
       editingUid: null,
+      counts,
+      uids,
+      isAllChecked,
     },
     reactions,
     sequences,
-    computed,
     providers,
   }
 }

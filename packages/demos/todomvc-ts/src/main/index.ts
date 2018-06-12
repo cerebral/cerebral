@@ -4,8 +4,8 @@ import { ModuleDefinition } from 'cerebral'
 import page from 'page'
 import * as reactions from './reactions'
 import * as sequences from './sequences'
-import * as computed from './computed'
 import * as providers from './providers'
+import { counts, uids, isAllChecked } from './computed'
 import { State } from './types'
 
 const state: State = {
@@ -13,6 +13,9 @@ const state: State = {
   todos: ls.get('todos') || {},
   filter: 'all',
   editingUid: null,
+  counts,
+  uids,
+  isAllChecked,
 }
 
 const module: ModuleDefinition = ({ app }) => {
@@ -31,7 +34,6 @@ const module: ModuleDefinition = ({ app }) => {
     reactions,
     state,
     sequences,
-    computed,
     providers,
   }
 }

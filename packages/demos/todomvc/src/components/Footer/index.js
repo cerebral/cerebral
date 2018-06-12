@@ -1,13 +1,13 @@
 import React from 'react'
 import { connect } from '@cerebral/react'
-import { state, sequences, computed } from 'cerebral'
+import { state, sequences } from 'cerebral'
 import classnames from 'classnames'
 
 const filters = ['All', 'Active', 'Completed']
 
 function Footer({ get }) {
   const filter = get(state.filter)
-  const counts = get(computed.counts)
+  const counts = get(state.counts)
   const clearCompletedTodos = get(sequences.clearCompletedTodos)
 
   return (
