@@ -35,7 +35,7 @@ after_success:
   fi
   if [[ $TRAVIS_BRANCH == 'master' || $TRAVIS_BRANCH == 'next' || $TRAVIS_BRANCH == 'canary' ]] && [[ $TRAVIS_PULL_REQUEST == 'false' ]]; then
     printf "//registry.npmjs.org/:_authToken=$NPM_TOKEN\n" > ~/.npmrc
-    npm install repo-cooker
+    npm install repo-cooker@^3.2.0
     npm run release -- --publish
     if [[ $TRAVIS_BRANCH == 'master' ]]; then
       npm run deploy
