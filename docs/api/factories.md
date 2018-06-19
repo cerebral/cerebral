@@ -69,6 +69,12 @@ set(state.foo.bar, true)
 set(props.foo, true)
 ```
 
+Optionally transform the value before setting
+
+```js
+set(state.some.number, props.number, (value) => value * 2)
+```
+
 ### shift
 
 Shift a value off an array (removes first element in array).
