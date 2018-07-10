@@ -62,6 +62,15 @@ Mocks out a provider that will be called in the sequence. Can give an optional r
 Snapshot(main).mock('someProvider.someMethod', 'someReturnedValue')
 ```
 
+The mock can also be a function with `(context, ...args)` signature where args are the arguments passed in the
+call to the provider method.
+
+```js
+Snapshot(main).mock('someProvider.someMethod', (context, ..args) => {
+  // mock operation here
+})
+```
+
 ### mockResolvedPromise
 
 Mocks out a provider with a returned promise that resolves with an optional value.
