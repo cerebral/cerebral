@@ -9,6 +9,8 @@ const app = App(main, {
   devtools: null,
   // Also logs error handling to console.
   throwToConsole: true,
+  // Prevent rethrow of errors (useful if you already use an on('error') handler)
+  noRethrow: false,
   // A map of state changes to run before instantiation,
   // where the key is the path and value is the state value
   stateChanges: {},
