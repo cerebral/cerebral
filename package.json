@@ -150,7 +150,7 @@
     "parcel-bundler": "1.7.0",
     "parcel-plugin-typescript": "0.7.0",
     "preact": "8.1.0",
-    "prettier": "^1.13.1",
+    "prettier": "^1.14.0",
     "prismjs": "1.6.0",
     "prop-types": "15.6.1",
     "raf": "^3.3.0",
