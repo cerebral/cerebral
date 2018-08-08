@@ -25,5 +25,8 @@
         "start": "parcel serve index.html",
         "setup": "npm install @types/jest --no-save",
         "test": "jest"
+    },
+	"jest": {
+        "testURL": "http://localhost"
     }
 }
