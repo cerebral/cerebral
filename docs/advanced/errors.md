@@ -1,9 +1,5 @@
 # Errors
 
-```marksy
-<Youtube url="https://www.youtube.com/embed/UdVjsKQLybw" />
-```
-
 Currently we are creating a nested structure in our sequence to express conditional execution. Related to errors that does not always make sense, cause you just want to stop execution and do something completely different. Let us revert our sequence back to is original format and then we rather catch the error:
 
 ```js

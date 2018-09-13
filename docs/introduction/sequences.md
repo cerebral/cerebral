@@ -1,9 +1,5 @@
 # Sequences
 
-```marksy
-<Youtube url="https://www.youtube.com/embed/o2ULoHp22BE" />
-```
-
 Application development is about handling events to run side effects and produce changes to the state. This event can be anything from a user interaction or some other internal event in the application.
 
 We need two pieces of logic for our application. **openPostsPage** and **openUserModal**. Let us look at how you might think this logic is commonly implemented:
@@ -144,13 +140,13 @@ const app = App({
 }, {...})
 ```
 
-Your first question here is probably: *"What is this state proxy?"*. Cerebral exposes what we call proxies. They basically allows you to point to state, sequences etc. and based on the context Cerebral is able to evaluate what you want to do. The **state** proxy points to the main module of the application, the root state.
+Your first question here is probably: *"What is this state import?"*. Cerebral exposes what we call proxies. They basically allows you to point to state, sequences etc. and based on the context Cerebral is able to evaluate what you want to do. The **state** proxy points to the main module of the application, the root state.
 
 ## Actions
 
 As you can see every function run in the sequence has access to **store**, **props** and our own **api** is available as well. We call these functions **actions** and Cerebral builds a context for them when they run. This context is passed in as the only argument. This context is where the store API allows you to do different changes on the state of the application. The props holds values passed into the sequence and populated through the execution.
 
-When **api.getPosts** runs we use its returned user and return an object with that user:
+When **api.getPosts** runs we put the returned posts on an object. This object is merged into the **props** of the sequence, as visualized here:
 
 ```js
 [

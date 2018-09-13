@@ -1,9 +1,5 @@
 # Providers
 
-```marksy
-<Youtube url="https://www.youtube.com/embed/Fa8XcfnQl_o" />
-```
-
 Providers is a term in Cerebral that basically means _side effects_. Everything from talking to the server, browser APIs etc. should be contained in providers. This has several benefits:
 
 1. You are encouraged to build an explicit API for doing side effects in your application

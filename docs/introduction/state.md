@@ -1,9 +1,5 @@
 # State
 
-```marksy
-<Youtube url="https://www.youtube.com/embed/OIKz6iASp1A" />
-```
-
 Cerebral uses a single state tree to store all the state of your application. Even though you split up your state into modules, at the end of the day it will look like one big tree:
 
 ```js
