@@ -28,15 +28,21 @@ As you can see a Compute follows the same signature as your views. Actually, vie
 </Info>
 ```
 
-A computed needs to be attached to a module. By convention you just attach all the computed you export from the *computed* file related to a module:
+You attach a computed to the state of your application
 
 ```js
-import { Module } from 'cerebral'
-import * as computed from './computed'
+import { filteredList } from './computed'
 
-export default Module({
-  computed
-})
+export default {
+  state: {
+    items: [],
+    filter: {
+      property: 'isAwesome',
+      value: true
+    },
+    filteredList
+  }
+}
 ```
 
 ## With components
@@ -44,11 +50,11 @@ export default Module({
 Here shown with *React*:
 
 ```js
-import { computed } from 'cerebral'
+import { state } from 'cerebral'
 
 connect(
   {
-    list: computed.filteredList
+    list: state.filteredList
   },
   function List({ list }) {
     return <ul>{list.map((item) => <li>{item.title}</li>)}</ul>
@@ -60,10 +66,10 @@ connect(
 
 ```js
 import { when } from 'cerebral/factories'
-import { state, computed } from 'cerebral'
+import { state } from 'cerebral'
 
 export const mySequence = [
-  when(computed.appIsAwesome),
+  when(state.appIsAwesome),
   {
     true: [],
     false: []
@@ -74,20 +80,20 @@ export const mySequence = [
 ## With actions
 
 ```js
-import { computed } from 'cerebral'
+import { state } from 'cerebral'
 
 export function myAction({ get }) {
-  const filteredList = get(computed.filteredList)
+  const filteredList = get(state.filteredList)
 }
 ```
 
 ## With other proxies
 
 ```js
-import { state, computed } from 'cerebral'
+import { state } from 'cerebral'
 import { set } from 'cerebral/factories'
 
-export const mySequence = set(state[computed.somePropKey].bar, 'baz')
+export const mySequence = set(state[state.somePropKey].bar, 'baz')
 ```
 
 ## Computing computeds
@@ -107,20 +113,13 @@ export const fooBar = Compute(
 
 export const fooBarBaz = Compute(
   {
-    fooBar: computed.fooBar,
+    fooBar: state.fooBar,
     baz: state.baz
   },
   ({ fooBar, baz }) => {
     return fooBar + baz
   }
 )
-```
-
-```marksy
-<Warning>
-All computeds has to be added to a module. This is what initializes them. So any composed computed
-needs to live individually on a module. No worry though, a computed does not recalcuate unless being used.
-</Warning>
 ```
 
 ## Dynamic computed
@@ -151,10 +150,10 @@ You typically want to use dynamic computed in situations where optimizations is 
 The computed we created here requires a prop and can be used in for example an action doing:
 
 ```js
-import { computed } from 'cerebral'
+import { state } from 'cerebral'
 
 function myAction({ get }) {
-  const itemUsers = get(computed.itemUsers, { itemKey: '123' })
+  const itemUsers = get(state.itemUsers, { itemKey: '123' })
 }
 ```
 
@@ -163,11 +162,11 @@ Or with a component, here showing with *React*:
 ```js
 import React from 'react'
 import { connect } from '@cerebral/react'
-import { computed } from 'cerebral'
+import { state } from 'cerebral'
 
 export default connect(
   {
-    users: computed.itemUsers
+    users: state.itemUsers
   },
   function ({ users }) {
     return ...
