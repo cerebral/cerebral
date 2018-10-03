@@ -7,10 +7,9 @@
     "website:build": "cd ../builder && npm run build",
     "website:copy": "shx cp -R ../builder/dist/* ./build",
     "website": "run-s website:*",
-    "todomvc": "shx mkdir -p ./build/todomvc && shx cp -R ../../demos/todomvc/build/* ./build/todomvc",
     "deploy": "gh-pages -x -d build -b master -r https://cerebraljs:$GH_TOKEN@github.com/cerebral/cerebral.github.io.git",
     "deploy:local": "gh-pages -d build -b master -r git@github.com:cerebral/cerebral.github.io.git",
-    "build": "run-p website todomvc",
+    "build": "run-p website",
     "ci": "run-s clean build deploy"
   },
   "author": "Alexey Gurianov <gurianov@gmail.com>",
