@@ -134,7 +134,7 @@ describe('<Button />', () => {
 The `runComputed` test helper accepts the `computed` and `fixture` arguments and returns the computed output.
 
 ```js
-import { props, state } from 'cerebral/tags'
+import { props, state } from 'cerebral'
 import { runComputed } from 'cerebral/test'
 
 import multiply from './multiply'
@@ -154,7 +154,7 @@ it('should multiply by the specified number', () => {
 The `runAction` test helper accepts the `action` and `fixture` arguments and returns a promise.
 
 ```js
-import { state } from 'cerebral/tags'
+import { state } from 'cerebral'
 import { runAction } from 'cerebral/test'
 
 import increment from './increment'
