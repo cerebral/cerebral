@@ -11,11 +11,8 @@ import * as cerebral from 'cerebral'
 
 type State = {}
 
-type Compute = {}
-
 export const props = cerebral.props
 export const state = cerebral.state as State
-export const computed = cerebral.computed as Compute
 export const sequences = cerebral.sequences
 export const moduleState = cerebral.moduleState
 export const moduleComputed = cerebral.moduleComputed
@@ -49,14 +46,10 @@ Typically you want to create a **types.ts** file next to your modules. This is w
 *main/types.ts*
 
 ```ts
-import * as computeds from './computeds'
-
 export type State = {
   title: string
   isAwesome: true
 }
-
-export type Compute = { [key in keyof typeof computed]: typeof computed[key] }
 ```
 
 ```marksy
@@ -78,7 +71,7 @@ import * as providers from './providers'
 
 const state: State = {
   title: 'My project',
-  isAwesome: true
+  isAwesome: computeds.isAwesome
 }
 
 const module: ModuleDefinition = {
@@ -89,6 +82,14 @@ const module: ModuleDefinition = {
 }
 
 export default module
+```
+
+Where the computed is defined as:
+
+```ts
+import { state, Compute } from 'cerebral'
+
+export const isAwesome = Compute(get => get(state.isAwesome) + '!!!')
 ```
 
 In your **app.cerebral** file you can now compose state from all your modules:
@@ -102,13 +103,8 @@ type State = Main.State & {
   moduleA: ModuleA.State
 }
 
-type Compute = Main.Compute & {
-  moduleA: ModuleA.Compute
-}
-
 export const props = cerebral.props
 export const state = cerebral.state as State
-export const computed = cerebral.computed as Compute
 export const sequences = cerebral.sequences
 export const moduleState = cerebral.moduleState
 export const moduleComputed = cerebral.moduleComputed
@@ -140,7 +136,7 @@ export const myOtherSequence = sequence([
 ])
 ```
 
-To type a sequence with prosp to pass in, just add it:
+To type a sequence with props to pass in, just add it:
 
 ```ts
 import { sequence } from 'cerebral'
@@ -159,15 +155,12 @@ This approach does **NOT** give you suggestions and type safety on props. This i
 *main/types.ts*
 
 ```ts
-import * as computeds from './computeds'
 import * as sequences from './sequences'
 
 export type State = {
   title: string
   isAwesome: true
 }
-
-export type Compute = { [key in keyof typeof computed]: typeof computed[key] }
 
 export type Sequences = { [key in keyof typeof sequences]: typeof sequences[key] }
 ```
