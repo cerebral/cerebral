@@ -25,7 +25,7 @@ const actionArray: ActionChain = [
 
 ```typescript
 import { Compute, compute, ValueResolver } from 'cerebral'
-import { state } from 'cerebral/tags'
+import { state } from 'cerebral'
 
 const someComputed: Compute = compute(
   state`foo`,

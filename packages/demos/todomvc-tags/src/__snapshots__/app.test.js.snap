@@ -1,0 +1,145 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`should add new todo 1`] = `
+<section
+  className="main"
+>
+  <input
+    checked={false}
+    className="toggle-all"
+    id="toggle-all"
+    onChange={[Function]}
+    type="checkbox"
+  />
+  <label
+    htmlFor="toggle-all"
+  >
+    Mark all as complete
+  </label>
+  <ul
+    className="todo-list"
+  >
+    <li
+      className=""
+    >
+      <div
+        className="view"
+      >
+        <input
+          checked={false}
+          className="toggle"
+          onChange={[Function]}
+          type="checkbox"
+        />
+        <label
+          onDoubleClick={[Function]}
+        >
+          h
+        </label>
+        <button
+          className="destroy"
+          onClick={[Function]}
+        />
+      </div>
+    </li>
+  </ul>
+</section>
+`;
+
+exports[`should add new todo 2`] = `
+Array [
+  Action {
+    "name": "factory.when(state\`newTodoTitle\`)",
+  },
+  Path {
+    "name": "true",
+  },
+  Action {
+    "name": "addTodo",
+  },
+  Provider {
+    "args": Array [],
+    "method": "id.create",
+  },
+  Mutation {
+    "args": Array [
+      Object {
+        "completed": false,
+        "title": "h",
+      },
+    ],
+    "method": "set",
+    "path": "todos.fc033770-7d95-4ac2-a0b2-c68e0f26700e",
+  },
+  Action {
+    "name": "factory.set(state\`newTodoTitle\`, )",
+  },
+  Mutation {
+    "args": Array [
+      "",
+    ],
+    "method": "set",
+    "path": "newTodoTitle",
+  },
+]
+`;
+
+exports[`should filter on all 1`] = `
+<footer
+  className="footer"
+>
+  <span
+    className="todo-count"
+  >
+    <strong>
+      0
+       
+      items
+       left
+    </strong>
+  </span>
+  <ul
+    className="filters"
+  >
+    <li>
+      <a
+        className="selected"
+        href="/all"
+      >
+        All
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/active"
+      >
+        Active
+      </a>
+    </li>
+    <li>
+      <a
+        className=""
+        href="/completed"
+      >
+        Completed
+      </a>
+    </li>
+  </ul>
+</footer>
+`;
+
+exports[`should filter on all 2`] = `
+Array [
+  Action {
+    "name": "factory.set(state\`filter\`, props\`filter\`)",
+  },
+  Mutation {
+    "args": Array [
+      "all",
+    ],
+    "method": "set",
+    "path": "filter",
+  },
+]
+`;
