@@ -3,25 +3,45 @@
 Computeds calculate and cache derived state values. Using computeds helps to keep logic out of the application view components and improves performance.
 
 ```js
-import { Compute, state } from 'cerebral'
+import { state } from 'cerebral'
 
-export default Compute({
-  userName: state.user.name,
-}, ({ userName }) => {
-  return `Hi ${name}`
-})
+export const title = (get) => {
+  return `Hi ${get(state.user.name)}`
+}
 ```
 
-A computed takes a map of dependencies. Proxies will be resolved to a value when the computed executes. 
+You use the **get** function to retrieve state and other computed values from the state tree. It will automatically track the computed to optimally figure out when it needs to recalculate.
 
-All computed also has a **get** property, it allows you to manually extract values that will become dynamic dependencies of the computed:
+You attach these computeds directly to your state:
 
 ```js
-import { Compute, state, props } from 'cerebral'
+import { title } from './computed'
 
-export default Compute({
-  userId: state.user.id
-}, ({ userId, get }) => {
-  return get(state.projects[userId]).length > get(props.limit)
-})
+export default {
+  state: {
+    user: {
+      name: 'Bob'
+    },
+    title
+  }
+}
+```
+
+To use a computed just point to it as if it was normal state, here shown with React:
+
+```js
+import React from 'react'
+import { state } from 'cerebral'
+import { connect } from '@cerebral/react'
+
+export default connect(
+  {
+    hello: state.title
+  },
+  function App({ hello }) {
+    return (
+      <h1>{title}</h1>
+    )
+  }
+)
 ```

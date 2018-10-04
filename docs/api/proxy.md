@@ -1,12 +1,12 @@
 # Proxy
 
-The proxies exposed by Cerebral allows you to target state, sequences, computed and props. They require the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) which transforms the proxies into [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals).
+The proxies exposed by Cerebral allows you to target state, sequences and props. They require the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) which transforms the proxies into [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals).
 
 
 ## State
 
 ```js
-import { state } from 'proxy'
+import { state } from 'cerebral'
 
 // In action
 function myAction ({ store }) {
@@ -38,7 +38,7 @@ connect({
 ## Sequences
 
 ```js
-import { sequences } from 'proxy'
+import { sequences } from 'cerebral'
 
 // In action
 function myAction ({ get }) {
@@ -67,7 +67,7 @@ connect({
 ## Compute
 
 ```js
-import { computed } from 'proxy'
+import { computed } from 'cerebral'
 
 // In action
 function myAction ({ get }) {
@@ -98,7 +98,7 @@ connect({
 ## Props
 
 ```js
-import { props } from 'proxy'
+import { props } from 'cerebral'
 
 // In factories
 [
@@ -119,7 +119,7 @@ connect({
 ## ModuleState
 
 ```js
-import { moduleState } from 'proxy'
+import { moduleState } from 'cerebral'
 
 // In action
 function myAction ({ store }) {
@@ -146,7 +146,7 @@ Reaction({
 ## ModuleSequences
 
 ```js
-import { moduleSequences } from 'proxy'
+import { moduleSequences } from 'cerebral'
 
 // In action
 function myAction ({ get }) {
@@ -164,32 +164,6 @@ Reaction({
 }, ({ foo, get }) => {
   get(moduleSequences.mySequence)({ foo })
 })
-```
-
-## ModuleComputed
-
-```js
-import { moduleComputed } from 'proxy'
-
-// In action
-function myAction ({ get }) {
-  const someValue = get(moduleComputed.someValue)
-}
-
-// In factories
-[
-  when(moduleComputed.appIsAwesome)
-]
-
-// In computed
-Compute({
-  foo: moduleComputed.foo
-}, ({ foo }) => {})
-
-// In reaction
-Reaction({
-  foo: moduleComputed.foo
-}, ({ foo }) => {})
 ```
 
 ## String
