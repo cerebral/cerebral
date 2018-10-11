@@ -7,28 +7,19 @@ Normally you use state directly from the state tree, but sometimes you need to c
 Cerebral allows you to compute state that can be used in multiple contexts. Let us look at an example:
 
 ```js
-import { Compute, state } from 'cerebral'
+import { state } from 'cerebral'
 
-export const filteredList = Compute(
-  {
-    items: state.items,
-    filter: state.filter
-  },
-  function filterList({ items, filter }) {
-    return items.filter((item) => item[filter.property] === filter.value)
-  }
-)
+export const filteredList = (get) => {
+  const items = get(state.items)
+  const filter = get(state.filter)
+
+  return items.filter((item) => item[filter.property] === filter.value)
+}
 ```
 
-When we call a computed we give it the dependencies to produce our calculated value. This returns a function which you can call giving a callback that receives the dependencies.
+A computed is just a function that receives the `get` argument. You use this argument to retrieve the state of the application. This retrieval is tracked, meaning that the computed automatically optimizes itself.
 
-```marksy
-<Info>
-As you can see a Compute follows the same signature as your views. Actually, views are treated the same way as computeds, they just return a UI description instead of a value of your choice.
-</Info>
-```
-
-You attach a computed to the state of your application
+You attach a computed to the state of your application:
 
 ```js
 import { filteredList } from './computed'
@@ -99,53 +90,31 @@ export const mySequence = set(state[state.somePropKey].bar, 'baz')
 ## Computing computeds
 
 ```js
-import { Compute, state, props } from 'cerebral'
+import { state, props } from 'cerebral'
 
-export const fooBar = Compute(
-  {
-    foo: state.foo,
-    bar: props.bar
-  },
-  ({ foo, bar }) => {
-    return foo + bar
-  }
-)
+export const fooBar = (get) => get(state.foo) + get(state.bar)
 
-export const fooBarBaz = Compute(
-  {
-    fooBar: state.fooBar,
-    baz: state.baz
-  },
-  ({ fooBar, baz }) => {
-    return fooBar + baz
-  }
-)
+export const fooBarBaz = (get) => get(state.fooBar) + get(state.baz)
 ```
 
-## Dynamic computed
+You point to computeds as normal state and you also use them that way.
 
-All computed receives a property called **get**. This function can be used to manually extract state and props, very useful to optimize computed lists.
+## With props
+
+You can also combine computeds with props. Either from a component or you can explicitly pass props when used in an action.
 
 ```js
-import { Compute, state, props } from 'cerebral'
+import { state, props } from 'cerebral'
 
-export const itemUsers = Compute(
-  {
-    item: state.items[props.itemKey]
-  },
-  function getItemUsers({ item, get }) {
-    return item.userIds.map((userId) => get(state.users[userId]))
-  }
-)
+export const itemUsers = (get) => {
+  const itemKey = get(props.itemKey)
+  const item = get(state.items[itemKey])
+
+  return item.userIds.map((userId) => get(state.users[userId]))
+}
 ```
 
-In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users. Now this computed will only recalculate when the item updates or any of the users grabbed. It will not update if any other users update, which would be the case if you were depending on the users state itself.
-
-```marksy
-<Info>
-You typically want to use dynamic computed in situations where optimizations is needed. Where you have large lists of entities related to other entities and you want to avoid too much recalculation.
-</Info>
-```
+In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users. Now this computed will only recalculate when the item or any of the users grabbed updates.
 
 The computed we created here requires a prop and can be used in for example an action doing:
 
