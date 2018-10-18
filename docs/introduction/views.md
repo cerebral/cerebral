@@ -96,7 +96,7 @@ import Devtools from 'cerebral/devtools'
 import React from 'react'
 import { render } from 'react-dom'
 import { Container } from '@cerebral/react'
-import AppComponent from './components/AppComponent'
+import AppComponent from './components/App'
 import main from './main'
 
 const app = App(main, {
