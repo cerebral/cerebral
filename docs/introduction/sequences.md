@@ -19,17 +19,17 @@ const app = App({
       show: false,
       id: null
     },
-    istLoadingPosts: false,
+    isLoadingPosts: false,
     isLoadingUser: false,
     error: null
   },
   methods: {
     openPostsPage() {
-      this.state.istLoadingPosts = true
+      this.state.isLoadingPosts = true
       this.providers.getPosts()
         .then((posts) => {
           this.state.posts = posts
-          this.state.istLoadingPosts = false
+          this.state.isLoadingPosts = false
         })
     }
     openUserModal(id) {
@@ -70,7 +70,7 @@ const app = App({
       show: false,
       id: null
     },
-    istLoadingPosts: false,
+    isLoadingPosts: false,
     isLoadingUser: false,
     error: null
   },
@@ -175,7 +175,7 @@ const setPosts = ({ store, props }) =>
   store.set(state.posts, props.posts)
 
 const unsetLoadingPosts = ({ store }) =>
-  store.set(state.istLoadingPosts, false)
+  store.set(state.isLoadingPosts, false)
 
 const app = App({
   state: {
@@ -186,7 +186,7 @@ const app = App({
       show: false,
       id: null
     },
-    istLoadingPosts: false,
+    isLoadingPosts: false,
     isLoadingUser: false,
     error: null
   },
@@ -234,16 +234,16 @@ const app = App({
       show: false,
       id: null
     },
-    istLoadingPosts: false,
+    isLoadingPosts: false,
     isLoadingUser: false,
     error: null
   },
   sequences: {
     openPostsPage: [
-      set(state.istLoadingPosts, true),
+      set(state.isLoadingPosts, true),
       getPosts,
       set(state.posts, props.posts),
-      set(state.istLoadingPosts, false)
+      set(state.isLoadingPosts, false)
     ],
     openUserModal: [
       set(state.userModal.id, props.id),
