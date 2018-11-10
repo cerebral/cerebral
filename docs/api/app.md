@@ -97,6 +97,22 @@ Triggers when Cerebral app has initialized.
 app.on('initialized', () => {})
 ```
 
+### moduleAdded
+
+Triggers when Cerebral adds a module is added.
+
+```js
+app.on('moduleAdded', (path, module) => {})
+```
+
+### moduleRemoved
+
+Triggers when Cerebral removes a module.
+
+```js
+app.on('moduleRemoved', (path, module) => {})
+```
+
 ### flush
 
 Triggered whenever Cerebral flushes out changes to the UI. Passes a map of changes.
