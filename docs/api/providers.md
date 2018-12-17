@@ -62,3 +62,22 @@ export const greetProvider = (context) => {
   return {}
 }
 ```
+
+### Initializing provider defined as a function with configuration
+
+Suppose you want to initialize your provider depending on some value from state, run some sequence or do any side-effect before returning instance of your provider - you need to include entire setup in **setTimeout**.
+```js
+export const greetProvider = (config) => {
+  const { initSequence } = config
+  return (ctx) => {
+    setTimeout(() => {
+      const greeterSequence = ctx.app.getSequence(initSequence)
+      if(greeterSequence) greeterSequence()
+    })
+    
+    return {}
+  }
+}
+```
+
+Not including context usage in **setTimeout** will cause runtime Errors, because of race conditions when accessing some of context properties when instantiating your provider.
