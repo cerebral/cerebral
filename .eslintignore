@@ -2,6 +2,7 @@ packages/*/**/node_modules/
 packages/*/**/lib/
 packages/*/**/es/
 packages/*/**/dist/
+scripts/**
 **/build/
 **/*.min.js
 **/bundle.js
