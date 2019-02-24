@@ -41,9 +41,9 @@ import { state, sequences } from 'cerebral'
 
 export default connect(
   {
-    posts: state.posts,
-    isLoadingItems: state.isLoadingItems,
-    openUserModal: sequences.openUserModal
+    posts: state`posts`,
+    isLoadingItems: state`isLoadingItems`,
+    openUserModal: sequences`openUserModal`
   },
   {
     template: `
@@ -122,8 +122,8 @@ import { connect } from '@cerebral/react'
 
 export default connect(
   {
-    posts: state.posts,
-    openUserModal: sequences.openUserModal
+    posts: state`posts`,
+    openUserModal: sequences`openUserModal`
   },
   function App({ posts, openUserModal }) {
     return (
@@ -144,4 +144,4 @@ export default connect(
 
 The point is that for Cerebral it does not really matter. Cerebral is responsible for your state, state changes and side effects. You can use whatever to convert your state into a UI for your users.
 
-From this point you are hopefully able to start exploring on your own. Continue looking into more advanced concepts and guides. You can also complete the full tutorial by watching the [next video chapters]().
+From this point you are hopefully able to start exploring on your own. Continue looking into more advanced concepts and guides.

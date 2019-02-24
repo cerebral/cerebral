@@ -39,9 +39,9 @@ With this approach we get some benefits not possible with other approaches.
 1.  **Simple and consistent API** - Typically a state update changes a value, pushes an item in a list, or merges an object into another. With a single state tree we can create an API that does exactly that:
 
 ```js
-state.set(path.auth.user.prefs.style, 'dark')
-state.push(path.auth.user.friends, 'Joe')
-state.merge(path.auth.user.info, {
+state.set('auth.user.prefs.style', 'dark')
+state.push('auth.user.friends', 'Joe')
+state.merge('auth.user.info', {
   email: 'cheetah@jungle.com',
   name: 'Cheetah'
 })
@@ -63,7 +63,7 @@ Since Cerebral stores all the state of the application in a single state tree, w
 
 ```js
 connect({
-  userName: state.auth.user.info.name
+  userName: state`auth.user.info.name`
 })(function User(props) {
   props.userName // "some name" (value stored in 'app.user.name')
 })

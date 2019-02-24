@@ -98,22 +98,22 @@ in the sequence. In this example the props would contain the id of the user we w
 We are now going to do the actual implementation:
 
 ```js
-import App, { state } from 'cerebral'
+import App from 'cerebral'
 import Devtools from 'cerebral/devtools'
 
 const API_URL = 'https://jsonplaceholder.typicode.com'
 
 const setLoadingPosts = ({ store }) =>
-  store.set(state.isLoadingPosts, true)
+  store.set('isLoadingPosts', true)
 
 const getPosts = ({ api }) =>
   api.getPosts().then(posts => ({ posts }))
 
 const setPosts = ({ store, props }) =>
-  store.set(state.posts, props.posts)
+  store.set('posts', props.posts)
 
 const unsetLoadingPosts = ({ store }) =>
-  store.set(state.isLoadingPosts, false)
+  store.set('isLoadingPosts', false)
 
 const app = App({
   state: {
@@ -139,8 +139,6 @@ const app = App({
   providers: {...}  
 }, {...})
 ```
-
-Your first question here is probably: *"What is this state import?"*. Cerebral exposes what we call proxies. They basically allows you to point to state, sequences etc. and based on the context Cerebral is able to evaluate what you want to do. The **state** proxy points to the main module of the application, the root state.
 
 ## Actions
 
@@ -160,22 +158,22 @@ When **api.getPosts** runs we put the returned posts on an object. This object i
 Let us fire up the sequence and we can rather let the debugger do this visualization for us. In the `/src/index.js` add the following:
 
 ```js
-import App, { state, sequences } from 'cerebral'
+import App, { sequences } from 'cerebral'
 import Devtools from 'cerebral/devtools'
 
 const API_URL = 'https://jsonplaceholder.typicode.com'
 
 const setLoadingPosts = ({ store }) =>
-  store.set(state.isLoadingPosts, true)
+  store.set('isLoadingPosts', true)
 
 const getPosts = ({ api }) =>
   api.getPosts().then(posts => ({ posts }))
 
 const setPosts = ({ store, props }) =>
-  store.set(state.posts, props.posts)
+  store.set('posts', props.posts)
 
 const unsetLoadingPosts = ({ store }) =>
-  store.set(state.isLoadingPosts, false)
+  store.set('isLoadingPosts', false)
 
 const app = App({
   state: {
@@ -201,7 +199,7 @@ const app = App({
   providers: {...}  
 }, {...})
 
-const openPostsPage = app.get(sequences.openPostsPage)
+const openPostsPage = app.getSequence('openPostsPage')
 
 openPostsPage()
 ```
@@ -210,10 +208,12 @@ When you refresh the application now you should see the debugger show you that t
 
 ## Factories
 
-But we can actually refactor our *openPostsPage* sequence a bit. A concept in functional programming called *factories* allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. Let us refactor the code and also add the sequence for loading a user:
+But we can actually refactor our *openPostsPage* sequence a bit. A concept in functional programming called *factories* allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. Luckily for us Cerebral ships with several factories that allows you to express state changes and other things directly in your sequences.
+
+Let us refactor the code and also add the sequence for loading a user. What to take notice of here is that we are using the **state** and **props** [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals). These tags can be used to tell the factories what you are targeting, at what path:
 
 ```js
-import App, { state, props, sequences } from 'cerebral'
+import App, { state, props } from 'cerebral'
 import Devtools from 'cerebral/devtools'
 import { set } from 'cerebral/factories'
 
@@ -240,32 +240,26 @@ const app = App({
   },
   sequences: {
     openPostsPage: [
-      set(state.isLoadingPosts, true),
+      set(state`isLoadingPosts`, true),
       getPosts,
-      set(state.posts, props.posts),
-      set(state.isLoadingPosts, false)
+      set(state`posts`, props`posts`),
+      set(state`isLoadingPosts`, false)
     ],
     openUserModal: [
-      set(state.userModal.id, props.id),
-      set(state.userModal.show, true),
-      set(state.isLoadingUser, true),
+      set(state`userModal.id`, props`id`),
+      set(state`userModal.show`, true),
+      set(state`isLoadingUser`, true),
       getUser,
-      set(state.users[props.id], props.user),
-      set(state.isLoadingUser, false)
+      set(state`users.${props`id`}`, props`user`),
+      set(state`isLoadingUser`, false)
     ]
   },
   providers: {...}  
 }, {...})
 
-const openPostsPage = app.get(sequences.openPostsPage)
+const openPostsPage = app.getSequence('openPostsPage')
 
 openPostsPage()
 ```
 
-We now just made several actions obsolete. There are other factories for store and also managing the flow of execution.
-
-```marksy
-<Info>
-If you have built Cerebral applications on previous versions you know the concept "template literal tags". You can still use these instead, but the proxies are more declarative. The babel plugin actually converts the proxies to tags.
-</Info>
-```
+We now just made several actions obsolete. There are other factories for changin state and also managing the flow of execution.

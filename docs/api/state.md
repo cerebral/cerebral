@@ -8,9 +8,9 @@ The only way to get state in your application is by connecting it to a component
 import { state, moduleState } from 'cerebral'
 
 function someAction({ get }) {
-  const stateAtSomePath = get(state.some.path)
+  const stateAtSomePath = get(state`some.path`)
   // Get from module running this execution
-  const stateAtModulePath = get(moduleState.isLoading)
+  const stateAtModulePath = get(moduleState`isLoading`)
 }
 ```
 
@@ -21,34 +21,33 @@ The only way to update the state of your application is in an action. Here is a 
 ```js
 function someAction({ store }) {
   // Concats passed array to existing array
-  store.concat(state.some.path, ['someValueA', 'someValueB'])
+  store.concat('some.path', ['someValueA', 'someValueB'])
   // Increment value at given path (default increment is 1)
-  store.increment(state.some.path, 1)
+  store.increment('some.path', 1)
   // Merge the keys and their values into existing object. Handled as a
   // change on all paths merged in
-  store.merge(state.some.path, {
+  store.merge('some.path', {
     some: 'value'
   })
   // Removes last item in array
-  store.pop(state.some.path)
+  store.pop('some.path')
   // Pushes a value to the end of the array
-  store.push(state.some.path, 'someValue')
+  store.push('some.path', 'someValue')
   // Set or replace a value
-  store.set(state.some.path, 'someValue')
+  store.set('some.path', 'someValue')
   // Removes first item in array
-  store.shift(state.some.path)
+  store.shift('some.path')
   // Splices arrays
-  store.splice(state.some.path, 2, 1)
+  store.splice('some.path', 2, 1)
   // Toggle a boolean value
-  store.toggle(state.some.path)
+  store.toggle('some.path')
   // Unset a key and its value
-  store.unset(state.some.path)
+  store.unset('some.path')
   // Puts the value at the beginning of the array
-  store.unshift(state.some.path, 'someValue')
+  store.unshift('some.path', 'someValue')
 
-  // Module has the same API surface, though the path is relative
-  // to the module path running this action
-  store.set(moduleState.foo, 'bar')
+  // To change state of a module, use the moduleState tag
+  store.set(moduleState`foo`, 'bar')
 }
 ```
 

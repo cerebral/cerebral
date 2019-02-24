@@ -49,10 +49,8 @@ So returning an object from actions, either directly or from a promise, extends 
 To change the state of your application you use the store API. It is available to every action and it is required that you use the proxies to point to the state you want to change.
 
 ```js
-import { state } from 'cerebral'
-
 function setSomething({ store }) {
-  store.set(state.some.path.foo, 'bar')
+  store.set('some.path.foo', 'bar')
 }
 ```
 
@@ -62,7 +60,7 @@ All common state operations are available as a method. Instead of first pointing
 // Traditional approach
 someArray.push('newItem')
 // With Cerebral
-store.push(state.path.to.array, 'newItem')
+store.push('path.to.array', 'newItem')
 ```
 
 This is the one core concept of Cerebral that gives all its power. This simple approach allows for a few important things:
@@ -91,13 +89,13 @@ In this scenario only *actionB* has the path on its context. That means in any a
 
 ## Get
 
-You can grab any tag/proxy value by using *get*:
+You can grab any tag value by using *get*:
 
 ```js
 import { state } from 'cerebral'
 
 function someAction({ get }) {
-  const foo = get(state.foo)
+  const foo = get(state`foo`)
 }
 ```
 

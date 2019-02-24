@@ -19,7 +19,7 @@ import { set } from 'cerebral/factories'
 Concatenate a value to an array
 
 ```js
-concat(state.some.list, ['foo', 'bar'])
+concat(state`some.list`, ['foo', 'bar'])
 ```
 
 ### increment
@@ -27,10 +27,10 @@ concat(state.some.list, ['foo', 'bar'])
 Increment an integer value by another integer value into an array. The default increment is 1, and a negative value effectively does a decrement.
 
 ```js
-increment(state.some.integer)
-increment(state.some.integer, -5)
-increment(state.some.integer, state.some.otherInteger)
-increment(state.some.integer, props.some.otherInteger)
+increment(state`some.integer`)
+increment(state`some.integer`, -5)
+increment(state`some.integer`, state`some.otherInteger`)
+increment(state`some.integer`, props`some.otherInteger`)
 ```
 
 ### merge
@@ -38,9 +38,9 @@ increment(state.some.integer, props.some.otherInteger)
 Merge objects into existing value. If no value exists, an empty object will be created. Merge supports using operator tags on key values:
 
 ```js
-merge(state.clients.$draft, props.newDraft, {
+merge(state`clients.$draft`, props`newDraft`, {
   foo: 'bar',
-  bar: props.baz
+  bar: props`baz`
 })
 ```
 
@@ -49,7 +49,7 @@ merge(state.clients.$draft, props.newDraft, {
 Pop a value off an array (removes last element from array).
 
 ```js
-pop(state.some.list)
+pop(state`some.list`)
 ```
 
 ### push
@@ -57,7 +57,7 @@ pop(state.some.list)
 Push value into an array (adds the element at the end of the array).
 
 ```js
-push(state.some.list, 'foo')
+push(state`some.list`, 'foo')
 ```
 
 ### set
@@ -65,14 +65,14 @@ push(state.some.list, 'foo')
 Set a target value in the state or props.
 
 ```js
-set(state.foo.bar, true)
-set(props.foo, true)
+set(state`foo.bar`, true)
+set(props`foo`, true)
 ```
 
 Optionally transform the value before setting
 
 ```js
-set(state.some.number, props.number, (value) => value * 2)
+set(state`some.number`, props`number`, (value) => value * 2)
 ```
 
 ### shift
@@ -80,7 +80,7 @@ set(state.some.number, props.number, (value) => value * 2)
 Shift a value off an array (removes first element in array).
 
 ```js
-shift(state.some.list),
+shift(state`some.list`),
 ```
 
 ### splice
@@ -88,7 +88,7 @@ shift(state.some.list),
 Splice an array in place.
 
 ```js
-splice(state.some.list, 0, 2)
+splice(state`some.list`, 0, 2)
 ```
 
 ### toggle
@@ -96,7 +96,7 @@ splice(state.some.list, 0, 2)
 Toggle a boolean value.
 
 ```js
-toggle(state.user.$toolbar)
+toggle(state`user.$toolbar`)
 ```
 
 ### unset
@@ -104,7 +104,7 @@ toggle(state.user.$toolbar)
 Unset key from object.
 
 ```js
-unset(state.clients.all[props.key])
+unset(state`clients.all.${props`key`}`)
 ```
 
 ### unshift
@@ -112,7 +112,7 @@ unset(state.clients.all[props.key])
 Unshift a value into an array (adds the element at the start of the array).
 
 ```js
-unshift(state.some.list, 'foo')
+unshift(state`some.list`, 'foo')
 ```
 
 ## Flow control factories
@@ -180,7 +180,7 @@ import { equals } from 'cerebral/factories'
 import { state } from 'cerebral'
 
 export default [
-  equals(state.user.role), {
+  equals(state`user.role`), {
     admin: [],
     user: [],
     otherwise: [] // When no match
@@ -228,13 +228,13 @@ import { when } from 'cerebral/factories'
 import { state } from 'cerebral'
 
 export default [
-  when(state.foo.isAwesome),
+  when(state`foo.isAwesome`),
   {
     true: [],
     false: []
   },
   // You can also pass your own function
-  when(state.foo.isAwesome, (value) => value.length === 3),
+  when(state`foo.isAwesome`, (value) => value.length === 3),
   {
     true: [],
     false: []
@@ -251,12 +251,12 @@ import { props, state } from 'cerebral'
 
 export default [
   when(
-    state.clients.$draft.key,
-    props.key,
+    state`clients.$draft.key`,
+    props`key`,
     (draftKey, updatedKey) => draftKey === updatedKey
   ),
   {
-    true: set(state.clients.$draft, props.value),
+    true: set(state`clients.$draft`, props`value`),
     false: []
   }
 ]

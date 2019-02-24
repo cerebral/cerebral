@@ -19,15 +19,15 @@ export default {
   },
   sequences: {
     loadUser: [
-      set(state.isLoadingUser, true),
+      set(state`isLoadingUser`, true),
       getUser,
-      set(state.users[props.id], props.user),
-      set(state.currentUserId, props.id),
-      set(state.isLoadingUser, false)
+      set(state`users.${props`id`}`, props`user`),
+      set(state`currentUserId`, props`id`),
+      set(state`isLoadingUser`, false)
     ]
   },
   catch: [
-    [Error, set(state.error, props.error.message)]
+    [Error, set(state`error`, props`error.message`)]
   ],
   providers: {...}
 }
@@ -37,7 +37,7 @@ The **catch** takes a list of error handlers. You define the handler with an err
 
 ```marksy
 <Warning>
-Notice that the catch handler is an array of arrays. Each item in the array is an array of two items. The error to handle and what sequence should handle it.
+Notice that the catch handler is an array of arrays. Each item in the array is an array of two items. The type of error to handle and what sequence should handle it.
 </Warning>
 ```
 
@@ -62,15 +62,15 @@ export default {
   state: {...},
   sequences: {
     loadUser: [
-      set(state.isLoadingUser, true),
+      set(state`isLoadingUser`, true),
       getUser,
-      set(state.users[props.id], props.user),
-      set(state.currentUserId, props.id),
-      set(state.isLoadingUser, false)
+      set(state`users.${props`id`}`, props`user`),
+      set(state`currentUserId`, props`id`),
+      set(state`isLoadingUser`, false)
     ]
   },
   catch: [
-    [JsonPlaceholderError, set(state.error, props.error.message)]
+    [JsonPlaceholderError, set(state`error`, props`error.message`)]
   ],
   providers: {...}
 }
@@ -109,7 +109,7 @@ import * as actions from './actions'
 import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral'
 
-export const handleError = set(state.error, props.error.message)
+export const handleError = set(state`error`, props`error.message`)
 
 export const loadUser = [...]
 ```

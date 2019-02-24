@@ -10,8 +10,8 @@ Cerebral allows you to compute state that can be used in multiple contexts. Let 
 import { state } from 'cerebral'
 
 export const filteredList = (get) => {
-  const items = get(state.items)
-  const filter = get(state.filter)
+  const items = get(state`items`)
+  const filter = get(state`filter`)
 
   return items.filter((item) => item[filter.property] === filter.value)
 }
@@ -45,7 +45,7 @@ import { state } from 'cerebral'
 
 connect(
   {
-    list: state.filteredList
+    list: state`filteredList`
   },
   function List({ list }) {
     return <ul>{list.map((item) => <li>{item.title}</li>)}</ul>
@@ -60,7 +60,7 @@ import { when } from 'cerebral/factories'
 import { state } from 'cerebral'
 
 export const mySequence = [
-  when(state.appIsAwesome),
+  when(state`appIsAwesome`),
   {
     true: [],
     false: []
@@ -74,17 +74,17 @@ export const mySequence = [
 import { state } from 'cerebral'
 
 export function myAction({ get }) {
-  const filteredList = get(state.filteredList)
+  const filteredList = get(state`filteredList`)
 }
 ```
 
-## With other proxies
+## With other tags
 
 ```js
 import { state } from 'cerebral'
 import { set } from 'cerebral/factories'
 
-export const mySequence = set(state[state.somePropKey].bar, 'baz')
+export const mySequence = set(state`${state`somePropKey`}.bar`, 'baz')
 ```
 
 ## Computing computeds
@@ -92,9 +92,9 @@ export const mySequence = set(state[state.somePropKey].bar, 'baz')
 ```js
 import { state, props } from 'cerebral'
 
-export const fooBar = (get) => get(state.foo) + get(state.bar)
+export const fooBar = (get) => get(state`foo`) + get(state`bar`)
 
-export const fooBarBaz = (get) => get(state.fooBar) + get(state.baz)
+export const fooBarBaz = (get) => get(state`fooBar`) + get(state`baz`)
 ```
 
 You point to computeds as normal state and you also use them that way.
@@ -107,10 +107,10 @@ You can also combine computeds with props. Either from a component or you can ex
 import { state, props } from 'cerebral'
 
 export const itemUsers = (get) => {
-  const itemKey = get(props.itemKey)
-  const item = get(state.items[itemKey])
+  const itemKey = get(props`itemKey`)
+  const item = get(state`items.${itemKey}`)
 
-  return item.userIds.map((userId) => get(state.users[userId]))
+  return item.userIds.map((userId) => get(state`users.${userId}`))
 }
 ```
 
@@ -122,7 +122,7 @@ The computed we created here requires a prop and can be used in for example an a
 import { state } from 'cerebral'
 
 function myAction({ get }) {
-  const itemUsers = get(state.itemUsers, { itemKey: '123' })
+  const itemUsers = get(state`itemUsers`, { itemKey: '123' })
 }
 ```
 
@@ -135,7 +135,7 @@ import { state } from 'cerebral'
 
 export default connect(
   {
-    users: state.itemUsers
+    users: state`itemUsers`
   },
   function ({ users }) {
     return ...

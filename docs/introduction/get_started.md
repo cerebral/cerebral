@@ -7,15 +7,9 @@
 ## Install on my machine
 
 1.  Install [Node](https://nodejs.org/en/), the JavaScript Runtime
-2.  Open [Codesandbox.io](https://codesandbox.io/s/m59vpm64vx)
+2.  Open [Codesandbox.io](https://codesandbox.io/s/qj183506)
 3.  Hit the **download** button and unzip the project to a folder
 4.  Run `npm install` and then `npm start`
-
-```marksy
-<Info>
-The project contains the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) package. This package helps writing declarative code using proxies, as you will soon learn more about.
-</Info>
-```
 
 ## Download debugger
 

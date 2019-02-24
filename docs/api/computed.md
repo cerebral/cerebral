@@ -6,7 +6,7 @@ Computeds calculate and cache derived state values. Using computeds helps to kee
 import { state } from 'cerebral'
 
 export const title = (get) => {
-  return `Hi ${get(state.user.name)}`
+  return `Hi ${get(state`user.name`)}`
 }
 ```
 
@@ -36,7 +36,7 @@ import { connect } from '@cerebral/react'
 
 export default connect(
   {
-    hello: state.title
+    hello: state`title`
   },
   function App({ hello }) {
     return (

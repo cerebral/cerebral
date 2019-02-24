@@ -20,51 +20,60 @@ Creating a factory gives you the possibility to configure what a function should
 
 ## Some example factories
 
-So the typical factories you use with Cerebral are the operator factories:
+So the typical factories you use with Cerebral changes the state:
 
 ```js
 import { set, push } from 'cerebral/factories'
 import { state } from 'cerebral'
 
 export default [
-  set(state.foo, 'bar'),
-  push(state.list, 'foo')
+  set(state`foo`, 'bar'),
+  push(state`list`, 'foo')
 ]
 ```
 
-But factories are also available in other packages, like [@cerebral/http](https://www.npmjs.com/package/@cerebral/http):
+But you could also create a factory to for example get data from the server:
 
 ```js
-import { httpGet } from '@cerebral/http/factories'
+import { state, props } from 'cerebral'
+import { set } from 'cerebral/factories'
+import { httpGet } from './myFactories'
 
-export default httpGet('/items')
+export default [
+  httpGet('/items'),
+  set(state`items`, props`response.data`)
+]
 ```
 
-So how does these factories actually work? Let us digest one of them.
+So how would this **httpGet** factory actually work? Let us dissect it.
 
 ## Dissecting a factory
 
-Our example above was using the **httpGet** factory. To support the syntax above it would have to look like this:
+The **httpGet** factory above could look something like this:
 
 ```js
 function httpGetFactory(url) {
-  function httpGet({ http }) {
-    return http.get(url)
+  function httpGetAction({ http }) {
+    return http.get(url).then(response => ({ response }))
   }
 
-  return httpGet
+  return httpGetAction
 }
 ```
 
-When **httpGet** is called it will return a function, an action, for us. This action is configured with a url and when it is called it will run the http provider with the configured url.
+When **httpGet** is called it will return a function, an action, for us. This action is configured with a url and when it is called it will run a method on a provider we have named **http**. In this case the http provider calls the server and returns the response to props as `{ response: [...] }`.
 
 But **httpGet** actually has more features than this. You can use a *string tag* instead of a normal string.
 
 ```js
-import { httpGet } from '@cerebral/http/factories'
-import { props, string } from 'cerebral'
+import { state, props, string } from 'cerebral'
+import { set } from 'cerebral/factories'
+import { httpGet } from './myFactories'
 
-export default httpGet(string`items/${props.itemId}`)
+export default [
+  httpGet(string`items/${props.itemId}`),
+  set(state`item`, prop`response.data`)
+]
 ```
 
 Here we have configured our function to produce the url based on the property **itemId** passed through the signal. How do we handle that inside our operator?
@@ -75,11 +84,11 @@ Instead of using the url directly, like we do here:
 
 ```js
 function httpGetFactory(url) {
-  function httpGet({ http }) {
-    return http.get(url)
+  function httpGetAction({ http }) {
+    return http.get(url).then(response => ({ response }))
   }
 
-  return httpGet
+  return httpGetAction
 }
 ```
 
@@ -87,30 +96,22 @@ We can rather resolve it, using the **get** provider:
 
 ```js
 function httpGetFactory(url) {
-  function httpGet({ http, get }) {
-    return http.get(get(url))
+  function httpGetAction({ http, get }) {
+    return http.get(get(url)).then(response => ({ response }))
   }
 
-  return httpGet
+  return httpGetAction
 }
 ```
 
-By using **get** we allow passing in a value to be evaluated. It can still be just a plain string, no worries, but now we can also use proxies.
+By using **get** we allow passing in a value to be evaluated. It can still be just a plain string, no worries, but now we can also use tags.
 
 ### Optional paths
 
-The factories of the **@cerebral/http** package has a pretty cool feature which allows you to optionally use paths. For example:
+The sequences of Cerebral a pretty cool feature which allows you to optionally use paths. For example:
 
 ```js
-import { httpGet } from '@cerebral/http/factories'
-
-export default httpGet('/items')
-```
-
-Or:
-
-```js
-import { httpGet } from '@cerebral/http/factories'
+import { httpGet } from './myFactories'
 
 export default [
   httpGet('/items'),
@@ -124,7 +125,7 @@ export default [
 You can even base the paths on status codes:
 
 ```js
-import { httpGet } from '@cerebral/http/factories'
+import { httpGet } from './myFactories'
 
 export default [
   httpGet('/items'),
@@ -140,23 +141,42 @@ This gives a lot of flexibility, but how does it work? Let us do some more diges
 
 ```js
 function httpGetFactory(url) {
-  function httpGet({ http, get, path }) {
+  function httpGetAction({ http, get, path }) {
     if (path) {
       // More to come
     } else {
-      return http.get(get(url))
+      return http.get(get(url)).then(response => ({ response }))
     }
   }
 
-  return httpGet
+  return httpGetAction
 }
 ```
 
-We can actually check if **path** exists on the context of the action. If it does not exist, it means that the action can not diverge execution down a path:
+We can actually check if **path** exists on the context of the action. If it does not exist, it means that the action can not diverge execution down a path. That means we can support both scenarios:
+
+```js
+import { state, props } from 'cerebral'
+import { set } from 'cerebral/factories'
+import { httpGet } from './myFactories'
+
+export const scenarioA = [
+  httpGet('/items'),
+  {
+    sucess: set(state`items`, props`response.data`),
+    error: []
+  }
+]
+
+export const scenarioB = [
+  httpGet('/items'),
+  set(state`items`, props`response.data`)
+]
+```
 
 ```js
 function httpGetFactory(url) {
-  function httpGet({ http, get, path }) {
+  function httpGetAction({ http, get, path }) {
     if (path) {
       return http
         .get(get(url))
@@ -167,11 +187,11 @@ function httpGetFactory(url) {
           return path.error({ error })
         })
     } else {
-      return http.get(get(url))
+      return http.get(get(url)).then(response => ({ response }))
     }
   }
 
-  return httpGet
+  return httpGetAction
 }
 ```
 
@@ -181,7 +201,7 @@ But what about the status codes? Lets extend our example:
 
 ```js
 function httpGetFactory(url) {
-  function httpGet({ http, get, path }) {
+  function httpGetAction({ http, get, path }) {
     if (path) {
       return http
         .get(get(url))
@@ -196,26 +216,26 @@ function httpGetFactory(url) {
             : path.error({ error })
         })
     } else {
-      return http.get(get(url))
+      return http.get(get(url)).then(response => ({ response }))
     }
   }
 
-  return httpGet
+  return httpGetAction
 }
 ```
 
-### Resolve proxy paths
+### Resolve tag paths
 
-You can also resolve the paths of a proxy. For example:
+You can also resolve the paths of a tag. For example:
 
 ```js
-state.foo.bar
+state`foo.bar`
 ```
 
 The path in this example is **foo.bar**. Or:
 
 ```js
-state.items[props.itemId]
+state`items.${props`itemId`}`
 ```
 
 This might resolve to **items.123**.
@@ -226,16 +246,14 @@ Resolving the path instead of the value within the path gives some contextual po
 import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral'
 
-export default set(state.foo, props.foo)
+export default set(state`foo`, props`foo`)
 ```
 
-So here we are using two proxies, **state** and **props**, and they have two different contextual meanings. The **state** proxy is used to identify *where* to put a value, and the **props** proxy is used to identify *what* value.
-
-Since proxies are transpiled into tags with the babel plugin, you treat them as tags using the **resolve** provider:
+So here we are using two tags, **state** and **props**, and they have two different contextual meanings. The **state** tag is used to identify *where* to put a value, and the **props** tag is used to identify *what* value.
 
 ```js
 function setFactory(target, value) {
-  function set({ state, resolve }) {
+  function set({ store, resolve }) {
     // First we identify that we have the tag
     // type we want
     const isStateTag = resolve.isTag(target, 'state')
@@ -247,9 +265,9 @@ function setFactory(target, value) {
       // we know where to set the value
       const statePath = resolve.path(target)
 
-      // We do a normal "state.set" with the
+      // We do a normal "store.set" with the
       // resolved path and value
-      state.set(statePath, resolve.value(value))
+      store.set(statePath, resolve.value(value))
     } else {
       throw new Error('Target must be a state tag')
     }
@@ -266,10 +284,10 @@ export default setFactory
 You will very likely create a lot of action factories in your application. This drys up your code and makes your sequences more expressive. If you start using the **get** provider, and even the **resolver**, you can make your factories even more expressive. One such factory could be notifying the user:
 
 ```js
-import factories from './factories'
+import { notify } from './myFactories'
 import { string, state } from 'cerebral'
 
-export default notify(string`Sorry ${state.user.name}, this does not work :(`)
+export default notify(string`Sorry ${state`user.name`}, this does not work :(`)
 ```
 
 The factory could look something like this:
@@ -278,14 +296,14 @@ The factory could look something like this:
 import { state } from 'cerebral'
 
 function notifyFactory(message) {
-  function notify({ store, get }) {
-    store.set(state.message, get(message))
+  function notifyAction({ store, get }) {
+    store.set('message', get(message))
   }
 
-  return notify
+  return notifyAction
 }
 ```
 
 ## Summary
 
-You might build your whole application without taking advantage of resolving proxies in your factories, but it is a powerful concept that can express more logic in your sequence definitions making your code even more readable.
+You might build your whole application without taking advantage of resolving tags in your factories, but it is a powerful concept that can express more logic in your sequence definitions making your code even more readable.

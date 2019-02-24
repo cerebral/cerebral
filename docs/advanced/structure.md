@@ -25,14 +25,12 @@ This structure favors a single file for each type of composable piece of logic. 
 ## Actions
 
 ```js
-import { state } from 'cerebral'
-
 export function actionA({ store }) {
-  store.set(state.foo, 'bar')
+  store.set('foo', 'bar')
 }
 
 export function actionB({ store }) {
-  store.set(state.foo, 'bar')
+  store.set('foo', 'bar')
 }
 ```
 
@@ -41,11 +39,9 @@ You export multiple actions from each modules *actions.js* file.
 If you prefer arrow functions, you can write:
 
 ```js
-import { state } from 'cerebral'
+export const actionA = ({ store }) => store.set('foo', 'bar')
 
-export const actionA = ({ store }) => store.set(state.foo, 'bar')
-
-export const actionB = ({ store }) => store.set(path.foo, 'bar')
+export const actionB = ({ store }) => store.set('foo', 'bar')
 ```
 
 ## Factories
@@ -56,7 +52,7 @@ Factories are similar to actions:
 // Normal function
 export function setLoadingApp (isLoading) {
   return function setLoadingApp({ store }) {
-    store.set(state.isLoading, isLoading)
+    store.set('isLoading', isLoading)
   }
 }
 
@@ -64,7 +60,7 @@ export function setLoadingApp (isLoading) {
 // We return a named function for debugging purposes
 export const setLoadingApp = (isLoading) =>
   function setLoadingApp({ store }) {
-    store.set(state.isLoading, isLoading)
+    store.set('isLoading', isLoading)
   }
 ```
 
@@ -82,7 +78,7 @@ export const initialize = [
   factories.setLoadingApp(true),
   actions.getUser,
   actions.setUser,
-  set(state.isLoading, false)
+  set(state`isLoading`, false)
 ]
 ```
 
@@ -106,6 +102,6 @@ export default Module({
   computed,
   reactions,
   providers,
-  catch: [[errors.AuthError, sequences.catchAuthError]]
+  catch: [[errors.AuthError, sequences`catchAuthError`]]
 })
 ```

@@ -120,7 +120,7 @@ import { sequences } from 'cerebral'
 
 export default connect(
   function MyComponent ({ get }) {
-    const routeToItems = get(sequences.routeToItems)
+    const routeToItems = get(sequences`routeToItems`)
 
     return (
       <button
@@ -156,19 +156,19 @@ import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral'
 import * as actions from './actions'
 
-export const routeToRoot = set(state.page, 'home')
+export const routeToRoot = set(state`page`, 'home')
 
 export const routeToItems = [
-  set(state.page, 'items'),
+  set(state`page`, 'items'),
   actions.getItems,
-  set(state.items, props.items)
+  set(state`items`, props`items`)
 ]
 
 export const routeToItem = [
   routeToItems, // We just add the sequence
   actions.getItemDetails,
-  set(state.itemDetails[props.id], props.itemDetails),
-  set(state.currentItemId, props.id)
+  set(state`itemDetails.${props`id`}`, props`itemDetails`),
+  set(state`currentItemId`, props`id`)
 ]
 ```
 
@@ -179,20 +179,20 @@ import { parallel, set } from 'cerebral/factories'
 import { state, props } from 'cerebral'
 import * as actions from './actions'
 
-export const routeToRoot = set(state.page, 'home')
+export const routeToRoot = set(state`page`, 'home')
 
 export const routeToItems = [
-  set(state.page, 'items'),
+  set(state`page`, 'items'),
   actions.getItems,
-  set(state.items, props.items)
+  set(state`items`, props`items`)
 ]
 
 export const routeToItem = parallel([
   routeToItems,
   [
     actions.getItemDetails,
-    set(state.itemDetails[props.id], props.itemDetails),
-    set(state.currentItemId, props.id)
+    set(state`itemDetails.${props`id`}`, props`itemDetails`),
+    set(state`currentItemId`, props`id`)
   ]
 ])
 ```

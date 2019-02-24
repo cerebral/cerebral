@@ -7,12 +7,11 @@ Sometimes you need to react to changes of the state. You might want to run a seq
 When you create a module you can attach a reaction to it:
 
 ```js
-import { Module } from 'cerebral'
 import * as reactions from './reactions'
 
-export default Module({
+export default {
   reactions
-})
+}
 ```
 
 So you would typically create your reactions in a separate file, *reactions.js*:
@@ -23,10 +22,10 @@ import { state, sequences } from 'cerebral'
 
 export const pageChanged = Reaction(
   {
-    page: state.currentPage
+    page: state`currentPage`
   },
   ({ page, get }) => {
-    get(sequences.openPage)({ page })
+    get(sequences`openPage`)({ page })
   }
 )
 ```
@@ -44,15 +43,15 @@ import { state, sequences } from 'cerebral'
 
 export default connect(
   {
-    inputValue: state.inputValue,
-    changeInputValue: sequences.changeInputValue
+    inputValue: state`inputValue`,
+    changeInputValue: sequences`changeInputValue`
   },
   class MyComponent extends React.Component {
     componentDidMount() {
       this.props.reaction(
         'focusUsername',
         {
-          error: state.usernameError
+          error: state`usernameError`
         },
         ({ error }) => error && this.input.focus()
       )

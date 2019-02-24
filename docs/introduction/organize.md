@@ -52,19 +52,19 @@ import { state, props } from 'cerebral'
 import * as actions from './actions'
 
 export const openPostsPage =  [
-  set(state.isLoadingPosts, true),
+  set(state`isLoadingPosts`, true),
   actions.getPosts,
-  set(state.posts, props.posts),
-  set(state.isLoadingPosts, false)
+  set(state`posts`, props`posts`),
+  set(state`isLoadingPosts`, false)
 ]
 
 export const openUserModal = [
-  set(state.userModal.show, true),
-  set(state.userModal.id, props.id),
-  set(state.isLoadingUser, true),
+  set(state`userModal.show`, true),
+  set(state`userModal.id`, props`id`),
+  set(state`isLoadingUser`, true),
   actions.getUser,
-  set(state.users[props.id], props.user),
-  set(state.isLoadingUser, false),
+  set(state`users.${props`id`}`, props`user`),
+  set(state`isLoadingUser`, false),
 ]
 ```
 
