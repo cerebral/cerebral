@@ -104,13 +104,13 @@ import React from 'react'
 import { mount } from 'enzyme'
 import assert from 'assert'
 import { Container } from '@cerebral/react'
-import App, { Module } from 'cerebral'
+import App from 'cerebral'
 
 import Button from './Button'
 
 describe('<Button />', () => {
   it('should pass foo state on click', () => {
-    const testModule = Module({
+    const testModule = () => ({
       state: {
         foo: 'bar'
       },
@@ -131,16 +131,16 @@ describe('<Button />', () => {
 
 ### Compute
 
-The `runComputed` test helper accepts the `computed` and `fixture` arguments and returns the computed output.
+The `runCompute` test helper accepts the `computed` and `fixture` arguments and returns the computed output.
 
 ```js
 import { props, state } from 'cerebral'
-import { runComputed } from 'cerebral/test'
+import { runCompute } from 'cerebral/test'
 
 import multiply from './multiply'
 
 it('should multiply by the specified number', () => {
-  const result = runComputed(multiply, {
+  const result = runCompute(multiply, {
     state: { number: 5 },
     props: { multiplyBy: 2 }
   })
