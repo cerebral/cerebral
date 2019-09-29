@@ -8,8 +8,9 @@
 
 1.  Install [Node](https://nodejs.org/en/), the JavaScript Runtime
 2.  Open [Codesandbox.io](https://codesandbox.io/s/qj183506)
-3.  Hit the **download** button and unzip the project to a folder
-4.  Run `npm install` and then `npm start`
+3.  Download the project as zip using the File Menu > Export to Zip
+4.  Unzip the project to a folder
+5.  Run `npm install` and then `npm start`
 
 ## Download debugger
 
