@@ -147,7 +147,7 @@
     "node-sass": "4.5.3",
     "npm-run-all": "4.0.2",
     "nyc": "^10.3.2",
-    "parcel-bundler": "1.7.0",
+    "parcel-bundler": "1.12.3",
     "parcel-plugin-typescript": "0.7.0",
     "preact": "8.1.0",
     "prettier": "^1.14.0",
