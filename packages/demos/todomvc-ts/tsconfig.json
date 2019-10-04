@@ -4,20 +4,8 @@
     "module": "es2015",
     "target": "es5",
     "lib": ["es6", "dom"],
-    "baseUrl": "./src",
-    "paths": {
-      "app.cerebral": ["app.cerebral.ts"]
-    },
     "jsx": "react",
-    "allowSyntheticDefaultImports": true,
-    "moduleResolution": "node"
+    "allowSyntheticDefaultImports": true
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest"
-  ]
+  "exclude": ["node_modules", "build", "scripts", "acceptance-tests"]
 }

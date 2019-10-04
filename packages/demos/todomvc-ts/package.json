@@ -7,11 +7,10 @@
 	"contributors": [
 		"Henri Hulski <henri.hulski@gazeta.pl>"
 	],
+	"alias": {
+		"app.cerebral": "./src/app.cerebral.ts"
+	},
 	"dependencies": {
-		"@cerebral/react": "next",
-		"@cerebral/router": "next",
-		"@cerebral/storage": "next",
-		"@types/jest": "^24.0.18",
 		"babel-plugin-cerebral": "next",
 		"cerebral": "next",
 		"classnames": "^2.2.6",
@@ -27,36 +26,13 @@
 		"build": "parcel build index.html",
 		"prepublish": "npm run build",
 		"start": "parcel serve index.html --no-autoinstall",
-		"setup": "npm install --only=dev && npm install @types/jest --no-save",
-		"test": "jest"
-	},
-	"jest": {
-		"testURL": "http://localhost",
-		"transform": {
-			"^.+\\.tsx?$": "ts-jest"
-		},
-		"testRegex": "(/__tests__/.*|(\\.|/)(spec))\\.(tsx?)$",
-		"moduleFileExtensions": [
-			"ts",
-			"tsx",
-			"js",
-			"json",
-			"node"
-		],
-		"moduleNameMapper": {
-			"app.cerebral": "<rootDir>/src/app.cerebral.ts"
-		},
-		"globals": {
-			"ts-jest": {
-				"tsConfigFile": "tsconfig.test.json",
-				"useBabelrc": true
-			}
-		}
+		"setup": "npm install --only=dev"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.6.2",
+		"@babel/register": "^7.6.2",
+		"@babel/preset-typescript": "^7.6.0",
 		"@types/page": "^1.8.0",
-		"parcel-bundler": "^1.12.3",
-		"parcel-plugin-typescript": "^1.0.0"
+		"parcel-bundler": "^1.12.3"
 	}
 }
