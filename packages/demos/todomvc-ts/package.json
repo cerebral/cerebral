@@ -7,32 +7,54 @@
 	"contributors": [
 		"Henri Hulski <henri.hulski@gazeta.pl>"
 	],
-	"alias": {
-		"app.cerebral": "./src/app.cerebral.ts"
-	},
 	"dependencies": {
+		"@cerebral/react": "next",
+		"@cerebral/router": "next",
+		"@cerebral/storage": "next",
 		"babel-plugin-cerebral": "next",
 		"cerebral": "next",
-		"classnames": "^2.2.6",
-		"local-storage": "^2.0.0",
-		"page": "^1.11.5",
+		"classnames": "^2.2.5",
+		"local-storage": "^1.4.2",
+		"page": "^1.8.6",
 		"react": "^16.2.0",
 		"react-dom": "^16.2.0",
 		"todomvc-app-css": "^2.1.0",
 		"todomvc-common": "^1.0.4",
-		"uuid": "^3.3.3"
+		"uuid": "^3.1.0"
 	},
 	"scripts": {
 		"build": "parcel build index.html",
 		"prepublish": "npm run build",
 		"start": "parcel serve index.html --no-autoinstall",
-		"setup": "npm install --only=dev"
+		"setup": "npm install --only=dev && npm install @types/jest --no-save",
+		"test": "jest"
+	},
+	"jest": {
+		"testURL": "http://localhost",
+		"transform": {
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testRegex": "(/__tests__/.*|(\\.|/)(spec))\\.(tsx?)$",
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"json",
+			"node"
+		],
+		"moduleNameMapper": {
+			"app.cerebral": "<rootDir>/src/app.cerebral.ts"
+		},
+		"globals": {
+			"ts-jest": {
+				"tsConfigFile": "tsconfig.test.json",
+				"useBabelrc": true
+			}
+		}
 	},
 	"devDependencies": {
-		"@babel/core": "^7.6.2",
-		"@babel/register": "^7.6.2",
-		"@babel/preset-typescript": "^7.6.0",
-		"@types/page": "^1.8.0",
-		"parcel-bundler": "^1.12.3"
+		"@types/page": "^1.5.32",
+		"parcel-bundler": "1.7.0",
+		"parcel-plugin-typescript": "^0.7.0"
 	}
 }

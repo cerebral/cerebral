@@ -29,6 +29,7 @@ export default connect<ExternalProps, typeof deps>(
     submitTodoTitle,
     toggleTodoCompleted,
     removeTodo,
+    abortEdit,
   }) {
     return (
       <li

@@ -9,14 +9,14 @@
     ],
     "dependencies": {
         "@cerebral/react": "next",
-        "classnames": "^2.2.6",
+        "classnames": "^2.2.5",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
-        "local-storage": "^2.0.0",
-        "page": "^1.11.5",
+        "local-storage": "^1.4.2",
+        "page": "^1.8.6",
         "todomvc-app-css": "^2.1.0",
         "todomvc-common": "^1.0.4",
-        "uuid": "^3.3.3"
+        "uuid": "^3.1.0"
     },
     "scripts": {
         "build": "parcel build index.html",

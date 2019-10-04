@@ -22,7 +22,7 @@ export default connect(
         />
         <label htmlFor="toggle-all">Mark all as complete</label>
         <ul className="todo-list">
-          {uids.map((todoUid) => {
+          {uids.map((todoUid, index) => {
             const isEditing = todoUid === editingUid
 
             return <Todo key={todoUid} uid={todoUid} isEditing={isEditing} />

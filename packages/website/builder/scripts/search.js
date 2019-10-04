@@ -1,7 +1,7 @@
 ;(function() {
   let text
   let isLoadingText = false
-  const searchTimeout = null
+  let searchTimeout = null
 
   function search(value) {
     const results = Object.keys(text).reduce(function(
