@@ -54,7 +54,7 @@
 	},
 	"devDependencies": {
 		"@types/page": "^1.5.32",
-		"parcel-bundler": "1.7.0",
+		"parcel-bundler": "1.12.3",
 		"parcel-plugin-typescript": "^0.7.0"
 	}
 }
