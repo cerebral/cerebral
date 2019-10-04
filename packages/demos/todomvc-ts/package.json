@@ -13,14 +13,14 @@
 		"@cerebral/storage": "next",
 		"babel-plugin-cerebral": "next",
 		"cerebral": "next",
-		"classnames": "^2.2.5",
-		"local-storage": "^1.4.2",
-		"page": "^1.8.6",
+		"classnames": "^2.2.6",
+		"local-storage": "^2.0.0",
+		"page": "^1.11.5",
 		"react": "^16.2.0",
 		"react-dom": "^16.2.0",
 		"todomvc-app-css": "^2.1.0",
 		"todomvc-common": "^1.0.4",
-		"uuid": "^3.1.0"
+		"uuid": "^3.3.3"
 	},
 	"scripts": {
 		"build": "parcel build index.html",
@@ -53,8 +53,8 @@
 		}
 	},
 	"devDependencies": {
-		"@types/page": "^1.5.32",
-		"parcel-bundler": "1.7.0",
-		"parcel-plugin-typescript": "^0.7.0"
+		"@types/page": "^1.8.0",
+		"parcel-bundler": "1.12.3",
+		"parcel-plugin-typescript": "^1.0.0"
 	}
 }
