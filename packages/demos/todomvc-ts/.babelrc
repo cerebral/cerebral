@@ -1,3 +1,4 @@
 {
-    "plugins": [ "cerebral" ]
+  "presets": ["@babel/preset-typescript"],
+  "plugins": ["cerebral"]
 }

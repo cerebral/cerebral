@@ -82,6 +82,7 @@
     "@angular/core": "^8.2.9",
     "@angular/platform-browser": "^8.2.9",
     "@angular/platform-browser-dynamic": "^8.2.9",
+    "@babel/preset-typescript": "^7.6.0",
     "@types/mocha": "^5.2.7",
     "@types/page": "1.8.0",
     "@types/prop-types": "^15.7.3",
