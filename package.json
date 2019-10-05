@@ -12,7 +12,7 @@
     "deploy": "cd packages/website/publisher && npm run ci",
     "format": "npm run lint -- --fix && prettier --write --with-node-modules \"**/*.md\" \"**/*.css\" \"**/*.json\"",
     "link": "node ./scripts/run.js link",
-    "lint": "eslint \"**/*.js\" \"**/*.ts\" \"**/*.tsx\"",
+    "lint": "eslint \"**/*.js\" \"**/*.ts\"",
     "postcoverage": "istanbul-combine -d coverage -p summary -r lcov -r html packages/**/coverage/*.json",
     "postinstall": "npm run setup",
     "postsetup": "npm run link && node ./scripts/run.js setup all",
