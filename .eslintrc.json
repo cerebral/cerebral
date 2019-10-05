@@ -24,8 +24,8 @@
   "overrides": [
     {
       "files": ["*.ts", "*.tsx"],
-      "parser": "typescript-eslint-parser",
-      "plugins": ["typescript"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
       "rules": {
         "import/export": "off",
         "no-dupe-class-members": "off",
@@ -35,7 +35,7 @@
         "no-unused-expressions": "off",
         "no-use-before-define": "off",
         "no-useless-constructor": "off",
-        "typescript/no-unused-vars": "error"
+        "@typescript-eslint/no-unused-vars": "error"
       }
     }
   ]
