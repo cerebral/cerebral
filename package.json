@@ -117,7 +117,7 @@
     "express": "4.15.4",
     "fs-extra": "2.0.0",
     "gh-pages": "1.0.0",
-    "husky": "^0.13.2",
+    "husky": "^0.13.4",
     "inferno": "^4.0.3",
     "inferno-create-element": "^4.0.3",
     "inferno-shared": "^4.0.4",
