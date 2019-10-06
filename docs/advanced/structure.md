@@ -13,7 +13,6 @@ src/
     factories.js
     sequences.js
     providers.js
-    computed.js
     reactions.js
     errors.js
     index.js
@@ -99,7 +98,6 @@ export default Module({
     isLoading: false
   },
   sequences,
-  computed,
   reactions,
   providers,
   catch: [[errors.AuthError, sequences`catchAuthError`]]

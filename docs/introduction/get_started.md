@@ -6,10 +6,10 @@
 
 ## Install on my machine
 
-1.  Install [Node](https://nodejs.org/en/), the JavaScript Runtime
-2.  Open [Codesandbox.io](https://codesandbox.io/s/qj183506)
-3.  Hit the **download** button and unzip the project to a folder
-4.  Run `npm install` and then `npm start`
+1. Install [Node](https://nodejs.org/en/), the JavaScript Runtime
+2. Create a project using a build tool like [Parcel JS](https://parceljs.org)
+3. Run `npm install cerebral`
+4. Install your view package of choice, for example: `npm install @cerebral/react`
 
 ## Download debugger
 

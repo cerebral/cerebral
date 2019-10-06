@@ -22,9 +22,17 @@ const app = App({
   }  
 }, {
   devtools: Devtools({
+    // This should point to the host and port you
+    // create in the Devtools application
     host: 'localhost:8585'
   })
 })
+```
+
+```marksy
+<Info>
+Note that if you are developing a native application you will most likely have to use your IP address instead of "localhost", when connecting to the Devtools
+</Info>
 ```
 
 Open up the newly installed debugger and add a new application.

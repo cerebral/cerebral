@@ -15,7 +15,10 @@ const app = App(main, {
   // where the key is the path and value is the state value
   stateChanges: {},
   // Sequence execution returns promises
-  returnSequencePromise: false
+  returnSequencePromise: false,
+  // Enables handling hotReloading. Hot reloading it detected and warned about. When active
+  // Cerebral will do a smart merge of any changes hot reloaded and update the devtools
+  hotReloading: false
 })
 ```
 

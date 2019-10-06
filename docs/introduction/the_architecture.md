@@ -49,13 +49,13 @@ state.merge('auth.user.info', {
 
 With a single state tree we can point to parts of the state using paths (the first argument).
 
-2.  **Optimized rendering** - Cerebral does not look at the updates in your application as "value updates", but as "path updates". This allows Cerebral to make optimizations not possible in other frameworks:
+2.  Cerebral does not look at the updates in your application as "value updates", but as "path updates". This allows Cerebral to make optimizations not possible in other frameworks.
 
 3.  There is no need for immutability in Cerebral because a change to a path means that any component depending on that path should render (no value comparison). In applications with large data structures, immutability has a high cost. There is no need to hack objects and arrays to observe changes to them either. There is nothing special about the state you put into Cerebral's state tree.
 
 4.  Since there is no value comparison in Cerebral it uses what we call **strict render**. This allows us to do render optimizations not possible with other solutions. For example you can say that a component that depends on a list is only interested in added/removed items of the list or whether the list itself is being replaced.
 
-5.  **Visualize the entire app state** - When the state of the application is a single object, we can use an object inspector to visualize the whole state of your application. With the Cerebral debugger it is easy to build a mental image of application state. You can even make changes directly to state to see how it affects the view layer.
+5.  When the state of the application is a single object, we can use an object inspector to visualize the whole state of your application. With the Cerebral debugger it is easy to build a mental image of application state. You can even make changes directly to state to see how it affects the view layer.
 
 ## Render state
 

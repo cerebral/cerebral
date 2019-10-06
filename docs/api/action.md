@@ -46,7 +46,7 @@ So returning an object from actions, either directly or from a promise, extends 
 
 ## Store
 
-To change the state of your application you use the store API. It is available to every action and it is required that you use the proxies to point to the state you want to change.
+To change the state of your application you use the store API.
 
 ```js
 function setSomething({ store }) {
@@ -68,6 +68,20 @@ This is the one core concept of Cerebral that gives all its power. This simple a
 1.  Track mutations in the application so that it can be passed to the debugger
 2.  Track mutations so that it can optimally inform components about needed renders
 3.  No need for immutability or intercepting getters and setters
+
+The following methods are available:
+
+- **concat**
+- **increment**
+- **merge**
+- **pop**
+- **push**
+- **set**
+- **shift**
+- **splice**
+- **toggle**
+- **unset**
+- **unshift**
 
 ## Path
 

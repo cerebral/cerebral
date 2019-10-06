@@ -158,46 +158,9 @@ When **api.getPosts** runs we put the returned posts on an object. This object i
 Let us fire up the sequence and we can rather let the debugger do this visualization for us. In the `/src/index.js` add the following:
 
 ```js
-import App, { sequences } from 'cerebral'
-import Devtools from 'cerebral/devtools'
+...
 
-const API_URL = 'https://jsonplaceholder.typicode.com'
-
-const setLoadingPosts = ({ store }) =>
-  store.set('isLoadingPosts', true)
-
-const getPosts = ({ api }) =>
-  api.getPosts().then(posts => ({ posts }))
-
-const setPosts = ({ store, props }) =>
-  store.set('posts', props.posts)
-
-const unsetLoadingPosts = ({ store }) =>
-  store.set('isLoadingPosts', false)
-
-const app = App({
-  state: {
-    title: 'My Project',
-    posts: [],
-    users: {},
-    userModal: {
-      show: false,
-      id: null
-    },
-    isLoadingPosts: false,
-    isLoadingUser: false,
-    error: null
-  },
-  sequences: {
-    openPostsPage: [
-      setLoadingPosts,
-      getPosts,
-      setPosts,
-      unsetLoadingPosts
-    ]
-  },
-  providers: {...}  
-}, {...})
+const app = App({...}, {...})
 
 const openPostsPage = app.getSequence('openPostsPage')
 
@@ -262,4 +225,4 @@ const openPostsPage = app.getSequence('openPostsPage')
 openPostsPage()
 ```
 
-We now just made several actions obsolete. There are other factories for changin state and also managing the flow of execution.
+We now just made several actions obsolete. There are other factories for changing state and also managing the flow of execution.

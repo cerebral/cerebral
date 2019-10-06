@@ -17,3 +17,9 @@ And when you see this:
 It is important that you read it to avoid being confused by something.
 </Warning>
 ```
+
+Please have a look at the follow Codesandbox to understand how all the concepts builds an application:
+
+```marksy
+<Codesandbox id="cerebral-todomvc-7ke4u" />
+```

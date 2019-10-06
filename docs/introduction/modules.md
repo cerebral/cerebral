@@ -12,4 +12,21 @@ const app = App({
 })
 ```
 
-**That is it!** Cerebral is now wired up and we can start building the application. But first, lets hook on the debugger.
+**That is it!** Cerebral is now wired up and we can start building the application. When your application grows you can extend a module with submodules:
+
+```js
+import App from 'cerebral'
+
+const app = App({
+  state: {
+    title: 'My Project'
+  },
+  modules: {
+    someOtherModule: {
+      state: {}
+    }
+  }
+})
+```
+
+But before looking more into organizing your project, let us look at the devtools.

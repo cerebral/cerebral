@@ -16,6 +16,7 @@ export const greetProvider = {
 import * as providers from './providers'
 
 export default {
+  state: {},
   providers
 }
 ```
@@ -34,7 +35,7 @@ export default {
 
 ## Provider
 
-You can optionally use the **Provider** factory. It allows you to pass some potions related to debugging:
+You can optionally use the **Provider** factory. It allows you to pass some options related to debugging:
 
 ```js
 import { Provider } from 'cerebral'

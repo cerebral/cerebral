@@ -24,13 +24,16 @@ const loadItemsPage = app.get(sequences.loadItemsPage)
 
 loadItemsPage()
 
-const vue = new Vue({
-  el: '#app',
-  components: {
-    container: Container(app),
-    app: AppComponent
-  }
-})
+new Vue({
+  render: h =>
+    h({
+      components: {
+        Container: Container(app),
+        AppComponent: AppComponent
+      },
+      template: "<Container><AppComponent></AppComponent></Container>"
+    })
+}).$mount("#app");
 ```
 
 And you would define the component like this:
@@ -64,16 +67,6 @@ export default connect(
 `
   }
 )
-```
-
-With Vue you would also need to update the **index.html** file with the following code:
-
-```html
-<div id="app">
-  <container>
-    <app></app>
-  </container>
-</div>
 ```
 
 You would of course be able to use **.vue** files as well here. Read more about that in [@cerebral/vue](/views/vue.html).

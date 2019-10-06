@@ -10,6 +10,7 @@ When you create a module you can attach a reaction to it:
 import * as reactions from './reactions'
 
 export default {
+  state: {},
   reactions
 }
 ```

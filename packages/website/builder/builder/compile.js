@@ -87,18 +87,21 @@ const compile = marksy({
         </div>
       )
     },
-    CodeSandbox(props) {
+    Codesandbox(props) {
       return (
-        <a href={props.url} target="new">
-          <img
-            src="https://codesandbox.io/static/img/play-codesandbox.svg"
-            alt="Edit Cerebral "
-            style={{
-              border: 0,
-              width: 'auto',
-            }}
-          />
-        </a>
+        <iframe
+          src={`https://codesandbox.io/embed/${props.id}?fontsize=14`}
+          title="cerebral-todomvc"
+          allow="geolocation; microphone; camera; midi; vr; accelerometer; gyroscope; payment; ambient-light-sensor; encrypted-media; usb"
+          style={{
+            width: '100%',
+            height: 500,
+            border: 0,
+            borderRadius: 4,
+            overflow: 'hidden',
+          }}
+          sandbox="allow-modals allow-forms allow-popups allow-scripts allow-same-origin"
+        />
       )
     },
     Warning(props) {

@@ -1,5 +1,7 @@
 # Typescript
 
+**IMPORTANT** Even though Cerebral does support Typescript it is recommended that you rather look at Cerebrals successor, [Overmind](https://overmindjs.org). It builds upon Cerebral, but is written in Typescript with modern JavaScript features.
+
 Cerebral supports full type safety in your application. It is recommended to use [React](https://reactjs.org/) as you will continue to use the types there. You can gradually add type safety to Cerebral so let us take this step by step. You can stop at any step you want when you feel you have enough type safety in your application.
 
 

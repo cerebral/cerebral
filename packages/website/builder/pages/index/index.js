@@ -125,10 +125,6 @@ function getUser() {
 A declarative approach to application logic also allows us to build developer tools that builds the mental image of this complexity for you:
 
 ![debugger](/images/debugger.png)
-
-Take a look at a real project using Cerebral, [Codesandbox.io](https://www.codesandbox.io). The client  is completely open source and the [code can be explored here](https://github.com/CompuIves/codesandbox-client/tree/master/packages/app/src/app).
-
-![codesandbox](/images/codesandbox.jpeg)
 `).tree
           }
           <div className="index-buttons">
