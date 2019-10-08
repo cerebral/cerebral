@@ -186,7 +186,7 @@ const getPosts = ({ api }) =>
   api.getPosts().then(posts => ({ posts }))
 
 const getUser = ({ api, props }) =>
-  jsonPlaceholder.getUser(props.id).then(user => ({ user }))
+  api.getUser(props.id).then(user => ({ user }))
 
 const app = App({
   state: {
