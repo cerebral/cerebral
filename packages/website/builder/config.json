@@ -82,6 +82,7 @@
     "contribute": [
       "../../../docs/contribute/introduction",
       "../../../docs/contribute/issues"
-    ]
+    ],
+    "resources": ["../../../docs/resources/utilities"]
   }
 }
