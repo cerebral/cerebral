@@ -1,6 +1,6 @@
 # Test
 
-## Snapshot testing (beta)
+## Snapshot testing
 
 ### Introduction
 
@@ -182,7 +182,38 @@ The `result` object passed when the promise resolves contains `state`, `props` a
 
 ### Sequences
 
-The `CerebralTest` factory returns `runSequence`, `setState` and `getState` functions.
+The `runSequence` test helper accepts a `sequence` and `fixture` arguments and returns a promise.
+
+```js
+import { state } from 'cerebral'
+import { runSequence } from 'cerebral/test'
+
+import increment from './increment'
+
+it('should increment numbers in state', () => {
+  return runSequence([increment], { state: { number: 1 } }).then(({ state }) =>
+    assert.equal(state.number, 2)
+  )
+})
+```
+
+The `result` object passed when the promise resolves contains `state`, `props` and `output` properties.
+
+```js
+{
+  state,
+  props: {
+    // props data received by sequence
+  },
+  output: {
+    // sequence output data
+  }
+}
+```
+
+### CerebralTest
+
+The `CerebralTest` factory returns `runSequence`, `setState` and `getState` functions. This allows you to run multiple sequences in the context of the same controller instance.
 
 ```js
 import { CerebralTest } from 'cerebral/test'
