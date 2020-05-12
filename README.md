@@ -76,16 +76,16 @@ This will give you a guide to creating a commit message. Then you just push and 
 * If changes to `repo-cooker`, clean Travis NPM cache
 * From command line:
 
-```sh
+```bash
 $ git checkout next
 $ git pull
 $ npm install # make sure any new dependencies are installed
 $ npm install --no-save repo-cooker # needed to test release, make sure you have latest
-￼$ npm run release # and check release notes
-￼$ git checkout master
+$ npm run release # and check release notes
+$ git checkout master
 $ git pull
-￼$ git merge --ff-only next
-￼$ git push
+$ git merge --ff-only next
+$ git push
 ```
 
 [npm-image]: https://img.shields.io/npm/v/cerebral.svg?style=flat
