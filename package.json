@@ -129,7 +129,7 @@
     "parcel-plugin-typescript": "^1.0.0",
     "preact": "8.1.0",
     "prettier": "^1.14.0",
-    "prismjs": "1.6.0",
+    "prismjs": "1.21.0",
     "prop-types": "15.6.1",
     "raf": "^3.3.0",
     "react-scripts": "1.1.1",
