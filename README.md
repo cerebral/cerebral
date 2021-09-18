@@ -10,6 +10,10 @@ A declarative state and side effects management solution for popular JavaScript 
 [![Discord][discord-image]][discord-url]
 <img src="images/logo.png" width="300" align="center">
 
+## Maintainer needed
+
+https://gist.github.com/christianalfoni/f1c4bfe320dcb24c403635d9bca3fa40
+
 ## Documentation
 
 * [Current Cerebral (2.x and up)](http://www.cerebraljs.com/)
