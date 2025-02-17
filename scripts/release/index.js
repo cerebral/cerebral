@@ -35,7 +35,7 @@ cooker.cook('publish', [
     canary: cook.mapTemporaryNpmTagTo('canary'),
     otherwise: [],
   },
-  cook.resetRepository,
+  cook.restoreRepository,
   cook.byBranch,
   {
     master: [
