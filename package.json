@@ -40,7 +40,7 @@
     "prism": "4.1.2",
     "react": "16.14.0",
     "react-dom": "16.14.0",
-    "universal-websocket-client": "1.0.1",
+    "universal-websocket-client": "1.0.3",
     "uuid": "11.0.5"
   },
   "lint-staged": {
