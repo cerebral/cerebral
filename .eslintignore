@@ -1,3 +1,4 @@
+!packages/node_modules/**
 packages/*/**/node_modules/
 packages/*/**/lib/
 packages/*/**/es/
@@ -8,5 +9,4 @@ scripts/**
 **/bundle.js
 **/coverage/
 **/vendor/
-packages/codemods/1.x-2.x/__testfixtures__/
 *.d.ts

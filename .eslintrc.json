@@ -11,13 +11,7 @@
     "node": true,
     "es6": true
   },
-  "extends": [
-    "standard",
-    "standard-jsx",
-    "plugin:prettier/recommended",
-    "prettier/react",
-    "prettier/standard"
-  ],
+  "extends": ["standard", "standard-jsx", "plugin:prettier/recommended"],
   "rules": {
     "linebreak-style": ["error", "unix"]
   },
