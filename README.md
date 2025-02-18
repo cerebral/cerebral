@@ -4,8 +4,6 @@ A declarative state and side effects management solution for popular JavaScript 
 
 [![NPM version][npm-image]][npm-url]
 [![Build status][travis-image]][travis-url]
-[![Coverage Status][coverage-image]][coverage-url]
-[![bitHound Score][bithound-image]][bithound-url]
 [![Commitizen friendly][commitizen-image]][commitizen-url]
 [![Discord][discord-image]][discord-url]
 <img src="images/logo.png" width="300" align="center">
@@ -95,10 +93,6 @@ $ git push
 [npm-url]: https://npmjs.org/package/cerebral
 [travis-image]: https://img.shields.io/travis/cerebral/cerebral.svg?style=flat
 [travis-url]: https://travis-ci.org/cerebral/cerebral
-[coverage-image]: https://img.shields.io/coveralls/github/cerebral/cerebral.svg?style=flat
-[coverage-url]: https://coveralls.io/github/cerebral/cerebral
-[bithound-image]: https://img.shields.io/bithound/code/github/cerebral/cerebral.svg?style=flat
-[bithound-url]: https://www.bithound.io/github/cerebral/cerebral
 [commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat
 [commitizen-url]: http://commitizen.github.io/cz-cli/
 [discord-image]: https://img.shields.io/badge/discord-join%20chat-blue.svg?style=flat
