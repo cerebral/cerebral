@@ -1,8 +1,8 @@
 {
-  "presets": ["es2015"],
+  "presets": ["@babel/preset-env"],
   "env": {
     "test": {
-      "presets": ["es2015", "react"]
+      "presets": ["@babel/preset-env", "@babel/preset-react"]
     },
     "production": {
       "ignore": [

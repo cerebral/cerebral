@@ -7,8 +7,8 @@ module.exports = {
     return fs.statSync(path).isFile()
   },
   readDir(dirPath) {
-    return new Promise(function(resolve, reject) {
-      fs.readdir(path.resolve(dirPath), function(error, dirs) {
+    return new Promise(function (resolve, reject) {
+      fs.readdir(path.resolve(dirPath), function (error, dirs) {
         if (error) {
           return reject(error)
         }
@@ -18,8 +18,8 @@ module.exports = {
     })
   },
   readFile(filePath) {
-    return new Promise(function(resolve, reject) {
-      fs.readFile(path.resolve(filePath), function(error, file) {
+    return new Promise(function (resolve, reject) {
+      fs.readFile(path.resolve(filePath), function (error, file) {
         if (error) {
           return reject(error)
         }
@@ -29,13 +29,13 @@ module.exports = {
     })
   },
   readScript(filePath) {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       babel.transformFile(
         filePath,
         {
-          presets: [require('babel-preset-es2015')],
+          presets: [require('@babel/preset-env')],
         },
-        function(err, result) {
+        function (err, result) {
           if (err) {
             return reject(err)
           }
@@ -51,8 +51,8 @@ module.exports = {
     )
   },
   writeFile(filePath, content) {
-    return new Promise(function(resolve, reject) {
-      fs.writeFile(path.resolve(filePath), content, 'utf-8', function(error) {
+    return new Promise(function (resolve, reject) {
+      fs.writeFile(path.resolve(filePath), content, 'utf-8', function (error) {
         if (error) {
           return reject(error)
         }
@@ -62,8 +62,8 @@ module.exports = {
     })
   },
   emptyDir(dirPath) {
-    return new Promise(function(resolve, reject) {
-      fs.emptyDir(path.resolve(dirPath), function(error) {
+    return new Promise(function (resolve, reject) {
+      fs.emptyDir(path.resolve(dirPath), function (error) {
         if (error) {
           return reject(error)
         }
@@ -73,8 +73,8 @@ module.exports = {
     })
   },
   copyDir(fromPath, toPath) {
-    return new Promise(function(resolve, reject) {
-      fs.copy(path.resolve(fromPath), path.resolve(toPath), function(error) {
+    return new Promise(function (resolve, reject) {
+      fs.copy(path.resolve(fromPath), path.resolve(toPath), function (error) {
         if (error) {
           return reject(error)
         }
@@ -84,8 +84,8 @@ module.exports = {
     })
   },
   extractRawText(docs) {
-    return Object.keys(docs).reduce(function(docsText, sectionKey) {
-      docsText[sectionKey] = Object.keys(docs[sectionKey]).reduce(function(
+    return Object.keys(docs).reduce(function (docsText, sectionKey) {
+      docsText[sectionKey] = Object.keys(docs[sectionKey]).reduce(function (
         subDocsText,
         subSectionKey
       ) {
@@ -95,8 +95,7 @@ module.exports = {
         }
 
         return subDocsText
-      },
-      {})
+      }, {})
 
       return docsText
     }, {})
