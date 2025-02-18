@@ -3,14 +3,13 @@
 A declarative state and side effects management solution for popular JavaScript frameworks
 
 [![NPM version][npm-image]][npm-url]
-[![Build status][travis-image]][travis-url]
 [![Commitizen friendly][commitizen-image]][commitizen-url]
 [![Discord][discord-image]][discord-url]
-<img src="images/logo.png" width="300" align="center">
+![Cerebral Logo](images/logo.png)
 
 ## Maintainer needed
 
-https://gist.github.com/christianalfoni/f1c4bfe320dcb24c403635d9bca3fa40
+<https://gist.github.com/christianalfoni/f1c4bfe320dcb24c403635d9bca3fa40>
 
 ## Documentation
 
@@ -21,8 +20,8 @@ https://gist.github.com/christianalfoni/f1c4bfe320dcb24c403635d9bca3fa40
 
 The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
 
-1.  Clone the monorepo: `git clone https://github.com/cerebral/cerebral.git`
-2.  In root: `npm install`
+1. Clone the monorepo: `git clone https://github.com/cerebral/cerebral.git`
+2. In root: `npm install`
 
 The packages are located under `packages` folder and there is **no need** to run `npm install` for each package.
 
@@ -79,20 +78,18 @@ This will give you a guide to creating a commit message. Then you just push and 
 * From command line:
 
 ```bash
-$ git switch next
-$ git pull
-$ npm install --legacy-peer-deps # make sure any new dependencies are installed
-$ npm run release # and check release notes
-$ git switch master
-$ git pull
-$ git merge --ff-only next
-$ git push
+git switch next
+git pull
+npm install      # make sure any new dependencies are installed
+npm run release  # and check release notes
+git switch master
+git pull
+git merge --ff-only next
+git push
 ```
 
 [npm-image]: https://img.shields.io/npm/v/cerebral.svg?style=flat
 [npm-url]: https://npmjs.org/package/cerebral
-[travis-image]: https://img.shields.io/travis/cerebral/cerebral.svg?style=flat
-[travis-url]: https://travis-ci.org/cerebral/cerebral
 [commitizen-image]: https://img.shields.io/badge/commitizen-friendly-brightgreen.svg?style=flat
 [commitizen-url]: http://commitizen.github.io/cz-cli/
 [discord-image]: https://img.shields.io/badge/discord-join%20chat-blue.svg?style=flat
