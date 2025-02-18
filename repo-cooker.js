@@ -1,10 +1,10 @@
 import { Cooker } from 'repo-cooker'
 
-const dryRun = process.argv[2] !== '--publish'
+const dryRun = process.argv.includes('--dry-run')
 
 process.env.REPO_COOKER_GITHUB_TOKEN = process.env.GH_TOKEN
 
-export const cooker = Cooker({
+export const cooker = Cooker(process.argv, {
   devtools: dryRun
     ? {
         host: 'localhost:8787',
