@@ -9,7 +9,7 @@ function Navigation(props) {
     }
     return (
       <ul>
-        {toc.map(function(item, index) {
+        {toc.map(function (item, index) {
           const href = `${path}#${item.id}`
 
           return (
@@ -78,7 +78,7 @@ function Navigation(props) {
   function Sections(props) {
     return (
       <ul>
-        {Object.keys(props.docs).map(function(sectionKey, index) {
+        {Object.keys(props.docs).map(function (sectionKey, index) {
           const open = props.sectionName === sectionKey
           return (
             <li

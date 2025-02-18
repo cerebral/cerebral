@@ -11,9 +11,9 @@ const indexHtml = fs
 const config = require('../config.json')
 const compile = require('./compile')
 
-module.exports = function({ pageName, Page, docs, sectionName, docName }) {
+module.exports = function ({ pageName, Page, docs, sectionName, docName }) {
   return Promise.all([renderScripts(pageName), renderCss(pageName)])
-    .then(function(results) {
+    .then(function (results) {
       const scripts = results[0]
       const css = results[1]
 
@@ -32,7 +32,7 @@ module.exports = function({ pageName, Page, docs, sectionName, docName }) {
         scripts,
       })
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.error(error)
     })
 }

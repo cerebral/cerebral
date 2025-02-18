@@ -5,14 +5,14 @@ if (location.pathname === '/docs/contribute/issues.html') {
   loader.innerHTML = 'Loading issues...'
   container.appendChild(loader)
 
-  const getColorByBgColor = function(bgColor) {
+  const getColorByBgColor = function (bgColor) {
     return parseInt(bgColor, 16) > 0xffffff / 2 ? '#000' : '#fff'
   }
 
-  const renderIssues = function(issues) {
+  const renderIssues = function (issues) {
     const list = document.createElement('ul')
     list.className = 'issues'
-    issues.forEach(function(issue) {
+    issues.forEach(function (issue) {
       const item = document.createElement('li')
       const title = document.createElement('div')
       const dateText = document.createElement('div')
@@ -23,7 +23,7 @@ if (location.pathname === '/docs/contribute/issues.html') {
         '<small>' + new Date(issue.created_at).toLocaleDateString() + '</small>'
       titleLink.innerHTML = issue.title
       item.appendChild(dateText)
-      issue.labels.forEach(function(label) {
+      issue.labels.forEach(function (label) {
         if (label.name === 'PR needed') {
           return
         }
@@ -45,11 +45,11 @@ if (location.pathname === '/docs/contribute/issues.html') {
   fetch(
     'https://api.github.com/repos/cerebral/cerebral/issues?state=open&labels=PR%20needed'
   )
-    .then(function(response) {
+    .then(function (response) {
       return response.json()
     })
-    .then(function(issues) {
-      return issues.sort(function(issueA, issueB) {
+    .then(function (issues) {
+      return issues.sort(function (issueA, issueB) {
         return issueA.created_at > issueB.created_at
       })
     })

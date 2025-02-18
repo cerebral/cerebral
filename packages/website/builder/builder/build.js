@@ -5,10 +5,10 @@ const render = require('./render')
 const { writeFile, emptyDir, copyDir, extractRawText } = require('./utils')
 
 function renderPages(pagesNotContainingDocs, pages) {
-  return pagesNotContainingDocs.map(function(pageName) {
+  return pagesNotContainingDocs.map(function (pageName) {
     const Page = pages[pageName]
 
-    return render({ pageName, Page }).then(function(view) {
+    return render({ pageName, Page }).then(function (view) {
       return {
         fileName: pageName,
         content: view,
@@ -18,9 +18,9 @@ function renderPages(pagesNotContainingDocs, pages) {
 }
 
 function renderDocs(docs, pages) {
-  return Object.keys(docs).reduce(function(allDocs, sectionName) {
+  return Object.keys(docs).reduce(function (allDocs, sectionName) {
     return allDocs.concat(
-      Object.keys(docs[sectionName]).map(function(docName) {
+      Object.keys(docs[sectionName]).map(function (docName) {
         const Page = pages.docs
 
         return render({
@@ -29,7 +29,7 @@ function renderDocs(docs, pages) {
           docs,
           sectionName,
           docName,
-        }).then(function(view) {
+        }).then(function (view) {
           return {
             fileName: `docs/${sectionName}/${docName}`,
             content: view,
@@ -40,11 +40,11 @@ function renderDocs(docs, pages) {
   }, [])
 }
 
-Promise.all([extractMarkdownFiles(), extractPages()]).then(function(results) {
+Promise.all([extractMarkdownFiles(), extractPages()]).then(function (results) {
   const docs = results[0]
   const pages = results[1]
 
-  const pagesNotContainingDocs = Object.keys(pages).filter(function(page) {
+  const pagesNotContainingDocs = Object.keys(pages).filter(function (page) {
     return page !== 'docs'
   })
 
@@ -52,20 +52,20 @@ Promise.all([extractMarkdownFiles(), extractPages()]).then(function(results) {
     ...renderPages(pagesNotContainingDocs, pages),
     ...renderDocs(docs, pages),
   ])
-    .then(function(renders) {
+    .then(function (renders) {
       return emptyDir('dist')
-        .then(function() {
-          return emptyDir('dist/docs').then(function() {
+        .then(function () {
+          return emptyDir('dist/docs').then(function () {
             return Promise.all(
-              Object.keys(docs).map(function(sectionDir) {
+              Object.keys(docs).map(function (sectionDir) {
                 return emptyDir(`dist/docs/${sectionDir}`)
               })
             )
           })
         })
         .then(function noop() {})
-        .then(function() {
-          return renders.map(function(render) {
+        .then(function () {
+          return renders.map(function (render) {
             return writeFile(
               path.join('dist', `${render.fileName}.html`),
               render.content
@@ -73,23 +73,23 @@ Promise.all([extractMarkdownFiles(), extractPages()]).then(function(results) {
           })
         })
     })
-    .then(function() {
+    .then(function () {
       return writeFile(
         'dist/docs-text.js',
         JSON.stringify(extractRawText(docs))
       )
     })
-    .then(function() {
+    .then(function () {
       return Promise.all([
         copyDir('css', 'dist'),
         copyDir('scripts', 'dist'),
         copyDir('public', 'dist'),
       ])
     })
-    .then(function() {
+    .then(function () {
       console.log('Build is finished!')
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.error(error)
     })
 })

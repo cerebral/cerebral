@@ -1,15 +1,15 @@
-;(function() {
+;(function () {
   let text
   let isLoadingText = false
   const searchTimeout = null
 
   function search(value) {
-    const results = Object.keys(text).reduce(function(
+    const results = Object.keys(text).reduce(function (
       sectionResults,
       sectionKey
     ) {
       return sectionResults.concat(
-        Object.keys(text[sectionKey]).reduce(function(
+        Object.keys(text[sectionKey]).reduce(function (
           subSectionResults,
           subSectionKey
         ) {
@@ -32,13 +32,11 @@
           }
 
           return subSectionResults
-        },
-        [])
+        }, [])
       )
-    },
-    [])
+    }, [])
 
-    results.sort(function(resultA, resultB) {
+    results.sort(function (resultA, resultB) {
       if (resultA.matches > resultB.matches) {
         return -1
       } else if (resultA.matches < resultB.matches) {
@@ -52,7 +50,7 @@
     const fiveFirst = results.splice(0, 5)
     searchResult.innerHTML = ''
     if (fiveFirst.length) {
-      fiveFirst.forEach(function(result) {
+      fiveFirst.forEach(function (result) {
         const resultEl = document.createElement('a')
 
         resultEl.className = 'docs-search-result-item'
@@ -74,7 +72,7 @@
 
   function setSearchLoadTimeout(value) {
     clearTimeout(searchTimeout)
-    setTimeout(function() {
+    setTimeout(function () {
       if (text) {
         search(value)
       } else {
@@ -83,13 +81,13 @@
     }, 100)
   }
 
-  document.body.addEventListener('click', function() {
+  document.body.addEventListener('click', function () {
     document.querySelector('#search-result').style.display = 'none'
   })
 
   document
     .querySelector('#search-docs')
-    .addEventListener('keyup', function(event) {
+    .addEventListener('keyup', function (event) {
       if (event.target.value.length < 3) {
         document.querySelector('#search-result').style.display = 'none'
 
@@ -106,7 +104,7 @@
         isLoadingText = true
 
         const oReq = new window.XMLHttpRequest()
-        oReq.addEventListener('load', function() {
+        oReq.addEventListener('load', function () {
           text = JSON.parse(this.responseText)
           search(event.target.value)
         })

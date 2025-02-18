@@ -3,13 +3,13 @@ const { readFile, fileExistsSync } = require('./utils')
 const config = require('../config.json')
 const compile = require('./compile')
 
-module.exports = function() {
+module.exports = function () {
   const sections = Object.keys(config.docs)
 
   return Promise.all(
-    sections.map(function(section) {
+    sections.map(function (section) {
       return Promise.all(
-        config.docs[section].map(function(file) {
+        config.docs[section].map(function (file) {
           return readFile(
             typeof file === 'string' ? `${file}.md` : `${file.path}.md`
           )
@@ -17,9 +17,9 @@ module.exports = function() {
       )
     })
   )
-    .then(function(fileContents) {
-      return sections.reduce(function(contentTree, dir, index) {
-        contentTree[dir] = config.docs[dir].reduce(function(
+    .then(function (fileContents) {
+      return sections.reduce(function (contentTree, dir, index) {
+        contentTree[dir] = config.docs[dir].reduce(function (
           subContent,
           contentName,
           subIndex
@@ -42,31 +42,29 @@ module.exports = function() {
             .reduce((currentContent, filePath) => {
               return currentContent.replace(
                 `(${filePath})`,
-                `(${path.dirname(filePath) +
-                  '/' +
-                  path.basename(filePath, '.md')}.html)`
+                `(${
+                  path.dirname(filePath) + '/' + path.basename(filePath, '.md')
+                }.html)`
               )
             }, fileContents[index][subIndex])
 
           subContent[key] = compile(content)
           subContent[key].raw = content
-          subContent[
-            key
-          ].githubUrl = `https://github.com/cerebral/cerebral/tree/next/${(
-            contentName.path || contentName
-          )
-            // TODO: implement correct url generation
-            .replace('../../../', '')
-            .replace('../../', 'packages/')}.md`
+          subContent[key].githubUrl =
+            `https://github.com/cerebral/cerebral/tree/next/${(
+              contentName.path || contentName
+            )
+              // TODO: implement correct url generation
+              .replace('../../../', '')
+              .replace('../../', 'packages/')}.md`
 
           return subContent
-        },
-        {})
+        }, {})
 
         return contentTree
       }, {})
     })
-    .catch(function(error) {
+    .catch(function (error) {
       console.log('Unable to extract markdown')
       console.error(error)
     })

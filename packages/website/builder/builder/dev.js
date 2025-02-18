@@ -32,18 +32,18 @@ watcher.on('change', updateDocsAndPages)
 
 function updateDocsAndPages() {
   console.log('Updating docs')
-  return Promise.all([extractMarkdownFiles(), extractPages()]).then(function(
-    results
-  ) {
-    docs = results[0]
-    pages = results[1]
-  })
+  return Promise.all([extractMarkdownFiles(), extractPages()]).then(
+    function (results) {
+      docs = results[0]
+      pages = results[1]
+    }
+  )
 }
 
 updateDocsAndPages().then(() => {
   app.use('/', express.static('public'))
 
-  app.get('/docs/:sectionName*', function(req, res) {
+  app.get('/docs/:sectionName*', function (req, res) {
     const docName = req.params[0]
       ? path.basename(req.params[0], '.html')
       : 'index'
@@ -56,34 +56,34 @@ updateDocsAndPages().then(() => {
       docs,
       sectionName,
       docName,
-    }).then(function(view) {
+    }).then(function (view) {
       res.send(view)
     })
   })
 
-  app.get('/docs-text.js', function(req, res) {
+  app.get('/docs-text.js', function (req, res) {
     res.writeHead(200, { 'Content-Type': 'text/javascript' })
     res.write(JSON.stringify(extractRawText(docs)))
     res.end()
   })
 
-  app.get('*.js', function(req, res) {
-    readScript(`scripts/${req.params[0]}.js`).then(function(content) {
+  app.get('*.js', function (req, res) {
+    readScript(`scripts/${req.params[0]}.js`).then(function (content) {
       res.writeHead(200, { 'Content-Type': 'text/javascript' })
       res.write(content)
       res.end()
     })
   })
 
-  app.get('*.css', function(req, res) {
-    readFile(`css/${req.params[0]}.css`).then(function(content) {
+  app.get('*.css', function (req, res) {
+    readFile(`css/${req.params[0]}.css`).then(function (content) {
       res.writeHead(200, { 'Content-Type': 'text/css' })
       res.write(content)
       res.end()
     })
   })
 
-  app.get('*', function(req, res) {
+  app.get('*', function (req, res) {
     if (
       path.extname(req.params[0]) &&
       path.extname(req.params[0]) !== '.html'
@@ -100,12 +100,12 @@ updateDocsAndPages().then(() => {
     render({
       pageName,
       Page,
-    }).then(function(view) {
+    }).then(function (view) {
       res.send(view)
     })
   })
 
-  app.listen(port, host, function() {
+  app.listen(port, host, function () {
     console.log(`Running server on ${host}:${port}`)
   })
 })

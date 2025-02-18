@@ -1,14 +1,13 @@
 module.exports = function prismJsx(Prism) {
-  var javascript = Prism.util.clone(Prism.languages.javascript)
+  const javascript = Prism.util.clone(Prism.languages.javascript)
 
   Prism.languages.jsx = Prism.languages.extend('markup', javascript)
   Prism.languages.jsx.tag.pattern = /<\/?[\w\.:-]+\s*(?:\s+[\w\.:-]+(?:=(?:("|')(\\?[\w\W])*?\1|[^\s'">=]+|(\{[\w\W]*?\})))?\s*)*\/?>/i // eslint-disable-line
 
-  Prism.languages.jsx.tag.inside[
-    'attr-value'
-  ].pattern = /=[^\{](?:('|")[\w\W]*?(\1)|[^\s>]+)/i // eslint-disable-line
+  Prism.languages.jsx.tag.inside['attr-value'].pattern =
+    /=[^\{](?:('|")[\w\W]*?(\1)|[^\s>]+)/i // eslint-disable-line
 
-  var jsxExpression = Prism.util.clone(Prism.languages.jsx)
+  let jsxExpression = Prism.util.clone(Prism.languages.jsx)
 
   delete jsxExpression.punctuation
 
