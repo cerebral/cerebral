@@ -2,7 +2,7 @@ const React = require('react')
 const Prism = require('prismjs')
 const prismJsx = require('./prismJsx')
 const prismJsxTs = require('./prismJsxTs')
-const marksy = require('marksy/components').marksy
+const marksy = require('marksy/jsx').marksy
 
 prismJsx(Prism)
 prismJsxTs(Prism)

@@ -1,6 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
-const babel = require('babel-core')
+const babel = require('@babel/core')
 
 module.exports = {
   fileExistsSync(path) {
