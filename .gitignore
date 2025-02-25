@@ -13,6 +13,7 @@ build
 website/builder/docs
 *darwin-x64
 package-lock.json
+!/package-lock.json
 yarn-error.log
 yarn.lock
 .vscode
