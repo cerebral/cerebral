@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: [Test]
+    types: [completed]
+    branches: [master, next]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          registry-url: https://registry.npmjs.org/
+      - run: npm ci
+      - run: git config user.name "cerebral[bot]"
+      - run: git config user.email "136202705+cerebral[bot]@users.noreply.github.com"
+      - name: Create token
+        id: create_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+          installation_retrieval_mode: repository
+          installation_retrieval_payload: cerebral/repo-cooker
+      - name: Release packages
+        run: npm run release -- --no-parallel --print-release
+        if: github.event_name != 'pull_request'
+        env:
+          REPO_COOKER_GITHUB_TOKEN: ${{ steps.create_token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Deploy with gh-pages
+        if: github.event_name != 'pull_request' && github.event.workflow_run.head_branch == 'master'
+        run: |
+            git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+            npm run deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
