@@ -29,8 +29,6 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
-          installation_retrieval_mode: repository
-          installation_retrieval_payload: cerebral/repo-cooker
       - name: Release packages
         run: npm run release -- --no-parallel --print-release
         if: github.event_name != 'pull_request'
