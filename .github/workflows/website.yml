@@ -1,0 +1,37 @@
+name: Website
+
+on:
+  repository_dispatch:
+    types: [Website]
+  workflow_dispatch:
+
+jobs:
+  website:
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Create token
+        id: create_token
+        uses: tibdex/github-app-token@v2
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+      - name: Build
+        run: npm run build:website
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ steps.create_token.outputs.token }}
+          external_repository: cerebral/cerebral.github.io
+          publish_branch: master
+          publish_dir: ./packages/cerebral-website/dist
+          user_name: 'cerebral[bot]'
+          user_email: '136202705+cerebral[bot]@users.noreply.github.com'

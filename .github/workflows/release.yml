@@ -10,6 +10,8 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -35,10 +37,9 @@ jobs:
         env:
           REPO_COOKER_GITHUB_TOKEN: ${{ steps.create_token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-      - name: Deploy with gh-pages
-        if: github.event_name != 'pull_request' && github.event.workflow_run.head_branch == 'master'
-        run: |
-            git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
-            npm run deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Dispatch Website event
+        uses: peter-evans/repository-dispatch@v3
+        if: github.event.workflow_run.head_branch == 'master'
+        with:
+          token: ${{ steps.create_token.outputs.token }}
+          event-type: Website
