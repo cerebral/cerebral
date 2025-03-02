@@ -20,5 +20,9 @@
   },
   "dependencies": {
     "chokidar": "^4.0.3"
+  },
+  "peerDependencies": {
+    "react": ">=16.3.0 <20.0.0",
+    "react-dom": ">=16.3.0 <20.0.0"
   }
 }
