@@ -30,7 +30,6 @@
     "chokidar": "4.0.3",
     "es6-error": "4.1.1",
     "eventemitter3": "5.0.1",
-    "preact": "8.1.0",
     "prop-types": "15.8.1",
     "universal-websocket-client": "1.0.3"
   },
@@ -98,6 +97,7 @@
     "mock-socket": "6.0.4",
     "npm-run-all": "4.1.5",
     "nyc": "^17.1.0",
+    "preact": "10.26.4",
     "prettier": "^3.5.2",
     "prismjs": "1.29.0",
     "raf": "3.4.1",
