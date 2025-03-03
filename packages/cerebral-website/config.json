@@ -37,10 +37,6 @@
         "path": "../node_modules/@cerebral/angular/README"
       },
       {
-        "name": "angularjs",
-        "path": "../node_modules/@cerebral/angularjs/README"
-      },
-      {
         "name": "inferno",
         "path": "../node_modules/@cerebral/inferno/README"
       },
