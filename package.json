@@ -17,10 +17,12 @@
     "lint": "eslint . && prettier --check --with-node-modules .",
     "lint-staged": "lint-staged",
     "postcoverage": "node scripts/coverage-combine.js",
-    "prepare": "husky install",
+    "prelint": "npm run typecheck",
+    "prepare": "husky",
     "pretest": "npm run checkdeps",
     "release": "repo-cooker --release",
-    "test": "repo-cooker test --no-parallel && npm run lint"
+    "test": "repo-cooker test --no-parallel && npm run lint",
+    "typecheck": "repo-cooker typecheck"
   },
   "repository": {
     "type": "git",
