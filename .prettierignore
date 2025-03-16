@@ -1,3 +1,6 @@
+!packages/node_modules/**
+/node_modules
+packages/*/**/node_modules
 package-lock.json
 package.json
 **/dist
@@ -7,6 +10,3 @@ package.json
 **/coverage
 **/.nyc_output
 /packages/website/builder/docs
-/node_modules
-/packages/*/**/node_modules
-*.md
