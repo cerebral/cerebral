@@ -35,7 +35,7 @@ module.exports = function () {
             .filter((filePath) => {
               try {
                 return fileExistsSync(path.resolve('docs', dir, filePath))
-              } catch (e) {
+              } catch (_e) {
                 return false
               }
             })

@@ -1,5 +1,5 @@
 ;(function () {
-  window.addEventListener('click', function (event) {
+  window.addEventListener('click', function () {
     document.getElementById('nav').classList.remove('show')
   })
   document.getElementById('nav').addEventListener('click', function (event) {
