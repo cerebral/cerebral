@@ -34,7 +34,10 @@
     "universal-websocket-client": "1.0.3"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --fix",
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write --with-node-modules"
+    ],
     "*.{md,css,json}": "prettier --write --with-node-modules"
   },
   "config": {
