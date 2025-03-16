@@ -4,19 +4,11 @@
   "private": true,
   "description": "",
   "main": "index.js",
+  "author": "",
+  "license": "ISC",
   "scripts": {
     "start": "babel-watch builder/dev --watch pages css scripts",
     "build": "babel-node builder/build"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "babel-watch": "^7.8.1",
-    "express": "^4.21.2",
-    "fs-extra": "^11.3.0",
-    "marksy": "^8.0.0",
-    "prismjs": "^1.29.0",
-    "string-template": "^1.0.0"
   },
   "dependencies": {
     "chokidar": "^4.0.3"
