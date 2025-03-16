@@ -75,11 +75,11 @@ connect({
 
 This is where Cerebral differs most from other approaches to application development. Updating the state of an application can be anything from:
 
-* flipping a **true** to a **false**
-* setting some value, like a filter
-* reading (and storing) something in local storage
-* requesting data from the server and, depending on the status code of the response, doing something with that response which might lead to new requests and/or setting up a listener for data on the server
-* etc...
+- flipping a **true** to a **false**
+- setting some value, like a filter
+- reading (and storing) something in local storage
+- requesting data from the server and, depending on the status code of the response, doing something with that response which might lead to new requests and/or setting up a listener for data on the server
+- etc...
 
 The point is, updating state can be a very complex flow of operations. This is often where spaghetti code comes from, and we use abstractions to hide it. The problem with abstractions hiding too much logic is that it becomes rigid, making it difficult to reuse logic and compose existing logic together in new ways.
 

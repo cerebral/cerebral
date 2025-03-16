@@ -141,7 +141,7 @@ if (process.env.NODE_ENV === 'development') {
   Devtools = require('cerebral/devtools').default
 }
 
-const app =  App(main, {
+const app = App(main, {
   throwToConsole: true,
   devtools: Devtools({
     host: 'localhost:8585'

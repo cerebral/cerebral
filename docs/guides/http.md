@@ -50,7 +50,7 @@ function withDefaultHeaders (config) {
 
 export const http = {
   request(config) {
-   return axios(withDefaultHeaders(config)) 
+   return axios(withDefaultHeaders(config))
   },
   get(url, config) {
     return axios.get(url, withDefaultHeaders(config))
@@ -84,7 +84,7 @@ export const http = {
     token = newToken
   }
   request(config) {
-   return axios(withDefaultHeaders(config)) 
+   return axios(withDefaultHeaders(config))
   },
   get(url, config) {
     return axios.get(url, withDefaultHeaders(config))
@@ -125,7 +125,7 @@ export const http = (() => {
   return {
     request(config) {
       const token = this.context.localStorage.get('token')
-      return axios(withDefaultHeaders(config, token)) 
+      return axios(withDefaultHeaders(config, token))
     },
     get(url, config) {
       const token = this.context.localStorage.get('token')

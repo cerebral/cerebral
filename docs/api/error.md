@@ -28,8 +28,6 @@ import * as sequences from './sequences'
 
 export default {
   sequences,
-  catch: [
-    [MyError, sequences.handleError]
-  ]
+  catch: [[MyError, sequences.handleError]]
 }
 ```

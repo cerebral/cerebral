@@ -26,10 +26,7 @@ So the typical factories you use with Cerebral changes the state:
 import { set, push } from 'cerebral/factories'
 import { state } from 'cerebral'
 
-export default [
-  set(state`foo`, 'bar'),
-  push(state`list`, 'foo')
-]
+export default [set(state`foo`, 'bar'), push(state`list`, 'foo')]
 ```
 
 But you could also create a factory to for example get data from the server:
@@ -39,10 +36,7 @@ import { state, props } from 'cerebral'
 import { set } from 'cerebral/factories'
 import { httpGet } from './myFactories'
 
-export default [
-  httpGet('/items'),
-  set(state`items`, props`response.data`)
-]
+export default [httpGet('/items'), set(state`items`, props`response.data`)]
 ```
 
 So how would this **httpGet** factory actually work? Let us dissect it.
@@ -54,7 +48,7 @@ The **httpGet** factory above could look something like this:
 ```js
 function httpGetFactory(url) {
   function httpGetAction({ http }) {
-    return http.get(url).then(response => ({ response }))
+    return http.get(url).then((response) => ({ response }))
   }
 
   return httpGetAction
@@ -63,7 +57,7 @@ function httpGetFactory(url) {
 
 When **httpGet** is called it will return a function, an action, for us. This action is configured with a url and when it is called it will run a method on a provider we have named **http**. In this case the http provider calls the server and returns the response to props as `{ response: [...] }`.
 
-But **httpGet** actually has more features than this. You can use a *string tag* instead of a normal string.
+But **httpGet** actually has more features than this. You can use a _string tag_ instead of a normal string.
 
 ```js
 import { state, props, string } from 'cerebral'
@@ -85,7 +79,7 @@ Instead of using the url directly, like we do here:
 ```js
 function httpGetFactory(url) {
   function httpGetAction({ http }) {
-    return http.get(url).then(response => ({ response }))
+    return http.get(url).then((response) => ({ response }))
   }
 
   return httpGetAction
@@ -97,7 +91,7 @@ We can rather resolve it, using the **get** provider:
 ```js
 function httpGetFactory(url) {
   function httpGetAction({ http, get }) {
-    return http.get(get(url)).then(response => ({ response }))
+    return http.get(get(url)).then((response) => ({ response }))
   }
 
   return httpGetAction
@@ -145,7 +139,7 @@ function httpGetFactory(url) {
     if (path) {
       // More to come
     } else {
-      return http.get(get(url)).then(response => ({ response }))
+      return http.get(get(url)).then((response) => ({ response }))
     }
   }
 
@@ -187,7 +181,7 @@ function httpGetFactory(url) {
           return path.error({ error })
         })
     } else {
-      return http.get(get(url)).then(response => ({ response }))
+      return http.get(get(url)).then((response) => ({ response }))
     }
   }
 
@@ -195,7 +189,7 @@ function httpGetFactory(url) {
 }
 ```
 
-So based on the path existing or not we call the expected *success* and *error* paths respectively.
+So based on the path existing or not we call the expected _success_ and _error_ paths respectively.
 
 But what about the status codes? Lets extend our example:
 
@@ -216,7 +210,7 @@ function httpGetFactory(url) {
             : path.error({ error })
         })
     } else {
-      return http.get(get(url)).then(response => ({ response }))
+      return http.get(get(url)).then((response) => ({ response }))
     }
   }
 
@@ -249,7 +243,7 @@ import { state, props } from 'cerebral'
 export default set(state`foo`, props`foo`)
 ```
 
-So here we are using two tags, **state** and **props**, and they have two different contextual meanings. The **state** tag is used to identify *where* to put a value, and the **props** tag is used to identify *what* value.
+So here we are using two tags, **state** and **props**, and they have two different contextual meanings. The **state** tag is used to identify _where_ to put a value, and the **props** tag is used to identify _what_ value.
 
 ```js
 function setFactory(target, value) {

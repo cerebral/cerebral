@@ -1,6 +1,6 @@
 # Paths
 
-Our *getUser* action might fail. The server might be unavailable for example. One way to solve this is to use conditional logic in the sequence. Let us first express a conditional in the sequence of **success** and **error** and refactor a bit:
+Our _getUser_ action might fail. The server might be unavailable for example. One way to solve this is to use conditional logic in the sequence. Let us first express a conditional in the sequence of **success** and **error** and refactor a bit:
 
 ```js
 import { set } from 'cerebral/factories'
@@ -35,8 +35,7 @@ export default {
 }
 ```
 
-Objects in sequences are treated as conditional execution and it is the action in front of it, *getUser* in this case, that chooses what path of execution to take.
-
+Objects in sequences are treated as conditional execution and it is the action in front of it, _getUser_ in this case, that chooses what path of execution to take.
 
 ```marksy
 <Info>
@@ -44,7 +43,7 @@ In this case we just chose to use **success** and **error** as paths here, but i
 </Info>
 ```
 
-To actually handle the conditional execution we need to look back into our *getUser* action:
+To actually handle the conditional execution we need to look back into our _getUser_ action:
 
 ```js
 import { set } from 'cerebral/factories'

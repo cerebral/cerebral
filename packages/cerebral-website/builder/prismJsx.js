@@ -2,7 +2,8 @@ module.exports = function prismJsx(Prism) {
   const javascript = Prism.util.clone(Prism.languages.javascript)
 
   Prism.languages.jsx = Prism.languages.extend('markup', javascript)
-  Prism.languages.jsx.tag.pattern = /<\/?[\w\.:-]+\s*(?:\s+[\w\.:-]+(?:=(?:("|')(\\?[\w\W])*?\1|[^\s'">=]+|(\{[\w\W]*?\})))?\s*)*\/?>/i // eslint-disable-line
+  Prism.languages.jsx.tag.pattern =
+    /<\/?[\w\.:-]+\s*(?:\s+[\w\.:-]+(?:=(?:("|')(\\?[\w\W])*?\1|[^\s'">=]+|(\{[\w\W]*?\})))?\s*)*\/?>/i // eslint-disable-line
 
   Prism.languages.jsx.tag.inside['attr-value'].pattern =
     /=[^\{](?:('|")[\w\W]*?(\1)|[^\s>]+)/i // eslint-disable-line

@@ -56,9 +56,7 @@ The array is converted to a sequence, but you can also be explicit about it:
 import { sequence } from 'cerebral/factories'
 import * as actions from './actions'
 
-export const mySequence = sequence([
-  actions.someAction
-])
+export const mySequence = sequence([actions.someAction])
 ```
 
 You can name a sequence, which will be displayed in debugger:
@@ -67,9 +65,7 @@ You can name a sequence, which will be displayed in debugger:
 import { sequence } from 'cerebral/factories'
 import * as actions from './actions'
 
-export const mySequence = sequence('my sequence', [
-  actions.someAction
-])
+export const mySequence = sequence('my sequence', [actions.someAction])
 ```
 
 You can compose a sequence into an existing sequence. The debugger will show this composition:
@@ -123,7 +119,7 @@ export const mySequence = [
 ]
 ```
 
-Note that you can also compose sequences into *parallel*. That means when both sequences are done running it will move on.
+Note that you can also compose sequences into _parallel_. That means when both sequences are done running it will move on.
 
 ## Paths
 

@@ -40,7 +40,7 @@ const app = App({
           .then((response) => response.json())
       }
     }
-  }  
+  }
 }, {...})
 ```
 

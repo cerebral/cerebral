@@ -25,15 +25,15 @@ const loadItemsPage = app.get(sequences.loadItemsPage)
 loadItemsPage()
 
 new Vue({
-  render: h =>
+  render: (h) =>
     h({
       components: {
         Container: Container(app),
         AppComponent: AppComponent
       },
-      template: "<Container><AppComponent></AppComponent></Container>"
+      template: '<Container><AppComponent></AppComponent></Container>'
     })
-}).$mount("#app");
+}).$mount('#app')
 ```
 
 And you would define the component like this:
@@ -121,7 +121,7 @@ export default connect(
   function App({ posts, openUserModal }) {
     return (
       <div className="posts">
-        {posts.map(post => (
+        {posts.map((post) => (
           <div
             className="post"
             onClick={() => openUserModal({ id: post.userId })}

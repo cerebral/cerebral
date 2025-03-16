@@ -120,10 +120,7 @@ app
     }
   )
   .then(() => {
-    const index = indexTemplate.replace(
-      '{{CEREBRAL_SCRIPT}}',
-      app.getScript()
-    )
+    const index = indexTemplate.replace('{{CEREBRAL_SCRIPT}}', app.getScript())
   })
 ```
 

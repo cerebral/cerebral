@@ -7,7 +7,8 @@ module.exports = function prismJsxTs(Prism) {
   const javascript = Prism.util.clone(Prism.languages.typescript)
 
   Prism.languages.ts = Prism.languages.extend('markup', javascript)
-  Prism.languages.ts.tag.pattern = /<\/?[\w\.:-]+\s*(?:\s+[\w\.:-]+(?:=(?:("|')(\\?[\w\W])*?\1|[^\s'">=]+|(\{[\w\W]*?\})))?\s*)*\/?>/i // eslint-disable-line
+  Prism.languages.ts.tag.pattern =
+    /<\/?[\w\.:-]+\s*(?:\s+[\w\.:-]+(?:=(?:("|')(\\?[\w\W])*?\1|[^\s'">=]+|(\{[\w\W]*?\})))?\s*)*\/?>/i // eslint-disable-line
 
   Prism.languages.ts.tag.inside['attr-value'].pattern =
     /=[^\{](?:('|")[\w\W]*?(\1)|[^\s>]+)/i // eslint-disable-line

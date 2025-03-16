@@ -5,9 +5,7 @@
       "presets": ["@babel/preset-env", "@babel/preset-react"]
     },
     "production": {
-      "ignore": [
-        "**/*.test.js"
-      ]
+      "ignore": ["**/*.test.js"]
     }
   }
 }

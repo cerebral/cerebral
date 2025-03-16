@@ -42,7 +42,7 @@ const app = App({
         })
     }
   },
-  providers: {...}  
+  providers: {...}
 }, {...})
 ```
 
@@ -82,7 +82,7 @@ const app = App({
       unsetLoadingPosts
     ]
   },
-  providers: {...}  
+  providers: {...}
 }, {...})
 ```
 
@@ -136,7 +136,7 @@ const app = App({
       unsetLoadingPosts
     ]
   },
-  providers: {...}  
+  providers: {...}
 }, {...})
 ```
 
@@ -147,7 +147,7 @@ As you can see every function run in the sequence has access to **store**, **pro
 When **api.getPosts** runs we put the returned posts on an object. This object is merged into the **props** of the sequence, as visualized here:
 
 ```js
-[
+;[
   setLoadingPosts, // {}
   getPosts, // {}
   setPosts, // { posts }
@@ -167,11 +167,11 @@ const openPostsPage = app.getSequence('openPostsPage')
 openPostsPage()
 ```
 
-When you refresh the application now you should see the debugger show you that the *openPostsPage* sequence has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
+When you refresh the application now you should see the debugger show you that the _openPostsPage_ sequence has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
 
 ## Factories
 
-But we can actually refactor our *openPostsPage* sequence a bit. A concept in functional programming called *factories* allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. Luckily for us Cerebral ships with several factories that allows you to express state changes and other things directly in your sequences.
+But we can actually refactor our _openPostsPage_ sequence a bit. A concept in functional programming called _factories_ allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. Luckily for us Cerebral ships with several factories that allows you to express state changes and other things directly in your sequences.
 
 Let us refactor the code and also add the sequence for loading a user. What to take notice of here is that we are using the **state** and **props** [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals). These tags can be used to tell the factories what you are targeting, at what path:
 
@@ -217,7 +217,7 @@ const app = App({
       set(state`isLoadingUser`, false)
     ]
   },
-  providers: {...}  
+  providers: {...}
 }, {...})
 
 const openPostsPage = app.getSequence('openPostsPage')

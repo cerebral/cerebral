@@ -40,9 +40,12 @@ You can optionally use the **Provider** factory. It allows you to pass some opti
 ```js
 import { Provider } from 'cerebral'
 
-export const myProvider = Provider({}, {
-  wrap: false
-})
+export const myProvider = Provider(
+  {},
+  {
+    wrap: false
+  }
+)
 ```
 
 This provider will not be tracked by debugger. Optionally you can intercept how the provider should work when wrapped by the devtools:
@@ -50,14 +53,18 @@ This provider will not be tracked by debugger. Optionally you can intercept how 
 ```js
 import { Provider } from 'cerebral'
 
-export const myProvider = Provider({}, {
-  wrap(context) {
-    return {}
+export const myProvider = Provider(
+  {},
+  {
+    wrap(context) {
+      return {}
+    }
   }
-})
+)
 ```
 
 A provider can also by defined as a function which receives the current context. This prevents some optimizations, but might be necessary:
+
 ```js
 export const greetProvider = (context) => {
   return {}

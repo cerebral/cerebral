@@ -13,7 +13,7 @@ The context is populated by Cerebral and you can configure this by creating **pr
 When you trigger a sequence you can pass it a payload. This payload is the starting point of the props to the sequence. Given the sequence:
 
 ```js
-[actionA, actionB]
+;[actionA, actionB]
 ```
 
 ```js
@@ -99,11 +99,11 @@ export default [
 ]
 ```
 
-In this scenario only *actionB* has the path on its context. That means in any action you can check if path is available and what paths can be taken by looking at its keys.
+In this scenario only _actionB_ has the path on its context. That means in any action you can check if path is available and what paths can be taken by looking at its keys.
 
 ## Get
 
-You can grab any tag value by using *get*:
+You can grab any tag value by using _get_:
 
 ```js
 import { state } from 'cerebral'

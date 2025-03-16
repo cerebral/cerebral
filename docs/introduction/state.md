@@ -36,7 +36,7 @@ const app = App({
     isLoadingItems: false,
     isLoadingUser: false,
     error: null
-  }  
+  }
 }, {...})
 ```
 
@@ -44,7 +44,7 @@ We are going to load posts from [JSONPlaceholder](https://jsonplaceholder.typico
 
 ## Storing data
 
-**Data** in this context means entities from the server that are unique, they have a unique *id*. Both posts and users are like this, but we still choose to store posts as arrays and users as an object. Choosing one or the other is as simple as asking yourself, "What am I going to do with the state?". In this application we are only going to map over the posts to display a list of posts, nothing more. Arrays are good for that. But users here are different. We want to get a hold of the user in question with an id, *userModal.id*. Objects are very good for this. Cause we can say:
+**Data** in this context means entities from the server that are unique, they have a unique _id_. Both posts and users are like this, but we still choose to store posts as arrays and users as an object. Choosing one or the other is as simple as asking yourself, "What am I going to do with the state?". In this application we are only going to map over the posts to display a list of posts, nothing more. Arrays are good for that. But users here are different. We want to get a hold of the user in question with an id, _userModal.id_. Objects are very good for this. Cause we can say:
 
 ```js
 users[userModal.id]

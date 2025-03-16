@@ -39,9 +39,7 @@ export default connect(
     hello: state`title`
   },
   function App({ hello }) {
-    return (
-      <h1>{title}</h1>
-    )
+    return <h1>{title}</h1>
   }
 )
 ```

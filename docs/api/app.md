@@ -169,10 +169,7 @@ app.on('functionStart', (execution, functionDetails, payload) => {})
 Triggered whenever Cerebral ends executing an action.
 
 ```js
-app.on(
-  'functionEnd',
-  (execution, functionDetails, payload, result) => {}
-)
+app.on('functionEnd', (execution, functionDetails, payload, result) => {})
 ```
 
 ### asyncFunction
@@ -188,10 +185,7 @@ app.on('asyncFunction', (execution, functionDetails, payload) => {})
 Triggered whenever Cerebral executes actions in parallel.
 
 ```js
-app.on(
-  'parallelStart',
-  (execution, payload, functionsToResolveCount) => {}
-)
+app.on('parallelStart', (execution, payload, functionsToResolveCount) => {})
 ```
 
 ### parallelProgress

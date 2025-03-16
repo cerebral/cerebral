@@ -8,12 +8,12 @@ import eslintConfigPrettier from 'eslint-config-prettier/flat'
 export default tseslint.config(
   {
     ignores: [
-        '!packages/node_modules/**',
-        'packages/*/**/node_modules/**',
-        '**/lib/**',
-        '**/es/**',
-        '**/dist/**',
-        '**/build/**',
+      '!packages/node_modules/**',
+      'packages/*/**/node_modules/**',
+      '**/lib/**',
+      '**/es/**',
+      '**/dist/**',
+      '**/build/**',
       '**/*.min.js',
       '**/bundle.js',
       '**/coverage/**',
@@ -41,8 +41,8 @@ export default tseslint.config(
         projectService: true,
         projectFolderIgnoreList: [
           '!packages/node_modules/**',
-          'packages/*/**/node_modules/**'
-        ]
+          'packages/*/**/node_modules/**',
+        ],
       },
     },
     linterOptions: {
@@ -79,5 +79,5 @@ export default tseslint.config(
     // disable type-aware linting on JS files
     files: ['**/*.{js,cjs,mjs,jsx}'],
     extends: [tseslint.configs.disableTypeChecked],
-  },
+  }
 )

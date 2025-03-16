@@ -67,11 +67,11 @@ Cerebrals universal app allows you to mount your client side initial state on th
 import { UniversalApp } from 'cerebral'
 import main from '../client/main'
 import AppComponent from '../client/components/App'
-import {renderToString} from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
 
 app.get('/', (req, res) => {
   const app = UniversalApp(main)
-  const appHtml = renderToString(<AppComponent/>)
+  const appHtml = renderToString(<AppComponent />)
 
   res.send(`<!DOCTYPE html>
 <html>
@@ -90,7 +90,7 @@ This means that when the app is rendered it will have the same initial state, bo
 import { UniversalApp, state } from 'cerebral'
 import main from '../client/main'
 import AppComponent from '../client/components/App'
-import {renderToString} from 'react-dom/server'
+import { renderToString } from 'react-dom/server'
 
 function setInitialState({ store, props }) {
   store.set(state.app.user, props.user)
@@ -99,8 +99,7 @@ function setInitialState({ store, props }) {
 app.get('/', (req, res) => {
   const app = UniversalApp(main)
 
-  db
-    .getUser()
+  db.getUser()
     .then((user) => {
       return app.run(setInitialState, { user })
     })

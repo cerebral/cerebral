@@ -195,10 +195,7 @@ Wait for the given time in milliseconds and then continue chain.
 ```js
 import { wait } from 'cerebral/factories'
 
-export default [
-  wait(200),
-  doSomethingAfterWaiting
-]
+export default [wait(200), doSomethingAfterWaiting]
 ```
 
 If you need to wait while executing in parallel, you should use a `continue`

@@ -38,7 +38,7 @@ export default {
 
 ## With components
 
-Here shown with *React*:
+Here shown with _React_:
 
 ```js
 import { state } from 'cerebral'
@@ -48,7 +48,13 @@ connect(
     list: state`filteredList`
   },
   function List({ list }) {
-    return <ul>{list.map((item) => <li>{item.title}</li>)}</ul>
+    return (
+      <ul>
+        {list.map((item) => (
+          <li>{item.title}</li>
+        ))}
+      </ul>
+    )
   }
 )
 ```
@@ -126,7 +132,7 @@ function myAction({ get }) {
 }
 ```
 
-Or with a component, here showing with *React*:
+Or with a component, here showing with _React_:
 
 ```js
 import React from 'react'

@@ -4,9 +4,9 @@
 
 [Download the Debugger](https://github.com/cerebral/cerebral-debugger/releases) for your target OS:
 
-* **Mac**: cerebral-debugger-x.x.x.dmg
-* **Windows**: cerebral-debugger-setup-x.x.x.exe
-* **Linux**: cerebral-debugger_x.x.x_amd64.deb
+- **Mac**: cerebral-debugger-x.x.x.dmg
+- **Windows**: cerebral-debugger-setup-x.x.x.exe
+- **Linux**: cerebral-debugger_x.x.x_amd64.deb
 
 ## Initialize
 
@@ -16,17 +16,20 @@ You initialize the devtools by adding it to the app. In the **index.js** file yo
 import { App } from 'cerebral'
 import Devtools from 'cerebral/devtools'
 
-const app = App({
-  state: {
-    title: 'My Project'
-  }  
-}, {
-  devtools: Devtools({
-    // This should point to the host and port you
-    // create in the Devtools application
-    host: 'localhost:8585'
-  })
-})
+const app = App(
+  {
+    state: {
+      title: 'My Project'
+    }
+  },
+  {
+    devtools: Devtools({
+      // This should point to the host and port you
+      // create in the Devtools application
+      host: 'localhost:8585'
+    })
+  }
+)
 ```
 
 ```marksy

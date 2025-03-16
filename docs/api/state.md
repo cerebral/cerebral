@@ -57,10 +57,10 @@ function someAction({ store }) {
 
 When building an application you often need to keep things like files and blobs in your state for further processing. Cerebral supports these kinds of values because they will never change, or changing them can be used with existing store API. This is the list of supported types:
 
-* **File**
-* **FilesList**
-* **Blob**
-* **ImageData**
-* **RegExp**
+- **File**
+- **FilesList**
+- **Blob**
+- **ImageData**
+- **RegExp**
 
 If you want to force Cerebral to support other types as well, you can do that with a devtools option. This is perfectly okay, but remember all state changes has to be done through the store API.

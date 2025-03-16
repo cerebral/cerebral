@@ -8,33 +8,35 @@ By installing [page.js](https://www.npmjs.com/package/page) you can implement a 
 
 ```js
 import page from 'page'
-import { routeToRoot, routeToItems, routeToItem } from './sequences'
+import { routeToRoot, routeToItems, routeToItem } from './sequences'
 
 export default ({ app }) => {
-
   // We want to start the router when the app is initialized
   app.on('initialized', () => page.start())
 
   // We create a route factory which takes the route url and
   // the sequences that should run when it triggers. It does two things
-  // 
+  //
   //  1. It register the route to page.js which runs the sequence using the
   //     path as the name of the execution, the sequence and passes in any
   //     params
-  // 
+  //
   //  2. It returns an action that you can run from your views, mapping
   //     the "props.params" passed in into the related url. Then triggers
   //     the url
   function route(url, sequence) {
-      page(url, ({ path, params }) => app.runSequence(path, sequence, { params }))
+    page(url, ({ path, params }) => app.runSequence(path, sequence, { params }))
 
-      return ({ props }) => {
-        const urlWithReplacedParams = Object.keys(props.params || {}).reduce((currentUrl, param) => {
+    return ({ props }) => {
+      const urlWithReplacedParams = Object.keys(props.params || {}).reduce(
+        (currentUrl, param) => {
           return currentUrl.replace(`:${param}`, props.params[param])
-        }, url)
+        },
+        url
+      )
 
-        page.show(urlWithReplacedParams)
-      }
+      page.show(urlWithReplacedParams)
+    }
   }
 
   return {
@@ -53,19 +55,15 @@ With this approach you trigger url changes with hyperlinks or you can call the s
 import { connect } from '@cerebral/react'
 import { sequences } from 'cerebral'
 
-export default connect(
-  function MyComponent ({ get }) {
-    const routeToItem = get(sequences.routeToItem)
+export default connect(function MyComponent({ get }) {
+  const routeToItem = get(sequences.routeToItem)
 
-    return (
-      <button
-        onClick={() => routeToItem({ params: { id: 123 }})}
-      >
-        Go to 123
-      </button>
-    )
-  }
-)
+  return (
+    <button onClick={() => routeToItem({ params: { id: 123 } })}>
+      Go to 123
+    </button>
+  )
+})
 ```
 
 ## Query strings
@@ -75,31 +73,33 @@ Not all applications has query strings, but if you need them you can easily add 
 ```js
 import page from 'page'
 import qs from 'query-string'
-import { routeToRoot, routeToItems, routeToItem } from './sequences'
+import { routeToRoot, routeToItems, routeToItem } from './sequences'
 
 export default ({ app }) => {
-
   app.on('initialized', () => page.start())
 
   function route(url, sequence) {
-      page(url, ({ path, params, querystring }) => {
-        // We parse the querystring passed in by page.js and pass it to the sequence
-        // on the "query" prop
-        const query = qs.parse(querystring)
+    page(url, ({ path, params, querystring }) => {
+      // We parse the querystring passed in by page.js and pass it to the sequence
+      // on the "query" prop
+      const query = qs.parse(querystring)
 
-        app.runSequence(path, sequence, { params, query })
-      })
+      app.runSequence(path, sequence, { params, query })
+    })
 
-      return ({ props }) => {
-        const urlWithReplacedParams = Object.keys(props.params || {}).reduce((currentUrl, param) => {
+    return ({ props }) => {
+      const urlWithReplacedParams = Object.keys(props.params || {}).reduce(
+        (currentUrl, param) => {
           return currentUrl.replace(`:${param}`, props.params[param])
-        }, url)
-        // We stringify any query passed in when the sequence is executed from the
-        // view
-        const query = props.query ? '?' + qs.stringify(props.query) : ''
+        },
+        url
+      )
+      // We stringify any query passed in when the sequence is executed from the
+      // view
+      const query = props.query ? '?' + qs.stringify(props.query) : ''
 
-        page.show(urlWithReplacedParams + query)
-      }
+      page.show(urlWithReplacedParams + query)
+    }
   }
 
   return {
@@ -118,19 +118,15 @@ Again you just use the query property in a component to add them to the url:
 import { connect } from '@cerebral/react'
 import { sequences } from 'cerebral'
 
-export default connect(
-  function MyComponent ({ get }) {
-    const routeToItems = get(sequences`routeToItems`)
+export default connect(function MyComponent({ get }) {
+  const routeToItems = get(sequences`routeToItems`)
 
-    return (
-      <button
-        onClick={() => routeToItems({ query: { limit: 10 }})}
-      >
-        Go to items
-      </button>
-    )
-  }
-)
+  return (
+    <button onClick={() => routeToItems({ query: { limit: 10 } })}>
+      Go to items
+    </button>
+  )
+})
 ```
 
 You might not want to use a **params** and **query** property, but rather extract props to params first and then any leftover props is put on the query. This requires a bit more code and you are perfectly free to do that. This is also a good start for a module that can be shared with others if you get inspired and want to maintain a Cerebral router!

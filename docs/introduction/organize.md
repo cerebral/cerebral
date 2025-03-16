@@ -35,11 +35,10 @@ Our actions should be contained in its own file at `src/main/actions.js`:
 ```js
 import { state } from 'cerebral'
 
-export const getPosts =  ({ api }) =>
-  api.getPosts().then(posts => ({ posts }))
+export const getPosts = ({ api }) => api.getPosts().then((posts) => ({ posts }))
 
 export const getUser = ({ api, props }) =>
-  api.getUser(props.id).then(user => ({ user }))
+  api.getUser(props.id).then((user) => ({ user }))
 ```
 
 ## Create a sequences file
@@ -51,7 +50,7 @@ import { set } from 'cerebral/factories'
 import { state, props } from 'cerebral'
 import * as actions from './actions'
 
-export const openPostsPage =  [
+export const openPostsPage = [
   set(state`isLoadingPosts`, true),
   actions.getPosts,
   set(state`posts`, props`posts`),
@@ -64,7 +63,7 @@ export const openUserModal = [
   set(state`isLoadingUser`, true),
   actions.getUser,
   set(state`users.${props`id`}`, props`user`),
-  set(state`isLoadingUser`, false),
+  set(state`isLoadingUser`, false)
 ]
 ```
 
@@ -77,12 +76,10 @@ const API_URL = 'https://jsonplaceholder.typicode.com'
 
 export const api = {
   getPosts() {
-    return fetch(`${API_URL}/posts`)
-      .then(response => response.toJSON())
+    return fetch(`${API_URL}/posts`).then((response) => response.toJSON())
   },
   getUser(id) {
-    return fetch(`${API_URL}/users/${id}`)
-      .then(response => response.toJSON())
+    return fetch(`${API_URL}/users/${id}`).then((response) => response.toJSON())
   }
 }
 ```

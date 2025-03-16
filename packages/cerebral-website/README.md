@@ -6,13 +6,13 @@ Though it is great that we are using a static site builder, it is rather complex
 
 ### Features
 
-* Uses React components to create static markup
-* `babel-node` allows for ES2015 and JSX
-* `babel-watch` restarts server on changes... very fast
-* `markdown-to-react-components` is used to convert markdown into React. This also contains the TOC of the file
-* Css and Scripts are loaded through config
-* Can add any new content as we wish, where `docs` is the hook for using markdown
-* It has search
+- Uses React components to create static markup
+- `babel-node` allows for ES2015 and JSX
+- `babel-watch` restarts server on changes... very fast
+- `markdown-to-react-components` is used to convert markdown into React. This also contains the TOC of the file
+- Css and Scripts are loaded through config
+- Can add any new content as we wish, where `docs` is the hook for using markdown
+- It has search
 
 ### Demo
 

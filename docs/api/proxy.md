@@ -2,7 +2,6 @@
 
 The proxies exposed by Cerebral allows you to target state, sequences and props. They require the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) which transforms the proxies into [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals).
 
-
 ## State
 
 ```js
@@ -122,25 +121,28 @@ connect({
 import { moduleState } from 'cerebral'
 
 // In action
-function myAction ({ store }) {
+function myAction({ store }) {
   store.set(moduleState.foo, 'bar')
 }
 
 // In factories
-[
-  set(moduleState.foo, 'bar'),
-  when(moduleState.isAwesome)
-]
+;[set(moduleState.foo, 'bar'), when(moduleState.isAwesome)]
 
 // In computed
-Compute({
-  foo: moduleState.foo
-}, () => {})
+Compute(
+  {
+    foo: moduleState.foo
+  },
+  () => {}
+)
 
 // In reaction
-Reaction({
-  foo: moduleState.foo
-}, () => {})
+Reaction(
+  {
+    foo: moduleState.foo
+  },
+  () => {}
+)
 ```
 
 ## ModuleSequences
@@ -149,21 +151,22 @@ Reaction({
 import { moduleSequences } from 'cerebral'
 
 // In action
-function myAction ({ get }) {
+function myAction({ get }) {
   const mySequence = get(moduleSequences.mySequence)
 }
 
 // In factories
-[
-  onMessage('some_channel', moduleSequences.onMessage)
-]
+;[onMessage('some_channel', moduleSequences.onMessage)]
 
 // In reaction
-Reaction({
-  foo: state.foo
-}, ({ foo, get }) => {
-  get(moduleSequences.mySequence)({ foo })
-})
+Reaction(
+  {
+    foo: state.foo
+  },
+  ({ foo, get }) => {
+    get(moduleSequences.mySequence)({ foo })
+  }
+)
 ```
 
 ## String
@@ -174,7 +177,5 @@ The string can not e converted to a proxy cause it represents a string, but you 
 import { state, string } from 'cerebral'
 
 // In factories
-[
-  httpGet(string`/items/${state.currentItemId}`)
-]
+;[httpGet(string`/items/${state.currentItemId}`)]
 ```

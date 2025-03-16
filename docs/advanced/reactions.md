@@ -15,7 +15,7 @@ export default {
 }
 ```
 
-So you would typically create your reactions in a separate file, *reactions.js*:
+So you would typically create your reactions in a separate file, _reactions.js_:
 
 ```js
 import { Reaction } from 'cerebral'
@@ -35,7 +35,7 @@ This reaction will react to whenever the current page is changed and fire off th
 
 ## Reactions in views
 
-You can also create reactions inside views, here shown with *React*:
+You can also create reactions inside views, here shown with _React_:
 
 ```js
 import * as React from 'react'
