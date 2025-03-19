@@ -79,6 +79,7 @@
     "@types/sinon": "^17.0.4",
     "assert": "^2.1.0",
     "babel-jest": "^29.7.0",
+    "babel-plugin-cerebral": "next",
     "babel-plugin-inferno": "^6.8.3",
     "babel-preset-preact": "^2.0.0",
     "babel-watch": "7.8.1",
