@@ -15,13 +15,13 @@ Forms are one of the most complex state management challenges out there. Before 
 
 ## @cerebral/storage
 
-### Description
+### Description (storage)
 
 This module exposes local storage or session storage as a provider, where it by default parses and serializes to JSON.
 
 ```marksy
 <Info>
-Note: this one is not in npm yet, so you need to add the github url in `package.json`
+This one is not in npm yet, so you need to add the github url in `package.json`
 </Info>
 ```
 

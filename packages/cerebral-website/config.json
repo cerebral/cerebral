@@ -12,7 +12,7 @@
   "docs": {
     "introduction": [
       "../../docs/introduction/get_started",
-      "../../docs/introduction/the_architecture",
+      "../../docs/introduction/architecture",
       "../../docs/introduction/tutorial",
       "../../docs/introduction/modules",
       "../../docs/introduction/devtools",

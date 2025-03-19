@@ -11,14 +11,20 @@ Cerebral uses a single state tree to store all the state of your application. Ev
 }
 ```
 
-You will normally store other objects, arrays, strings, booleans and numbers in it. Forcing you to think of your state in this simple form gives us benefits.
+## State management principles
 
-1.  The state of the application is exposed as simple values. There are no classes or other abstractions hiding the state of your application
-2.  The state can be stored on the server, local storage and passed to the debugger. It is what we call **serializable** state
-3.  All the state of your application can be inspected through one object
-4.  All state is related to a path. There is no need to import and/or pass around model instances into other model instances to access state
+Cerebral's state management is built on several key principles:
 
-Let us add some new state to the application to show of some more Cerebral. In our **main/index.js** file:
+1. **Simple data types**: Store only plain objects, arrays, strings, numbers, booleans, and a few special types like File and Blob
+2. **Serializable state**: The entire state tree can be serialized to JSON (with a few exceptions like File objects)
+3. **Path-based access**: All state is accessed via paths, making it easy to understand data relationships
+4. **Controlled mutations**: State can only be changed through the store API, ensuring all changes are tracked
+
+These principles make your application more predictable and easier to debug.
+
+## Adding state to your app
+
+Let's expand our application with more state to manage posts and users:
 
 ```js
 import { App } from 'cerebral'
@@ -33,21 +39,101 @@ const app = App({
       show: false,
       id: null
     },
-    isLoadingItems: false,
+    isLoadingPosts: false,
     isLoadingUser: false,
     error: null
   }
 }, {...})
 ```
 
-We are going to load posts from [JSONPlaceholder](https://jsonplaceholder.typicode.com). We also want to be able to click a post to load information about the user who wrote it, in a modal. For this to work we need some state. All the state defined here is pretty straight forward, but why do we choose an array for the posts and an object for the users?
+## Data modeling strategies
 
-## Storing data
+When modeling your state, you'll need to decide how to structure your data. There are two main approaches:
 
-**Data** in this context means entities from the server that are unique, they have a unique _id_. Both posts and users are like this, but we still choose to store posts as arrays and users as an object. Choosing one or the other is as simple as asking yourself, "What am I going to do with the state?". In this application we are only going to map over the posts to display a list of posts, nothing more. Arrays are good for that. But users here are different. We want to get a hold of the user in question with an id, _userModal.id_. Objects are very good for this. Cause we can say:
+### Arrays vs Objects for collections
+
+For our posts and users, we've chosen different storage approaches:
 
 ```js
-users[userModal.id]
+{
+  posts: [
+    { id: 1, title: 'Post 1', userId: 1 },
+    { id: 2, title: 'Post 2', userId: 2 }
+  ],
+  users: {
+    '1': { id: 1, name: 'User 1' },
+    '2': { id: 2, name: 'User 2' }
+  }
+}
 ```
 
-No need to iterate through an array to find the user. Normally you will store data in objects, because you usually have the need for lookups. An object also ensures that there will never exist two entities with the same id, unlike in an array.
+The decision depends on how you'll access the data:
+
+- **Arrays** are best when you primarily need to iterate through items (like rendering a list of posts)
+- **Objects with ID keys** are better for lookups by ID (like finding a user by ID)
+
+For example, to display a user in our modal:
+
+```js
+// With object storage - O(1) constant time lookup
+const user = users[userModal.id]
+
+// With array storage - O(n) linear time search
+const user = users.find((user) => user.id === userModal.id)
+```
+
+Objects also naturally prevent duplicate entries with the same ID, since object keys must be unique.
+
+## Accessing state
+
+In Cerebral, you access state using the `state` tag:
+
+```js
+import { state } from 'cerebral'
+
+// In a component
+connect({
+  title: state`title`,
+  posts: state`posts`
+})
+
+// In an action
+function myAction({ get }) {
+  const title = get(state`title`)
+  const posts = get(state`posts`)
+}
+```
+
+You can also use a cleaner object notation syntax if you configure the [babel-plugin-cerebral](/docs/api/proxy.html) in your project:
+
+```js
+import { state } from 'cerebral'
+
+// In a component
+connect({
+  title: state.title,
+  posts: state.posts
+})
+
+// In an action
+function myAction({ get }) {
+  const title = get(state.title)
+  const posts = get(state.posts)
+}
+```
+
+## Updating state
+
+State can only be updated in actions using the store provider:
+
+```js
+function setTitle({ store }) {
+  store.set(state`title`, 'New Title')
+}
+
+function addPost({ store, props }) {
+  store.push(state`posts`, props.post)
+}
+```
+
+We'll explore more about state operations in later sections.

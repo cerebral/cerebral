@@ -1,144 +1,344 @@
 # Server Side Rendering
 
-Server side rendering is tricky business. There are numerous considerations to take and how you execute on these considerations depends on the application. Cerebral supports server side rendering and in this article we will look at the typical strategies to make this work.
+Server-side rendering (SSR) allows you to deliver pre-rendered HTML to users for faster initial page loads and better SEO. Cerebral provides robust support for SSR through the `UniversalApp` API.
 
-## The flow
+## Understanding the SSR Flow
 
-When you want to deliver content to your users as fast as possible, like with a progressive web app, or you just want to search engine optimize the application, you will need to render the UI on the server and return it on the initial request.
+When a user visits your application, the typical SSR flow follows these steps:
 
-Let us imagine a user going to **www.example.com**. This request goes to the server and it will return some HTML, here showing example with Node express, manually returning the HTML string:
+1. **Server receives request** - User requests a URL like `www.example.com`
+2. **Server initializes app state** - A Cerebral app instance is created with initial state
+3. **Server fetches necessary data** - Data required for the current route is fetched
+4. **Server renders HTML** - Components are rendered to HTML string using the populated state
+5. **Server returns HTML response** - HTML is sent to the browser with embedded state
+6. **Client hydrates the app** - Client-side JavaScript takes over without refetching data
 
-```js
-app.get('/', (req, res) => {
-  res.send(`<!DOCTYPE html>
-<html>
-  <head></head>
-  <body>
-    <div id="app"></div>
-    <script src="/app.js"></script>
-  </body>
-</html>`)
-})
-```
+## Setting Up SSR with Cerebral
 
-This response is now displayed in the browser and the Cerebral application is ready to take over and your view library of choice will populate the `<div id="app"></div>` with the HTML of the app.
+### 1. Create a Universal App Instance
 
-Now lets lay out the considerations we need to take regarding server side rendering:
-
-1.  **Render components** - The minimum requirement is to actually render the components on the server inside the same `<div id="app"></div>` as the client will
-
-2.  **Universal Cerebral App** - When your client fires up it might need some initial data from the server to display the content. With the help of the **Universal Cerebral App** we can automate this process
-
-3.  **Synchronize with router** - If your application uses the Cerebral router it is not only initial data that possibly needs to be synchronized, but also the state that is related to what URL you are on
-
-## Render components
-
-To render the components on the server they should be as pure as possible. By default components in a Cerebral app are kept pure because all application logic is contained in sequences and actions. That means it is safe to grab your root component on the server and render it:
-
-```js
-import App from '../client/components/App'
-import { renderToString } from 'react-dom/server'
-
-app.get('/', (req, res) => {
-  const appHtml = renderToString(<App />)
-
-  res.send(`<!DOCTYPE html>
-<html>
-  <head></head>
-  <body>
-    <div id="app">${appHtml}</div>
-    <script src="/app.js"></script>
-  </body>
-</html>`)
-})
-```
-
-A good workflow for working with server side rendered components requires some packages and configuration. This is one approach to such a setup.
-
-### Run Node with Babel
-
-To bring your components into Node you should run Node with the [babel-node](https://babeljs.io/docs/usage/cli/#babel-node) project. Make sure this is not run in production though. You will need to build the server files as well.
-
-## Universal Controller
-
-Cerebrals universal app allows you to mount your client side initial state on the server, execute logic to change that state and inject it with the server rendered app so that your client does not need to refetch the data.
+On your server, create a fresh `UniversalApp` instance for each request:
 
 ```js
 import { UniversalApp } from 'cerebral'
-import main from '../client/main'
-import AppComponent from '../client/components/App'
-import { renderToString } from 'react-dom/server'
+import main from '../client/main' // Your main module
 
 app.get('/', (req, res) => {
-  const app = UniversalApp(main)
-  const appHtml = renderToString(<AppComponent />)
+  // Create a new app instance for each request to prevent state leakage
+  const cerebral = UniversalApp(main)
 
-  res.send(`<!DOCTYPE html>
-<html>
-  <head></head>
-  <body>
-    <div id="app">${appHtml}</div>
-    <script src="/app.js"></script>
-  </body>
-</html>`)
+  // Continue with rendering...
 })
 ```
 
-This means that when the app is rendered it will have the same initial state, both on the client and the server. To actually produce some new state we need to execute logic and we do that using the **run** method:
+### 2. Populate Initial State
+
+Fetch any necessary data and update the app state:
 
 ```js
-import { UniversalApp, state } from 'cerebral'
-import main from '../client/main'
-import AppComponent from '../client/components/App'
+// Run a sequence to fetch data and update state
+await cerebral.runSequence(
+  [
+    // Fetch data based on the current route
+    ({ http, props }) => {
+      return http.get('/api/data').then((response) => ({ data: response.data }))
+    },
+    // Update state with the fetched data
+    ({ store, props }) => {
+      store.set(state`pageData`, props.data)
+    }
+  ],
+  {
+    // Initial props for the sequence
+    route: req.path
+  }
+)
+```
+
+### 3. Render Components to HTML
+
+Use your view library's server rendering method:
+
+```js
+// With React
 import { renderToString } from 'react-dom/server'
+import { Container } from '@cerebral/react'
+import App from '../client/components/App'
 
-function setInitialState({ store, props }) {
-  store.set(state.app.user, props.user)
-}
+// Render the app to a string
+const appHtml = renderToString(
+  <Container app={cerebral}>
+    <App />
+  </Container>
+)
+```
 
-app.get('/', (req, res) => {
-  const app = UniversalApp(main)
+### 4. Generate State Hydration Script
 
-  db.getUser()
-    .then((user) => {
-      return app.run(setInitialState, { user })
-    })
-    .then(() => {
-      const appHtml = renderToString(
-        <Container app={app}>
-          <App />
-        </Container>
-      )
-      const stateScript = app.getScript()
+Create a script tag containing the state changes to hydrate the client app:
 
-      res.send(`<!DOCTYPE html>
+```js
+// Generate script tag with serialized state
+const stateScript = cerebral.getScript()
+```
+
+### 5. Return Complete HTML Response
+
+Combine everything into a complete HTML response:
+
+```js
+res.send(`<!DOCTYPE html>
 <html>
   <head>
+    <title>My Cerebral App</title>
     ${stateScript}
   </head>
   <body>
-    <div id="app">${appHtml}</div>
-    <script src="/app.js"></script>
+    <div id="root">${appHtml}</div>
+    <script src="/static/bundle.js"></script>
   </body>
 </html>`)
-    })
+```
+
+### 6. Client-Side Hydration
+
+On the client, use a regular `App` instance that will automatically pick up the state:
+
+```js
+// client.js
+import React from 'react'
+import { createRoot } from 'react-dom/client'
+import App from 'cerebral'
+import { Container } from '@cerebral/react'
+import main from './main'
+import AppComponent from './components/App'
+
+// Standard app - automatically picks up window.CEREBRAL_STATE
+const app = App(main)
+
+// Hydrate the app
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <Container app={app}>
+    <AppComponent />
+  </Container>
+)
+```
+
+## Complete SSR Example
+
+This example shows a complete Express server setup for SSR:
+
+```js
+import express from 'express'
+import path from 'path'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { UniversalApp, state } from 'cerebral'
+import { Container } from '@cerebral/react'
+
+import main from '../client/main'
+import App from '../client/components/App'
+
+const server = express()
+const PORT = process.env.PORT || 3000
+
+// Serve static files
+server.use('/static', express.static(path.resolve(__dirname, '../dist')))
+
+// Handle all routes
+server.get('*', async (req, res) => {
+  try {
+    // 1. Create fresh app instance
+    const cerebral = UniversalApp(main)
+
+    // 2. Run initialization sequence based on route
+    await cerebral.runSequence(
+      [
+        ({ store, props }) => {
+          // Store current URL
+          store.set(state`currentPage`, props.url)
+
+          // We could fetch data based on the route here
+          // For example, if url is /users/123, fetch user with id 123
+          if (props.url.startsWith('/users/')) {
+            const userId = props.url.split('/')[2]
+            return { userId }
+          }
+        },
+        // Conditionally fetch data based on previous action's return value
+        ({ http, props }) => {
+          if (props.userId) {
+            return http
+              .get(`/api/users/${props.userId}`)
+              .then((response) => ({ user: response.data }))
+          }
+        },
+        // Store fetched data
+        ({ store, props }) => {
+          if (props.user) {
+            store.set(state`currentUser`, props.user)
+          }
+        }
+      ],
+      {
+        url: req.path
+      }
+    )
+
+    // 3. Render the app
+    const appHtml = renderToString(
+      <Container app={cerebral}>
+        <App />
+      </Container>
+    )
+
+    // 4. Get state script for hydration
+    const stateScript = cerebral.getScript()
+
+    // 5. Send the response
+    res.send(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>Cerebral SSR Example</title>
+    ${stateScript}
+  </head>
+  <body>
+    <div id="root">${appHtml}</div>
+    <script src="/static/bundle.js"></script>
+  </body>
+</html>`)
+  } catch (error) {
+    console.error('SSR Error:', error)
+    res.status(500).send('Server Error')
+  }
+})
+
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 })
 ```
 
-Lets summarize the changes:
+## Router Integration
 
-1.  We create a sequence, which is just one action, that expects to receive a user as a prop. This user is then put into the state
+When implementing SSR with routing, you need to synchronize the server-side state with the current route:
 
-2.  Before we start rendering our application we go and grab a user from the database. When this user is fetched we run the app passing in the user, making it available on the props
+```js
+await cerebral.runSequence(
+  [
+    ({ store, props }) => {
+      // Initialize routing state based on the request URL
+      store.set(state`router.currentPath`, props.url)
+      store.set(state`router.query`, props.query)
 
-3.  When the execution is done we render the application by using the **Container** component which provides the app to the components
+      // Extract route parameters if needed
+      const params = extractParamsFromUrl(props.url)
+      store.set(state`router.params`, params)
 
-4.  Now we can extract the script that contains the exact state changes made. The client will automatically pick up this script and produce the correct initial state of the application
+      // Determine which data to load based on the route
+      return {
+        route: determineRoute(props.url),
+        params
+      }
+    },
+    // Load data based on the route
+    ({ http, props }) => {
+      switch (props.route) {
+        case 'home':
+          return http
+            .get('/api/home-data')
+            .then((response) => ({ pageData: response.data }))
+        case 'user':
+          return http
+            .get(`/api/users/${props.params.id}`)
+            .then((response) => ({ userData: response.data }))
+        default:
+          return { pageData: null }
+      }
+    },
+    // Store loaded data
+    ({ store, props }) => {
+      if (props.pageData) {
+        store.set(state`pageData`, props.pageData)
+      }
+      if (props.userData) {
+        store.set(state`currentUser`, props.userData)
+      }
+    }
+  ],
+  {
+    url: req.path,
+    query: req.query
+  }
+)
+```
 
-5.  We put the script in the head
+Your client-side router should be configured to read from and update this same state structure to ensure consistency between server and client rendering.
 
-This is what you need to do if you want to put the client side application in a different state than the default one. There can be any number of reason for this, but beware... it is not strictly necessary. You might rather want to render your application in a "skeleton version" and then fetch the data needed from the client instead.
+## Performance Optimizations
 
-## Summary
+To optimize your SSR implementation:
 
-Rendering on the server is not straight forward. It depends heavily on the app. Do you do routing, or do you want a skeleton app and do data fetching on client? How beneficial is it to grab state on server and inject it compared to making those requests from the client? There is no one right answer to this. But with Cerebral you have the tools you need to produce state on the server and rehydrate that state on the client, if you want to.
+1. **Use streaming where possible** - For large pages, consider streaming HTML response
+2. **Cache rendered content** - For static content, implement server-side caching
+3. **Selective hydration** - Only hydrate interactive parts of your page
+4. **Defer non-critical data loading** - Load non-essential data on the client
+
+## Common Challenges
+
+### 1. Browser-only APIs
+
+Handle APIs that only exist in the browser:
+
+```js
+function safelyUseWindow({ props }) {
+  // Check if we're in a browser environment
+  if (typeof window !== 'undefined') {
+    window.localStorage.setItem('key', props.value)
+  }
+}
+```
+
+### 2. Different environment configurations
+
+Create environment-specific providers:
+
+```js
+const localStorageProvider =
+  typeof window !== 'undefined'
+    ? {
+        get(key) {
+          return window.localStorage.getItem(key)
+        },
+        set(key, value) {
+          window.localStorage.setItem(key, value)
+        }
+      }
+    : {
+        get() {
+          return null
+        },
+        set() {}
+      }
+
+// In your module
+export default {
+  providers: {
+    storage: localStorageProvider
+  }
+}
+```
+
+## Best Practices
+
+1. **Create a fresh app instance per request** - Prevents state leakage between users
+2. **Error handling** - Implement proper error boundaries and fallbacks
+3. **Track performance** - Measure and optimize render times
+4. **Selective SSR** - Consider which routes benefit most from SSR
+5. **Progressive enhancement** - Ensure your app works without JavaScript
+
+## Conclusion
+
+Server-side rendering with Cerebral gives you the benefits of fast initial page loads and SEO while maintaining the power and organization of a Cerebral application. By using the `UniversalApp` API, you can seamlessly share state between server and client.
+
+For more detailed API information, refer to the [UniversalApp API documentation](/docs/api/universalapp.html).

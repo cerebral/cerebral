@@ -1,45 +1,158 @@
-# Compute
+# Computed
 
-Computeds calculate and cache derived state values. Using computeds helps to keep logic out of the application view components and improves performance.
+Computed values allow you to derive state from your application state. They calculate and cache derived values based on dependencies from the state tree.
+
+## API Reference
+
+### Creating Computed
 
 ```js
 import { state } from 'cerebral'
 
-export const title = (get) => {
-  return `Hi ${get(state`user.name`)}`
+// Basic computed function
+export const fullName = (get) => {
+  const firstName = get(state`user.firstName`)
+  const lastName = get(state`user.lastName`)
+
+  return `${firstName} ${lastName}`
+}
+
+// With conditional logic
+export const userStatus = (get) => {
+  const isLoggedIn = get(state`user.isLoggedIn`)
+
+  if (isLoggedIn) {
+    const lastActive = get(state`user.lastActive`)
+    return lastActive > Date.now() - 3600000 ? 'active' : 'away'
+  }
+
+  return 'offline'
 }
 ```
 
-You use the **get** function to retrieve state and other computed values from the state tree. It will automatically track the computed to optimally figure out when it needs to recalculate.
+The computed function receives a `get` parameter which is used to retrieve values from the state tree. Using `get` automatically creates dependency tracking.
 
-You attach these computeds directly to your state:
+### Using in State Tree
+
+Computed values are added directly to your state tree:
 
 ```js
-import { title } from './computed'
+import { fullName, userStatus } from './computed'
 
 export default {
   state: {
     user: {
-      name: 'Bob'
+      firstName: 'John',
+      lastName: 'Doe',
+      isLoggedIn: true,
+      lastActive: Date.now()
     },
-    title
+    fullName, // <-- Computed added to state
+    userStatus // <-- Another computed
   }
 }
 ```
 
-To use a computed just point to it as if it was normal state, here shown with React:
+### Accessing Computed Values
+
+You can access computed values just like regular state:
 
 ```js
-import React from 'react'
-import { state } from 'cerebral'
-import { connect } from '@cerebral/react'
+// In an action
+function myAction({ get }) {
+  const name = get(state`fullName`)
+  // Do something with name
+}
 
-export default connect(
+// In a component (React example)
+connect(
   {
-    hello: state`title`
+    name: state`fullName`,
+    status: state`userStatus`
   },
-  function App({ hello }) {
-    return <h1>{title}</h1>
+  function User({ name, status }) {
+    return (
+      <div>
+        <h1>{name}</h1>
+        <span>Status: {status}</span>
+      </div>
+    )
   }
 )
 ```
+
+### Using Props
+
+Computed values can access props when used in components:
+
+```js
+import { state, props } from 'cerebral'
+
+export const itemDetails = (get) => {
+  const itemId = get(props`itemId`)
+  const item = get(state`items.${itemId}`)
+
+  return item || { name: 'Unknown item' }
+}
+```
+
+When used in a component:
+
+```js
+// React component
+connect(
+  {
+    item: state`itemDetails`
+  },
+  function ItemDetails({ item }) {
+    return <div>{item.name}</div>
+  }
+)
+
+// Usage
+<ItemDetails itemId="123" />
+```
+
+When used in an action, props must be passed explicitly:
+
+```js
+function myAction({ get }) {
+  const item = get(state`itemDetails`, { itemId: '123' })
+}
+```
+
+### The `get` Function
+
+The `get` function has these capabilities:
+
+1. **Retrieve state values**:
+
+   ```js
+   const user = get(state`user`)
+   ```
+
+2. **Access paths**:
+
+   ```js
+   const path = get.path(state`user.settings`)
+   // Returns 'user.settings'
+   ```
+
+3. **Access other computed values**:
+
+   ```js
+   const name = get(state`fullName`)
+   ```
+
+## Behavior
+
+```marksy
+<Info>
+- **Caching**: Computed values are cached and only recalculate when their dependencies change
+- **Composition**: Computed values can use other computed values
+- **Cloning**: When a computed uses props and is connected to a component, it's cloned for that instance
+- **Optimization**: The dependency tracking ensures minimal recalculations
+</Info>
+```
+
+For more examples and advanced usage patterns, see the [advanced computed documentation](/docs/advanced/computed.html).

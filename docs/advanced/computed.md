@@ -1,10 +1,20 @@
-# Compute
+# Computed
 
-Normally you use state directly from the state tree, but sometimes you need to compute state. Typically filtering lists, grabbing the projects of a user, or other derived state. It is a good idea not to put this kind of logic inside your view layer, cause by creating a computed you can reuse the logic anywhere and it will automatically optimize the need to recalculate the value.
+Computed values let you derive state from your application state tree. Instead of putting calculation logic in components or actions, computed values give you a dedicated place for this logic with automatic optimization.
 
-## Create a computed
+## When to Use Computed Values
 
-Cerebral allows you to compute state that can be used in multiple contexts. Let us look at an example:
+Use computed values when you need to:
+
+- Filter or transform lists
+- Combine multiple state values
+- Calculate derived properties
+- Cache expensive calculations
+- Share derived state across components
+
+## Basic Computed
+
+Let's look at a simple example that filters a list based on criteria in state:
 
 ```js
 import { state } from 'cerebral'
@@ -17,149 +27,169 @@ export const filteredList = (get) => {
 }
 ```
 
-A computed is just a function that receives the `get` argument. You use this argument to retrieve the state of the application. This retrieval is tracked, meaning that the computed automatically optimizes itself.
-
-You attach a computed to the state of your application:
+Add it to your state tree:
 
 ```js
 import { filteredList } from './computed'
 
 export default {
   state: {
-    items: [],
+    items: [
+      { id: 1, title: 'Item 1', isCompleted: false },
+      { id: 2, title: 'Item 2', isCompleted: true }
+    ],
     filter: {
-      property: 'isAwesome',
-      value: true
+      property: 'isCompleted',
+      value: false
     },
     filteredList
   }
 }
 ```
 
-## With components
+## Performance Benefits
 
-Here shown with _React_:
+When you use a computed value:
+
+1. **Automatic dependency tracking**: The `get` function tracks every state path you access
+2. **Smart caching**: The computed value only recalculates when its dependencies change
+3. **Composition optimization**: When computed values use other computed values, the dependency tree is maintained
+
+This makes computed values significantly more efficient than calculating derived state in components or actions.
+
+## Composition
+
+You can compose computed values by using other computed values:
 
 ```js
 import { state } from 'cerebral'
 
+// First computed
+export const activeUsers = (get) => {
+  const users = get(state`users`)
+  return users.filter((user) => user.isActive)
+}
+
+// Second computed using the first
+export const activeAdmins = (get) => {
+  const active = get(state`activeUsers`)
+  return active.filter((user) => user.isAdmin)
+}
+```
+
+In your state tree:
+
+```js
+import { activeUsers, activeAdmins } from './computed'
+
+export default {
+  state: {
+    users: [
+      /* user objects */
+    ],
+    activeUsers,
+    activeAdmins
+  }
+}
+```
+
+## Dynamic Computed with Props
+
+Computed values can access component props, making them dynamic:
+
+```js
+import { state, props } from 'cerebral'
+
+export const userItems = (get) => {
+  const userId = get(props`userId`)
+  const items = get(state`items`)
+
+  return items.filter((item) => item.userId === userId)
+}
+```
+
+Use it in a component:
+
+```js
+// React example
 connect(
   {
-    list: state`filteredList`
+    items: state`userItems`
   },
-  function List({ list }) {
+  function UserItems({ items }) {
     return (
       <ul>
-        {list.map((item) => (
-          <li>{item.title}</li>
+        {items.map(item => (
+          <li key={item.id}>{item.title}</li>
         ))}
       </ul>
     )
   }
 )
+
+// When using the component
+<UserItems userId="user-123" />
 ```
 
-## With factories
+Behind the scenes, Cerebral clones the computed for each component instance to maintain individual caching.
+
+## Creating Computed Factories
+
+Sometimes you'll want to create reusable computed patterns. You can create a computed factory:
 
 ```js
-import { when } from 'cerebral/factories'
 import { state } from 'cerebral'
 
-export const mySequence = [
-  when(state`appIsAwesome`),
-  {
-    true: [],
-    false: []
+export const itemsByStatus = (statusKey) => (get) => {
+  const items = get(state`items`)
+  const status = get(state`${statusKey}`)
+
+  return items.filter((item) => item.status === status)
+}
+
+// Usage in state
+export default {
+  state: {
+    items: [],
+    activeStatus: 'pending',
+    archivedStatus: 'archived',
+
+    // Created from factory
+    pendingItems: itemsByStatus('activeStatus'),
+    archivedItems: itemsByStatus('archivedStatus')
   }
-]
-```
-
-## With actions
-
-```js
-import { state } from 'cerebral'
-
-export function myAction({ get }) {
-  const filteredList = get(state`filteredList`)
 }
 ```
 
-## With other tags
+## Using in Actions
+
+You can use computed values in actions just like any other state:
 
 ```js
-import { state } from 'cerebral'
-import { set } from 'cerebral/factories'
+function myAction({ get, store }) {
+  const filteredItems = get(state`filteredList`)
 
-export const mySequence = set(state`${state`somePropKey`}.bar`, 'baz')
-```
-
-## Computing computeds
-
-```js
-import { state, props } from 'cerebral'
-
-export const fooBar = (get) => get(state`foo`) + get(state`bar`)
-
-export const fooBarBaz = (get) => get(state`fooBar`) + get(state`baz`)
-```
-
-You point to computeds as normal state and you also use them that way.
-
-## With props
-
-You can also combine computeds with props. Either from a component or you can explicitly pass props when used in an action.
-
-```js
-import { state, props } from 'cerebral'
-
-export const itemUsers = (get) => {
-  const itemKey = get(props`itemKey`)
-  const item = get(state`items.${itemKey}`)
-
-  return item.userIds.map((userId) => get(state`users.${userId}`))
+  if (filteredItems.length === 0) {
+    store.set(state`noResults`, true)
+  }
 }
 ```
 
-In this example we have items with an array of user ids. We create a computed taking in **itemKey** as a prop, extracts the item and then iterates the userIds to grab the actual users. Now this computed will only recalculate when the item or any of the users grabbed updates.
-
-The computed we created here requires a prop and can be used in for example an action doing:
+For computed values that require props, pass them as the second argument:
 
 ```js
-import { state } from 'cerebral'
-
 function myAction({ get }) {
-  const itemUsers = get(state`itemUsers`, { itemKey: '123' })
+  const userItems = get(state`userItems`, { userId: 'user-123' })
+  // Do something with userItems
 }
 ```
 
-Or with a component, here showing with _React_:
+## Best Practices
 
-```js
-import React from 'react'
-import { connect } from '@cerebral/react'
-import { state } from 'cerebral'
+1. **Keep computed values pure**: Don't cause side effects in computed functions
+2. **Move complex logic out of components**: Extract calculations into computed values
+3. **Be specific with dependencies**: Only access the state you need
+4. **Compose for clarity**: Break complex computations into smaller, composable pieces
+5. **Watch for expensive operations**: Even computed values will run when dependencies change
 
-export default connect(
-  {
-    users: state`itemUsers`
-  },
-  function ({ users }) {
-    return ...
-  }
-)
-```
-
-And then you would pass the **itemKey** when using the component:
-
-```js
-<ItemUsers itemKey="123" />
-```
-
-Now this component only renders when the item changes or any related users. Even if users are added/removed from the item it will know about this en recalculate correctly.
-
-```marksy
-<Info>
-Computeds that uses props and are connected to components will actually be cloned under the hood.
-This ensures that when you use the same computed, for example for a list, they will all individually cached. When the component unmounts the clone is destroyed.
-</Info>
-```
+By following these patterns, computed values can significantly improve your application's performance and maintainability.

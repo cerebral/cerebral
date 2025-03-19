@@ -1,282 +1,208 @@
-# Test
+# Test API
 
-## Snapshot testing
+Cerebral provides testing utilities to help you test your application logic. There are two main approaches to testing in Cerebral:
 
-### Introduction
+1. **Snapshot testing** - Test sequences by capturing and verifying their execution flow
+2. **Unit testing** - Test individual components, actions, and computed values
 
-**1. Run the sequence**
-
-Open up your app and run the sequence you want to test.
-
-**2. Create test in debugger**
-
-In the debugger there is a button in the sequence list called "Create sequence test". Select the sequence you just triggered and click this button. The test is copied to the clipboard.
-
-**3. Run test**
-
-It is recommended to use [JEST](https://facebook.github.io/jest/). Just paste what you have in your clipboard and it will look something like this.
-
-```js
-test('should filter on all', () => {
-  return Snapshot(main) // main is the main module
-    .run('filterClicked', { filter: 'all' })
-    .then((snapshot) => {
-      expect(snapshot.get()).toMatchSnapshot()
-    })
-})
-```
-
-Run the test to create the first snapshot. Any changes to your app that affects this sequence will be yelled at you by Jest.
+## Snapshot Testing API
 
 ### Snapshot
 
-Creates the test and returns a promise. Pass it the main module of your application.
+Creates a snapshot test environment for your application. Pass your main module:
 
 ```js
-Snapshot(main)
+import { Snapshot } from 'cerebral/test'
+import main from './main'
+
+const snapshot = Snapshot(main)
 ```
 
 ### run
 
-Runs a sequence with an optional payload. It returns a promise, passing the snapshot.
+Runs a sequence with an optional payload, returning a promise:
 
 ```js
 Snapshot(main)
-  .run('some.sequence', { foo: 'bar' })
-  .then((snapshot) => {})
+  .run('app.sequences.submitForm', { username: 'test' })
+  .then((snapshot) => {
+    expect(snapshot.get()).toMatchSnapshot()
+  })
 ```
 
 ### mutate
 
-Runs a mutation in the state store before the sequence runs.
+Modifies state before running the sequence:
 
 ```js
-Snapshot(main).mutate('set', 'some.state.path', 'someValue')
+Snapshot(main)
+  .mutate('set', 'users.isLoading', true)
+  .run('app.sequences.loadUsers')
 ```
+
+Available mutations: `set`, `toggle`, `push`, `concat`, `pop`, `shift`, `unshift`, `splice`, `merge`, `unset`
 
 ### mock
 
-Mocks out a provider that will be called in the sequence. Can give an optional return value. If provider is called multiple times, you will need multiple calls to mock.
+Mocks provider methods that will be called during sequence execution:
 
 ```js
-Snapshot(main).mock('someProvider.someMethod', 'someReturnedValue')
-```
+// Mock with return value
+Snapshot(main).mock('http.get', { users: [] }).run('app.sequences.loadUsers')
 
-The mock can also be a function with `(context, ...args)` signature where args are the arguments passed in the
-call to the provider method.
-
-```js
-Snapshot(main).mock('someProvider.someMethod', (context, ..args) => {
-  // mock operation here
-})
-```
-
-### mockResolvedPromise
-
-Mocks out a provider with a returned promise that resolves with an optional value.
-
-```js
-Snapshot(main).mockResolvedPromise(
-  'someProvider.someMethod',
-  'someReturnedValue'
-)
-```
-
-### mockRejectedPromise
-
-Mocks out a provider with a returned promise that rejects with an optional value.
-
-```js
-Snapshot(main).mockRejectedPromise(
-  'someProvider.someMethod',
-  'someReturnedValue'
-)
-```
-
-## Assertion
-
-### Components
-
-The **Container** you use to expose Cerebral to your components can also be used when testing. This is beneficial if you want to test a section of your UI interacts correctly with the Cerebral app.
-
-```js
-import React from 'react'
-import { mount } from 'enzyme'
-import assert from 'assert'
-import { Container } from '@cerebral/react'
-import App from 'cerebral'
-
-import Button from './Button'
-
-describe('<Button />', () => {
-  it('should pass foo state on click', () => {
-    const testModule = () => ({
-      state: {
-        foo: 'bar'
-      },
-      sequences: {
-        clicked: ({ props }) => assert.equal(props.foo, 'bar')
-      }
-    })
-    const app = App(testModule)
-    const wrapper = mount(
-      <Container app={app}>
-        <Button />
-      </Container>
-    )
-    expect(wrapper.find('.foo')).to.have.length(1)
+// Mock with function
+Snapshot(main)
+  .mock('http.get', (context, url) => {
+    expect(url).toBe('/api/users')
+    return { users: [{ id: 1, name: 'Test' }] }
   })
-})
+  .run('app.sequences.loadUsers')
 ```
 
-### Compute
+### mockResolvedPromise / mockRejectedPromise
 
-The `runCompute` test helper accepts the `computed` and `fixture` arguments and returns the computed output.
+Mock asynchronous provider methods that return promises:
 
 ```js
-import { props, state } from 'cerebral'
+// Mock resolved promise
+Snapshot(main)
+  .mockResolvedPromise('http.get', { users: [] })
+  .run('app.sequences.loadUsers')
+
+// Mock rejected promise
+Snapshot(main)
+  .mockRejectedPromise('http.get', { error: 'Network error' })
+  .run('app.sequences.loadUsers')
+```
+
+## Unit Testing API
+
+### runCompute
+
+Test computed values:
+
+```js
 import { runCompute } from 'cerebral/test'
+import { multiply } from './computed'
 
-import multiply from './multiply'
-
-it('should multiply by the specified number', () => {
+it('should multiply values', () => {
   const result = runCompute(multiply, {
-    state: { number: 5 },
-    props: { multiplyBy: 2 }
+    state: { value: 5 },
+    props: { multiplier: 2 }
   })
-
-  assert.equal(result, 10)
+  expect(result).toBe(10)
 })
 ```
 
-### Actions
+### runAction
 
-The `runAction` test helper accepts the `action` and `fixture` arguments and returns a promise.
+Test individual actions:
 
 ```js
-import { state } from 'cerebral'
 import { runAction } from 'cerebral/test'
+import { increment } from './actions'
 
-import increment from './increment'
-
-it('should increment numbers in state', () => {
-  return runAction(increment, { state: { number: 1 } }).then(({ state }) =>
-    assert.equal(state.number, 2)
-  )
+it('should increment counter', async () => {
+  const { state } = await runAction(increment, {
+    state: { count: 1 }
+  })
+  expect(state.count).toBe(2)
 })
 ```
 
-The `result` object passed when the promise resolves contains `state`, `props` and `output` properties.
+The promise resolves with an object containing:
+
+- `state`: Updated state
+- `props`: Props passed to the action
+- `output`: Action's output
+
+### runSequence
+
+Test sequences:
 
 ```js
-{
-  state,
-  props: {
-    // props data received by action
-  },
-  output: {
-    // action output data
-  }
-}
-```
-
-### Sequences
-
-The `runSequence` test helper accepts a `sequence` and `fixture` arguments and returns a promise.
-
-```js
-import { state } from 'cerebral'
 import { runSequence } from 'cerebral/test'
+import { submitForm } from './sequences'
 
-import increment from './increment'
-
-it('should increment numbers in state', () => {
-  return runSequence([increment], { state: { number: 1 } }).then(({ state }) =>
-    assert.equal(state.number, 2)
-  )
+it('should validate form', async () => {
+  const { state } = await runSequence(submitForm, {
+    state: { form: { username: '' } },
+    props: { submitted: true }
+  })
+  expect(state.form.isValid).toBe(false)
 })
-```
-
-The `result` object passed when the promise resolves contains `state`, `props` and `output` properties.
-
-```js
-{
-  state,
-  props: {
-    // props data received by sequence
-  },
-  output: {
-    // sequence output data
-  }
-}
 ```
 
 ### CerebralTest
 
-The `CerebralTest` factory returns `runSequence`, `setState` and `getState` functions. This allows you to run multiple sequences in the context of the same controller instance.
+Create a test environment for running multiple sequences with the same controller:
 
 ```js
 import { CerebralTest } from 'cerebral/test'
-import math from './math'
+import app from './app'
 
-it('should accumulate a count', () => {
-  const test = CerebralTest(math) // Expects a Module
+it('should manage user sessions', async () => {
+  const test = CerebralTest(app)
 
-  test.setState('count', 0)
+  // Set initial state
+  test.setState('user.isLoggedIn', false)
 
-  return test.runSequence('plusOne').then(({ state }) => {
-    assert.equal(state.count, 1)
-
-    return test.runSequence('plus', { value: 2 }).then(() => {
-      assert.equal(test.getState('count'), 3)
-    })
+  // Run first sequence
+  await test.runSequence('user.login', {
+    username: 'test',
+    password: 'password'
   })
+
+  // Check state between sequences
+  expect(test.getState('user.isLoggedIn')).toBe(true)
+
+  // Run another sequence
+  await test.runSequence('user.logout')
+  expect(test.getState('user.isLoggedIn')).toBe(false)
 })
-```
-
-Note that state initialized in a module takes precedence over the state property of a fixture. Example:
-
-```js
-const fixture = {
-  // Override default state in modules
-  state: {
-    app: {
-      showNavigation: true
-    }
-  },
-  modules: {
-    app
-  }
-}
 ```
 
 #### Options
 
-The optional `options` argument contain the the following options:
-
-`recordActions: true|false|'byName'`
+CerebralTest accepts an options object as second parameter:
 
 ```js
-import { CerebralTest } from 'cerebral/test'
-import math from './math'
-
-it('should accumulate a count', () => {
-  const test = CerebralTest(math, {
-    recordActions: 'byName'
-  })
-
-  test.setState('count', 0)
-
-  return test
-    .runSequence('plusOne', {
-      incrementBy: 1
-    })
-    .then(({ increment }) => {
-      assert.equal(increment.props.incrementBy, 1)
-    })
+const test = CerebralTest(app, {
+  throwToConsole: true, // Log errors to console
+  recordActions: 'byName' // Record actions by name instead of index
 })
 ```
 
-When `recordActions: true` is specified each action will record its props/output against its index within the sequence. When `recordActions: 'byName'` is specified each action will record its output against an named property in the result.
+With `recordActions: 'byName'`, action results are accessible by action name:
 
-The `result` object passed when the promise resolves contains `state` and an object for each named action in the sequence with the same name as the actions with `props` and `output` properties.
+```js
+const { validateForm } = await test.runSequence('form.submit')
+expect(validateForm.output.isValid).toBe(true)
+```
+
+## Component Testing
+
+Test components with Cerebral containers:
+
+```js
+import { mount } from 'enzyme'
+import App from 'cerebral'
+import { Container } from '@cerebral/react'
+import UserComponent from './UserComponent'
+
+it('should render user data', () => {
+  const app = App({
+    state: {
+      user: { name: 'Test' }
+    }
+  })
+
+  const wrapper = mount(
+    <Container app={app}>
+      <UserComponent />
+    </Container>
+  )
+
+  expect(wrapper.find('.user-name').text()).toBe('Test')
+})
+```

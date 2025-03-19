@@ -7,75 +7,162 @@ A declarative state and side effects management solution for popular JavaScript 
 [![Discord][discord-image]][discord-url]
 ![Cerebral Logo](images/logo.png)
 
-## Maintainer needed
+## Project Status
 
-<https://gist.github.com/christianalfoni/f1c4bfe320dcb24c403635d9bca3fa40>
+Cerebral 5.3 is the latest release, bringing modern API patterns and significant improvements:
+
+- Supports full type safety in your application
+- Updated integrations for the latest view libraries (React, Vue, etc.)
+- Compatibility with modern lint, build and publish tools
+- Updated documentation
+- Bug fixes and performance improvements
+
+The project is currently in maintenance mode. We accept PRs and Issues for bug fixes.
+While we're not actively developing new features, if you have a reasonable feature request,
+please create an issue. If we agree that the request adds value and it receives community
+support (indicated by thumbs up), we may consider implementing it.
+
+## Framework Support
+
+Cerebral works seamlessly with all major frontend frameworks:
+
+- **React**: Compatible with React 16.3 through React 19
+- **Vue**: Full support for Vue 3, with backward compatibility for Vue 2.6+
+- **Preact**: Works with Preact X (v10+) and older v8
+- **Inferno**: Supports v4 through v9
+- **Angular**: Compatible with Angular 14 through 19
+
+## Getting Started
+
+### Installation
+
+```sh
+# Using npm
+npm install cerebral
+
+# Using yarn
+yarn add cerebral
+
+# Using pnpm
+pnpm add cerebral
+```
+
+### Basic Example (React)
+
+```jsx
+import React from 'react'
+import { createApp } from 'cerebral'
+import { Container, connect } from '@cerebral/react'
+import { state, sequences } from 'cerebral'
+
+// Create an action
+const increment = ({ store, get }) => {
+  // Use 'store' to update state
+  store.set(state`count`, get(state`count`) + 1)
+}
+
+// Create app with state and sequences
+const app = createApp({
+  state: {
+    count: 0
+  },
+  sequences: {
+    increment: [increment]
+  }
+})
+
+// Connect component to Cerebral
+const Counter = connect(
+  {
+    count: state`count`,
+    increment: sequences`increment`
+  },
+  function Counter({ count, increment }) {
+    return (
+      <div>
+        <h1>Count: {count}</h1>
+        <button onClick={() => increment()}>Increment</button>
+      </div>
+    )
+  }
+)
+
+// Provide the app to your component tree
+const App = () => (
+  <Container app={app}>
+    <Counter />
+  </Container>
+)
+```
+
+For more detailed examples, check the documentation. If you prefer the proxy syntax (`state.count` instead of `state\`count\``), see our [proxy documentation](http://www.cerebraljs.com/docs/api/proxy.html).
 
 ## Documentation
 
-* [Current Cerebral (2.x and up)](http://www.cerebraljs.com/)
-* [Previous Cerebral (1.x)](http://cerebral-website.herokuapp.com/)
+- [Current Cerebral (2.x and up)](http://www.cerebraljs.com/)
+- [Previous Cerebral (1.x)](http://cerebral-website.herokuapp.com/)
 
 ## Contribute
 
-The entire Cerebral codebase has been rewritten to encourage contributions. The code is cleaned up, commented and all code is in a "monorepo". That means you can run tests across projects and general management of the code is simplified a lot.
+Cerebral is organized as a monorepo to make contributions easier:
 
-1. Clone the monorepo: `git clone https://github.com/cerebral/cerebral.git`
-2. In root: `npm install`
+1. Clone the repo: `git clone https://github.com/cerebral/cerebral.git`
+2. Install dependencies: `npm install` (from the root folder)
 
-The packages are located under `packages` folder and there is **no need** to run `npm install` for each package.
-
-### Using monorepo for your own apps
-
-If you want to use Cerebral 2 directly from your cloned repo, you can create a symlinks for following
-directories into the `node_modules` directory of your app:
-
-* `packages/node_modules/cerebral`
-* `packages/node_modules/function-tree`
-* `packages/node_modules/@cerebral`
-
-If your app and the cerebral monorepo are in the same folder you can do from inside your
-app directory:
-
-```sh
-$ ln -s ../../cerebral/packages/node_modules/cerebral/ node_modules/
-# ...
-```
-
-Just remember to unlink the package before installing it from npm:
-
-```sh
-$ unlink node_modules/cerebral
-# ...
-```
-
-### Running demos
-
-Go to the respective `packages/demos/some-demo-folder` and run `npm start`
+You don't need to run `npm install` in each package directory - the monorepo setup handles this for you.
 
 ### Testing
 
-You can run all tests in all packages from root:
+Run all tests from the root directory:
 
-`npm test`
+```sh
+npm test
+```
 
-Or you can run tests for specific packages by going to package root and do the same:
+Or run tests for a specific package:
 
-`npm test`
+```sh
+# Navigate to the package
+cd packages/cerebral
 
-### Changing the code
+# Run tests for just this package
+npm test
+```
 
-When you make a code change you should create a branch first. When the code is changed and backed up by a test you can commit it from **the root** using:
+### Making Changes
 
-`npm run commit`
+1. Create a branch for your changes
+2. Make your code changes and add tests
+3. Commit from the root using our guided format:
 
-This will give you a guide to creating a commit message. Then you just push and create a pull request as normal on Github.
+   ```sh
+   npm run commit
+   ```
+
+4. Push your branch and create a pull request on GitHub
+
+### Using the monorepo for development
+
+If you want to use your local Cerebral code in your own project, you can create symlinks to the packages:
+
+```sh
+# From your project root
+ln -s ../../cerebral/packages/node_modules/cerebral/ node_modules/
+ln -s ../../cerebral/packages/node_modules/@cerebral/ node_modules/
+```
+
+Remember to remove these links before installing from npm:
+
+```sh
+unlink node_modules/cerebral
+unlink node_modules/@cerebral
+```
 
 ### Release process
 
-* Review and merge PRs into `next` branch. It is safe to use "Update branch", the commit created by Github will not be part of `next` history
-* If changes to `repo-cooker`, clean Travis NPM cache
-* From command line:
+- Review and merge PRs into `next` branch. It is safe to use "Update branch",
+  the commit created by Github will not be part of `next` history
+- From command line:
 
 ```bash
 git switch next

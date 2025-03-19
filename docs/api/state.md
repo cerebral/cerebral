@@ -2,65 +2,127 @@
 
 ## Get state
 
-The only way to get state in your application is by connecting it to a component or grabbing it in an action.
+State in Cerebral is accessed using the `get` provider with tags.
 
 ```js
 import { state, moduleState } from 'cerebral'
 
 function someAction({ get }) {
+  // Get state using path tag
   const stateAtSomePath = get(state`some.path`)
-  // Get from module running this execution
+
+  // Get state using object notation (proxy)
+  const sameState = get(state.some.path)
+
+  // Get state from current module
   const stateAtModulePath = get(moduleState`isLoading`)
+
+  // Also works with object notation
+  const sameModuleState = get(moduleState.isLoading)
+
+  // Access computed values the same way
+  const computedValue = get(state`someComputed`)
 }
+```
+
+```marksy
+<Info>
+The object notation (proxy) syntax requires the [babel-plugin-cerebral](/docs/api/proxy.html) to be configured in your project. The template literal tag syntax (`state\`path\``) works without additional configuration.
+</Info>
 ```
 
 ## Updating state
 
-The only way to update the state of your application is in an action. Here is a list of all possible state mutations you can do:
+State updates must be performed in actions using the `store` provider:
 
 ```js
-function someAction({ store }) {
-  // Concats passed array to existing array
-  store.concat('some.path', ['someValueA', 'someValueB'])
-  // Increment value at given path (default increment is 1)
-  store.increment('some.path', 1)
-  // Merge the keys and their values into existing object. Handled as a
-  // change on all paths merged in
-  store.merge('some.path', {
-    some: 'value'
-  })
-  // Removes last item in array
-  store.pop('some.path')
-  // Pushes a value to the end of the array
-  store.push('some.path', 'someValue')
-  // Set or replace a value
-  store.set('some.path', 'someValue')
-  // Removes first item in array
-  store.shift('some.path')
-  // Splices arrays
-  store.splice('some.path', 2, 1)
-  // Toggle a boolean value
-  store.toggle('some.path')
-  // Unset a key and its value
-  store.unset('some.path')
-  // Puts the value at the beginning of the array
-  store.unshift('some.path', 'someValue')
+import { state, moduleState } from 'cerebral'
 
-  // To change state of a module, use the moduleState tag
-  store.set(moduleState`foo`, 'bar')
+function someAction({ store }) {
+  // Set a value
+  store.set(state`some.path`, 'someValue')
+
+  // Set using object notation
+  store.set(state.some.path, 'someValue')
+
+  // Set value in current module
+  store.set(moduleState`isLoading`, true)
 }
 ```
 
-**NOTE!** You should not extract state and change it directly in your actions or components. This will not be tracked by Cerebral. That means a render will not be triggered and the debugger will not know about it. Treat your state as if it was immutable and only change it using the **store API**.
+### Store API Methods
+
+```js
+function storeExample({ store }) {
+  // Set or replace a value
+  store.set(state`some.path`, 'someValue')
+
+  // Set to undefined is the same as unset
+  store.set(state`some.path`, undefined)
+
+  // Toggle a boolean value
+  store.toggle(state`isActive`)
+
+  // Increment number (default increment is 1)
+  store.increment(state`count`)
+  store.increment(state`count`, 5)
+
+  // Array operations
+  store.push(state`items`, 'newItem') // Add to end of array
+  store.unshift(state`items`, 'newItem') // Add to beginning of array
+  store.pop(state`items`) // Remove last item
+  store.shift(state`items`) // Remove first item
+  store.splice(state`items`, 2, 1, 'newItem') // Remove/insert items
+  store.concat(state`items`, ['a', 'b']) // Concatenate arrays
+
+  // Object operations
+  store.merge(state`user`, { name: 'John', age: 25 }) // Merge object properties
+  store.unset(state`user.temporaryData`) // Remove property
+}
+```
+
+<Warning>**Important:** Never mutate state values directly in your actions or components. Always use the store API to ensure changes are tracked by Cerebral's state system and debugger.</Warning>
+
+## Using moduleState
+
+The `moduleState` tag allows you to operate on state relative to the current module:
+
+```js
+function someAction({ store, get }) {
+  // If running in a module at "app.dashboard", this points to "app.dashboard.isLoading"
+  store.set(moduleState`isLoading`, true)
+
+  const isLoading = get(moduleState`isLoading`)
+}
+```
+
+## Path resolution
+
+You can use dynamic paths with template literals:
+
+```js
+function selectUser({ store, props }) {
+  store.set(state`users.${props.userId}.isSelected`, true)
+}
+```
 
 ## Special values support
 
-When building an application you often need to keep things like files and blobs in your state for further processing. Cerebral supports these kinds of values because they will never change, or changing them can be used with existing store API. This is the list of supported types:
+Cerebral supports these special value types that can be stored in state:
 
 - **File**
-- **FilesList**
+- **FileList**
 - **Blob**
 - **ImageData**
 - **RegExp**
 
-If you want to force Cerebral to support other types as well, you can do that with a devtools option. This is perfectly okay, but remember all state changes has to be done through the store API.
+These values are treated as immutable - they will never be cloned or modified directly.
+
+```js
+function uploadFile({ store, props }) {
+  // Store a file object directly in state
+  store.set(state`uploadedFiles.${props.id}`, props.file)
+}
+```
+
+If you need to support additional special types, you can configure this in the devtools options.

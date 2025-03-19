@@ -1,260 +1,260 @@
 # Factories
 
-You can call factories to create actions for you. These actions will help you change state and control the flow of execution.
+Factories are functions that create actions for you. They help you manipulate state and control execution flow with a declarative API.
 
-Read more about factories in the [the guide](/docs/guides/factories) article.
+## State Manipulation Factories
 
-## Store factories
-
-The methods for changing state within actions are also available as factories.
-
-All store are imported as members of the 'cerebral/factories' module. For example:
+Cerebral includes a set of factories for common state operations, all imported from 'cerebral/factories':
 
 ```js
-import { set } from 'cerebral/factories'
+import { set, push, toggle } from 'cerebral/factories'
 ```
 
 ### concat
 
-Concatenate a value to an array
+Concatenate values to an array:
 
 ```js
-concat(state`some.list`, ['foo', 'bar'])
+concat(state`list`, ['foo', 'bar'])
 ```
 
 ### increment
 
-Increment an integer value by another integer value into an array. The default increment is 1, and a negative value effectively does a decrement.
+Increment a number by a specific value (default is 1):
 
 ```js
-increment(state`some.integer`)
-increment(state`some.integer`, -5)
-increment(state`some.integer`, state`some.otherInteger`)
-increment(state`some.integer`, props`some.otherInteger`)
+// Basic increment by 1
+increment(state`counter`)
+
+// Increment by specific value
+increment(state`counter`, 5)
+
+// Decrement using negative values
+increment(state`counter`, -1)
+
+// Use values from state or props
+increment(state`counter`, state`incrementBy`)
+increment(state`counter`, props`amount`)
 ```
 
 ### merge
 
-Merge objects into existing value. If no value exists, an empty object will be created. Merge supports using operator tags on key values:
+Merge objects into existing values:
 
 ```js
-merge(state`clients.$draft`, props`newDraft`, {
-  foo: 'bar',
-  bar: props`baz`
+// Simple merge
+merge(state`user`, { name: 'John', age: 30 })
+
+// Merge with props
+merge(state`user`, props`userData`)
+
+// Merge with dynamic keys
+merge(state`clients.$draft`, {
+  name: props`name`,
+  email: props`email`
 })
 ```
 
 ### pop
 
-Pop a value off an array (removes last element from array).
+Remove and return last element from an array:
 
 ```js
-pop(state`some.list`)
+pop(state`items`)
 ```
 
 ### push
 
-Push value into an array (adds the element at the end of the array).
+Add items to the end of an array:
 
 ```js
-push(state`some.list`, 'foo')
+push(state`items`, 'new item')
+push(state`items`, props`newItem`)
 ```
 
 ### set
 
-Set a target value in the state or props.
+Set a value in state or props:
 
 ```js
-set(state`foo.bar`, true)
-set(props`foo`, true)
-```
+// Basic usage
+set(state`user.name`, 'John')
+set(props`redirect`, true)
 
-Optionally transform the value before setting
-
-```js
-set(state`some.number`, props`number`, (value) => value * 2)
+// Transform value before setting
+set(state`count`, props`count`, (value) => value * 2)
 ```
 
 ### shift
 
-Shift a value off an array (removes first element in array).
+Remove and return the first element from an array:
 
 ```js
-shift(state`some.list`),
+shift(state`items`)
 ```
 
 ### splice
 
-Splice an array in place.
+Modify an array by removing or replacing elements:
 
 ```js
-splice(state`some.list`, 0, 2)
+// Remove 2 elements starting at index 0
+splice(state`items`, 0, 2)
+
+// Remove 1 element at index 2 and insert new elements
+splice(state`items`, 2, 1, 'new item', props`item2`)
 ```
 
 ### toggle
 
-Toggle a boolean value.
+Toggle a boolean value:
 
 ```js
-toggle(state`user.$toolbar`)
+toggle(state`menu.isOpen`)
 ```
 
 ### unset
 
-Unset key from object.
+Remove a property from an object:
 
 ```js
-unset(state`clients.all.${props`key`}`)
+unset(state`user.temporaryData`)
+unset(state`items.${props`itemKey`}`)
 ```
 
 ### unshift
 
-Unshift a value into an array (adds the element at the start of the array).
+Add elements to the beginning of an array:
 
 ```js
-unshift(state`some.list`, 'foo')
+unshift(state`items`, 'new first item')
 ```
 
-## Flow control factories
+## Flow Control Factories
 
-These factories help control the execution flow.
+These factories help control the execution flow of your sequences.
 
 ### debounce
 
-Hold action until the given amount of time in milliseconds has passed. If the
-sequence triggers again within this time frame, the previous sequence goes down the
-"discard" path while the new sequence holds for the given time. This is
-typically used for typeahead functionality. For a debounce that is shared
-across different signals, you can use `debounce.shared()` (see example below).
-
-Please note that the `discard` path has to be present even if it is most often
-empty.
+Delay execution of a path until a specified time has passed without another call:
 
 ```js
 import { debounce } from 'cerebral/factories'
 
-export default [
-  debounce(200),
+// Basic usage
+;[
+  debounce(500), // Wait 500ms without new calls
   {
-    continue: runThisActionOrSequence,
+    continue: [actions.search], // Run when debounce completes
+    discard: [] // Must be present - run when debounce is abandoned
+  }
+]
+
+// Shared debounce across multiple sequences
+const sharedDebounce = debounce.shared()
+
+export const notifyUser = [
+  set(state`notification`, props`message`),
+  sharedDebounce(2000),
+  {
+    continue: [unset(state`notification`)],
     discard: []
   }
 ]
 ```
 
-`debounce.shared()` is typically used with factories, for example to show
-notifications where a previous notification should be cancelled by a new one.
-
-```js
-import { debounce, set, unset } from 'cerebral/factories'
-import { state } from 'cerebral'
-
-const sharedDebounce = debounce.shared()
-function showNotificationFactory(message, ms) {
-  return [
-    set(state.notification, message),
-    sharedDebounce(ms),
-    {
-      continue: unset(state.notification),
-      discard: []
-    }
-  ]
-}
-```
-
-Now when this notification factory is used in different sequence, the call to
-`debounceShared` will share the same debounce execution state:
-
-```js
-import * as factories from './factories'
-
-export default factories.showNotification('User logged in', 5000)
+```marksy
+<Warning>
+The `discard` path must always be present when using debounce, even if you don't need to run any actions when debounce is abandoned.
+</Warning>
 ```
 
 ### equals
 
-This operator chooses a specific path based on the provided value.
+Branch execution based on a value comparison:
 
 ```js
-import { equals } from 'cerebral/factories'
-import { state } from 'cerebral'
-
-export default [
-  equals(state`user.role`), {
-    admin: [],
-    user: [],
-    otherwise: [] // When no match
+equals(state`user.role`),
+  {
+    admin: [actions.loadAdminPage],
+    user: [actions.loadUserPage],
+    otherwise: [actions.redirectToLogin]
   }
-],
 ```
 
 ### wait
 
-Wait for the given time in milliseconds and then continue chain.
+Pause execution for a specified time:
 
 ```js
-import { wait } from 'cerebral/factories'
+// Simple waiting
+;[wait(500), actions.afterWaiting]
 
-export default [wait(200), doSomethingAfterWaiting]
-```
-
-If you need to wait while executing in parallel, you should use a `continue`
-path to isolate the sequence to be run:
-
-```js
-import { wait } from 'cerebral/factories'
-import { parallel } from 'cerebral'
-
-export default
-  someAction,
-  parallel('my parallel with wait', [
-    wait(200), {
-      continue: [doSomethingAfterWaiting]
-    },
-    otherActionInParallel
-  ])
-]
+// Within parallel execution
+parallel([
+  [
+    wait(500),
+    {
+      continue: [actions.afterWaiting]
+    }
+  ],
+  actions.runInParallel
+])
 ```
 
 ### when
 
-Run signal path depending on a truth value or function evaluation.
+Conditionally choose a path based on a value or predicate:
 
 ```js
-import { when } from 'cerebral/factories'
-import { state } from 'cerebral'
+// With direct value
+when(state`user.isLoggedIn`),
+  {
+    true: [actions.redirectToDashboard],
+    false: [actions.showLoginForm]
+  }
 
-export default [
-  when(state`foo.isAwesome`),
+// With custom predicate
+when(state`user.role`, (role) => role === 'admin'),
   {
-    true: [],
-    false: []
-  },
-  // You can also pass your own function
-  when(state`foo.isAwesome`, (value) => value.length === 3),
-  {
-    true: [],
+    true: [actions.showAdminTools],
     false: []
   }
+
+// With multiple arguments
+when(
+  state`inputValue`,
+  state`minLength`,
+  (value, minLength) => value.length >= minLength
+),
+  {
+    true: [set(state`isValid`, true)],
+    false: [set(state`isValid`, false)]
+  }
+```
+
+## Sequence and Parallel
+
+These factories help compose sequences and run actions in parallel:
+
+```js
+import { sequence, parallel } from 'cerebral/factories'
+
+// Create a named sequence
+export const mySequence = sequence('My Sequence', [
+  actions.doSomething,
+  set(state`foo`, 'bar')
+])
+
+// Run actions in parallel
+export const loadData = [
+  parallel('Load Data', [
+    actions.loadUsers,
+    actions.loadPosts,
+    actions.loadSettings
+  ]),
+  set(state`isLoaded`, true)
 ]
 ```
 
-When used with a truth function, the `when` operator supports more then a single
-"value" argument. The predicate function must come last.
-
-```js
-import { when } from 'cerebral/factories'
-import { props, state } from 'cerebral'
-
-export default [
-  when(
-    state`clients.$draft.key`,
-    props`key`,
-    (draftKey, updatedKey) => draftKey === updatedKey
-  ),
-  {
-    true: set(state`clients.$draft`, props`value`),
-    false: []
-  }
-]
-```
+For more detailed usage examples and advanced patterns, see the [factories guide](/docs/advanced/factories.html).

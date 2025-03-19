@@ -1,14 +1,15 @@
 # Sequences
 
-Application development is about handling events to run side effects and produce changes to the state. This event can be anything from a user interaction or some other internal event in the application.
+Application development is about handling events to run side effects and produce changes to the state. Cerebral uses **sequences** to define these flows in a declarative, functional way.
 
-We need two pieces of logic for our application. **openPostsPage** and **openUserModal**. Let us look at how you might think this logic is commonly implemented:
+## From Imperative to Declarative
+
+Let's compare a traditional imperative approach to Cerebral's declarative sequence approach.
+
+### Traditional Imperative Approach
 
 ```js
 import { App } from 'cerebral'
-import Devtools from 'cerebral/devtools'
-
-const API_URL = 'https://jsonplaceholder.typicode.com'
 
 const app = App({
   state: {
@@ -26,167 +27,36 @@ const app = App({
   methods: {
     openPostsPage() {
       this.state.isLoadingPosts = true
-      this.providers.getPosts()
-        .then((posts) => {
-          this.state.posts = posts
-          this.state.isLoadingPosts = false
-        })
-    }
+      this.providers.api.getPosts().then((posts) => {
+        this.state.posts = posts
+        this.state.isLoadingPosts = false
+      })
+    },
     openUserModal(id) {
       this.state.isLoadingUser = true
-      this.providers.getUser(id)
-        .then((user) => {
-          this.state.users[id] = user
-          this.state.currentUserId = id
-          this.state.isLoadingUser = false
-        })
+      this.providers.api.getUser(id).then((user) => {
+        this.state.users[id] = user
+        this.state.userModal.id = id
+        this.state.isLoadingUser = false
+      })
     }
   },
-  providers: {...}
-}, {...})
+  providers: {
+    api: {
+      /*...*/
+    }
+  }
+})
 ```
 
-This is an **imperative** approach to managing application logic, using methods. In Cerebral we do not use an imperative approach, but a functional one. That means instead of methods we use **sequences**. Let us review what we want to happen before we dive into it:
+### Cerebral's Declarative Approach
 
-1.  Set that we are loading the posts
-2.  Go grab the posts
-3.  Add the posts
-4.  Unset that we are loading the posts
-
-We can mock out this **sequence** in our main module:
+In Cerebral, we think about **what** should happen before we define **how** it happens. Let's define our sequences first:
 
 ```js
 import { App } from 'cerebral'
-import Devtools from 'cerebral/devtools'
-
-const API_URL = 'https://jsonplaceholder.typicode.com'
-
-const app = App({
-  state: {
-    title: 'My Project',
-    posts: [],
-    users: {},
-    userModal: {
-      show: false,
-      id: null
-    },
-    isLoadingPosts: false,
-    isLoadingUser: false,
-    error: null
-  },
-  sequences: {
-    openPostsPage: [
-      setLoadingPosts,
-      getPosts,
-      setPosts,
-      unsetLoadingPosts
-    ]
-  },
-  providers: {...}
-}, {...})
-```
-
-As you can see we can just write out exactly what we want to happen. This allows us to reason about **what** we want our application to do before we think about **how** to do it.
-
-```marksy
-<Info>
-When a sequence triggers you can pass in **props**. These props can be accessed by any function
-in the sequence. In this example the props would contain the id of the user we want to fetch.
-</Info>
-```
-
-We are now going to do the actual implementation:
-
-```js
-import App from 'cerebral'
-import Devtools from 'cerebral/devtools'
-
-const API_URL = 'https://jsonplaceholder.typicode.com'
-
-const setLoadingPosts = ({ store }) =>
-  store.set('isLoadingPosts', true)
-
-const getPosts = ({ api }) =>
-  api.getPosts().then(posts => ({ posts }))
-
-const setPosts = ({ store, props }) =>
-  store.set('posts', props.posts)
-
-const unsetLoadingPosts = ({ store }) =>
-  store.set('isLoadingPosts', false)
-
-const app = App({
-  state: {
-    title: 'My Project',
-    posts: [],
-    users: {},
-    userModal: {
-      show: false,
-      id: null
-    },
-    isLoadingPosts: false,
-    isLoadingUser: false,
-    error: null
-  },
-  sequences: {
-    openPostsPage: [
-      setLoadingPosts,
-      getPosts,
-      setPosts,
-      unsetLoadingPosts
-    ]
-  },
-  providers: {...}
-}, {...})
-```
-
-## Actions
-
-As you can see every function run in the sequence has access to **store**, **props** and our own **api** is available as well. We call these functions **actions** and Cerebral builds a context for them when they run. This context is passed in as the only argument. This context is where the store API allows you to do different changes on the state of the application. The props holds values passed into the sequence and populated through the execution.
-
-When **api.getPosts** runs we put the returned posts on an object. This object is merged into the **props** of the sequence, as visualized here:
-
-```js
-;[
-  setLoadingPosts, // {}
-  getPosts, // {}
-  setPosts, // { posts }
-  unsetLoadingPosts // { posts }
-]
-```
-
-Let us fire up the sequence and we can rather let the debugger do this visualization for us. In the `/src/index.js` add the following:
-
-```js
-...
-
-const app = App({...}, {...})
-
-const openPostsPage = app.getSequence('openPostsPage')
-
-openPostsPage()
-```
-
-When you refresh the application now you should see the debugger show you that the _openPostsPage_ sequence has triggered. Play around with the checkboxes at the top of the execution window in the debugger to adjust the level of detail.
-
-## Factories
-
-But we can actually refactor our _openPostsPage_ sequence a bit. A concept in functional programming called _factories_ allows you to create a function by calling a function. What we want to create are functions that changes the state of the application. Luckily for us Cerebral ships with several factories that allows you to express state changes and other things directly in your sequences.
-
-Let us refactor the code and also add the sequence for loading a user. What to take notice of here is that we are using the **state** and **props** [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals). These tags can be used to tell the factories what you are targeting, at what path:
-
-```js
-import App, { state, props } from 'cerebral'
-import Devtools from 'cerebral/devtools'
 import { set } from 'cerebral/factories'
-
-const API_URL = 'https://jsonplaceholder.typicode.com'
-
-const getPosts = ({ api }) =>
-  api.getPosts().then(posts => ({ posts }))
-
-const getUser = ({ api, props }) =>
-  api.getUser(props.id).then(user => ({ user }))
+import { state, props } from 'cerebral'
 
 const app = App({
   state: {
@@ -217,12 +87,137 @@ const app = App({
       set(state`isLoadingUser`, false)
     ]
   },
-  providers: {...}
-}, {...})
+  providers: {
+    api: {
+      /*...*/
+    }
+  }
+})
+```
 
+Now we need to implement the actions used in our sequences:
+
+```js
+// Action to get posts
+function getPosts({ api }) {
+  return api.getPosts().then((posts) => ({ posts }))
+}
+
+// Action to get user
+function getUser({ api, props }) {
+  return api.getUser(props.id).then((user) => ({ user }))
+}
+```
+
+## Actions
+
+Every function in a sequence is called an **action**. Actions receive a context object with access to:
+
+1. **store** - For changing state
+2. **props** - Values passed to the sequence or from previous actions
+3. **path** - When using paths for branching
+4. Your custom **providers** (like the api provider in our example)
+
+Actions can be synchronous or asynchronous:
+
+```js
+// Synchronous action
+function syncAction({ store }) {
+  store.set('some.path', 'some value')
+}
+
+// Asynchronous action with Promise
+function asyncAction({ api }) {
+  return api.getSomething().then((data) => ({ data }))
+}
+
+// Asynchronous action with async/await
+async function modernAction({ api }) {
+  const data = await api.getSomething()
+  return { data }
+}
+```
+
+## Props Flow
+
+When a sequence triggers, you can pass it an object of props. These props are available to all actions in the sequence:
+
+```js
+// Trigger a sequence with props
+app.getSequence('openUserModal')({ id: 123 })
+```
+
+When an action returns an object, its properties are merged with the existing props and passed to the next action:
+
+```js
+;[
+  // Props: { id: 123 }
+  function firstAction({ props }) {
+    return { foo: 'bar' } // Adds to props
+  },
+  // Props: { id: 123, foo: 'bar' }
+  function secondAction({ props }) {
+    console.log(props) // { id: 123, foo: 'bar' }
+  }
+]
+```
+
+## Factories
+
+Cerebral includes **factories** - functions that create actions. They help you write more concise and readable code:
+
+```js
+import { set, push, toggle, when } from 'cerebral/factories'
+import { state, props } from 'cerebral'
+
+export const mySequence = [
+  // Set a value in state
+  set(state`user.name`, props`name`),
+
+  // Push to an array
+  push(state`items`, props`newItem`),
+
+  // Toggle a boolean
+  toggle(state`menu.isOpen`),
+
+  // Conditional logic
+  when(state`user.isAdmin`),
+  {
+    true: [set(state`adminTools.visible`, true)],
+    false: [set(state`adminTools.visible`, false)]
+  }
+]
+```
+
+```marksy
+<Info>
+You can also use object notation (like `state.user.name`) with the [babel-plugin-cerebral](/docs/api/proxy.html) in your project.
+</Info>
+```
+
+This approach makes your sequences more declarative and easier to understand.
+
+## Using the Debugger
+
+You can visualize sequence execution with the Cerebral debugger. To try it out, add this to your entry file:
+
+```js
+// Get a reference to a sequence
 const openPostsPage = app.getSequence('openPostsPage')
 
+// Run it
 openPostsPage()
 ```
 
-We now just made several actions obsolete. There are other factories for changing state and also managing the flow of execution.
+When you refresh your application, you should see the sequence execution in the debugger. Experiment with the checkboxes at the top of the execution window to adjust the level of detail shown.
+
+## Summary
+
+Sequences provide a structured way to define your application logic by:
+
+1. Declaring the exact flow of operations
+2. Breaking down complex logic into simple actions
+3. Using factories to handle common operations
+4. Providing great debugging through the Cerebral debugger
+
+In the next sections, we'll explore more advanced features like branching paths and error handling.

@@ -1,10 +1,12 @@
-# Http
+# HTTP Requests in Cerebral
 
-Most applications needs some sort of requests going to a server. With Cerebral you choose your favourite library and expose it as a provider. By exposing it as a provider Cerebral will be able to track its usage and you can be more specific about how the library should work for your application.
+Most applications need to make HTTP requests to a server. Cerebral provides a flexible approach where you create custom providers using your preferred HTTP library. This gives you complete control over how HTTP requests are handled in your application.
 
-## Using axios
+## Creating an HTTP Provider
 
-[Axios documentation](https://www.npmjs.com/package/axios)
+### Using Axios
+
+[Axios](https://github.com/axios/axios) is a popular HTTP client that works in both browser and Node.js environments.
 
 ```js
 import axios from 'axios'
@@ -18,225 +20,338 @@ export const http = {
 }
 ```
 
-In this scenario we are just exposing the library methods we are going to use in our application, that might be enough. Or maybe you want to have an additional custom request, which is what the default export of axios provides:
+This simple implementation exposes the axios methods directly. You can register it in your module:
 
 ```js
-import axios from 'axios'
+import * as providers from './providers'
 
-export const http = {
-  request: axios,
-  get: axios.get,
-  post: axios.post,
-  put: axios.put,
-  patch: axios.patch,
-  delete: axios.delete
+export default {
+  // ...module definition
+  providers
 }
 ```
 
-You might want to intercept the usage to include a default header:
+### Using Fetch API
+
+The native [Fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) is available in all modern browsers and Node.js:
 
 ```js
-import axios from 'axios'
-
-function withDefaultHeaders (config) {
-  return {
-     ...config,
-     headers: {
-       ...config.headers || {},
-       'my special header': 'awesome'
-     }
-   }
-}
-
 export const http = {
-  request(config) {
-   return axios(withDefaultHeaders(config))
-  },
-  get(url, config) {
-    return axios.get(url, withDefaultHeaders(config))
-  },
-  post(url, data, config) {
-    return axios.post(url, data, withDefaultHeaders(config))
-  },
-  ...
-}
-```
+  async get(url, options = {}) {
+    const response = await fetch(url, {
+      method: 'GET',
+      ...options
+    })
 
-And maybe this should be a token you want to set when the application loads:
-
-```js
-import axios from 'axios'
-
-let token
-
-function withDefaultHeaders (config) {
-  return {
-     ...config,
-     headers: {
-       ...config.headers || {},
-       'Authorization': `bearer ${token}`
-     }
-   }
-}
-
-export const http = {
-  setToken(newToken) {
-    token = newToken
-  }
-  request(config) {
-   return axios(withDefaultHeaders(config))
-  },
-  get(url, config) {
-    return axios.get(url, withDefaultHeaders(config))
-  },
-  post(url, data, config) {
-    return axios.post(url, data, withDefaultHeaders(config))
-  },
-  ...
-}
-```
-
-Though this token might be from local storage. Lets say you have a provider to talk to local storage and you just grab the token from there. This is another good example, cause you very likely want to JSON stringify/parse data in your local storage:
-
-```js
-import axios from 'axios'
-
-export const localStorage = {
-  get(key) {
-    return JSON.parse(localStorage.getItem(key))
-  },
-  set(key, value) {
-    localStorage.setItem(key, JSON.stringify(value))
-  }
-}
-
-// We use an IIFE to encapsulate our provider
-export const http = (() => {
-  function withDefaultHeaders (config, token) {
-    return {
-      ...config,
-      headers: {
-        ...config.headers || {},
-        'Authorization': `bearer ${token}`
-      }
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`)
     }
-  }
 
-  return {
-    request(config) {
-      const token = this.context.localStorage.get('token')
-      return axios(withDefaultHeaders(config, token))
-    },
-    get(url, config) {
-      const token = this.context.localStorage.get('token')
-      return axios.get(url, withDefaultHeaders(config, token))
-    },
-    post(url, data, config) {
-      const token = this.context.localStorage.get('token')
-      return axios.post(url, data, withDefaultHeaders(config, token))
-    },
-    ...
-  }
-})()
-```
-
-As you can see there are many ways to put a provider together. It totally depends on your application what makes sense. What to also take note of here is that **http** could be completely replaced with a new provider exposing the same API.
-
-## Using fetch
-
-We could also just use the native fetch implementation to create our provider. Let us keep the signature and replace the code:
-
-```js
-import axios from 'axios'
-
-export const localStorage = {
-  get(key) {
-    return JSON.parse(localStorage.getItem(key))
+    return response.json()
   },
-  set(key, value) {
-    localStorage.setItem(key, JSON.stringify(value))
-  }
-}
 
-// We use an IIFE to encapsulate our provider
-export const http = (() => {
-  function withDefaultHeaders (config, token) {
-    return {
-      ...config,
+  async post(url, data, options = {}) {
+    const response = await fetch(url, {
+      method: 'POST',
       headers: {
-        ...config.headers || {},
         'Content-Type': 'application/json',
-        'Authorization': `bearer ${token}`
-      }
+        ...options.headers
+      },
+      body: JSON.stringify(data),
+      ...options
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP Error: ${response.status}`)
     }
+
+    return response.json()
   }
 
-  function evaluateResponse (response) {
-    if (response.status >= 200 && response.status < 300) {
-      return response.toJSON()
-    }
-
-    return Promise.reject(response)
-  }
-
-  return {
-    request(config = {}) {
-      const token = this.context.localStorage.get('token')
-      return fetch(config.url, withDefaultHeaders(config, token))
-        .then(evaluateResponse)
-    },
-    get(url, config = {}) {
-      const token = this.context.localStorage.get('token')
-      config.url = url
-      return fetch(url, withDefaultHeaders(config, token))
-        .then(evaluateResponse)
-
-    },
-    post(url, data, config = {}) {
-      const token = this.context.localStorage.get('token')
-      config.url = url
-      config.method = 'POST'
-      config.body = JSON.stringify(data)
-
-      return fetch(url, withDefaultHeaders(config, token))
-        .then(evaluateResponse)
-    },
-    ...
-  }
-})()
+  // Add other methods (put, patch, delete) similarly
+}
 ```
 
-Now our application works the same way, but we replaced the tool that performs the logic. This gives you a lot of flexibility in how you want to deal with requests.
+## Adding Default Configuration
 
-## Specific API
-
-You could also be more specific about how we expose running requests from your application. We could simply replace the signature to:
+One advantage of creating your own provider is the ability to add defaults and customizations:
 
 ```js
-import qs from 'query-string'
+import axios from 'axios'
 
-export const api = (() => {
-  const baseUrl = '/api'
-  const http = {
-    get (url, query = {}) {
-      const queryString = qs.stringify(query)
-      return fetch(baseUrl + url + (queryString ? '?' + queryString : '')
-        .then(response => response.toJSON())
-    }
+// Create axios instance with defaults
+const client = axios.create({
+  baseURL: 'https://api.example.com',
+  timeout: 10000,
+  headers: {
+    'Content-Type': 'application/json'
   }
+})
 
+export const http = {
+  get: client.get,
+  post: client.post,
+  put: client.put,
+  patch: client.patch,
+  delete: client.delete
+}
+```
+
+## Authentication and Tokens
+
+A common need is handling authentication tokens:
+
+```js
+export const http = (() => {
+  // Store token in closure
+  let token = null
+
+  // Create methods with token handling
   return {
-    getUser (id) {
-      return http.get(`/users/${id}`)
+    setToken(newToken) {
+      token = newToken
     },
-    getItems (query) {
-      return http.get(`/items`, query)
-    },
-    getItem (id) {
-      return http.get(`/items/${id}`)
+
+    async get(url, options = {}) {
+      const headers = {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...options.headers
+      }
+
+      return fetch(url, {
+        method: 'GET',
+        headers,
+        ...options
+      }).then((response) => {
+        if (!response.ok) throw new Error(`HTTP Error: ${response.status}`)
+        return response.json()
+      })
     }
+
+    // Implement other methods similarly
   }
 })()
 ```
 
-This approach gives you a more specific API in your actual application.
+## Using Local Storage for Tokens
+
+You can combine providers to create more powerful abstractions:
+
+```js
+export const localStorage = {
+  get(key) {
+    try {
+      return JSON.parse(window.localStorage.getItem(key))
+    } catch (e) {
+      return null
+    }
+  },
+  set(key, value) {
+    window.localStorage.setItem(key, JSON.stringify(value))
+  }
+}
+
+export const http = {
+  async get(url, options = {}) {
+    // Access localStorage provider through context
+    const token = this.context.localStorage.get('token')
+
+    const headers = {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...options.headers
+    }
+
+    // Continue with request...
+  }
+
+  // Other methods...
+}
+```
+
+## Error Handling
+
+Robust error handling is crucial for HTTP requests:
+
+```js
+import { CerebralError } from 'cerebral'
+
+// Custom HTTP error class
+export class HttpError extends CerebralError {
+  constructor(message, status, data) {
+    super(message)
+    this.name = 'HttpError'
+    this.status = status
+    this.data = data
+  }
+}
+
+export const http = {
+  async get(url, options = {}) {
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        ...options
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}))
+        throw new HttpError(
+          `Request failed with status ${response.status}`,
+          response.status,
+          errorData
+        )
+      }
+
+      return response.json()
+    } catch (error) {
+      if (error instanceof HttpError) throw error
+
+      throw new HttpError('Network error', 0, { originalError: error.message })
+    }
+  }
+
+  // Other methods with similar error handling
+}
+```
+
+Then in your module:
+
+```js
+import { HttpError } from './errors'
+
+export default {
+  // ...module definition
+  catch: [[HttpError, sequences.handleHttpError]]
+}
+```
+
+## Domain-Specific API Providers
+
+For larger applications, you might want to create domain-specific API providers instead of a generic HTTP provider:
+
+```js
+export const usersApi = {
+  async getUser(id) {
+    const response = await fetch(`/api/users/${id}`)
+    if (!response.ok) throw new Error('Failed to fetch user')
+    return response.json()
+  },
+
+  async updateUser(id, data) {
+    const response = await fetch(`/api/users/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    if (!response.ok) throw new Error('Failed to update user')
+    return response.json()
+  }
+
+  // Other user-related operations
+}
+
+export const postsApi = {
+  async getPosts(filters = {}) {
+    const queryString = new URLSearchParams(filters).toString()
+    const response = await fetch(`/api/posts?${queryString}`)
+    if (!response.ok) throw new Error('Failed to fetch posts')
+    return response.json()
+  }
+
+  // Other post-related operations
+}
+```
+
+This approach:
+
+1. Makes sequences more readable with explicit method names
+2. Centralizes API endpoint knowledge
+3. Allows for specialized error handling per domain
+4. Makes testing easier with more focused mocking
+
+## Testing HTTP Providers
+
+One major advantage of providers is easy mocking during tests:
+
+```js
+import main from './main'
+import App from 'cerebral'
+
+describe('My sequence', () => {
+  it('should handle successful response', () => {
+    const mockHttp = {
+      get: jest.fn().mockResolvedValue({ id: '123', name: 'Test User' })
+    }
+
+    const app = App(main, {
+      providers: {
+        http: mockHttp
+      }
+    })
+
+    return app
+      .getSequence('fetchUser')({ id: '123' })
+      .then(() => {
+        expect(mockHttp.get).toHaveBeenCalledWith('/api/users/123')
+        expect(app.getState('currentUser.name')).toBe('Test User')
+      })
+  })
+
+  it('should handle errors', () => {
+    const mockHttp = {
+      get: jest.fn().mockRejectedValue(new Error('Network failure'))
+    }
+
+    const app = App(main, {
+      providers: {
+        http: mockHttp
+      }
+    })
+
+    return app
+      .getSequence('fetchUser')({ id: '123' })
+      .then(() => {
+        expect(app.getState('error')).toBe('Network failure')
+      })
+  })
+})
+```
+
+## TypeScript Support
+
+If you're using TypeScript, you can define interfaces for your HTTP provider:
+
+```typescript
+// HTTP provider types
+interface HttpOptions {
+  headers?: Record<string, string>
+  timeout?: number
+  signal?: AbortSignal
+  [key: string]: any
+}
+
+interface HttpProvider {
+  get<T>(url: string, options?: HttpOptions): Promise<T>
+  post<T>(url: string, data: any, options?: HttpOptions): Promise<T>
+  put<T>(url: string, data: any, options?: HttpOptions): Promise<T>
+  patch<T>(url: string, data: any, options?: HttpOptions): Promise<T>
+  delete<T>(url: string, options?: HttpOptions): Promise<T>
+  setToken(token: string | null): void
+}
+
+// Implementation
+export const http: HttpProvider = {
+  // Implementation...
+}
+```
+
+## Summary
+
+Creating custom HTTP providers in Cerebral 5 gives you:
+
+1. Complete control over HTTP request handling
+2. Flexibility to use your preferred HTTP library
+3. Ability to add application-specific functionality
+4. Better testability through easier mocking
+
+By treating HTTP requests as side effects handled by providers, Cerebral maintains its clean separation of concerns while giving you the freedom to implement HTTP functionality in the way that best suits your application's needs.

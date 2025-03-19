@@ -1,174 +1,213 @@
-# Universal App
+# UniversalApp
 
-The Universal App allows you to put your application in its initial state on the server. In combination with your chosen view layer you can now render the application on the server and show it near instantly in the context of the current user. When the client side application loads it will piggyback on the existing DOM and effectively rehydrate the minimal state from the server to make it up to date, meaning that the pure HTML responded from your server and the loading of the actual application is transparent.
+The `UniversalApp` creates a special version of the Cerebral controller for server-side rendering (SSR). It allows you to:
 
-Read more about server side rendering in the [SSR guide](/docs/guides/ssr).
+1. Initialize your app's state on the server
+2. Render the app with the populated state
+3. Produce a script tag containing state changes for client hydration
 
-**Note** that when using JSX syntax it is wise to also transpile your server side code, which this example shows.
+## Initialization
 
 ```js
 import { UniversalApp } from 'cerebral'
 import main from './main'
 
-const app = UniversalApp(main)
+const app = UniversalApp(main, {
+  // Same options as App
+  devtools: null,
+  throwToConsole: true
+})
+```
+
+```marksy
+<Info>
+`UniversalApp` accepts the same options as the standard [App](/docs/api/app.html).
+</Info>
 ```
 
 ## Methods
 
-### runSequence
+`UniversalApp` includes all methods from the standard [App](/docs/api/app.html), plus the following:
 
-If you need to update the state of the controller you can run a sequence execution for doing so:
+### run / runSequence
+
+Execute sequences to set up the initial state.
 
 ```js
-import { UniversalApp, state } from 'cerebral'
-import main from './main'
-
-const app = UniversalApp(main)
-
-app
-  .runSequence(
-    [
-      function myAction({ store, props }) {
-        store.set(state.isAwesome, props.isAwesome)
-      }
-    ],
-    {
-      isAwesome: true
+// Run an inline sequence
+app.run(
+  [
+    ({ store, props }) => {
+      store.set(state`user`, props.user)
     }
-  )
-  .then(() => {
-    // I am done running
-  })
-```
+  ],
+  {
+    user: fetchedUserData
+  }
+)
 
-You can run a predefined sequence, which is defined inside a module as well:
-
-```js
-import { UniversalApp } from 'cerebral'
-import main from './main'
-
-const app = UniversalApp(main)
-
-app.runSequence('some.module.aSequence', { isAwesome: true }).then(() => {
-  // I am done running
+// Run a named module sequence
+app.runSequence('app.initialize', {
+  user: fetchedUserData
 })
 ```
 
-**NOTE!** You should instantiate the app for each run you want to do.
+Both methods return a Promise that resolves when the sequence completes:
+
+```js
+app.runSequence('app.initialize', { user }).then(() => {
+  // State is now populated
+  renderApp()
+})
+```
 
 ### setState
 
-Finally, you can (synchronously) set a value inside the state directly, using a path:
+Directly set state at a specific path (synchronous operation).
 
 ```js
-import { UniversalApp } from 'cerebral'
-import main from './main'
+// Set a value by path
+app.setState('user.isLoggedIn', true)
 
-const app = UniversalApp(main)
-
-app.setState('app.foo', 123)
+// Set a nested object
+app.setState('user', {
+  id: '123',
+  name: 'John',
+  isLoggedIn: true
+})
 ```
 
 ### getChanges
 
-Returns a map of the changes made.
+Returns a map of all state changes made since initialization.
 
 ```js
-import { UniversalApp } from 'cerebral'
-import main from './main'
-
-const app = UniversalApp(main)
-
-app.runSequence('app.aSequence', { isAwesome: true }).then(() => {
-  app.getChanges() // {"app.isAwesome": true}
-})
+// After running sequences to set state
+const stateChanges = app.getChanges()
+// { "user.isLoggedIn": true, "user.id": "123" }
 ```
 
 ### getScript
 
-When the client side application loads it will do its first render with the default state, meaning that if the server updated the state this is now out of sync. Using the **getScript** method you will get a script tag you can inject into the _HEAD_ of the returned HTML. Cerebral will use this to bring your client side application state up to date with the server.
+Generates a script tag containing all state changes, which the client app will use for hydration.
 
 ```js
-import { UniversalApp, state } from 'cerebral'
-import main from './main'
-import fs from 'fs'
-
-/*
-  <!DOCTYPE html>
-  <html>
-    <head>
-      {{CEREBRAL_SCRIPT}}
-    </head>
-    <body>
-      <div id="app">{{APP}}</div>
-    </body>
-  </html>
-*/
-const indexTemplate = fs.readFileSync('index.template.html').toString()
-
-const app = UniversalApp(main)
-
-app
-  .run(
-    [
-      function myAction({ store, props }) {
-        store.set(state.app.isAwesome, props.isAwesome)
-      }
-    ],
-    {
-      isAwesome: true
-    }
-  )
-  .then(() => {
-    const index = indexTemplate.replace('{{CEREBRAL_SCRIPT}}', app.getScript())
-  })
+// Get the script tag HTML
+const scriptTag = app.getScript()
+// <script>window.CEREBRAL_STATE = {"user.isLoggedIn":true,"user.id":"123"}</script>
 ```
 
-## Render
+This should be included in the HTML response, typically in the `<head>` section.
 
-Depending on the view layer of your choice you can bring all of this together:
+## Complete SSR Example
+
+This example shows a complete server-side rendering setup with React:
+
+```js
+import express from 'express'
+import React from 'react'
+import { renderToString } from 'react-dom/server'
+import { UniversalApp, state } from 'cerebral'
+import { Container } from '@cerebral/react'
+import App from '../client/components/App'
+import main from '../client/main'
+
+const server = express()
+
+server.get('/', async (req, res) => {
+  // Create a fresh app instance for each request
+  const app = UniversalApp(main)
+
+  // Run initialization sequence with request data
+  await app.runSequence([fetchUser, setInitialState], {
+    query: req.query,
+    cookies: req.cookies
+  })
+
+  // Render the app to string
+  const appHtml = renderToString(
+    <Container app={app}>
+      <App />
+    </Container>
+  )
+
+  // Get the state hydration script
+  const stateScript = app.getScript()
+
+  // Return the complete HTML
+  res.send(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>My App</title>
+    ${stateScript}
+  </head>
+  <body>
+    <div id="root">${appHtml}</div>
+    <script src="/static/bundle.js"></script>
+  </body>
+</html>`)
+})
+
+// Example actions for initialization
+function fetchUser({ http, props }) {
+  // Fetch user data based on cookie
+  return http
+    .get(`/api/users/me`, {
+      headers: {
+        Cookie: props.cookies
+      }
+    })
+    .then((response) => ({ user: response.data }))
+    .catch(() => ({ user: null }))
+}
+
+function setInitialState({ store, props }) {
+  // Set the user in state
+  store.set(state`user`, props.user)
+
+  // Set initial query parameters
+  store.set(state`query`, props.query)
+}
+
+server.listen(3000, () => {
+  console.log('Server running on port 3000')
+})
+```
+
+## Client-Side Hydration
+
+On the client side, the standard App automatically picks up the state changes:
 
 ```js
 import React from 'react'
-import express from 'express'
-import fs from 'fs'
-import { renderToString } from 'react-dom/server'
-import { UniversalApp } from 'cerebral'
-import { Container } from 'cerebral/react'
-import main from '../client/main'
-import AppComponent from '../client/components/App'
-import loadAppSequence from './loadAppSequence'
+import { createRoot } from 'react-dom/client'
+import App from 'cerebral'
+import { Container } from '@cerebral/react'
+import main from './main'
+import AppComponent from './components/App'
 
-const server = express()
-const indexTemplate = fs.readFileSync('index.template.html').toString()
+// Standard app picks up CEREBRAL_STATE automatically
+const app = App(main)
 
-server.get('/', (req, res) => {
-  const app = UniversalApp(main)
-
-  app
-    .run(loadAppSequence, {
-      query: req.query,
-      useragent: req.headers['user-agent']
-    })
-    .then(() => {
-      const index = indexTemplate
-        .replace('{{CEREBRAL_SCRIPT}}', app.getScript())
-        .replace(
-          '{{APP}}',
-          renderToString(
-            <Container app={app}>
-              <App />
-            </Container>
-          )
-        )
-
-      res.send(index)
-    })
-})
-
-server.listen(3000)
+// Render and hydrate the app
+const root = createRoot(document.getElementById('root'))
+root.render(
+  <Container app={app}>
+    <AppComponent />
+  </Container>
+)
 ```
 
-## Transpile server code
+## Caveats and Best Practices
 
-You should run and build your Node instance with `babel`. Take a look at how you can run Node with babel [over here](https://babeljs.io/docs/usage/cli/#babel-node).
+1. **Create fresh instances**: Create a new `UniversalApp` instance for each request to prevent state leakage between users.
+
+2. **Async operations**: Ensure all async operations complete before rendering.
+
+3. **Environment differences**: Be mindful of APIs that may exist only in browser or server environments.
+
+4. **Error handling**: Add proper error handling for server-side sequences.
+
+5. **Transpilation**: When using JSX on the server, ensure you're properly transpiling your server code.
+
+For more detailed information on server-side rendering, see the [SSR guide](/docs/guides/ssr.html).

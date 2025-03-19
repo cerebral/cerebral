@@ -1,6 +1,40 @@
-# Proxy
+# Proxy vs Tags
 
-The proxies exposed by Cerebral allows you to target state, sequences and props. They require the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) which transforms the proxies into [template literal tags](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Tagged_template_literals).
+Cerebral offers two ways to target state, sequences, and props in your application:
+
+1. **Proxies**: A cleaner syntax that looks like normal object access (`state.foo`)
+2. **Tags**: Traditional template literals (`state\`foo\``) that work without additional configuration
+
+## Proxies
+
+Proxies provide a more natural syntax for accessing paths in your state and sequences. They require the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) which transforms them into template literal tags behind the scenes.
+
+```marksy
+<Info>
+The proxy syntax is recommended for most applications as it's more readable and integrates better with TypeScript. Tags are still supported for compatibility and for projects that don't use Babel.
+</Info>
+```
+
+### Setup for Proxies
+
+1. Install the babel plugin:
+
+   ```sh
+   npm install --save-dev babel-plugin-cerebral
+   ```
+
+2. Add it to your Babel configuration:
+
+   ```json
+   {
+     "plugins": ["cerebral"]
+   }
+   ```
+
+## When to Use Which Approach
+
+- **Use Tags**: When you want to quickly get started without additional configuration or if you're not using Babel
+- **Use Proxies**: When you prefer the cleaner syntax or need full TypeScript support
 
 ## State
 
@@ -12,16 +46,16 @@ function myAction ({ store }) {
   store.set(state.foo, 'bar')
 }
 
+// Using tags (alternative without babel plugin)
+function myAction ({ store }) {
+  store.set(state`foo`, 'bar')
+}
+
 // In factories
 [
   set(state.foo, 'bar'),
   when(state.isAwesome)
 ]
-
-// In computed
-Compute({
-  foo: state.foo
-}, () => {})
 
 // In reaction
 Reaction({
@@ -44,6 +78,11 @@ function myAction ({ get }) {
   const mySequence = get(sequences.mySequence)
 }
 
+// Using tags (alternative without babel plugin)
+function myAction ({ get }) {
+  const mySequence = get(sequences`mySequence`)
+}
+
 // In factories
 [
   onMessage('some_channel', sequences.onMessage)
@@ -63,34 +102,49 @@ connect({
 }, ...)
 ```
 
-## Compute
+## Computed
 
 ```js
-import { computed } from 'cerebral'
+import { state } from 'cerebral'
+
+// Define a computed
+export const filteredItems = (get) => {
+  const items = get(state.items)
+  const filter = get(state.filter)
+
+  return items.filter(item => item[filter.property] === filter.value)
+}
 
 // In action
-function myAction ({ get }) {
-  const someValue = get(computed.someValue)
+function myAction({ get }) {
+  const filteredResult = get(state.filteredItems)
 }
 
 // In factories
 [
-  when(computed.appIsAwesome)
+  when(state.appIsAwesome)
 ]
-
-// In computed
-Compute({
-  foo: computed.foo
-}, ({ foo }) => {})
 
 // In reaction
 Reaction({
-  foo: computed.foo
+  foo: state.foo
 }, ({ foo }) => {})
 
-// In connect
+// Using tags (alternative without babel plugin)
+export const filteredItems = (get) => {
+  const items = get(state`items`)
+  const filter = get(state`filter`)
+
+  return items.filter(item => item[filter.property] === filter.value)
+}
+
+function myAction({ get }) {
+  const filteredResult = get(state`filteredItems`)
+}
+
+// In components
 connect({
-  foo: computed.foo
+  items: state.filteredItems
 }, ...)
 ```
 
@@ -104,10 +158,10 @@ import { props } from 'cerebral'
   when(props.isCool)
 ]
 
-// In computed
-Compute({
-  foo: props.foo
-}, ({ foo }) => {})
+// Using tags (alternative without babel plugin)
+[
+  when(props`isCool`)
+]
 
 // In connect
 connect({
@@ -125,16 +179,13 @@ function myAction({ store }) {
   store.set(moduleState.foo, 'bar')
 }
 
+// Using tags (alternative without babel plugin)
+function myAction({ store }) {
+  store.set(moduleState`foo`, 'bar')
+}
+
 // In factories
 ;[set(moduleState.foo, 'bar'), when(moduleState.isAwesome)]
-
-// In computed
-Compute(
-  {
-    foo: moduleState.foo
-  },
-  () => {}
-)
 
 // In reaction
 Reaction(
@@ -155,6 +206,11 @@ function myAction({ get }) {
   const mySequence = get(moduleSequences.mySequence)
 }
 
+// Using tags (alternative without babel plugin)
+function myAction({ get }) {
+  const mySequence = get(moduleSequences`mySequence`)
+}
+
 // In factories
 ;[onMessage('some_channel', moduleSequences.onMessage)]
 
@@ -169,13 +225,60 @@ Reaction(
 )
 ```
 
-## String
+## Reaction
 
-The string can not e converted to a proxy cause it represents a string, but you can combine it with proxies:
+```js
+import { state } from 'cerebral'
+
+// Create a reaction with proxies
+const dispose = Reaction(
+  {
+    items: state.items,
+    filter: state.filter
+  },
+  ({ items, filter, get }) => {
+    console.log(
+      'Filtered items:',
+      items.filter((item) => item.type === filter)
+    )
+
+    // Use get to access additional state
+    const count = get(state.itemCount)
+  }
+)
+
+// Using tags (alternative without babel plugin)
+const dispose = Reaction(
+  {
+    items: state`items`,
+    filter: state`filter`
+  },
+  ({ items, filter, get }) => {
+    console.log(
+      'Filtered items:',
+      items.filter((item) => item.type === filter)
+    )
+
+    // Use get to access additional state
+    const count = get(state`itemCount`)
+  }
+)
+
+// In components - no change needed as props.reaction is provided
+```
+
+## String
 
 ```js
 import { state, string } from 'cerebral'
 
 // In factories
-;[httpGet(string`/items/${state.currentItemId}`)]
+;[httpGet(string`/items/${state.currentItemId}`)][
+  // Using tags (alternative without babel plugin)
+  httpGet(string`/items/${state`currentItemId`}`)
+]
 ```
+
+## TypeScript Support
+
+For complete TypeScript support, you need to use proxies. The tags approach doesn't provide the same level of type checking. See [TypeScript documentation](/docs/advanced/typescript) for details on setting up static typing with Cerebral.

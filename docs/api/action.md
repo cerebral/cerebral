@@ -1,28 +1,30 @@
 # Action
 
-When actions run they are passed a context. This context is created by Cerebral for every action run.
+Actions are the building blocks of sequences in Cerebral. When actions run they receive a context object with tools and values to interact with your app.
 
 ```js
-function iAmAnAction(context) {}
+function myAction(context) {
+  // Use context to access state, props, etc.
+}
 ```
 
-The context is populated by Cerebral and you can configure this by creating **providers**. By default Cerebral adds the following providers on the context.
+The context is populated by Cerebral and can be extended with custom **providers**. By default, Cerebral includes the following on the context:
 
 ## Props
 
-When you trigger a sequence you can pass it a payload. This payload is the starting point of the props to the sequence. Given the sequence:
+When you trigger a sequence you can pass it a payload. This payload is the starting point of the props for the sequence:
 
 ```js
-;[actionA, actionB]
-```
+// Define a sequence with multiple actions
+const mySequence = [actionA, actionB]
 
-```js
-someSequence({
+// Trigger the sequence with initial props
+mySequence({
   foo: 'bar'
 })
 ```
 
-The first action will receive the payload passed into the signal.
+The first action will receive the payload passed to the sequence:
 
 ```js
 function actionA({ props }) {
@@ -34,7 +36,7 @@ function actionA({ props }) {
 }
 ```
 
-By returning a new object the next action will see an extended payload:
+By returning an object, you extend the props for the next action:
 
 ```js
 function actionB({ props }) {
@@ -42,11 +44,11 @@ function actionB({ props }) {
 }
 ```
 
-So returning an object from actions, either directly or from a promise, extends the payload for later actions to handle.
+Return values from actions, either directly or from a promise, are merged with existing props for subsequent actions to use.
 
 ## Store
 
-To change the state of your application you use the store API.
+To change the state of your application, use the store API:
 
 ```js
 function setSomething({ store }) {
@@ -54,38 +56,39 @@ function setSomething({ store }) {
 }
 ```
 
-All common state operations are available as a method. Instead of first pointing to a value and then operate, you operate first and give the path to the value.
+Cerebral uses a direct mutation approach instead of relying on immutability patterns. Instead of first accessing a value and then operating on it, you specify the operation first and then the path to the value:
 
 ```js
 // Traditional approach
 someArray.push('newItem')
+
 // With Cerebral
 store.push('path.to.array', 'newItem')
 ```
 
-This is the one core concept of Cerebral that gives all its power. This simple approach allows for a few important things:
+This approach enables Cerebral to:
 
-1.  Track mutations in the application so that it can be passed to the debugger
-2.  Track mutations so that it can optimally inform components about needed renders
-3.  No need for immutability or intercepting getters and setters
+1. Track mutations for debugging
+2. Efficiently update components based on state changes
+3. Avoid the complexity of immutability patterns
 
-The following methods are available:
+Available store methods include:
 
-- **concat**
-- **increment**
-- **merge**
-- **pop**
-- **push**
-- **set**
-- **shift**
-- **splice**
-- **toggle**
-- **unset**
-- **unshift**
+- **set** - Set a value at a specific path
+- **concat** - Concatenate arrays
+- **increment** - Increase a number by a specified value
+- **merge** - Merge objects
+- **pop** - Remove the last item in an array
+- **push** - Add items to the end of an array
+- **shift** - Remove the first item in an array
+- **splice** - Remove or replace elements in an array
+- **toggle** - Toggle a boolean value
+- **unset** - Remove a property from an object
+- **unshift** - Add elements to the beginning of an array
 
 ## Path
 
-The path on the context is only available if there is actually expressed a path after the action in question:
+The path property is only available when your action is followed by a paths object:
 
 ```js
 import * as actions from './actions'
@@ -94,46 +97,55 @@ export default [
   actions.actionA,
   actions.actionB,
   {
-    foo: actions.actionC
+    success: actions.actionC,
+    error: actions.actionD
   }
 ]
 ```
 
-In this scenario only _actionB_ has the path on its context. That means in any action you can check if path is available and what paths can be taken by looking at its keys.
+In this example, only `actionB` has access to the path property, allowing it to choose between the "success" and "error" paths:
+
+```js
+function actionB({ path }) {
+  // Choose which path to take
+  if (someCondition) {
+    return path.success()
+  } else {
+    return path.error()
+  }
+}
+```
 
 ## Get
 
-You can grab any tag value by using _get_:
+You can access state, props, computed values, and sequences using the `get` function:
 
 ```js
-import { state } from 'cerebral'
+import { state, props } from 'cerebral'
 
 function someAction({ get }) {
-  const foo = get(state`foo`)
+  const foo = get(state`foo`) // Get state value
+  const user = get(state`users.${props`userId`}`) // Dynamic path
 }
 ```
+
+<Info>
+You can also use object notation (like `state.foo`) with the [babel-plugin-cerebral](/docs/api/proxy.html).
+</Info>
 
 ## Resolve
 
-**Get** is actually a wrapper around resolve and you should use that. **Resolve** has some additional functionality though. To resolve an argument passed to a factory you can use resolve:
+The `resolve` utility allows you to work with tags and values at a lower level. `get` is actually a wrapper around `resolve`:
 
 ```js
 function someActionFactory(someArgument) {
   function someAction({ resolve }) {
-    // The argument can be anything, even plain values
+    // Resolve any value, including tags
     const value = resolve.value(someArgument)
-  }
 
-  return someAction
-}
-```
-
-You can also use resolve to check the value type and extract for example the path of tags:
-
-```js
-function someActionFactory(someArgument) {
-  function someAction({ resolve }) {
+    // Check if an argument is a tag
     if (resolve.isTag(someArgument)) {
+      // Get the path string of a tag
       const path = resolve.path(someArgument)
     }
   }
@@ -141,3 +153,5 @@ function someActionFactory(someArgument) {
   return someAction
 }
 ```
+
+This is particularly useful when creating factories that accept a mix of static values and tags.

@@ -1,303 +1,230 @@
-# Factories
+# Custom Factories
 
-A common concept in functional programming is factories. A factory is basically a function that creates a function:
+## What is a Factory?
+
+In Cerebral, factories are functions that create actions. This pattern gives you power to create reusable, configurable actions:
+
+```js
+function createAction(config) {
+  return function action(context) {
+    // Use config and context here
+  }
+}
+```
+
+## Why Use Factories?
+
+Factories help you:
+
+- Reuse similar logic with different configurations
+- Make your sequences more declarative and readable
+- Configure actions before they run
+
+## Basic Factory Example
+
+Here's a simple factory that creates a message:
 
 ```js
 function createMessager(name) {
-  function message(msg) {
-    return `${name}, ${msg}`
+  function message({ store }) {
+    store.set('message', `Hello ${name}!`)
   }
-
   return message
 }
 
-const message = createMessager('Bob')
-
-message('what is happening?') // "Bob, what is happening?"
-```
-
-Creating a factory gives you the possibility to configure what a function should do before it is run. This is a perfect concept for Cerebral.
-
-## Some example factories
-
-So the typical factories you use with Cerebral changes the state:
-
-```js
-import { set, push } from 'cerebral/factories'
-import { state } from 'cerebral'
-
-export default [set(state`foo`, 'bar'), push(state`list`, 'foo')]
-```
-
-But you could also create a factory to for example get data from the server:
-
-```js
-import { state, props } from 'cerebral'
-import { set } from 'cerebral/factories'
-import { httpGet } from './myFactories'
-
-export default [httpGet('/items'), set(state`items`, props`response.data`)]
-```
-
-So how would this **httpGet** factory actually work? Let us dissect it.
-
-## Dissecting a factory
-
-The **httpGet** factory above could look something like this:
-
-```js
-function httpGetFactory(url) {
-  function httpGetAction({ http }) {
-    return http.get(url).then((response) => ({ response }))
-  }
-
-  return httpGetAction
-}
-```
-
-When **httpGet** is called it will return a function, an action, for us. This action is configured with a url and when it is called it will run a method on a provider we have named **http**. In this case the http provider calls the server and returns the response to props as `{ response: [...] }`.
-
-But **httpGet** actually has more features than this. You can use a _string tag_ instead of a normal string.
-
-```js
-import { state, props, string } from 'cerebral'
-import { set } from 'cerebral/factories'
-import { httpGet } from './myFactories'
-
-export default [
-  httpGet(string`items/${props.itemId}`),
-  set(state`item`, prop`response.data`)
+// Use it in a sequence
+export const sayHello = [
+  createMessager('Bob')
+  // Result: sets state.message to "Hello Bob!"
 ]
 ```
 
-Here we have configured our function to produce the url based on the property **itemId** passed through the signal. How do we handle that inside our operator?
+## Creating HTTP Request Factories
 
-### Resolve values
-
-Instead of using the url directly, like we do here:
+One common use case is creating factories for API requests:
 
 ```js
 function httpGetFactory(url) {
-  function httpGetAction({ http }) {
-    return http.get(url).then((response) => ({ response }))
+  function httpGetAction({ http, props }) {
+    return http.get(url).then((response) => ({ response: response.data }))
   }
-
   return httpGetAction
 }
+
+// Usage
+export const getUsers = [
+  httpGetFactory('/api/users'),
+  set(state`users`, props`response`)
+]
 ```
 
-We can rather resolve it, using the **get** provider:
+## Using Dynamic Values with Tags
+
+Let's improve our factory to handle dynamic values using Cerebral's tag system:
 
 ```js
+import { string, props } from 'cerebral'
+
 function httpGetFactory(url) {
   function httpGetAction({ http, get }) {
-    return http.get(get(url)).then((response) => ({ response }))
+    // Resolve the URL if it's a tag
+    const resolvedUrl = get(url)
+    return http
+      .get(resolvedUrl)
+      .then((response) => ({ response: response.data }))
   }
-
   return httpGetAction
 }
-```
 
-By using **get** we allow passing in a value to be evaluated. It can still be just a plain string, no worries, but now we can also use tags.
-
-### Optional paths
-
-The sequences of Cerebral a pretty cool feature which allows you to optionally use paths. For example:
-
-```js
-import { httpGet } from './myFactories'
-
-export default [
-  httpGet('/items'),
-  {
-    sucess: [],
-    error: []
-  }
+// Usage with dynamic URL
+export const getUser = [
+  httpGetFactory(string`/api/users/${props`userId`}`),
+  set(state`currentUser`, props`response`)
 ]
 ```
 
-You can even base the paths on status codes:
+## Supporting Path Divergence
 
-```js
-import { httpGet } from './myFactories'
-
-export default [
-  httpGet('/items'),
-  {
-    success: [],
-    404: [],
-    error: []
-  }
-]
-```
-
-This gives a lot of flexibility, but how does it work? Let us do some more digesting:
+Factories can support branching execution paths:
 
 ```js
 function httpGetFactory(url) {
   function httpGetAction({ http, get, path }) {
-    if (path) {
-      // More to come
-    } else {
-      return http.get(get(url)).then((response) => ({ response }))
-    }
-  }
+    const resolvedUrl = get(url)
 
-  return httpGetAction
-}
-```
-
-We can actually check if **path** exists on the context of the action. If it does not exist, it means that the action can not diverge execution down a path. That means we can support both scenarios:
-
-```js
-import { state, props } from 'cerebral'
-import { set } from 'cerebral/factories'
-import { httpGet } from './myFactories'
-
-export const scenarioA = [
-  httpGet('/items'),
-  {
-    sucess: set(state`items`, props`response.data`),
-    error: []
-  }
-]
-
-export const scenarioB = [
-  httpGet('/items'),
-  set(state`items`, props`response.data`)
-]
-```
-
-```js
-function httpGetFactory(url) {
-  function httpGetAction({ http, get, path }) {
+    // Check if this action is used with paths
     if (path) {
       return http
-        .get(get(url))
-        .then((response) => {
-          return path.success({ response })
-        })
-        .catch((error) => {
-          return path.error({ error })
-        })
+        .get(resolvedUrl)
+        .then((response) => path.success({ response: response.data }))
+        .catch((error) => path.error({ error: error.response }))
     } else {
-      return http.get(get(url)).then((response) => ({ response }))
+      // Regular promise return when not using paths
+      return http
+        .get(resolvedUrl)
+        .then((response) => ({ response: response.data }))
     }
   }
-
   return httpGetAction
 }
+
+// Usage with paths
+export const getUsers = [
+  httpGetFactory('/api/users'),
+  {
+    success: set(state`users`, props`response`),
+    error: set(state`error`, props`error`)
+  }
+]
 ```
 
-So based on the path existing or not we call the expected _success_ and _error_ paths respectively.
+## Status-Based Path Selection
 
-But what about the status codes? Lets extend our example:
+You can enhance factories to choose paths based on status codes:
 
 ```js
 function httpGetFactory(url) {
   function httpGetAction({ http, get, path }) {
+    const resolvedUrl = get(url)
+
     if (path) {
       return http
-        .get(get(url))
+        .get(resolvedUrl)
         .then((response) => {
+          // Choose path based on status code or use default success
           return path[response.status]
-            ? path[response.status]({ response })
-            : path.success({ response })
+            ? path[response.status]({ response: response.data })
+            : path.success({ response: response.data })
         })
         .catch((error) => {
-          return path[error.status]
-            ? path[error.status]({ error })
-            : path.error({ error })
+          return path[error.response?.status]
+            ? path[error.response?.status]({ error: error.response })
+            : path.error({ error: error.response })
         })
     } else {
-      return http.get(get(url)).then((response) => ({ response }))
+      // Regular promise return
+      return http
+        .get(resolvedUrl)
+        .then((response) => ({ response: response.data }))
     }
   }
-
   return httpGetAction
 }
+
+// Usage with status paths
+export const getUsers = [
+  httpGetFactory('/api/users'),
+  {
+    success: set(state`users`, props`response`),
+    404: set(state`error`, 'Users not found'),
+    error: set(state`error`, props`error.message`)
+  }
+]
 ```
 
-### Resolve tag paths
+## Working with Tag Paths
 
-You can also resolve the paths of a tag. For example:
-
-```js
-state`foo.bar`
-```
-
-The path in this example is **foo.bar**. Or:
-
-```js
-state`items.${props`itemId`}`
-```
-
-This might resolve to **items.123**.
-
-Resolving the path instead of the value within the path gives some contextual power. For example the core Cerebral factories uses this feature:
-
-```js
-import { set } from 'cerebral/factories'
-import { state, props } from 'cerebral'
-
-export default set(state`foo`, props`foo`)
-```
-
-So here we are using two tags, **state** and **props**, and they have two different contextual meanings. The **state** tag is used to identify _where_ to put a value, and the **props** tag is used to identify _what_ value.
+Sometimes you need to resolve not just the value of a tag, but its path:
 
 ```js
 function setFactory(target, value) {
-  function set({ store, resolve }) {
-    // First we identify that we have the tag
-    // type we want
-    const isStateTag = resolve.isTag(target, 'state')
+  function setAction({ store, resolve }) {
+    // Check if target is a state tag
+    if (resolve.isTag(target, 'state')) {
+      // Get the path from the tag (e.g., "users.list")
+      const path = resolve.path(target)
+      // Get the value to set, which might also be a tag
+      const resolvedValue = resolve.value(value)
 
-    // We use the type of tag to identify
-    // where we want to do a "set"
-    if (isStateTag) {
-      // We extract the path, "foo", so that
-      // we know where to set the value
-      const statePath = resolve.path(target)
-
-      // We do a normal "store.set" with the
-      // resolved path and value
-      store.set(statePath, resolve.value(value))
+      // Update state at the resolved path
+      store.set(path, resolvedValue)
     } else {
       throw new Error('Target must be a state tag')
     }
   }
-
-  return set
+  return setAction
 }
 
-export default setFactory
+// Usage
+export const updateUser = [
+  setFactory(state`users.${props`userId`}`, props`userData`)
+]
 ```
 
-## Enhancing your factories
+## Simple Factory Examples
 
-You will very likely create a lot of action factories in your application. This drys up your code and makes your sequences more expressive. If you start using the **get** provider, and even the **resolver**, you can make your factories even more expressive. One such factory could be notifying the user:
-
-```js
-import { notify } from './myFactories'
-import { string, state } from 'cerebral'
-
-export default notify(string`Sorry ${state`user.name`}, this does not work :(`)
-```
-
-The factory could look something like this:
+Here are some useful custom factories you can create:
 
 ```js
-import { state } from 'cerebral'
-
+// Notification factory
 function notifyFactory(message) {
-  function notifyAction({ store, get }) {
-    store.set('message', get(message))
+  return function notify({ store, get }) {
+    store.set('notifications.message', get(message))
+    store.set('notifications.visible', true)
   }
-
-  return notifyAction
 }
+
+// Timeout factory
+function delayFactory(ms) {
+  return function delay() {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+}
+
+// Usage
+export const showNotification = [
+  notifyFactory('Operation successful!'),
+  delayFactory(3000),
+  set(state`notifications.visible`, false)
+]
 ```
 
-## Summary
+## Best Practices
 
-You might build your whole application without taking advantage of resolving tags in your factories, but it is a powerful concept that can express more logic in your sequence definitions making your code even more readable.
+1. **Name your actions**: Give the returned function a name for better debugging
+2. **Keep factories focused**: Each factory should do one thing well
+3. **Handle errors**: Always consider how errors will be handled
+4. **Document parameters**: Make it clear what each factory expects
+5. **Use tag resolution**: Take advantage of Cerebral's tag system for dynamic values
+
+Custom factories are a powerful way to create reusable logic in your Cerebral application while keeping your sequences clean and declarative.

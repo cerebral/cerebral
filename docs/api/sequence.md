@@ -1,15 +1,13 @@
 # Sequence
 
+Sequences are the primary way to define logic flows in Cerebral. They allow you to compose actions in a declarative way.
+
+## Basic Sequences
+
 Sequences can be expressed with a simple array:
 
 ```js
-export const mySequence = []
-```
-
-You populate these arrays with actions:
-
-```js
-export const mySequence = [actions.someAction]
+export const mySequence = [actions.doSomething, actions.doSomethingElse]
 ```
 
 You attach sequences to modules:
@@ -22,172 +20,287 @@ export default {
 }
 ```
 
-## Async
+## Async Actions
 
-By default sequences run completely synchronous, but an action might run asynchronously thus making the sequence async. When an action returns a promise it means it runs async.
+By default sequences run synchronously, but an action might run asynchronously, making the sequence async. When an action returns a promise, the sequence waits for it to resolve before continuing:
 
 ```js
-export function myAction() {
-  return Promise.resolve()
+function myAsyncAction() {
+  return Promise.resolve({ result: 'data' })
 }
-```
 
-You could also use an **async** function:
-
-```js
-export async function myAction() {
-  return { foo: 'bar' }
+// Or using async/await
+async function myAsyncAction() {
+  const data = await fetchSomething()
+  return { result: data }
 }
+
+export const mySequence = [
+  myAsyncAction, // Sequence will wait for this to resolve
+  actions.useTheResult
+]
 ```
 
-## Sequence factory
+## Sequence Factory
 
-Simple format of a sequence is to use an array literal, as explained above. Actions are run one after the other. If the action returns a promise Cerebral will wait until it resolves before moving to the next action:
-
-```js
-import * as actions from '../actions'
-
-export const mySequence = [actions.someAction]
-```
-
-The array is converted to a sequence, but you can also be explicit about it:
+While using array literals is the simplest approach, you can also be explicit by using the sequence factory:
 
 ```js
 import { sequence } from 'cerebral/factories'
 import * as actions from './actions'
 
-export const mySequence = sequence([actions.someAction])
+// Unnamed sequence
+export const mySequence = sequence([actions.someAction, actions.anotherAction])
+
+// Named sequence (useful for debugging)
+export const namedSequence = sequence('My Important Flow', [
+  actions.someAction,
+  actions.anotherAction
+])
 ```
 
-You can name a sequence, which will be displayed in debugger:
+## Composition
+
+Sequences can be composed within other sequences:
 
 ```js
-import { sequence } from 'cerebral/factories'
 import * as actions from './actions'
 
-export const mySequence = sequence('my sequence', [actions.someAction])
-```
+// Define a reusable sequence
+export const authenticateSequence = [
+  actions.validateCredentials,
+  actions.requestToken,
+  actions.storeToken
+]
 
-You can compose a sequence into an existing sequence. The debugger will show this composition:
+// Use it within another sequence
+export const loginSequence = [
+  actions.showLoadingIndicator,
+  ...authenticateSequence,
+  actions.redirectToDashboard,
+  actions.hideLoadingIndicator
+]
 
-```js
-import * as actions from '../actions'
-
-export const myOtherSequence = [actions.doThis]
-
-export const mySequence = [actions.someAction, myOtherSequence]
+// Or
+export const loginSequence = [
+  actions.showLoadingIndicator,
+  authenticateSequence,
+  actions.redirectToDashboard,
+  actions.hideLoadingIndicator
+]
 ```
 
 ## Parallel
 
-Cerebral can not truly run actions in parallel (JavaScript is single threaded), but it can trigger multiple asynchronous actions at the same time, just like **Promise.all**. That means when Cerebral triggers actions defined within a parallel, it will not wait if a promise is returned, it will just move on to the next action. When all actions within a parallel is resolved it will move to the action after the parallel definition, if any:
+While JavaScript is single-threaded, Cerebral can run multiple asynchronous actions concurrently using `parallel`:
 
 ```js
 import { parallel } from 'cerebral/factories'
 import * as actions from './actions'
 
-export const mySequence = parallel([
-  actions.someAsyncAction,
-  actions.someOtherAsyncAction
-])
-```
+export const loadDataSequence = [
+  actions.setLoading,
+  parallel([actions.loadUsers, actions.loadPosts, actions.loadSettings]),
+  actions.unsetLoading
+]
 
-You can name a parallel, which will be displayed in debugger:
-
-```js
-import { parallel } from 'cerebral/factories'
-import * as actions from './actions'
-
-export const mySequence = parallel('my parallel', [
-  actions.someAsyncAction,
-  actions.someOtherAsyncAction
-])
-```
-
-You can compose parallel into any existing sequence:
-
-```js
-import { parallel } from 'cerebral/factories'
-import * as actions from './actions'
-
-export const mySequence = [
-  actions.someAction,
-  parallel('my parallel', [
-    actions.someAsyncAction,
-    actions.someOtherAsyncAction
-  ])
+// Named parallel for debugging
+export const loadDataSequence = [
+  actions.setLoading,
+  parallel('Load Application Data', [
+    actions.loadUsers,
+    actions.loadPosts,
+    actions.loadSettings
+  ]),
+  actions.unsetLoading
 ]
 ```
 
-Note that you can also compose sequences into _parallel_. That means when both sequences are done running it will move on.
+The sequence continues only when all parallel actions have completed.
 
 ## Paths
 
-You can diverge execution by defining paths in your sequences.
+Paths allow you to create branches in your sequences based on the result of an action.
+
+### Basic Path Usage
 
 ```js
 import * as actions from './actions'
 
-export const mySequence = [
-  actions.getItems,
+export const submitForm = [
+  actions.validateForm,
   {
-    success: [],
-    error: []
+    valid: [actions.submitForm, actions.showSuccessMessage],
+    invalid: [actions.showValidationErrors]
   }
 ]
 ```
 
-The action returned by **getItems** will now have access to a success and an error path and can call those based on the result of the http request.
-
-You can define any path to execute:
+The action before the paths object decides which path to take:
 
 ```js
-import * as actions from './actions'
+function validateForm({ path }) {
+  const isValid = /* validation logic */
 
-export const mySequence = [
-  actions.myAction,
+  if (isValid) {
+    return path.valid()
+  } else {
+    return path.invalid()
+  }
+}
+```
+
+### Passing Data to Paths
+
+You can pass data when taking a path:
+
+```js
+function validateForm({ path, props }) {
+  if (props.form.isValid) {
+    return path.valid({
+      validatedData: props.form.data
+    })
+  } else {
+    return path.invalid({
+      validationErrors: getErrors(props.form)
+    })
+  }
+}
+```
+
+### Async Path Selection
+
+Paths work with promises too:
+
+```js
+function checkUserPermission({ api, path, props }) {
+  return api
+    .checkPermission(props.userId)
+    .then((response) => {
+      if (response.hasPermission) {
+        return path.allowed({ permissions: response.permissions })
+      } else {
+        return path.denied({ reason: response.reason })
+      }
+    })
+    .catch((error) => path.error({ error }))
+}
+
+export const userSequence = [
+  actions.checkUserPermission,
   {
-    foo: [],
-    bar: [],
-    bananas: [],
-    apples: []
+    allowed: [actions.grantAccess],
+    denied: [actions.redirectToUnauthorized],
+    error: [actions.showError]
   }
 ]
 ```
 
-When these paths are defined you will have access to corresponding paths in the action preceding the paths:
+### Status-Based Paths
+
+You can create paths for specific scenarios like HTTP status codes:
 
 ```js
-function myAction({ path }) {
-  path.foo
-  path.bar
-  path.bananas
-  path.apples
+function getUser({ http, path, props }) {
+  return http
+    .get(`/users/${props.id}`)
+    .then((response) => path.success({ user: response.data }))
+    .catch((error) => {
+      if (error.status === 404) {
+        return path.notFound()
+      } else {
+        return path.error({ error })
+      }
+    })
 }
+
+export const loadUser = [
+  actions.getUser,
+  {
+    success: [actions.setUser],
+    notFound: [actions.redirectToUserNotFound],
+    error: [actions.showErrorMessage]
+  }
+]
 ```
 
-To actually diverge down the path you have to call it and return it from the action:
+### Optional Paths
+
+Not all defined paths need to be used. Actions can choose which paths to include:
 
 ```js
-function myAction({ path }) {
-  return path.foo()
-}
+// The action might take any of these paths, but isn't required to use all
+export const userSequence = [
+  actions.processUser,
+  {
+    admin: [actions.loadAdminTools],
+    regular: [actions.loadRegularDashboard],
+    guest: [actions.redirectToLogin],
+    error: [actions.showError]
+  }
+]
 ```
 
-Optionally pass a payload:
+### Nesting Paths
+
+Paths can be nested to create complex conditional flows:
 
 ```js
-function myAction({ path }) {
-  return path.bananas({ foo: 'bar' })
-}
+export const checkoutSequence = [
+  actions.validateCart,
+  {
+    valid: [
+      actions.processPayment,
+      {
+        success: [actions.createOrder, actions.showReceipt],
+        declined: [actions.showPaymentError],
+        error: [actions.logPaymentError]
+      }
+    ],
+    invalid: [actions.showCartError]
+  }
+]
 ```
 
-With promises you just return it the same way:
+## Running Sequences
+
+There are several ways to run sequences:
 
 ```js
-function myAction({ someProvider, path }) {
-  return someProvider
-    .doAsync()
-    .then((result) => path.bananas({ data: result.data }))
+import { sequences, state } from 'cerebral'
+
+// From an action
+function myAction({ get, props }) {
+  // Get a sequence and run it
+  const mySequence = get(sequences`mySequence`)
+  mySequence({ someData: props.data })
 }
+
+// From a component
+connect(
+  {
+    buttonClicked: sequences`mySequence`
+  },
+  ({ buttonClicked }) => {
+    return <button onClick={() => buttonClicked({ id: 123 })}>Click me</button>
+  }
+)
+
+// From a reaction
+Reaction(
+  {
+    isLoggedIn: state`user.isLoggedIn`
+  },
+  ({ isLoggedIn, get }) => {
+    if (isLoggedIn) {
+      get(sequences`loadDashboard`)()
+    }
+  }
+)
+```
+
+```marksy
+<Info>
+You can also use object notation (like `sequences.mySequence`) with the [babel-plugin-cerebral](/docs/api/proxy.html).
+</Info>
 ```
