@@ -99,8 +99,7 @@ For more detailed examples, check the documentation. If you prefer the proxy syn
 
 ## Documentation
 
-- [Current Cerebral (2.x and up)](http://www.cerebraljs.com/)
-- [Previous Cerebral (1.x)](http://cerebral-website.herokuapp.com/)
+You can find the Cerebral documentation at [cerebraljs.com](http://www.cerebraljs.com/).
 
 ## Contribute
 
