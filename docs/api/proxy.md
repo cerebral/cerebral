@@ -3,7 +3,7 @@
 Cerebral offers two ways to target state, sequences, and props in your application:
 
 1. **Proxies**: A cleaner syntax that looks like normal object access (`state.foo`)
-2. **Tags**: Traditional template literals (`state\`foo\``) that work without additional configuration
+2. **Tags**: Traditional template literals (`` state`foo` ``) that work without additional configuration
 
 ## Proxies
 

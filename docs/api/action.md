@@ -129,9 +129,11 @@ function someAction({ get }) {
 }
 ```
 
+```marksy
 <Info>
 You can also use object notation (like `state.foo`) with the [babel-plugin-cerebral](/docs/api/proxy.html).
 </Info>
+```
 
 ## Resolve
 

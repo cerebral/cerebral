@@ -96,33 +96,6 @@ export default connect(
 
 You can also use **.vue** files for your components. Read more about that in [@cerebral/vue](/views/vue.html).
 
-````marksy
-<Info>
-For Vue 2, you need to use the complete Vue build that includes the template compiler:
-
-```js
-import Vue from 'vue/dist/vue'
-import App from 'cerebral'
-import { Container, connect } from '@cerebral/vue'
-import main from './main'
-
-const app = App(main)
-
-new Vue({
-  render: (h) =>
-    h({
-      components: {
-        Container: Container(app),
-        AppComponent
-      },
-      template: '<Container><AppComponent /></Container>'
-    })
-}).$mount('#app')
-````
-
-</Info>
-```
-
 ## Using React
 
 React is one of the most popular integrations for Cerebral.

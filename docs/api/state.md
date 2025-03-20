@@ -27,7 +27,7 @@ function someAction({ get }) {
 
 ```marksy
 <Info>
-The object notation (proxy) syntax requires the [babel-plugin-cerebral](/docs/api/proxy.html) to be configured in your project. The template literal tag syntax (`state\`path\``) works without additional configuration.
+The object notation (proxy) syntax requires the [babel-plugin-cerebral](/docs/api/proxy.html) to be configured in your project. The template literal tag syntax (`` state`path` ``) works without additional configuration.
 </Info>
 ```
 
@@ -81,7 +81,11 @@ function storeExample({ store }) {
 }
 ```
 
-<Warning>**Important:** Never mutate state values directly in your actions or components. Always use the store API to ensure changes are tracked by Cerebral's state system and debugger.</Warning>
+```marksy
+<Warning>
+**Important:** Never mutate state values directly in your actions or components. Always use the store API to ensure changes are tracked by Cerebral's state system and debugger.
+</Warning>
+```
 
 ## Using moduleState
 

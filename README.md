@@ -95,7 +95,7 @@ const App = () => (
 )
 ```
 
-For more detailed examples, check the documentation. If you prefer the proxy syntax (`state.count` instead of `state\`count\``), see our [proxy documentation](http://www.cerebraljs.com/docs/api/proxy.html).
+For more detailed examples, check the documentation. If you prefer the proxy syntax (`state.count` instead of `` state`count` ``), see our [proxy documentation](http://www.cerebraljs.com/docs/api/proxy.html).
 
 ## Documentation
 
