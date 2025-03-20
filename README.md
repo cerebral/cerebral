@@ -168,7 +168,7 @@ unlink node_modules/@cerebral
 git switch next
 git pull
 npm install      # make sure any new dependencies are installed
-npm run release  # and check release notes
+npm run release -- --dry-run --print-release  # and check release notes
 git switch master
 git pull
 git merge --ff-only next
