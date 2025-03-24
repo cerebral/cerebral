@@ -122,13 +122,13 @@ function myAction({ get }) {
 
 // In factories
 [
-  when(state.appIsAwesome)
+  when(state.filteredItems)
 ]
 
 // In reaction
 Reaction({
-  foo: state.foo
-}, ({ foo }) => {})
+  filteredItems: state.filteredItems
+}, ({ filteredItems }) => {})
 
 // Using tags (alternative without babel plugin)
 export const filteredItems = (get) => {

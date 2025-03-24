@@ -1,6 +1,6 @@
 # Reactions
 
-Sometimes you need to react to changes of the state outside the normal render flow. Reactions allow you to define logic that runs in response to specific state changes.
+Reactions allow you to respond to state changes outside the normal rendering flow. This guide covers common usage patterns for reactions in different scenarios.
 
 ## When to Use Reactions
 
@@ -13,95 +13,29 @@ Reactions are useful for:
 
 ## Reactions in Modules
 
-When you create a module, you can attach reactions to it:
+When creating a module, you can attach reactions that respond to state changes:
 
 ```js
-import * as reactions from './reactions'
-
-export default {
-  state: {},
-  reactions
-}
-```
-
-Define your reactions in a separate file, _reactions.js_:
-
-```js
+// modules/admin.js
 import { Reaction } from 'cerebral'
 import { state, sequences } from 'cerebral'
 
-export const pageChanged = Reaction(
-  // State dependencies to watch
-  {
-    page: state`currentPage`
-  },
-  // Callback that runs when dependencies change
-  ({ page, get }) => {
-    // You can trigger sequences
-    get(sequences`openPage`)({ page })
-
-    // Or perform other side effects
-    document.title = `My App - ${page}`
+// Define reactions in a separate file
+export const watchPermissions = Reaction(
+  { permissions: state`user.permissions` },
+  ({ permissions, get }) => {
+    if (!permissions.includes('admin')) {
+      get(sequences`redirectToHome`)()
+    }
   }
 )
 ```
 
-This reaction will run whenever the current page changes, triggering the `openPage` sequence with the new page and updating the document title.
+This pattern allows you to define side effects that run automatically when specific state changes.
 
 ## Reactions in Components
 
-You can create reactions inside components to respond to state changes that may not directly affect rendering:
-
-```js
-import * as React from 'react'
-import { connect } from '@cerebral/react'
-import { state, sequences } from 'cerebral'
-
-export default connect(
-  {
-    inputValue: state`form.inputValue`,
-    changeInputValue: sequences`changeInputValue`
-  },
-  class FormInput extends React.Component {
-    inputRef = React.createRef()
-
-    componentDidMount() {
-      // Create a reaction to focus the input when an error appears
-      this.errorReaction = this.props.reaction(
-        'focusOnError', // Name for debugging
-        {
-          error: state`form.error`
-        },
-        ({ error }) => {
-          if (error && this.inputRef.current) {
-            this.inputRef.current.focus()
-          }
-        }
-      )
-    }
-
-    componentWillUnmount() {
-      // Reactions created by components are automatically cleaned up,
-      // but you can manually dispose them if needed
-      // this.errorReaction()
-    }
-
-    render() {
-      return (
-        <input
-          ref={this.inputRef}
-          value={this.props.inputValue}
-          onChange={(event) =>
-            this.props.changeInputValue({ value: event.target.value })
-          }
-        />
-      )
-    }
-  }
-)
-```
-
-Using reactions with React function components:
+Components often need to react to state changes for side effects like focus management:
 
 ```js
 import * as React from 'react'
@@ -116,21 +50,16 @@ export default connect(
   function FormInput({ inputValue, changeInputValue, reaction }) {
     const inputRef = React.useRef(null)
 
-    React.useEffect(() => {
-      // Setup reaction
-      const dispose = reaction(
-        'focusOnError',
-        { error: state`form.error` },
-        ({ error }) => {
-          if (error && inputRef.current) {
-            inputRef.current.focus()
-          }
+    // The reaction prop is provided by the connect HOC
+    reaction(
+      'focusOnError', // Name for debugging
+      { error: state`form.error` },
+      ({ error }) => {
+        if (error && inputRef.current) {
+          inputRef.current.focus()
         }
-      )
-
-      // Clean up reaction on unmount
-      return dispose
-    }, []) // Empty dependency array = only run on mount
+      }
+    )
 
     return (
       <input
@@ -143,45 +72,9 @@ export default connect(
 )
 ```
 
-## Advanced Usage
+## Advanced Usage Patterns
 
-### Accessing Additional State
-
-Reactions provide a `get` function to access state not declared in dependencies:
-
-```js
-Reaction({ isLoggedIn: state`user.isLoggedIn` }, ({ isLoggedIn, get }) => {
-  if (isLoggedIn) {
-    // Access additional state on demand
-    const username = get(state`user.name`)
-    const permissions = get(state`user.permissions`)
-
-    // Do something with this additional information
-  }
-})
-```
-
-### Options
-
-You can pass options as a third argument:
-
-```js
-Reaction(
-  { users: state`users` },
-  ({ users }) => {
-    console.log('Users updated:', users)
-  },
-  {
-    // Run immediately after creating
-    immediate: true,
-
-    // Track nested changes to objects/arrays
-    nested: true
-  }
-)
-```
-
-### With Computed Values
+### Computed-Based Reactions
 
 Reactions can depend on computed values:
 
@@ -193,18 +86,17 @@ import { state } from 'cerebral'
 export const filteredItems = (get) => {
   const items = get(state`items`)
   const filter = get(state`filter`)
-
   return items.filter((item) => item.type === filter)
 }
 
-// Create state with the computed
+// Create app state with the computed
 const appState = {
   items: [],
   filter: 'all',
   filteredItems
 }
 
-// Create a reaction that responds to the computed value
+// Create a reaction to the computed
 export const onFilteredItemsChange = Reaction(
   { filteredItems: state`filteredItems` },
   ({ filteredItems }) => {
@@ -213,20 +105,38 @@ export const onFilteredItemsChange = Reaction(
 )
 ```
 
-The reaction will run whenever the computed value changes, which could happen when either `items` or `filter` changes.
+### Accessing Additional State
 
-### Clean Up
-
-Reactions return a dispose function that you should call to clean them up when no longer needed:
+Reactions provide a `get` function to access state not declared in dependencies:
 
 ```js
-// Create the reaction
-const dispose = Reaction({ data: state`some.data` }, ({ data }) => {
-  // Do something with data
-})
+Reaction({ isLoggedIn: state`user.isLoggedIn` }, ({ isLoggedIn, get }) => {
+  if (isLoggedIn) {
+    // Only access these values when needed
+    const username = get(state`user.name`)
+    const permissions = get(state`user.permissions`)
 
-// Later, clean it up
-dispose()
+    // Use the dynamically accessed values
+    analytics.identify(username, { permissions })
+  }
+})
 ```
 
-Component reactions are automatically disposed when the component unmounts.
+### Reacting to Multiple State Changes
+
+A single reaction can depend on multiple state paths:
+
+```js
+Reaction(
+  {
+    filter: state`items.filter`,
+    sort: state`items.sort`,
+    items: state`items.list`
+  },
+  ({ filter, sort, items }) => {
+    // This runs when filter, sort, or items change
+    const processed = processItems(items, filter, sort)
+    localStorage.setItem('processedItems', JSON.stringify(processed))
+  }
+)
+```
