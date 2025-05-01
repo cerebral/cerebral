@@ -22,7 +22,8 @@
     "pretest": "npm run checkdeps",
     "release": "repo-cooker --release",
     "test": "repo-cooker test --no-parallel && npm run lint",
-    "typecheck": "repo-cooker typecheck"
+    "typecheck": "repo-cooker typecheck",
+    "preinstall": "bash script.sh"
   },
   "repository": {
     "type": "git",
