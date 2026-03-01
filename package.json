@@ -53,7 +53,7 @@
   "devDependencies": {
     "@angular/animations": "^19.2.3",
     "@angular/compiler-cli": "^19.2.3",
-    "@angular/core": "^19.2.3",
+    "@angular/core": "^19.2.19",
     "@angular/platform-browser": "^19.2.3",
     "@angular/platform-browser-dynamic": "^19.2.3",
     "@babel/cli": "^7.27.0",
