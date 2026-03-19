@@ -174,12 +174,12 @@ The `discard` path must always be present when using debounce, even if you don't
 Branch execution based on a value comparison:
 
 ```js
-equals(state`user.role`),
+;(equals(state`user.role`),
   {
     admin: [actions.loadAdminPage],
     user: [actions.loadUserPage],
     otherwise: [actions.redirectToLogin]
-  }
+  })
 ```
 
 ### wait
@@ -208,21 +208,21 @@ Conditionally choose a path based on a value or predicate:
 
 ```js
 // With direct value
-when(state`user.isLoggedIn`),
+;(when(state`user.isLoggedIn`),
   {
     true: [actions.redirectToDashboard],
     false: [actions.showLoginForm]
-  }
+  })
 
 // With custom predicate
-when(state`user.role`, (role) => role === 'admin'),
+;(when(state`user.role`, (role) => role === 'admin'),
   {
     true: [actions.showAdminTools],
     false: []
-  }
+  })
 
 // With multiple arguments
-when(
+;(when(
   state`inputValue`,
   state`minLength`,
   (value, minLength) => value.length >= minLength
@@ -230,7 +230,7 @@ when(
   {
     true: [set(state`isValid`, true)],
     false: [set(state`isValid`, false)]
-  }
+  })
 ```
 
 ## Sequence and Parallel

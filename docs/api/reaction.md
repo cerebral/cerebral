@@ -23,7 +23,6 @@ Reaction(dependencies, callback)
 A reaction object with the following methods:
 
 - **create(controller, modulePath, name)**: Binds the reaction to a controller/app and associates it with a module.
-
   - `controller`: The Cerebral app/controller
   - `modulePath`: Array specifying the module path (e.g., `['users']`)
   - `name`: String identifier for debugging
