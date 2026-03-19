@@ -43,9 +43,6 @@
     "*.{md,css,json}": "prettier --write --with-node-modules"
   },
   "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-customizable"
-    },
     "cz-customizable": {
       "config": ".cz-config.js"
     }
