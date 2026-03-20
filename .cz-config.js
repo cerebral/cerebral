@@ -5,7 +5,7 @@ module.exports = {
     { value: 'feat', name: 'feat:     A new feature' },
     { value: 'fix', name: 'fix:      A bug fix' },
     { value: 'docs', name: 'docs:     Documentation only changes' },
-    { value: 'ts', name: 'ts:   Typescript/Typings related changes' },
+    { value: 'typing', name: 'typing:   Typescript/Typing related changes' },
     { value: 'test', name: 'test:     Adding missing tests' },
     {
       value: 'refactor',
@@ -14,6 +14,14 @@ module.exports = {
     {
       value: 'perf',
       name: 'perf:     A code change that improves performance',
+    },
+    {
+      value: 'build',
+      name: 'build:    Changes that affect the build system or external dependencies',
+    },
+    {
+      value: 'ci',
+      name: 'ci:       Changes to our CI configuration files and scripts',
     },
     {
       value: 'chore',
