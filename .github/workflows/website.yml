@@ -20,25 +20,20 @@ jobs:
       - name: Update npm
         run: npm install -g npm@latest
       - run: npm ci
-      - name: Create GitHub App token
-        id: app-token
-        uses: actions/create-github-app-token@v3
+      - name: Create token
+        id: create_token
+        uses: tibdex/github-app-token@v2
         with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.PRIVATE_KEY }}
-      - name: Get GitHub App User ID
-        id: get-user-id
-        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
       - name: Build
         run: npm run build:website
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
-          personal_token: ${{ steps.app-token.outputs.token }}
+          personal_token: ${{ steps.create_token.outputs.token }}
           external_repository: cerebral/cerebral.github.io
           publish_branch: master
           publish_dir: ./packages/cerebral-website/dist
-          user_name: '${{ steps.app-token.outputs.app-slug }}[bot]'
-          user_email: '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
+          user_name: 'cerebral[bot]'
+          user_email: '136202705+cerebral[bot]@users.noreply.github.com'
