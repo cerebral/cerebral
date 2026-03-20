@@ -63,7 +63,7 @@
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
     "@babel/register": "^7.28.6",
-    "@cerebral/babel-plugin": "^1.1.0",
+    "@cerebral/babel-plugin": "next",
     "@eslint/js": "^8.57.1",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.2",
