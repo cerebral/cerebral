@@ -29,13 +29,13 @@ module.exports = {
   scopes: [
     { name: 'cerebral' },
     { name: 'function-tree' },
-    { name: 'demos' },
     { name: 'website' },
     { name: 'react' },
     { name: 'inferno' },
     { name: 'preact' },
     { name: 'vue' },
     { name: 'angular' },
+    { name: 'babel-plugin' },
   ],
 
   // it needs to match the value for field type. Eg.: 'fix'
@@ -44,6 +44,6 @@ module.exports = {
   },
 
   allowCustomScopes: true,
-  allowBreakingChanges: ['feat', 'fix'],
+  allowBreakingChanges: ['feat', 'fix', 'refactor', 'perf'],
   appendBranchNameToCommitMessage: false,
 }

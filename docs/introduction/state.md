@@ -104,7 +104,7 @@ function myAction({ get }) {
 }
 ```
 
-You can also use a cleaner object notation syntax if you configure the [babel-plugin-cerebral](/docs/api/proxy.html) in your project:
+You can also use a cleaner object notation syntax if you configure the [@cerebral/babel-plugin](/docs/api/proxy.html) in your project:
 
 ```js
 import { state } from 'cerebral'

@@ -7,7 +7,7 @@ Cerebral offers two ways to target state, sequences, and props in your applicati
 
 ## Proxies
 
-Proxies provide a more natural syntax for accessing paths in your state and sequences. They require the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) which transforms them into template literal tags behind the scenes.
+Proxies provide a more natural syntax for accessing paths in your state and sequences. They require the [@cerebral/babel-plugin](https://www.npmjs.com/package/@cerebral/babel-plugin) which transforms them into template literal tags behind the scenes.
 
 ```marksy
 <Info>
@@ -20,14 +20,14 @@ The proxy syntax is recommended for most applications as it's more readable and 
 1. Install the babel plugin:
 
    ```sh
-   npm install --save-dev babel-plugin-cerebral
+   npm install --save-dev @cerebral/babel-plugin
    ```
 
 2. Add it to your Babel configuration:
 
    ```json
    {
-     "plugins": ["cerebral"]
+     "plugins": ["@cerebral"]
    }
    ```
 

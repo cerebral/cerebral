@@ -27,7 +27,7 @@ function someAction({ get }) {
 
 ```marksy
 <Info>
-The object notation (proxy) syntax requires the [babel-plugin-cerebral](/docs/api/proxy.html) to be configured in your project. The template literal tag syntax (`` state`path` ``) works without additional configuration.
+The object notation (proxy) syntax requires the [@cerebral/babel-plugin](/docs/api/proxy.html) to be configured in your project. The template literal tag syntax (`` state`path` ``) works without additional configuration.
 </Info>
 ```
 

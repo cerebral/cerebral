@@ -14,7 +14,7 @@ Cerebral uses proxies for type-safe state and sequences access. To set up these 
 
 ```marksy
 <Info>
-You MUST use the [babel-plugin-cerebral](https://www.npmjs.com/package/babel-plugin-cerebral) package. This plugin transforms the typed proxies into template literal tags behind the scenes.
+You MUST use the [@cerebral/babel-plugin](https://www.npmjs.com/package/@cerebral/babel-plugin) package. This plugin transforms the typed proxies into template literal tags behind the scenes.
 </Info>
 ```
 

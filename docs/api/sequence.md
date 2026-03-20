@@ -301,6 +301,6 @@ Reaction(
 
 ```marksy
 <Info>
-You can also use object notation (like `sequences.mySequence`) with the [babel-plugin-cerebral](/docs/api/proxy.html).
+You can also use object notation (like `sequences.mySequence`) with the [@cerebral/babel-plugin](/docs/api/proxy.html).
 </Info>
 ```

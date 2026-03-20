@@ -191,7 +191,7 @@ export const mySequence = [
 
 ```marksy
 <Info>
-You can also use object notation (like `state.user.name`) with the [babel-plugin-cerebral](/docs/api/proxy.html) in your project.
+You can also use object notation (like `state.user.name`) with the [@cerebral/babel-plugin](/docs/api/proxy.html) in your project.
 </Info>
 ```
 
